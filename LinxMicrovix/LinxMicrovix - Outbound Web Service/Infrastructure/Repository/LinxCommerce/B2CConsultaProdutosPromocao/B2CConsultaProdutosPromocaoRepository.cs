@@ -12,7 +12,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
         public B2CConsultaProdutosPromocaoRepository(ILinxMicrovixRepositoryBase<TEntity> linxMicrovixRepositoryBase) =>
             (_linxMicrovixRepositoryBase) = (linxMicrovixRepositoryBase);
 
-        public bool BulkInsertIntoTableRaw(JobParameter jobParameter, List<TEntity> records)
+        public bool BulkInsertIntoTableRaw(LinxMicrovixJobParameter jobParameter, List<TEntity> records)
         {
             try
             {
@@ -38,32 +38,46 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
             }
         }
 
-        public async Task<bool> ExecuteTableMerge(JobParameter jobParameter)
+        public async Task<bool> CreateTableMerge(LinxMicrovixJobParameter jobParameter)
         {
-            string sql = $"MERGE [{jobParameter.tableName}_trusted] AS TARGET " +
-                         $"USING [{jobParameter.tableName}_raw] AS SOURCE " +
-                          "ON (TARGET.CODIGO_PROMOCAO = SOURCE.CODIGO_PROMOCAO) " +
-                          "WHEN MATCHED THEN UPDATE SET " +
-                          "TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON], " +
-                          "TARGET.[CODIGO_PROMOCAO] = SOURCE.[CODIGO_PROMOCAO], " +
-                          "TARGET.[EMPRESA] = SOURCE.[EMPRESA], " +
-                          "TARGET.[CODIGOPRODUTO] = SOURCE.[CODIGOPRODUTO], " +
-                          "TARGET.[PRECO] = SOURCE.[PRECO], " +
-                          "TARGET.[DATA_INICIO] = SOURCE.[DATA_INICIO], " +
-                          "TARGET.[DATA_TERMINO] = SOURCE.[DATA_TERMINO], " +
-                          "TARGET.[DATA_CADASTRO] = SOURCE.[DATA_CADASTRO], " +
-                          "TARGET.[ATIVA] = SOURCE.[ATIVA], " +
-                          "TARGET.[CODIGO_CAMPANHA] = SOURCE.[CODIGO_CAMPANHA], " +
-                          "TARGET.[PROMOCAO_OPCIONAL] = SOURCE.[PROMOCAO_OPCIONAL], " +
-                          "TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP], " +
-                          "TARGET.[REFERENCIA] = SOURCE.[REFERENCIA], " +
-                          "TARGET.[PORTAL] = SOURCE.[PORTAL] " +
-                          "WHEN NOT MATCHED BY TARGET THEN " +
-                          "INSERT " +
-                          "([LASTUPDATEON], [CODIGO_PROMOCAO], [EMPRESA], [CODIGOPRODUTO], [PRECO], [DATA_INICIO], [DATA_TERMINO], [DATA_CADASTRO], [ATIVA], [CODIGO_CAMPANHA], [PROMOCAO_OPCIONAL], [TIMESTAMP], [REFERENCIA], [PORTAL])" +
-                          "VALUES " +
-                          "(SOURCE.[LASTUPDATEON], SOURCE.[CODIGO_PROMOCAO], SOURCE.[EMPRESA], SOURCE.[CODIGOPRODUTO], SOURCE.[PRECO], SOURCE.[DATA_INICIO], SOURCE.[DATA_TERMINO], SOURCE.[DATA_CADASTRO], SOURCE.[ATIVA], SOURCE.[CODIGO_CAMPANHA], SOURCE.[PROMOCAO_OPCIONAL], SOURCE.[TIMESTAMP], " +
-                          "SOURCE.[REFERENCIA], SOURCE.[PORTAL]);";
+            string? sql = @"IF NOT EXISTS (SELECT * FROM SYS.OBJECTS WHERE TYPE = 'P' AND NAME = 'P_B2CCONSULTAPRODUTOSPROMOCOES_SYNC')
+                           BEGIN
+                           EXECUTE (
+	                           'CREATE PROCEDURE [P_B2CCONSULTAPRODUTOSPROMOCOES_SYNC] AS
+	                           BEGIN
+		                           MERGE [B2CCONSULTAPRODUTOSPROMOCOES_TRUSTED] AS TARGET
+                                   USING [B2CCONSULTAPRODUTOSPROMOCOES_RAW] AS SOURCE
+
+                                   ON (
+			                           TARGET.[CODIGO_PROMOCAO] = SOURCE.[CODIGO_PROMOCAO]
+		                           )
+
+                                   WHEN MATCHED AND TARGET.[TIMESTAMP] != SOURCE.[TIMESTAMP] THEN
+			                           UPDATE SET
+			                           TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON],
+			                           TARGET.[CODIGO_PROMOCAO] = SOURCE.[CODIGO_PROMOCAO],
+			                           TARGET.[EMPRESA] = SOURCE.[EMPRESA],
+			                           TARGET.[CODIGOPRODUTO] = SOURCE.[CODIGOPRODUTO],
+			                           TARGET.[PRECO] = SOURCE.[PRECO],
+			                           TARGET.[DATA_INICIO] = SOURCE.[DATA_INICIO],
+			                           TARGET.[DATA_TERMINO] = SOURCE.[DATA_TERMINO],
+			                           TARGET.[DATA_CADASTRO] = SOURCE.[DATA_CADASTRO],
+			                           TARGET.[ATIVA] = SOURCE.[ATIVA],
+			                           TARGET.[CODIGO_CAMPANHA] = SOURCE.[CODIGO_CAMPANHA],
+			                           TARGET.[PROMOCAO_OPCIONAL] = SOURCE.[PROMOCAO_OPCIONAL],
+			                           TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP],
+			                           TARGET.[REFERENCIA] = SOURCE.[REFERENCIA],
+			                           TARGET.[PORTAL] = SOURCE.[PORTAL]
+
+                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[CODIGO_PROMOCAO] NOT IN (SELECT [CODIGO_PROMOCAO] FROM [B2CCONSULTAPRODUTOSPROMOCOES_TRUSTED]) THEN
+			                           INSERT
+			                           ([LASTUPDATEON], [CODIGO_PROMOCAO], [EMPRESA], [CODIGOPRODUTO], [PRECO], [DATA_INICIO], [DATA_TERMINO], [DATA_CADASTRO], [ATIVA], [CODIGO_CAMPANHA], [PROMOCAO_OPCIONAL], [TIMESTAMP], [REFERENCIA], [PORTAL])
+			                           VALUES
+			                           (SOURCE.[LASTUPDATEON], SOURCE.[CODIGO_PROMOCAO], SOURCE.[EMPRESA], SOURCE.[CODIGOPRODUTO], SOURCE.[PRECO], SOURCE.[DATA_INICIO], SOURCE.[DATA_TERMINO], SOURCE.[DATA_CADASTRO], SOURCE.[ATIVA], SOURCE.[CODIGO_CAMPANHA], SOURCE.[PROMOCAO_OPCIONAL], SOURCE.[TIMESTAMP],
+			                           SOURCE.[REFERENCIA], SOURCE.[PORTAL]);
+	                           END'
+                           )
+                           END";
 
             try
             {
@@ -75,7 +89,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
             }
         }
 
-        public async Task<bool> InsertParametersIfNotExists(JobParameter jobParameter)
+        public async Task<bool> InsertParametersIfNotExists(LinxMicrovixJobParameter jobParameter)
         {
             try
             {
@@ -100,9 +114,9 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
             }
         }
 
-        public async Task<bool> InsertRecord(JobParameter jobParameter, TEntity? record)
+        public async Task<bool> InsertRecord(LinxMicrovixJobParameter jobParameter, TEntity? record)
         {
-            string sql = $"INSERT INTO {jobParameter.tableName}_raw " +
+            string? sql = $"INSERT INTO {jobParameter.tableName}_raw " +
                           "([lastupdateon], [codigo_promocao], [empresa], [codigoproduto], [preco], [data_inicio], [data_termino], [data_cadastro], [ativa], [codigo_campanha], [promocao_opcional], [timestamp], [referencia], [portal]) " +
                           "Values " +
                           "(@lastupdateon, @codigo_promocao, @empresa, @codigoproduto, @preco, @data_inicio, @data_termino, @data_cadastro, @ativa, @codigo_campanha, @promocao_opcional, @timestamp, @referencia, @portal)";

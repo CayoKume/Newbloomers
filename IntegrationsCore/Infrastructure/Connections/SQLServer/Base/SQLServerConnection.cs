@@ -6,12 +6,12 @@ namespace IntegrationsCore.Infrastructure.Connections.SQLServer
 {
     public class SQLServerConnection : ISQLServerConnection, IDisposable
     {
-        private readonly string? _connectionString;
+        private readonly string? _connectionstring;
         private IDbConnection _connection;
         private SqlConnection _conn;
 
         public SQLServerConnection(IConfiguration configuration) =>
-            _connectionString = configuration.GetConnectionString("Connection");
+            _connectionstring = configuration.GetConnectionString("Connection");
 
         public void Dispose() => _connection?.Dispose();
 
@@ -19,7 +19,7 @@ namespace IntegrationsCore.Infrastructure.Connections.SQLServer
         {
             try
             {
-                _conn = new SqlConnection(_connectionString.Replace("[catalog]", "master").Replace("[database]", "master"));
+                _conn = new SqlConnection(_connectionstring.Replace("[catalog]", "master").Replace("[database]", "master"));
                 _conn.Open();
                 return _conn;
             }
@@ -34,7 +34,7 @@ namespace IntegrationsCore.Infrastructure.Connections.SQLServer
         {
             try
             {
-                _connection = new SqlConnection(_connectionString.Replace("[catalog]", "master").Replace("[database]", "master"));
+                _connection = new SqlConnection(_connectionstring.Replace("[catalog]", "master").Replace("[database]", "master"));
                 _connection.Open();
                 return _connection;
             }

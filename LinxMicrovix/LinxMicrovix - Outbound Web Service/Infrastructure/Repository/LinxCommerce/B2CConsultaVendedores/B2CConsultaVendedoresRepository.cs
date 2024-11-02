@@ -12,7 +12,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
         public B2CConsultaVendedoresRepository(ILinxMicrovixRepositoryBase<TEntity> linxMicrovixRepositoryBase) =>
             (_linxMicrovixRepositoryBase) = (linxMicrovixRepositoryBase);
 
-        public bool BulkInsertIntoTableRaw(JobParameter jobParameter, List<TEntity> records)
+        public bool BulkInsertIntoTableRaw(LinxMicrovixJobParameter jobParameter, List<TEntity> records)
         {
             try
             {
@@ -37,9 +37,9 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
             }
         }
 
-        public async Task<bool> ExecuteTableMerge(JobParameter jobParameter)
+        public async Task<bool> CreateTableMerge(LinxMicrovixJobParameter jobParameter)
         {
-            string sql = $"MERGE [{jobParameter.tableName}_trusted] AS TARGET " +
+            string? sql = $"MERGE [{jobParameter.tableName}_trusted] AS TARGET " +
                          $"USING [{jobParameter.tableName}_raw] AS SOURCE " +
                           "ON (TARGET.COD_VENDEDOR = SOURCE.COD_VENDEDOR) " +
                           "WHEN MATCHED THEN UPDATE SET " +
@@ -68,7 +68,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
             }
         }
 
-        public async Task<bool> InsertParametersIfNotExists(JobParameter jobParameter)
+        public async Task<bool> InsertParametersIfNotExists(LinxMicrovixJobParameter jobParameter)
         {
             try
             {
@@ -91,9 +91,9 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
             }
         }
 
-        public async Task<bool> InsertRecord(JobParameter jobParameter, TEntity? record)
+        public async Task<bool> InsertRecord(LinxMicrovixJobParameter jobParameter, TEntity? record)
         {
-            string sql = $"INSERT INTO {jobParameter.tableName}_raw " +
+            string? sql = $"INSERT INTO {jobParameter.tableName}_raw " +
                           "([lastupdateon], [cod_vendedor], [nome_vendedor], [comissao_produtos], [comissao_servicos], [tipo], [ativo], [comissionado], [timestamp], [portal]) " +
                           "Values " +
                           "(@lastupdateon, @cod_vendedor, @nome_vendedor, @comissao_produtos, @comissao_servicos, @tipo, @ativo, @comissionado, @timestamp, @portal)";

@@ -36,7 +36,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
             _linxMicrovixRepositoryBase = linxMicrovixRepositoryBase;
         }
 
-        public List<TEntity?> DeserializeXMLToObject(JobParameter jobParameter, List<Dictionary<string, string>> records)
+        public List<TEntity?> DeserializeXMLToObject(LinxMicrovixJobParameter jobParameter, List<Dictionary<string?, string?>> records)
         {
             var list = new List<TEntity>();
 
@@ -45,44 +45,44 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
                 try
                 {
                     var entity = new B2CConsultaClientes(
-                         cod_cliente_b2c: records[i].Where(pair => pair.Key == "cod_cliente_b2c").Select(pair => pair.Value).First(),
-                         cod_cliente_erp: records[i].Where(pair => pair.Key == "cod_cliente_erp").Select(pair => pair.Value).First(),
-                         doc_cliente: records[i].Where(pair => pair.Key == "doc_cliente").Select(pair => pair.Value).First(),
-                         nm_cliente: records[i].Where(pair => pair.Key == "nm_cliente").Select(pair => pair.Value).First(),
-                         nm_mae: records[i].Where(pair => pair.Key == "nm_mae").Select(pair => pair.Value).First(),
-                         nm_pai: records[i].Where(pair => pair.Key == "nm_pai").Select(pair => pair.Value).First(),
-                         nm_conjuge: records[i].Where(pair => pair.Key == "nm_conjuge").Select(pair => pair.Value).First(),
-                         dt_cadastro: records[i].Where(pair => pair.Key == "dt_cadastro").Select(pair => pair.Value).First(),
-                         dt_nasc_cliente: records[i].Where(pair => pair.Key == "dt_nasc_cliente").Select(pair => pair.Value).First(),
-                         end_cliente: records[i].Where(pair => pair.Key == "end_cliente").Select(pair => pair.Value).First(),
-                         complemento_end_cliente: records[i].Where(pair => pair.Key == "complemento_end_cliente").Select(pair => pair.Value).First(),
-                         nr_rua_cliente: records[i].Where(pair => pair.Key == "nr_rua_cliente").Select(pair => pair.Value).First(),
-                         bairro_cliente: records[i].Where(pair => pair.Key == "bairro_cliente").Select(pair => pair.Value).First(),
-                         cep_cliente: records[i].Where(pair => pair.Key == "cep_cliente").Select(pair => pair.Value).First(),
-                         cidade_cliente: records[i].Where(pair => pair.Key == "cidade_cliente").Select(pair => pair.Value).First(),
-                         uf_cliente: records[i].Where(pair => pair.Key == "uf_cliente").Select(pair => pair.Value).First(),
-                         fone_cliente: records[i].Where(pair => pair.Key == "fone_cliente").Select(pair => pair.Value).First(),
-                         fone_comercial: records[i].Where(pair => pair.Key == "fone_comercial").Select(pair => pair.Value).First(),
-                         cel_cliente: records[i].Where(pair => pair.Key == "cel_cliente").Select(pair => pair.Value).First(),
-                         email_cliente: records[i].Where(pair => pair.Key == "email_cliente").Select(pair => pair.Value).First(),
-                         rg_cliente: records[i].Where(pair => pair.Key == "rg_cliente").Select(pair => pair.Value).First(),
-                         rg_orgao_emissor: records[i].Where(pair => pair.Key == "rg_orgao_emissor").Select(pair => pair.Value).First(),
-                         estado_civil_cliente: records[i].Where(pair => pair.Key == "estado_civil_cliente").Select(pair => pair.Value).First(),
-                         empresa_cliente: records[i].Where(pair => pair.Key == "empresa_cliente").Select(pair => pair.Value).First(),
-                         cargo_cliente: records[i].Where(pair => pair.Key == "cargo_cliente").Select(pair => pair.Value).First(),
-                         sexo_cliente: records[i].Where(pair => pair.Key == "sexo_cliente").Select(pair => pair.Value).First(),
-                         dt_update: records[i].Where(pair => pair.Key == "dt_update").Select(pair => pair.Value).First(),
-                         ativo: records[i].Where(pair => pair.Key == "ativo").Select(pair => pair.Value).First(),
-                         receber_email: records[i].Where(pair => pair.Key == "receber_email").Select(pair => pair.Value).First(),
-                         dt_expedicao_rg: records[i].Where(pair => pair.Key == "dt_expedicao_rg").Select(pair => pair.Value).First(),
-                         naturalidade: records[i].Where(pair => pair.Key == "naturalidade").Select(pair => pair.Value).First(),
-                         tempo_residencia: records[i].Where(pair => pair.Key == "tempo_residencia").Select(pair => pair.Value).First(),
-                         renda: records[i].Where(pair => pair.Key == "renda").Select(pair => pair.Value).First(),
-                         numero_compl_rua_cliente: records[i].Where(pair => pair.Key == "numero_compl_rua_cliente").Select(pair => pair.Value).First(),
-                         timestamp: records[i].Where(pair => pair.Key == "timestamp").Select(pair => pair.Value).First(),
-                         tipo_pessoa: records[i].Where(pair => pair.Key == "tipo_pessoa").Select(pair => pair.Value).First(),
-                         portal: records[i].Where(pair => pair.Key == "portal").Select(pair => pair.Value).First(),
-                         aceita_programa_fidelidade: records[i].Where(pair => pair.Key == "aceita_programa_fidelidade").Select(pair => pair.Value).First()
+                         cod_cliente_b2c: records[i].Where(pair => pair.Key == "cod_cliente_b2c").Select(pair => pair.Value).FirstOrDefault(),
+                         cod_cliente_erp: records[i].Where(pair => pair.Key == "cod_cliente_erp").Select(pair => pair.Value).FirstOrDefault(),
+                         doc_cliente: records[i].Where(pair => pair.Key == "doc_cliente").Select(pair => pair.Value).FirstOrDefault(),
+                         nm_cliente: records[i].Where(pair => pair.Key == "nm_cliente").Select(pair => pair.Value).FirstOrDefault(),
+                         nm_mae: records[i].Where(pair => pair.Key == "nm_mae").Select(pair => pair.Value).FirstOrDefault(),
+                         nm_pai: records[i].Where(pair => pair.Key == "nm_pai").Select(pair => pair.Value).FirstOrDefault(),
+                         nm_conjuge: records[i].Where(pair => pair.Key == "nm_conjuge").Select(pair => pair.Value).FirstOrDefault(),
+                         dt_cadastro: records[i].Where(pair => pair.Key == "dt_cadastro").Select(pair => pair.Value).FirstOrDefault(),
+                         dt_nasc_cliente: records[i].Where(pair => pair.Key == "dt_nasc_cliente").Select(pair => pair.Value).FirstOrDefault(),
+                         end_cliente: records[i].Where(pair => pair.Key == "end_cliente").Select(pair => pair.Value).FirstOrDefault(),
+                         complemento_end_cliente: records[i].Where(pair => pair.Key == "complemento_end_cliente").Select(pair => pair.Value).FirstOrDefault(),
+                         nr_rua_cliente: records[i].Where(pair => pair.Key == "nr_rua_cliente").Select(pair => pair.Value).FirstOrDefault(),
+                         bairro_cliente: records[i].Where(pair => pair.Key == "bairro_cliente").Select(pair => pair.Value).FirstOrDefault(),
+                         cep_cliente: records[i].Where(pair => pair.Key == "cep_cliente").Select(pair => pair.Value).FirstOrDefault(),
+                         cidade_cliente: records[i].Where(pair => pair.Key == "cidade_cliente").Select(pair => pair.Value).FirstOrDefault(),
+                         uf_cliente: records[i].Where(pair => pair.Key == "uf_cliente").Select(pair => pair.Value).FirstOrDefault(),
+                         fone_cliente: records[i].Where(pair => pair.Key == "fone_cliente").Select(pair => pair.Value).FirstOrDefault(),
+                         fone_comercial: records[i].Where(pair => pair.Key == "fone_comercial").Select(pair => pair.Value).FirstOrDefault(),
+                         cel_cliente: records[i].Where(pair => pair.Key == "cel_cliente").Select(pair => pair.Value).FirstOrDefault(),
+                         email_cliente: records[i].Where(pair => pair.Key == "email_cliente").Select(pair => pair.Value).FirstOrDefault(),
+                         rg_cliente: records[i].Where(pair => pair.Key == "rg_cliente").Select(pair => pair.Value).FirstOrDefault(),
+                         rg_orgao_emissor: records[i].Where(pair => pair.Key == "rg_orgao_emissor").Select(pair => pair.Value).FirstOrDefault(),
+                         estado_civil_cliente: records[i].Where(pair => pair.Key == "estado_civil_cliente").Select(pair => pair.Value).FirstOrDefault(),
+                         empresa_cliente: records[i].Where(pair => pair.Key == "empresa_cliente").Select(pair => pair.Value).FirstOrDefault(),
+                         cargo_cliente: records[i].Where(pair => pair.Key == "cargo_cliente").Select(pair => pair.Value).FirstOrDefault(),
+                         sexo_cliente: records[i].Where(pair => pair.Key == "sexo_cliente").Select(pair => pair.Value).FirstOrDefault(),
+                         dt_update: records[i].Where(pair => pair.Key == "dt_update").Select(pair => pair.Value).FirstOrDefault(),
+                         ativo: records[i].Where(pair => pair.Key == "ativo").Select(pair => pair.Value).FirstOrDefault(),
+                         receber_email: records[i].Where(pair => pair.Key == "receber_email").Select(pair => pair.Value).FirstOrDefault(),
+                         dt_expedicao_rg: records[i].Where(pair => pair.Key == "dt_expedicao_rg").Select(pair => pair.Value).FirstOrDefault(),
+                         naturalidade: records[i].Where(pair => pair.Key == "naturalidade").Select(pair => pair.Value).FirstOrDefault(),
+                         tempo_residencia: records[i].Where(pair => pair.Key == "tempo_residencia").Select(pair => pair.Value).FirstOrDefault(),
+                         renda: records[i].Where(pair => pair.Key == "renda").Select(pair => pair.Value).FirstOrDefault(),
+                         numero_compl_rua_cliente: records[i].Where(pair => pair.Key == "numero_compl_rua_cliente").Select(pair => pair.Value).FirstOrDefault(),
+                         timestamp: records[i].Where(pair => pair.Key == "timestamp").Select(pair => pair.Value).FirstOrDefault(),
+                         tipo_pessoa: records[i].Where(pair => pair.Key == "tipo_pessoa").Select(pair => pair.Value).FirstOrDefault(),
+                         portal: records[i].Where(pair => pair.Key == "portal").Select(pair => pair.Value).FirstOrDefault(),
+                         aceita_programa_fidelidade: records[i].Where(pair => pair.Key == "aceita_programa_fidelidade").Select(pair => pair.Value).FirstOrDefault()
                     );
 
                     list.Add((TEntity)entity);
@@ -94,8 +94,8 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
                         project = jobParameter.projectName,
                         job = jobParameter.jobName,
                         method = "DeserializeXMLToObject",
-                        message = $"Error when convert record: {records[i].Where(pair => pair.Key == "cod_cliente_b2c").Select(pair => pair.Value).First()} - {records[i].Where(pair => pair.Key == "nm_cliente").Select(pair => pair.Value).First()}",
-                        record = $"{records[i].Where(pair => pair.Key == "cod_cliente_b2c").Select(pair => pair.Value).First()} - {records[i].Where(pair => pair.Key == "nm_cliente").Select(pair => pair.Value).First()}",
+                        message = $"Error when convert record: {records[i].Where(pair => pair.Key == "cod_cliente_b2c").Select(pair => pair.Value).FirstOrDefault()} - {records[i].Where(pair => pair.Key == "nm_cliente").Select(pair => pair.Value).FirstOrDefault()}",
+                        record = $"{records[i].Where(pair => pair.Key == "cod_cliente_b2c").Select(pair => pair.Value).FirstOrDefault()} - {records[i].Where(pair => pair.Key == "nm_cliente").Select(pair => pair.Value).FirstOrDefault()}",
                         propertie = " - ",
                         exception = ex.Message
                     };
@@ -105,7 +105,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
             return list;
         }
 
-        public async Task<bool> GetRecord(JobParameter jobParameter, string? identificador, string? cnpj_emp)
+        public async Task<bool> GetRecord(LinxMicrovixJobParameter jobParameter, string? identificador, string? cnpj_emp)
         {
             try
             {
@@ -113,14 +113,14 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
                 await _linxMicrovixRepositoryBase.CreateDataTableIfNotExists(jobParameter);
                 await _b2cConsultaClientesRepository.InsertParametersIfNotExists(jobParameter);
 
-                string parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter);
+                string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter);
 
                 var body = _linxMicrovixServiceBase.BuildBodyRequest(
                     parametersList: parameters.Replace("[0]", "0").Replace("[doc_cliente]", identificador),
                     jobParameter: jobParameter,
                     cnpj_emp: cnpj_emp);
 
-                string response = await _apiCall.PostAsync(jobParameter: jobParameter, body: body);
+                string? response = await _apiCall.PostAsync(jobParameter: jobParameter, body: body);
                 var xmls = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response);
 
                 if (xmls.Count() > 0)
@@ -154,7 +154,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
             }
         }
 
-        public async Task<bool> GetRecords(JobParameter jobParameter)
+        public async Task<bool> GetRecords(LinxMicrovixJobParameter jobParameter)
         {
             try
             {
@@ -163,8 +163,8 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
                 await _b2cConsultaClientesRepository.InsertParametersIfNotExists(jobParameter);
                 await _linxMicrovixRepositoryBase.ExecuteTruncateRawTable(jobParameter);
 
-                string parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter);
-                string timestamp = await _linxMicrovixRepositoryBase.GetLast7DaysMinTimestamp(jobParameter: jobParameter, columnDate: "DT_UPDATE");
+                string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter);
+                string? timestamp = await _linxMicrovixRepositoryBase.GetLast7DaysMinTimestamp(jobParameter: jobParameter, columnDate: "DT_UPDATE");
 
                 var body = _linxMicrovixServiceBase.BuildBodyRequest(
                     parametersList: parameters.Replace("[0]", timestamp),
@@ -172,7 +172,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
                     cnpj_emp: jobParameter.docMainCompany
                 );
 
-                string response = await _apiCall.PostAsync(jobParameter: jobParameter, body: body);
+                string? response = await _apiCall.PostAsync(jobParameter: jobParameter, body: body);
                 var xmls = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response);
 
                 if (xmls.Count() > 0)
@@ -193,7 +193,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
                 await _linxMicrovixRepositoryBase.UpdateLogParameters(jobParameter: jobParameter, lastResponse: response);
 
                 //await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter: jobParameter);
-                await _b2cConsultaClientesRepository.ExecuteTableMerge(jobParameter: jobParameter);
+                await _b2cConsultaClientesRepository.CreateTableMerge(jobParameter: jobParameter);
                 await _linxMicrovixRepositoryBase.ExecuteTruncateRawTable(jobParameter);
 
                 return true;

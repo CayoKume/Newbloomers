@@ -2,7 +2,7 @@
 {
     public class Parameters
     {
-        public string cnpj_emp { get; set; }
+        public string? cnpj_emp { get; set; }
         public int cliente_id { get; set; }
         public int ctt_id { get; set; }
         public int ccusto_id { get; set; }

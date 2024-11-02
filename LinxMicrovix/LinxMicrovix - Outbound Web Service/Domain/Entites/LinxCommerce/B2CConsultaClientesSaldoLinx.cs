@@ -20,7 +20,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
         [Column(TypeName = "int")]
         public Int32? empresa { get; private set; }
 
-        [Column(TypeName = "money")]
+        [Column(TypeName = "decimal(10,2)")]
         public decimal? valor { get; private set; }
 
         [Column(TypeName = "bigint")]
@@ -43,27 +43,27 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
             lastupdateon = DateTime.Now;
 
             this.cod_cliente_b2c =
-                cod_cliente_b2c == String.Empty ? 0
+                String.IsNullOrEmpty(cod_cliente_b2c) ? 0
                 : Convert.ToInt32(cod_cliente_b2c);
 
             this.cod_cliente_erp =
-                cod_cliente_erp == String.Empty ? 0
+                String.IsNullOrEmpty(cod_cliente_erp) ? 0
                 : Convert.ToInt32(cod_cliente_erp);
 
             this.valor =
-                valor == String.Empty ? 0
+                String.IsNullOrEmpty(valor) ? 0
                 : Convert.ToDecimal(valor);
 
             this.empresa =
-                empresa == String.Empty ? 0
+                String.IsNullOrEmpty(empresa) ? 0
                 : Convert.ToInt32(empresa);
 
             this.timestamp =
-                timestamp == String.Empty ? 0
+                String.IsNullOrEmpty(timestamp) ? 0
                 : Convert.ToInt64(timestamp);
 
             this.portal =
-                portal == String.Empty ? 0
+                String.IsNullOrEmpty(portal) ? 0
                 : Convert.ToInt32(portal);
         }
     }

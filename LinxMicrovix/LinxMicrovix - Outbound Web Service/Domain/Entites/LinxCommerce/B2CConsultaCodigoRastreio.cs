@@ -45,15 +45,15 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
             lastupdateon = DateTime.Now;
 
             this.id_pedido =
-                id_pedido == String.Empty ? 0
+                String.IsNullOrEmpty(id_pedido) ? 0
                 : Convert.ToInt32(id_pedido);
 
             this.documento =
-                documento == String.Empty ? 0
+                String.IsNullOrEmpty(documento) ? 0
                 : Convert.ToInt32(documento);
 
             this.serie =
-                serie == String.Empty ? ""
+                String.IsNullOrEmpty(serie) ? ""
                 : serie.Substring(
                     0,
                     serie.Length > 10 ? 10
@@ -61,7 +61,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.codigo_rastreio =
-                codigo_rastreio == String.Empty ? ""
+                String.IsNullOrEmpty(codigo_rastreio) ? ""
                 : codigo_rastreio.Substring(
                     0,
                     codigo_rastreio.Length > 20 ? 20
@@ -69,7 +69,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.sequencia_volume =
-                sequencia_volume == String.Empty ? ""
+                String.IsNullOrEmpty(sequencia_volume) ? ""
                 : sequencia_volume.Substring(
                     0,
                     sequencia_volume.Length > 20 ? 20
@@ -77,11 +77,11 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.timestamp =
-                timestamp == String.Empty ? 0
+                String.IsNullOrEmpty(timestamp) ? 0
                 : Convert.ToInt64(timestamp);
 
             this.portal =
-                portal == String.Empty ? 0
+                String.IsNullOrEmpty(portal) ? 0
                 : Convert.ToInt32(portal);
 
         }

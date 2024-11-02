@@ -12,7 +12,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
         public B2CConsultaNFeRepository(ILinxMicrovixRepositoryBase<TEntity> linxMicrovixRepositoryBase) =>
             (_linxMicrovixRepositoryBase) = (linxMicrovixRepositoryBase);
 
-        public bool BulkInsertIntoTableRaw(JobParameter jobParameter, List<TEntity> records)
+        public bool BulkInsertIntoTableRaw(LinxMicrovixJobParameter jobParameter, List<TEntity> records)
         {
             try
             {
@@ -39,38 +39,50 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
             }
         }
 
-        public async Task<bool> ExecuteTableMerge(JobParameter jobParameter)
+        public async Task<bool> CreateTableMerge(LinxMicrovixJobParameter jobParameter)
         {
-            string sql = $"MERGE [{jobParameter.tableName}_trusted] AS TARGET " +
-                         $"USING [{jobParameter.tableName}_raw] AS SOURCE " +
-                          "ON (TARGET.ID_NFE = SOURCE.ID_NFE) " +
-                          "WHEN MATCHED THEN UPDATE SET " +
-                          "TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON], " +
-                          "TARGET.[ID_NFE] = SOURCE.[ID_NFE], " +
-                          "TARGET.[ID_PEDIDO] = SOURCE.[ID_PEDIDO], " +
-                          "TARGET.[DOCUMENTO] = SOURCE.[DOCUMENTO], " +
-                          "TARGET.[DATA_EMISSAO] = SOURCE.[DATA_EMISSAO], " +
-                          "TARGET.[CHAVE_NFE] = SOURCE.[CHAVE_NFE], " +
-                          "TARGET.[SITUACAO] = SOURCE.[SITUACAO], " +
-                          "TARGET.[XML] = SOURCE.[XML], " +
-                          "TARGET.[EXCLUIDO] = SOURCE.[EXCLUIDO], " +
-                          "TARGET.[IDENTIFICADOR_MICROVIX] = SOURCE.[IDENTIFICADOR_MICROVIX], " +
-                          "TARGET.[DT_INSERT] = SOURCE.[DT_INSERT], " +
-                          "TARGET.[VALOR_NOTA] = SOURCE.[VALOR_NOTA], " +
-                          "TARGET.[SERIE] = SOURCE.[SERIE], " +
-                          "TARGET.[FRETE] = SOURCE.[FRETE], " +
-                          "TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP], " +
-                          "TARGET.[PORTAL] = SOURCE.[PORTAL], " +
-                          "TARGET.[NPROT] = SOURCE.[NPROT], " +
-                          "TARGET.[CODIGO_MODELO_NF] = SOURCE.[CODIGO_MODELO_NF], " +
-                          "TARGET.[JUSTIFICATIVA] = SOURCE.[JUSTIFICATIVA], " +
-                          "TARGET.[TPAMB] = SOURCE.[TPAMB] " +
-                          "WHEN NOT MATCHED BY TARGET THEN " +
-                          "INSERT " +
-                          "([LASTUPDATEON], [ID_NFE], [ID_PEDIDO], [DOCUMENTO], [DATA_EMISSAO], [CHAVE_NFE], [SITUACAO], [XML], [EXCLUIDO], [IDENTIFICADOR_MICROVIX], [DT_INSERT], [VALOR_NOTA], [SERIE], [FRETE], [TIMESTAMP], [PORTAL], [NPROT], [CODIGO_MODELO_NF], [TPAMB])" +
-                          "VALUES " +
-                          "(SOURCE.[LASTUPDATEON], SOURCE.[ID_NFE], SOURCE.[ID_PEDIDO], SOURCE.[DOCUMENTO], SOURCE.[DATA_EMISSAO], SOURCE.[CHAVE_NFE], SOURCE.[SITUACAO], SOURCE.[XML], SOURCE.[EXCLUIDO], SOURCE.[IDENTIFICADOR_MICROVIX], SOURCE.[DT_INSERT], " +
-                          "SOURCE.[VALOR_NOTA], SOURCE.[SERIE], SOURCE.[FRETE], SOURCE.[TIMESTAMP], SOURCE.[PORTAL], SOURCE.[NPROT], SOURCE.[CODIGO_MODELO_NF], SOURCE.[TPAMB]);";
+            string? sql = @"IF NOT EXISTS (SELECT * FROM SYS.OBJECTS WHERE TYPE = 'P' AND NAME = 'P_B2CCONSULTANFE_SYNC')
+                           BEGIN
+                           EXECUTE (
+	                           'CREATE PROCEDURE [P_B2CCONSULTANFE_SYNC] AS
+	                           BEGIN
+		                           MERGE [B2CCONSULTANFE_TRUSTED] AS TARGET
+                                   USING [B2CCONSULTANFE_RAW] AS SOURCE
+
+                                   ON (TARGET.[ID_NFE] = SOURCE.[ID_NFE])
+
+                                   WHEN MATCHED AND TARGET.[TIMESTAMP] != SOURCE.[TIMESTAMP] THEN 
+			                           UPDATE SET
+			                           TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON],
+			                           TARGET.[ID_NFE] = SOURCE.[ID_NFE],
+			                           TARGET.[ID_PEDIDO] = SOURCE.[ID_PEDIDO],
+			                           TARGET.[DOCUMENTO] = SOURCE.[DOCUMENTO],
+			                           TARGET.[DATA_EMISSAO] = SOURCE.[DATA_EMISSAO],
+			                           TARGET.[CHAVE_NFE] = SOURCE.[CHAVE_NFE],
+			                           TARGET.[SITUACAO] = SOURCE.[SITUACAO],
+			                           TARGET.[XML] = SOURCE.[XML],
+			                           TARGET.[EXCLUIDO] = SOURCE.[EXCLUIDO],
+			                           TARGET.[IDENTIFICADOR_MICROVIX] = SOURCE.[IDENTIFICADOR_MICROVIX],
+			                           TARGET.[DT_INSERT] = SOURCE.[DT_INSERT],
+			                           TARGET.[VALOR_NOTA] = SOURCE.[VALOR_NOTA],
+			                           TARGET.[SERIE] = SOURCE.[SERIE],
+			                           TARGET.[FRETE] = SOURCE.[FRETE],
+			                           TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP],
+			                           TARGET.[PORTAL] = SOURCE.[PORTAL],
+			                           TARGET.[NPROT] = SOURCE.[NPROT],
+			                           TARGET.[CODIGO_MODELO_NF] = SOURCE.[CODIGO_MODELO_NF],
+			                           TARGET.[JUSTIFICATIVA] = SOURCE.[JUSTIFICATIVA],
+			                           TARGET.[TPAMB] = SOURCE.[TPAMB]
+
+                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_NFE] NOT IN (SELECT [ID_NFE] FROM [B2CCONSULTANFE_TRUSTED]) THEN
+                                       INSERT
+                                       ([LASTUPDATEON], [ID_NFE], [ID_PEDIDO], [DOCUMENTO], [DATA_EMISSAO], [CHAVE_NFE], [SITUACAO], [XML], [EXCLUIDO], [IDENTIFICADOR_MICROVIX], [DT_INSERT], [VALOR_NOTA], [SERIE], [FRETE], [TIMESTAMP], [PORTAL], [NPROT], [CODIGO_MODELO_NF], [TPAMB])
+                                       VALUES
+                                       (SOURCE.[LASTUPDATEON], SOURCE.[ID_NFE], SOURCE.[ID_PEDIDO], SOURCE.[DOCUMENTO], SOURCE.[DATA_EMISSAO], SOURCE.[CHAVE_NFE], SOURCE.[SITUACAO], SOURCE.[XML], SOURCE.[EXCLUIDO], SOURCE.[IDENTIFICADOR_MICROVIX], SOURCE.[DT_INSERT],
+                                       SOURCE.[VALOR_NOTA], SOURCE.[SERIE], SOURCE.[FRETE], SOURCE.[TIMESTAMP], SOURCE.[PORTAL], SOURCE.[NPROT], SOURCE.[CODIGO_MODELO_NF], SOURCE.[TPAMB]);
+	                           END'
+                           )
+                           END";
 
             try
             {
@@ -82,7 +94,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
             }
         }
 
-        public async Task<bool> InsertParametersIfNotExists(JobParameter jobParameter)
+        public async Task<bool> InsertParametersIfNotExists(LinxMicrovixJobParameter jobParameter)
         {
             try
             {
@@ -105,9 +117,9 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
             }
         }
 
-        public async Task<bool> InsertRecord(JobParameter jobParameter, TEntity? record)
+        public async Task<bool> InsertRecord(LinxMicrovixJobParameter jobParameter, TEntity? record)
         {
-            string sql = $"INSERT INTO {jobParameter.tableName}_raw " +
+            string? sql = $"INSERT INTO {jobParameter.tableName}_raw " +
                           "([lastupdateon], [id_nfe], [id_pedido], [documento], [data_emissao], [chave_nfe], [situacao], [xml], [excluido], [identificador_microvix], [dt_insert], [valor_nota], [serie], [frete], [timestamp], [portal], [nProt], [codigo_modelo_nf], [justificativa], [tpAmb]) " +
                           "Values " +
                           "(@lastupdateon, @id_nfe, @id_pedido, @documento, @data_emissao, @chave_nfe, @situacao, @xml, @excluido, @identificador_microvix, @dt_insert, @valor_nota, @serie, @frete, @timestamp, @portal, @nProt, @codigo_modelo_nf, @justificativa, @tpAmb)";

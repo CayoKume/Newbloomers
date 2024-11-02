@@ -12,7 +12,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
         public B2CConsultaProdutosDepositosRepository(ILinxMicrovixRepositoryBase<TEntity> linxMicrovixRepositoryBase) =>
             (_linxMicrovixRepositoryBase) = (linxMicrovixRepositoryBase);
 
-        public bool BulkInsertIntoTableRaw(JobParameter jobParameter, List<TEntity> records)
+        public bool BulkInsertIntoTableRaw(LinxMicrovixJobParameter jobParameter, List<TEntity> records)
         {
             try
             {
@@ -37,25 +37,39 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
             }
         }
 
-        public async Task<bool> ExecuteTableMerge(JobParameter jobParameter)
+        public async Task<bool> CreateTableMerge(LinxMicrovixJobParameter jobParameter)
         {
-            string sql = $"MERGE [{jobParameter.tableName}_trusted] AS TARGET " +
-                         $"USING [{jobParameter.tableName}_raw] AS SOURCE " +
-                          "ON (TARGET.ID_DEPOSITO = SOURCE.ID_DEPOSITO) " +
-                          "WHEN MATCHED THEN UPDATE SET " +
-                          "TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON], " +
-                          "TARGET.[ID_DEPOSITO] = SOURCE.[ID_DEPOSITO], " +
-                          "TARGET.[NOME_DEPOSITO] = SOURCE.[NOME_DEPOSITO], " +
-                          "TARGET.[DISPONIVEL] = SOURCE.[DISPONIVEL], " +
-                          "TARGET.[DISPONIVEL_TRANSFERENCIA] = SOURCE.[DISPONIVEL_TRANSFERENCIA], " +
-                          "TARGET.[DISPONIVEL_FRANQUIAS] = SOURCE.[DISPONIVEL_FRANQUIAS], " +
-                          "TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP], " +
-                          "TARGET.[PORTAL] = SOURCE.[PORTAL] " +
-                          "WHEN NOT MATCHED BY TARGET THEN " +
-                          "INSERT " +
-                          "([LASTUPDATEON], [ID_DEPOSITO], [NOME_DEPOSITO], [DISPONIVEL], [DISPONIVEL_TRANSFERENCIA], [DISPONIVEL_FRANQUIAS], [TIMESTAMP], [PORTAL])" +
-                          "VALUES " +
-                          "(SOURCE.[LASTUPDATEON], SOURCE.[ID_DEPOSITO], SOURCE.[NOME_DEPOSITO], SOURCE.[DISPONIVEL], SOURCE.[DISPONIVEL_TRANSFERENCIA], SOURCE.[DISPONIVEL_FRANQUIAS], SOURCE.[TIMESTAMP], SOURCE.[PORTAL]);";
+            string? sql = @"IF NOT EXISTS (SELECT * FROM SYS.OBJECTS WHERE TYPE = 'P' AND NAME = 'P_B2CCONSULTAPRODUTOSDEPOSITOS_SYNC')
+                           BEGIN
+                           EXECUTE (
+	                           'CREATE PROCEDURE [P_B2CCONSULTAPRODUTOSDEPOSITOS_SYNC] AS
+	                           BEGIN
+		                           MERGE [B2CCONSULTAPRODUTOSDEPOSITOS_TRUSTED] AS TARGET
+                                   USING [B2CCONSULTAPRODUTOSDEPOSITOS_RAW] AS SOURCE
+
+                                   ON (
+			                           TARGET.[ID_DEPOSITO] = SOURCE.[ID_DEPOSITO]
+		                           )
+
+                                   WHEN MATCHED AND TARGET.[TIMESTAMP] != SOURCE.[TIMESTAMP] THEN
+			                           UPDATE SET
+			                           TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON],
+			                           TARGET.[ID_DEPOSITO] = SOURCE.[ID_DEPOSITO],
+			                           TARGET.[NOME_DEPOSITO] = SOURCE.[NOME_DEPOSITO],
+			                           TARGET.[DISPONIVEL] = SOURCE.[DISPONIVEL],
+			                           TARGET.[DISPONIVEL_TRANSFERENCIA] = SOURCE.[DISPONIVEL_TRANSFERENCIA],
+			                           TARGET.[DISPONIVEL_FRANQUIAS] = SOURCE.[DISPONIVEL_FRANQUIAS],
+			                           TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP],
+			                           TARGET.[PORTAL] = SOURCE.[PORTAL]
+
+                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_DEPOSITO] NOT IN (SELECT [ID_DEPOSITO] FROM [B2CCONSULTAPRODUTOSDEPOSITOS_TRUSTED]) THEN
+			                           INSERT
+			                           ([LASTUPDATEON], [ID_DEPOSITO], [NOME_DEPOSITO], [DISPONIVEL], [DISPONIVEL_TRANSFERENCIA], [DISPONIVEL_FRANQUIAS], [TIMESTAMP], [PORTAL])
+			                           VALUES
+			                           (SOURCE.[LASTUPDATEON], SOURCE.[ID_DEPOSITO], SOURCE.[NOME_DEPOSITO], SOURCE.[DISPONIVEL], SOURCE.[DISPONIVEL_TRANSFERENCIA], SOURCE.[DISPONIVEL_FRANQUIAS], SOURCE.[TIMESTAMP], SOURCE.[PORTAL]);
+	                           END'
+                           )
+                           END";
 
             try
             {
@@ -67,7 +81,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
             }
         }
 
-        public async Task<bool> InsertParametersIfNotExists(JobParameter jobParameter)
+        public async Task<bool> InsertParametersIfNotExists(LinxMicrovixJobParameter jobParameter)
         {
             try
             {
@@ -90,9 +104,9 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
             }
         }
 
-        public async Task<bool> InsertRecord(JobParameter jobParameter, TEntity? record)
+        public async Task<bool> InsertRecord(LinxMicrovixJobParameter jobParameter, TEntity? record)
         {
-            string sql = $"INSERT INTO {jobParameter.tableName}_raw " +
+            string? sql = $"INSERT INTO {jobParameter.tableName}_raw " +
                           "([lastupdateon], [id_deposito], [nome_deposito], [disponivel], [disponivel_transferencia], [disponivel_franquias], [timestamp], [portal]) " +
                           "Values " +
                           "(@lastupdateon, @id_deposito, @nome_deposito, @disponivel, @disponivel_transferencia, @disponivel_franquias, @timestamp, @portal)";

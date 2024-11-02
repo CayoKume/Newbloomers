@@ -33,11 +33,11 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
             lastupdateon = DateTime.Now;
 
             this.codigo_espessura =
-                codigo_espessura == String.Empty ? 0
+                String.IsNullOrEmpty(codigo_espessura) ? 0
                 : Convert.ToInt32(codigo_espessura);
 
             this.nome_espessura =
-                nome_espessura == String.Empty ? ""
+                String.IsNullOrEmpty(nome_espessura) ? ""
                 : nome_espessura.Substring(
                     0,
                     nome_espessura.Length > 100 ? 100
@@ -45,11 +45,11 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.timestamp =
-                timestamp == String.Empty ? 0
+                String.IsNullOrEmpty(timestamp) ? 0
                 : Convert.ToInt64(timestamp);
 
             this.portal =
-                portal == String.Empty ? 0
+                String.IsNullOrEmpty(portal) ? 0
                 : Convert.ToInt32(portal);
         }
     }

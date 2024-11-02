@@ -33,11 +33,11 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
             lastupdateon = DateTime.Now;
 
             this.codigo_grade2 =
-                codigo_grade2 == String.Empty ? 0
+                String.IsNullOrEmpty(codigo_grade2) ? 0
                 : Convert.ToInt32(codigo_grade2);
 
             this.nome_grade2 =
-                nome_grade2 == String.Empty ? ""
+                String.IsNullOrEmpty(nome_grade2) ? ""
                 : nome_grade2.Substring(
                     0,
                     nome_grade2.Length > 100 ? 100
@@ -45,11 +45,11 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.timestamp =
-                timestamp == String.Empty ? 0
+                String.IsNullOrEmpty(timestamp) ? 0
                 : Convert.ToInt64(timestamp);
 
             this.portal =
-                portal == String.Empty ? 0
+                String.IsNullOrEmpty(portal) ? 0
                 : Convert.ToInt32(portal);
         }
     }

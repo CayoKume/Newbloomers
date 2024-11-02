@@ -12,7 +12,7 @@
             public required string? command { get; set; }
             public required string? exception { get; set; }
 
-            public override string Message => $"Project: {project}\n" +
+            public override string? Message => $"Project: {project}\n" +
                                               $"Job: {job}\n" +
                                               $"Method: {method}\n" +
                                               $"Description: Error getting record from: {schema}\n" +
@@ -31,7 +31,7 @@
             public required string? command { get; set; }
             public required string? exception { get; set; }
 
-            public override string Message => $"Project: {project}\n" +
+            public override string? Message => $"Project: {project}\n" +
                                               $"Job: {job}\n" +
                                               $"Method: {method}\n" +
                                               $"Description: Error getting records from: {schema}\n" +
@@ -49,7 +49,7 @@
             public required string? schema { get; set; }
             public required string? exception { get; set; }
 
-            public override string Message => $"Project: {project}\n" +
+            public override string? Message => $"Project: {project}\n" +
                                               $"Job: {job}\n" +
                                               $"Method: {method}\n" +
                                               $"Description: Error executing query \nOn: {schema}\n" +
@@ -67,7 +67,7 @@
             public required string? command { get; set; }
             public required string? exception { get; set; }
 
-            public override string Message => $"Project: {project}\n" +
+            public override string? Message => $"Project: {project}\n" +
                                               $"Job: {job}\n" +
                                               $"Method: {method}\n" +
                                               $"Description: Error executing command: {command}\nOn: {schema}\n" +
@@ -86,7 +86,7 @@
             public required string? parameter { get; set; }
             public required string? exception { get; set; }
 
-            public override string Message => $"Project: {project}\n" +
+            public override string? Message => $"Project: {project}\n" +
                                               $"Job: {job}\n" +
                                               $"Method: {method}\n" +
                                               $"Description: Error executing command: {command}\nWith parameters: {parameter}\nOn: {schema}\n" +

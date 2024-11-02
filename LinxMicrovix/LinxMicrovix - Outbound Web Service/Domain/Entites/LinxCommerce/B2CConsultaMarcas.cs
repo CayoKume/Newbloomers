@@ -37,11 +37,11 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
             lastupdateon = DateTime.Now;
 
             this.codigo_marca =
-                codigo_marca == String.Empty ? 0
+                String.IsNullOrEmpty(codigo_marca) ? 0
                 : Convert.ToInt32(codigo_marca);
 
             this.nome_marca =
-                nome_marca == String.Empty ? ""
+                String.IsNullOrEmpty(nome_marca) ? ""
                 : nome_marca.Substring(
                     0,
                     nome_marca.Length > 100 ? 100
@@ -49,7 +49,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.linhas =
-                linhas == String.Empty ? ""
+                String.IsNullOrEmpty(linhas) ? ""
                 : linhas.Substring(
                     0,
                     linhas.Length > 250 ? 250
@@ -57,11 +57,11 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.timestamp =
-                timestamp == String.Empty ? 0
+                String.IsNullOrEmpty(timestamp) ? 0
                 : Convert.ToInt64(timestamp);
 
             this.portal =
-                portal == String.Empty ? 0
+                String.IsNullOrEmpty(portal) ? 0
                 : Convert.ToInt32(portal);
         }
     }

@@ -23,7 +23,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
         [Column(TypeName = "int")]
         public Int32? quantidade { get; private set; }
 
-        [Column(TypeName = "float")]
+        [Column(TypeName = "decimal(10,2)")]
         public decimal? vl_unitario { get; private set; }
 
         [Column(TypeName = "bigint")]
@@ -47,31 +47,31 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
             lastupdateon = DateTime.Now;
 
             this.id_pedido_item =
-                id_pedido_item == String.Empty ? 0
+                String.IsNullOrEmpty(id_pedido_item) ? 0
                 : Convert.ToInt32(id_pedido_item);
 
             this.id_pedido =
-                id_pedido == String.Empty ? 0
+                String.IsNullOrEmpty(id_pedido) ? 0
                 : Convert.ToInt32(id_pedido);
 
             this.codigoproduto =
-                codigoproduto == String.Empty ? 0
+                String.IsNullOrEmpty(codigoproduto) ? 0
                 : Convert.ToInt64(codigoproduto);
 
             this.quantidade =
-                quantidade == String.Empty ? 0
+                String.IsNullOrEmpty(quantidade) ? 0
                 : Convert.ToInt32(quantidade);
 
             this.vl_unitario =
-                vl_unitario == String.Empty ? 0
+                String.IsNullOrEmpty(vl_unitario) ? 0
                 : Convert.ToDecimal(vl_unitario);
 
             this.timestamp =
-                timestamp == String.Empty ? 0
+                String.IsNullOrEmpty(timestamp) ? 0
                 : Convert.ToInt64(timestamp);
 
             this.portal =
-                portal == String.Empty ? 0
+                String.IsNullOrEmpty(portal) ? 0
                 : Convert.ToInt32(portal);
         }
     }

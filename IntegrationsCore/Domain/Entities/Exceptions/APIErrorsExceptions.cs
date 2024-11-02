@@ -12,7 +12,7 @@
             public required string? api_error_message { get; set; }
             public required string? exception { get; set; }
 
-            public override string Message => $"Project: {project}\n" +
+            public override string? Message => $"Project: {project}\n" +
                                               $"Job: {job}\n" +
                                               $"Method: {method}\n" +
                                               $"Response: {response}\n" +
@@ -31,7 +31,7 @@
             public required string? message { get; set; }
             public required string? exception { get; set; }
 
-            public override string Message => $"Project: {project}\n" +
+            public override string? Message => $"Project: {project}\n" +
                                               $"Job: {job}\n" +
                                               $"Method: {method}\n" +
                                               $"Endpoint: {endpoint}\n" +

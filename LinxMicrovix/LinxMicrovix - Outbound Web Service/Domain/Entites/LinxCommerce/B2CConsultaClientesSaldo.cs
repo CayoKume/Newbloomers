@@ -8,7 +8,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
         [Column(TypeName = "datetime")]
         public DateTime? lastupdateon { get; private set; }
 
-        [Column(TypeName = "money")]
+        [Column(TypeName = "decimal(10,2)")]
         public decimal? saldo { get; private set; }
 
         [Key]
@@ -38,23 +38,23 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
             lastupdateon = DateTime.Now;
 
             this.saldo =
-                saldo == String.Empty ? 0
+                String.IsNullOrEmpty(saldo) ? 0
                 : Convert.ToDecimal(saldo);
 
             this.cod_cliente_erp =
-                cod_cliente_erp == String.Empty ? 0
+                String.IsNullOrEmpty(cod_cliente_erp) ? 0
                 : Convert.ToInt32(cod_cliente_erp);
 
             this.empresa =
-                empresa == String.Empty ? 0
+                String.IsNullOrEmpty(empresa) ? 0
                 : Convert.ToInt32(empresa);
 
             this.timestamp =
-                timestamp == String.Empty ? 0
+                String.IsNullOrEmpty(timestamp) ? 0
                 : Convert.ToInt64(timestamp);
 
             this.portal =
-                portal == String.Empty ? 0
+                String.IsNullOrEmpty(portal) ? 0
                 : Convert.ToInt32(portal);
         }
     }

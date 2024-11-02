@@ -17,6 +17,7 @@ using IntegrationsCore.Infrastructure.Connections.SQLServer;
 using LinxMicrovix_Outbound_Web_Service.Application.Services.LinxMicrovix;
 using LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxMicrovix;
 using LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxMicrovix;
+using LinxCommerce.Application.Services.Sales;
 
 namespace HangfireDashboard.Domain.Extensions
 {
@@ -25,18 +26,33 @@ namespace HangfireDashboard.Domain.Extensions
         public static WebApplicationBuilder AddServices(this WebApplicationBuilder builder)
         {
             var serverName = builder.Configuration.GetSection("ConfigureServer").GetSection("ServerName").Value;
-            var connectionString = builder.Configuration.GetConnectionString("Connection");
+            var connectionstring = builder.Configuration.GetConnectionString("Connection");
 
             builder.Services.AddScopedSQLServerConnection();
 
+            builder.Services.AddScopedLinxCommerceServices();
             builder.Services.AddScopedLinxMicrovixServices();
             builder.Services.AddScopedB2CLinxMicrovixServices();
             builder.Services.AddScopedFlashCourierServices();
             builder.Services.AddScopedTotalExpressServices();
 
-            builder.Services.AddHangfireService(connectionString, serverName);
+            builder.Services.AddHangfireService(connectionstring, serverName);
 
             return builder;
+        }
+
+        public static IServiceCollection AddScopedLinxCommerceServices(this IServiceCollection services)
+        {
+            services.AddScoped<LinxCommerce.Infrastructure.Api.IAPICall, LinxCommerce.Infrastructure.Api.APICall>();
+            services.AddHttpClient("LinxCommerceAPI", client =>
+            {
+                client.BaseAddress = new Uri("https://misha.layer.core.dcg.com.br");
+                client.Timeout = new TimeSpan(0, 20, 0);
+            });
+
+            services.AddScoped<ISalesService, SalesService>();
+
+            return services;
         }
 
         public static IServiceCollection AddScopedLinxMicrovixServices(this IServiceCollection services)
@@ -301,7 +317,7 @@ namespace HangfireDashboard.Domain.Extensions
             return services;
         }
 
-        public static IServiceCollection AddHangfireService(this IServiceCollection services, string? connectionString, string? serverName)
+        public static IServiceCollection AddHangfireService(this IServiceCollection services, string? connectionstring, string? serverName)
         {
             services.AddHangfire(configuration => configuration
                 .UseFilter(new AutomaticRetryAttribute { Attempts = 0 })
@@ -309,7 +325,7 @@ namespace HangfireDashboard.Domain.Extensions
                 .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
                 .UseSimpleAssemblyNameTypeSerializer()
                 .UseRecommendedSerializerSettings()
-                .UseSqlServerStorage(connectionString, new SqlServerStorageOptions
+                .UseSqlServerStorage(connectionstring, new SqlServerStorageOptions
                 {
                     CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
                     SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),

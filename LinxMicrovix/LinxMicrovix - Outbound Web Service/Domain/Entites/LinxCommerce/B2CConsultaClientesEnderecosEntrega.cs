@@ -80,19 +80,19 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
             lastupdateon = DateTime.Now;
 
             this.id_endereco_entrega =
-                id_endereco_entrega == String.Empty ? 0
+                String.IsNullOrEmpty(id_endereco_entrega) ? 0
                 : Convert.ToInt32(id_endereco_entrega);
 
             this.cod_cliente_erp =
-                cod_cliente_erp == String.Empty ? 0
+                String.IsNullOrEmpty(cod_cliente_erp) ? 0
                 : Convert.ToInt32(cod_cliente_erp);
 
             this.cod_cliente_b2c =
-                cod_cliente_b2c == String.Empty ? 0
+                String.IsNullOrEmpty(cod_cliente_b2c) ? 0
                 : Convert.ToInt32(cod_cliente_b2c);
 
             this.endereco_cliente =
-                endereco_cliente == String.Empty ? ""
+                String.IsNullOrEmpty(endereco_cliente) ? ""
                 : endereco_cliente.Substring(
                     0,
                     endereco_cliente.Length > 250 ? 250
@@ -100,7 +100,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.numero_rua_cliente =
-                numero_rua_cliente == String.Empty ? ""
+                String.IsNullOrEmpty(numero_rua_cliente) ? ""
                 : numero_rua_cliente.Substring(
                     0,
                     numero_rua_cliente.Length > 20 ? 20
@@ -108,7 +108,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.complemento_end_cli =
-                complemento_end_cli == String.Empty ? ""
+                String.IsNullOrEmpty(complemento_end_cli) ? ""
                 : complemento_end_cli.Substring(
                     0,
                     complemento_end_cli.Length > 60 ? 60
@@ -116,7 +116,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.cep_cliente =
-                cep_cliente == String.Empty ? ""
+                String.IsNullOrEmpty(cep_cliente) ? ""
                 : cep_cliente.Substring(
                     0,
                     cep_cliente.Length > 9 ? 9
@@ -124,7 +124,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.bairro_cliente =
-                bairro_cliente == String.Empty ? ""
+                String.IsNullOrEmpty(bairro_cliente) ? ""
                 : bairro_cliente.Substring(
                     0,
                     bairro_cliente.Length > 60 ? 60
@@ -132,7 +132,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.cidade_cliente =
-                cidade_cliente == String.Empty ? ""
+                String.IsNullOrEmpty(cidade_cliente) ? ""
                 : cidade_cliente.Substring(
                     0,
                     cidade_cliente.Length > 40 ? 40
@@ -140,7 +140,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.uf_cliente =
-                uf_cliente == String.Empty ? ""
+                String.IsNullOrEmpty(uf_cliente) ? ""
                 : uf_cliente.Substring(
                     0,
                     uf_cliente.Length > 2 ? 2
@@ -148,7 +148,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.descricao =
-                descricao == String.Empty ? ""
+                String.IsNullOrEmpty(descricao) ? ""
                 : descricao.Substring(
                     0,
                     descricao.Length > 250 ? 250
@@ -156,19 +156,19 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.principal =
-                principal == String.Empty ? 0
+                String.IsNullOrEmpty(principal) ? 0
                 : Convert.ToInt32(principal);
 
             this.id_cidade =
-                id_cidade == String.Empty ? 0
+                String.IsNullOrEmpty(id_cidade) ? 0
                 : Convert.ToInt32(id_cidade);
 
             this.timestamp =
-                timestamp == String.Empty ? 0
+                String.IsNullOrEmpty(timestamp) ? 0
                 : Convert.ToInt64(timestamp);
 
             this.portal =
-                portal == String.Empty ? 0
+                String.IsNullOrEmpty(portal) ? 0
                 : Convert.ToInt32(portal);
         }
     }

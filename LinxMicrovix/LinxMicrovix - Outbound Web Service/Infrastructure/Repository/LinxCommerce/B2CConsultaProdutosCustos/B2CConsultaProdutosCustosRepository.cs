@@ -12,7 +12,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
         public B2CConsultaProdutosCustosRepository(ILinxMicrovixRepositoryBase<TEntity> linxMicrovixRepositoryBase) =>
             (_linxMicrovixRepositoryBase) = (linxMicrovixRepositoryBase);
 
-        public bool BulkInsertIntoTableRaw(JobParameter jobParameter, List<TEntity> records)
+        public bool BulkInsertIntoTableRaw(LinxMicrovixJobParameter jobParameter, List<TEntity> records)
         {
             try
             {
@@ -38,36 +38,50 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
             }
         }
 
-        public async Task<bool> ExecuteTableMerge(JobParameter jobParameter)
+        public async Task<bool> CreateTableMerge(LinxMicrovixJobParameter jobParameter)
         {
-            string sql = $"MERGE [{jobParameter.tableName}_trusted] AS TARGET " +
-                         $"USING [{jobParameter.tableName}_raw] AS SOURCE " +
-                          "ON (TARGET.ID_PRODUTOS_CUSTOS = SOURCE.ID_PRODUTOS_CUSTOS) " +
-                          "WHEN MATCHED THEN UPDATE SET " +
-                          "TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON], " +
-                          "TARGET.[ID_PRODUTOS_CUSTOS] = SOURCE.[ID_PRODUTOS_CUSTOS], " +
-                          "TARGET.[CODIGOPRODUTO] = SOURCE.[CODIGOPRODUTO], " +
-                          "TARGET.[EMPRESA] = SOURCE.[EMPRESA], " +
-                          "TARGET.[CUSTOICMS1] = SOURCE.[CUSTOICMS1], " +
-                          "TARGET.[IPI1] = SOURCE.[IPI1], " +
-                          "TARGET.[MARKUP] = SOURCE.[MARKUP], " +
-                          "TARGET.[CUSTOMEDIO] = SOURCE.[CUSTOMEDIO], " +
-                          "TARGET.[FRETE1] = SOURCE.[FRETE1], " +
-                          "TARGET.[PRECISAO] = SOURCE.[PRECISAO], " +
-                          "TARGET.[PRECOMINIMO] = SOURCE.[PRECOMINIMO], " +
-                          "TARGET.[DT_UPDATE] = SOURCE.[DT_UPDATE], " +
-                          "TARGET.[CUSTOLIQUIDO] = SOURCE.[CUSTOLIQUIDO], " +
-                          "TARGET.[PRECOVENDA] = SOURCE.[PRECOVENDA], " +
-                          "TARGET.[CUSTOTOTAL] = SOURCE.[CUSTOTOTAL], " +
-                          "TARGET.[PRECOCOMPRA] = SOURCE.[PRECOCOMPRA], " +
-                          "TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP], " +
-                          "TARGET.[PORTAL] = SOURCE.[PORTAL] " +
-                          "WHEN NOT MATCHED BY TARGET THEN " +
-                          "INSERT " +
-                          "([LASTUPDATEON], [ID_PRODUTOS_CUSTOS], [CODIGOPRODUTO], [EMPRESA], [CUSTOICMS1], [IPI1], [MARKUP], [CUSTOMEDIO], [FRETE1], [PRECISAO], [PRECOMINIMO], [DT_UPDATE], [CUSTOLIQUIDO], [PRECOVENDA], [CUSTOTOTAL], [PRECOCOMPRA], [TIMESTAMP], [PORTAL])" +
-                          "VALUES " +
-                          "(SOURCE.[LASTUPDATEON], SOURCE.[ID_PRODUTOS_CUSTOS], SOURCE.[CODIGOPRODUTO], SOURCE.[EMPRESA], SOURCE.[CUSTOICMS1], SOURCE.[IPI1], SOURCE.[MARKUP], SOURCE.[CUSTOMEDIO], SOURCE.[FRETE1], SOURCE.[PRECISAO], SOURCE.[PRECOMINIMO], " +
-                          "SOURCE.[DT_UPDATE], SOURCE.[CUSTOLIQUIDO], SOURCE.[PRECOVENDA], SOURCE.[CUSTOTOTAL], SOURCE.[PRECOCOMPRA], SOURCE.[TIMESTAMP], SOURCE.[PORTAL]);";
+            string? sql = @"IF NOT EXISTS (SELECT * FROM SYS.OBJECTS WHERE TYPE = 'P' AND NAME = 'P_B2CCONSULTAPRODUTOSCUSTOS_SYNC')
+                           BEGIN
+                           EXECUTE (
+	                           'CREATE PROCEDURE [P_B2CCONSULTAPRODUTOSCUSTOS_SYNC] AS
+	                           BEGIN
+		                           MERGE [B2CCONSULTAPRODUTOSCUSTOS_TRUSTED] AS TARGET
+                                   USING [B2CCONSULTAPRODUTOSCUSTOS_RAW] AS SOURCE
+
+                                   ON (
+			                           TARGET.[ID_PRODUTOS_CUSTOS] = SOURCE.[ID_PRODUTOS_CUSTOS]
+		                           )
+        
+		                           WHEN MATCHED AND TARGET.[TIMESTAMP] != SOURCE.[TIMESTAMP] THEN
+			                           UPDATE SET
+			                           TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON],
+			                           TARGET.[ID_PRODUTOS_CUSTOS] = SOURCE.[ID_PRODUTOS_CUSTOS],
+			                           TARGET.[CODIGOPRODUTO] = SOURCE.[CODIGOPRODUTO],
+			                           TARGET.[EMPRESA] = SOURCE.[EMPRESA],
+			                           TARGET.[CUSTOICMS1] = SOURCE.[CUSTOICMS1],
+			                           TARGET.[IPI1] = SOURCE.[IPI1],
+			                           TARGET.[MARKUP] = SOURCE.[MARKUP],
+			                           TARGET.[CUSTOMEDIO] = SOURCE.[CUSTOMEDIO],
+			                           TARGET.[FRETE1] = SOURCE.[FRETE1],
+			                           TARGET.[PRECISAO] = SOURCE.[PRECISAO],
+			                           TARGET.[PRECOMINIMO] = SOURCE.[PRECOMINIMO],
+			                           TARGET.[DT_UPDATE] = SOURCE.[DT_UPDATE],
+			                           TARGET.[CUSTOLIQUIDO] = SOURCE.[CUSTOLIQUIDO],
+			                           TARGET.[PRECOVENDA] = SOURCE.[PRECOVENDA],
+			                           TARGET.[CUSTOTOTAL] = SOURCE.[CUSTOTOTAL],
+			                           TARGET.[PRECOCOMPRA] = SOURCE.[PRECOCOMPRA],
+			                           TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP],
+			                           TARGET.[PORTAL] = SOURCE.[PORTAL]
+        
+		                           WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_PRODUTOS_CUSTOS] NOT IN (SELECT [ID_PRODUTOS_CUSTOS] FROM [B2CCONSULTAPRODUTOSCUSTOS_TRUSTED]) THEN
+			                           INSERT
+			                           ([LASTUPDATEON], [ID_PRODUTOS_CUSTOS], [CODIGOPRODUTO], [EMPRESA], [CUSTOICMS1], [IPI1], [MARKUP], [CUSTOMEDIO], [FRETE1], [PRECISAO], [PRECOMINIMO], [DT_UPDATE], [CUSTOLIQUIDO], [PRECOVENDA], [CUSTOTOTAL], [PRECOCOMPRA], [TIMESTAMP], [PORTAL])
+			                           VALUES
+			                           (SOURCE.[LASTUPDATEON], SOURCE.[ID_PRODUTOS_CUSTOS], SOURCE.[CODIGOPRODUTO], SOURCE.[EMPRESA], SOURCE.[CUSTOICMS1], SOURCE.[IPI1], SOURCE.[MARKUP], SOURCE.[CUSTOMEDIO], SOURCE.[FRETE1], SOURCE.[PRECISAO], SOURCE.[PRECOMINIMO],
+			                           SOURCE.[DT_UPDATE], SOURCE.[CUSTOLIQUIDO], SOURCE.[PRECOVENDA], SOURCE.[CUSTOTOTAL], SOURCE.[PRECOCOMPRA], SOURCE.[TIMESTAMP], SOURCE.[PORTAL]);
+	                           END'
+                           )
+                           END";
 
             try
             {
@@ -79,7 +93,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
             }
         }
 
-        public async Task<bool> InsertParametersIfNotExists(JobParameter jobParameter)
+        public async Task<bool> InsertParametersIfNotExists(LinxMicrovixJobParameter jobParameter)
         {
             try
             {
@@ -102,9 +116,9 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
             }
         }
 
-        public async Task<bool> InsertRecord(JobParameter jobParameter, TEntity? record)
+        public async Task<bool> InsertRecord(LinxMicrovixJobParameter jobParameter, TEntity? record)
         {
-            string sql = $"INSERT INTO {jobParameter.tableName}_raw " +
+            string? sql = $"INSERT INTO {jobParameter.tableName}_raw " +
                           "([lastupdateon], [id_produtos_custos], [codigoproduto], [empresa], [custoicms1], [ipi1], [markup], [customedio], [frete1], [precisao], [precominimo], [dt_update], [custoliquido], [precovenda], [custototal], [precocompra], [timestamp], [portal]) " +
                           "Values " +
                           "(@lastupdateon, @id_produtos_custos, @codigoproduto, @empresa, @custoicms1, @ipi1, @markup, @customedio, @frete1, @precisao, @precominimo, @dt_update, @custoliquido, @precovenda, @custototal, @precocompra, @timestamp, @portal)";

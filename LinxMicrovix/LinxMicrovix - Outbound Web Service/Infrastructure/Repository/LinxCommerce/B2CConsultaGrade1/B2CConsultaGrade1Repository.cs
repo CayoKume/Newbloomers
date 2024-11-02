@@ -12,7 +12,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
         public B2CConsultaGrade1Repository(ILinxMicrovixRepositoryBase<TEntity> linxMicrovixRepositoryBase) =>
             (_linxMicrovixRepositoryBase) = (linxMicrovixRepositoryBase);
 
-        public bool BulkInsertIntoTableRaw(JobParameter jobParameter, List<TEntity> records)
+        public bool BulkInsertIntoTableRaw(LinxMicrovixJobParameter jobParameter, List<TEntity> records)
         {
             try
             {
@@ -37,22 +37,36 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
             }
         }
 
-        public async Task<bool> ExecuteTableMerge(JobParameter jobParameter)
+        public async Task<bool> CreateTableMerge(LinxMicrovixJobParameter jobParameter)
         {
-            string sql = $"MERGE [{jobParameter.tableName}_trusted] AS TARGET " +
-                         $"USING [{jobParameter.tableName}_raw] AS SOURCE " +
-                          "ON (TARGET.CODIGO_GRADE1 = SOURCE.CODIGO_GRADE1) " +
-                          "WHEN MATCHED THEN UPDATE SET " +
-                          "TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON], " +
-                          "TARGET.[CODIGO_GRADE1] = SOURCE.[CODIGO_GRADE1], " +
-                          "TARGET.[NOME_GRADE1] = SOURCE.[NOME_GRADE1], " +
-                          "TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP], " +
-                          "TARGET.[PORTAL] = SOURCE.[PORTAL] " +
-                          "WHEN NOT MATCHED BY TARGET THEN " +
-                          "INSERT " +
-                          "([LASTUPDATEON], [CODIGO_GRADE1], [NOME_GRADE1], [TIMESTAMP], [PORTAL])" +
-                          "VALUES " +
-                          "(SOURCE.[LASTUPDATEON], SOURCE.[CODIGO_GRADE1], SOURCE.[NOME_GRADE1], SOURCE.[TIMESTAMP], SOURCE.[PORTAL]);";
+            string? sql = @"IF NOT EXISTS (SELECT * FROM SYS.OBJECTS WHERE TYPE = 'P' AND NAME = 'P_B2CCONSULTAGRADE1_SYNC')
+                           BEGIN
+                           EXECUTE (
+	                           'CREATE PROCEDURE [P_B2CCONSULTAGRADE1_SYNC] AS
+	                           BEGIN
+		                           MERGE [B2CCONSULTAGRADE1_TRUSTED] AS TARGET
+                                   USING [B2CCONSULTAGRADE1_RAW] AS SOURCE
+
+                                   ON (
+			                           TARGET.[CODIGO_GRADE1] = SOURCE.[CODIGO_GRADE1]
+		                           )
+
+                                   WHEN MATCHED AND TARGET.[TIMESTAMP] != SOURCE.[TIMESTAMP] THEN 
+			                           UPDATE SET
+			                           TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON],
+			                           TARGET.[CODIGO_GRADE1] = SOURCE.[CODIGO_GRADE1],
+			                           TARGET.[NOME_GRADE1] = SOURCE.[NOME_GRADE1],
+			                           TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP],
+			                           TARGET.[PORTAL] = SOURCE.[PORTAL]
+
+                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[CODIGO_GRADE1] NOT IN (SELECT [CODIGO_GRADE1] FROM [B2CCONSULTAGRADE1_TRUSTED]) THEN
+			                           INSERT
+			                           ([LASTUPDATEON], [CODIGO_GRADE1], [NOME_GRADE1], [TIMESTAMP], [PORTAL])
+			                           VALUES
+			                           (SOURCE.[LASTUPDATEON], SOURCE.[CODIGO_GRADE1], SOURCE.[NOME_GRADE1], SOURCE.[TIMESTAMP], SOURCE.[PORTAL]);
+	                           END'
+                           )
+                           END";
 
             try
             {
@@ -64,7 +78,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
             }
         }
 
-        public async Task<bool> InsertParametersIfNotExists(JobParameter jobParameter)
+        public async Task<bool> InsertParametersIfNotExists(LinxMicrovixJobParameter jobParameter)
         {
             try
             {
@@ -87,9 +101,9 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
             }
         }
 
-        public async Task<bool> InsertRecord(JobParameter jobParameter, TEntity? record)
+        public async Task<bool> InsertRecord(LinxMicrovixJobParameter jobParameter, TEntity? record)
         {
-            string sql = $"INSERT INTO {jobParameter.tableName}_raw " +
+            string? sql = $"INSERT INTO {jobParameter.tableName}_raw " +
                           "([lastupdateon], [codigo_grade1], [nome_grade1], [timestamp], [portal]) " +
                           "Values " +
                           "(@lastupdateon, @codigo_grade1, @nome_grade1, @timestamp, @portal)";

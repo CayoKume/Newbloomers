@@ -1,6 +1,6 @@
-﻿namespace IntegrationsCore.Domain.Entities
+﻿namespace IntegrationsCore.Domain.Entities.Parameters
 {
-    public class JobParameter
+    public class LinxCommerceJobParameter
     {
         public string? docMainCompany { get; set; }
 
@@ -11,7 +11,6 @@
         public string? keyAuthorization { get; set; }
         public string? userAuthentication { get; set; }
 
-        public string? parametersInterval { get; set; }
         public string? parametersTableName { get; set; }
         public string? parametersLogTableName { get; set; }
     }

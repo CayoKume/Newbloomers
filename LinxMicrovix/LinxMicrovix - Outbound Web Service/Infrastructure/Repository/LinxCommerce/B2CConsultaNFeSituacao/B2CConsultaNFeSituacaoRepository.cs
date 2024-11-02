@@ -12,7 +12,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
         public B2CConsultaNFeSituacaoRepository(ILinxMicrovixRepositoryBase<TEntity> linxMicrovixRepositoryBase) =>
             (_linxMicrovixRepositoryBase) = (linxMicrovixRepositoryBase);
 
-        public bool BulkInsertIntoTableRaw(JobParameter jobParameter, List<TEntity> records)
+        public bool BulkInsertIntoTableRaw(LinxMicrovixJobParameter jobParameter, List<TEntity> records)
         {
             try
             {
@@ -37,22 +37,36 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
             }
         }
 
-        public async Task<bool> ExecuteTableMerge(JobParameter jobParameter)
+        public async Task<bool> CreateTableMerge(LinxMicrovixJobParameter jobParameter)
         {
-            string sql = $"MERGE [{jobParameter.tableName}_trusted] AS TARGET " +
-                         $"USING [{jobParameter.tableName}_raw] AS SOURCE " +
-                          "ON (TARGET.ID_NFE_SITUACAO = SOURCE.ID_NFE_SITUACAO) " +
-                          "WHEN MATCHED THEN UPDATE SET " +
-                          "TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON], " +
-                          "TARGET.[ID_NFE_SITUACAO] = SOURCE.[ID_NFE_SITUACAO], " +
-                          "TARGET.[DESCRICAO] = SOURCE.[DESCRICAO], " +
-                          "TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP], " +
-                          "TARGET.[PORTAL] = SOURCE.[PORTAL] " +
-                          "WHEN NOT MATCHED BY TARGET THEN " +
-                          "INSERT " +
-                          "([LASTUPDATEON], [ID_NFE_SITUACAO], [DESCRICAO], [TIMESTAMP], [PORTAL])" +
-                          "VALUES " +
-                          "(SOURCE.[LASTUPDATEON], SOURCE.[ID_NFE_SITUACAO], SOURCE.[DESCRICAO], SOURCE.[TIMESTAMP], SOURCE.[PORTAL]);";
+            string? sql = @"IF NOT EXISTS (SELECT * FROM SYS.OBJECTS WHERE TYPE = 'P' AND NAME = 'P_B2CCONSULTANFESITUACAO_SYNC')
+                           BEGIN
+                           EXECUTE (
+	                           'CREATE PROCEDURE [P_B2CCONSULTANFESITUACAO_SYNC] AS
+	                           BEGIN
+		                           MERGE [B2CCONSULTANFESITUACAO_TRUSTED] AS TARGET
+                                   USING [B2CCONSULTANFESITUACAO_RAW] AS SOURCE
+
+                                   ON (
+			                           TARGET.[ID_NFE_SITUACAO] = SOURCE.[ID_NFE_SITUACAO]
+		                           )
+
+                                   WHEN MATCHED AND TARGET.[TIMESTAMP] != SOURCE.[TIMESTAMP] THEN 
+			                           UPDATE SET
+			                           TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON],
+			                           TARGET.[ID_NFE_SITUACAO] = SOURCE.[ID_NFE_SITUACAO],
+			                           TARGET.[DESCRICAO] = SOURCE.[DESCRICAO],
+			                           TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP],
+			                           TARGET.[PORTAL] = SOURCE.[PORTAL]
+
+                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_NFE_SITUACAO] NOT IN (SELECT [ID_NFE_SITUACAO] FROM [B2CCONSULTANFESITUACAO_TRUSTED]) THEN
+			                           INSERT
+			                           ([LASTUPDATEON], [ID_NFE_SITUACAO], [DESCRICAO], [TIMESTAMP], [PORTAL])
+			                           VALUES
+			                           (SOURCE.[LASTUPDATEON], SOURCE.[ID_NFE_SITUACAO], SOURCE.[DESCRICAO], SOURCE.[TIMESTAMP], SOURCE.[PORTAL]);
+	                           END'
+                           )
+                           END";
 
             try
             {
@@ -64,7 +78,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
             }
         }
 
-        public async Task<bool> InsertParametersIfNotExists(JobParameter jobParameter)
+        public async Task<bool> InsertParametersIfNotExists(LinxMicrovixJobParameter jobParameter)
         {
             try
             {

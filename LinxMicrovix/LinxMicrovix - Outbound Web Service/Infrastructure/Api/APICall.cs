@@ -6,7 +6,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Api
 {
     public class APICall : IAPICall
     {
-        public async Task<string> PostAsync(JobParameter jobParameter, string? body)
+        public async Task<string?> PostAsync(LinxMicrovixJobParameter jobParameter, string? body)
         {
             try
             {
@@ -42,7 +42,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Api
             }
         }
 
-        private HttpWebRequest CreateClient(JobParameter jobParameter, byte[] bytes)
+        private HttpWebRequest CreateClient(LinxMicrovixJobParameter jobParameter, byte[] bytes)
         {
             try
             {

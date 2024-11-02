@@ -29,7 +29,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
             _b2cConsultaEmpresasRepository = b2cConsultaEmpresasRepository;
         }
 
-        public List<TEntity?> DeserializeXMLToObject(JobParameter jobParameter, List<Dictionary<string, string>> records)
+        public List<TEntity?> DeserializeXMLToObject(LinxMicrovixJobParameter jobParameter, List<Dictionary<string?, string?>> records)
         {
             var list = new List<TEntity>();
 
@@ -38,21 +38,21 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
                 try
                 {
                     var entity = new B2CConsultaEmpresas(
-                        empresa: records[i].Where(pair => pair.Key == "empresa").Select(pair => pair.Value).First(),
-                        nome_emp: records[i].Where(pair => pair.Key == "nome_emp").Select(pair => pair.Value).First(),
-                        cnpj_emp: records[i].Where(pair => pair.Key == "cnpj_emp").Select(pair => pair.Value).First(),
-                        end_unidade: records[i].Where(pair => pair.Key == "end_unidade").Select(pair => pair.Value).First(),
-                        complemento_end_unidade: records[i].Where(pair => pair.Key == "complemento_end_unidade").Select(pair => pair.Value).First(),
-                        nr_rua_unidade: records[i].Where(pair => pair.Key == "nr_rua_unidade").Select(pair => pair.Value).First(),
-                        bairro_unidade: records[i].Where(pair => pair.Key == "bairro_unidade").Select(pair => pair.Value).First(),
-                        cep_unidade: records[i].Where(pair => pair.Key == "cep_unidade").Select(pair => pair.Value).First(),
-                        cidade_unidade: records[i].Where(pair => pair.Key == "cidade_unidade").Select(pair => pair.Value).First(),
-                        uf_unidade: records[i].Where(pair => pair.Key == "uf_unidade").Select(pair => pair.Value).First(),
-                        email_unidade: records[i].Where(pair => pair.Key == "email_unidade").Select(pair => pair.Value).First(),
-                        timestamp: records[i].Where(pair => pair.Key == "timestamp").Select(pair => pair.Value).First(),
-                        data_criacao: records[i].Where(pair => pair.Key == "data_criacao").Select(pair => pair.Value).First(),
-                        centro_distribuicao: records[i].Where(pair => pair.Key == "centro_distribuicao").Select(pair => pair.Value).First(),
-                        portal: records[i].Where(pair => pair.Key == "portal").Select(pair => pair.Value).First()
+                        empresa: records[i].Where(pair => pair.Key == "empresa").Select(pair => pair.Value).FirstOrDefault(),
+                        nome_emp: records[i].Where(pair => pair.Key == "nome_emp").Select(pair => pair.Value).FirstOrDefault(),
+                        cnpj_emp: records[i].Where(pair => pair.Key == "cnpj_emp").Select(pair => pair.Value).FirstOrDefault(),
+                        end_unidade: records[i].Where(pair => pair.Key == "end_unidade").Select(pair => pair.Value).FirstOrDefault(),
+                        complemento_end_unidade: records[i].Where(pair => pair.Key == "complemento_end_unidade").Select(pair => pair.Value).FirstOrDefault(),
+                        nr_rua_unidade: records[i].Where(pair => pair.Key == "nr_rua_unidade").Select(pair => pair.Value).FirstOrDefault(),
+                        bairro_unidade: records[i].Where(pair => pair.Key == "bairro_unidade").Select(pair => pair.Value).FirstOrDefault(),
+                        cep_unidade: records[i].Where(pair => pair.Key == "cep_unidade").Select(pair => pair.Value).FirstOrDefault(),
+                        cidade_unidade: records[i].Where(pair => pair.Key == "cidade_unidade").Select(pair => pair.Value).FirstOrDefault(),
+                        uf_unidade: records[i].Where(pair => pair.Key == "uf_unidade").Select(pair => pair.Value).FirstOrDefault(),
+                        email_unidade: records[i].Where(pair => pair.Key == "email_unidade").Select(pair => pair.Value).FirstOrDefault(),
+                        timestamp: records[i].Where(pair => pair.Key == "timestamp").Select(pair => pair.Value).FirstOrDefault(),
+                        data_criacao: records[i].Where(pair => pair.Key == "data_criacao").Select(pair => pair.Value).FirstOrDefault(),
+                        centro_distribuicao: records[i].Where(pair => pair.Key == "centro_distribuicao").Select(pair => pair.Value).FirstOrDefault(),
+                        portal: records[i].Where(pair => pair.Key == "portal").Select(pair => pair.Value).FirstOrDefault()
                     );
 
                     list.Add((TEntity)entity);
@@ -64,8 +64,8 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
                         project = jobParameter.projectName,
                         job = jobParameter.jobName,
                         method = "DeserializeXMLToObject",
-                        message = $"Error when convert record: {records[i].Where(pair => pair.Key == "empresa").Select(pair => pair.Value).First()} - {records[i].Where(pair => pair.Key == "nome_emp").Select(pair => pair.Value).First()}",
-                        record = $"{records[i].Where(pair => pair.Key == "empresa").Select(pair => pair.Value).First()} - {records[i].Where(pair => pair.Key == "nome_emp").Select(pair => pair.Value).First()}",
+                        message = $"Error when convert record: {records[i].Where(pair => pair.Key == "empresa").Select(pair => pair.Value).FirstOrDefault()} - {records[i].Where(pair => pair.Key == "nome_emp").Select(pair => pair.Value).FirstOrDefault()}",
+                        record = $"{records[i].Where(pair => pair.Key == "empresa").Select(pair => pair.Value).FirstOrDefault()} - {records[i].Where(pair => pair.Key == "nome_emp").Select(pair => pair.Value).FirstOrDefault()}",
                         propertie = " - ",
                         exception = ex.Message
                     };
@@ -75,7 +75,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
             return list;
         }
 
-        public async Task<bool> GetRecords(JobParameter jobParameter)
+        public async Task<bool> GetRecords(LinxMicrovixJobParameter jobParameter)
         {
             try
             {
@@ -84,7 +84,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
                 await _b2cConsultaEmpresasRepository.InsertParametersIfNotExists(jobParameter);
                 await _linxMicrovixRepositoryBase.ExecuteTruncateRawTable(jobParameter);
 
-                string parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter);
+                string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter);
 
                 var body = _linxMicrovixServiceBase.BuildBodyRequest(
                     parametersList: parameters.Replace("[0]", "0"),
@@ -92,7 +92,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
                     cnpj_emp: jobParameter.docMainCompany
                 );
 
-                string response = await _apiCall.PostAsync(jobParameter: jobParameter, body: body);
+                string? response = await _apiCall.PostAsync(jobParameter: jobParameter, body: body);
                 var xmls = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response);
 
                 if (xmls.Count() > 0)
@@ -113,7 +113,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
                 await _linxMicrovixRepositoryBase.UpdateLogParameters(jobParameter: jobParameter, lastResponse: response); 
 
                 //await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter: jobParameter);
-                await _b2cConsultaEmpresasRepository.ExecuteTableMerge(jobParameter: jobParameter);
+                await _b2cConsultaEmpresasRepository.CreateTableMerge(jobParameter: jobParameter);
                 await _linxMicrovixRepositoryBase.ExecuteTruncateRawTable(jobParameter);
 
                 return true;

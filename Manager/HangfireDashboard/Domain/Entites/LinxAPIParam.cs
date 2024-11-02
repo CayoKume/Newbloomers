@@ -7,16 +7,16 @@ namespace HangfireDashboard.Domain.Entites
     {
         [Key]
         [Column(TypeName = "varchar(50)")]
-        public string method { get; set; }
+        public string? method { get; set; }
 
         [Column(TypeName = "varchar(MAX)")]
-        public string parameters_timestamp { get; set; }
+        public string? parameters_timestamp { get; set; }
 
         [Column(TypeName = "varchar(MAX)")]
-        public string parameters_dateinterval { get; set; }
+        public string? parameters_dateinterval { get; set; }
 
         [Column(TypeName = "varchar(MAX)")]
-        public string parameters_individual { get; set; }
+        public string? parameters_individual { get; set; }
 
         [Column(TypeName = "BIT")]
         public bool? ativo { get; set; }
@@ -25,6 +25,6 @@ namespace HangfireDashboard.Domain.Entites
         public DateTime? last_execution { get; set; }
 
         [Column(TypeName = "varchar(MAX)")]
-        public string last_response { get; set; }
+        public string? last_response { get; set; }
     }
 }

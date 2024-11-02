@@ -24,7 +24,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
         [Column(TypeName = "int")]
         public Int32? cod_cliente_b2c { get; private set; }
 
-        [Column(TypeName = "float")]
+        [Column(TypeName = "decimal(10,2)")]
         public decimal? vl_frete { get; private set; }
 
         [Column(TypeName = "int")]
@@ -36,13 +36,13 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
         [Column(TypeName = "varchar(400)")]
         public string? anotacao { get; private set; }
 
-        [Column(TypeName = "float")]
+        [Column(TypeName = "decimal(10,2)")]
         public decimal? taxa_impressao { get; private set; }
 
         [Column(TypeName = "bit")]
         public Int32? finalizado { get; private set; }
 
-        [Column(TypeName = "float")]
+        [Column(TypeName = "decimal(10,2)")]
         public decimal? valor_frete_gratis { get; private set; }
 
         [Column(TypeName = "int")]
@@ -66,7 +66,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
         [Column(TypeName = "int")]
         public Int32? id_tabela_preco { get; private set; }
 
-        [Column(TypeName = "money")]
+        [Column(TypeName = "decimal(10,2)")]
         public decimal? valor_credito { get; private set; }
 
         [Column(TypeName = "int")]
@@ -133,35 +133,35 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
             lastupdateon = DateTime.Now;
 
             this.id_pedido =
-                id_pedido == String.Empty ? 0
+                String.IsNullOrEmpty(id_pedido) ? 0
                 : Convert.ToInt32(id_pedido);
 
             this.dt_pedido =
-                dt_pedido == String.Empty ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
+                String.IsNullOrEmpty(dt_pedido) ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
                 : Convert.ToDateTime(dt_pedido);
 
             this.cod_cliente_erp =
-                cod_cliente_erp == String.Empty ? 0
+                String.IsNullOrEmpty(cod_cliente_erp) ? 0
                 : Convert.ToInt32(cod_cliente_erp);
 
             this.cod_cliente_b2c =
-                cod_cliente_b2c == String.Empty ? 0
+                String.IsNullOrEmpty(cod_cliente_b2c) ? 0
                 : Convert.ToInt32(cod_cliente_b2c);
 
             this.vl_frete =
-                vl_frete == String.Empty ? 0
+                String.IsNullOrEmpty(vl_frete) ? 0
                 : Convert.ToDecimal(vl_frete);
 
             this.forma_pgto =
-                forma_pgto == String.Empty ? 0
+                String.IsNullOrEmpty(forma_pgto) ? 0
                 : Convert.ToInt32(forma_pgto);
 
             this.plano_pagamento =
-               plano_pagamento == String.Empty ? 0
+               String.IsNullOrEmpty(plano_pagamento) ? 0
                : Convert.ToInt32(plano_pagamento);
 
             this.anotacao =
-                anotacao == String.Empty ? ""
+                String.IsNullOrEmpty(anotacao) ? ""
                 : anotacao.Substring(
                     0,
                     anotacao.Length > 400 ? 400
@@ -169,71 +169,71 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.taxa_impressao =
-                taxa_impressao == String.Empty ? 0
+                String.IsNullOrEmpty(taxa_impressao) ? 0
                 : Convert.ToDecimal(taxa_impressao);
 
             this.finalizado =
-                finalizado == String.Empty ? 0
+                String.IsNullOrEmpty(finalizado) ? 0
                 : Convert.ToInt32(finalizado);
 
             this.valor_frete_gratis =
-                valor_frete_gratis == String.Empty ? 0
+                String.IsNullOrEmpty(valor_frete_gratis) ? 0
                 : Convert.ToDecimal(valor_frete_gratis);
 
             this.tipo_frete =
-                tipo_frete == String.Empty ? 0
+                String.IsNullOrEmpty(tipo_frete) ? 0
                 : Convert.ToInt32(tipo_frete);
 
             this.id_status =
-                id_status == String.Empty ? 0
+                String.IsNullOrEmpty(id_status) ? 0
                 : Convert.ToInt32(id_status);
 
             this.cod_transportador =
-                cod_transportador == String.Empty ? 0
+                String.IsNullOrEmpty(cod_transportador) ? 0
                 : Convert.ToInt32(cod_transportador);
 
             this.tipo_cobranca_frete =
-                tipo_cobranca_frete == String.Empty ? 0
+                String.IsNullOrEmpty(tipo_cobranca_frete) ? 0
                 : Convert.ToInt32(tipo_cobranca_frete);
 
             this.ativo =
-                ativo == String.Empty ? 0
+                String.IsNullOrEmpty(ativo) ? 0
                 : Convert.ToInt32(ativo);
 
             this.empresa =
-                empresa == String.Empty ? 0
+                String.IsNullOrEmpty(empresa) ? 0
                 : Convert.ToInt32(empresa);
 
             this.id_tabela_preco =
-                id_tabela_preco == String.Empty ? 0
+                String.IsNullOrEmpty(id_tabela_preco) ? 0
                 : Convert.ToInt32(id_tabela_preco);
 
             this.valor_credito =
-                valor_credito == String.Empty ? 0
+                String.IsNullOrEmpty(valor_credito) ? 0
                 : Convert.ToDecimal(valor_credito);
 
             this.cod_vendedor =
-                cod_vendedor == String.Empty ? 0
+                String.IsNullOrEmpty(cod_vendedor) ? 0
                 : Convert.ToInt32(cod_vendedor);
 
             this.dt_insert =
-                dt_insert == String.Empty ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
+                String.IsNullOrEmpty(dt_insert) ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
                 : Convert.ToDateTime(dt_insert);
 
             this.dt_disponivel_faturamento =
-                dt_disponivel_faturamento == String.Empty ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
+                String.IsNullOrEmpty(dt_disponivel_faturamento) ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
                 : Convert.ToDateTime(dt_disponivel_faturamento);
 
             this.mensagem_falha_faturamento =
-                mensagem_falha_faturamento == String.Empty ? ""
+                String.IsNullOrEmpty(mensagem_falha_faturamento) ? ""
                 : mensagem_falha_faturamento;
 
             this.id_tipo_b2c =
-                id_tipo_b2c == String.Empty ? 0
+                String.IsNullOrEmpty(id_tipo_b2c) ? 0
                 : Convert.ToInt32(id_tipo_b2c);
 
             this.ecommerce_origem =
-                ecommerce_origem == String.Empty ? ""
+                String.IsNullOrEmpty(ecommerce_origem) ? ""
                 : ecommerce_origem.Substring(
                     0,
                     ecommerce_origem.Length > 200 ? 200
@@ -241,7 +241,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.order_id =
-                order_id == String.Empty ? ""
+                String.IsNullOrEmpty(order_id) ? ""
                 : order_id.Substring(
                     0,
                     order_id.Length > 40 ? 40
@@ -249,11 +249,11 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.timestamp =
-                timestamp == String.Empty ? 0
+                String.IsNullOrEmpty(timestamp) ? 0
                 : Convert.ToInt64(timestamp);
 
             this.portal =
-                portal == String.Empty ? 0
+                String.IsNullOrEmpty(portal) ? 0
                 : Convert.ToInt32(portal);
         }
     }

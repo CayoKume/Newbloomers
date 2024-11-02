@@ -1,5 +1,4 @@
 ﻿using IntegrationsCore.Domain.Entities;
-using LinxMicrovix_Outbound_Web_Service.Domain.Entites;
 using LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce;
 using LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.Base;
 
@@ -12,7 +11,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
         public B2CConsultaProdutosDimensoesRepository(ILinxMicrovixRepositoryBase<TEntity> linxMicrovixRepositoryBase) =>
             (_linxMicrovixRepositoryBase) = (linxMicrovixRepositoryBase);
 
-        public bool BulkInsertIntoTableRaw(JobParameter jobParameter, List<TEntity> records)
+        public bool BulkInsertIntoTableRaw(LinxMicrovixJobParameter jobParameter, List<TEntity> records)
         {
             try
             {
@@ -37,24 +36,38 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
             }
         }
 
-        public async Task<bool> ExecuteTableMerge(JobParameter jobParameter)
+        public async Task<bool> CreateTableMerge(LinxMicrovixJobParameter jobParameter)
         {
-            string sql = $"MERGE [{jobParameter.tableName}_trusted] AS TARGET " +
-                         $"USING [{jobParameter.tableName}_raw] AS SOURCE " +
-                          "ON (TARGET.CODIGOPRODUTO = SOURCE.CODIGOPRODUTO) " +
-                          "WHEN MATCHED THEN UPDATE SET " +
-                          "TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON], " +
-                          "TARGET.[CODIGOPRODUTO] = SOURCE.[CODIGOPRODUTO], " +
-                          "TARGET.[ALTURA] = SOURCE.[ALTURA], " +
-                          "TARGET.[COMPRIMENTO] = SOURCE.[COMPRIMENTO], " +
-                          "TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP], " +
-                          "TARGET.[LARGURA] = SOURCE.[LARGURA], " +
-                          "TARGET.[PORTAL] = SOURCE.[PORTAL] " +
-                          "WHEN NOT MATCHED BY TARGET THEN " +
-                          "INSERT " +
-                          "([LASTUPDATEON], [CODIGOPRODUTO], [ALTURA], [COMPRIMENTO], [TIMESTAMP], [LARGURA], [PORTAL])" +
-                          "VALUES " +
-                          "(SOURCE.[LASTUPDATEON], SOURCE.[CODIGOPRODUTO], SOURCE.[ALTURA], SOURCE.[COMPRIMENTO], SOURCE.[TIMESTAMP], SOURCE.[LARGURA], SOURCE.[PORTAL]);";
+            string? sql = @"IF NOT EXISTS (SELECT * FROM SYS.OBJECTS WHERE TYPE = 'P' AND NAME = 'P_B2CCONSULTAPRODUTOSDIMENSOES_SYNC')
+                           BEGIN
+                           EXECUTE (
+	                           'CREATE PROCEDURE [P_B2CCONSULTAPRODUTOSDIMENSOES_SYNC] AS
+	                           BEGIN
+		                           MERGE [B2CCONSULTAPRODUTOSDIMENSOES_TRUSTED] AS TARGET
+                                   USING [B2CCONSULTAPRODUTOSDIMENSOES_RAW] AS SOURCE
+
+                                   ON (
+			                           TARGET.[CODIGOPRODUTO] = SOURCE.[CODIGOPRODUTO]
+		                           )
+
+                                   WHEN MATCHED AND TARGET.[TIMESTAMP] != SOURCE.[TIMESTAMP] THEN
+			                           UPDATE SET
+			                           TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON],
+			                           TARGET.[CODIGOPRODUTO] = SOURCE.[CODIGOPRODUTO],
+			                           TARGET.[ALTURA] = SOURCE.[ALTURA],
+			                           TARGET.[COMPRIMENTO] = SOURCE.[COMPRIMENTO],
+			                           TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP],
+			                           TARGET.[LARGURA] = SOURCE.[LARGURA],
+			                           TARGET.[PORTAL] = SOURCE.[PORTAL]
+
+                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[CODIGOPRODUTO] NOT IN (SELECT [CODIGOPRODUTO] FROM [B2CCONSULTAPRODUTOSDIMENSOES_TRUSTED]) THEN
+			                           INSERT
+			                           ([LASTUPDATEON], [CODIGOPRODUTO], [ALTURA], [COMPRIMENTO], [TIMESTAMP], [LARGURA], [PORTAL])
+			                           VALUES
+			                           (SOURCE.[LASTUPDATEON], SOURCE.[CODIGOPRODUTO], SOURCE.[ALTURA], SOURCE.[COMPRIMENTO], SOURCE.[TIMESTAMP], SOURCE.[LARGURA], SOURCE.[PORTAL]);
+	                           END'
+                           )
+                           END";
 
             try
             {
@@ -66,7 +79,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
             }
         }
 
-        public async Task<bool> InsertParametersIfNotExists(JobParameter jobParameter)
+        public async Task<bool> InsertParametersIfNotExists(LinxMicrovixJobParameter jobParameter)
         {
             try
             {
@@ -89,9 +102,9 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
             }
         }
 
-        public async Task<bool> InsertRecord(JobParameter jobParameter, TEntity? record)
+        public async Task<bool> InsertRecord(LinxMicrovixJobParameter jobParameter, TEntity? record)
         {
-            string sql = $"INSERT INTO {jobParameter.tableName}_raw " +
+            string? sql = $"INSERT INTO {jobParameter.tableName}_raw " +
                           "([lastupdateon], [codigoproduto], [altura], [comprimento], [timestamp], [largura], [portal]) " +
                           "Values " +
                           "(@lastupdateon, @codigoproduto, @altura, @comprimento, @timestamp, @largura, @portal)";

@@ -12,7 +12,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
         public B2CConsultaProdutosCodebarRepository(ILinxMicrovixRepositoryBase<TEntity> linxMicrovixRepositoryBase) =>
             (_linxMicrovixRepositoryBase) = (linxMicrovixRepositoryBase);
 
-        public bool BulkInsertIntoTableRaw(JobParameter jobParameter, List<TEntity> records)
+        public bool BulkInsertIntoTableRaw(LinxMicrovixJobParameter jobParameter, List<TEntity> records)
         {
             try
             {
@@ -38,26 +38,40 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
             }
         }
 
-        public async Task<bool> ExecuteTableMerge(JobParameter jobParameter)
+        public async Task<bool> CreateTableMerge(LinxMicrovixJobParameter jobParameter)
         {
-            string sql = $"MERGE [{jobParameter.tableName}_trusted] AS TARGET " +
-                         $"USING [{jobParameter.tableName}_raw] AS SOURCE " +
-                          "ON (TARGET.CODIGOPRODUTO = SOURCE.CODIGOPRODUTO) " +
-                          "WHEN MATCHED THEN UPDATE SET " +
-                          "TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON], " +
-                          "TARGET.[CODIGOPRODUTO] = SOURCE.[CODIGOPRODUTO], " +
-                          "TARGET.[CODEBAR] = SOURCE.[CODEBAR], " +
-                          "TARGET.[ID_PRODUTOS_CODEBAR] = SOURCE.[ID_PRODUTOS_CODEBAR], " +
-                          "TARGET.[PRINCIPAL] = SOURCE.[PRINCIPAL], " +
-                          "TARGET.[EMPRESA] = SOURCE.[EMPRESA], " +
-                          "TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP], " +
-                          "TARGET.[TIPO_CODEBAR] = SOURCE.[TIPO_CODEBAR], " +
-                          "TARGET.[PORTAL] = SOURCE.[PORTAL] " +
-                          "WHEN NOT MATCHED BY TARGET THEN " +
-                          "INSERT " +
-                          "([LASTUPDATEON], [CODIGOPRODUTO], [CODEBAR], [ID_PRODUTOS_CODEBAR], [PRINCIPAL], [EMPRESA], [TIMESTAMP], [TIPO_CODEBAR], [PORTAL])" +
-                          "VALUES " +
-                          "(SOURCE.[LASTUPDATEON], SOURCE.[CODIGOPRODUTO], SOURCE.[CODEBAR], SOURCE.[ID_PRODUTOS_CODEBAR], SOURCE.[PRINCIPAL], SOURCE.[EMPRESA], SOURCE.[TIMESTAMP], SOURCE.[TIPO_CODEBAR], SOURCE.[PORTAL]);";
+            string? sql = @"IF NOT EXISTS (SELECT * FROM SYS.OBJECTS WHERE TYPE = 'P' AND NAME = 'P_B2CCONSULTAPRODUTOSCODEBAR_SYNC')
+                           BEGIN
+                           EXECUTE (
+	                           'CREATE PROCEDURE [P_B2CCONSULTAPRODUTOSCODEBAR_SYNC] AS
+	                           BEGIN
+		                           MERGE [B2CCONSULTAPRODUTOSCODEBAR_TRUSTED] AS TARGET
+                                   USING [B2CCONSULTAPRODUTOSCODEBAR_RAW] AS SOURCE
+
+                                   ON (
+			                           TARGET.[CODIGOPRODUTO] = SOURCE.[CODIGOPRODUTO]
+		                           )
+
+                                   WHEN MATCHED AND TARGET.[TIMESTAMP] != SOURCE.[TIMESTAMP] THEN
+			                           UPDATE SET
+			                           TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON],
+			                           TARGET.[CODIGOPRODUTO] = SOURCE.[CODIGOPRODUTO],
+			                           TARGET.[CODEBAR] = SOURCE.[CODEBAR],
+			                           TARGET.[ID_PRODUTOS_CODEBAR] = SOURCE.[ID_PRODUTOS_CODEBAR],
+			                           TARGET.[PRINCIPAL] = SOURCE.[PRINCIPAL],
+			                           TARGET.[EMPRESA] = SOURCE.[EMPRESA],
+			                           TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP],
+			                           TARGET.[TIPO_CODEBAR] = SOURCE.[TIPO_CODEBAR],
+			                           TARGET.[PORTAL] = SOURCE.[PORTAL]
+
+                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[CODIGOPRODUTO] NOT IN (SELECT [CODIGOPRODUTO] FROM [B2CCONSULTAPRODUTOSCODEBAR_TRUSTED]) THEN
+			                           INSERT
+			                           ([LASTUPDATEON], [CODIGOPRODUTO], [CODEBAR], [ID_PRODUTOS_CODEBAR], [PRINCIPAL], [EMPRESA], [TIMESTAMP], [TIPO_CODEBAR], [PORTAL])
+			                           VALUES
+			                           (SOURCE.[LASTUPDATEON], SOURCE.[CODIGOPRODUTO], SOURCE.[CODEBAR], SOURCE.[ID_PRODUTOS_CODEBAR], SOURCE.[PRINCIPAL], SOURCE.[EMPRESA], SOURCE.[TIMESTAMP], SOURCE.[TIPO_CODEBAR], SOURCE.[PORTAL]);
+	                           END'
+                           )
+                           END";
 
             try
             {
@@ -69,7 +83,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
             }
         }
 
-        public async Task<bool> InsertParametersIfNotExists(JobParameter jobParameter)
+        public async Task<bool> InsertParametersIfNotExists(LinxMicrovixJobParameter jobParameter)
         {
             try
             {
@@ -92,9 +106,9 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
             }
         }
 
-        public async Task<bool> InsertRecord(JobParameter jobParameter, TEntity? record)
+        public async Task<bool> InsertRecord(LinxMicrovixJobParameter jobParameter, TEntity? record)
         {
-            string sql = $"INSERT INTO {jobParameter.tableName}_raw " +
+            string? sql = $"INSERT INTO {jobParameter.tableName}_raw " +
                           "([lastupdateon], [codigoproduto], [codebar], [id_produtos_codebar], [principal], [empresa], [timestamp], [tipo_codebar], [portal]) " +
                           "Values " +
                           "(@lastupdateon, @codigoproduto, @codebar, @id_produtos_codebar, @principal, @empresa, @timestamp, @tipo_codebar, @portal)";

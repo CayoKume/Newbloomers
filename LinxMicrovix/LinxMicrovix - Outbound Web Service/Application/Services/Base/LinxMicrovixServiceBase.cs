@@ -6,7 +6,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.Base
 {
     public class LinxMicrovixServiceBase : ILinxMicrovixServiceBase
     {
-        public string BuildBodyRequest(JobParameter jobParameter, string? parametersList, string? cnpj_emp)
+        public string? BuildBodyRequest(LinxMicrovixJobParameter jobParameter, string? parametersList, string? cnpj_emp)
         {
             return @$"<?xml version=""1.0"" encoding=""utf-8""?>
                           <LinxMicrovix>
@@ -23,7 +23,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.Base
                           </LinxMicrovix>";
         }
 
-        public string BuildBodyRequest(JobParameter jobParameter)
+        public string? BuildBodyRequest(LinxMicrovixJobParameter jobParameter)
         {
             return @$"<?xml version=""1.0"" encoding=""utf-8""?>
                           <LinxMicrovix>
@@ -38,14 +38,14 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.Base
                           </LinxMicrovix>";
         }
 
-        public List<Dictionary<string, string>> DeserializeResponseToXML(JobParameter jobParameter, string? response)
+        public List<Dictionary<string?, string?>> DeserializeResponseToXML(LinxMicrovixJobParameter jobParameter, string? response)
         {
             try
             {
-                var listRegistros = new List<Dictionary<string, string>>();
+                var listRegistros = new List<Dictionary<string?, string?>>();
                 var xml = new XmlDocument();
 
-                if (response != string.Empty)
+                if (response != String.Empty)
                 {
                     xml.LoadXml(response);
 
@@ -65,7 +65,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.Base
                     {
                         Parallel.For(0, xml.GetElementsByTagName("R").Count, row =>
                         {
-                            var registro = new Dictionary<string, string>();
+                            var registro = new Dictionary<string?, string?>();
                             var c0 = xml.GetElementsByTagName("C")[0];
                             var rrow = xml.GetElementsByTagName("R")[row];
                             Parallel.For(0, c0.ChildNodes.Count, col =>

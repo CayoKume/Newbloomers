@@ -20,7 +20,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
         [Column(TypeName = "bigint")]
         public Int64? codigoproduto_associado { get; private set; }
 
-        [Column(TypeName = "float")]
+        [Column(TypeName = "decimal(10,2)")]
         public decimal? coeficiente_desconto { get; private set; }
 
         [Column(TypeName = "bigint")]
@@ -29,7 +29,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
         [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
-        [Column(TypeName = "float")]
+        [Column(TypeName = "decimal(10,2)")]
         public decimal? qtde_item { get; private set; }
 
         [Column(TypeName = "bit")]
@@ -51,35 +51,35 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
             lastupdateon = DateTime.Now;
 
             this.id =
-                id == String.Empty ? 0
+                String.IsNullOrEmpty(id) ? 0
                 : Convert.ToInt32(id);
 
             this.codigoproduto =
-                codigoproduto == String.Empty ? 0
+                String.IsNullOrEmpty(codigoproduto) ? 0
                 : Convert.ToInt64(codigoproduto);
 
             this.codigoproduto_associado =
-                codigoproduto_associado == String.Empty ? 0
+                String.IsNullOrEmpty(codigoproduto_associado) ? 0
                 : Convert.ToInt64(codigoproduto_associado);
 
             this.coeficiente_desconto =
-                coeficiente_desconto == String.Empty ? 0
+                String.IsNullOrEmpty(coeficiente_desconto) ? 0
                 : Convert.ToDecimal(coeficiente_desconto);
 
             this.qtde_item =
-                qtde_item == String.Empty ? 0
+                String.IsNullOrEmpty(qtde_item) ? 0
                 : Convert.ToDecimal(qtde_item);
 
             this.item_obrigatorio =
-                item_obrigatorio == String.Empty ? 0
+                String.IsNullOrEmpty(item_obrigatorio) ? 0
                 : Convert.ToInt32(item_obrigatorio);
 
             this.timestamp =
-               timestamp == String.Empty ? 0
+               String.IsNullOrEmpty(timestamp) ? 0
                : Convert.ToInt64(timestamp);
 
             this.portal =
-                portal == String.Empty ? 0
+                String.IsNullOrEmpty(portal) ? 0
                 : Convert.ToInt32(portal);
         }
     }

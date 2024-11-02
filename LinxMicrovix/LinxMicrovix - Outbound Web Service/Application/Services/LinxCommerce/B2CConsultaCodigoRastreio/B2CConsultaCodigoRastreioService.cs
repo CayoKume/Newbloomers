@@ -28,7 +28,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
             _linxMicrovixRepositoryBase = linxMicrovixRepositoryBase;
         }
 
-        public List<TEntity?> DeserializeXMLToObject(JobParameter jobParameter, List<Dictionary<string, string>> records)
+        public List<TEntity?> DeserializeXMLToObject(LinxMicrovixJobParameter jobParameter, List<Dictionary<string?, string?>> records)
         {
             var list = new List<TEntity>();
 
@@ -37,13 +37,13 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
                 try
                 {
                     var entity = new B2CConsultaCodigoRastreio(
-                        id_pedido: records[i].Where(pair => pair.Key == "id_pedido").Select(pair => pair.Value).First(),
-                        documento: records[i].Where(pair => pair.Key == "documento").Select(pair => pair.Value).First(),
-                        serie: records[i].Where(pair => pair.Key == "serie").Select(pair => pair.Value).First(),
-                        codigo_rastreio: records[i].Where(pair => pair.Key == "codigo_rastreio").Select(pair => pair.Value).First(),
-                        sequencia_volume: records[i].Where(pair => pair.Key == "sequencia_volume").Select(pair => pair.Value).First(),
-                        timestamp: records[i].Where(pair => pair.Key == "timestamp").Select(pair => pair.Value).First(),
-                        portal: records[i].Where(pair => pair.Key == "portal").Select(pair => pair.Value).First()
+                        id_pedido: records[i].Where(pair => pair.Key == "id_pedido").Select(pair => pair.Value).FirstOrDefault(),
+                        documento: records[i].Where(pair => pair.Key == "documento").Select(pair => pair.Value).FirstOrDefault(),
+                        serie: records[i].Where(pair => pair.Key == "serie").Select(pair => pair.Value).FirstOrDefault(),
+                        codigo_rastreio: records[i].Where(pair => pair.Key == "codigo_rastreio").Select(pair => pair.Value).FirstOrDefault(),
+                        sequencia_volume: records[i].Where(pair => pair.Key == "sequencia_volume").Select(pair => pair.Value).FirstOrDefault(),
+                        timestamp: records[i].Where(pair => pair.Key == "timestamp").Select(pair => pair.Value).FirstOrDefault(),
+                        portal: records[i].Where(pair => pair.Key == "portal").Select(pair => pair.Value).FirstOrDefault()
                     );
 
                     list.Add((TEntity)entity);
@@ -55,8 +55,8 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
                         project = jobParameter.projectName,
                         job = jobParameter.jobName,
                         method = "DeserializeXMLToObject",
-                        message = $"Error when convert record: Pedido - {records[i].Where(pair => pair.Key == "id_pedido").Select(pair => pair.Value).First()} Código - {records[i].Where(pair => pair.Key == "codigo_rastreio").Select(pair => pair.Value).First()}",
-                        record = $"Pedido - {records[i].Where(pair => pair.Key == "id_pedido").Select(pair => pair.Value).First()} Código - {records[i].Where(pair => pair.Key == "codigo_rastreio").Select(pair => pair.Value).First()}",
+                        message = $"Error when convert record: Pedido - {records[i].Where(pair => pair.Key == "id_pedido").Select(pair => pair.Value).FirstOrDefault()} Código - {records[i].Where(pair => pair.Key == "codigo_rastreio").Select(pair => pair.Value).FirstOrDefault()}",
+                        record = $"Pedido - {records[i].Where(pair => pair.Key == "id_pedido").Select(pair => pair.Value).FirstOrDefault()} Código - {records[i].Where(pair => pair.Key == "codigo_rastreio").Select(pair => pair.Value).FirstOrDefault()}",
                         propertie = " - ",
                         exception = ex.Message
                     };
@@ -66,7 +66,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
             return list;
         }
 
-        public async Task<bool> GetRecord(JobParameter jobParameter, string? identificador, string? cnpj_emp)
+        public async Task<bool> GetRecord(LinxMicrovixJobParameter jobParameter, string? identificador, string? cnpj_emp)
         {
             try
             {
@@ -74,14 +74,14 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
                 await _linxMicrovixRepositoryBase.CreateDataTableIfNotExists(jobParameter);
                 await _b2cConsultaCodigoRastreioRepository.InsertParametersIfNotExists(jobParameter);
 
-                string parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter);
+                string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter);
 
                 var body = _linxMicrovixServiceBase.BuildBodyRequest(
                     parametersList: parameters.Replace("[0]", "0").Replace("[id_pedido]", identificador),
                     jobParameter: jobParameter,
                     cnpj_emp: cnpj_emp);
 
-                string response = await _apiCall.PostAsync(jobParameter: jobParameter, body: body);
+                string? response = await _apiCall.PostAsync(jobParameter: jobParameter, body: body);
                 var xmls = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response);
 
                 if (xmls.Count() > 0)
@@ -115,7 +115,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
             }
         }
 
-        public async Task<bool> GetRecords(JobParameter jobParameter)
+        public async Task<bool> GetRecords(LinxMicrovixJobParameter jobParameter)
         {
             try
             {
@@ -124,7 +124,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
                 await _b2cConsultaCodigoRastreioRepository.InsertParametersIfNotExists(jobParameter);
                 await _linxMicrovixRepositoryBase.ExecuteTruncateRawTable(jobParameter);
 
-                string parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter);
+                string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter);
                 var cnpjs_emp = await _linxMicrovixRepositoryBase.GetB2CCompanys(jobParameter);
 
                 foreach (var cnpj_emp in cnpjs_emp)
@@ -135,7 +135,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
                         cnpj_emp: cnpj_emp.doc_company
                     );
 
-                    string response = await _apiCall.PostAsync(jobParameter: jobParameter, body: body);
+                    string? response = await _apiCall.PostAsync(jobParameter: jobParameter, body: body);
                     var xmls = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response);
 
                     if (xmls.Count() > 0)
@@ -157,7 +157,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
                 }
 
                 //await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter: jobParameter);
-                await _b2cConsultaCodigoRastreioRepository.ExecuteTableMerge(jobParameter: jobParameter);
+                await _b2cConsultaCodigoRastreioRepository.CreateTableMerge(jobParameter: jobParameter);
                 await _linxMicrovixRepositoryBase.ExecuteTruncateRawTable(jobParameter);
 
                 return true;

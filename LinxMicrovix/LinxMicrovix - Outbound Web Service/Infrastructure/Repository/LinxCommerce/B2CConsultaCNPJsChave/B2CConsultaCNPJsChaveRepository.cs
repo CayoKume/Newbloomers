@@ -13,7 +13,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
         public B2CConsultaCNPJsChaveRepository(ILinxMicrovixRepositoryBase<TEntity> linxMicrovixRepositoryBase) =>
             (_linxMicrovixRepositoryBase) = (linxMicrovixRepositoryBase);
 
-        public bool BulkInsertIntoTableRaw(JobParameter jobParameter, List<TEntity> records)
+        public bool BulkInsertIntoTableRaw(LinxMicrovixJobParameter jobParameter, List<TEntity> records)
         {
             try
             {
@@ -39,28 +39,43 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
             }
         }
 
-        public async Task<bool> ExecuteTableMerge(JobParameter jobParameter)
+        public async Task<bool> CreateTableMerge(LinxMicrovixJobParameter jobParameter)
         {
-            string sql = $"MERGE [{jobParameter.tableName}_trusted] AS TARGET " +
-                         $"USING [{jobParameter.tableName}_raw] AS SOURCE " +
-                          "ON (TARGET.CNPJ = SOURCE.CNPJ) " +
-                          "WHEN MATCHED THEN UPDATE SET " +
-                          "TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON], " +
-                          "TARGET.[CNPJ] = SOURCE.[CNPJ], " +
-                          "TARGET.[NOME_EMPRESA] = SOURCE.[NOME_EMPRESA], " +
-                          "TARGET.[ID_EMPRESA_REDE] = SOURCE.[ID_EMPRESA_REDE], " +
-                          "TARGET.[REDE] = SOURCE.[REDE], " +
-                          "TARGET.[PORTAL] = SOURCE.[PORTAL], " +
-                          "TARGET.[NOME_PORTAL] = SOURCE.[NOME_PORTAL], " +
-                          "TARGET.[EMPRESA] = SOURCE.[EMPRESA], " +
-                          "TARGET.[CLASSIFICACAO_PORTAL] = SOURCE.[CLASSIFICACAO_PORTAL], " +
-                          "TARGET.[B2C] = SOURCE.[B2C], " +
-                          "TARGET.[OMS] = SOURCE.[OMS] " +
-                          "WHEN NOT MATCHED BY TARGET THEN " +
-                          "INSERT " +
-                          "([LASTUPDATEON], [CNPJ], [NOME_EMPRESA], [ID_EMPRESA_REDE], [REDE], [PORTAL], [NOME_PORTAL], [EMPRESA], [CLASSIFICACAO_PORTAL], [B2C], [OMS])" +
-                          "VALUES " +
-                          "(SOURCE.[LASTUPDATEON], SOURCE.[CNPJ], SOURCE.[NOME_EMPRESA], SOURCE.[ID_EMPRESA_REDE], SOURCE.[REDE], SOURCE.[PORTAL], SOURCE.[NOME_PORTAL], SOURCE.[EMPRESA], SOURCE.[CLASSIFICACAO_PORTAL], SOURCE.[B2C], SOURCE.[OMS]);";
+            string? sql = @"IF NOT EXISTS (SELECT * FROM SYS.OBJECTS WHERE TYPE = 'P' AND NAME = 'P_B2CCONSULTACNPJSCHAVE_SYNC')
+                           BEGIN
+                           EXECUTE (
+	                           'CREATE PROCEDURE [P_B2CCONSULTACNPJSCHAVE_SYNC] AS
+	                           BEGIN
+		                           MERGE [B2CCONSULTACNPJSCHAVE_TRUSTED] AS TARGET
+                                   USING [B2CCONSULTACNPJSCHAVE_RAW] AS SOURCE
+
+                                   ON (
+			                           TARGET.[CNPJ] = SOURCE.[CNPJ]
+		                           )
+
+                                   WHEN MATCHED AND (TARGET.[B2C] != SOURCE.[B2C] OR TARGET.[OMS] != SOURCE.[OMS]) THEN
+			                           UPDATE SET
+			                           TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON],
+			                           TARGET.[CNPJ] = SOURCE.[CNPJ],
+			                           TARGET.[NOME_EMPRESA] = SOURCE.[NOME_EMPRESA],
+			                           TARGET.[ID_EMPRESA_REDE] = SOURCE.[ID_EMPRESA_REDE],
+			                           TARGET.[REDE] = SOURCE.[REDE],
+			                           TARGET.[PORTAL] = SOURCE.[PORTAL],
+			                           TARGET.[NOME_PORTAL] = SOURCE.[NOME_PORTAL],
+			                           TARGET.[EMPRESA] = SOURCE.[EMPRESA],
+			                           TARGET.[CLASSIFICACAO_PORTAL] = SOURCE.[CLASSIFICACAO_PORTAL],
+			                           TARGET.[B2C] = SOURCE.[B2C],
+			                           TARGET.[OMS] = SOURCE.[OMS]
+
+                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[CNPJ] NOT IN (SELECT [CNPJ] FROM [B2CCONSULTACNPJSCHAVE_TRUSTED]) THEN
+			                           INSERT
+			                           ([LASTUPDATEON], [CNPJ], [NOME_EMPRESA], [ID_EMPRESA_REDE], [REDE], [PORTAL], [NOME_PORTAL], [EMPRESA], [CLASSIFICACAO_PORTAL], [B2C], [OMS])
+			                           VALUES
+			                           (SOURCE.[LASTUPDATEON], SOURCE.[CNPJ], SOURCE.[NOME_EMPRESA], SOURCE.[ID_EMPRESA_REDE], SOURCE.[REDE], SOURCE.[PORTAL], SOURCE.[NOME_PORTAL], 
+			                           SOURCE.[EMPRESA], SOURCE.[CLASSIFICACAO_PORTAL], SOURCE.[B2C], SOURCE.[OMS]);
+	                           END'
+                           )
+                           END";
 
             try
             {
@@ -72,7 +87,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
             }
         }
 
-        public async Task<bool> InsertParametersIfNotExists(JobParameter jobParameter)
+        public async Task<bool> InsertParametersIfNotExists(LinxMicrovixJobParameter jobParameter)
         {
             try
             {
@@ -94,9 +109,9 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
             }
         }
 
-        public async Task<bool> InsertRecord(JobParameter jobParameter, TEntity? record)
+        public async Task<bool> InsertRecord(LinxMicrovixJobParameter jobParameter, TEntity? record)
         {
-            string sql = $"INSERT INTO {jobParameter.tableName}_raw " +
+            string? sql = $"INSERT INTO {jobParameter.tableName}_raw " +
                           "([lastupdateon], [cnpj], [nome_empresa], [id_empresas_rede], [rede], [portal], [nome_portal], [empresa], [classificacao_portal], [b2c], [oms]) " +
                           "Values " +
                           "(@lastupdateon, @cnpj, @nome_empresa, @id_empresas_rede, @rede, @portal, @nome_portal, @empresa, @classificacao_portal, @b2c, @oms)";

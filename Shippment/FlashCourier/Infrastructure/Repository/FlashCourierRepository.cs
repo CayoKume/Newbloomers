@@ -25,9 +25,9 @@ namespace FlashCourier.Infrastructure.Repository
         public FlashCourierRepository(IPostgreSQLConnection postgreSQLConnection) =>
             (_postgreSQLConnection) = (postgreSQLConnection);
 
-        public async Task<bool> GenerateRequestLog(string orderNumber, string request)
+        public async Task<bool> GenerateRequestLog(string? orderNumber, string? request)
         {
-            string sql = $@"INSERT INTO [GENERAL].[dbo].[FLASHCOURIERREQUESTLOG] (PEDIDO, DATAENVIO, REQUEST) 
+            string? sql = $@"INSERT INTO [GENERAL].[dbo].[FLASHCOURIERREQUESTLOG] (PEDIDO, DATAENVIO, REQUEST) 
                          VALUES(@OrderNumber, GETDATE(), @request)";
             
             var parameter = new { 
@@ -68,9 +68,9 @@ namespace FlashCourier.Infrastructure.Repository
             }
         }
 
-        public async Task<bool> GenerateResponseLog(string orderNumber, string senderID, string _return, string statusFlash, string keyNFe)
+        public async Task<bool> GenerateResponseLog(string? orderNumber, string? senderID, string? _return, string? statusFlash, string? keyNFe)
         {
-            string sql = $@"INSERT INTO [GENERAL].[dbo].[FLASHCOURIERREGISTROLOG] (PEDIDO, DATAENVIO, RETORNO, REMETENTE, STATUSFLASH, CHAVENFE) 
+            string? sql = $@"INSERT INTO [GENERAL].[dbo].[FLASHCOURIERREGISTROLOG] (PEDIDO, DATAENVIO, RETORNO, REMETENTE, STATUSFLASH, CHAVENFE) 
                          VALUES(@OrderNumber, GETDATE(), @Return, @SenderID, @StatusFlash, @KeyNFe)";
             
             var parameter = new { 
@@ -114,9 +114,9 @@ namespace FlashCourier.Infrastructure.Repository
             }
         }
 
-        public async Task<Order> GetInvoicedOrder(string orderNumber)
+        public async Task<Order> GetInvoicedOrder(string? orderNumber)
         {
-            string sql = @$"SELECT DISTINCT
+            string? sql = @$"SELECT DISTINCT
 	                        TRIM(A.DOCUMENTO) AS number,
 	                        SUM(C.PESO_BRUTO) AS weight,
 	                        B.QTDERETORNO AS quantity,
@@ -203,7 +203,7 @@ namespace FlashCourier.Infrastructure.Repository
 
         public async Task<IEnumerable<Order>> GetInvoicedOrders()
         {
-            string sql = @"SELECT DISTINCT
+            string? sql = @"SELECT DISTINCT
 	                        TRIM(A.DOCUMENTO) AS number,
 	                        SUM(C.PESO_BRUTO) AS weight,
 	                        B.QTDERETORNO AS quantity,
@@ -291,15 +291,15 @@ namespace FlashCourier.Infrastructure.Repository
             }
         }
 
-        public async Task<Parameters> GetParameters(string docCompany)
+        public async Task<Parameters> GetParameters(string? docCompany)
         {
-            string sql = $"SELECT DISTINCT * FROM [GENERAL].[dbo].[PARAMETROS_FLASHCOURIER] (NOLOCK)";
+            string? sql = $"SELECT DISTINCT * FROM [GENERAL].[dbo].[PARAMETROS_FLASHCOURIER] (NOLOCK)";
 
             try
             {
                 using (var conn = _sqlServerConnection.GetIDbConnection())
                 {
-                    return await conn.QueryFirstAsync<Parameters>(sql: sql);
+                    return await conn.QueryFirstOrDefaultAsync<Parameters>(sql: sql);
                 }
             }
             catch (Exception ex)
@@ -319,7 +319,7 @@ namespace FlashCourier.Infrastructure.Repository
 
         public async Task<IEnumerable<Company>> GetCompanys()
         {
-            string sql = $"SELECT DISTINCT CNPJ_EMP AS DOC_COMPANY FROM [BLOOMERS_LINX].[dbo].[LINXLOJAS_TRUSTED] (NOLOCK) WHERE EMPRESA IN (1,5)";
+            string? sql = $"SELECT DISTINCT CNPJ_EMP AS DOC_COMPANY FROM [BLOOMERS_LINX].[dbo].[LINXLOJAS_TRUSTED] (NOLOCK) WHERE EMPRESA IN (1,5)";
 
             try
             {
@@ -343,9 +343,9 @@ namespace FlashCourier.Infrastructure.Repository
             }
         }
 
-        public async Task<IEnumerable<Order>> GetShippedOrders(string doc_company)
+        public async Task<IEnumerable<Order>> GetShippedOrders(string? doc_company)
         {
-            string sql = @$"SELECT DISTINCT
+            string? sql = @$"SELECT DISTINCT
                            TRIM(C.DOCUMENTO) AS NUMBER,
                            C.NB_DOC_REMETENTE AS DOC_COMPANY
                            FROM [GENERAL].[dbo].[IT4_WMS_DOCUMENTO] C (NOLOCK)
@@ -381,9 +381,9 @@ namespace FlashCourier.Infrastructure.Repository
             }
         }
 
-        public async Task<bool> UpdateCollectionDate(string dtSla, string cardCode)
+        public async Task<bool> UpdateCollectionDate(string? dtSla, string? cardCode)
         {
-            string sql = $"UPDATE [GENERAL].[dbo].[IT4_WMS_DOCUMENTO] SET NB_DATA_COLETA = CONVERT(DATETIME, '{dtSla}', 103) WHERE LTRIM(RTRIM(DOCUMENTO)) = '{cardCode}' AND NB_TRANSPORTADORA = '18035'";
+            string? sql = $"UPDATE [GENERAL].[dbo].[IT4_WMS_DOCUMENTO] SET NB_DATA_COLETA = CONVERT(DATETIME, '{dtSla}', 103) WHERE LTRIM(RTRIM(DOCUMENTO)) = '{cardCode}' AND NB_TRANSPORTADORA = '18035'";
 
             try
             {
@@ -416,9 +416,9 @@ namespace FlashCourier.Infrastructure.Repository
             }
         }
 
-        public async Task<bool> UpdateDeliveryMadeDate(string occurrence, string cardCode)
+        public async Task<bool> UpdateDeliveryMadeDate(string? occurrence, string? cardCode)
         {
-            string sql = @$"UPDATE [GENERAL].[dbo].[IT4_WMS_DOCUMENTO] SET NB_DATA_ENTREGA_REALIZADA = CONVERT(DATETIME, '{occurrence}', 103) WHERE LTRIM(RTRIM(DOCUMENTO)) = '{cardCode}' AND NB_TRANSPORTADORA = '18035';
+            string? sql = @$"UPDATE [GENERAL].[dbo].[IT4_WMS_DOCUMENTO] SET NB_DATA_ENTREGA_REALIZADA = CONVERT(DATETIME, '{occurrence}', 103) WHERE LTRIM(RTRIM(DOCUMENTO)) = '{cardCode}' AND NB_TRANSPORTADORA = '18035';
                             UPDATE [GENERAL].[dbo].[FLASHCOURIERREGISTROLOG] SET STATUSECOM = '56' WHERE PEDIDO = '{cardCode}'";
 
             try
@@ -452,9 +452,9 @@ namespace FlashCourier.Infrastructure.Repository
             }
         }
 
-        public async Task<bool> UpdateLastStatusDate(string occurrence, string eventId, string _event, string cardCode)
+        public async Task<bool> UpdateLastStatusDate(string? occurrence, string? eventId, string? _event, string? cardCode)
         {
-            string sql = @$"UPDATE [GENERAL].[dbo].[IT4_WMS_DOCUMENTO] SET NB_DATA_ULTIMO_STATUS = CONVERT(DATETIME, '{occurrence}', 103), NB_DESCRICAO_ULTIMO_STATUS = '{eventId}-{_event}' WHERE LTRIM(RTRIM(DOCUMENTO)) = '{cardCode}' AND NB_TRANSPORTADORA = '18035';
+            string? sql = @$"UPDATE [GENERAL].[dbo].[IT4_WMS_DOCUMENTO] SET NB_DATA_ULTIMO_STATUS = CONVERT(DATETIME, '{occurrence}', 103), NB_DESCRICAO_ULTIMO_STATUS = '{eventId}-{_event}' WHERE LTRIM(RTRIM(DOCUMENTO)) = '{cardCode}' AND NB_TRANSPORTADORA = '18035';
                             UPDATE [GENERAL].[dbo].[FLASHCOURIERREGISTROLOG] SET STATUSFLASH = '{_event}' WHERE PEDIDO = '{cardCode}'";
 
             try
@@ -488,9 +488,9 @@ namespace FlashCourier.Infrastructure.Repository
             }
         }
 
-        public async Task<bool> UpdateRealDeliveryForecastDate(string dtSla, string cardCode)
+        public async Task<bool> UpdateRealDeliveryForecastDate(string? dtSla, string? cardCode)
         {
-            string sql = $"UPDATE [GENERAL].[dbo].[IT4_WMS_DOCUMENTO] SET NB_PREVISAO_REAL_ENTREGA = CONVERT(DATETIME, '{dtSla}', 103) WHERE LTRIM(RTRIM(DOCUMENTO)) = '{cardCode}' AND NB_TRANSPORTADORA = '18035';";
+            string? sql = $"UPDATE [GENERAL].[dbo].[IT4_WMS_DOCUMENTO] SET NB_PREVISAO_REAL_ENTREGA = CONVERT(DATETIME, '{dtSla}', 103) WHERE LTRIM(RTRIM(DOCUMENTO)) = '{cardCode}' AND NB_TRANSPORTADORA = '18035';";
 
             try
             {

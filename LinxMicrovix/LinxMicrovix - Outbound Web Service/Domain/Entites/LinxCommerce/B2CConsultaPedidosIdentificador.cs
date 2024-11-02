@@ -31,7 +31,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
         [Column(TypeName = "int")]
         public Int32? id_cliente { get; private set; }
 
-        [Column(TypeName = "money")]
+        [Column(TypeName = "decimal(10,2)")]
         public decimal? valor_frete { get; private set; }
 
         [Column(TypeName = "datetime")]
@@ -57,31 +57,31 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
             lastupdateon = DateTime.Now;
 
             this.empresa =
-                empresa == String.Empty ? 0
+                String.IsNullOrEmpty(empresa) ? 0
                 : Convert.ToInt32(empresa);
 
             this.id_venda =
-                id_venda == String.Empty ? 0
+                String.IsNullOrEmpty(id_venda) ? 0
                 : Convert.ToInt32(id_venda);
 
             this.id_cliente =
-                id_cliente == String.Empty ? 0
+                String.IsNullOrEmpty(id_cliente) ? 0
                 : Convert.ToInt32(id_cliente);
 
             this.data_origem =
-                data_origem == String.Empty ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
+                String.IsNullOrEmpty(data_origem) ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
                 : Convert.ToDateTime(data_origem);
 
             this.valor_frete =
-               valor_frete == String.Empty ? 0
+               String.IsNullOrEmpty(valor_frete) ? 0
                : Convert.ToDecimal(valor_frete);
 
             this.identificador =
-                identificador == String.Empty ? null
+                String.IsNullOrEmpty(identificador) ? null
                 : Guid.Parse(identificador);
 
             this.order_id =
-                order_id == String.Empty ? ""
+                String.IsNullOrEmpty(order_id) ? ""
                 : order_id.Substring(
                     0,
                     order_id.Length > 40 ? 40
@@ -89,11 +89,11 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.timestamp =
-                timestamp == String.Empty ? 0
+                String.IsNullOrEmpty(timestamp) ? 0
                 : Convert.ToInt64(timestamp);
 
             this.portal =
-                portal == String.Empty ? 0
+                String.IsNullOrEmpty(portal) ? 0
                 : Convert.ToInt32(portal);
         }
     }

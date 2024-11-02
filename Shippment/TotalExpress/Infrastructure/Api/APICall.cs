@@ -11,7 +11,7 @@ namespace TotalExpress.Infrastructure.Api
         public APICall(IHttpClientFactory httpClientFactory) =>
             (_httpClientFactory) = (httpClientFactory);
 
-        public async Task<string> PostAsync(JObject jObject, string rote, Dictionary<string, string> parameters, string clientName)
+        public async Task<string?> PostAsync(JObject jObject, string? rote, Dictionary<string?, string?> parameters, string? clientName)
         {
             var client = CreateClient(clientName, parameters);
 
@@ -30,7 +30,7 @@ namespace TotalExpress.Infrastructure.Api
                 throw new Exception($"{response.StatusCode} - {await response.Content.ReadAsStringAsync()}");
         }
 
-        public async Task<string> PostAsync(JToken jToken, string rote, Dictionary<string, string> parameters, string clientName)
+        public async Task<string?> PostAsync(JToken jToken, string? rote, Dictionary<string?, string?> parameters, string? clientName)
         {
             var client = CreateClient(clientName, parameters);
 
@@ -47,7 +47,7 @@ namespace TotalExpress.Infrastructure.Api
 
         }
 
-        private HttpClient CreateClient(string clientName, Dictionary<string, string> parameters)
+        private HttpClient CreateClient(string? clientName, Dictionary<string?, string?> parameters)
         {
             var client = _httpClientFactory.CreateClient(clientName);
             foreach (var parameter in parameters)

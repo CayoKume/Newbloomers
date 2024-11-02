@@ -25,7 +25,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
         [Column(TypeName = "varchar(250)")]
         public string? nome_produto { get; private set; }
 
-        [Column(TypeName = "float")]
+        [Column(TypeName = "decimal(10,2)")]
         public decimal? peso_liquido { get; private set; }
 
         [Column(TypeName = "int")]
@@ -70,19 +70,19 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
         [Column(TypeName = "smalldatetime")]
         public DateTime? dt_update { get; private set; }
 
-        [Column(TypeName = "float")]
+        [Column(TypeName = "decimal(10,2)")]
         public decimal? altura_para_frete { get; private set; }
 
-        [Column(TypeName = "float")]
+        [Column(TypeName = "decimal(10,2)")]
         public decimal? largura_para_frete { get; private set; }
 
-        [Column(TypeName = "float")]
+        [Column(TypeName = "decimal(10,2)")]
         public decimal? comprimento_para_frete { get; private set; }
 
         [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
-        [Column(TypeName = "float")]
+        [Column(TypeName = "decimal(10,2)")]
         public decimal? peso_bruto { get; private set; }
 
         [Column(TypeName = "int")]
@@ -142,39 +142,39 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
             lastupdateon = DateTime.Now;
 
             this.cod_fornecedor =
-                cod_fornecedor == String.Empty ? 0
+                String.IsNullOrEmpty(cod_fornecedor) ? 0
                 : Convert.ToInt32(cod_fornecedor);
 
             this.canais_ecommerce_publicados =
-                canais_ecommerce_publicados == String.Empty ? 0
+                String.IsNullOrEmpty(canais_ecommerce_publicados) ? 0
                 : Convert.ToInt32(canais_ecommerce_publicados);
 
             this.inicio_publicacao_produto =
-                inicio_publicacao_produto == String.Empty ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
+                String.IsNullOrEmpty(inicio_publicacao_produto) ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
                 : Convert.ToDateTime(inicio_publicacao_produto);
 
             this.fim_publicacao_produto =
-                fim_publicacao_produto == String.Empty ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
+                String.IsNullOrEmpty(fim_publicacao_produto) ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
                 : Convert.ToDateTime(fim_publicacao_produto);
 
             this.altura_para_frete =
-                altura_para_frete == String.Empty ? 0
+                String.IsNullOrEmpty(altura_para_frete) ? 0
                 : Convert.ToDecimal(altura_para_frete);
 
             this.largura_para_frete =
-                largura_para_frete == String.Empty ? 0
+                String.IsNullOrEmpty(largura_para_frete) ? 0
                 : Convert.ToDecimal(largura_para_frete);
 
             this.comprimento_para_frete =
-                comprimento_para_frete == String.Empty ? 0
+                String.IsNullOrEmpty(comprimento_para_frete) ? 0
                 : Convert.ToDecimal(comprimento_para_frete);
 
             this.peso_bruto =
-                peso_bruto == String.Empty ? 0
+                String.IsNullOrEmpty(peso_bruto) ? 0
                 : Convert.ToDecimal(peso_bruto);
 
             this.descricao_completa_commerce =
-                descricao_completa_commerce == String.Empty ? ""
+                String.IsNullOrEmpty(descricao_completa_commerce) ? ""
                 : descricao_completa_commerce.Substring(
                     0,
                     descricao_completa_commerce.Length > 8000 ? 8000
@@ -182,7 +182,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.codigo_integracao_oms =
-                codigo_integracao_oms == String.Empty ? ""
+                String.IsNullOrEmpty(codigo_integracao_oms) ? ""
                 : codigo_integracao_oms.Substring(
                     0,
                     codigo_integracao_oms.Length > 50 ? 50
@@ -190,15 +190,15 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.dt_update =
-                dt_update == String.Empty ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
+                String.IsNullOrEmpty(dt_update) ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
                 : Convert.ToDateTime(dt_update);
 
             this.codigoproduto =
-                codigoproduto == String.Empty ? 0
+                String.IsNullOrEmpty(codigoproduto) ? 0
                 : Convert.ToInt64(codigoproduto);
 
             this.referencia =
-                referencia == String.Empty ? ""
+                String.IsNullOrEmpty(referencia) ? ""
                 : referencia.Substring(
                     0,
                     referencia.Length > 20 ? 20
@@ -206,7 +206,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.codauxiliar1 =
-                codauxiliar1 == String.Empty ? ""
+                String.IsNullOrEmpty(codauxiliar1) ? ""
                 : codauxiliar1.Substring(
                     0,
                     codauxiliar1.Length > 40 ? 40
@@ -214,7 +214,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.descricao_basica =
-                descricao_basica == String.Empty ? ""
+                String.IsNullOrEmpty(descricao_basica) ? ""
                 : descricao_basica.Substring(
                     0,
                     descricao_basica.Length > 100 ? 100
@@ -222,7 +222,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.nome_produto =
-                nome_produto == String.Empty ? ""
+                String.IsNullOrEmpty(nome_produto) ? ""
                 : nome_produto.Substring(
                     0,
                     nome_produto.Length > 250 ? 250
@@ -230,39 +230,39 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.peso_liquido =
-                peso_liquido == String.Empty ? 0
+                String.IsNullOrEmpty(peso_liquido) ? 0
                 : Convert.ToDecimal(peso_liquido);
 
             this.codigo_setor =
-                codigo_setor == String.Empty ? 0
+                String.IsNullOrEmpty(codigo_setor) ? 0
                 : Convert.ToInt32(codigo_setor);
 
             this.codigo_linha =
-                codigo_linha == String.Empty ? 0
+                String.IsNullOrEmpty(codigo_linha) ? 0
                 : Convert.ToInt32(codigo_linha);
 
             this.codigo_marca =
-                codigo_marca == String.Empty ? 0
+                String.IsNullOrEmpty(codigo_marca) ? 0
                 : Convert.ToInt32(codigo_marca);
 
             this.codigo_colecao =
-                codigo_colecao == String.Empty ? 0
+                String.IsNullOrEmpty(codigo_colecao) ? 0
                 : Convert.ToInt32(codigo_colecao);
 
             this.codigo_espessura =
-                codigo_espessura == String.Empty ? 0
+                String.IsNullOrEmpty(codigo_espessura) ? 0
                 : Convert.ToInt32(codigo_espessura);
 
             this.codigo_grade1 =
-                codigo_grade1 == String.Empty ? 0
+                String.IsNullOrEmpty(codigo_grade1) ? 0
                 : Convert.ToInt32(codigo_grade1);
 
             this.codigo_grade2 =
-                codigo_grade2 == String.Empty ? 0
+                String.IsNullOrEmpty(codigo_grade2) ? 0
                 : Convert.ToInt32(codigo_grade2);
 
             this.unidade =
-                unidade == String.Empty ? ""
+                String.IsNullOrEmpty(unidade) ? ""
                 : unidade.Substring(
                     0,
                     unidade.Length > 50 ? 50
@@ -270,27 +270,27 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.ativo =
-                ativo == String.Empty ? 0
+                String.IsNullOrEmpty(ativo) ? 0
                 : Convert.ToInt32(ativo);
 
             this.codigo_classificacao =
-                codigo_classificacao == String.Empty ? 0
+                String.IsNullOrEmpty(codigo_classificacao) ? 0
                 : Convert.ToInt32(codigo_classificacao);
 
             this.dt_cadastro =
-                dt_cadastro == String.Empty ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
+                String.IsNullOrEmpty(dt_cadastro) ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
                 : Convert.ToDateTime(dt_cadastro);
 
             this.observacao =
-                observacao == String.Empty ? ""
+                String.IsNullOrEmpty(observacao) ? ""
                 : observacao;
 
             this.timestamp =
-                timestamp == String.Empty ? 0
+                String.IsNullOrEmpty(timestamp) ? 0
                 : Convert.ToInt64(timestamp);
 
             this.portal =
-                portal == String.Empty ? 0
+                String.IsNullOrEmpty(portal) ? 0
                 : Convert.ToInt32(portal);
         }
     }

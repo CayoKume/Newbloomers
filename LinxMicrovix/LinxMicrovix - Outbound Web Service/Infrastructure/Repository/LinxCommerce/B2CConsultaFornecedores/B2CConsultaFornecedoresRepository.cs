@@ -12,7 +12,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
         public B2CConsultaFornecedoresRepository(ILinxMicrovixRepositoryBase<TEntity> linxMicrovixRepositoryBase) =>
             (_linxMicrovixRepositoryBase) = (linxMicrovixRepositoryBase);
 
-        public bool BulkInsertIntoTableRaw(JobParameter jobParameter, List<TEntity> records)
+        public bool BulkInsertIntoTableRaw(LinxMicrovixJobParameter jobParameter, List<TEntity> records)
         {
             try
             {
@@ -38,37 +38,50 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
             }
         }
 
-        public async Task<bool> ExecuteTableMerge(JobParameter jobParameter)
+        public async Task<bool> CreateTableMerge(LinxMicrovixJobParameter jobParameter)
         {
-            string sql = $"MERGE [{jobParameter.tableName}_trusted] AS TARGET " +
-                         $"USING [{jobParameter.tableName}_raw] AS SOURCE " +
-                          "ON (TARGET.COD_FORNECEDOR = SOURCE.COD_FORNECEDOR) " +
-                          "WHEN MATCHED THEN UPDATE SET " +
-                          "TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON], " +
-                          "TARGET.[COD_FORNECEDOR] = SOURCE.[COD_FORNECEDOR], " +
-                          "TARGET.[NOME] = SOURCE.[NOME], " +
-                          "TARGET.[NOME_FANTASIA] = SOURCE.[NOME_FANTASIA], " +
-                          "TARGET.[TIPO_PESSOA] = SOURCE.[TIPO_PESSOA], " +
-                          "TARGET.[TIPO_FORNECEDOR] = SOURCE.[TIPO_FORNECEDOR], " +
-                          "TARGET.[ENDRECO] = SOURCE.[ENDRECO], " +
-                          "TARGET.[NUMERO_RUA] = SOURCE.[NUMERO_RUA], " +
-                          "TARGET.[BAIRRO] = SOURCE.[BAIRRO], " +
-                          "TARGET.[CEP] = SOURCE.[CEP], " +
-                          "TARGET.[CIDADE] = SOURCE.[CIDADE], " +
-                          "TARGET.[UF] = SOURCE.[UF], " +
-                          "TARGET.[DOCUMENTO] = SOURCE.[DOCUMENTO], " +
-                          "TARGET.[FONE] = SOURCE.[FONE], " +
-                          "TARGET.[EMAIL] = SOURCE.[EMAIL], " +
-                          "TARGET.[PAIS] = SOURCE.[PAIS], " +
-                          "TARGET.[OBS] = SOURCE.[OBS], " +
-                          "TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP], " +
-                          "TARGET.[PORTAL] = SOURCE.[PORTAL] " +
-                          "WHEN NOT MATCHED BY TARGET THEN " +
-                          "INSERT " +
-                          "([LASTUPDATEON], [COD_FORNECEDOR], [NOME], [NOME_FANTASIA], [TIPO_PESSOA], [TIPO_FORNECEDOR], [ENDRECO], [NUMERO_RUA], [BAIRRO], [CEP], [CIDADE], [UF], [DOCUMENTO], [FONE], [EMAIL], [PAIS], [OBS], [TIMESTAMP], [PORTAL])" +
-                          "VALUES " +
-                          "(SOURCE.[LASTUPDATEON], SOURCE.[COD_FORNECEDOR], SOURCE.[NOME], SOURCE.[NOME_FANTASIA], SOURCE.[TIPO_PESSOA], SOURCE.[TIPO_FORNECEDOR], SOURCE.[ENDRECO], SOURCE.[NUMERO_RUA], SOURCE.[BAIRRO], SOURCE.[CEP], SOURCE.[CIDADE], SOURCE.[UF], " + 
-                          "SOURCE.[DOCUMENTO], SOURCE.[FONE], SOURCE.[EMAIL], SOURCE.[PAIS], SOURCE.[OBS], SOURCE.[TIMESTAMP], SOURCE.[PORTAL]);";
+            string? sql = @"IF NOT EXISTS (SELECT * FROM SYS.OBJECTS WHERE TYPE = 'P' AND NAME = 'P_B2CCONSULTAFORNECEDORES_SYNC')
+                           BEGIN
+                           EXECUTE (
+	                           'CREATE PROCEDURE [P_B2CCONSULTAFORNECEDORES_SYNC] AS
+	                           BEGIN
+		                           MERGE [B2CCONSULTAFORNECEDORES_TRUSTED] AS TARGET
+                                   USING [B2CCONSULTAFORNECEDORES_RAW] AS SOURCE
+
+                                   ON (
+			                           TARGET.COD_FORNECEDOR = SOURCE.COD_FORNECEDOR
+		                           )
+
+                                   WHEN MATCHED THEN UPDATE SET
+			                           TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON],
+			                           TARGET.[COD_FORNECEDOR] = SOURCE.[COD_FORNECEDOR],
+			                           TARGET.[NOME] = SOURCE.[NOME],
+			                           TARGET.[NOME_FANTASIA] = SOURCE.[NOME_FANTASIA],
+			                           TARGET.[TIPO_PESSOA] = SOURCE.[TIPO_PESSOA],
+			                           TARGET.[TIPO_FORNECEDOR] = SOURCE.[TIPO_FORNECEDOR],
+			                           TARGET.[ENDRECO] = SOURCE.[ENDRECO],
+			                           TARGET.[NUMERO_RUA] = SOURCE.[NUMERO_RUA],
+			                           TARGET.[BAIRRO] = SOURCE.[BAIRRO],
+			                           TARGET.[CEP] = SOURCE.[CEP],
+			                           TARGET.[CIDADE] = SOURCE.[CIDADE],
+			                           TARGET.[UF] = SOURCE.[UF],
+			                           TARGET.[DOCUMENTO] = SOURCE.[DOCUMENTO],
+			                           TARGET.[FONE] = SOURCE.[FONE],
+			                           TARGET.[EMAIL] = SOURCE.[EMAIL],
+			                           TARGET.[PAIS] = SOURCE.[PAIS],
+			                           TARGET.[OBS] = SOURCE.[OBS],
+			                           TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP],
+			                           TARGET.[PORTAL] = SOURCE.[PORTAL]
+
+                                   WHEN NOT MATCHED BY TARGET THEN
+			                           INSERT
+			                           ([LASTUPDATEON], [COD_FORNECEDOR], [NOME], [NOME_FANTASIA], [TIPO_PESSOA], [TIPO_FORNECEDOR], [ENDRECO], [NUMERO_RUA], [BAIRRO], [CEP], [CIDADE], [UF], [DOCUMENTO], [FONE], [EMAIL], [PAIS], [OBS], [TIMESTAMP], [PORTAL])
+			                           VALUES
+			                           (SOURCE.[LASTUPDATEON], SOURCE.[COD_FORNECEDOR], SOURCE.[NOME], SOURCE.[NOME_FANTASIA], SOURCE.[TIPO_PESSOA], SOURCE.[TIPO_FORNECEDOR], SOURCE.[ENDRECO], SOURCE.[NUMERO_RUA], SOURCE.[BAIRRO], SOURCE.[CEP], SOURCE.[CIDADE], SOURCE.[UF], 
+			                           SOURCE.[DOCUMENTO], SOURCE.[FONE], SOURCE.[EMAIL], SOURCE.[PAIS], SOURCE.[OBS], SOURCE.[TIMESTAMP], SOURCE.[PORTAL]);
+	                           END'
+                           )
+                           END";
 
             try
             {
@@ -80,7 +93,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
             }
         }
 
-        public async Task<bool> InsertParametersIfNotExists(JobParameter jobParameter)
+        public async Task<bool> InsertParametersIfNotExists(LinxMicrovixJobParameter jobParameter)
         {
             try
             {
@@ -103,9 +116,9 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
             }
         }
 
-        public async Task<bool> InsertRecord(JobParameter jobParameter, TEntity? record)
+        public async Task<bool> InsertRecord(LinxMicrovixJobParameter jobParameter, TEntity? record)
         {
-            string sql = $"INSERT INTO {jobParameter.tableName}_raw " +
+            string? sql = $"INSERT INTO {jobParameter.tableName}_raw " +
                           "([lastupdateon], [cod_fornecedor], [nome], [nome_fantasia], [tipo_pessoa], [tipo_fornecedor], [endereco], [numero_rua], [bairro], [cep], [cidade], [uf], [documento], [fone], [email], [pais], [obs], [timestamp], [portal]) " +
                           "Values " +
                           "(@lastupdateon, @cod_fornecedor, @nome, @nome_fantasia, @tipo_pessoa, @tipo_fornecedor, @endereco, @numero_rua, @bairro, @cep, @cidade, @uf, @documento, @fone, @email, @pais, @obs, @timestamp, @portal)";

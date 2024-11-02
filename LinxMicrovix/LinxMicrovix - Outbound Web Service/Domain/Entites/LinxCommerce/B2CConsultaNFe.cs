@@ -42,13 +42,13 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
         [Column(TypeName = "smalldatetime")]
         public DateTime? dt_insert { get; private set; }
 
-        [Column(TypeName = "money")]
+        [Column(TypeName = "decimal(10,2)")]
         public decimal? valor_nota { get; private set; }
 
         [Column(TypeName = "varchar(10)")]
         public string? serie { get; private set; }
 
-        [Column(TypeName = "money")]
+        [Column(TypeName = "decimal(10,2)")]
         public decimal? frete { get; private set; }
 
         [Column(TypeName = "bigint")]
@@ -96,23 +96,23 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
             lastupdateon = DateTime.Now;
 
             this.id_nfe =
-                id_nfe == String.Empty ? 0
+                String.IsNullOrEmpty(id_nfe) ? 0
                 : Convert.ToInt32(id_nfe);
 
             this.id_pedido =
-                id_pedido == String.Empty ? 0
+                String.IsNullOrEmpty(id_pedido) ? 0
                 : Convert.ToInt32(id_pedido);
 
             this.documento =
-                documento == String.Empty ? 0
+                String.IsNullOrEmpty(documento) ? 0
                 : Convert.ToInt32(documento);
 
             this.data_emissao =
-                data_emissao == String.Empty ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
+                String.IsNullOrEmpty(data_emissao) ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
                 : Convert.ToDateTime(data_emissao);
 
             this.chave_nfe =
-                chave_nfe == String.Empty ? ""
+                String.IsNullOrEmpty(chave_nfe) ? ""
                 : chave_nfe.Substring(
                     0,
                     chave_nfe.Length > 44 ? 44
@@ -120,31 +120,31 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.situacao =
-                situacao == String.Empty ? 0
+                String.IsNullOrEmpty(situacao) ? 0
                 : Convert.ToInt32(situacao);
 
             this.xml =
-                xml == String.Empty ? ""
+                String.IsNullOrEmpty(xml) ? ""
                 : xml;
 
             this.excluido =
-                excluido == String.Empty ? 0
+                String.IsNullOrEmpty(excluido) ? 0
                 : Convert.ToInt32(excluido);
 
             this.identificador_microvix =
-                identificador_microvix == String.Empty ? null
+                String.IsNullOrEmpty(identificador_microvix) ? null
                 : Guid.Parse(identificador_microvix);
 
             this.dt_insert =
-                dt_insert == String.Empty ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
+                String.IsNullOrEmpty(dt_insert) ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
                 : Convert.ToDateTime(dt_insert);
 
             this.valor_nota =
-                valor_nota == String.Empty ? 0
+                String.IsNullOrEmpty(valor_nota) ? 0
                 : Convert.ToDecimal(valor_nota);
 
             this.serie =
-                serie == String.Empty ? ""
+                String.IsNullOrEmpty(serie) ? ""
                 : serie.Substring(
                     0,
                     serie.Length > 10 ? 10
@@ -152,11 +152,11 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.frete =
-                frete == String.Empty ? 0
+                String.IsNullOrEmpty(frete) ? 0
                 : Convert.ToDecimal(frete);
 
             this.nProt =
-                nProt == String.Empty ? ""
+                String.IsNullOrEmpty(nProt) ? ""
                 : nProt.Substring(
                     0,
                     nProt.Length > 15 ? 15
@@ -164,7 +164,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.codigo_modelo_nf =
-                codigo_modelo_nf == String.Empty ? ""
+                String.IsNullOrEmpty(codigo_modelo_nf) ? ""
                 : codigo_modelo_nf.Substring(
                     0,
                     codigo_modelo_nf.Length > 3 ? 3
@@ -172,7 +172,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.justificativa =
-                justificativa == String.Empty ? ""
+                String.IsNullOrEmpty(justificativa) ? ""
                 : justificativa.Substring(
                     0,
                     justificativa.Length > 255 ? 255
@@ -180,15 +180,15 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.tpAmb =
-                tpAmb == String.Empty ? 0
+                String.IsNullOrEmpty(tpAmb) ? 0
                 : Convert.ToInt32(tpAmb);
 
             this.timestamp =
-                timestamp == String.Empty ? 0
+                String.IsNullOrEmpty(timestamp) ? 0
                 : Convert.ToInt64(timestamp);
 
             this.portal =
-                portal == String.Empty ? 0
+                String.IsNullOrEmpty(portal) ? 0
                 : Convert.ToInt32(portal);
         }
     }

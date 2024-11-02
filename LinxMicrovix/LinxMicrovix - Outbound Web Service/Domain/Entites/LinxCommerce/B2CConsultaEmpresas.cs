@@ -79,11 +79,11 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
             lastupdateon = DateTime.Now;
 
             this.empresa =
-                empresa == String.Empty ? 0
+                String.IsNullOrEmpty(empresa) ? 0
                 : Convert.ToInt32(empresa);
 
             this.nome_emp =
-                nome_emp == String.Empty ? ""
+                String.IsNullOrEmpty(nome_emp) ? ""
                 : nome_emp.Substring(
                     0,
                     nome_emp.Length > 50 ? 50
@@ -91,7 +91,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.cnpj_emp =
-                cnpj_emp == String.Empty ? ""
+                String.IsNullOrEmpty(cnpj_emp) ? ""
                 : cnpj_emp.Substring(
                     0,
                     cnpj_emp.Length > 14 ? 14
@@ -99,7 +99,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.end_unidade =
-                end_unidade == String.Empty ? ""
+                String.IsNullOrEmpty(end_unidade) ? ""
                 : end_unidade.Substring(
                     0,
                     end_unidade.Length > 250 ? 250
@@ -107,7 +107,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.complemento_end_unidade =
-                complemento_end_unidade == String.Empty ? ""
+                String.IsNullOrEmpty(complemento_end_unidade) ? ""
                 : complemento_end_unidade.Substring(
                     0,
                     complemento_end_unidade.Length > 60 ? 60
@@ -115,7 +115,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.nr_rua_unidade =
-                nr_rua_unidade == String.Empty ? ""
+                String.IsNullOrEmpty(nr_rua_unidade) ? ""
                 : nr_rua_unidade.Substring(
                     0,
                     nr_rua_unidade.Length > 20 ? 20
@@ -123,7 +123,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.bairro_unidade =
-                bairro_unidade == String.Empty ? ""
+                String.IsNullOrEmpty(bairro_unidade) ? ""
                 : bairro_unidade.Substring(
                     0,
                     bairro_unidade.Length > 60 ? 60
@@ -131,7 +131,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.cep_unidade =
-                cep_unidade == String.Empty ? ""
+                String.IsNullOrEmpty(cep_unidade) ? ""
                 : cep_unidade.Substring(
                     0,
                     cep_unidade.Length > 9 ? 9
@@ -139,7 +139,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.cidade_unidade =
-                cidade_unidade == String.Empty ? ""
+                String.IsNullOrEmpty(cidade_unidade) ? ""
                 : cidade_unidade.Substring(
                     0,
                     cidade_unidade.Length > 50 ? 50
@@ -147,7 +147,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.uf_unidade =
-                uf_unidade == String.Empty ? ""
+                String.IsNullOrEmpty(uf_unidade) ? ""
                 : uf_unidade.Substring(
                     0,
                     uf_unidade.Length > 2 ? 2
@@ -155,7 +155,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.email_unidade =
-                email_unidade == String.Empty ? ""
+                String.IsNullOrEmpty(email_unidade) ? ""
                 : email_unidade.Substring(
                     0,
                     email_unidade.Length > 50 ? 50
@@ -163,19 +163,19 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.data_criacao =
-                data_criacao == String.Empty ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
+                String.IsNullOrEmpty(data_criacao) ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
                 : Convert.ToDateTime(data_criacao);
 
             this.centro_distribuicao =
-                centro_distribuicao == String.Empty ? false
+                String.IsNullOrEmpty(centro_distribuicao) ? false
                 : Convert.ToBoolean(centro_distribuicao);
 
             this.timestamp =
-                timestamp == String.Empty ? 0
+                String.IsNullOrEmpty(timestamp) ? 0
                 : Convert.ToInt64(timestamp);
 
             this.portal =
-                portal == String.Empty ? 0
+                String.IsNullOrEmpty(portal) ? 0
                 : Convert.ToInt32(portal);
         }
     }

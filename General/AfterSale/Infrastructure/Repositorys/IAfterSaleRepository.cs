@@ -20,7 +20,7 @@ public interface IAfterSaleRepository
     public Task<bool> CreateTableAfterSaleRefunds();
 
     /*Select in Database*/
-    public Task<Parameters> GetParameters(string doc_company);
+    public Task<Parameters> GetParameters(string? doc_company);
     public Task<IEnumerable<Company>> GetCompanys();
 
     /*Insert in Database*/

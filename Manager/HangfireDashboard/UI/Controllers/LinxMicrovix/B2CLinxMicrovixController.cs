@@ -3,7 +3,6 @@ using LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce;
 using LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce;
 using Microsoft.AspNetCore.Mvc;
 using HangfireDashboard.Domain.Entites;
-using ZstdSharp.Unsafe;
 
 namespace HangfireDashboard.UI.Controllers.LinxMicrovix
 {
@@ -269,7 +268,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
                 
                 var result = await _b2cConsultaClassificacaoService.GetRecords(
-                    new JobParameter {
+                    new LinxMicrovixJobParameter {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
                         keyAuthorization = _key,
@@ -304,7 +303,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaClientesService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -340,7 +339,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaClientesContatosService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -376,7 +375,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaClientesContatosParentescoService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -412,7 +411,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaClientesEnderecosEntregaService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -448,7 +447,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaClientesEstadoCivilService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -484,7 +483,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaClientesSaldoService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -520,7 +519,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaClientesSaldoLinxService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -556,7 +555,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaCNPJsChaveService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -592,7 +591,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaCodigoRastreioService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -628,7 +627,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaColecoesService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -664,7 +663,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaEmpresasService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -700,7 +699,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaEspessurasService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -736,7 +735,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaFlagsService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -772,7 +771,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaFormasPagamentoService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -808,7 +807,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaFornecedoresService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -844,7 +843,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaGrade1Service.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -880,7 +879,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaGrade2Service.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -916,7 +915,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaImagensService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -952,7 +951,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaImagensHDService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -988,7 +987,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaLegendasCadastrosAuxiliaresService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -1024,7 +1023,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaLinhasService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -1060,7 +1059,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaMarcasService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -1096,7 +1095,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaNFeService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -1132,7 +1131,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaNFeSituacaoService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -1168,7 +1167,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaPalavrasChavePesquisaService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -1204,7 +1203,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaPedidosService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -1240,7 +1239,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaPedidosIdentificadorService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -1276,7 +1275,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaPedidosItensService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -1312,7 +1311,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaPedidosPlanosService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -1348,7 +1347,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaPedidosStatusService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -1384,7 +1383,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaPedidosTiposService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -1420,7 +1419,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaPlanosService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -1456,7 +1455,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaPlanosParcelasService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -1492,7 +1491,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaProdutosService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -1528,7 +1527,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaProdutosAssociadosService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -1564,7 +1563,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaProdutosCampanhasService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -1600,7 +1599,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaProdutosCamposAdicionaisDetalhesService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -1636,7 +1635,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaProdutosCamposAdicionaisNomesService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -1672,7 +1671,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaProdutosCamposAdicionaisValoresService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -1708,7 +1707,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaProdutosCodebarService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -1744,7 +1743,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaProdutosCustosService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -1780,7 +1779,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaProdutosDepositosService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -1816,7 +1815,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaProdutosDetalhesService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -1852,7 +1851,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaProdutosDetalhesDepositosService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -1888,7 +1887,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaProdutosDimensoesService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -1924,7 +1923,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaProdutosFlagsService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -1960,7 +1959,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaProdutosImagensService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -1996,7 +1995,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaProdutosInformacoesService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -2032,7 +2031,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaProdutosPalavrasChavePesquisaService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -2068,7 +2067,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaProdutosPromocaoService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -2104,7 +2103,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaProdutosStatusService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -2140,7 +2139,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaProdutosTabelasService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -2176,7 +2175,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaProdutosTabelasPrecosService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -2212,7 +2211,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaProdutosTagsService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -2248,7 +2247,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaSetoresService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -2284,7 +2283,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaStatusService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -2320,7 +2319,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaTagsService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -2356,7 +2355,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaTipoEncomendaService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -2392,7 +2391,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaTiposCobrancaFreteService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -2428,7 +2427,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaTransportadoresService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -2464,7 +2463,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaUnidadeService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,
@@ -2500,7 +2499,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaVendedoresService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,

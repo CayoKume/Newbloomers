@@ -6,7 +6,7 @@ namespace IntegrationsCore.Infrastructure.Connections.MySQL
 {
     public class LinxCommerceConnection : ILinxCommerceConnection, IDisposable
     {
-        private readonly string? _connectionString;
+        private readonly string? _connectionstring;
         private IConfiguration? _configuration;
         private IDbConnection _connection;
         private SqlConnection _conn;
@@ -15,7 +15,7 @@ namespace IntegrationsCore.Infrastructure.Connections.MySQL
             (_connection, _configuration) = (connection, configuration);
 
         public LinxCommerceConnection(IConfiguration configuration) =>
-            _connectionString = configuration.GetConnectionString("Connection");
+            _connectionstring = configuration.GetConnectionString("Connection");
 
         public void Dispose() => _connection?.Dispose();
 
@@ -23,8 +23,8 @@ namespace IntegrationsCore.Infrastructure.Connections.MySQL
         {
             try
             {
-                string databaseName = _configuration.GetSection("ConfigureServer").GetSection("LinxCommerceDatabaseName").Value;
-                _conn = new SqlConnection(_connectionString.Replace("[catalog]", databaseName).Replace("[database]", databaseName));
+                string? databaseName = _configuration.GetSection("ConfigureServer").GetSection("LinxCommerceDatabaseName").Value;
+                _conn = new SqlConnection(_connectionstring.Replace("[catalog]", databaseName).Replace("[database]", databaseName));
                 _conn.Open();
                 return _conn;
             }
@@ -39,8 +39,8 @@ namespace IntegrationsCore.Infrastructure.Connections.MySQL
         {
             try
             {
-                string databaseName = _configuration.GetSection("ConfigureServer").GetSection("GeneralDatabaseName").Value;
-                _conn = new SqlConnection(_connectionString.Replace("[catalog]", databaseName).Replace("[database]", databaseName));
+                string? databaseName = _configuration.GetSection("ConfigureServer").GetSection("GeneralDatabaseName").Value;
+                _conn = new SqlConnection(_connectionstring.Replace("[catalog]", databaseName).Replace("[database]", databaseName));
                 _connection.Open();
                 return _connection;
             }

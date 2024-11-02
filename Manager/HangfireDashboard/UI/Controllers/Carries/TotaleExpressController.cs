@@ -14,7 +14,7 @@ namespace HangfireDashboard.UI.Controllers.Carries
             (_totalExpressService) = (totalExpressService);
 
         [HttpPost("SendOrders")]
-        public async Task<ActionResult<string>> TotalExpressSendOrders()
+        public async Task<ActionResult<string?>> TotalExpressSendOrders()
         {
             try
             {
@@ -29,7 +29,7 @@ namespace HangfireDashboard.UI.Controllers.Carries
         }
 
         [HttpPost("SendOrder")]
-        public async Task<ActionResult<string>> TotalExpressSendOrder([Required][FromQuery] string orderNumber)
+        public async Task<ActionResult<string?>> TotalExpressSendOrder([Required][FromQuery] string? orderNumber)
         {
             try
             {
@@ -48,7 +48,7 @@ namespace HangfireDashboard.UI.Controllers.Carries
         }
 
         [HttpPost("SendOrderAsETUR")]
-        public async Task<ActionResult<string>> TotalExpressSendOrderAsETUR([Required][FromQuery] string orderNumber)
+        public async Task<ActionResult<string?>> TotalExpressSendOrderAsETUR([Required][FromQuery] string? orderNumber)
         {
             try
             {
@@ -67,7 +67,7 @@ namespace HangfireDashboard.UI.Controllers.Carries
         }
 
         [HttpPost("UpdateLogOrders")]
-        public async Task<ActionResult<string>> TotalExpressUpdateLogOrders()
+        public async Task<ActionResult<string?>> TotalExpressUpdateLogOrders()
         {
             try
             {

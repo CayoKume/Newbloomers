@@ -59,7 +59,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
             lastupdateon = DateTime.Now;
 
             this.cnpj =
-                cnpj == String.Empty ? ""
+                String.IsNullOrEmpty(cnpj) ? ""
                 : cnpj.Substring(
                     0,
                     cnpj.Length > 14 ? 14
@@ -67,7 +67,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.nome_empresa =
-                nome_empresa == String.Empty ? ""
+                String.IsNullOrEmpty(nome_empresa) ? ""
                 : nome_empresa.Substring(
                     0,
                     nome_empresa.Length > 250 ? 250
@@ -75,11 +75,11 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.id_empresas_rede =
-                id_empresas_rede == String.Empty ? 0
+                String.IsNullOrEmpty(id_empresas_rede) ? 0
                 : Convert.ToInt32(id_empresas_rede);
 
             this.rede =
-                rede == String.Empty ? ""
+                String.IsNullOrEmpty(rede) ? ""
                 : rede.Substring(
                     0,
                     rede.Length > 100 ? 100
@@ -87,7 +87,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.nome_portal =
-                nome_portal == String.Empty ? ""
+                String.IsNullOrEmpty(nome_portal) ? ""
                 : nome_portal.Substring(
                     0,
                     nome_portal.Length > 50 ? 50
@@ -95,11 +95,11 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.empresa =
-                empresa == String.Empty ? 0
+                String.IsNullOrEmpty(empresa) ? 0
                 : Convert.ToInt32(empresa);
 
             this.classificacao_portal =
-                classificacao_portal == String.Empty ? ""
+                String.IsNullOrEmpty(classificacao_portal) ? ""
                 : classificacao_portal.Substring(
                     0,
                     classificacao_portal.Length > 50 ? 50
@@ -107,15 +107,15 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.b2c =
-                b2c == String.Empty ? 0
+                String.IsNullOrEmpty(b2c) ? 0
                 : Convert.ToInt32(b2c);
 
             this.oms =
-                oms == String.Empty ? 0
+                String.IsNullOrEmpty(oms) ? 0
                 : Convert.ToInt32(oms);
 
             this.portal =
-                portal == String.Empty ? 0
+                String.IsNullOrEmpty(portal) ? 0
                 : Convert.ToInt32(portal);
         }
     }

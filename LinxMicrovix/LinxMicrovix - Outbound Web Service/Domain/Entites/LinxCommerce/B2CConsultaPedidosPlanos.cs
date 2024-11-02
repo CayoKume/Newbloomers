@@ -19,7 +19,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
         [Column(TypeName = "int")]
         public Int32? plano_pagamento { get; private set; }
 
-        [Column(TypeName = "money")]
+        [Column(TypeName = "decimal(10,2)")]
         public decimal? valor_plano { get; private set; }
 
         [Column(TypeName = "varchar(20)")]
@@ -58,23 +58,23 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
             lastupdateon = DateTime.Now;
 
             this.id_pedido_planos =
-                id_pedido_planos == String.Empty ? 0
+                String.IsNullOrEmpty(id_pedido_planos) ? 0
                 : Convert.ToInt32(id_pedido_planos);
 
             this.id_pedido =
-                id_pedido == String.Empty ? 0
+                String.IsNullOrEmpty(id_pedido) ? 0
                 : Convert.ToInt32(id_pedido);
 
             this.plano_pagamento =
-                plano_pagamento == String.Empty ? 0
+                String.IsNullOrEmpty(plano_pagamento) ? 0
                 : Convert.ToInt32(plano_pagamento);
 
             this.valor_plano =
-                valor_plano == String.Empty ? 0
+                String.IsNullOrEmpty(valor_plano) ? 0
                 : Convert.ToDecimal(valor_plano);
 
             this.nsu_sitef =
-                nsu_sitef == String.Empty ? ""
+                String.IsNullOrEmpty(nsu_sitef) ? ""
                 : nsu_sitef.Substring(
                     0,
                     nsu_sitef.Length > 20 ? 20
@@ -82,7 +82,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.cod_autorizacao =
-                cod_autorizacao == String.Empty ? ""
+                String.IsNullOrEmpty(cod_autorizacao) ? ""
                 : cod_autorizacao.Substring(
                     0,
                     cod_autorizacao.Length > 50 ? 50
@@ -90,11 +90,11 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.texto_comprovante =
-                texto_comprovante == String.Empty ? ""
+                String.IsNullOrEmpty(texto_comprovante) ? ""
                 : texto_comprovante;
 
             this.cod_loja_sitef =
-                cod_loja_sitef == String.Empty ? ""
+                String.IsNullOrEmpty(cod_loja_sitef) ? ""
                 : cod_loja_sitef.Substring(
                     0,
                     cod_loja_sitef.Length > 10 ? 10
@@ -102,11 +102,11 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.timestamp =
-                timestamp == String.Empty ? 0
+                String.IsNullOrEmpty(timestamp) ? 0
                 : Convert.ToInt64(timestamp);
 
             this.portal =
-                portal == String.Empty ? 0
+                String.IsNullOrEmpty(portal) ? 0
                 : Convert.ToInt32(portal);
         }
     }

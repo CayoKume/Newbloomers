@@ -68,15 +68,15 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
             lastupdateon = DateTime.Now;
 
             this.id_clientes_contatos =
-               id_clientes_contatos == String.Empty ? 0
+               String.IsNullOrEmpty(id_clientes_contatos) ? 0
                : Convert.ToInt32(id_clientes_contatos);
 
             this.id_contato_b2c =
-               id_contato_b2c == String.Empty ? 0
+               String.IsNullOrEmpty(id_contato_b2c) ? 0
                : Convert.ToInt32(id_contato_b2c);
 
             this.nome_contato =
-                nome_contato == String.Empty ? ""
+                String.IsNullOrEmpty(nome_contato) ? ""
                 : nome_contato.Substring(
                     0,
                     nome_contato.Length > 50 ? 50
@@ -84,11 +84,11 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.data_nasc_contato =
-                data_nasc_contato == String.Empty ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
+                String.IsNullOrEmpty(data_nasc_contato) ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
                 : Convert.ToDateTime(data_nasc_contato);
 
             this.sexo_contato =
-                sexo_contato == String.Empty ? ""
+                String.IsNullOrEmpty(sexo_contato) ? ""
                 : sexo_contato.Substring(
                     0,
                     sexo_contato.Length > 1 ? 1
@@ -96,11 +96,11 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.id_parentesco =
-               id_parentesco == String.Empty ? 0
+               String.IsNullOrEmpty(id_parentesco) ? 0
                : Convert.ToInt32(id_parentesco);
 
             this.fone_contato =
-                fone_contato == String.Empty ? ""
+                String.IsNullOrEmpty(fone_contato) ? ""
                 : fone_contato.Substring(
                     0,
                     fone_contato.Length > 20 ? 20
@@ -108,7 +108,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.celular_contato =
-                celular_contato == String.Empty ? ""
+                String.IsNullOrEmpty(celular_contato) ? ""
                 : celular_contato.Substring(
                     0,
                     celular_contato.Length > 20 ? 20
@@ -116,7 +116,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.email_contato =
-                email_contato == String.Empty ? ""
+                String.IsNullOrEmpty(email_contato) ? ""
                 : email_contato.Substring(
                     0,
                     email_contato.Length > 50 ? 50
@@ -124,15 +124,15 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.cod_cliente_erp =
-               cod_cliente_erp == String.Empty ? 0
+               String.IsNullOrEmpty(cod_cliente_erp) ? 0
                : Convert.ToInt32(cod_cliente_erp);
 
             this.timestamp =
-                timestamp == String.Empty ? 0
+                String.IsNullOrEmpty(timestamp) ? 0
                 : Convert.ToInt64(timestamp);
 
             this.portal =
-                portal == String.Empty ? 0
+                String.IsNullOrEmpty(portal) ? 0
                 : Convert.ToInt32(portal);
         }
     }

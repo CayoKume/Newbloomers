@@ -24,9 +24,9 @@ namespace TotalExpress.Infrastructure.Repository
         public TotalExpressRepository(IPostgreSQLConnection postgreSQLConnection) =>
             (_postgreSQLConnection) = (postgreSQLConnection);
 
-        public async Task<bool> GenerateRequestLog(string orderNumber, string request)
+        public async Task<bool> GenerateRequestLog(string? orderNumber, string? request)
         {
-            string sql = $@"INSERT INTO [GENERAL].[dbo].[TOTALEXPRESSREQUESTLOG] (PEDIDO, DATAENVIO, REQUEST) 
+            string? sql = $@"INSERT INTO [GENERAL].[dbo].[TOTALEXPRESSREQUESTLOG] (PEDIDO, DATAENVIO, REQUEST) 
                             VALUES (@OrderNumber, GETDATE(), @Request)";
             var parameter = new { 
                 OrderNumber = orderNumber, 
@@ -66,9 +66,9 @@ namespace TotalExpress.Infrastructure.Repository
             }
         }
 
-        public async Task<bool> GenerateResponseLog(string orderNumber, string sender_id, string response)
+        public async Task<bool> GenerateResponseLog(string? orderNumber, string? sender_id, string? response)
         {
-            string sql = @$"INSERT INTO [GENERAL].[dbo].[TOTALEXPRESSREGISTROLOG] (PEDIDO, REMETENTEID, DATAENVIO, RETORNO) 
+            string? sql = @$"INSERT INTO [GENERAL].[dbo].[TOTALEXPRESSREGISTROLOG] (PEDIDO, REMETENTEID, DATAENVIO, RETORNO) 
                          VALUES (@OrderNumber, @SenderID, GETDATE(), @Return)";
             var parameter = new {
                 OrderNumber = orderNumber,
@@ -109,9 +109,9 @@ namespace TotalExpress.Infrastructure.Repository
             }
         }
 
-        public async Task<Order> GetInvoicedOrder(string orderNumber)
+        public async Task<Order> GetInvoicedOrder(string? orderNumber)
         {
-            string sql = $@"SELECT DISTINCT 
+            string? sql = $@"SELECT DISTINCT 
                             TRIM(A.DOCUMENTO) AS NUMBER,
                             A.VOLUMES AS VOLUMES,
                             A.NB_CFOP_PEDIDO AS CFOP,
@@ -183,14 +183,14 @@ namespace TotalExpress.Infrastructure.Repository
 
                             A.NF_SAIDA AS NUMBER_NF,
                             A.NB_VALOR_PEDIDO AS AMOUNT_NF,
-                            (SELECT CAST(SUBSTRING (A.[XML_FATURAMENTO], CHARINDEX('<vFrete>', CAST(A.[XML_FATURAMENTO] AS VARCHAR(MAX))) + 8, 4) AS DECIMAL(14,2))) AS SHIPPING_VALUE_NF,
-                            (SELECT CAST(SUBSTRING (A.[XML_FATURAMENTO], CHARINDEX('<pesoB>', CAST(A.[XML_FATURAMENTO] AS VARCHAR(MAX))) + 7, 4) AS DECIMAL(14,2))) AS WEIGHT_NF,
+                            (SELECT CAST(SUBstring? (A.[XML_FATURAMENTO], CHARINDEX('<vFrete>', CAST(A.[XML_FATURAMENTO] AS VARCHAR(MAX))) + 8, 4) AS DECIMAL(14,2))) AS SHIPPING_VALUE_NF,
+                            (SELECT CAST(SUBstring? (A.[XML_FATURAMENTO], CHARINDEX('<pesoB>', CAST(A.[XML_FATURAMENTO] AS VARCHAR(MAX))) + 7, 4) AS DECIMAL(14,2))) AS WEIGHT_NF,
                             A.CHAVE_NFE AS KEY_NFE_NF,
                             CAST(A.[XML_FATURAMENTO] AS VARCHAR(MAX)) AS XML_NF,
                             CAST(A.[XML_FATURAMENTO] AS VARCHAR(MAX)) AS XML_DISTRIBUITION_NF,
                             'NF' as TYPE_NF,
-                            (SELECT SUBSTRING (A.[XML_FATURAMENTO], CHARINDEX('<serie>', A.[XML_FATURAMENTO]) + 7, 1)) AS SERIE_NF,
-                            (SELECT SUBSTRING (A.[XML_FATURAMENTO], CHARINDEX('<dhEmi>', A.[XML_FATURAMENTO]) + 7, 25)) AS DATE_EMISSION_NF
+                            (SELECT SUBstring? (A.[XML_FATURAMENTO], CHARINDEX('<serie>', A.[XML_FATURAMENTO]) + 7, 1)) AS SERIE_NF,
+                            (SELECT SUBstring? (A.[XML_FATURAMENTO], CHARINDEX('<dhEmi>', A.[XML_FATURAMENTO]) + 7, 25)) AS DATE_EMISSION_NF
 
                             FROM [GENERAL].[dbo].[IT4_WMS_DOCUMENTO] A (NOLOCK)
                             JOIN [GENERAL].[dbo].[IT4_WMS_DOCUMENTO_ITEM] B (NOLOCK) ON A.IDCONTROLE = B.IDCONTROLE
@@ -219,7 +219,7 @@ namespace TotalExpress.Infrastructure.Repository
 
                     var order = result.GroupBy(p => p.number).Select(g =>
                     {
-                        var groupedOrder = g.First();
+                        var groupedOrder = g.FirstOrDefault();
                         groupedOrder.itens = g.Select(p => p.itens.Single()).ToList();
                         return groupedOrder;
                     });
@@ -244,7 +244,7 @@ namespace TotalExpress.Infrastructure.Repository
 
         public async Task<List<Order>> GetInvoicedOrders()
         {
-            string sql = @"SELECT DISTINCT 
+            string? sql = @"SELECT DISTINCT 
                             TRIM(A.DOCUMENTO) AS NUMBER,
                             A.VOLUMES AS VOLUMES,
                             A.NB_CFOP_PEDIDO AS CFOP,
@@ -315,14 +315,14 @@ namespace TotalExpress.Infrastructure.Repository
 
                             A.NF_SAIDA AS NUMBER_NF,
                             A.NB_VALOR_PEDIDO AS AMOUNT_NF,
-                            (SELECT CAST(SUBSTRING (A.[XML_FATURAMENTO], CHARINDEX('<vFrete>', CAST(A.[XML_FATURAMENTO] AS VARCHAR(MAX))) + 8, 4) AS DECIMAL(14,2))) AS SHIPPING_VALUE_NF,
-                            (SELECT CAST(SUBSTRING (A.[XML_FATURAMENTO], CHARINDEX('<pesoB>', CAST(A.[XML_FATURAMENTO] AS VARCHAR(MAX))) + 7, 4) AS DECIMAL(14,2))) AS WEIGHT_NF,
+                            (SELECT CAST(SUBstring? (A.[XML_FATURAMENTO], CHARINDEX('<vFrete>', CAST(A.[XML_FATURAMENTO] AS VARCHAR(MAX))) + 8, 4) AS DECIMAL(14,2))) AS SHIPPING_VALUE_NF,
+                            (SELECT CAST(SUBstring? (A.[XML_FATURAMENTO], CHARINDEX('<pesoB>', CAST(A.[XML_FATURAMENTO] AS VARCHAR(MAX))) + 7, 4) AS DECIMAL(14,2))) AS WEIGHT_NF,
                             A.CHAVE_NFE AS KEY_NFE_NF,
                             CAST(A.[XML_FATURAMENTO] AS VARCHAR(MAX)) AS XML_NF,
                             CAST(A.[XML_FATURAMENTO] AS VARCHAR(MAX)) AS XML_DISTRIBUITION_NF,
                             'NF' as TYPE_NF,
-                            (SELECT SUBSTRING (A.[XML_FATURAMENTO], CHARINDEX('<serie>', A.[XML_FATURAMENTO]) + 7, 1)) AS SERIE_NF,
-                            (SELECT SUBSTRING (A.[XML_FATURAMENTO], CHARINDEX('<dhEmi>', A.[XML_FATURAMENTO]) + 7, 25)) AS DATE_EMISSION_NF
+                            (SELECT SUBstring? (A.[XML_FATURAMENTO], CHARINDEX('<serie>', A.[XML_FATURAMENTO]) + 7, 1)) AS SERIE_NF,
+                            (SELECT SUBstring? (A.[XML_FATURAMENTO], CHARINDEX('<dhEmi>', A.[XML_FATURAMENTO]) + 7, 25)) AS DATE_EMISSION_NF
 
                             FROM [GENERAL].[dbo].[IT4_WMS_DOCUMENTO] A (NOLOCK)
                             JOIN [GENERAL].[dbo].[IT4_WMS_DOCUMENTO_ITEM] B (NOLOCK) ON A.IDCONTROLE = B.IDCONTROLE
@@ -335,8 +335,8 @@ namespace TotalExpress.Infrastructure.Repository
                             AND A.NB_TRANSPORTADORA = '7601'
                             AND A.DATA > GETDATE() - 15
                             AND A.VOLUMES IS NOT NULL
-							AND (C.PEDIDO IS NULL OR SUBSTRING(C.retorno, 3, 7) <> 'retorno') 
-							AND NOT EXISTS (SELECT 0 FROM GENERAL..TotalExpressRegistroLog TER (NOLOCK) WHERE TER.pedido = C.pedido AND SUBSTRING(TER.retorno, 3, 7) = 'retorno')";
+							AND (C.PEDIDO IS NULL OR SUBstring?(C.retorno, 3, 7) <> 'retorno') 
+							AND NOT EXISTS (SELECT 0 FROM GENERAL..TotalExpressRegistroLog TER (NOLOCK) WHERE TER.pedido = C.pedido AND SUBstring?(TER.retorno, 3, 7) = 'retorno')";
 
             try
             {
@@ -354,7 +354,7 @@ namespace TotalExpress.Infrastructure.Repository
 
                     return result.GroupBy(p => p.number).Select(g =>
                     {
-                        var groupedOrder = g.First();
+                        var groupedOrder = g.FirstOrDefault();
                         groupedOrder.itens = g.Select(p => p.itens.Single()).ToList();
                         return groupedOrder;
                     }).ToList();
@@ -375,9 +375,9 @@ namespace TotalExpress.Infrastructure.Repository
             }
         }
 
-        public async Task<Parameters> GetParameters(string docCompany, string method)
+        public async Task<Parameters> GetParameters(string? docCompany, string? method)
         {
-            string sql = $@"SELECT DISTINCT
+            string? sql = $@"SELECT DISTINCT
                             REMETENTE_ID AS SENDER_ID,
                             SERVICO_TIPO AS SERVICE_TYPE
                             FROM
@@ -390,7 +390,7 @@ namespace TotalExpress.Infrastructure.Repository
             {
                 using (var conn = _sqlServerConnection.GetIDbConnection())
                 {
-                    return await conn.QueryFirstAsync<Parameters>(sql);
+                    return await conn.QueryFirstOrDefaultAsync<Parameters>(sql);
                 }
             }
             catch (Exception ex)
@@ -410,7 +410,7 @@ namespace TotalExpress.Infrastructure.Repository
 
         public async Task<IEnumerable<Parameters>> GetSenderIds()
         {
-            string sql = $@"SELECT DISTINCT
+            string? sql = $@"SELECT DISTINCT
                             REMETENTE_ID AS SENDER_ID
                             FROM
                             [GENERAL].[dbo].[PARAMETROS_TOTALEXPRESS]";
@@ -437,9 +437,9 @@ namespace TotalExpress.Infrastructure.Repository
             }
         }
 
-        public async Task<bool> UpdateDeliveryDates(string deliveryMadeDate, string collectionDate, string deliveryForecastDate, string lastStatusDate, string lastStatusDescription, string orderNumber)
+        public async Task<bool> UpdateDeliveryDates(string? deliveryMadeDate, string? collectionDate, string? deliveryForecastDate, string? lastStatusDate, string? lastStatusDescription, string? orderNumber)
         {
-            string sql = @$"UPDATE [GENERAL].[dbo].[IT4_WMS_DOCUMENTO] SET 
+            string? sql = @$"UPDATE [GENERAL].[dbo].[IT4_WMS_DOCUMENTO] SET 
                             NB_DESCRICAO_ULTIMO_STATUS = '{lastStatusDescription}',
                             NB_DATA_ULTIMO_STATUS = '{lastStatusDate}',
                             NB_DATA_COLETA = convert(datetime, '{collectionDate}'),

@@ -79,7 +79,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _linxVendedoresService.GetRecords(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
                         projectName = _projectName,

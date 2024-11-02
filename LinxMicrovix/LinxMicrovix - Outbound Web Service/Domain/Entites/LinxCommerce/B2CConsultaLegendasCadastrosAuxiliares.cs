@@ -57,11 +57,11 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
             lastupdateon = DateTime.Now;
 
             this.empresa =
-                empresa == String.Empty ? 0
+                String.IsNullOrEmpty(empresa) ? 0
                 : Convert.ToInt32(empresa);
 
             this.legenda_setor =
-                legenda_setor == String.Empty ? ""
+                String.IsNullOrEmpty(legenda_setor) ? ""
                 : legenda_setor.Substring(
                     0,
                     legenda_setor.Length > 20 ? 20
@@ -69,7 +69,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.legenda_linha =
-                legenda_linha == String.Empty ? ""
+                String.IsNullOrEmpty(legenda_linha) ? ""
                 : legenda_linha.Substring(
                     0,
                     legenda_linha.Length > 20 ? 20
@@ -77,7 +77,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.legenda_marca =
-                legenda_marca == String.Empty ? ""
+                String.IsNullOrEmpty(legenda_marca) ? ""
                 : legenda_marca.Substring(
                     0,
                     legenda_marca.Length > 20 ? 20
@@ -85,7 +85,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.legenda_colecao =
-                legenda_colecao == String.Empty ? ""
+                String.IsNullOrEmpty(legenda_colecao) ? ""
                 : legenda_colecao.Substring(
                     0,
                     legenda_colecao.Length > 20 ? 20
@@ -93,7 +93,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.legenda_grade1 =
-                legenda_grade1 == String.Empty ? ""
+                String.IsNullOrEmpty(legenda_grade1) ? ""
                 : legenda_grade1.Substring(
                     0,
                     legenda_grade1.Length > 20 ? 20
@@ -101,7 +101,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.legenda_grade2 =
-                legenda_grade2 == String.Empty ? ""
+                String.IsNullOrEmpty(legenda_grade2) ? ""
                 : legenda_grade2.Substring(
                     0,
                     legenda_grade2.Length > 20 ? 20
@@ -109,7 +109,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.legenda_espessura =
-                legenda_espessura == String.Empty ? ""
+                String.IsNullOrEmpty(legenda_espessura) ? ""
                 : legenda_espessura.Substring(
                     0,
                     legenda_espessura.Length > 20 ? 20
@@ -117,7 +117,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.legenda_classificacao =
-                legenda_classificacao == String.Empty ? ""
+                String.IsNullOrEmpty(legenda_classificacao) ? ""
                 : legenda_classificacao.Substring(
                     0,
                     legenda_classificacao.Length > 20 ? 20
@@ -125,7 +125,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.timestamp =
-                timestamp == String.Empty ? 0
+                String.IsNullOrEmpty(timestamp) ? 0
                 : Convert.ToInt64(timestamp);
         }
     }

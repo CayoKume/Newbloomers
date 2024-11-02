@@ -25,7 +25,7 @@ namespace HangfireDashboard.Infrastructure.Repository
 
         public async Task<bool> CreateDatabaseIfNotExists(string? projectName, string? databaseName)
         {
-            string sql = @$"IF NOT EXISTS (SELECT * FROM [MASTER].[dbo].[SYSDATABASES] WHERE NAME = '{databaseName}')
+            string? sql = @$"IF NOT EXISTS (SELECT * FROM [MASTER].[dbo].[SYSDATABASES] WHERE NAME = '{databaseName}')
                             BEGIN
                               CREATE DATABASE {databaseName}
                             END";
@@ -59,7 +59,7 @@ namespace HangfireDashboard.Infrastructure.Repository
 
         public async Task<bool> CreateParametersDataTableIfNotExists(string? projectName, string? databaseName, string? tableName)
         {
-            string sql = @$"SELECT DISTINCT * FROM [{databaseName}].[INFORMATION_SCHEMA].[TABLES] (NOLOCK) WHERE TABLE_NAME LIKE '%{tableName}%'";
+            string? sql = @$"SELECT DISTINCT * FROM [{databaseName}].[INFORMATION_SCHEMA].[TABLES] (NOLOCK) WHERE TABLE_NAME LIKE '%{tableName}%'";
 
             try
             {

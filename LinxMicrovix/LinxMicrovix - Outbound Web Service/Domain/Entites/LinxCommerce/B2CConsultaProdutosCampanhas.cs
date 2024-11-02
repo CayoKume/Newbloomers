@@ -50,11 +50,11 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
             lastupdateon = DateTime.Now;
 
             this.codigo_campanha =
-                codigo_campanha == String.Empty ? 0
+                String.IsNullOrEmpty(codigo_campanha) ? 0
                 : Convert.ToInt32(codigo_campanha);
 
             this.nome_campanha =
-                nome_campanha == String.Empty ? ""
+                String.IsNullOrEmpty(nome_campanha) ? ""
                 : nome_campanha.Substring(
                     0,
                     nome_campanha.Length > 60 ? 60
@@ -62,27 +62,27 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.vigencia_inicio =
-                vigencia_inicio == String.Empty ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
+                String.IsNullOrEmpty(vigencia_inicio) ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
                 : Convert.ToDateTime(vigencia_inicio);
 
             this.vigencia_fim =
-                vigencia_fim == String.Empty ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
+                String.IsNullOrEmpty(vigencia_fim) ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
                 : Convert.ToDateTime(vigencia_fim);
 
             this.observacao =
-                observacao == String.Empty ? ""
+                String.IsNullOrEmpty(observacao) ? ""
                 : observacao;
 
             this.ativo =
-                ativo == String.Empty ? 0
+                String.IsNullOrEmpty(ativo) ? 0
                 : Convert.ToInt32(ativo);
 
             this.timestamp =
-                timestamp == String.Empty ? 0
+                String.IsNullOrEmpty(timestamp) ? 0
                 : Convert.ToInt64(timestamp);
 
             this.portal =
-                portal == String.Empty ? 0
+                String.IsNullOrEmpty(portal) ? 0
                 : Convert.ToInt32(portal);
         }
     }

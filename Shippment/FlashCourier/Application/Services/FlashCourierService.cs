@@ -14,7 +14,7 @@ namespace FlashCourier.Application.Services
         public FlashCourierService(IAPICall apiCall, IFlashCourierRepository flashCourierRepository) =>
             (_apiCall, _flashCourierRepository) = (apiCall, flashCourierRepository);
 
-        public async Task<bool> SendOrder(string orderNumber)
+        public async Task<bool> SendOrder(string? orderNumber)
         {
             try
             {
@@ -30,7 +30,7 @@ namespace FlashCourier.Application.Services
                         JsonConvert.SerializeObject(jObject)
                     );
 
-                    string result = await _apiCall.PostAsync(
+                    string? result = await _apiCall.PostAsync(
                         parameters.login, 
                         parameters.senha, 
                         jObject, 
@@ -38,7 +38,7 @@ namespace FlashCourier.Application.Services
                     );
                     
                     var postHAWB = JsonConvert.DeserializeObject<List<AWBSucessResponse>>(result);
-                    var statusFlash = postHAWB.First().type.ToUpper() == "SUCESS" ? "Enviado" : "Erro_Flash";
+                    var statusFlash = postHAWB.FirstOrDefault().type.ToUpper() == "SUCESS" ? "Enviado" : "Erro_Flash";
 
                     await _flashCourierRepository.GenerateResponseLog(
                         orderNumber: order.number,
@@ -78,7 +78,7 @@ namespace FlashCourier.Application.Services
                             JsonConvert.SerializeObject(jObject)
                         );
 
-                        string result = await _apiCall.PostAsync(
+                        string? result = await _apiCall.PostAsync(
                             parameters.login, 
                             parameters.senha, 
                             jObject, 
@@ -86,7 +86,7 @@ namespace FlashCourier.Application.Services
                         );
                         
                         var postHAWB = JsonConvert.DeserializeObject<List<AWBSucessResponse>>(result);
-                        var statusFlash = postHAWB.First().type.ToUpper() == "SUCESS" ? "Enviado" : "Erro_Flash";
+                        var statusFlash = postHAWB.FirstOrDefault().type.ToUpper() == "SUCESS" ? "Enviado" : "Erro_Flash";
 
                         await _flashCourierRepository.GenerateResponseLog(
                             orderNumber: order.number,
@@ -131,7 +131,7 @@ namespace FlashCourier.Application.Services
 
                         var authenticationResponse = await _apiCall.PostAsync(token, jObject, "/api/v1/token");
                         var authentication = JsonConvert.DeserializeObject<AuthenticationResponse>(authenticationResponse);
-                        string[] numEncCli = orders.Select(a => a.number).ToArray();
+                        string?[] numEncCli = orders.Select(a => a.number).ToArray();
 
                         var _jObject = new JObject
                         {

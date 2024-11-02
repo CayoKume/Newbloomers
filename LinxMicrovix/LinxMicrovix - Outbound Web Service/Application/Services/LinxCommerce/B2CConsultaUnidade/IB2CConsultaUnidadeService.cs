@@ -4,8 +4,8 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
 {
     public interface IB2CConsultaUnidadeService<TEntity> where TEntity : class, new()
     {
-        public List<TEntity?> DeserializeXMLToObject(JobParameter jobParameter, List<Dictionary<string, string>> records);
-        public Task<bool> GetRecords(JobParameter jobParameter);
-        public Task<bool> GetRecord(JobParameter jobParameter, string? identificador, string? cnpj_emp);
+        public List<TEntity?> DeserializeXMLToObject(LinxMicrovixJobParameter jobParameter, List<Dictionary<string?, string?>> records);
+        public Task<bool> GetRecords(LinxMicrovixJobParameter jobParameter);
+        public Task<bool> GetRecord(LinxMicrovixJobParameter jobParameter, string? identificador, string? cnpj_emp);
     }
 }

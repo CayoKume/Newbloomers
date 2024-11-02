@@ -41,15 +41,15 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
             lastupdateon = DateTime.Now;
 
             this.id_campo =
-                id_campo == String.Empty ? 0
+                String.IsNullOrEmpty(id_campo) ? 0
                 : Convert.ToInt32(id_campo);
 
             this.ordem =
-                ordem == String.Empty ? 0
+                String.IsNullOrEmpty(ordem) ? 0
                 : Convert.ToInt32(ordem);
 
             this.legenda =
-                legenda == String.Empty ? ""
+                String.IsNullOrEmpty(legenda) ? ""
                 : legenda.Substring(
                     0,
                     legenda.Length > 30 ? 30
@@ -57,7 +57,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.tipo =
-                tipo == String.Empty ? ""
+                String.IsNullOrEmpty(tipo) ? ""
                 : tipo.Substring(
                     0,
                     tipo.Length > 1 ? 1
@@ -65,11 +65,11 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.timestamp =
-                timestamp == String.Empty ? 0
+                String.IsNullOrEmpty(timestamp) ? 0
                 : Convert.ToInt64(timestamp);
 
             this.portal =
-                portal == String.Empty ? 0
+                String.IsNullOrEmpty(portal) ? 0
                 : Convert.ToInt32(portal);
         }
     }

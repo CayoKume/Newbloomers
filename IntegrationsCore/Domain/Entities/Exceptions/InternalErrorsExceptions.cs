@@ -12,7 +12,7 @@
             public required string? propertie { get; set; }
             public required string? exception { get; set; }
 
-            public override string Message => $"Project: {project}\n" +
+            public override string? Message => $"Project: {project}\n" +
                                               $"Job: {job}\n" +
                                               $"Method: {method}\n" +
                                               $"Description: Error when convert xml to list objects\n" +

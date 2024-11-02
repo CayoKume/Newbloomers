@@ -4,8 +4,8 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
 {
     public interface IB2CConsultaClientesEstadoCivilRepository<TEntity> where TEntity : class, new()
     {
-        public Task<bool> InsertParametersIfNotExists(JobParameter jobParameter);
-        public Task<bool> ExecuteTableMerge(JobParameter jobParameter);
-        public bool BulkInsertIntoTableRaw(JobParameter jobParameter, List<TEntity> records);
+        public Task<bool> InsertParametersIfNotExists(LinxMicrovixJobParameter jobParameter);
+        public Task<bool> CreateTableMerge(LinxMicrovixJobParameter jobParameter);
+        public bool BulkInsertIntoTableRaw(LinxMicrovixJobParameter jobParameter, List<TEntity> records);
     }
 }

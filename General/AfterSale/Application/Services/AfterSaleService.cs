@@ -15,7 +15,7 @@ public class AfterSaleService : IAfterSaleService
     /// <summary>
     /// return infos about ecommerce
     /// </summary>
-    public Task<string> GetMe()
+    public Task<string?> GetMe()
     {
         throw new NotImplementedException();
     }
@@ -25,7 +25,7 @@ public class AfterSaleService : IAfterSaleService
     /// <summary>
     /// returns all refunds
     /// </summary>
-    public Task<string> GetRefunds()
+    public Task<string?> GetRefunds()
     {
         throw new NotImplementedException();
     }
@@ -33,7 +33,7 @@ public class AfterSaleService : IAfterSaleService
     /// <summary>
     /// returns the possible actions of a reverse
     /// </summary>
-    public Task<string> GetRefundsActions()
+    public Task<string?> GetRefundsActions()
     {
         throw new NotImplementedException();
     }
@@ -41,7 +41,7 @@ public class AfterSaleService : IAfterSaleService
     /// <summary>
     /// returns the possible banks of a refund
     /// </summary>
-    public Task<string> GetRefundsBanks()
+    public Task<string?> GetRefundsBanks()
     {
         throw new NotImplementedException();
     }
@@ -49,7 +49,7 @@ public class AfterSaleService : IAfterSaleService
     /// <summary>
     /// get a refund
     /// </summary>
-    public Task<string> GetRefundsById(Int64 id)
+    public Task<string?> GetRefundsById(Int64 id)
     {
         throw new NotImplementedException();
     }
@@ -57,7 +57,7 @@ public class AfterSaleService : IAfterSaleService
     /// <summary>
     /// returns the possible status of a refund
     /// </summary>
-    public Task<string> GetRefundsStatus()
+    public Task<string?> GetRefundsStatus()
     {
         throw new NotImplementedException();
     }
@@ -65,7 +65,7 @@ public class AfterSaleService : IAfterSaleService
     /// <summary>
     /// returns the possible types of a refund
     /// </summary>
-    public Task<string> GetRefundsTypes()
+    public Task<string?> GetRefundsTypes()
     {
         throw new NotImplementedException();
     }
@@ -73,7 +73,7 @@ public class AfterSaleService : IAfterSaleService
     /// <summary>
     /// cancel reverse
     /// </summary>
-    public Task<string> CancelRefundById(Int64 id)
+    public Task<string?> CancelRefundById(Int64 id)
     {
         throw new NotImplementedException();
     }
@@ -81,7 +81,7 @@ public class AfterSaleService : IAfterSaleService
     /// <summary>
     /// change total amount of refund
     /// </summary>
-    public Task<string> ChangeTotalAmountRefundById(Int64 id)
+    public Task<string?> ChangeTotalAmountRefundById(Int64 id)
     {
         throw new NotImplementedException();
     }
@@ -89,7 +89,7 @@ public class AfterSaleService : IAfterSaleService
     /// <summary>
     /// pay refund
     /// </summary>
-    public Task<string> PayRefundById(Int64 id)
+    public Task<string?> PayRefundById(Int64 id)
     {
         throw new NotImplementedException();
     }
@@ -98,7 +98,7 @@ public class AfterSaleService : IAfterSaleService
     /// approve reverse
     /// </summary>
     /// <param name="id"></param>
-    public Task<string> ApproveRefundById(Int64 id)
+    public Task<string?> ApproveRefundById(Int64 id)
     {
         throw new NotImplementedException();
     }
@@ -108,7 +108,7 @@ public class AfterSaleService : IAfterSaleService
     /// <summary>
     /// returns all reverses
     /// </summary>
-    public Task<string> GetReverses()
+    public Task<string?> GetReverses()
     {
         throw new NotImplementedException();
     }
@@ -117,7 +117,7 @@ public class AfterSaleService : IAfterSaleService
     /// get a reverse
     /// </summary>
     /// <param name="id"></param>
-    public Task<string> GetReversesById(Int64 id)
+    public Task<string?> GetReversesById(Int64 id)
     {
         throw new NotImplementedException();
     }
@@ -125,7 +125,7 @@ public class AfterSaleService : IAfterSaleService
     /// <summary>
     /// get courier data fields needed to process the reverse
     /// </summary>
-    public Task<string> GetReversesCourierAttributes()
+    public Task<string?> GetReversesCourierAttributes()
     {
         throw new NotImplementedException();
     }
@@ -133,7 +133,7 @@ public class AfterSaleService : IAfterSaleService
     /// <summary>
     /// returns the possible status of a reverse
     /// </summary>
-    public Task<string> GetReversesStatus()
+    public Task<string?> GetReversesStatus()
     {
         throw new NotImplementedException();
     }
@@ -141,7 +141,7 @@ public class AfterSaleService : IAfterSaleService
     /// <summary>
     /// returns the possible transportations
     /// </summary>
-    public Task<string> GetReversesTransportations()
+    public Task<string?> GetReversesTransportations()
     {
         throw new NotImplementedException();
     }
@@ -150,7 +150,7 @@ public class AfterSaleService : IAfterSaleService
     /// receive products by reverse ID
     /// </summary>
     /// <param name="id"></param>
-    public Task<string> ReciveProductsById(Int64 id)
+    public Task<string?> ReciveProductsById(Int64 id)
     {
         throw new NotImplementedException();
     }
@@ -159,7 +159,7 @@ public class AfterSaleService : IAfterSaleService
     /// update recived invoice in reverse products. Need pass the products id and the returned invoice
     /// </summary>
     /// <param name="id"></param>
-    public Task<string> ReturnedInvoiceById(Int64 id)
+    public Task<string?> ReturnedInvoiceById(Int64 id)
     {
         throw new NotImplementedException();
     }
@@ -168,7 +168,7 @@ public class AfterSaleService : IAfterSaleService
     /// set reverse courier data and process/generate code
     /// </summary>
     /// <param name="id"></param>
-    public Task<string> ReversesInvoiceById(Int64 id)
+    public Task<string?> ReversesInvoiceById(Int64 id)
     {
         throw new NotImplementedException();
     }
@@ -177,7 +177,7 @@ public class AfterSaleService : IAfterSaleService
     /// approve products by reverse ID
     /// </summary>
     /// <param name="id"></param>
-    public Task<string> ApproveReverseById(Int64 id)
+    public Task<string?> ApproveReverseById(Int64 id)
     {
         throw new NotImplementedException();
     } 

@@ -14,7 +14,7 @@ namespace HangfireDashboard.UI.Controllers.Carries
             (_flashCourierService) = (flashCourierService);
 
         [HttpPost("SendOrders")]
-        public async Task<ActionResult<string>> FlashCourierSendOrders()
+        public async Task<ActionResult<string?>> FlashCourierSendOrders()
         {
             try
             {
@@ -29,7 +29,7 @@ namespace HangfireDashboard.UI.Controllers.Carries
         }
 
         [HttpPost("SendOrder")]
-        public async Task<ActionResult<string>> FlashCourierSendOrder([Required][FromQuery] string orderNumber)
+        public async Task<ActionResult<string?>> FlashCourierSendOrder([Required][FromQuery] string? orderNumber)
         {
             try
             {
@@ -48,7 +48,7 @@ namespace HangfireDashboard.UI.Controllers.Carries
         }
 
         [HttpPost("UpdateLogOrders")]
-        public async Task<ActionResult<string>> FlashCourierUpdateLogOrders()
+        public async Task<ActionResult<string?>> FlashCourierUpdateLogOrders()
         {
             try
             {

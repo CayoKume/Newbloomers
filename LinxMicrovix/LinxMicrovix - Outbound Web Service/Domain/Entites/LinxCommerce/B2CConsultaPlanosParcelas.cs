@@ -41,27 +41,27 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
             lastupdateon = DateTime.Now;
 
             this.plano =
-                plano == String.Empty ? 0
+                String.IsNullOrEmpty(plano) ? 0
                 : Convert.ToInt32(plano);
 
             this.ordem_parcela =
-                ordem_parcela == String.Empty ? 0
+                String.IsNullOrEmpty(ordem_parcela) ? 0
                 : Convert.ToInt32(ordem_parcela);
 
             this.prazo_parc =
-                prazo_parc == String.Empty ? 0
+                String.IsNullOrEmpty(prazo_parc) ? 0
                 : Convert.ToInt32(prazo_parc);
 
             this.id_planos_parcelas =
-                id_planos_parcelas == String.Empty ? 0
+                String.IsNullOrEmpty(id_planos_parcelas) ? 0
                 : Convert.ToInt32(id_planos_parcelas);
 
             this.timestamp =
-                timestamp == String.Empty ? 0
+                String.IsNullOrEmpty(timestamp) ? 0
                 : Convert.ToInt64(timestamp);
 
             this.portal =
-                portal == String.Empty ? 0
+                String.IsNullOrEmpty(portal) ? 0
                 : Convert.ToInt32(portal);
         }
     }

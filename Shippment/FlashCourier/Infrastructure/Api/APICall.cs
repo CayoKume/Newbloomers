@@ -12,7 +12,7 @@ namespace FlashCourier.Infrastructure.Api
         public APICall(IHttpClientFactory httpClientFactory) =>
             (_httpClientFactory) = (httpClientFactory);
 
-        public async Task<string> PostAsync(string token, JObject jObject, string rote)
+        public async Task<string?> PostAsync(string? token, JObject jObject, string? rote)
         {
             try
             {
@@ -38,7 +38,7 @@ namespace FlashCourier.Infrastructure.Api
             }
         }
 
-        public async Task<string> PostAsync(string userName, string password, JArray jObject, string rote)
+        public async Task<string?> PostAsync(string? userName, string? password, JArray jObject, string? rote)
         {
             try
             {
@@ -67,14 +67,14 @@ namespace FlashCourier.Infrastructure.Api
             }
         }
 
-        private HttpClient CreateCliente(string token)
+        private HttpClient CreateCliente(string? token)
         {
             var client = _httpClientFactory.CreateClient("FlashCourierAPI");
             client.DefaultRequestHeaders.Add("Authorization", token);
             return client;
         }
 
-        private HttpClient CreateCliente(string userName, string password)
+        private HttpClient CreateCliente(string? userName, string? password)
         {
             var client = _httpClientFactory.CreateClient("FlashCourierAPI");
             client.DefaultRequestHeaders.Add("Authorization", "Basic " + Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes($"{userName}:{password}")));

@@ -12,7 +12,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
         public B2CConsultaImagensRepository(ILinxMicrovixRepositoryBase<TEntity> linxMicrovixRepositoryBase) =>
             (_linxMicrovixRepositoryBase) = (linxMicrovixRepositoryBase);
 
-        public bool BulkInsertIntoTableRaw(JobParameter jobParameter, List<TEntity> records)
+        public bool BulkInsertIntoTableRaw(LinxMicrovixJobParameter jobParameter, List<TEntity> records)
         {
             try
             {
@@ -37,24 +37,38 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
             }
         }
 
-        public async Task<bool> ExecuteTableMerge(JobParameter jobParameter)
+        public async Task<bool> CreateTableMerge(LinxMicrovixJobParameter jobParameter)
         {
-            string sql = $"MERGE [{jobParameter.tableName}_trusted] AS TARGET " +
-                         $"USING [{jobParameter.tableName}_raw] AS SOURCE " +
-                          "ON (TARGET.ID_IMAGEM = SOURCE.ID_IMAGEM) " +
-                          "WHEN MATCHED THEN UPDATE SET " +
-                          "TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON], " +
-                          "TARGET.[ID_IMAGEM] = SOURCE.[ID_IMAGEM], " +
-                          "TARGET.[IMAGEM] = SOURCE.[IMAGEM], " +
-                          "TARGET.[MD5] = SOURCE.[MD5], " +
-                          "TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP], " +
-                          "TARGET.[PORTAL] = SOURCE.[PORTAL], " +
-                          "TARGET.[URL_IMAGEM_BLOB] = SOURCE.[URL_IMAGEM_BLOB] " +
-                          "WHEN NOT MATCHED BY TARGET THEN " +
-                          "INSERT " +
-                          "([LASTUPDATEON], [ID_IMAGEM], [IMAGEM], [MD5], [TIMESTAMP], [PORTAL], [URL_IMAGEM_BLOB])" +
-                          "VALUES " +
-                          "(SOURCE.[LASTUPDATEON], SOURCE.[ID_IMAGEM], SOURCE.[IMAGEM], SOURCE.[MD5], SOURCE.[TIMESTAMP], SOURCE.[PORTAL], SOURCE.[URL_IMAGEM_BLOB]);";
+            string? sql = @"IF NOT EXISTS (SELECT * FROM SYS.OBJECTS WHERE TYPE = 'P' AND NAME = 'P_B2CCONSULTAIMAGENS_SYNC')
+                           BEGIN
+                           EXECUTE (
+	                           'CREATE PROCEDURE [P_B2CCONSULTAIMAGENS_SYNC] AS
+	                           BEGIN
+		                           MERGE [B2CCONSULTAIMAGENS_TRUSTED] AS TARGET
+                                   USING [B2CCONSULTAIMAGENS_RAW] AS SOURCE
+
+                                   ON (
+			                           TARGET.[ID_IMAGEM] = SOURCE.[ID_IMAGEM]
+		                           )
+
+                                   WHEN MATCHED AND TARGET.[TIMESTAMP] != SOURCE.[TIMESTAMP] THEN 
+			                           UPDATE SET
+			                           TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON],
+			                           TARGET.[ID_IMAGEM] = SOURCE.[ID_IMAGEM],
+			                           TARGET.[IMAGEM] = SOURCE.[IMAGEM],
+			                           TARGET.[MD5] = SOURCE.[MD5],
+			                           TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP],
+			                           TARGET.[PORTAL] = SOURCE.[PORTAL],
+			                           TARGET.[URL_IMAGEM_BLOB] = SOURCE.[URL_IMAGEM_BLOB]
+
+                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_IMAGEM] NOT IN (SELECT [ID_IMAGEM] FROM [B2CCONSULTAIMAGENS_TRUSTED]) THEN
+			                           INSERT
+			                           ([LASTUPDATEON], [ID_IMAGEM], [IMAGEM], [MD5], [TIMESTAMP], [PORTAL], [URL_IMAGEM_BLOB])
+			                           VALUES
+			                           (SOURCE.[LASTUPDATEON], SOURCE.[ID_IMAGEM], SOURCE.[IMAGEM], SOURCE.[MD5], SOURCE.[TIMESTAMP], SOURCE.[PORTAL], SOURCE.[URL_IMAGEM_BLOB]);
+	                           END'
+                           )
+                           END";
 
             try
             {
@@ -66,7 +80,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
             }
         }
 
-        public async Task<bool> InsertParametersIfNotExists(JobParameter jobParameter)
+        public async Task<bool> InsertParametersIfNotExists(LinxMicrovixJobParameter jobParameter)
         {
             try
             {
@@ -89,9 +103,9 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
             }
         }
 
-        public async Task<bool> InsertRecord(JobParameter jobParameter, TEntity? record)
+        public async Task<bool> InsertRecord(LinxMicrovixJobParameter jobParameter, TEntity? record)
         {
-            string sql = $"INSERT INTO {jobParameter.tableName}_raw " +
+            string? sql = $"INSERT INTO {jobParameter.tableName}_raw " +
                           "([lastupdateon], [id_imagem], [imagem], [md5], [timestamp], [portal], [url_imagem_blob]) " +
                           "Values " +
                           "(@lastupdateon, @id_imagem, @imagem, @md5, @timestamp, @portal, @url_imagem_blob)";

@@ -20,15 +20,15 @@
 
     public class Fields
     {
-        public string id { get; set; }
-        public string name { get; set; }
+        public string? id { get; set; }
+        public string? name { get; set; }
         public Validation validation { get; set; }
-        public string type { get; set; }
+        public string? type { get; set; }
     }
 
     public class Validation
     {
         public bool required { get; set; }
-        public string mime { get; set; }
+        public string? mime { get; set; }
     }
 }

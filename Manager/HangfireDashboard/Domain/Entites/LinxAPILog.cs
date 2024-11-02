@@ -11,15 +11,15 @@ namespace HangfireDashboard.Domain.Entites
         public int id { get; set; }
 
         [Column(TypeName = "varchar(50)")]
-        public string method { get; set; }
+        public string? method { get; set; }
 
         [Column(TypeName = "datetime")]
         public DateTime? execution_date { get; set; }
 
         [Column(TypeName = "varchar(50)")]
-        public string parameters_interval { get; set; }
+        public string? parameters_interval { get; set; }
 
         [Column(TypeName = "varchar(MAX)")]
-        public string response { get; set; }
+        public string? response { get; set; }
     }
 }

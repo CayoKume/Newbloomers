@@ -7,14 +7,14 @@ namespace IntegrationsCore.Infrastructure.Connections.SQLServer
     public class GeneralConnection : IGeneralConnection, IDisposable
     {
         private readonly string? _databaseName;
-        private readonly string? _connectionString;
+        private readonly string? _connectionstring;
         private IDbConnection _connection;
         private SqlConnection _conn;
 
         public GeneralConnection(IConfiguration configuration)
         {
             _databaseName = configuration.GetSection("ConfigureServer").GetSection("GeneralDatabaseName").Value;
-            _connectionString = configuration.GetConnectionString("Connection");
+            _connectionstring = configuration.GetConnectionString("Connection");
         }
 
         public void Dispose() => _connection?.Dispose();
@@ -23,7 +23,7 @@ namespace IntegrationsCore.Infrastructure.Connections.SQLServer
         {
             try
             {
-                _conn = new SqlConnection(_connectionString.Replace("[catalog]", _databaseName).Replace("[database]", _databaseName));
+                _conn = new SqlConnection(_connectionstring.Replace("[catalog]", _databaseName).Replace("[database]", _databaseName));
                 _conn.Open();
                 return _conn;
             }
@@ -38,7 +38,7 @@ namespace IntegrationsCore.Infrastructure.Connections.SQLServer
         {
             try
             {
-                _conn = new SqlConnection(_connectionString.Replace("[catalog]", _databaseName).Replace("[database]", _databaseName));
+                _conn = new SqlConnection(_connectionstring.Replace("[catalog]", _databaseName).Replace("[database]", _databaseName));
                 _connection.Open();
                 return _connection;
             }

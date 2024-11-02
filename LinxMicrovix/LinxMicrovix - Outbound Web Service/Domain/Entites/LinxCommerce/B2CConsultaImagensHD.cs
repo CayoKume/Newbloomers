@@ -42,19 +42,19 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
             lastupdateon = DateTime.Now;
 
             this.identificador_imagem =
-                identificador_imagem == String.Empty ? new Guid()
+                String.IsNullOrEmpty(identificador_imagem) ? null
                 : Guid.Parse(identificador_imagem);
 
             this.codigoproduto =
-                codigoproduto == String.Empty ? 0
+                String.IsNullOrEmpty(codigoproduto) ? 0
                 : Convert.ToInt32(codigoproduto);
 
             this.imagem =
-                imagem == String.Empty ? ""
+                String.IsNullOrEmpty(imagem) ? ""
                 : imagem;
 
             this.url_imagem_blob =
-                url_imagem_blob == String.Empty ? ""
+                String.IsNullOrEmpty(url_imagem_blob) ? ""
                 : url_imagem_blob.Substring(
                     0,
                     url_imagem_blob.Length > 200 ? 200
@@ -62,11 +62,11 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.timestamp =
-                timestamp == String.Empty ? 0
+                String.IsNullOrEmpty(timestamp) ? 0
                 : Convert.ToInt64(timestamp);
 
             this.portal =
-                portal == String.Empty ? 0
+                String.IsNullOrEmpty(portal) ? 0
                 : Convert.ToInt32(portal);
         }
     }

@@ -21,10 +21,10 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
         [Column(TypeName = "int")]
         public Int32? qtde_parcelas { get; private set; }
 
-        [Column(TypeName = "money")]
+        [Column(TypeName = "decimal(10,2)")]
         public decimal? valor_minimo_parcela { get; private set; }
 
-        [Column(TypeName = "money")]
+        [Column(TypeName = "decimal(10,2)")]
         public decimal? indice { get; private set; }
 
         [Column(TypeName = "bigint")]
@@ -57,11 +57,11 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
             lastupdateon = DateTime.Now;
 
             this.plano =
-                plano == String.Empty ? 0
+                String.IsNullOrEmpty(plano) ? 0
                 : Convert.ToInt32(plano);
 
             this.nome_plano =
-                nome_plano == String.Empty ? ""
+                String.IsNullOrEmpty(nome_plano) ? ""
                 : nome_plano.Substring(
                     0,
                     nome_plano.Length > 30 ? 30
@@ -69,23 +69,23 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.forma_pagamento =
-                forma_pagamento == String.Empty ? 0
+                String.IsNullOrEmpty(forma_pagamento) ? 0
                 : Convert.ToInt32(forma_pagamento);
 
             this.qtde_parcelas =
-                qtde_parcelas == String.Empty ? 0
+                String.IsNullOrEmpty(qtde_parcelas) ? 0
                 : Convert.ToInt32(qtde_parcelas);
 
             this.valor_minimo_parcela =
-                valor_minimo_parcela == String.Empty ? 0
+                String.IsNullOrEmpty(valor_minimo_parcela) ? 0
                 : Convert.ToDecimal(valor_minimo_parcela);
 
             this.indice =
-                indice == String.Empty ? 0
+                String.IsNullOrEmpty(indice) ? 0
                 : Convert.ToDecimal(indice);
 
             this.desativado =
-                desativado == String.Empty ? ""
+                String.IsNullOrEmpty(desativado) ? ""
                 : desativado.Substring(
                     0,
                     desativado.Length > 1 ? 1
@@ -93,7 +93,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.tipo_plano =
-                tipo_plano == String.Empty ? ""
+                String.IsNullOrEmpty(tipo_plano) ? ""
                 : tipo_plano.Substring(
                     0,
                     tipo_plano.Length > 1 ? 1
@@ -101,11 +101,11 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.timestamp =
-                timestamp == String.Empty ? 0
+                String.IsNullOrEmpty(timestamp) ? 0
                 : Convert.ToInt64(timestamp);
 
             this.portal =
-                portal == String.Empty ? 0
+                String.IsNullOrEmpty(portal) ? 0
                 : Convert.ToInt32(portal);
         }
     }

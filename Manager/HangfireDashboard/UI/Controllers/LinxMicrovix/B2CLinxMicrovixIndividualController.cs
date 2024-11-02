@@ -64,12 +64,12 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
         }
 
         [HttpPost("B2CConsultaClassificacaoIndividual")]
-        public async Task<ActionResult> B2CConsultaClassificacaoIndividual([Required][FromQuery] string codigo_classificacao, [Required][FromQuery] string cnpj_emp)
+        public async Task<ActionResult> B2CConsultaClassificacaoIndividual([Required][FromQuery] string? codigo_classificacao, [Required][FromQuery] string? cnpj_emp)
         {
             try
             {
                 var result = await _b2cConsultaClassificacaoService.GetRecord(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         projectName = _projectName,
                         keyAuthorization = _key,
@@ -111,12 +111,12 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
         }
 
         [HttpPost("B2CConsultaClientesIndividual")]
-        public async Task<ActionResult> B2CConsultaClientesIndividual([Required][FromQuery] string doc_cliente, [Required][FromQuery] string cnpj_emp)
+        public async Task<ActionResult> B2CConsultaClientesIndividual([Required][FromQuery] string? doc_cliente, [Required][FromQuery] string? cnpj_emp)
         {
             try
             {
                 var result = await _b2cConsultaClientesService.GetRecord(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         projectName = _projectName,
                         keyAuthorization = _key,
@@ -158,12 +158,12 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
         }
 
         [HttpPost("B2CConsultaClientesContatosParentescoIndividual")]
-        public async Task<ActionResult> B2CConsultaClientesContatosParentescoIndividual([Required][FromQuery] string id_parentesco, [Required][FromQuery] string cnpj_emp)
+        public async Task<ActionResult> B2CConsultaClientesContatosParentescoIndividual([Required][FromQuery] string? id_parentesco, [Required][FromQuery] string? cnpj_emp)
         {
             try
             {
                 var result = await _b2cConsultaClientesContatosParentescoService.GetRecord(
-                    new JobParameter
+                    new LinxMicrovixJobParameter
                     {
                         projectName = _projectName,
                         keyAuthorization = _key,

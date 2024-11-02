@@ -62,7 +62,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.Base
                                     .Value;
         }
 
-        public async Task<bool> CallDbProcMerge(JobParameter jobParameter)
+        public async Task<bool> CallDbProcMerge(LinxMicrovixJobParameter jobParameter)
         {
             try
             {
@@ -90,9 +90,9 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.Base
             }
         }
 
-        public async Task<bool> CreateDataTableIfNotExists(JobParameter jobParameter)
+        public async Task<bool> CreateDataTableIfNotExists(LinxMicrovixJobParameter jobParameter)
         {
-            string sql = @$"SELECT DISTINCT * FROM [INFORMATION_SCHEMA].[TABLES] (NOLOCK) WHERE TABLE_NAME LIKE '%{jobParameter.tableName}%'";
+            string? sql = @$"SELECT DISTINCT * FROM [INFORMATION_SCHEMA].[TABLES] (NOLOCK) WHERE TABLE_NAME LIKE '%{jobParameter.tableName}%'";
 
             try
             {
@@ -126,7 +126,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.Base
             }
         }
 
-        public DataTable CreateSystemDataTable(JobParameter jobParameter, TEntity entity)
+        public DataTable CreateSystemDataTable(LinxMicrovixJobParameter jobParameter, TEntity entity)
         {
             try
             {
@@ -153,9 +153,9 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.Base
             }
         }
 
-        public async Task<IEnumerable<Company>> GetB2CCompanys(JobParameter jobParameter)
+        public async Task<IEnumerable<Company>> GetB2CCompanys(LinxMicrovixJobParameter jobParameter)
         {
-            string sql = @"SELECT  
+            string? sql = @"SELECT  
                            EMPRESA AS COD_COMPANY,
                            CNPJ_EMP AS DOC_COMPANY,
                            NOME_EMP AS REASON_COMPANY,
@@ -196,9 +196,9 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.Base
             }
         }
 
-        public async Task<IEnumerable<Company>> GetMicrovixCompanys(JobParameter jobParameter)
+        public async Task<IEnumerable<Company>> GetMicrovixCompanys(LinxMicrovixJobParameter jobParameter)
         {
-            string sql = @"";
+            string? sql = @"";
 
             try
             {
@@ -222,9 +222,9 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.Base
             }
         }
 
-        public async Task<string> GetParameters(JobParameter jobParameter)
+        public async Task<string?> GetParameters(LinxMicrovixJobParameter jobParameter)
         {
-            string sql = $"SELECT {jobParameter.parametersInterval} " +
+            string? sql = $"SELECT {jobParameter.parametersInterval} " +
                          $"FROM [{jobParameter.parametersTableName}] (NOLOCK) " +
                           "WHERE " +
                          $"METHOD = '{jobParameter.jobName}'";
@@ -233,7 +233,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.Base
             {
                 using (var conn = _sqlServerConnection.GetIDbConnection())
                 {
-                    return await conn.QueryFirstAsync<String>(sql: sql, commandTimeout: 360);
+                    return await conn.QueryFirstOrDefaultAsync<string?>(sql: sql, commandTimeout: 360);
                 }
             }
             catch (Exception ex)
@@ -251,9 +251,9 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.Base
             }
         }
 
-        public async Task<string> GetLast7DaysMinTimestamp(JobParameter jobParameter, string columnDate)
+        public async Task<string?> GetLast7DaysMinTimestamp(LinxMicrovixJobParameter jobParameter, string? columnDate)
         {
-            string sql = "SELECT ISNULL(MIN(TIMESTAMP), 0) " +
+            string? sql = "SELECT ISNULL(MIN(TIMESTAMP), 0) " +
                          $"FROM [{jobParameter.tableName}_trusted] (NOLOCK) " +
                           "WHERE " +
                          $"{columnDate} > GETDATE() - 7";
@@ -262,7 +262,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.Base
             {
                 using (var conn = _sqlServerConnection.GetIDbConnection())
                 {
-                    return await conn.QueryFirstAsync<String>(sql: sql, commandTimeout: 360);
+                    return await conn.QueryFirstOrDefaultAsync<string?>(sql: sql, commandTimeout: 360);
                 }
             }
             catch (Exception ex)
@@ -280,7 +280,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.Base
             }
         }
 
-        public async Task<bool> InsertRecord(JobParameter jobParameter, string? sql, object record)
+        public async Task<bool> InsertRecord(LinxMicrovixJobParameter jobParameter, string? sql, object record)
         {
             try
             {
@@ -309,9 +309,9 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.Base
             }
         }
 
-        public async Task<bool> InsertParametersIfNotExists(JobParameter jobParameter, object parameter)
+        public async Task<bool> InsertParametersIfNotExists(LinxMicrovixJobParameter jobParameter, object parameter)
         {
-            string sql = $"IF NOT EXISTS (SELECT * FROM [{jobParameter.parametersTableName}] WHERE [method] = '{jobParameter.jobName}') " +
+            string? sql = $"IF NOT EXISTS (SELECT * FROM [{jobParameter.parametersTableName}] WHERE [method] = '{jobParameter.jobName}') " +
                          $"INSERT INTO [{jobParameter.parametersTableName}] ([method], [parameters_timestamp], [parameters_dateinterval], [parameters_individual], [ativo]) " +
                           "VALUES (@method, @parameters_timestamp, @parameters_dateinterval, @parameters_individual, @ativo)";
 
@@ -342,9 +342,9 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.Base
             }
         }
 
-        public async Task<bool> InsertLogResponse(JobParameter jobParameter, string? response, object record)
+        public async Task<bool> InsertLogResponse(LinxMicrovixJobParameter jobParameter, string? response, object record)
         {
-            string sql = $"INSERT INTO {jobParameter.parametersLogTableName} " +
+            string? sql = $"INSERT INTO {jobParameter.parametersLogTableName} " +
               "([method], [execution_date], [parameters_interval], [response]) " +
               "Values " +
               "(@method, GETDATE(), @parameters_interval, @response)";
@@ -376,9 +376,9 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.Base
             }
         }
 
-        public async Task<bool> UpdateLogParameters(JobParameter jobParameter, string? lastResponse)
+        public async Task<bool> UpdateLogParameters(LinxMicrovixJobParameter jobParameter, string? lastResponse)
         {
-            string sql = $"UPDATE {jobParameter.parametersTableName} " +
+            string? sql = $"UPDATE {jobParameter.parametersTableName} " +
                           "SET LAST_EXECUTION = GETDATE(), " +
                          $"LAST_RESPONSE = '{lastResponse}' " +
                           "WHERE " +
@@ -411,7 +411,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.Base
             }
         }
 
-        public async Task<bool> ExecuteQueryCommand(JobParameter jobParameter, string sql)
+        public async Task<bool> ExecuteQueryCommand(LinxMicrovixJobParameter jobParameter, string? sql)
         {
             try
             {
@@ -440,9 +440,9 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.Base
             }
         }
 
-        public async Task<bool> DeleteLogResponse(JobParameter jobParameter)
+        public async Task<bool> DeleteLogResponse(LinxMicrovixJobParameter jobParameter)
         {
-            string sql = $"DELETE FROM [{jobParameter.parametersLogTableName}] " +
+            string? sql = $"DELETE FROM [{jobParameter.parametersLogTableName}] " +
                          $"WHERE METHOD = '{jobParameter.jobName}' " +
                          $"AND ID NOT IN (SELECT TOP 15 ID FROM [{jobParameter.parametersLogTableName}] ORDER BY ID DESC)";
 
@@ -473,9 +473,9 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.Base
             }
         }
 
-        public async Task<bool> ExecuteTruncateRawTable(JobParameter jobParameter)
+        public async Task<bool> ExecuteTruncateRawTable(LinxMicrovixJobParameter jobParameter)
         {
-            string sql = $"TRUNCATE TABLE [{jobParameter.tableName}_raw]";
+            string? sql = $"TRUNCATE TABLE [{jobParameter.tableName}_raw]";
 
             try
             {
@@ -504,7 +504,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.Base
             }
         }
 
-        public bool BulkInsertIntoTableRaw(JobParameter jobParameter, DataTable dataTable, int dataTableRowsNumber)
+        public bool BulkInsertIntoTableRaw(LinxMicrovixJobParameter jobParameter, DataTable dataTable, int dataTableRowsNumber)
         {
             try
             {

@@ -47,23 +47,23 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
             lastupdateon = DateTime.Now;
 
             this.id =
-                id == String.Empty ? 0
+                String.IsNullOrEmpty(id) ? 0
                 : Convert.ToInt32(id);
 
             this.id_status =
-                id_status == String.Empty ? 0
+                String.IsNullOrEmpty(id_status) ? 0
                 : Convert.ToInt32(id_status);
 
             this.id_pedido =
-                id_pedido == String.Empty ? 0
+                String.IsNullOrEmpty(id_pedido) ? 0
                 : Convert.ToInt32(id_pedido);
 
             this.data_hora =
-                data_hora == String.Empty ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
+                String.IsNullOrEmpty(data_hora) ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
                 : Convert.ToDateTime(data_hora);
 
             this.anotacao =
-                anotacao == String.Empty ? ""
+                String.IsNullOrEmpty(anotacao) ? ""
                 : anotacao.Substring(
                     0,
                     anotacao.Length > 80 ? 80
@@ -71,11 +71,11 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.timestamp =
-                timestamp == String.Empty ? 0
+                String.IsNullOrEmpty(timestamp) ? 0
                 : Convert.ToInt64(timestamp);
 
             this.portal =
-                portal == String.Empty ? 0
+                String.IsNullOrEmpty(portal) ? 0
                 : Convert.ToInt32(portal);
         }
     }

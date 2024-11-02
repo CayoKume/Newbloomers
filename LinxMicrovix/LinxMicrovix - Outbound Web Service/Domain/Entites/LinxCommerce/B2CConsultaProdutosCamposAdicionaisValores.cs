@@ -37,23 +37,23 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
             lastupdateon = DateTime.Now;
 
             this.id_campo_valor =
-                id_campo_valor == String.Empty ? 0
+                String.IsNullOrEmpty(id_campo_valor) ? 0
                 : Convert.ToInt32(id_campo_valor);
 
             this.id_campo_detalhe =
-                id_campo_detalhe == String.Empty ? 0
+                String.IsNullOrEmpty(id_campo_detalhe) ? 0
                 : Convert.ToInt32(id_campo_detalhe);
 
             this.codigoproduto =
-                codigoproduto == String.Empty ? 0
+                String.IsNullOrEmpty(codigoproduto) ? 0
                 : Convert.ToInt64(codigoproduto);
 
             this.timestamp =
-                timestamp == String.Empty ? 0
+                String.IsNullOrEmpty(timestamp) ? 0
                 : Convert.ToInt64(timestamp);
 
             this.portal =
-                portal == String.Empty ? 0
+                String.IsNullOrEmpty(portal) ? 0
                 : Convert.ToInt32(portal);
         }
     }

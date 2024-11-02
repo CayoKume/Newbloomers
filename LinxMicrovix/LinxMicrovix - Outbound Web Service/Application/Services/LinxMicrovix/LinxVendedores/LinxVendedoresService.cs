@@ -28,7 +28,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxMicrovix
             _linxVendedoresRepository = linxVendedoresRepository;
         }
 
-        public async Task<bool> GetRecords(JobParameter jobParameter)
+        public async Task<bool> GetRecords(LinxMicrovixJobParameter jobParameter)
         {
             try
             {
@@ -37,15 +37,15 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxMicrovix
                 await _linxVendedoresRepository.InsertParametersIfNotExists(jobParameter);
                 await _linxMicrovixRepositoryBase.ExecuteTruncateRawTable(jobParameter);
 
-                string parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter);
+                string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter);
 
                 var body = _linxMicrovixServiceBase.BuildBodyRequest(
-                    parametersList: parameters.Replace("[0]", "0").Replace("[data_upd_inicial]", DateTime.Now.AddDays(-7).ToString("yyyy-mm-dd")).Replace("[data_upd_fim]", DateTime.Now.ToString("yyyy-mm-dd")),
+                    parametersList: parameters.Replace("[0]", "0").Replace("[data_upd_inicial]", DateTime.Now.AddDays(-7).ToString("yyyy-MM-dd")).Replace("[data_upd_fim]", DateTime.Now.ToString("yyyy-MM-dd")),
                     jobParameter: jobParameter,
                     cnpj_emp: jobParameter.docMainCompany
                 );
 
-                string response = await _apiCall.PostAsync(jobParameter: jobParameter, body: body);
+                string? response = await _apiCall.PostAsync(jobParameter: jobParameter, body: body);
                 var xmls = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response);
 
                 if (xmls.Count() > 0)
@@ -66,7 +66,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxMicrovix
                 await _linxMicrovixRepositoryBase.UpdateLogParameters(jobParameter: jobParameter, lastResponse: response);
 
                 //await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter: jobParameter);
-                await _linxVendedoresRepository.ExecuteTableMerge(jobParameter: jobParameter);
+                await _linxVendedoresRepository.CreateTableMerge(jobParameter: jobParameter);
                 await _linxMicrovixRepositoryBase.ExecuteTruncateRawTable(jobParameter);
 
                 return true;
@@ -77,7 +77,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxMicrovix
             }
         }
 
-        public async Task<bool> GetRecord(JobParameter jobParameter, string? identificador, string? cnpj_emp)
+        public async Task<bool> GetRecord(LinxMicrovixJobParameter jobParameter, string? identificador, string? cnpj_emp)
         {
             try
             {
@@ -85,14 +85,14 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxMicrovix
                 await _linxMicrovixRepositoryBase.CreateDataTableIfNotExists(jobParameter);
                 await _linxVendedoresRepository.InsertParametersIfNotExists(jobParameter);
 
-                string parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter);
+                string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter);
 
                 var body = _linxMicrovixServiceBase.BuildBodyRequest(
                     parametersList: parameters.Replace("[0]", "0").Replace("[codigo_classificacao]", identificador),
                     jobParameter: jobParameter,
                     cnpj_emp: cnpj_emp);
 
-                string response = await _apiCall.PostAsync(jobParameter: jobParameter, body: body);
+                string? response = await _apiCall.PostAsync(jobParameter: jobParameter, body: body);
                 var xmls = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response);
 
                 if (xmls.Count() > 0)
@@ -126,7 +126,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxMicrovix
             }
         }
 
-        public List<TEntity?> DeserializeXMLToObject(JobParameter jobParameter, List<Dictionary<string, string>> records)
+        public List<TEntity?> DeserializeXMLToObject(LinxMicrovixJobParameter jobParameter, List<Dictionary<string?, string?>> records)
         {
             var list = new List<TEntity>();
             for (int i = 0; i < records.Count(); i++)
@@ -168,8 +168,8 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxMicrovix
                         project = jobParameter.projectName,
                         job = jobParameter.jobName,
                         method = "DeserializeXMLToObject",
-                        message = $"Error when convert record: {records[i].Where(pair => pair.Key == "cod_vendedor").Select(pair => pair.Value).First()} - {records[i].Where(pair => pair.Key == "nome_vendedor").Select(pair => pair.Value).First()}",
-                        record = $"{records[i].Where(pair => pair.Key == "cod_vendedor").Select(pair => pair.Value).First()} - {records[i].Where(pair => pair.Key == "nome_vendedor").Select(pair => pair.Value).First()}",
+                        message = $"Error when convert record: {records[i].Where(pair => pair.Key == "cod_vendedor").Select(pair => pair.Value).FirstOrDefault()} - {records[i].Where(pair => pair.Key == "nome_vendedor").Select(pair => pair.Value).FirstOrDefault()}",
+                        record = $"{records[i].Where(pair => pair.Key == "cod_vendedor").Select(pair => pair.Value).FirstOrDefault()} - {records[i].Where(pair => pair.Key == "nome_vendedor").Select(pair => pair.Value).FirstOrDefault()}",
                         propertie = " - ",
                         exception = ex.Message
                     };

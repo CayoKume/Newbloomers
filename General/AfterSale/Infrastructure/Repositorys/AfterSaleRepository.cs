@@ -67,7 +67,7 @@ public class AfterSaleRepository : IAfterSaleRepository
         throw new NotImplementedException();
     }
 
-    public Task<Parameters> GetParameters(string doc_company)
+    public Task<Parameters> GetParameters(string? doc_company)
     {
         throw new NotImplementedException();
     }

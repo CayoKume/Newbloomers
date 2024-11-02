@@ -10,7 +10,7 @@ public class APICall : IAPICall
     public APICall(IHttpClientFactory httpClientFactory) =>
         (_httpClientFactory) = (httpClientFactory);
 
-    public async Task<string> GetAsync(string rote, string token, string encodedParameters)
+    public async Task<string?> GetAsync(string? rote, string? token, string? encodedParameters)
     {
         try
         {
@@ -24,7 +24,7 @@ public class APICall : IAPICall
         }
     }
 
-    public async Task<string> GetAsync(string rote, string token)
+    public async Task<string?> GetAsync(string? rote, string? token)
     {
         try
         {
@@ -38,7 +38,7 @@ public class APICall : IAPICall
         }
     }
 
-    public Task<string> PostAsync(string rote, JObject jObj)
+    public Task<string?> PostAsync(string? rote, JObject jObj)
     {
         try
         {
@@ -50,7 +50,7 @@ public class APICall : IAPICall
         }
     }
 
-    public Task<string> PutAsync(string rote, JObject jObj)
+    public Task<string?> PutAsync(string? rote, JObject jObj)
     {
         try
         {
@@ -62,7 +62,7 @@ public class APICall : IAPICall
         }
     }
 
-    private HttpClient CreateClient(string route, string token)
+    private HttpClient CreateClient(string? route, string? token)
     {
         try
         {

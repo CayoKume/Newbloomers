@@ -8,10 +8,42 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Application\Services\" />
-    <Folder Include="Domain\Entites\" />
-    <Folder Include="Infrastructure\Api\" />
-    <Folder Include="Infrastructure\Repository\" />
+    <Folder Include="Domain\Entities\Catolog\" />
+    <Folder Include="Domain\Entities\Configuration\" />
+    <Folder Include="Domain\Entities\Default\" />
+    <Folder Include="Domain\Entities\Fulfillment\" />
+    <Folder Include="Domain\Entities\Inventory\" />
+    <Folder Include="Domain\Entities\LGPD\" />
+    <Folder Include="Domain\Entities\Mashup\" />
+    <Folder Include="Domain\Entities\Multisite\" />
+    <Folder Include="Domain\Entities\Payment\" />
+    <Folder Include="Domain\Entities\Pricing\" />
+    <Folder Include="Domain\Entities\Profile\" />
+    <Folder Include="Domain\Entities\Promotion\" />
+    <Folder Include="Domain\Entities\Queue\" />
+    <Folder Include="Domain\Entities\Order\" />
+    <Folder Include="Domain\Entities\Sales\Order\Requests\" />
+    <Folder Include="Infrastructure\Repository\Catolog\" />
+    <Folder Include="Infrastructure\Repository\Configuration\" />
+    <Folder Include="Infrastructure\Repository\Fulfillment\" />
+    <Folder Include="Infrastructure\Repository\Default\" />
+    <Folder Include="Infrastructure\Repository\Inventory\" />
+    <Folder Include="Infrastructure\Repository\LGPD\" />
+    <Folder Include="Infrastructure\Repository\Mashup\" />
+    <Folder Include="Infrastructure\Repository\Multisite\" />
+    <Folder Include="Infrastructure\Repository\Queue\" />
+    <Folder Include="Infrastructure\Repository\Promotion\" />
+    <Folder Include="Infrastructure\Repository\Profile\" />
+    <Folder Include="Infrastructure\Repository\Pricing\" />
+    <Folder Include="Infrastructure\Repository\Payment\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\IntegrationsCore\IntegrationsCore.csproj" />
   </ItemGroup>
 
 </Project>

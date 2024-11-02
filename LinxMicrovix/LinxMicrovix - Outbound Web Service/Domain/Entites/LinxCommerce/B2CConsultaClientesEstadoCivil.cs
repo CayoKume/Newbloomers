@@ -33,11 +33,11 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
             lastupdateon = DateTime.Now;
 
             this.id_estado_civil =
-                id_estado_civil == String.Empty ? 0
+                String.IsNullOrEmpty(id_estado_civil) ? 0
                 : Convert.ToInt32(id_estado_civil);
 
             this.estado_civil =
-                estado_civil == String.Empty ? ""
+                String.IsNullOrEmpty(estado_civil) ? ""
                 : estado_civil.Substring(
                     0,
                     estado_civil.Length > 20 ? 20
@@ -45,11 +45,11 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.timestamp =
-                timestamp == String.Empty ? 0
+                String.IsNullOrEmpty(timestamp) ? 0
                 : Convert.ToInt64(timestamp);
 
             this.portal =
-                portal == String.Empty ? 0
+                String.IsNullOrEmpty(portal) ? 0
                 : Convert.ToInt32(portal);
         }
     }

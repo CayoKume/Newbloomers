@@ -15,7 +15,7 @@ namespace TotalExpress.Application.Services
         public TotalExpressService(IAPICall apiCall, ITotalExpressRepository totalExpressRepository) =>
             (_apiCall, _totalExpressRepository) = (apiCall, totalExpressRepository);
 
-        public async Task<bool> SendOrder(string orderNumber)
+        public async Task<bool> SendOrder(string? orderNumber)
         {
             try
             {
@@ -26,7 +26,7 @@ namespace TotalExpress.Application.Services
                     var parameters = await _totalExpressRepository.GetParameters(order.company.doc_company, order.shippment_method);
                     var jArray = BuildJObject(order, parameters);
                     var token = await GenerateToken(order.company.doc_company);
-                    var headers = new Dictionary<string, string>
+                    var headers = new Dictionary<string?, string?>
                     {
                         { "ContentType", "application/json" },
                         { "Authorization", token.token_type + " " + token.access_token }
@@ -39,7 +39,7 @@ namespace TotalExpress.Application.Services
                                             JsonConvert.SerializeObject(jArray[j])
                                         );
 
-                        string response = await _apiCall.PostAsync(
+                        string? response = await _apiCall.PostAsync(
                             jArray[j],
                             "ics-edi/v1/coleta/smartLabel/registrar",
                             headers,
@@ -63,7 +63,7 @@ namespace TotalExpress.Application.Services
             }
         }
 
-        public async Task<bool> SendOrderAsEtur(string orderNumber)
+        public async Task<bool> SendOrderAsEtur(string? orderNumber)
         {
             try
             {
@@ -74,7 +74,7 @@ namespace TotalExpress.Application.Services
                     var parameters = await _totalExpressRepository.GetParameters(order.company.doc_company, "ETUR");
                     var jArray = BuildJObject(order, parameters);
                     var token = await GenerateToken(order.company.doc_company);
-                    var headers = new Dictionary<string, string>
+                    var headers = new Dictionary<string?, string?>
                     {
                         { "ContentType", "application/json" },
                         { "Authorization", token.token_type + " " + token.access_token }
@@ -87,7 +87,7 @@ namespace TotalExpress.Application.Services
                                             JsonConvert.SerializeObject(jArray[j])
                                         );
 
-                        string response = await _apiCall.PostAsync(
+                        string? response = await _apiCall.PostAsync(
                             jArray[j],
                             "ics-edi/v1/coleta/smartLabel/registrar",
                             headers,
@@ -124,7 +124,7 @@ namespace TotalExpress.Application.Services
                         var parameters = await _totalExpressRepository.GetParameters(order.company.doc_company, order.shippment_method);
                         var jArray = BuildJObject(order, parameters);
                         var token = await GenerateToken(order.company.doc_company);
-                        var headers = new Dictionary<string, string>
+                        var headers = new Dictionary<string?, string?>
                         {
                             { "ContentType", "application/json" },
                             { "Authorization", token.token_type + " " + token.access_token }
@@ -137,7 +137,7 @@ namespace TotalExpress.Application.Services
                                                 JsonConvert.SerializeObject(jArray[j])
                                             );
 
-                            string response = await _apiCall.PostAsync(
+                            string? response = await _apiCall.PostAsync(
                                 jArray[j],
                                 "ics-edi/v1/coleta/smartLabel/registrar",
                                 headers,
@@ -180,7 +180,7 @@ namespace TotalExpress.Application.Services
                             //{ "pedido", "" }
                         };
 
-                        var headers = new Dictionary<string, string>
+                        var headers = new Dictionary<string?, string?>
                         {
                             { "ContentType", "application/xml" },
                             { "Authorization", "Basic " + Convert.ToBase64String(Encoding.Default.GetBytes("apistatusnew-prod:GttTBS8x")) } //transformar em variável
@@ -188,7 +188,7 @@ namespace TotalExpress.Application.Services
 
                         try
                         {
-                            string response = await _apiCall.PostAsync(
+                            string? response = await _apiCall.PostAsync(
                                                 jObject,
                                                 "previsao_entrega_atualizada.php",
                                                 headers,
@@ -214,10 +214,10 @@ namespace TotalExpress.Application.Services
                                                        null : status.detalhes.dataPrev.PrevEntrega;
 
                                     var collectionDate = status.detalhes.statusDeEncomenda.Where(p => p.status == "COLETA REALIZADA").FirstOrDefault() == null ? 
-                                                     null : status.detalhes.statusDeEncomenda.Where(p => p.status == "COLETA REALIZADA").First().data;
+                                                     null : status.detalhes.statusDeEncomenda.Where(p => p.status == "COLETA REALIZADA").FirstOrDefault().data;
 
                                     var deliveryMadeDate = status.detalhes.statusDeEncomenda.Where(p => p.status == "ENTREGA REALIZADA").FirstOrDefault() == null ?
-                                                     null : status.detalhes.statusDeEncomenda.Where(p => p.status == "ENTREGA REALIZADA").First().data;
+                                                     null : status.detalhes.statusDeEncomenda.Where(p => p.status == "ENTREGA REALIZADA").FirstOrDefault().data;
 
                                     await _totalExpressRepository.UpdateDeliveryDates(
                                         deliveryMadeDate, 
@@ -322,7 +322,7 @@ namespace TotalExpress.Application.Services
             return jArrayObj;
         }
 
-        private async Task<Token?> GenerateToken(string doc_company)
+        private async Task<Token?> GenerateToken(string? doc_company)
         {
             var jObject = new JObject
             {
@@ -331,7 +331,7 @@ namespace TotalExpress.Application.Services
                 { "password", "He7weir@o" } //transformar em variável
             };
 
-            var headers = new Dictionary<string, string>
+            var headers = new Dictionary<string?, string?>
             {
                 { "ContentType", "application/json" },
                 { "Authorization", "Basic " + "SUNTOnRvdGFs" } //transformar em variável
