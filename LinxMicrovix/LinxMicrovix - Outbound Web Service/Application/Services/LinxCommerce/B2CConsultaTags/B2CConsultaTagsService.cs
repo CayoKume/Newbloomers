@@ -4,22 +4,22 @@ using LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.Base;
 using LinxMicrovix_Outbound_Web_Service.Infrastructure.Api;
 using LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommerce;
 using IntegrationsCore.Domain.Entities;
-using static IntegrationsCore.Domain.Entities.Exceptions.InternalErrorsExceptions;
+using static IntegrationsCore.Domain.Entities.Exceptions.publicErrorsExceptions;
 
 namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
 {
-    public class B2CConsultaTagsService<TEntity> : IB2CConsultaTagsService<TEntity> where TEntity : B2CConsultaTags, new()
+    public class B2CConsultaTagsService : IB2CConsultaTagsService
     {
         private readonly IAPICall _apiCall;
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
-        private readonly ILinxMicrovixRepositoryBase<TEntity> _linxMicrovixRepositoryBase;
-        private readonly IB2CConsultaTagsRepository<TEntity> _b2cConsultaTagsRepository;
+        private readonly ILinxMicrovixRepositoryBase<B2CConsultaTags> _linxMicrovixRepositoryBase;
+        private readonly IB2CConsultaTagsRepository _b2cConsultaTagsRepository;
 
         public B2CConsultaTagsService(
             IAPICall apiCall,
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
-            ILinxMicrovixRepositoryBase<TEntity> linxMicrovixRepositoryBase,
-            IB2CConsultaTagsRepository<TEntity> b2cConsultaTagsRepository
+            ILinxMicrovixRepositoryBase<B2CConsultaTags> linxMicrovixRepositoryBase,
+            IB2CConsultaTagsRepository b2cConsultaTagsRepository
         )
         {
             _apiCall = apiCall;
@@ -28,15 +28,15 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
             _b2cConsultaTagsRepository = b2cConsultaTagsRepository;
         }
 
-        public List<TEntity?> DeserializeXMLToObject(LinxMicrovixJobParameter jobParameter, List<Dictionary<string?, string?>> records)
+        public List<B2CConsultaTags?> DeserializeXMLToObject(LinxMicrovixJobParameter jobParameter, List<Dictionary<string?, string?>> records)
         {
-            var list = new List<TEntity>();
+            var list = new List<B2CConsultaTags>();
 
             for (int i = 0; i < records.Count(); i++)
             {
                 try
                 {
-                    list.Add(new TEntity
+                    list.Add(new B2CConsultaTags
                     {
                         lastupdateon = DateTime.Now,
 
@@ -55,7 +55,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
                 }
                 catch (Exception ex)
                 {
-                    throw new InternalErrorException()
+                    throw new publicErrorException()
                     {
                         project = jobParameter.projectName,
                         job = jobParameter.jobName,
@@ -77,6 +77,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
             {
                 await _linxMicrovixRepositoryBase.DeleteLogResponse(jobParameter);
                 await _linxMicrovixRepositoryBase.CreateDataTableIfNotExists(jobParameter);
+                await _b2cConsultaTagsRepository.CreateTableMerge(jobParameter: jobParameter);
                 await _b2cConsultaTagsRepository.InsertParametersIfNotExists(jobParameter);
                 await _linxMicrovixRepositoryBase.ExecuteTruncateRawTable(jobParameter);
 
@@ -113,7 +114,6 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
                 }
 
                 //await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter: jobParameter);
-                await _b2cConsultaTagsRepository.CreateTableMerge(jobParameter: jobParameter);
                 await _linxMicrovixRepositoryBase.ExecuteTruncateRawTable(jobParameter);
 
                 return true;

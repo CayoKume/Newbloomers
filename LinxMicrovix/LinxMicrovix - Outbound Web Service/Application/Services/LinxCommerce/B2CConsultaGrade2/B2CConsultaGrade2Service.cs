@@ -4,22 +4,22 @@ using LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.Base;
 using LinxMicrovix_Outbound_Web_Service.Infrastructure.Api;
 using LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommerce;
 using IntegrationsCore.Domain.Entities;
-using static IntegrationsCore.Domain.Entities.Exceptions.InternalErrorsExceptions;
+using static IntegrationsCore.Domain.Entities.Exceptions.publicErrorsExceptions;
 
 namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
 {
-    public class B2CConsultaGrade2Service<TEntity> : IB2CConsultaGrade2Service<TEntity> where TEntity : B2CConsultaGrade2, new()
+    public class B2CConsultaGrade2Service : IB2CConsultaGrade2Service
     {
         private readonly IAPICall _apiCall;
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
-        private readonly ILinxMicrovixRepositoryBase<TEntity> _linxMicrovixRepositoryBase;
-        private readonly IB2CConsultaGrade2Repository<TEntity> _b2cConsultaGrade2Repository;
+        private readonly ILinxMicrovixRepositoryBase<B2CConsultaGrade2> _linxMicrovixRepositoryBase;
+        private readonly IB2CConsultaGrade2Repository _b2cConsultaGrade2Repository;
 
         public B2CConsultaGrade2Service(
             IAPICall apiCall,
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
-            ILinxMicrovixRepositoryBase<TEntity> linxMicrovixRepositoryBase,
-            IB2CConsultaGrade2Repository<TEntity> b2cConsultaGrade2Repository
+            ILinxMicrovixRepositoryBase<B2CConsultaGrade2> linxMicrovixRepositoryBase,
+            IB2CConsultaGrade2Repository b2cConsultaGrade2Repository
         )
         {
             _apiCall = apiCall;
@@ -28,9 +28,9 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
             _b2cConsultaGrade2Repository = b2cConsultaGrade2Repository;
         }
 
-        public List<TEntity?> DeserializeXMLToObject(LinxMicrovixJobParameter jobParameter, List<Dictionary<string?, string?>> records)
+        public List<B2CConsultaGrade2?> DeserializeXMLToObject(LinxMicrovixJobParameter jobParameter, List<Dictionary<string?, string?>> records)
         {
-            var list = new List<TEntity>();
+            var list = new List<B2CConsultaGrade2>();
 
             for (int i = 0; i < records.Count(); i++)
             {
@@ -43,11 +43,11 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
                         portal: records[i].Where(pair => pair.Key == "portal").Select(pair => pair.Value).FirstOrDefault()
                     );
 
-                    list.Add((TEntity)entity);
+                    list.Add(entity);
                 }
                 catch (Exception ex)
                 {
-                    throw new InternalErrorException()
+                    throw new publicErrorException()
                     {
                         project = jobParameter.projectName,
                         job = jobParameter.jobName,
@@ -118,6 +118,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
             {
                 await _linxMicrovixRepositoryBase.DeleteLogResponse(jobParameter);
                 await _linxMicrovixRepositoryBase.CreateDataTableIfNotExists(jobParameter);
+                await _b2cConsultaGrade2Repository.CreateTableMerge(jobParameter: jobParameter);
                 await _b2cConsultaGrade2Repository.InsertParametersIfNotExists(jobParameter);
                 await _linxMicrovixRepositoryBase.ExecuteTruncateRawTable(jobParameter);
 
@@ -154,7 +155,6 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
                 }
 
                 //await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter: jobParameter);
-                await _b2cConsultaGrade2Repository.CreateTableMerge(jobParameter: jobParameter);
                 await _linxMicrovixRepositoryBase.ExecuteTruncateRawTable(jobParameter);
 
                 return true;

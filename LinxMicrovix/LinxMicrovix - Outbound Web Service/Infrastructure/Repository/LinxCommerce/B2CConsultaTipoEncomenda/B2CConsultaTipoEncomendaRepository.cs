@@ -5,18 +5,18 @@ using LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.Base;
 
 namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommerce
 {
-    public class B2CConsultaTipoEncomendaRepository<TEntity> : IB2CConsultaTipoEncomendaRepository<TEntity> where TEntity : B2CConsultaTipoEncomenda, new()
+    public class B2CConsultaTipoEncomendaRepository : IB2CConsultaTipoEncomendaRepository
     {
-        private readonly ILinxMicrovixRepositoryBase<TEntity> _linxMicrovixRepositoryBase;
+        private readonly ILinxMicrovixRepositoryBase<B2CConsultaTipoEncomenda> _linxMicrovixRepositoryBase;
 
-        public B2CConsultaTipoEncomendaRepository(ILinxMicrovixRepositoryBase<TEntity> linxMicrovixRepositoryBase) =>
+        public B2CConsultaTipoEncomendaRepository(ILinxMicrovixRepositoryBase<B2CConsultaTipoEncomenda> linxMicrovixRepositoryBase) =>
             (_linxMicrovixRepositoryBase) = (linxMicrovixRepositoryBase);
 
-        public bool BulkInsertIntoTableRaw(LinxMicrovixJobParameter jobParameter, List<TEntity> records)
+        public bool BulkInsertIntoTableRaw(LinxMicrovixJobParameter jobParameter, List<B2CConsultaTipoEncomenda> records)
         {
             try
             {
-                var table = _linxMicrovixRepositoryBase.CreateSystemDataTable(jobParameter, new TEntity());
+                var table = _linxMicrovixRepositoryBase.CreateSystemDataTable(jobParameter, new B2CConsultaTipoEncomenda());
 
                 for (int i = 0; i < records.Count(); i++)
                 {

@@ -6,18 +6,18 @@ using static Dapper.SqlMapper;
 
 namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommerce
 {
-    public class B2CConsultaCNPJsChaveRepository<TEntity> : IB2CConsultaCNPJsChaveRepository<TEntity> where TEntity : B2CConsultaCNPJsChave, new()
+    public class B2CConsultaCNPJsChaveRepository : IB2CConsultaCNPJsChaveRepository
     {
-        private readonly ILinxMicrovixRepositoryBase<TEntity> _linxMicrovixRepositoryBase;
+        private readonly ILinxMicrovixRepositoryBase<B2CConsultaCNPJsChave> _linxMicrovixRepositoryBase;
 
-        public B2CConsultaCNPJsChaveRepository(ILinxMicrovixRepositoryBase<TEntity> linxMicrovixRepositoryBase) =>
+        public B2CConsultaCNPJsChaveRepository(ILinxMicrovixRepositoryBase<B2CConsultaCNPJsChave> linxMicrovixRepositoryBase) =>
             (_linxMicrovixRepositoryBase) = (linxMicrovixRepositoryBase);
 
-        public bool BulkInsertIntoTableRaw(LinxMicrovixJobParameter jobParameter, List<TEntity> records)
+        public bool BulkInsertIntoTableRaw(LinxMicrovixJobParameter jobParameter, List<B2CConsultaCNPJsChave> records)
         {
             try
             {
-                var table = _linxMicrovixRepositoryBase.CreateSystemDataTable(jobParameter, new TEntity());
+                var table = _linxMicrovixRepositoryBase.CreateSystemDataTable(jobParameter, new B2CConsultaCNPJsChave());
 
                 for (int i = 0; i < records.Count(); i++)
                 {
@@ -109,7 +109,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
             }
         }
 
-        public async Task<bool> InsertRecord(LinxMicrovixJobParameter jobParameter, TEntity? record)
+        public async Task<bool> InsertRecord(LinxMicrovixJobParameter jobParameter, B2CConsultaCNPJsChave? record)
         {
             string? sql = $"INSERT INTO {jobParameter.tableName}_raw " +
                           "([lastupdateon], [cnpj], [nome_empresa], [id_empresas_rede], [rede], [portal], [nome_portal], [empresa], [classificacao_portal], [b2c], [oms]) " +

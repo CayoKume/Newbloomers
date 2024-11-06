@@ -5,18 +5,18 @@ using LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.Base;
 
 namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommerce
 {
-    public class B2CConsultaClientesEnderecosEntregaRepository<TEntity> : IB2CConsultaClientesEnderecosEntregaRepository<TEntity> where TEntity : B2CConsultaClientesEnderecosEntrega, new()
+    public class B2CConsultaClientesEnderecosEntregaRepository : IB2CConsultaClientesEnderecosEntregaRepository
     {
-        private readonly ILinxMicrovixRepositoryBase<TEntity> _linxMicrovixRepositoryBase;
+        private readonly ILinxMicrovixRepositoryBase<B2CConsultaClientesEnderecosEntrega> _linxMicrovixRepositoryBase;
 
-        public B2CConsultaClientesEnderecosEntregaRepository(ILinxMicrovixRepositoryBase<TEntity> linxMicrovixRepositoryBase) =>
+        public B2CConsultaClientesEnderecosEntregaRepository(ILinxMicrovixRepositoryBase<B2CConsultaClientesEnderecosEntrega> linxMicrovixRepositoryBase) =>
             (_linxMicrovixRepositoryBase) = (linxMicrovixRepositoryBase);
 
-        public bool BulkInsertIntoTableRaw(LinxMicrovixJobParameter jobParameter, List<TEntity> records)
+        public bool BulkInsertIntoTableRaw(LinxMicrovixJobParameter jobParameter, List<B2CConsultaClientesEnderecosEntrega> records)
         {
             try
             {
-                var table = _linxMicrovixRepositoryBase.CreateSystemDataTable(jobParameter, new TEntity());
+                var table = _linxMicrovixRepositoryBase.CreateSystemDataTable(jobParameter, new B2CConsultaClientesEnderecosEntrega());
 
                 for (int i = 0; i < records.Count(); i++)
                 {
@@ -115,7 +115,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
             }
         }
 
-        public async Task<bool> InsertRecord(LinxMicrovixJobParameter jobParameter, TEntity? record)
+        public async Task<bool> InsertRecord(LinxMicrovixJobParameter jobParameter, B2CConsultaClientesEnderecosEntrega? record)
         {
             string? sql = $"INSERT INTO ([LASTUPDATEON], [ID_ENDERECO_ENTREGA], [COD_CLIENTE_ERP], [COD_CLIENTE_B2C], [ENDRECO_CLIENTE], [NUMERO_RUA_CLIENTE], [COMPLEMENTO_END_CLI], [CEP_CLIENTE], [BAIRRO_CLIENTE], " +
                           "[CIDADE_CLIENTE], [UF_CLIENTE], [DESCRICAO], [PRINCIPAL], [ID_CIDADE], [TIMESTAMP], [PORTAL]) " + 

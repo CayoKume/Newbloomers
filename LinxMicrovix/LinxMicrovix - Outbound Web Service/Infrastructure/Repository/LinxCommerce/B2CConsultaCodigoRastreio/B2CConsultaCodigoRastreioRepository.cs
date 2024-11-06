@@ -5,18 +5,18 @@ using LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.Base;
 
 namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommerce
 {
-    public class B2CConsultaCodigoRastreioRepository<TEntity> : IB2CConsultaCodigoRastreioRepository<TEntity> where TEntity : B2CConsultaCodigoRastreio, new()
+    public class B2CConsultaCodigoRastreioRepository : IB2CConsultaCodigoRastreioRepository
     {
-        private readonly ILinxMicrovixRepositoryBase<TEntity> _linxMicrovixRepositoryBase;
+        private readonly ILinxMicrovixRepositoryBase<B2CConsultaCodigoRastreio> _linxMicrovixRepositoryBase;
 
-        public B2CConsultaCodigoRastreioRepository(ILinxMicrovixRepositoryBase<TEntity> linxMicrovixRepositoryBase) =>
+        public B2CConsultaCodigoRastreioRepository(ILinxMicrovixRepositoryBase<B2CConsultaCodigoRastreio> linxMicrovixRepositoryBase) =>
             (_linxMicrovixRepositoryBase) = (linxMicrovixRepositoryBase);
 
-        public bool BulkInsertIntoTableRaw(LinxMicrovixJobParameter jobParameter, List<TEntity> records)
+        public bool BulkInsertIntoTableRaw(LinxMicrovixJobParameter jobParameter, List<B2CConsultaCodigoRastreio> records)
         {
             try
             {
-                var table = _linxMicrovixRepositoryBase.CreateSystemDataTable(jobParameter, new TEntity());
+                var table = _linxMicrovixRepositoryBase.CreateSystemDataTable(jobParameter, new B2CConsultaCodigoRastreio());
 
                 for (int i = 0; i < records.Count(); i++)
                 {
@@ -106,7 +106,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
             }
         }
 
-        public async Task<bool> InsertRecord(LinxMicrovixJobParameter jobParameter, TEntity? record)
+        public async Task<bool> InsertRecord(LinxMicrovixJobParameter jobParameter, B2CConsultaCodigoRastreio? record)
         {
             string? sql = $"INSERT INTO {jobParameter.tableName}_raw " +
                           "([lastupdateon], [id_pedido], [documento], [serie], [codigo_rastreio], [sequencia_volume], [timestamp], [portal]) " +

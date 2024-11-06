@@ -5,18 +5,18 @@ using LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.Base;
 
 namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommerce
 {
-    public class B2CConsultaTiposCobrancaFreteRepository<TEntity> : IB2CConsultaTiposCobrancaFreteRepository<TEntity> where TEntity : B2CConsultaTiposCobrancaFrete, new()
+    public class B2CConsultaTiposCobrancaFreteRepository : IB2CConsultaTiposCobrancaFreteRepository
     {
-        private readonly ILinxMicrovixRepositoryBase<TEntity> _linxMicrovixRepositoryBase;
+        private readonly ILinxMicrovixRepositoryBase<B2CConsultaTiposCobrancaFrete> _linxMicrovixRepositoryBase;
 
-        public B2CConsultaTiposCobrancaFreteRepository(ILinxMicrovixRepositoryBase<TEntity> linxMicrovixRepositoryBase) =>
+        public B2CConsultaTiposCobrancaFreteRepository(ILinxMicrovixRepositoryBase<B2CConsultaTiposCobrancaFrete> linxMicrovixRepositoryBase) =>
             (_linxMicrovixRepositoryBase) = (linxMicrovixRepositoryBase);
 
-        public bool BulkInsertIntoTableRaw(LinxMicrovixJobParameter jobParameter, List<TEntity> records)
+        public bool BulkInsertIntoTableRaw(LinxMicrovixJobParameter jobParameter, List<B2CConsultaTiposCobrancaFrete> records)
         {
             try
             {
-                var table = _linxMicrovixRepositoryBase.CreateSystemDataTable(jobParameter, new TEntity());
+                var table = _linxMicrovixRepositoryBase.CreateSystemDataTable(jobParameter, new B2CConsultaTiposCobrancaFrete());
 
                 for (int i = 0; i < records.Count(); i++)
                 {

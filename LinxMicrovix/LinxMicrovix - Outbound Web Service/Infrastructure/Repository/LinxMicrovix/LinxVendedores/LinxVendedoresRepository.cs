@@ -4,18 +4,18 @@ using LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.Base;
 
 namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxMicrovix
 {
-    public class LinxVendedoresRepository<TEntity> : ILinxVendedoresRepository<TEntity> where TEntity : LinxVendedores, new()
+    public class LinxVendedoresRepository : ILinxVendedoresRepository
     {
-        private readonly ILinxMicrovixRepositoryBase<TEntity> _linxMicrovixRepositoryBase;
+        private readonly ILinxMicrovixRepositoryBase<LinxVendedores> _linxMicrovixRepositoryBase;
 
-        public LinxVendedoresRepository(ILinxMicrovixRepositoryBase<TEntity> linxMicrovixRepositoryBase) =>
+        public LinxVendedoresRepository(ILinxMicrovixRepositoryBase<LinxVendedores> linxMicrovixRepositoryBase) =>
             (_linxMicrovixRepositoryBase) = (linxMicrovixRepositoryBase);
 
-        public bool BulkInsertIntoTableRaw(LinxMicrovixJobParameter jobParameter, List<TEntity> records)
+        public bool BulkInsertIntoTableRaw(LinxMicrovixJobParameter jobParameter, List<LinxVendedores> records)
         {
             try
             {
-                var table = _linxMicrovixRepositoryBase.CreateSystemDataTable(jobParameter, new TEntity());
+                var table = _linxMicrovixRepositoryBase.CreateSystemDataTable(jobParameter, new LinxVendedores());
 
                 for (int i = 0; i < records.Count(); i++)
                 {
@@ -115,7 +115,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxMicrov
             }
         }
 
-        public async Task<bool> InsertRecord(LinxMicrovixJobParameter jobParameter, TEntity? record)
+        public async Task<bool> InsertRecord(LinxMicrovixJobParameter jobParameter, LinxVendedores? record)
         {
             string? sql = $"INSERT INTO {jobParameter.tableName}_raw " +
                           "([lastupdateon], [portal], [cod_vendedor], [nome_vendedor], [tipo_vendedor], [end_vend_rua], [end_vend_numero], [end_vend_complemento], [end_vend_bairro], [end_vend_cep], [end_vend_cidade], [end_vend_uf], [fone_vendedor], [mail_vendedor], [dt_upd], [cpf_vendedor], [ativo], [data_admissao], [data_saida], [timestamp], [matricula], [id_tipo_venda], [descricao_tipo_venda], [cargo]) " +

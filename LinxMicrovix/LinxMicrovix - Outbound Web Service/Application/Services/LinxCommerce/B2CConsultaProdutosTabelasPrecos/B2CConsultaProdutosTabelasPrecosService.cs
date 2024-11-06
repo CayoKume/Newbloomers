@@ -4,22 +4,22 @@ using LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.Base;
 using LinxMicrovix_Outbound_Web_Service.Infrastructure.Api;
 using LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommerce;
 using IntegrationsCore.Domain.Entities;
-using static IntegrationsCore.Domain.Entities.Exceptions.InternalErrorsExceptions;
+using static IntegrationsCore.Domain.Entities.Exceptions.publicErrorsExceptions;
 
 namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
 {
-    public class B2CConsultaProdutosTabelasPrecosService<TEntity> : IB2CConsultaProdutosTabelasPrecosService<TEntity> where TEntity : B2CConsultaProdutosTabelasPrecos, new()
+    public class B2CConsultaProdutosTabelasPrecosService : IB2CConsultaProdutosTabelasPrecosService
     {
         private readonly IAPICall _apiCall;
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
-        private readonly ILinxMicrovixRepositoryBase<TEntity> _linxMicrovixRepositoryBase;
-        private readonly IB2CConsultaProdutosTabelasPrecosRepository<TEntity> _b2cConsultaProdutosTabelasPrecosRepository;
+        private readonly ILinxMicrovixRepositoryBase<B2CConsultaProdutosTabelasPrecos> _linxMicrovixRepositoryBase;
+        private readonly IB2CConsultaProdutosTabelasPrecosRepository _b2cConsultaProdutosTabelasPrecosRepository;
         
         public B2CConsultaProdutosTabelasPrecosService(
             IAPICall apiCall,
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
-            ILinxMicrovixRepositoryBase<TEntity> linxMicrovixRepositoryBase,
-            IB2CConsultaProdutosTabelasPrecosRepository<TEntity> b2cConsultaProdutosTabelasPrecosRepository
+            ILinxMicrovixRepositoryBase<B2CConsultaProdutosTabelasPrecos> linxMicrovixRepositoryBase,
+            IB2CConsultaProdutosTabelasPrecosRepository b2cConsultaProdutosTabelasPrecosRepository
         )
         {
             _apiCall = apiCall;
@@ -28,9 +28,9 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
             _b2cConsultaProdutosTabelasPrecosRepository = b2cConsultaProdutosTabelasPrecosRepository;
         }
 
-        public List<TEntity?> DeserializeXMLToObject(LinxMicrovixJobParameter jobParameter, List<Dictionary<string?, string?>> records)
+        public List<B2CConsultaProdutosTabelasPrecos?> DeserializeXMLToObject(LinxMicrovixJobParameter jobParameter, List<Dictionary<string?, string?>> records)
         {
-            var list = new List<TEntity>();
+            var list = new List<B2CConsultaProdutosTabelasPrecos>();
 
             for (int i = 0; i < records.Count(); i++)
             {
@@ -45,11 +45,11 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
                         portal: records[i].Where(pair => pair.Key == "portal").Select(pair => pair.Value).FirstOrDefault()
                     );
 
-                    list.Add((TEntity)entity);
+                    list.Add(entity);
                 }
                 catch (Exception ex)
                 {
-                    throw new InternalErrorException()
+                    throw new publicErrorException()
                     {
                         project = jobParameter.projectName,
                         job = jobParameter.jobName,
@@ -120,6 +120,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
             {
                 await _linxMicrovixRepositoryBase.DeleteLogResponse(jobParameter);
                 await _linxMicrovixRepositoryBase.CreateDataTableIfNotExists(jobParameter);
+                await _b2cConsultaProdutosTabelasPrecosRepository.CreateTableMerge(jobParameter: jobParameter);
                 await _b2cConsultaProdutosTabelasPrecosRepository.InsertParametersIfNotExists(jobParameter);
                 await _linxMicrovixRepositoryBase.ExecuteTruncateRawTable(jobParameter);
 
@@ -156,7 +157,6 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
                 }
 
                 //await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter: jobParameter);
-                await _b2cConsultaProdutosTabelasPrecosRepository.CreateTableMerge(jobParameter: jobParameter);
                 await _linxMicrovixRepositoryBase.ExecuteTruncateRawTable(jobParameter);
 
                 return true;

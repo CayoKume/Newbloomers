@@ -5,7 +5,7 @@ using static IntegrationsCore.Domain.Entities.Exceptions.RepositorysExceptions;
 using Z.Dapper.Plus;
 using Microsoft.Extensions.Configuration;
 using IntegrationsCore.Domain.Entities;
-using static IntegrationsCore.Domain.Entities.Exceptions.InternalErrorsExceptions;
+using static IntegrationsCore.Domain.Entities.Exceptions.publicErrorsExceptions;
 using System.Data.SqlClient;
 using System.ComponentModel;
 using ISQLLinxMicrovixConnection = IntegrationsCore.Infrastructure.Connections.SQLServer.ILinxMicrovixConnection;
@@ -140,7 +140,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.Base
             }
             catch (Exception ex)
             {
-                throw new InternalErrorException()
+                throw new publicErrorException()
                 {
                     project = jobParameter.projectName,
                     job = jobParameter.jobName,

@@ -4,22 +4,22 @@ using LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.Base;
 using LinxMicrovix_Outbound_Web_Service.Infrastructure.Api;
 using LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxMicrovix;
 using IntegrationsCore.Domain.Entities;
-using static IntegrationsCore.Domain.Entities.Exceptions.InternalErrorsExceptions;
+using static IntegrationsCore.Domain.Entities.Exceptions.publicErrorsExceptions;
 
 namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxMicrovix
 {
-    public class LinxVendedoresService<TEntity> : ILinxVendedoresService<TEntity> where TEntity : LinxVendedores, new()
+    public class LinxVendedoresService : ILinxVendedoresService
     {
         private readonly IAPICall _apiCall;
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
-        private readonly ILinxMicrovixRepositoryBase<TEntity> _linxMicrovixRepositoryBase;
-        private readonly ILinxVendedoresRepository<TEntity> _linxVendedoresRepository;
+        private readonly ILinxMicrovixRepositoryBase<LinxVendedores> _linxMicrovixRepositoryBase;
+        private readonly ILinxVendedoresRepository _linxVendedoresRepository;
 
         public LinxVendedoresService(
             IAPICall apiCall,
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
-            ILinxMicrovixRepositoryBase<TEntity> linxMicrovixRepositoryBase,
-            ILinxVendedoresRepository<TEntity> linxVendedoresRepository
+            ILinxMicrovixRepositoryBase<LinxVendedores> linxMicrovixRepositoryBase,
+            ILinxVendedoresRepository linxVendedoresRepository
         )
         {
             _apiCall = apiCall;
@@ -126,9 +126,9 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxMicrovix
             }
         }
 
-        public List<TEntity?> DeserializeXMLToObject(LinxMicrovixJobParameter jobParameter, List<Dictionary<string?, string?>> records)
+        public List<LinxVendedores?> DeserializeXMLToObject(LinxMicrovixJobParameter jobParameter, List<Dictionary<string?, string?>> records)
         {
-            var list = new List<TEntity>();
+            var list = new List<LinxVendedores>();
             for (int i = 0; i < records.Count(); i++)
             {
                 try
@@ -159,11 +159,11 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxMicrovix
                         portal: records[i].Where(pair => pair.Key == "portal").Select(pair => pair.Value).FirstOrDefault()
                     );
 
-                    list.Add((TEntity)entity);
+                    list.Add(entity);
                 }
                 catch (Exception ex)
                 {
-                    throw new InternalErrorException()
+                    throw new publicErrorException()
                     {
                         project = jobParameter.projectName,
                         job = jobParameter.jobName,

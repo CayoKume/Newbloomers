@@ -1,6 +1,6 @@
 ﻿using HangfireDashboard.Domain.Entites;
 using IntegrationsCore.Domain.Entities.Parameters;
-using LinxCommerce.Application.Services.Sales;
+using LinxCommerce.Application.Services.Catolog.SKU;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
@@ -18,15 +18,15 @@ namespace HangfireDashboard.UI.Controllers.LinxCommerce
         private readonly List<Method>? _methods;
 
         private readonly IConfiguration _configuration;
-        private readonly ISalesService _salesService;
+        private readonly ISKUService _skuService;
 
         public LinxCommerceIndividualController(
             IConfiguration configuration,
-            ISalesService salesService    
+            ISKUService skuService
         )
         {
             _configuration = configuration;
-            _salesService = salesService;
+            _skuService = skuService;
 
             _projectName = _configuration
                 .GetSection("LinxCommerce")
@@ -52,14 +52,65 @@ namespace HangfireDashboard.UI.Controllers.LinxCommerce
                 .GetSection("LinxCommerce")
                 .GetSection("Authentication")
                 .Value;
+
+            _methods = _configuration
+                            .GetSection("LinxCommerce")
+                            .GetSection("Methods")
+                            .Get<List<Method>>();
         }
 
         [HttpPost("GetOrder")]
         public async Task<ActionResult> GetOrder([Required][FromQuery] string? orderId)
         {
+            throw new NotImplementedException();
+            //try
+            //{
+            //    var result = await _salesService.GetOrder(
+            //        new LinxCommerceJobParameter
+            //        {
+            //            projectName = _projectName,
+            //            keyAuthorization = _key,
+            //            userAuthentication = _authentication,
+            //            parametersTableName = _parametersTableName,
+            //            parametersLogTableName = _parametersLogTableName,
+
+            //            jobName = _configuration
+            //                .GetSection("LinxMicrovix")
+            //                .GetSection("B2CConsultaClassificacao")
+            //                .GetSection("MethodName")
+            //                .Value,
+
+            //            tableName = "_" + _configuration
+            //                .GetSection("LinxMicrovix")
+            //                .GetSection("B2CConsultaClassificacao")
+            //                .GetSection("MethodName")
+            //                .Value,
+            //        },
+            //        orderId: orderId
+            //    );
+
+            //    if (result != true)
+            //        return BadRequest($"Unable to find record: {orderId} on endpoint.");
+            //    else
+            //        return Ok($"Record: {orderId} integrated successfully.");
+            //}
+            //catch (Exception ex)
+            //{
+            //    Response.StatusCode = 400;
+            //    return Content($"Unable to integrate the record: {orderId}.\nError: {ex.Message}");
+            //}
+        }
+
+        [HttpPost("GetSKU")]
+        public async Task<ActionResult> GetSKU([Required][FromQuery] int productId)
+        {
             try
             {
-                var result = await _salesService.GetOrder(
+                var method = _methods
+                    .Where(m => m.MethodName == "SKU")
+                    .FirstOrDefault();
+
+                var result = await _skuService.GetSKU(
                     new LinxCommerceJobParameter
                     {
                         projectName = _projectName,
@@ -67,31 +118,21 @@ namespace HangfireDashboard.UI.Controllers.LinxCommerce
                         userAuthentication = _authentication,
                         parametersTableName = _parametersTableName,
                         parametersLogTableName = _parametersLogTableName,
-
-                        jobName = _configuration
-                            .GetSection("LinxMicrovix")
-                            .GetSection("B2CConsultaClassificacao")
-                            .GetSection("MethodName")
-                            .Value,
-
-                        tableName = "_" + _configuration
-                            .GetSection("LinxMicrovix")
-                            .GetSection("B2CConsultaClassificacao")
-                            .GetSection("MethodName")
-                            .Value,
+                        jobName = method.MethodName,
+                        tableName = method.MethodName,
                     },
-                    orderId: orderId
+                    productID: productId
                 );
 
                 if (result != true)
-                    return BadRequest($"Unable to find record: {orderId} on endpoint.");
+                    return BadRequest($"Unable to find record: {productId} on endpoint.");
                 else
-                    return Ok($"Record: {orderId} integrated successfully.");
+                    return Ok($"Record: {productId} integrated successfully.");
             }
             catch (Exception ex)
             {
                 Response.StatusCode = 400;
-                return Content($"Unable to integrate the record: {orderId}.\nError: {ex.Message}");
+                return Content($"Unable to integrate the record: {productId}.\nError: {ex.Message}");
             }
         }
     }

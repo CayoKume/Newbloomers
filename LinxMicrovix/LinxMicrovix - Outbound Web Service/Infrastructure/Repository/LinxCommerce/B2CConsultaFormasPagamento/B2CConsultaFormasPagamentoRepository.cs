@@ -5,18 +5,18 @@ using LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.Base;
 
 namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommerce
 {
-    public class B2CConsultaFormasPagamentoRepository<TEntity> : IB2CConsultaFormasPagamentoRepository<TEntity> where TEntity : B2CConsultaFormasPagamento, new()
+    public class B2CConsultaFormasPagamentoRepository : IB2CConsultaFormasPagamentoRepository
     {
-        private readonly ILinxMicrovixRepositoryBase<TEntity> _linxMicrovixRepositoryBase;
+        private readonly ILinxMicrovixRepositoryBase<B2CConsultaFormasPagamento> _linxMicrovixRepositoryBase;
 
-        public B2CConsultaFormasPagamentoRepository(ILinxMicrovixRepositoryBase<TEntity> linxMicrovixRepositoryBase) =>
+        public B2CConsultaFormasPagamentoRepository(ILinxMicrovixRepositoryBase<B2CConsultaFormasPagamento> linxMicrovixRepositoryBase) =>
             (_linxMicrovixRepositoryBase) = (linxMicrovixRepositoryBase);
 
-        public bool BulkInsertIntoTableRaw(LinxMicrovixJobParameter jobParameter, List<TEntity> records)
+        public bool BulkInsertIntoTableRaw(LinxMicrovixJobParameter jobParameter, List<B2CConsultaFormasPagamento> records)
         {
             try
             {
-                var table = _linxMicrovixRepositoryBase.CreateSystemDataTable(jobParameter, new TEntity());
+                var table = _linxMicrovixRepositoryBase.CreateSystemDataTable(jobParameter, new B2CConsultaFormasPagamento());
 
                 for (int i = 0; i < records.Count(); i++)
                 {

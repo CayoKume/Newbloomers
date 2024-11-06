@@ -20,136 +20,136 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
         private readonly List<Method>? _methods;
 
         private readonly IConfiguration _configuration;
-        private readonly IB2CConsultaClassificacaoService<B2CConsultaClassificacao> _b2cConsultaClassificacaoService;
-        private readonly IB2CConsultaClientesService<B2CConsultaClientes> _b2cConsultaClientesService;
-        private readonly IB2CConsultaClientesContatosService<B2CConsultaClientesContatos> _b2cConsultaClientesContatosService;
-        private readonly IB2CConsultaClientesContatosParentescoService<B2CConsultaClientesContatosParentesco> _b2cConsultaClientesContatosParentescoService;
-        private readonly IB2CConsultaClientesEnderecosEntregaService<B2CConsultaClientesEnderecosEntrega> _b2cConsultaClientesEnderecosEntregaService;
-        private readonly IB2CConsultaClientesEstadoCivilService<B2CConsultaClientesEstadoCivil> _b2cConsultaClientesEstadoCivilService;
-        private readonly IB2CConsultaClientesSaldoService<B2CConsultaClientesSaldo> _b2cConsultaClientesSaldoService;
-        private readonly IB2CConsultaClientesSaldoLinxService<B2CConsultaClientesSaldoLinx> _b2cConsultaClientesSaldoLinxService;
-        private readonly IB2CConsultaCNPJsChaveService<B2CConsultaCNPJsChave> _b2cConsultaCNPJsChaveService;
-        private readonly IB2CConsultaCodigoRastreioService<B2CConsultaCodigoRastreio> _b2cConsultaCodigoRastreioService;
-        private readonly IB2CConsultaColecoesService<B2CConsultaColecoes> _b2cConsultaColecoesService;
-        private readonly IB2CConsultaEmpresasService<B2CConsultaEmpresas> _b2cConsultaEmpresasService;
-        private readonly IB2CConsultaEspessurasService<B2CConsultaEspessuras> _b2cConsultaEspessurasService;
-        private readonly IB2CConsultaFlagsService<B2CConsultaFlags> _b2cConsultaFlagsService;
-        private readonly IB2CConsultaFormasPagamentoService<B2CConsultaFormasPagamento> _b2cConsultaFormasPagamentoService;
-        private readonly IB2CConsultaFornecedoresService<B2CConsultaFornecedores> _b2cConsultaFornecedoresService;
-        private readonly IB2CConsultaGrade1Service<B2CConsultaGrade1> _b2cConsultaGrade1Service;
-        private readonly IB2CConsultaGrade2Service<B2CConsultaGrade2> _b2cConsultaGrade2Service;
-        private readonly IB2CConsultaImagensService<B2CConsultaImagens> _b2cConsultaImagensService;
-        private readonly IB2CConsultaImagensHDService<B2CConsultaImagensHD> _b2cConsultaImagensHDService;
-        private readonly IB2CConsultaLegendasCadastrosAuxiliaresService<B2CConsultaLegendasCadastrosAuxiliares> _b2cConsultaLegendasCadastrosAuxiliaresService;
-        private readonly IB2CConsultaLinhasService<B2CConsultaLinhas> _b2cConsultaLinhasService;
-        private readonly IB2CConsultaMarcasService<B2CConsultaMarcas> _b2cConsultaMarcasService;
-        private readonly IB2CConsultaNFeService<B2CConsultaNFe> _b2cConsultaNFeService;
-        private readonly IB2CConsultaNFeSituacaoService<B2CConsultaNFeSituacao> _b2cConsultaNFeSituacaoService;
-        private readonly IB2CConsultaPalavrasChavePesquisaService<B2CConsultaPalavrasChavePesquisa> _b2cConsultaPalavrasChavePesquisaService;
-        private readonly IB2CConsultaPedidosService<B2CConsultaPedidos> _b2cConsultaPedidosService;
-        private readonly IB2CConsultaPedidosIdentificadorService<B2CConsultaPedidosIdentificador> _b2cConsultaPedidosIdentificadorService;
-        private readonly IB2CConsultaPedidosItensService<B2CConsultaPedidosItens> _b2cConsultaPedidosItensService;
-        private readonly IB2CConsultaPedidosPlanosService<B2CConsultaPedidosPlanos> _b2cConsultaPedidosPlanosService;
-        private readonly IB2CConsultaPedidosStatusService<B2CConsultaPedidosStatus> _b2cConsultaPedidosStatusService;
-        private readonly IB2CConsultaPedidosTiposService<B2CConsultaPedidosTipos> _b2cConsultaPedidosTiposService;
-        private readonly IB2CConsultaPlanosService<B2CConsultaPlanos> _b2cConsultaPlanosService;
-        private readonly IB2CConsultaPlanosParcelasService<B2CConsultaPlanosParcelas> _b2cConsultaPlanosParcelasService;
-        private readonly IB2CConsultaProdutosService<B2CConsultaProdutos> _b2cConsultaProdutosService;
-        private readonly IB2CConsultaProdutosAssociadosService<B2CConsultaProdutosAssociados> _b2cConsultaProdutosAssociadosService;
-        private readonly IB2CConsultaProdutosCampanhasService<B2CConsultaProdutosCampanhas> _b2cConsultaProdutosCampanhasService;
-        private readonly IB2CConsultaProdutosCamposAdicionaisDetalhesService<B2CConsultaProdutosCamposAdicionaisDetalhes> _b2cConsultaProdutosCamposAdicionaisDetalhesService;
-        private readonly IB2CConsultaProdutosCamposAdicionaisNomesService<B2CConsultaProdutosCamposAdicionaisNomes> _b2cConsultaProdutosCamposAdicionaisNomesService;
-        private readonly IB2CConsultaProdutosCamposAdicionaisValoresService<B2CConsultaProdutosCamposAdicionaisValores> _b2cConsultaProdutosCamposAdicionaisValoresService;
-        private readonly IB2CConsultaProdutosCodebarService<B2CConsultaProdutosCodebar> _b2cConsultaProdutosCodebarService;
-        private readonly IB2CConsultaProdutosCustosService<B2CConsultaProdutosCustos> _b2cConsultaProdutosCustosService;
-        private readonly IB2CConsultaProdutosDepositosService<B2CConsultaProdutosDepositos> _b2cConsultaProdutosDepositosService;
-        private readonly IB2CConsultaProdutosDetalhesService<B2CConsultaProdutosDetalhes> _b2cConsultaProdutosDetalhesService;
-        private readonly IB2CConsultaProdutosDetalhesDepositosService<B2CConsultaProdutosDetalhesDepositos> _b2cConsultaProdutosDetalhesDepositosService;
-        private readonly IB2CConsultaProdutosDimensoesService<B2CConsultaProdutosDimensoes> _b2cConsultaProdutosDimensoesService;
-        private readonly IB2CConsultaProdutosFlagsService<B2CConsultaProdutosFlags> _b2cConsultaProdutosFlagsService;
-        private readonly IB2CConsultaProdutosImagensService<B2CConsultaProdutosImagens> _b2cConsultaProdutosImagensService;
-        private readonly IB2CConsultaProdutosInformacoesService<B2CConsultaProdutosInformacoes> _b2cConsultaProdutosInformacoesService;
-        private readonly IB2CConsultaProdutosPalavrasChavePesquisaService<B2CConsultaProdutosPalavrasChavePesquisa> _b2cConsultaProdutosPalavrasChavePesquisaService;
-        private readonly IB2CConsultaProdutosPromocaoService<B2CConsultaProdutosPromocao> _b2cConsultaProdutosPromocaoService;
-        private readonly IB2CConsultaProdutosStatusService<B2CConsultaProdutosStatus> _b2cConsultaProdutosStatusService;
-        private readonly IB2CConsultaProdutosTabelasService<B2CConsultaProdutosTabelas> _b2cConsultaProdutosTabelasService;
-        private readonly IB2CConsultaProdutosTabelasPrecosService<B2CConsultaProdutosTabelasPrecos> _b2cConsultaProdutosTabelasPrecosService;
-        private readonly IB2CConsultaProdutosTagsService<B2CConsultaProdutosTags> _b2cConsultaProdutosTagsService;
-        private readonly IB2CConsultaSetoresService<B2CConsultaSetores> _b2cConsultaSetoresService;
-        private readonly IB2CConsultaStatusService<B2CConsultaStatus> _b2cConsultaStatusService;
-        private readonly IB2CConsultaTagsService<B2CConsultaTags> _b2cConsultaTagsService;
-        private readonly IB2CConsultaTipoEncomendaService<B2CConsultaTipoEncomenda> _b2cConsultaTipoEncomendaService;
-        private readonly IB2CConsultaTiposCobrancaFreteService<B2CConsultaTiposCobrancaFrete> _b2cConsultaTiposCobrancaFreteService;
-        private readonly IB2CConsultaTransportadoresService<B2CConsultaTransportadores> _b2cConsultaTransportadoresService;
-        private readonly IB2CConsultaUnidadeService<B2CConsultaUnidade> _b2cConsultaUnidadeService;
-        private readonly IB2CConsultaVendedoresService<B2CConsultaVendedores> _b2cConsultaVendedoresService;
+        private readonly IB2CConsultaClassificacaoService _b2cConsultaClassificacaoService;
+        private readonly IB2CConsultaClientesService _b2cConsultaClientesService;
+        private readonly IB2CConsultaClientesContatosService _b2cConsultaClientesContatosService;
+        private readonly IB2CConsultaClientesContatosParentescoService _b2cConsultaClientesContatosParentescoService;
+        private readonly IB2CConsultaClientesEnderecosEntregaService _b2cConsultaClientesEnderecosEntregaService;
+        private readonly IB2CConsultaClientesEstadoCivilService _b2cConsultaClientesEstadoCivilService;
+        private readonly IB2CConsultaClientesSaldoService _b2cConsultaClientesSaldoService;
+        private readonly IB2CConsultaClientesSaldoLinxService _b2cConsultaClientesSaldoLinxService;
+        private readonly IB2CConsultaCNPJsChaveService _b2cConsultaCNPJsChaveService;
+        private readonly IB2CConsultaCodigoRastreioService _b2cConsultaCodigoRastreioService;
+        private readonly IB2CConsultaColecoesService _b2cConsultaColecoesService;
+        private readonly IB2CConsultaEmpresasService _b2cConsultaEmpresasService;
+        private readonly IB2CConsultaEspessurasService _b2cConsultaEspessurasService;
+        private readonly IB2CConsultaFlagsService _b2cConsultaFlagsService;
+        private readonly IB2CConsultaFormasPagamentoService _b2cConsultaFormasPagamentoService;
+        private readonly IB2CConsultaFornecedoresService _b2cConsultaFornecedoresService;
+        private readonly IB2CConsultaGrade1Service _b2cConsultaGrade1Service;
+        private readonly IB2CConsultaGrade2Service _b2cConsultaGrade2Service;
+        private readonly IB2CConsultaImagensService _b2cConsultaImagensService;
+        private readonly IB2CConsultaImagensHDService _b2cConsultaImagensHDService;
+        private readonly IB2CConsultaLegendasCadastrosAuxiliaresService _b2cConsultaLegendasCadastrosAuxiliaresService;
+        private readonly IB2CConsultaLinhasService _b2cConsultaLinhasService;
+        private readonly IB2CConsultaMarcasService _b2cConsultaMarcasService;
+        private readonly IB2CConsultaNFeService _b2cConsultaNFeService;
+        private readonly IB2CConsultaNFeSituacaoService _b2cConsultaNFeSituacaoService;
+        private readonly IB2CConsultaPalavrasChavePesquisaService _b2cConsultaPalavrasChavePesquisaService;
+        private readonly IB2CConsultaPedidosService _b2cConsultaPedidosService;
+        private readonly IB2CConsultaPedidosIdentificadorService _b2cConsultaPedidosIdentificadorService;
+        private readonly IB2CConsultaPedidosItensService _b2cConsultaPedidosItensService;
+        private readonly IB2CConsultaPedidosPlanosService _b2cConsultaPedidosPlanosService;
+        private readonly IB2CConsultaPedidosStatusService _b2cConsultaPedidosStatusService;
+        private readonly IB2CConsultaPedidosTiposService _b2cConsultaPedidosTiposService;
+        private readonly IB2CConsultaPlanosService _b2cConsultaPlanosService;
+        private readonly IB2CConsultaPlanosParcelasService _b2cConsultaPlanosParcelasService;
+        private readonly IB2CConsultaProdutosService _b2cConsultaProdutosService;
+        private readonly IB2CConsultaProdutosAssociadosService _b2cConsultaProdutosAssociadosService;
+        private readonly IB2CConsultaProdutosCampanhasService _b2cConsultaProdutosCampanhasService;
+        private readonly IB2CConsultaProdutosCamposAdicionaisDetalhesService _b2cConsultaProdutosCamposAdicionaisDetalhesService;
+        private readonly IB2CConsultaProdutosCamposAdicionaisNomesService _b2cConsultaProdutosCamposAdicionaisNomesService;
+        private readonly IB2CConsultaProdutosCamposAdicionaisValoresService _b2cConsultaProdutosCamposAdicionaisValoresService;
+        private readonly IB2CConsultaProdutosCodebarService _b2cConsultaProdutosCodebarService;
+        private readonly IB2CConsultaProdutosCustosService _b2cConsultaProdutosCustosService;
+        private readonly IB2CConsultaProdutosDepositosService _b2cConsultaProdutosDepositosService;
+        private readonly IB2CConsultaProdutosDetalhesService _b2cConsultaProdutosDetalhesService;
+        private readonly IB2CConsultaProdutosDetalhesDepositosService _b2cConsultaProdutosDetalhesDepositosService;
+        private readonly IB2CConsultaProdutosDimensoesService _b2cConsultaProdutosDimensoesService;
+        private readonly IB2CConsultaProdutosFlagsService _b2cConsultaProdutosFlagsService;
+        private readonly IB2CConsultaProdutosImagensService _b2cConsultaProdutosImagensService;
+        private readonly IB2CConsultaProdutosInformacoesService _b2cConsultaProdutosInformacoesService;
+        private readonly IB2CConsultaProdutosPalavrasChavePesquisaService _b2cConsultaProdutosPalavrasChavePesquisaService;
+        private readonly IB2CConsultaProdutosPromocaoService _b2cConsultaProdutosPromocaoService;
+        private readonly IB2CConsultaProdutosStatusService _b2cConsultaProdutosStatusService;
+        private readonly IB2CConsultaProdutosTabelasService _b2cConsultaProdutosTabelasService;
+        private readonly IB2CConsultaProdutosTabelasPrecosService _b2cConsultaProdutosTabelasPrecosService;
+        private readonly IB2CConsultaProdutosTagsService _b2cConsultaProdutosTagsService;
+        private readonly IB2CConsultaSetoresService _b2cConsultaSetoresService;
+        private readonly IB2CConsultaStatusService _b2cConsultaStatusService;
+        private readonly IB2CConsultaTagsService _b2cConsultaTagsService;
+        private readonly IB2CConsultaTipoEncomendaService _b2cConsultaTipoEncomendaService;
+        private readonly IB2CConsultaTiposCobrancaFreteService _b2cConsultaTiposCobrancaFreteService;
+        private readonly IB2CConsultaTransportadoresService _b2cConsultaTransportadoresService;
+        private readonly IB2CConsultaUnidadeService _b2cConsultaUnidadeService;
+        private readonly IB2CConsultaVendedoresService _b2cConsultaVendedoresService;
 
         public B2CLinxMicrovixController
         (
             IConfiguration configuration,
-            IB2CConsultaClassificacaoService<B2CConsultaClassificacao> b2cConsultaClassificacaoService,
-            IB2CConsultaClientesService<B2CConsultaClientes> b2cConsultaClientesService,
-            IB2CConsultaClientesContatosService<B2CConsultaClientesContatos> b2cConsultaClientesContatosService,
-            IB2CConsultaClientesContatosParentescoService<B2CConsultaClientesContatosParentesco> b2cConsultaClientesContatosParentescoService,
-            IB2CConsultaClientesEnderecosEntregaService<B2CConsultaClientesEnderecosEntrega> b2cConsultaClientesEnderecosEntregaService,
-            IB2CConsultaClientesEstadoCivilService<B2CConsultaClientesEstadoCivil> b2cConsultaClientesEstadoCivilService,
-            IB2CConsultaClientesSaldoService<B2CConsultaClientesSaldo> b2cConsultaClientesSaldoService,
-            IB2CConsultaClientesSaldoLinxService<B2CConsultaClientesSaldoLinx> b2cConsultaClientesSaldoLinxService,
-            IB2CConsultaCNPJsChaveService<B2CConsultaCNPJsChave> b2cConsultaCNPJsChaveService,
-            IB2CConsultaCodigoRastreioService<B2CConsultaCodigoRastreio> b2cConsultaCodigoRastreioService,
-            IB2CConsultaColecoesService<B2CConsultaColecoes> b2cConsultaColecoesService,
-            IB2CConsultaEmpresasService<B2CConsultaEmpresas> b2cConsultaEmpresasService,
-            IB2CConsultaEspessurasService<B2CConsultaEspessuras> b2cConsultaEspessurasService,
-            IB2CConsultaFlagsService<B2CConsultaFlags> b2cConsultaFlagsService,
-            IB2CConsultaFormasPagamentoService<B2CConsultaFormasPagamento> b2cConsultaFormasPagamentoService,
-            IB2CConsultaFornecedoresService<B2CConsultaFornecedores> b2cConsultaFornecedoresService,
-            IB2CConsultaGrade1Service<B2CConsultaGrade1> b2cConsultaGrade1Service,
-            IB2CConsultaGrade2Service<B2CConsultaGrade2> b2cConsultaGrade2Service,
-            IB2CConsultaImagensService<B2CConsultaImagens> b2cConsultaImagensService,
-            IB2CConsultaImagensHDService<B2CConsultaImagensHD> b2cConsultaImagensHDService,
-            IB2CConsultaLegendasCadastrosAuxiliaresService<B2CConsultaLegendasCadastrosAuxiliares> b2cConsultaLegendasCadastrosAuxiliaresService,
-            IB2CConsultaLinhasService<B2CConsultaLinhas> b2cConsultaLinhasService,
-            IB2CConsultaMarcasService<B2CConsultaMarcas> b2cConsultaMarcasService,
-            IB2CConsultaNFeService<B2CConsultaNFe> b2cConsultaNFeService,
-            IB2CConsultaNFeSituacaoService<B2CConsultaNFeSituacao> b2cConsultaNFeSituacaoService,
-            IB2CConsultaPalavrasChavePesquisaService<B2CConsultaPalavrasChavePesquisa> b2cConsultaPalavrasChavePesquisaService,
-            IB2CConsultaPedidosService<B2CConsultaPedidos> b2cConsultaPedidosService,
-            IB2CConsultaPedidosIdentificadorService<B2CConsultaPedidosIdentificador> b2cConsultaPedidosIdentificadorService,
-            IB2CConsultaPedidosItensService<B2CConsultaPedidosItens> b2cConsultaPedidosItensService,
-            IB2CConsultaPedidosPlanosService<B2CConsultaPedidosPlanos> b2cConsultaPedidosPlanosService,
-            IB2CConsultaPedidosStatusService<B2CConsultaPedidosStatus> b2cConsultaPedidosStatusService,
-            IB2CConsultaPedidosTiposService<B2CConsultaPedidosTipos> b2cConsultaPedidosTiposService,
-            IB2CConsultaPlanosService<B2CConsultaPlanos> b2cConsultaPlanosService,
-            IB2CConsultaPlanosParcelasService<B2CConsultaPlanosParcelas> b2cConsultaPlanosParcelasService,
-            IB2CConsultaProdutosService<B2CConsultaProdutos> b2cConsultaProdutosService,
-            IB2CConsultaProdutosAssociadosService<B2CConsultaProdutosAssociados> b2cConsultaProdutosAssociadosService,
-            IB2CConsultaProdutosCampanhasService<B2CConsultaProdutosCampanhas> b2cConsultaProdutosCampanhasService,
-            IB2CConsultaProdutosCamposAdicionaisDetalhesService<B2CConsultaProdutosCamposAdicionaisDetalhes> b2cConsultaProdutosCamposAdicionaisDetalhesService,
-            IB2CConsultaProdutosCamposAdicionaisNomesService<B2CConsultaProdutosCamposAdicionaisNomes> b2cConsultaProdutosCamposAdicionaisNomesService,
-            IB2CConsultaProdutosCamposAdicionaisValoresService<B2CConsultaProdutosCamposAdicionaisValores> b2cConsultaProdutosCamposAdicionaisValoresService,
-            IB2CConsultaProdutosCodebarService<B2CConsultaProdutosCodebar> b2cConsultaProdutosCodebarService,
-            IB2CConsultaProdutosCustosService<B2CConsultaProdutosCustos> b2cConsultaProdutosCustosService,
-            IB2CConsultaProdutosDepositosService<B2CConsultaProdutosDepositos> b2cConsultaProdutosDepositosService,
-            IB2CConsultaProdutosDetalhesService<B2CConsultaProdutosDetalhes> b2cConsultaProdutosDetalhesService,
-            IB2CConsultaProdutosDetalhesDepositosService<B2CConsultaProdutosDetalhesDepositos> b2cConsultaProdutosDetalhesDepositosService,
-            IB2CConsultaProdutosDimensoesService<B2CConsultaProdutosDimensoes> b2cConsultaProdutosDimensoesService,
-            IB2CConsultaProdutosFlagsService<B2CConsultaProdutosFlags> b2cConsultaProdutosFlagsService,
-            IB2CConsultaProdutosImagensService<B2CConsultaProdutosImagens> b2cConsultaProdutosImagensService,
-            IB2CConsultaProdutosInformacoesService<B2CConsultaProdutosInformacoes> b2cConsultaProdutosInformacoesService,
-            IB2CConsultaProdutosPalavrasChavePesquisaService<B2CConsultaProdutosPalavrasChavePesquisa> b2cConsultaProdutosPalavrasChavePesquisaService,
-            IB2CConsultaProdutosPromocaoService<B2CConsultaProdutosPromocao> b2cConsultaProdutosPromocaoService,
-            IB2CConsultaProdutosStatusService<B2CConsultaProdutosStatus> b2cConsultaProdutosStatusService,
-            IB2CConsultaProdutosTabelasService<B2CConsultaProdutosTabelas> b2cConsultaProdutosTabelasService,
-            IB2CConsultaProdutosTabelasPrecosService<B2CConsultaProdutosTabelasPrecos> b2cConsultaProdutosTabelasPrecosService,
-            IB2CConsultaProdutosTagsService<B2CConsultaProdutosTags> b2cConsultaProdutosTagsService,
-            IB2CConsultaSetoresService<B2CConsultaSetores> b2cConsultaSetoresService,
-            IB2CConsultaStatusService<B2CConsultaStatus> b2cConsultaStatusService,
-            IB2CConsultaTagsService<B2CConsultaTags> b2cConsultaTagsService,
-            IB2CConsultaTipoEncomendaService<B2CConsultaTipoEncomenda> b2cConsultaTipoEncomendaService,
-            IB2CConsultaTiposCobrancaFreteService<B2CConsultaTiposCobrancaFrete> b2cConsultaTiposCobrancaFreteService,
-            IB2CConsultaTransportadoresService<B2CConsultaTransportadores> b2cConsultaTransportadoresService,
-            IB2CConsultaUnidadeService<B2CConsultaUnidade> b2cConsultaUnidadeService,
-            IB2CConsultaVendedoresService<B2CConsultaVendedores> b2cConsultaVendedoresService
+            IB2CConsultaClassificacaoService b2cConsultaClassificacaoService,
+            IB2CConsultaClientesService b2cConsultaClientesService,
+            IB2CConsultaClientesContatosService b2cConsultaClientesContatosService,
+            IB2CConsultaClientesContatosParentescoService b2cConsultaClientesContatosParentescoService,
+            IB2CConsultaClientesEnderecosEntregaService b2cConsultaClientesEnderecosEntregaService,
+            IB2CConsultaClientesEstadoCivilService b2cConsultaClientesEstadoCivilService,
+            IB2CConsultaClientesSaldoService b2cConsultaClientesSaldoService,
+            IB2CConsultaClientesSaldoLinxService b2cConsultaClientesSaldoLinxService,
+            IB2CConsultaCNPJsChaveService b2cConsultaCNPJsChaveService,
+            IB2CConsultaCodigoRastreioService b2cConsultaCodigoRastreioService,
+            IB2CConsultaColecoesService b2cConsultaColecoesService,
+            IB2CConsultaEmpresasService b2cConsultaEmpresasService,
+            IB2CConsultaEspessurasService b2cConsultaEspessurasService,
+            IB2CConsultaFlagsService b2cConsultaFlagsService,
+            IB2CConsultaFormasPagamentoService b2cConsultaFormasPagamentoService,
+            IB2CConsultaFornecedoresService b2cConsultaFornecedoresService,
+            IB2CConsultaGrade1Service b2cConsultaGrade1Service,
+            IB2CConsultaGrade2Service b2cConsultaGrade2Service,
+            IB2CConsultaImagensService b2cConsultaImagensService,
+            IB2CConsultaImagensHDService b2cConsultaImagensHDService,
+            IB2CConsultaLegendasCadastrosAuxiliaresService b2cConsultaLegendasCadastrosAuxiliaresService,
+            IB2CConsultaLinhasService b2cConsultaLinhasService,
+            IB2CConsultaMarcasService b2cConsultaMarcasService,
+            IB2CConsultaNFeService b2cConsultaNFeService,
+            IB2CConsultaNFeSituacaoService b2cConsultaNFeSituacaoService,
+            IB2CConsultaPalavrasChavePesquisaService b2cConsultaPalavrasChavePesquisaService,
+            IB2CConsultaPedidosService b2cConsultaPedidosService,
+            IB2CConsultaPedidosIdentificadorService b2cConsultaPedidosIdentificadorService,
+            IB2CConsultaPedidosItensService b2cConsultaPedidosItensService,
+            IB2CConsultaPedidosPlanosService b2cConsultaPedidosPlanosService,
+            IB2CConsultaPedidosStatusService b2cConsultaPedidosStatusService,
+            IB2CConsultaPedidosTiposService b2cConsultaPedidosTiposService,
+            IB2CConsultaPlanosService b2cConsultaPlanosService,
+            IB2CConsultaPlanosParcelasService b2cConsultaPlanosParcelasService,
+            IB2CConsultaProdutosService b2cConsultaProdutosService,
+            IB2CConsultaProdutosAssociadosService b2cConsultaProdutosAssociadosService,
+            IB2CConsultaProdutosCampanhasService b2cConsultaProdutosCampanhasService,
+            IB2CConsultaProdutosCamposAdicionaisDetalhesService b2cConsultaProdutosCamposAdicionaisDetalhesService,
+            IB2CConsultaProdutosCamposAdicionaisNomesService b2cConsultaProdutosCamposAdicionaisNomesService,
+            IB2CConsultaProdutosCamposAdicionaisValoresService b2cConsultaProdutosCamposAdicionaisValoresService,
+            IB2CConsultaProdutosCodebarService b2cConsultaProdutosCodebarService,
+            IB2CConsultaProdutosCustosService b2cConsultaProdutosCustosService,
+            IB2CConsultaProdutosDepositosService b2cConsultaProdutosDepositosService,
+            IB2CConsultaProdutosDetalhesService b2cConsultaProdutosDetalhesService,
+            IB2CConsultaProdutosDetalhesDepositosService b2cConsultaProdutosDetalhesDepositosService,
+            IB2CConsultaProdutosDimensoesService b2cConsultaProdutosDimensoesService,
+            IB2CConsultaProdutosFlagsService b2cConsultaProdutosFlagsService,
+            IB2CConsultaProdutosImagensService b2cConsultaProdutosImagensService,
+            IB2CConsultaProdutosInformacoesService b2cConsultaProdutosInformacoesService,
+            IB2CConsultaProdutosPalavrasChavePesquisaService b2cConsultaProdutosPalavrasChavePesquisaService,
+            IB2CConsultaProdutosPromocaoService b2cConsultaProdutosPromocaoService,
+            IB2CConsultaProdutosStatusService b2cConsultaProdutosStatusService,
+            IB2CConsultaProdutosTabelasService b2cConsultaProdutosTabelasService,
+            IB2CConsultaProdutosTabelasPrecosService b2cConsultaProdutosTabelasPrecosService,
+            IB2CConsultaProdutosTagsService b2cConsultaProdutosTagsService,
+            IB2CConsultaSetoresService b2cConsultaSetoresService,
+            IB2CConsultaStatusService b2cConsultaStatusService,
+            IB2CConsultaTagsService b2cConsultaTagsService,
+            IB2CConsultaTipoEncomendaService b2cConsultaTipoEncomendaService,
+            IB2CConsultaTiposCobrancaFreteService b2cConsultaTiposCobrancaFreteService,
+            IB2CConsultaTransportadoresService b2cConsultaTransportadoresService,
+            IB2CConsultaUnidadeService b2cConsultaUnidadeService,
+            IB2CConsultaVendedoresService b2cConsultaVendedoresService
         )
         {
             _configuration = configuration;

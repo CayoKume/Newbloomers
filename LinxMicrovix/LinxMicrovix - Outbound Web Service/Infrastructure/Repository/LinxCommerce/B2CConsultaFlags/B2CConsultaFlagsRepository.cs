@@ -1,23 +1,21 @@
 ﻿using IntegrationsCore.Domain.Entities;
-using LinxMicrovix_Outbound_Web_Service.Domain.Entites;
 using LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce;
 using LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.Base;
-using static Dapper.SqlMapper;
 
 namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommerce
 {
-    public class B2CConsultaFlagsRepository<TEntity> : IB2CConsultaFlagsRepository<TEntity> where TEntity : B2CConsultaFlags, new()
+    public class B2CConsultaFlagsRepository : IB2CConsultaFlagsRepository
     {
-        private readonly ILinxMicrovixRepositoryBase<TEntity> _linxMicrovixRepositoryBase;
+        private readonly ILinxMicrovixRepositoryBase<B2CConsultaFlags> _linxMicrovixRepositoryBase;
 
-        public B2CConsultaFlagsRepository(ILinxMicrovixRepositoryBase<TEntity> linxMicrovixRepositoryBase) =>
+        public B2CConsultaFlagsRepository(ILinxMicrovixRepositoryBase<B2CConsultaFlags> linxMicrovixRepositoryBase) =>
             (_linxMicrovixRepositoryBase) = (linxMicrovixRepositoryBase);
 
-        public bool BulkInsertIntoTableRaw(LinxMicrovixJobParameter jobParameter, List<TEntity> records)
+        public bool BulkInsertIntoTableRaw(LinxMicrovixJobParameter jobParameter, List<B2CConsultaFlags> records)
         {
             try
             {
-                var table = _linxMicrovixRepositoryBase.CreateSystemDataTable(jobParameter, new TEntity());
+                var table = _linxMicrovixRepositoryBase.CreateSystemDataTable(jobParameter, new B2CConsultaFlags());
 
                 for (int i = 0; i < records.Count(); i++)
                 {

@@ -29,7 +29,7 @@ namespace IntegrationsCore.Infrastructure.Connections.SQLServer
             }
             catch (Exception ex)
             {
-                _connection?.Dispose();
+                _conn?.Dispose();
                 throw new InvalidOperationException("Failed to establish a database connection.", ex);
             }
         }
@@ -38,7 +38,7 @@ namespace IntegrationsCore.Infrastructure.Connections.SQLServer
         {
             try
             {
-                _conn = new SqlConnection(_connectionstring.Replace("[catalog]", _databaseName).Replace("[database]", _databaseName));
+                _connection = new SqlConnection(_connectionstring.Replace("[catalog]", _databaseName).Replace("[database]", _databaseName));
                 _connection.Open();
                 return _connection;
             }

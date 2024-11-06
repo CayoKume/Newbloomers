@@ -3,7 +3,7 @@ using LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce;
 using LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommerce;
 using LinxMicrovix_Outbound_Web_Service.Application.Services.Base;
 using LinxMicrovix_Outbound_Web_Service.Infrastructure.Api;
-using static IntegrationsCore.Domain.Entities.Exceptions.InternalErrorsExceptions;
+using static IntegrationsCore.Domain.Entities.Exceptions.publicErrorsExceptions;
 using System.Globalization;
 using System.Data;
 using LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.Base;
@@ -16,18 +16,18 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
     /// a partir dele, buscando assim todos os clientes novos e atualizados dos ultimos 7 dias.
     /// E como ela possui dados gerais não é preciso pesquisar por todos os cnpjs, ao pesquisar por um cnpj os dados serão os mesmo para os demais cnpjs
     /// </summary>
-    public class B2CConsultaClientesService<TEntity> : IB2CConsultaClientesService<TEntity> where TEntity : B2CConsultaClientes, new()
+    public class B2CConsultaClientesService : IB2CConsultaClientesService
     {
         private readonly IAPICall _apiCall;
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
-        private readonly ILinxMicrovixRepositoryBase<TEntity> _linxMicrovixRepositoryBase;
-        private readonly IB2CConsultaClientesRepository<TEntity> _b2cConsultaClientesRepository;
+        private readonly ILinxMicrovixRepositoryBase<B2CConsultaClientes> _linxMicrovixRepositoryBase;
+        private readonly IB2CConsultaClientesRepository _b2cConsultaClientesRepository;
 
         public B2CConsultaClientesService(
             IAPICall apiCall,
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
-            ILinxMicrovixRepositoryBase<TEntity> linxMicrovixRepositoryBase,
-            IB2CConsultaClientesRepository<TEntity> b2cConsultaClientesRepository
+            ILinxMicrovixRepositoryBase<B2CConsultaClientes> linxMicrovixRepositoryBase,
+            IB2CConsultaClientesRepository b2cConsultaClientesRepository
         )
         {
             _apiCall = apiCall;
@@ -36,9 +36,9 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
             _linxMicrovixRepositoryBase = linxMicrovixRepositoryBase;
         }
 
-        public List<TEntity?> DeserializeXMLToObject(LinxMicrovixJobParameter jobParameter, List<Dictionary<string?, string?>> records)
+        public List<B2CConsultaClientes?> DeserializeXMLToObject(LinxMicrovixJobParameter jobParameter, List<Dictionary<string?, string?>> records)
         {
-            var list = new List<TEntity>();
+            var list = new List<B2CConsultaClientes>();
 
             for(int i = 0; i < records.Count(); i++)
             {
@@ -85,11 +85,11 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
                          aceita_programa_fidelidade: records[i].Where(pair => pair.Key == "aceita_programa_fidelidade").Select(pair => pair.Value).FirstOrDefault()
                     );
 
-                    list.Add((TEntity)entity);
+                    list.Add(entity);
                 }
                 catch (Exception ex)
                 {
-                    throw new InternalErrorException()
+                    throw new publicErrorException()
                     {
                         project = jobParameter.projectName,
                         job = jobParameter.jobName,
@@ -160,6 +160,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
             {
                 await _linxMicrovixRepositoryBase.DeleteLogResponse(jobParameter);
                 await _linxMicrovixRepositoryBase.CreateDataTableIfNotExists(jobParameter);
+                await _b2cConsultaClientesRepository.CreateTableMerge(jobParameter: jobParameter);
                 await _b2cConsultaClientesRepository.InsertParametersIfNotExists(jobParameter);
                 await _linxMicrovixRepositoryBase.ExecuteTruncateRawTable(jobParameter);
 
@@ -193,7 +194,6 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
                 await _linxMicrovixRepositoryBase.UpdateLogParameters(jobParameter: jobParameter, lastResponse: response);
 
                 //await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter: jobParameter);
-                await _b2cConsultaClientesRepository.CreateTableMerge(jobParameter: jobParameter);
                 await _linxMicrovixRepositoryBase.ExecuteTruncateRawTable(jobParameter);
 
                 return true;

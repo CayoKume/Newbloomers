@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LinxCommerce.Domain.Entities.Sales.Order
 {
-    internal class OrderExternalInfo
+    public class OrderExternalInfo
     {
     }
 }

@@ -3,7 +3,7 @@ using LinxMicrovix_Outbound_Web_Service.Application.Services.Base;
 using LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.Base;
 using LinxMicrovix_Outbound_Web_Service.Infrastructure.Api;
 using LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommerce;
-using static IntegrationsCore.Domain.Entities.Exceptions.InternalErrorsExceptions;
+using static IntegrationsCore.Domain.Entities.Exceptions.publicErrorsExceptions;
 using IntegrationsCore.Domain.Entities;
 
 namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
@@ -13,18 +13,18 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
     /// E como ela possui dados gerais não é preciso pesquisar por todos os cnpjs, ao pesquisar pelo cnpj da matriz os dados serão os 
     /// mesmos para os demais cnpjs
     /// </summary>
-    public class B2CConsultaClassificacaoService<TEntity> : IB2CConsultaClassificacaoService<TEntity> where TEntity : B2CConsultaClassificacao, new()
+    public class B2CConsultaClassificacaoService : IB2CConsultaClassificacaoService
     {
         private readonly IAPICall _apiCall;
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
-        private readonly ILinxMicrovixRepositoryBase<TEntity> _linxMicrovixRepositoryBase;
-        private readonly IB2CConsultaClassificacaoRepository<TEntity> _b2cConsultaClassificacaoRepository;
+        private readonly ILinxMicrovixRepositoryBase<B2CConsultaClassificacao> _linxMicrovixRepositoryBase;
+        private readonly IB2CConsultaClassificacaoRepository _b2cConsultaClassificacaoRepository;
         
         public B2CConsultaClassificacaoService(
             IAPICall apiCall, 
-            IB2CConsultaClassificacaoRepository<TEntity> b2cConsultaClassificacaoRepository, 
+            IB2CConsultaClassificacaoRepository b2cConsultaClassificacaoRepository, 
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
-            ILinxMicrovixRepositoryBase<TEntity> linxMicrovixRepositoryBase
+            ILinxMicrovixRepositoryBase<B2CConsultaClassificacao> linxMicrovixRepositoryBase
         ) 
         {
             _apiCall = apiCall;
@@ -39,6 +39,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
             {
                 await _linxMicrovixRepositoryBase.DeleteLogResponse(jobParameter);
                 await _linxMicrovixRepositoryBase.CreateDataTableIfNotExists(jobParameter);
+                await _b2cConsultaClassificacaoRepository.CreateTableMerge(jobParameter: jobParameter);
                 await _b2cConsultaClassificacaoRepository.InsertParametersIfNotExists(jobParameter);
                 await _linxMicrovixRepositoryBase.ExecuteTruncateRawTable(jobParameter);
 
@@ -71,7 +72,6 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
                 await _linxMicrovixRepositoryBase.UpdateLogParameters(jobParameter: jobParameter, lastResponse: response);
 
                 //await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter: jobParameter);
-                await _b2cConsultaClassificacaoRepository.CreateTableMerge(jobParameter: jobParameter);
                 await _linxMicrovixRepositoryBase.ExecuteTruncateRawTable(jobParameter);
 
                 return true;
@@ -131,9 +131,9 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
             }
         }
 
-        public List<TEntity?> DeserializeXMLToObject(LinxMicrovixJobParameter jobParameter, List<Dictionary<string?, string?>> records)
+        public List<B2CConsultaClassificacao?> DeserializeXMLToObject(LinxMicrovixJobParameter jobParameter, List<Dictionary<string?, string?>> records)
         {
-            var list = new List<TEntity>();
+            var list = new List<B2CConsultaClassificacao>();
             for(int i = 0; i < records.Count(); i++)
             {
                 try
@@ -145,11 +145,11 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
                         portal: records[i].Where(pair => pair.Key == "portal").Select(pair => pair.Value).FirstOrDefault()
                     );
 
-                    list.Add((TEntity)entity);
+                    list.Add(entity);
                 }
                 catch (Exception ex)
                 {
-                    throw new InternalErrorException()
+                    throw new publicErrorException()
                     {
                         project = jobParameter.projectName,
                         job = jobParameter.jobName,

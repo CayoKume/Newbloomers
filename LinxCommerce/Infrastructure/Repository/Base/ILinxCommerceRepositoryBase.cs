@@ -4,9 +4,9 @@ using System.Data;
 
 namespace LinxCommerce.Infrastructure.Repository.Base
 {
-    public interface ILinxCommerceRepositoryBase
+    public interface ILinxCommerceRepositoryBase<TEntity> where TEntity : class
     {
-        public Task<string?> GetParameters(LinxMicrovixJobParameter jobParameter);
+        public Task<string?> GetParameters(LinxCommerceJobParameter jobParameter);
 
         public Task<bool> InsertRecord(LinxCommerceJobParameter jobParameter, string? sql, object record);
         public Task<bool> InsertParametersIfNotExists(LinxCommerceJobParameter jobParameter, object parameter);
@@ -21,5 +21,8 @@ namespace LinxCommerce.Infrastructure.Repository.Base
         public bool BulkInsertIntoTableRaw(LinxCommerceJobParameter jobParameter, DataTable dataTable, int dataTableRowsNumber);
 
         public Task<bool> CallDbProcMerge(LinxCommerceJobParameter jobParameter);
+
+        public Task<bool> CreateDataTableIfNotExists(LinxCommerceJobParameter jobParameter);
+        public DataTable CreateSystemDataTable(LinxCommerceJobParameter jobParameter, TEntity entity);
     }
 }

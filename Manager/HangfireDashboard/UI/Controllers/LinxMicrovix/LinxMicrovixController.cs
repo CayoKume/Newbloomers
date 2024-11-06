@@ -18,15 +18,18 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
         private readonly List<Method>? _methods;
         private readonly IConfiguration _configuration;
 
-        private readonly ILinxVendedoresService<LinxVendedores> _linxVendedoresService;
+        private readonly ILinxVendedoresService _linxVendedoresService;
+        private readonly ILinxProdutosCodBarService _linxProdutosCodBarService;
 
         public LinxMicrovixController(
             IConfiguration configuration,
-            ILinxVendedoresService<LinxVendedores> linxVendedoresService
+            ILinxVendedoresService linxVendedoresService,
+            ILinxProdutosCodBarService linxProdutosCodBarService
         )
         {
             _configuration = configuration;
             _linxVendedoresService = linxVendedoresService;
+            _linxProdutosCodBarService = linxProdutosCodBarService;
 
             _docMainCompany = _configuration
                 .GetSection("LinxMicrovix")
@@ -90,6 +93,42 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                         parametersInterval = _parametersInterval,
                         jobName = method.MethodName,
                         tableName = "_" + method.MethodName
+                    }
+                );
+
+                if (result != true)
+                    return BadRequest($"Unable to find records on endpoint.");
+                else
+                    return Ok($"Records integrated successfully.");
+            }
+            catch (Exception ex)
+            {
+                Response.StatusCode = 400;
+                return Content($"Unable to integrate the records.\nError: {ex.Message}");
+            }
+        }
+
+        [HttpPost("LinxProdutosCodBar")]
+        public async Task<ActionResult> LinxProdutosCodBar()
+        {
+            try
+            {
+                var method = _methods
+                    .Where(m => m.MethodName == "LinxProdutosCodBar")
+                    .FirstOrDefault();
+
+                var result = await _linxProdutosCodBarService.GetRecords(
+                    new LinxMicrovixJobParameter
+                    {
+                        docMainCompany = _docMainCompany,
+                        projectName = _projectName,
+                        keyAuthorization = _key,
+                        userAuthentication = _authentication,
+                        parametersTableName = _parametersTableName,
+                        parametersLogTableName = _parametersLogTableName,
+                        parametersInterval = _parametersInterval,
+                        jobName = method.MethodName,
+                        tableName = method.MethodName
                     }
                 );
 

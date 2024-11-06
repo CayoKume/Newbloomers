@@ -1,30 +1,29 @@
 ﻿using Microsoft.Extensions.Configuration;
-using ISQLLinxMicrovixConnection = IntegrationsCore.Infrastructure.Connections.SQLServer.ILinxMicrovixConnection;
-using IMySQLLinxMicrovixConnection = IntegrationsCore.Infrastructure.Connections.MySQL.ILinxMicrovixConnection;
-using IPostgreSQLLinxMicrovixConnection = IntegrationsCore.Infrastructure.Connections.PostgreSQL.ILinxMicrovixConnection;
+using ISQLLinxCommerceConnection = IntegrationsCore.Infrastructure.Connections.SQLServer.ILinxCommerceConnection;
+using IMySQLLinxCommerceConnection = IntegrationsCore.Infrastructure.Connections.MySQL.ILinxCommerceConnection;
+using IPostgreSQLLinxCommerceConnection = IntegrationsCore.Infrastructure.Connections.PostgreSQL.ILinxCommerceConnection;
 using IntegrationsCore.Domain.Entities.Parameters;
 using System.Data;
 using IntegrationsCore.Domain.Entities;
 using Dapper;
 using static IntegrationsCore.Domain.Entities.Exceptions.RepositorysExceptions;
-using Z.Dapper.Plus;
 using static IntegrationsCore.Domain.Entities.Exceptions.InternalErrorsExceptions;
 using System.ComponentModel;
 using System.Data.SqlClient;
 
 namespace LinxCommerce.Infrastructure.Repository.Base
 {
-    public class LinxCommerceRepositoryBase : ILinxCommerceRepositoryBase
+    public class LinxCommerceRepositoryBase<TEntity> : ILinxCommerceRepositoryBase<TEntity> where TEntity : class, new()
     {
         private readonly string? _parametersTableName;
 
         private readonly IConfiguration _configuration;
-        private readonly ISQLLinxMicrovixConnection? _sqlServerConnection;
-        private readonly IMySQLLinxMicrovixConnection? _mySQLConnection;
-        private readonly IPostgreSQLLinxMicrovixConnection? _postgreSQLConnection;
+        private readonly ISQLLinxCommerceConnection? _sqlServerConnection;
+        private readonly IMySQLLinxCommerceConnection? _mySQLConnection;
+        private readonly IPostgreSQLLinxCommerceConnection? _postgreSQLConnection;
 
         public LinxCommerceRepositoryBase(
-            ISQLLinxMicrovixConnection sqlServerConnection,
+            ISQLLinxCommerceConnection sqlServerConnection,
             IConfiguration configuration
         )
         {
@@ -37,7 +36,7 @@ namespace LinxCommerce.Infrastructure.Repository.Base
         }
 
         public LinxCommerceRepositoryBase(
-            IMySQLLinxMicrovixConnection mySQLConnection,
+            IMySQLLinxCommerceConnection mySQLConnection,
             IConfiguration configuration
         )
         {
@@ -50,7 +49,7 @@ namespace LinxCommerce.Infrastructure.Repository.Base
         }
 
         public LinxCommerceRepositoryBase(
-            IPostgreSQLLinxMicrovixConnection postgreSQLConnection,
+            IPostgreSQLLinxCommerceConnection postgreSQLConnection,
             IConfiguration configuration
         )
         {
@@ -118,6 +117,11 @@ namespace LinxCommerce.Infrastructure.Repository.Base
                     exception = ex.Message
                 };
             }
+        }
+
+        public Task<bool> CreateDataTableIfNotExists(LinxCommerceJobParameter jobParameter)
+        {
+            throw new NotImplementedException();
         }
 
         public DataTable CreateSystemDataTable(LinxCommerceJobParameter jobParameter, TEntity entity)
@@ -263,6 +267,32 @@ namespace LinxCommerce.Infrastructure.Repository.Base
                     method = $"GetParameters",
                     message = $"Error when trying to get parameters from database",
                     schema = $"[{jobParameter.parametersTableName}]",
+                    command = sql,
+                    exception = ex.Message
+                };
+            }
+        }
+
+        public async Task<string?> GetParameters(LinxCommerceJobParameter jobParameter)
+        {
+            string sql = $@"SELECT NUMBEROFDAYS FROM [BLOOMERS_LINX].[dbo].[LINXAPIPARAM] WHERE METHOD = '{jobParameter.tableName}'";
+
+            try
+            {
+                using (var conn = _sqlServerConnection.GetIDbConnection())
+                {
+                    return await conn.QueryFirstAsync<string>(sql: sql, commandTimeout: 360);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new ExecuteCommandException()
+                {
+                    project = $"{jobParameter.projectName} - IntegrationsCore",
+                    job = jobParameter.jobName,
+                    method = $"GetParameters",
+                    message = $"Error when trying to insert record in database table: {jobParameter.tableName}",
+                    schema = $"[{jobParameter.tableName}]",
                     command = sql,
                     exception = ex.Message
                 };
