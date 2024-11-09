@@ -6,16 +6,25 @@ namespace WebJobsApplication
     {
         public static async Task Main(string[] args)
         {
+
+            var configuration = new ConfigurationBuilder()
+                .AddJsonFile($"appsettings.json")
+                .Build();
+
             var builder = Host.CreateDefaultBuilder();
             
             builder
-                .AddServices()
                 .ConfigureWebJobs(b =>
                 {
-                    b.AddAzureStorageCoreServices();
-                });
+                    b
+                    .AddAzureStorageCoreServices()
+                    .AddTimers();
+                })
+                .AddServices()
+                .UseConsoleLifetime();
 
             var host = builder.Build();
+            await host.DatabaseInitialization(configuration);
 
             using (host)
             {

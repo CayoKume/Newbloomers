@@ -1,6 +1,6 @@
 ﻿using IntegrationsCore.Domain.Entities;
 using System.Net;
-using static IntegrationsCore.Domain.Entities.Exceptions.APIErrorsExceptions;
+using static IntegrationsCore.Domain.Exceptions.APIErrorsExceptions;
 
 namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Api
 {

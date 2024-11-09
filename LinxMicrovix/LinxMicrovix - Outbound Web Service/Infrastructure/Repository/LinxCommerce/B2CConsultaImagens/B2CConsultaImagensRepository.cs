@@ -20,7 +20,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
 
                 for (int i = 0; i < records.Count(); i++)
                 {
-                    table.Rows.Add(records[i].lastupdateon, records[i].id_imagem, records[i].imagem, records[i].md5, records[i].timestamp, records[i].portal, records[i].url_imagem_blob);
+                    table.Rows.Add(records[i].lastupdateon, records[i].id_imagem, records[i].md5, records[i].timestamp, records[i].portal, records[i].url_imagem_blob);
                 }
 
                 _linxMicrovixRepositoryBase.BulkInsertIntoTableRaw(
@@ -55,7 +55,6 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
 			                           UPDATE SET
 			                           TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON],
 			                           TARGET.[ID_IMAGEM] = SOURCE.[ID_IMAGEM],
-			                           TARGET.[IMAGEM] = SOURCE.[IMAGEM],
 			                           TARGET.[MD5] = SOURCE.[MD5],
 			                           TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP],
 			                           TARGET.[PORTAL] = SOURCE.[PORTAL],
@@ -63,9 +62,9 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
 
                                    WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_IMAGEM] NOT IN (SELECT [ID_IMAGEM] FROM [B2CCONSULTAIMAGENS_TRUSTED]) THEN
 			                           INSERT
-			                           ([LASTUPDATEON], [ID_IMAGEM], [IMAGEM], [MD5], [TIMESTAMP], [PORTAL], [URL_IMAGEM_BLOB])
+			                           ([LASTUPDATEON], [ID_IMAGEM], [MD5], [TIMESTAMP], [PORTAL], [URL_IMAGEM_BLOB])
 			                           VALUES
-			                           (SOURCE.[LASTUPDATEON], SOURCE.[ID_IMAGEM], SOURCE.[IMAGEM], SOURCE.[MD5], SOURCE.[TIMESTAMP], SOURCE.[PORTAL], SOURCE.[URL_IMAGEM_BLOB]);
+			                           (SOURCE.[LASTUPDATEON], SOURCE.[ID_IMAGEM], SOURCE.[MD5], SOURCE.[TIMESTAMP], SOURCE.[PORTAL], SOURCE.[URL_IMAGEM_BLOB]);
 	                           END'
                            )
                            END";
@@ -106,9 +105,9 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
         public async Task<bool> InsertRecord(LinxMicrovixJobParameter jobParameter, B2CConsultaImagens? record)
         {
             string? sql = $"INSERT INTO {jobParameter.tableName}_raw " +
-                          "([lastupdateon], [id_imagem], [imagem], [md5], [timestamp], [portal], [url_imagem_blob]) " +
+                          "([lastupdateon], [id_imagem], [md5], [timestamp], [portal], [url_imagem_blob]) " +
                           "Values " +
-                          "(@lastupdateon, @id_imagem, @imagem, @md5, @timestamp, @portal, @url_imagem_blob)";
+                          "(@lastupdateon, @id_imagem, @md5, @timestamp, @portal, @url_imagem_blob)";
 
             try
             {

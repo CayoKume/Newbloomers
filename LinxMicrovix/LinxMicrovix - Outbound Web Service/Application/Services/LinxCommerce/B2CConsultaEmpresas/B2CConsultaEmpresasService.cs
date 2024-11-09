@@ -4,7 +4,7 @@ using LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.Base;
 using LinxMicrovix_Outbound_Web_Service.Infrastructure.Api;
 using LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommerce;
 using IntegrationsCore.Domain.Entities;
-using static IntegrationsCore.Domain.Entities.Exceptions.publicErrorsExceptions;
+using static IntegrationsCore.Domain.Exceptions.InternalErrorsExceptions;
 using System.Globalization;
 
 namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
@@ -40,7 +40,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
                     var entity = new B2CConsultaEmpresas(
                         empresa: records[i].Where(pair => pair.Key == "empresa").Select(pair => pair.Value).FirstOrDefault(),
                         nome_emp: records[i].Where(pair => pair.Key == "nome_emp").Select(pair => pair.Value).FirstOrDefault(),
-                        cnpj_emp: records[i].Where(pair => pair.Key == "cnpj_emp").Select(pair => pair.Value).FirstOrDefault(),
+                        cnpj_emp: records[i].Where(pair => pair.Key == "cnpjEmp").Select(pair => pair.Value).FirstOrDefault(),
                         end_unidade: records[i].Where(pair => pair.Key == "end_unidade").Select(pair => pair.Value).FirstOrDefault(),
                         complemento_end_unidade: records[i].Where(pair => pair.Key == "complemento_end_unidade").Select(pair => pair.Value).FirstOrDefault(),
                         nr_rua_unidade: records[i].Where(pair => pair.Key == "nr_rua_unidade").Select(pair => pair.Value).FirstOrDefault(),
@@ -59,7 +59,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
                 }
                 catch (Exception ex)
                 {
-                    throw new publicErrorException()
+                    throw new InternalErrorException()
                     {
                         project = jobParameter.projectName,
                         job = jobParameter.jobName,
@@ -113,7 +113,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
                     });
                 await _linxMicrovixRepositoryBase.UpdateLogParameters(jobParameter: jobParameter, lastResponse: response); 
 
-                //await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter: jobParameter);
+                await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter: jobParameter);
                 await _linxMicrovixRepositoryBase.ExecuteTruncateRawTable(jobParameter);
 
                 return true;

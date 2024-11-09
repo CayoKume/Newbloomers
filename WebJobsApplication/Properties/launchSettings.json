@@ -1,11 +1,27 @@
 ﻿{
   "$schema": "http://json.schemastore.org/launchsettings.json",
   "profiles": {
-    "JobManagerWorkerService": {
+    "WebJobsApplication": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "environmentVariables": {
         "DOTNET_ENVIRONMENT": "Development"
+      }
+    },
+
+    "WebJobsApplication - homolog": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "homolog"
+      }
+    },
+
+    "WebJobsApplication - local": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "local"
       }
     }
   }

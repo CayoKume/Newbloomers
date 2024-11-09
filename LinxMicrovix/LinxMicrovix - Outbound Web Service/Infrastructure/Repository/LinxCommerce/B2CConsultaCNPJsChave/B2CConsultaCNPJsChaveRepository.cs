@@ -58,7 +58,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
 			                           TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON],
 			                           TARGET.[CNPJ] = SOURCE.[CNPJ],
 			                           TARGET.[NOME_EMPRESA] = SOURCE.[NOME_EMPRESA],
-			                           TARGET.[ID_EMPRESA_REDE] = SOURCE.[ID_EMPRESA_REDE],
+			                           TARGET.[ID_EMPRESAS_REDE] = SOURCE.[ID_EMPRESAS_REDE],
 			                           TARGET.[REDE] = SOURCE.[REDE],
 			                           TARGET.[PORTAL] = SOURCE.[PORTAL],
 			                           TARGET.[NOME_PORTAL] = SOURCE.[NOME_PORTAL],
@@ -69,9 +69,9 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
 
                                    WHEN NOT MATCHED BY TARGET AND SOURCE.[CNPJ] NOT IN (SELECT [CNPJ] FROM [B2CCONSULTACNPJSCHAVE_TRUSTED]) THEN
 			                           INSERT
-			                           ([LASTUPDATEON], [CNPJ], [NOME_EMPRESA], [ID_EMPRESA_REDE], [REDE], [PORTAL], [NOME_PORTAL], [EMPRESA], [CLASSIFICACAO_PORTAL], [B2C], [OMS])
+			                           ([LASTUPDATEON], [CNPJ], [NOME_EMPRESA], [ID_EMPRESAS_REDE], [REDE], [PORTAL], [NOME_PORTAL], [EMPRESA], [CLASSIFICACAO_PORTAL], [B2C], [OMS])
 			                           VALUES
-			                           (SOURCE.[LASTUPDATEON], SOURCE.[CNPJ], SOURCE.[NOME_EMPRESA], SOURCE.[ID_EMPRESA_REDE], SOURCE.[REDE], SOURCE.[PORTAL], SOURCE.[NOME_PORTAL], 
+			                           (SOURCE.[LASTUPDATEON], SOURCE.[CNPJ], SOURCE.[NOME_EMPRESA], SOURCE.[ID_EMPRESAS_REDE], SOURCE.[REDE], SOURCE.[PORTAL], SOURCE.[NOME_PORTAL], 
 			                           SOURCE.[EMPRESA], SOURCE.[CLASSIFICACAO_PORTAL], SOURCE.[B2C], SOURCE.[OMS]);
 	                           END'
                            )

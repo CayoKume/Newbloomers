@@ -51,7 +51,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
 			                           TARGET.[ID_PARENTESCO] = SOURCE.[ID_PARENTESCO]
 		                           )
 
-                                   WHEN MATCHED SOURCE.[TIMESTAMP] != TARGET.[TIMESTAMP] THEN 
+                                   WHEN MATCHED AND SOURCE.[TIMESTAMP] != TARGET.[TIMESTAMP] THEN 
 			                           UPDATE SET
 			                           TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON],
 			                           TARGET.[ID_PARENTESCO] = SOURCE.[ID_PARENTESCO],

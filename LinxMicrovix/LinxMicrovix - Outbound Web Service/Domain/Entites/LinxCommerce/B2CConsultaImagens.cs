@@ -12,9 +12,6 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
         [Column(TypeName = "int")]
         public Int32? id_imagem { get; private set; }
 
-        [Column(TypeName = "image")]
-        public string? imagem { get; private set; }
-
         [Column(TypeName = "char(32)")]
         public string? md5 { get; private set; }
 
@@ -24,14 +21,13 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
         [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
-        [Column(TypeName = "varchar(200)")]
+        [Column(TypeName = "varchar(4000)")]
         public string? url_imagem_blob { get; private set; }
 
         public B2CConsultaImagens() { }
 
         public B2CConsultaImagens(
             string? id_imagem,
-            string? imagem,
             string? md5,
             string? timestamp,
             string? portal,
@@ -43,10 +39,6 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
             this.id_imagem =
                 String.IsNullOrEmpty(id_imagem) ? 0
                 : Convert.ToInt32(id_imagem);
-
-            this.imagem =
-                String.IsNullOrEmpty(imagem) ? ""
-                : imagem;
 
             this.md5 =
                 String.IsNullOrEmpty(md5) ? ""

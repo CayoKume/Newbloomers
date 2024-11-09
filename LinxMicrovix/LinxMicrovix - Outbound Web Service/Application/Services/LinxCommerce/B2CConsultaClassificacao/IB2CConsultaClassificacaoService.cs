@@ -1,5 +1,6 @@
 ﻿using IntegrationsCore.Domain.Entities;
 using LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce;
+using Microsoft.Azure.WebJobs;
 
 namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
 {

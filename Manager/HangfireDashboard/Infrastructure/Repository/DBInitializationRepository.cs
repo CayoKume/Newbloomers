@@ -1,10 +1,9 @@
 ﻿using Dapper;
 using static Dapper.SqlMapper;
 using Z.Dapper.Plus;
-using static IntegrationsCore.Domain.Entities.Exceptions.RepositorysExceptions;
+using static IntegrationsCore.Domain.Exceptions.RepositorysExceptions;
 using IntegrationsCore.Infrastructure.Connections.SQLServer;
 using IntegrationsCore.Infrastructure.Connections.PostgreSQL;
-using IntegrationsCore.Infrastructure.Connections.MySQL;
 
 namespace HangfireDashboard.Infrastructure.Repository
 {

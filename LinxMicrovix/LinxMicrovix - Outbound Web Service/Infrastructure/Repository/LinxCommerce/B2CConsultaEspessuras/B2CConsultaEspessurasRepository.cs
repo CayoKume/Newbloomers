@@ -59,7 +59,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
 			                           TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP],
 			                           TARGET.[PORTAL] = SOURCE.[PORTAL]
 
-                                   WHEN NOT MATCHED BY TARGET AND NOT IN (SELECT [CODIGO_ESPESSURA] FROM [CODIGO_ESPESSURA]) THEN
+                                   WHEN NOT MATCHED BY TARGET AND CODIGO_ESPESSURA NOT IN (SELECT [CODIGO_ESPESSURA] FROM [B2CCONSULTAESPESSURAS_TRUSTED]) THEN
 			                           INSERT
 			                           ([LASTUPDATEON], [CODIGO_ESPESSURA], [NOME_ESPESSURA], [TIMESTAMP], [PORTAL])
 			                           VALUES

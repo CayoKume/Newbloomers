@@ -1,4 +1,5 @@
-﻿using IntegrationsCore.Domain.Entities;
+﻿using HangfireDashboard.Domain.Entites;
+using IntegrationsCore.Domain.Entities;
 using LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce;
 using LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce;
 using Microsoft.AspNetCore.Mvc;
@@ -10,25 +11,30 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
     [Route("MicrovixJobs/B2CLinxMicrovixIndividual")]
     public class B2CLinxMicrovixIndividualController : Controller
     {
+        private readonly string? _docMainCompany;
         private readonly string? _projectName;
+        private readonly string? _parametersInterval;
         private readonly string? _parametersTableName;
         private readonly string? _parametersLogTableName;
         private readonly string? _key;
         private readonly string? _authentication;
-
+        private readonly List<Method>? _methods;
         private readonly IConfiguration _configuration;
-        private readonly IB2CConsultaClassificacaoService<B2CConsultaClassificacao> _b2cConsultaClassificacaoService;
-        private readonly IB2CConsultaClientesService<B2CConsultaClientes> _b2cConsultaClientesService;
-        private readonly IB2CConsultaClientesContatosService<B2CConsultaClientesContatos> _b2cConsultaClientesContatosService;
-        private readonly IB2CConsultaClientesContatosParentescoService<B2CConsultaClientesContatosParentesco> _b2cConsultaClientesContatosParentescoService;
+
+        private readonly IB2CConsultaClassificacaoService _b2cConsultaClassificacaoService;
+        private readonly IB2CConsultaClientesService _b2cConsultaClientesService;
+        private readonly IB2CConsultaClientesContatosService _b2cConsultaClientesContatosService;
+        private readonly IB2CConsultaClientesContatosParentescoService _b2cConsultaClientesContatosParentescoService;
+        private readonly IB2CConsultaImagensService _b2cConsultaImagensService;
 
         public B2CLinxMicrovixIndividualController
         (
             IConfiguration configuration,
-            IB2CConsultaClassificacaoService<B2CConsultaClassificacao> b2cConsultaClassificacaoService,
-            IB2CConsultaClientesService<B2CConsultaClientes> b2cConsultaClientesService,
-            IB2CConsultaClientesContatosService<B2CConsultaClientesContatos> b2cConsultaClientesContatosService,
-            IB2CConsultaClientesContatosParentescoService<B2CConsultaClientesContatosParentesco> b2cConsultaClientesContatosParentescoService
+            IB2CConsultaClassificacaoService b2cConsultaClassificacaoService,
+            IB2CConsultaClientesService b2cConsultaClientesService,
+            IB2CConsultaClientesContatosService b2cConsultaClientesContatosService,
+            IB2CConsultaClientesContatosParentescoService b2cConsultaClientesContatosParentescoService,
+            IB2CConsultaImagensService b2cConsultaImagensService
         )
         {
             _configuration = configuration;
@@ -36,31 +42,47 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
             _b2cConsultaClientesService = b2cConsultaClientesService;
             _b2cConsultaClientesContatosService = b2cConsultaClientesContatosService;
             _b2cConsultaClientesContatosParentescoService = b2cConsultaClientesContatosParentescoService;
+            _b2cConsultaImagensService = b2cConsultaImagensService;
+
+            _docMainCompany = _configuration
+                .GetSection("B2CLinxMicrovix")
+                .GetSection("MainCompany")
+                .Value;
 
             _projectName = _configuration
-                .GetSection("LinxMicrovix")
+                .GetSection("B2CLinxMicrovix")
                 .GetSection("ProjectName")
                 .Value;
 
             _parametersLogTableName = _configuration
-                .GetSection("LinxMicrovix")
+                .GetSection("B2CLinxMicrovix")
                 .GetSection("ProjectParametersLogTableName")
                 .Value;
 
             _parametersTableName = _configuration
-                .GetSection("LinxMicrovix")
+                .GetSection("B2CLinxMicrovix")
                 .GetSection("ProjectParametersTableName")
                 .Value;
 
             _key = _configuration
-                .GetSection("LinxMicrovix")
-                .GetSection("B2CKey")
+                .GetSection("B2CLinxMicrovix")
+                .GetSection("Key")
                 .Value;
 
             _authentication = _configuration
-                .GetSection("LinxMicrovix")
-                .GetSection("B2CAuthentication")
+                .GetSection("B2CLinxMicrovix")
+                .GetSection("Authentication")
                 .Value;
+
+            _parametersInterval = _configuration
+                            .GetSection("B2CLinxMicrovix")
+                            .GetSection("ParametersIndividual")
+                            .Value;
+
+            _methods = _configuration
+                            .GetSection("B2CLinxMicrovix")
+                            .GetSection("Methods")
+                            .Get<List<Method>>();
         }
 
         [HttpPost("B2CConsultaClassificacaoIndividual")]
@@ -68,6 +90,10 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
         {
             try
             {
+                var method = _methods
+                    .Where(m => m.MethodName == "B2CConsultaClassificacao")
+                    .FirstOrDefault();
+
                 var result = await _b2cConsultaClassificacaoService.GetRecord(
                     new LinxMicrovixJobParameter
                     {
@@ -76,23 +102,9 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                         userAuthentication = _authentication,
                         parametersTableName = _parametersTableName,
                         parametersLogTableName = _parametersLogTableName,
-
-                        jobName = _configuration
-                            .GetSection("LinxMicrovix")
-                            .GetSection("B2CConsultaClassificacao")
-                            .GetSection("MethodName")
-                            .Value,
-
-                        tableName = "_" + _configuration
-                            .GetSection("LinxMicrovix")
-                            .GetSection("B2CConsultaClassificacao")
-                            .GetSection("MethodName")
-                            .Value,
-
-                        parametersInterval = _configuration
-                            .GetSection("LinxMicrovix")
-                            .GetSection("ParametersIndividual")
-                            .Value,
+                        parametersInterval = _parametersInterval,
+                        jobName = method.MethodName,
+                        tableName = method.MethodName
                     },
                     cnpj_emp: cnpj_emp,
                     identificador: codigo_classificacao
@@ -115,6 +127,10 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
         {
             try
             {
+                var method = _methods
+                    .Where(m => m.MethodName == "B2CConsultaClientes")
+                    .FirstOrDefault();
+
                 var result = await _b2cConsultaClientesService.GetRecord(
                     new LinxMicrovixJobParameter
                     {
@@ -123,23 +139,9 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                         userAuthentication = _authentication,
                         parametersTableName = _parametersTableName,
                         parametersLogTableName = _parametersLogTableName,
-
-                        jobName = _configuration
-                            .GetSection("LinxMicrovix")
-                            .GetSection("B2CConsultaClientes")
-                            .GetSection("MethodName")
-                            .Value,
-
-                        tableName = "_" + _configuration
-                            .GetSection("LinxMicrovix")
-                            .GetSection("B2CConsultaClientes")
-                            .GetSection("MethodName")
-                            .Value,
-
-                        parametersInterval = _configuration
-                            .GetSection("LinxMicrovix")
-                            .GetSection("ParametersIndividual")
-                            .Value,
+                        parametersInterval = _parametersInterval,
+                        jobName = method.MethodName,
+                        tableName = method.MethodName
                     },
                     cnpj_emp: cnpj_emp,
                     identificador: doc_cliente
@@ -162,6 +164,10 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
         {
             try
             {
+                var method = _methods
+                    .Where(m => m.MethodName == "B2CConsultaClientesContatosParentesco")
+                    .FirstOrDefault();
+
                 var result = await _b2cConsultaClientesContatosParentescoService.GetRecord(
                     new LinxMicrovixJobParameter
                     {
@@ -170,23 +176,9 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                         userAuthentication = _authentication,
                         parametersTableName = _parametersTableName,
                         parametersLogTableName = _parametersLogTableName,
-
-                        jobName = _configuration
-                            .GetSection("LinxMicrovix")
-                            .GetSection("B2CConsultaClientesContatosParentesco")
-                            .GetSection("MethodName")
-                            .Value,
-
-                        tableName = "_" + _configuration
-                            .GetSection("LinxMicrovix")
-                            .GetSection("B2CConsultaClientesContatosParentesco")
-                            .GetSection("MethodName")
-                            .Value,
-
-                        parametersInterval = _configuration
-                            .GetSection("LinxMicrovix")
-                            .GetSection("ParametersIndividual")
-                            .Value,
+                        parametersInterval = _parametersInterval,
+                        jobName = method.MethodName,
+                        tableName = method.MethodName
                     },
                     cnpj_emp: cnpj_emp,
                     identificador: id_parentesco
@@ -201,6 +193,43 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
             {
                 Response.StatusCode = 400;
                 return Content($"Unable to integrate the record: {id_parentesco}.\nError: {ex.Message}");
+            }
+        }
+
+        [HttpPost("B2CConsultaImagensIndividual")]
+        public async Task<ActionResult> B2CConsultaImagensIndividual([Required][FromQuery] string? id_imagem, [Required][FromQuery] string? cnpj_emp)
+        {
+            try
+            {
+                var method = _methods
+                    .Where(m => m.MethodName == "B2CConsultaImagens")
+                    .FirstOrDefault();
+
+                var result = await _b2cConsultaImagensService.GetRecord(
+                    new LinxMicrovixJobParameter
+                    {
+                        projectName = _projectName,
+                        keyAuthorization = _key,
+                        userAuthentication = _authentication,
+                        parametersTableName = _parametersTableName,
+                        parametersLogTableName = _parametersLogTableName,
+                        parametersInterval = _parametersInterval,
+                        jobName = method.MethodName,
+                        tableName = method.MethodName
+                    },
+                    cnpj_emp: cnpj_emp,
+                    identificador: id_imagem
+                );
+
+                if (result != true)
+                    return BadRequest($"Unable to find record: {id_imagem} on endpoint.");
+                else
+                    return Ok();
+            }
+            catch (Exception ex)
+            {
+                Response.StatusCode = 400;
+                return Content($"Unable to integrate the record: {id_imagem}.\nError: {ex.Message}");
             }
         }
     }

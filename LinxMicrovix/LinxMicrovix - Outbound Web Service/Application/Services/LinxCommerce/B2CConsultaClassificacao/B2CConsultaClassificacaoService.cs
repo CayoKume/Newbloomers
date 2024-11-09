@@ -3,8 +3,9 @@ using LinxMicrovix_Outbound_Web_Service.Application.Services.Base;
 using LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.Base;
 using LinxMicrovix_Outbound_Web_Service.Infrastructure.Api;
 using LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommerce;
-using static IntegrationsCore.Domain.Entities.Exceptions.publicErrorsExceptions;
 using IntegrationsCore.Domain.Entities;
+using static IntegrationsCore.Domain.Exceptions.InternalErrorsExceptions;
+using Microsoft.Azure.WebJobs;
 
 namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
 {
@@ -71,7 +72,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
                     });
                 await _linxMicrovixRepositoryBase.UpdateLogParameters(jobParameter: jobParameter, lastResponse: response);
 
-                //await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter: jobParameter);
+                await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter: jobParameter);
                 await _linxMicrovixRepositoryBase.ExecuteTruncateRawTable(jobParameter);
 
                 return true;
@@ -149,7 +150,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
                 }
                 catch (Exception ex)
                 {
-                    throw new publicErrorException()
+                    throw new InternalErrorException()
                     {
                         project = jobParameter.projectName,
                         job = jobParameter.jobName,

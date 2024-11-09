@@ -36,6 +36,10 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
         {
             lastupdateon = DateTime.Now;
 
+            this.codigo_colecao =
+                String.IsNullOrEmpty(codigo_colecao) ? 0
+                : Convert.ToInt32(codigo_colecao);
+
             this.nome_colecao =
                 String.IsNullOrEmpty(nome_colecao) ? ""
                 : nome_colecao.Substring(

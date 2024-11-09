@@ -1,11 +1,10 @@
 ﻿using Dapper;
-using IntegrationsCore.Infrastructure.Connections.MySQL;
 using IntegrationsCore.Infrastructure.Connections.PostgreSQL;
 using IntegrationsCore.Infrastructure.Connections.SQLServer;
 using Newtonsoft.Json;
 using System.Data;
 using TotalExpress.Domain.Entites;
-using static IntegrationsCore.Domain.Entities.Exceptions.RepositorysExceptions;
+using static IntegrationsCore.Domain.Exceptions.RepositorysExceptions;
 
 namespace TotalExpress.Infrastructure.Repository
 {

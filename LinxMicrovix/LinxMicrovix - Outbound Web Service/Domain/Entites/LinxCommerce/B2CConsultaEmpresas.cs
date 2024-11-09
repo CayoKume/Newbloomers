@@ -50,7 +50,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
         [Column(TypeName = "datetime")]
         public DateTime? data_criacao { get; private set; }
 
-        [Column(TypeName = "boolean")]
+        [Column(TypeName = "bit")]
         public bool? centro_distribuicao { get; private set; }
 
         [Column(TypeName = "int")]

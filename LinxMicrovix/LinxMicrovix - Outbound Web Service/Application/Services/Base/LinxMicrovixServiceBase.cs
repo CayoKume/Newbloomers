@@ -1,6 +1,6 @@
 ﻿using IntegrationsCore.Domain.Entities;
 using System.Xml;
-using static IntegrationsCore.Domain.Entities.Exceptions.APIErrorsExceptions;
+using static IntegrationsCore.Domain.Exceptions.APIErrorsExceptions;
 
 namespace LinxMicrovix_Outbound_Web_Service.Application.Services.Base
 {
@@ -68,13 +68,13 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.Base
                             var registro = new Dictionary<string?, string?>();
                             var c0 = xml.GetElementsByTagName("C")[0];
                             var rrow = xml.GetElementsByTagName("R")[row];
-                            Parallel.For(0, c0.ChildNodes.Count, col =>
+                            for (int col = 0; col < c0.ChildNodes.Count; col++)
                             {
                                 string? key = c0.ChildNodes[col].InnerText;
                                 string? value = rrow.ChildNodes[col].InnerText.Replace("'", "''");
 
                                 registro.Add(key, value);
-                            });
+                            }
                             listRegistros.Add(registro);
                         });
 

@@ -4,7 +4,7 @@ using LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.Base;
 using LinxMicrovix_Outbound_Web_Service.Infrastructure.Api;
 using LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommerce;
 using IntegrationsCore.Domain.Entities;
-using static IntegrationsCore.Domain.Entities.Exceptions.publicErrorsExceptions;
+using static IntegrationsCore.Domain.Exceptions.InternalErrorsExceptions;
 
 namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
 {
@@ -38,7 +38,6 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
                 {
                     var entity = new B2CConsultaImagens(
                         id_imagem: records[i].Where(pair => pair.Key == "id_imagem").Select(pair => pair.Value).FirstOrDefault(),
-                        imagem: records[i].Where(pair => pair.Key == "imagem").Select(pair => pair.Value).FirstOrDefault(),
                         md5: records[i].Where(pair => pair.Key == "md5").Select(pair => pair.Value).FirstOrDefault(),
                         url_imagem_blob: records[i].Where(pair => pair.Key == "url_imagem_blob").Select(pair => pair.Value).FirstOrDefault(),
                         timestamp: records[i].Where(pair => pair.Key == "timestamp").Select(pair => pair.Value).FirstOrDefault(),
@@ -49,7 +48,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
                 }
                 catch (Exception ex)
                 {
-                    throw new publicErrorException()
+                    throw new InternalErrorException()
                     {
                         project = jobParameter.projectName,
                         job = jobParameter.jobName,
@@ -129,8 +128,10 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
 
                 foreach (var cnpj_emp in cnpjs_emp)
                 {
+                    var id_imagem = "Buscar IDs das Imagens";
+
                     var body = _linxMicrovixServiceBase.BuildBodyRequest(
-                        parametersList: parameters.Replace("[0]", "0"),
+                        parametersList: parameters.Replace("[0]", "0").Replace("[id_imagem]", id_imagem),
                         jobParameter: jobParameter,
                         cnpj_emp: cnpj_emp.doc_company
                     );
@@ -156,7 +157,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
                     await _linxMicrovixRepositoryBase.UpdateLogParameters(jobParameter: jobParameter, lastResponse: response); 
                 }
 
-                //await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter: jobParameter);
+                await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter: jobParameter);
                 await _linxMicrovixRepositoryBase.ExecuteTruncateRawTable(jobParameter);
 
                 return true;

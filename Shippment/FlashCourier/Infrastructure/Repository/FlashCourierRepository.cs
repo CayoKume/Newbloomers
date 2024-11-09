@@ -6,7 +6,7 @@ using IntegrationsCore.Infrastructure.Connections.SQLServer;
 using Newtonsoft.Json;
 using System.Data;
 using static Dapper.SqlMapper;
-using static IntegrationsCore.Domain.Entities.Exceptions.RepositorysExceptions;
+using static IntegrationsCore.Domain.Exceptions.RepositorysExceptions;
 
 namespace FlashCourier.Infrastructure.Repository
 {

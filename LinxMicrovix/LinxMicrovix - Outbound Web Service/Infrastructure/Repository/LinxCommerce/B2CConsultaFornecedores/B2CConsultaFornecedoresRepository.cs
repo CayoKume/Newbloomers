@@ -52,14 +52,14 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
 			                           TARGET.COD_FORNECEDOR = SOURCE.COD_FORNECEDOR
 		                           )
 
-                                   WHEN MATCHED THEN UPDATE SET
+                                   WHEN MATCHED AND SOURCE.[TIMESTAMP] != TARGET.[TIMESTAMP] THEN UPDATE SET
 			                           TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON],
 			                           TARGET.[COD_FORNECEDOR] = SOURCE.[COD_FORNECEDOR],
 			                           TARGET.[NOME] = SOURCE.[NOME],
 			                           TARGET.[NOME_FANTASIA] = SOURCE.[NOME_FANTASIA],
 			                           TARGET.[TIPO_PESSOA] = SOURCE.[TIPO_PESSOA],
 			                           TARGET.[TIPO_FORNECEDOR] = SOURCE.[TIPO_FORNECEDOR],
-			                           TARGET.[ENDRECO] = SOURCE.[ENDRECO],
+			                           TARGET.[ENDERECO] = SOURCE.[ENDERECO],
 			                           TARGET.[NUMERO_RUA] = SOURCE.[NUMERO_RUA],
 			                           TARGET.[BAIRRO] = SOURCE.[BAIRRO],
 			                           TARGET.[CEP] = SOURCE.[CEP],
@@ -73,11 +73,11 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
 			                           TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP],
 			                           TARGET.[PORTAL] = SOURCE.[PORTAL]
 
-                                   WHEN NOT MATCHED BY TARGET THEN
+                                   WHEN NOT MATCHED BY TARGET AND [COD_FORNECEDOR] NOT IN (SELECT [COD_FORNECEDOR] FROM [B2CCONSULTAFORNECEDORES_TRUSTED]) THEN
 			                           INSERT
-			                           ([LASTUPDATEON], [COD_FORNECEDOR], [NOME], [NOME_FANTASIA], [TIPO_PESSOA], [TIPO_FORNECEDOR], [ENDRECO], [NUMERO_RUA], [BAIRRO], [CEP], [CIDADE], [UF], [DOCUMENTO], [FONE], [EMAIL], [PAIS], [OBS], [TIMESTAMP], [PORTAL])
+			                           ([LASTUPDATEON], [COD_FORNECEDOR], [NOME], [NOME_FANTASIA], [TIPO_PESSOA], [TIPO_FORNECEDOR], [ENDERECO], [NUMERO_RUA], [BAIRRO], [CEP], [CIDADE], [UF], [DOCUMENTO], [FONE], [EMAIL], [PAIS], [OBS], [TIMESTAMP], [PORTAL])
 			                           VALUES
-			                           (SOURCE.[LASTUPDATEON], SOURCE.[COD_FORNECEDOR], SOURCE.[NOME], SOURCE.[NOME_FANTASIA], SOURCE.[TIPO_PESSOA], SOURCE.[TIPO_FORNECEDOR], SOURCE.[ENDRECO], SOURCE.[NUMERO_RUA], SOURCE.[BAIRRO], SOURCE.[CEP], SOURCE.[CIDADE], SOURCE.[UF], 
+			                           (SOURCE.[LASTUPDATEON], SOURCE.[COD_FORNECEDOR], SOURCE.[NOME], SOURCE.[NOME_FANTASIA], SOURCE.[TIPO_PESSOA], SOURCE.[TIPO_FORNECEDOR], SOURCE.[ENDERECO], SOURCE.[NUMERO_RUA], SOURCE.[BAIRRO], SOURCE.[CEP], SOURCE.[CIDADE], SOURCE.[UF], 
 			                           SOURCE.[DOCUMENTO], SOURCE.[FONE], SOURCE.[EMAIL], SOURCE.[PAIS], SOURCE.[OBS], SOURCE.[TIMESTAMP], SOURCE.[PORTAL]);
 	                           END'
                            )

@@ -19,7 +19,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
         {
             try
             {
-                var table = _linxMicrovixRepositoryBase.CreateSystemDataTable(jobParameter, new TEntity());
+                var table = _linxMicrovixRepositoryBase.CreateSystemDataTable(jobParameter, new B2CConsultaClientes());
 
                 for (int i = 0; i < records.Count(); i++)
                 {

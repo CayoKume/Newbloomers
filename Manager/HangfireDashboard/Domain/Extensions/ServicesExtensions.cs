@@ -313,9 +313,9 @@ namespace HangfireDashboard.Domain.Extensions
         public static IServiceCollection AddScopedSQLServerConnection(this IServiceCollection services)
         {
             services.AddScoped<ISQLServerConnection, SQLServerConnection>();
-            services.AddScoped<IGeneralConnection, GeneralConnection>();
-            services.AddScoped<ILinxCommerceConnection, LinxCommerceConnection>();
-            services.AddScoped<ILinxMicrovixConnection, LinxMicrovixConnection>();
+            services.AddScoped<IGeneral, General>();
+            services.AddScoped<ILinxCommerce, IntegrationsCore.Infrastructure.Connections.SQLServer.LinxCommerce>();
+            services.AddScoped<ILinxMicrovixERP, LinxMicrovixERP>();
 
             services.AddScoped<IDBInitializationRepository<ServerParameter>, DBInitializationRepository<ServerParameter>>();
             services.AddScoped<IDBInitializationRepository<LinxAPIParam>, DBInitializationRepository<LinxAPIParam>>();

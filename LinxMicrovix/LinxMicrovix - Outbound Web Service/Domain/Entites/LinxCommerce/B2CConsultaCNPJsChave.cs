@@ -36,10 +36,10 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
         public string? classificacao_portal { get; private set; }
 
         [Column(TypeName = "bit")]
-        public Int32? b2c { get; private set; }
+        public bool? b2c { get; private set; }
 
         [Column(TypeName = "bit")]
-        public Int32? oms { get; private set; }
+        public bool? oms { get; private set; }
 
         public B2CConsultaCNPJsChave() { }
 
@@ -107,12 +107,12 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.b2c =
-                String.IsNullOrEmpty(b2c) ? 0
-                : Convert.ToInt32(b2c);
+                String.IsNullOrEmpty(b2c) ? false
+                : Convert.ToBoolean(b2c);
 
             this.oms =
-                String.IsNullOrEmpty(oms) ? 0
-                : Convert.ToInt32(oms);
+                String.IsNullOrEmpty(oms) ? false
+                : Convert.ToBoolean(oms);
 
             this.portal =
                 String.IsNullOrEmpty(portal) ? 0

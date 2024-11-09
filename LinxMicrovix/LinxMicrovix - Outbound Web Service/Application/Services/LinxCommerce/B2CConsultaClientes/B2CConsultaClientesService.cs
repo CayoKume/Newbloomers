@@ -3,8 +3,7 @@ using LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce;
 using LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommerce;
 using LinxMicrovix_Outbound_Web_Service.Application.Services.Base;
 using LinxMicrovix_Outbound_Web_Service.Infrastructure.Api;
-using static IntegrationsCore.Domain.Entities.Exceptions.publicErrorsExceptions;
-using System.Globalization;
+using static IntegrationsCore.Domain.Exceptions.InternalErrorsExceptions;
 using System.Data;
 using LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.Base;
 
@@ -89,7 +88,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
                 }
                 catch (Exception ex)
                 {
-                    throw new publicErrorException()
+                    throw new InternalErrorException()
                     {
                         project = jobParameter.projectName,
                         job = jobParameter.jobName,
@@ -193,7 +192,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
                     });
                 await _linxMicrovixRepositoryBase.UpdateLogParameters(jobParameter: jobParameter, lastResponse: response);
 
-                //await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter: jobParameter);
+                await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter: jobParameter);
                 await _linxMicrovixRepositoryBase.ExecuteTruncateRawTable(jobParameter);
 
                 return true;

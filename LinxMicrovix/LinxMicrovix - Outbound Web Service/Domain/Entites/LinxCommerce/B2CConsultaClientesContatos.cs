@@ -14,6 +14,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
         public Int32? id_clientes_contatos { get; private set; }
 
         [Key]
+        [ForeignKey("id_contato_b2c")]
         [Column(TypeName = "int")]
         public Int32? id_contato_b2c { get; private set; }
 
@@ -27,6 +28,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
         public string? sexo_contato { get; private set; }
 
         [Key]
+        [ForeignKey("id_parentesco")]
         [Column(TypeName = "int")]
         public Int32? id_parentesco { get; private set; }
 

@@ -1,13 +1,13 @@
 ﻿using Microsoft.Extensions.Configuration;
-using ISQLLinxCommerceConnection = IntegrationsCore.Infrastructure.Connections.SQLServer.ILinxCommerceConnection;
-using IMySQLLinxCommerceConnection = IntegrationsCore.Infrastructure.Connections.MySQL.ILinxCommerceConnection;
-using IPostgreSQLLinxCommerceConnection = IntegrationsCore.Infrastructure.Connections.PostgreSQL.ILinxCommerceConnection;
+using ISQLLinxCommerceConnection = IntegrationsCore.Infrastructure.Connections.SQLServer.ILinxCommerce;
+using IMySQLLinxCommerceConnection = IntegrationsCore.Infrastructure.Connections.MySQL.ILinxCommerce;
+using IPostgreSQLLinxCommerceConnection = IntegrationsCore.Infrastructure.Connections.PostgreSQL.ILinxCommerce;
 using IntegrationsCore.Domain.Entities.Parameters;
 using System.Data;
 using IntegrationsCore.Domain.Entities;
 using Dapper;
-using static IntegrationsCore.Domain.Entities.Exceptions.RepositorysExceptions;
-using static IntegrationsCore.Domain.Entities.Exceptions.InternalErrorsExceptions;
+using static IntegrationsCore.Domain.Exceptions.RepositorysExceptions;
+using static IntegrationsCore.Domain.Exceptions.InternalErrorsExceptions;
 using System.ComponentModel;
 using System.Data.SqlClient;
 

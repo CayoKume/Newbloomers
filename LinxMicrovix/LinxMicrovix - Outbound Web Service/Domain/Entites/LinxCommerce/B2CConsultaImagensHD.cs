@@ -16,9 +16,6 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
         [Column(TypeName = "bigint")]
         public Int64? codigoproduto { get; private set; }
 
-        [Column(TypeName = "varbinary(MAX)")]
-        public string? imagem { get; private set; }
-
         [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
@@ -33,7 +30,6 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
         public B2CConsultaImagensHD(
             string? identificador_imagem,
             string? codigoproduto,
-            string? imagem,
             string? timestamp,
             string? url_imagem_blob,
             string? portal
@@ -48,10 +44,6 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
             this.codigoproduto =
                 String.IsNullOrEmpty(codigoproduto) ? 0
                 : Convert.ToInt32(codigoproduto);
-
-            this.imagem =
-                String.IsNullOrEmpty(imagem) ? ""
-                : imagem;
 
             this.url_imagem_blob =
                 String.IsNullOrEmpty(url_imagem_blob) ? ""

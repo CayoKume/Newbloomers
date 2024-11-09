@@ -19,7 +19,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
 
                 for (int i = 0; i < records.Count(); i++)
                 {
-                    table.Rows.Add(records[i].lastupdateon, records[i].identificador_imagem, records[i].codigoproduto, records[i].imagem, records[i].timestamp, records[i].url_imagem_blob, records[i].portal);
+                    table.Rows.Add(records[i].lastupdateon, records[i].identificador_imagem, records[i].codigoproduto, records[i].timestamp, records[i].url_imagem_blob, records[i].portal);
                 }
 
                 _linxMicrovixRepositoryBase.BulkInsertIntoTableRaw(
@@ -55,16 +55,15 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
 			                           TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON],
 			                           TARGET.[IDENTIFICADOR_IMAGEM] = SOURCE.[IDENTIFICADOR_IMAGEM],
 			                           TARGET.[CODIGOPRODUTO] = SOURCE.[CODIGOPRODUTO],
-			                           TARGET.[IMAGEM] = SOURCE.[IMAGEM],
 			                           TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP],
 			                           TARGET.[URL_IMAGEM_BLOB] = SOURCE.[URL_IMAGEM_BLOB],
 			                           TARGET.[PORTAL] = SOURCE.[PORTAL]
 
                                    WHEN NOT MATCHED BY TARGET AND SOURCE.[IDENTIFICADOR_IMAGEM] NOT IN (SELECT [IDENTIFICADOR_IMAGEM] FROM [B2CCONSULTAIMAGENSHD_TRUSTED]) THEN
 			                           INSERT
-			                           ([LASTUPDATEON], [IDENTIFICADOR_IMAGEM], [CODIGOPRODUTO], [IMAGEM], [TIPO_PESSOA], [TIMESTAMP], [URL_IMAGEM_BLOB], [PORTAL])
+			                           ([LASTUPDATEON], [IDENTIFICADOR_IMAGEM], [CODIGOPRODUTO], [TIMESTAMP], [URL_IMAGEM_BLOB], [PORTAL])
 			                           VALUES
-			                           (SOURCE.[LASTUPDATEON], SOURCE.[IDENTIFICADOR_IMAGEM], SOURCE.[CODIGOPRODUTO], SOURCE.[IMAGEM], SOURCE.[TIPO_PESSOA], SOURCE.[TIMESTAMP], SOURCE.[URL_IMAGEM_BLOB], SOURCE.[PORTAL]);"";
+			                           (SOURCE.[LASTUPDATEON], SOURCE.[IDENTIFICADOR_IMAGEM], SOURCE.[CODIGOPRODUTO], SOURCE.[TIMESTAMP], SOURCE.[URL_IMAGEM_BLOB], SOURCE.[PORTAL]);
 	                           END'
                            )
                            END";
@@ -89,7 +88,8 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
                     {
                         method = jobParameter.jobName,
                         parameters_timestamp = @"<Parameter id=""timestamp"">[0]</Parameter>",
-                        parameters_dateinterval = @"<Parameter id=""timestamp"">[0]</Parameter>",
+                        parameters_dateinterval = @"<Parameter id=""timestamp"">[0]</Parameter>
+                                                    <Parameter id=""codigoproduto"">[codigoproduto]</Parameter>",
                         parameters_individual = @"<Parameter id=""timestamp"">[0]</Parameter>
                                                   <Parameter id=""codigoproduto"">[codigoproduto]</Parameter>",
                         ativo = 1
@@ -105,9 +105,9 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
         public async Task<bool> InsertRecord(LinxMicrovixJobParameter jobParameter, B2CConsultaImagensHD? record)
         {
             string? sql = $"INSERT INTO {jobParameter.tableName}_raw " +
-                          "([lastupdateon], [portal], [identificador_imagem], [codigoproduto], [imagem], [timestamp], [url_imagem_blob]) " +
+                          "([lastupdateon], [portal], [identificador_imagem], [codigoproduto], [timestamp], [url_imagem_blob]) " +
                           "Values " +
-                          "(@lastupdateon, @portal, @identificador_imagem, @codigoproduto, @imagem, @timestamp, @url_imagem_blob)";
+                          "(@lastupdateon, @portal, @identificador_imagem, @codigoproduto, @timestamp, @url_imagem_blob)";
 
             try
             {

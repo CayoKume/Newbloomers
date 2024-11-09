@@ -1,16 +1,16 @@
 ﻿using Dapper;
 using LinxMicrovix_Outbound_Web_Service.Domain.Entites;
 using System.Data;
-using static IntegrationsCore.Domain.Entities.Exceptions.RepositorysExceptions;
+using static IntegrationsCore.Domain.Exceptions.RepositorysExceptions;
 using Z.Dapper.Plus;
 using Microsoft.Extensions.Configuration;
 using IntegrationsCore.Domain.Entities;
-using static IntegrationsCore.Domain.Entities.Exceptions.publicErrorsExceptions;
+using static IntegrationsCore.Domain.Exceptions.InternalErrorsExceptions;
 using System.Data.SqlClient;
 using System.ComponentModel;
-using ISQLLinxMicrovixConnection = IntegrationsCore.Infrastructure.Connections.SQLServer.ILinxMicrovixConnection;
-using IMySQLLinxMicrovixConnection = IntegrationsCore.Infrastructure.Connections.MySQL.ILinxMicrovixConnection;
-using IPostgreSQLLinxMicrovixConnection = IntegrationsCore.Infrastructure.Connections.PostgreSQL.ILinxMicrovixConnection;
+using ISQLLinxMicrovixConnection = IntegrationsCore.Infrastructure.Connections.SQLServer.ILinxMicrovixERP;
+using IMySQLLinxMicrovixConnection = IntegrationsCore.Infrastructure.Connections.MySQL.ILinxMicrovixERP;
+using IPostgreSQLLinxMicrovixConnection = IntegrationsCore.Infrastructure.Connections.PostgreSQL.ILinxMicrovixERP;
 
 namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.Base
 {
@@ -140,7 +140,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.Base
             }
             catch (Exception ex)
             {
-                throw new publicErrorException()
+                throw new InternalErrorException()
                 {
                     project = jobParameter.projectName,
                     job = jobParameter.jobName,

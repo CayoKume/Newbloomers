@@ -45,7 +45,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
         public string? descricao { get; private set; }
 
         [Column(TypeName = "bit")]
-        public Int32? principal { get; private set; }
+        public bool? principal { get; private set; }
 
         [Key]
         [Column(TypeName = "int")]
@@ -156,8 +156,8 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 );
 
             this.principal =
-                String.IsNullOrEmpty(principal) ? 0
-                : Convert.ToInt32(principal);
+                String.IsNullOrEmpty(principal) ? false
+                : Convert.ToBoolean(principal);
 
             this.id_cidade =
                 String.IsNullOrEmpty(id_cidade) ? 0

@@ -4,7 +4,7 @@ using LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.Base;
 using LinxMicrovix_Outbound_Web_Service.Infrastructure.Api;
 using LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxMicrovix;
 using IntegrationsCore.Domain.Entities;
-using static IntegrationsCore.Domain.Entities.Exceptions.publicErrorsExceptions;
+using static IntegrationsCore.Domain.Exceptions.InternalErrorsExceptions;
 
 namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxMicrovix
 {
@@ -65,7 +65,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxMicrovix
                     });
                 await _linxMicrovixRepositoryBase.UpdateLogParameters(jobParameter: jobParameter, lastResponse: response);
 
-                //await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter: jobParameter);
+                await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter: jobParameter);
                 await _linxVendedoresRepository.CreateTableMerge(jobParameter: jobParameter);
                 await _linxMicrovixRepositoryBase.ExecuteTruncateRawTable(jobParameter);
 
@@ -88,7 +88,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxMicrovix
                 string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter);
 
                 var body = _linxMicrovixServiceBase.BuildBodyRequest(
-                    parametersList: parameters.Replace("[0]", "0").Replace("[codigo_classificacao]", identificador),
+                    parametersList: parameters.Replace("[0]", "0").Replace("[cod_vendedor]", identificador),
                     jobParameter: jobParameter,
                     cnpj_emp: cnpj_emp);
 
@@ -163,7 +163,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxMicrovix
                 }
                 catch (Exception ex)
                 {
-                    throw new publicErrorException()
+                    throw new InternalErrorException()
                     {
                         project = jobParameter.projectName,
                         job = jobParameter.jobName,

@@ -18,8 +18,8 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
         private readonly string? _key;
         private readonly string? _authentication;
         private readonly List<Method>? _methods;
-
         private readonly IConfiguration _configuration;
+
         private readonly IB2CConsultaClassificacaoService _b2cConsultaClassificacaoService;
         private readonly IB2CConsultaClientesService _b2cConsultaClientesService;
         private readonly IB2CConsultaClientesContatosService _b2cConsultaClientesContatosService;
