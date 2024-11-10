@@ -14,7 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\IntegrationsCore\IntegrationsCore.csproj" />
     <ProjectReference Include="..\..\LinxCommerce\LinxCommerce.csproj" />
     <ProjectReference Include="..\..\LinxMicrovix\LinxMicrovix - Outbound Web Service\LinxMicrovix - Outbound Web Service.csproj" />
     <ProjectReference Include="..\..\Shippment\FlashCourier\FlashCourier.csproj" />
