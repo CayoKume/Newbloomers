@@ -35,8 +35,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinxCommerce", "LinxCommerc
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinxMicrovix - Outbound Web Service", "LinxMicrovix\LinxMicrovix - Outbound Web Service\LinxMicrovix - Outbound Web Service.csproj", "{9522823D-FF25-4049-A879-ABA9796577DD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebJobsApplication", "WebJobsApplication\WebJobsApplication.csproj", "{59025945-B9DA-424C-B836-999FB414525A}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application.IntegrationsCore", "_IntegrationsCore\Application.IntegrationsCore\Application.IntegrationsCore.csproj", "{2B504E45-3F02-4528-9A8E-D072930EEA7E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain.IntegrationsCore", "_IntegrationsCore\Domain.IntegrationsCore\Domain.IntegrationsCore.csproj", "{F390324F-6D2F-4EC0-AAAD-A71922D137B8}"
@@ -116,12 +114,6 @@ Global
 		{9522823D-FF25-4049-A879-ABA9796577DD}.Homolog|Any CPU.Build.0 = Release|Any CPU
 		{9522823D-FF25-4049-A879-ABA9796577DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9522823D-FF25-4049-A879-ABA9796577DD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{59025945-B9DA-424C-B836-999FB414525A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{59025945-B9DA-424C-B836-999FB414525A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{59025945-B9DA-424C-B836-999FB414525A}.Homolog|Any CPU.ActiveCfg = Release|Any CPU
-		{59025945-B9DA-424C-B836-999FB414525A}.Homolog|Any CPU.Build.0 = Release|Any CPU
-		{59025945-B9DA-424C-B836-999FB414525A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{59025945-B9DA-424C-B836-999FB414525A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2B504E45-3F02-4528-9A8E-D072930EEA7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2B504E45-3F02-4528-9A8E-D072930EEA7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2B504E45-3F02-4528-9A8E-D072930EEA7E}.Homolog|Any CPU.ActiveCfg = Debug|Any CPU
