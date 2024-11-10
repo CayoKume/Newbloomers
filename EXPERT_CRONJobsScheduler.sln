@@ -41,6 +41,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain.IntegrationsCore", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.IntegrationsCore", "_IntegrationsCore\Infrastructure.IntegrationsCore\Infrastructure.IntegrationsCore.csproj", "{0D5C3D49-3905-4607-AE28-C42C42ED7407}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebJobsApplication", "Manager\WebJobsApplication\WebJobsApplication.csproj", "{07DCF204-B600-41E0-8D5C-C24657369BBE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -132,6 +134,12 @@ Global
 		{0D5C3D49-3905-4607-AE28-C42C42ED7407}.Homolog|Any CPU.Build.0 = Debug|Any CPU
 		{0D5C3D49-3905-4607-AE28-C42C42ED7407}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0D5C3D49-3905-4607-AE28-C42C42ED7407}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07DCF204-B600-41E0-8D5C-C24657369BBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07DCF204-B600-41E0-8D5C-C24657369BBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07DCF204-B600-41E0-8D5C-C24657369BBE}.Homolog|Any CPU.ActiveCfg = Homolog|Any CPU
+		{07DCF204-B600-41E0-8D5C-C24657369BBE}.Homolog|Any CPU.Build.0 = Homolog|Any CPU
+		{07DCF204-B600-41E0-8D5C-C24657369BBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07DCF204-B600-41E0-8D5C-C24657369BBE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
