@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Configurations>Debug;Release;Homolog</Configurations>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Hangfire" Version="1.8.14" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.4" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\LinxCommerce\LinxCommerce.csproj" />
+    <ProjectReference Include="..\..\LinxMicrovix\LinxMicrovix - Outbound Web Service\LinxMicrovix - Outbound Web Service.csproj" />
+    <ProjectReference Include="..\..\Shippment\FlashCourier\FlashCourier.csproj" />
+    <ProjectReference Include="..\..\Shippment\TotalExpress\TotalExpress.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="UI\Controllers\General\" />
+  </ItemGroup>
+
+</Project>
