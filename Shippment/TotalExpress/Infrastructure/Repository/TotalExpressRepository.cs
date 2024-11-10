@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using IntegrationsCore.Infrastructure.Connections.MySQL;
 using IntegrationsCore.Infrastructure.Connections.PostgreSQL;
 using IntegrationsCore.Infrastructure.Connections.SQLServer;
 using Newtonsoft.Json;
