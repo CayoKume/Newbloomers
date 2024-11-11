@@ -117,8 +117,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.Hangfire", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Presentation.Hangfire", "_Hangfire\Presentation.Hangfire\Presentation.Hangfire.csproj", "{8B891425-720C-461D-9662-805A0A5086F9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinxMicrovix - Outbound Web Service", "_LinxMicrovix\LinxMicrovix - Outbound Web Service\LinxMicrovix - Outbound Web Service\LinxMicrovix - Outbound Web Service.csproj", "{B01911B1-71BE-4876-B1D3-1D3BD49AFEB8}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -366,12 +364,6 @@ Global
 		{8B891425-720C-461D-9662-805A0A5086F9}.Homolog|Any CPU.Build.0 = Debug|Any CPU
 		{8B891425-720C-461D-9662-805A0A5086F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8B891425-720C-461D-9662-805A0A5086F9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B01911B1-71BE-4876-B1D3-1D3BD49AFEB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B01911B1-71BE-4876-B1D3-1D3BD49AFEB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B01911B1-71BE-4876-B1D3-1D3BD49AFEB8}.Homolog|Any CPU.ActiveCfg = Homolog|Any CPU
-		{B01911B1-71BE-4876-B1D3-1D3BD49AFEB8}.Homolog|Any CPU.Build.0 = Homolog|Any CPU
-		{B01911B1-71BE-4876-B1D3-1D3BD49AFEB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B01911B1-71BE-4876-B1D3-1D3BD49AFEB8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -427,7 +419,6 @@ Global
 		{05C1789A-BD32-4C06-B304-3A56B88B9F8B} = {C05013A7-859F-4E55-B334-98F3A13E072F}
 		{3B131D3D-4816-438F-B10C-8C90DFCDB8A4} = {C05013A7-859F-4E55-B334-98F3A13E072F}
 		{8B891425-720C-461D-9662-805A0A5086F9} = {C05013A7-859F-4E55-B334-98F3A13E072F}
-		{B01911B1-71BE-4876-B1D3-1D3BD49AFEB8} = {C8B04229-829B-4FF4-B7A3-05640EE693AB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5D185E79-64DA-4776-B17F-D88137430DF6}

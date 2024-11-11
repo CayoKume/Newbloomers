@@ -3,6 +3,7 @@
     public class LinxMicrovixJobParameter
     {
         public string? docMainCompany { get; set; }
+        public string? databaseName { get; set; }
 
         public string? jobName { get; set; }
         public string? projectName { get; set; }
