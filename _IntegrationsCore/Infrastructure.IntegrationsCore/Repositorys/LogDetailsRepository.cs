@@ -2,10 +2,10 @@
 using Infrastructure.IntegrationsCore.Connections.SQLServer;
 using Domain.IntegrationsCore.Entities.Errors;
 using Domain.IntegrationsCore.SqlBuilder;
-using Domain.IntegrationsCore.Interfaces.Repositorys;
 using Domain.IntegrationsCore.Exceptions;
 using Domain.IntegrationsCore.Entities.Enums;
 using Microsoft.Extensions.Configuration;
+using Domain.IntegrationsCore.Interfaces;
 
 namespace IntegrationsCore.Infrastructure.Repositorys.LogDetailsRepository
 {

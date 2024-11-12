@@ -2,7 +2,7 @@
 using Domain.IntegrationsCore.Entities.Enums;
 using Domain.IntegrationsCore.Entities.Errors;
 using Domain.IntegrationsCore.Exceptions;
-using Domain.IntegrationsCore.Interfaces.Repositorys;
+using Domain.IntegrationsCore.Interfaces;
 using System.Data;
 
 namespace Application.IntegrationsCore.Services

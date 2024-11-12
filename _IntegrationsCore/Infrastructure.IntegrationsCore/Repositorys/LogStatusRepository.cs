@@ -2,7 +2,7 @@
 using Domain.IntegrationsCore.Entities.Enums;
 using Domain.IntegrationsCore.Entities.Errors;
 using Domain.IntegrationsCore.Exceptions;
-using Domain.IntegrationsCore.Interfaces.Repositorys;
+using Domain.IntegrationsCore.Interfaces;
 using Domain.IntegrationsCore.SqlBuilder;
 using Infrastructure.IntegrationsCore.Connections.SQLServer;
 using Microsoft.Extensions.Configuration;
