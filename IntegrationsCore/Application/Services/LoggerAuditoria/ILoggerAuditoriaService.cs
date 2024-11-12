@@ -142,7 +142,7 @@ namespace Bloomers.Core.Auditoria.Infrastructure.Logger
         /// <param name="title">Título, mensagem curta max 200.</param>
         /// <param name="text">Detalhes da exception por exemplo inserir aqui.</param>
         /// <returns></returns>
-        ILoggerAuditoriaService SetStatus(EnumIdLogLevel idLevel, string title = "", string text = "");
+        public ILoggerAuditoriaService SetStatus(EnumIdLogLevel idLevel, string title = "", string text = "");
 
         /// <summary>
         /// Inicializar o IdApp. Percebemos uma repetição em enviar o IdApp em todo lançamento
@@ -154,7 +154,41 @@ namespace Bloomers.Core.Auditoria.Infrastructure.Logger
         /// <returns>retorna a própria classe</returns>
         public ILoggerAuditoriaService SetApp(EnumIdApp idApp);
 
-        ILoggerAuditoriaService SetLogMsg(EnumIdLogLevel idLevel, EnumIdError error , string text = "");
+        /// <summary>
+        /// Atualizar a Mensagem LogMsg de Status, é a mensagem criada para status de ciclo de execução.
+        /// </summary>
+        /// <param name="idLevel">Nível da mensagem da execução no caso do status de execução</param>
+        /// <param name="title">Titulo Status</param>
+        /// <param name="logText">Texto log Adicional</param>
+        /// <returns></returns>
+        public ILoggerAuditoriaService SetLogMsgStatus(EnumIdLogLevel idLevel, EnumIdError error, string logText);
+
+        /// <summary>
+        /// Atualizar a Mensagem LogMsg de Status + o Status em único método.
+        /// Quando as duas mensagens são iguais, (quase sempre) use este método
+        /// para atualiar as duas mensagens ao mesmo tempo, economizando uma chamada.
+        /// Os argumentos serão atualizados nas duas exceto o error que não existe no status
+        /// </summary>
+        /// <param name="idLevel">Nível da mensagem da execução no caso do status de execução</param>
+        /// <param name="error">Código de tipo de msg categorizada para o log.</param>
+        /// <param name="title">Titulo Status</param>
+        /// <param name="logText">Texto log Adicional</param>
+        /// <returns></returns>
+        public ILoggerAuditoriaService SetLogMsgAndStatus(EnumIdLogLevel idLevel, EnumIdError error, string title, string logText = "");
+
+        /// <summary>
+        /// Atualizar a Mensagem LogMsg de Status + o Status em único método.
+        /// Quando as duas mensagens são iguais, (quase sempre) use este método
+        /// para atualiar as duas mensagens ao mesmo tempo, economizando uma chamada.
+        /// Os argumentos serão atualizados nas duas exceto o error que não existe no status
+        /// </summary>
+        /// <param name="idLevel">Nível da mensagem da execução no caso do status de execução</param>
+        /// <param name="error">Código de tipo de msg categorizada para o log.</param>
+        /// <param name="ex">Código de tipo de msg categorizada para o log.</param>
+        /// <param name="title">Titulo Status</param>
+        /// <param name="logText">Texto log Adicional</param>
+        /// <returns></returns>
+        public ILoggerAuditoriaService SetLogMsgAndStatus(EnumIdLogLevel idLevel, EnumIdError error, Exception ex, string title, string logText = "");
         #endregion
 
         #region GET LIST: Métodos para retornar os dados internos.

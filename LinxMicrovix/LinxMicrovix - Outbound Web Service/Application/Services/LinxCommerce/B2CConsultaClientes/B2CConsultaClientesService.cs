@@ -6,6 +6,8 @@ using LinxMicrovix_Outbound_Web_Service.Infrastructure.Api;
 using static IntegrationsCore.Domain.Exceptions.InternalErrorsExceptions;
 using System.Data;
 using LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.Base;
+using Bloomers.Core.Auditoria.Infrastructure.Logger;
+using IntegrationsCore.Domain.Entities.Enums;
 
 namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
 {
@@ -22,14 +24,19 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
         private readonly ILinxMicrovixRepositoryBase<B2CConsultaClientes> _linxMicrovixRepositoryBase;
         private readonly IB2CConsultaClientesRepository _b2cConsultaClientesRepository;
 
+        protected readonly ILoggerAuditoriaService _logger;
+        protected static IB2CConsultaClientesCache _b2cConsultaClientesCache { get; set; } = new B2CConsultaClientesCache();
+
         public B2CConsultaClientesService(
             IAPICall apiCall,
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
             ILinxMicrovixRepositoryBase<B2CConsultaClientes> linxMicrovixRepositoryBase,
+            ILoggerAuditoriaService logger,
             IB2CConsultaClientesRepository b2cConsultaClientesRepository
         )
         {
             _apiCall = apiCall;
+            _logger = logger;
             _b2cConsultaClientesRepository = b2cConsultaClientesRepository;
             _linxMicrovixServiceBase = linxMicrovixServiceBase;
             _linxMicrovixRepositoryBase = linxMicrovixRepositoryBase;
@@ -157,49 +164,87 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
         {
             try
             {
-                await _linxMicrovixRepositoryBase.DeleteLogResponse(jobParameter);
+                _logger.Clear()
+                   .SetApp(EnumIdApp.Integracao_B2CConsultaClientes)
+                   .AddLog(EnumIdLogLevel.StatusRunning)
+                   .AddNewStatus(EnumIdLogLevel.StatusRunning);
+
+                //await _linxMicrovixRepositoryBase.DeleteLogResponse(jobParameter);
                 await _linxMicrovixRepositoryBase.CreateDataTableIfNotExists(jobParameter);
                 await _b2cConsultaClientesRepository.CreateTableMerge(jobParameter: jobParameter);
                 await _b2cConsultaClientesRepository.InsertParametersIfNotExists(jobParameter);
-                await _linxMicrovixRepositoryBase.ExecuteTruncateRawTable(jobParameter);
+                //await _linxMicrovixRepositoryBase.ExecuteTruncateRawTable(jobParameter);
 
                 string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter);
                 string? timestamp = await _linxMicrovixRepositoryBase.GetLast7DaysMinTimestamp(jobParameter: jobParameter, columnDate: "DT_UPDATE");
 
                 var body = _linxMicrovixServiceBase.BuildBodyRequest(
-                    parametersList: parameters.Replace("[0]", timestamp),
+                    parametersList: parameters.Replace("[0]", "149643664"),
                     jobParameter: jobParameter,
                     cnpj_emp: jobParameter.docMainCompany
                 );
 
                 string? response = await _apiCall.PostAsync(jobParameter: jobParameter, body: body);
-                var xmls = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response);
+                var xmls = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response, _b2cConsultaClientesCache);
 
                 if (xmls.Count() > 0)
                 {
-                    var listRecords = DeserializeXMLToObject(jobParameter, xmls);
-                    _b2cConsultaClientesRepository.BulkInsertIntoTableRaw(records: listRecords, jobParameter: jobParameter);
+                    List<B2CConsultaClientes> listRecords = DeserializeXMLToObject(jobParameter, xmls);
+                    IList<B2CConsultaClientes> _listNewRecords = new List<B2CConsultaClientes>();
+
+                    if (_b2cConsultaClientesCache.GetList().Count == 0)
+                    {
+                        var listRegistersExists = await _b2cConsultaClientesRepository.GetRegistersExists(registros: listRecords, jobParameter: jobParameter);
+                        _b2cConsultaClientesCache.AddList(listRegistersExists);
+                    }
+
+                    // Filtra a lista, somente os registros novos
+                    _listNewRecords = _b2cConsultaClientesCache.FiltrarList(listRecords);
+                    if (_listNewRecords.Count() > 0)
+                    {
+                        // ****** INSERT ****** AQUI
+                        _b2cConsultaClientesRepository.BulkInsertIntoTableRaw(records: listRecords, jobParameter: jobParameter);
+                        for (int i = 0; i < _listNewRecords.Count; i++)
+                        {
+                            // Criar os Logs de Detalhes antes de salvar no cache
+                            var key = _b2cConsultaClientesCache.GetKey(_listNewRecords[i]);
+                            if (_b2cConsultaClientesCache.GetDictionaryXml().ContainsKey(key))
+                            {
+                                var xml = _b2cConsultaClientesCache.GetDictionaryXml()[key];
+                                _logger.AddLogDetail(key, xml);
+                            }
+                        }
+                        // Neste ponto atualizarmos a mensagem de status como sucesso, é necessário atualizar no status e na mensagem, caso hajam diferenças.
+                        _logger.SetLogMsgAndStatus(EnumIdLogLevel.StatusSuccess, EnumIdError.Success,
+                            $"Concluída com sucesso: {_listNewRecords.Count} registro(s) novo(s) inserido(s)! ");
+                    }
+                    else
+                    {
+                        // Neste ponto atualizarmos a mensagem de status como sucesso, é necessário atualizar no status e na mensagem, caso hajam diferenças.
+                        _logger.SetLogMsgAndStatus(EnumIdLogLevel.StatusSuccess, EnumIdError.Success,
+                            $"Concluída com sucesso: {_listNewRecords.Count} registro(s) novo(s) inserido(s)! ");
+                    }
                 }
 
-                await _linxMicrovixRepositoryBase.InsertLogResponse(
-                    jobParameter: jobParameter,
-                    response: response,
-                    record: new
-                    {
-                        method = jobParameter.jobName,
-                        parameters_interval = jobParameter.parametersInterval,
-                        response = response
-                    });
-                await _linxMicrovixRepositoryBase.UpdateLogParameters(jobParameter: jobParameter, lastResponse: response);
+                //await _linxMicrovixRepositoryBase.InsertLogResponse(
+                //    jobParameter: jobParameter,
+                //    response: response,
+                //    record: new
+                //    {
+                //        method = jobParameter.jobName,
+                //        parameters_interval = jobParameter.parametersInterval,
+                //        response = response
+                //    });
+                //await _linxMicrovixRepositoryBase.UpdateLogParameters(jobParameter: jobParameter, lastResponse: response);
 
                 await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter: jobParameter);
-                await _linxMicrovixRepositoryBase.ExecuteTruncateRawTable(jobParameter);
+                //await _linxMicrovixRepositoryBase.ExecuteTruncateRawTable(jobParameter);
 
                 return true;
             }
             catch
             {
-                throw;
+                 throw;
             }
         }
     }

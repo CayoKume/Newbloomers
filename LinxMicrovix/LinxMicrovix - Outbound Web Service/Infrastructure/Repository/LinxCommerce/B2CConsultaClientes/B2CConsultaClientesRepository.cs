@@ -129,6 +129,29 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommer
             }
         }
 
+        public async Task<IList<B2CConsultaClientes>> GetRegistersExists(IList<B2CConsultaClientes> registros, LinxMicrovixJobParameter jobParameter)
+        {
+            var identificadores = String.Empty;
+            for (int i = 0; i < registros.Count(); i++)
+            {
+                if (i == registros.Count() - 1)
+                    identificadores += $"'{registros[i].doc_cliente}'";
+                else
+                    identificadores += $"'{registros[i].doc_cliente}', ";
+            }
+
+            string sql = $"SELECT DOC_CLIENTE, TIMESTAMP FROM B2CCONSULTACLIENTES_TRUSTED WHERE DOC_CLIENTE IN ({identificadores})";
+
+            try
+            {
+                return await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
         public async Task<bool> InsertParametersIfNotExists(LinxMicrovixJobParameter jobParameter)
         {
             try

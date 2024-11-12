@@ -1,6 +1,8 @@
-﻿namespace Bloomers.Core.Auditoria.Infrastructure.Cache
+﻿using IntegrationsCore.Application.Services.Cache;
+
+namespace Bloomers.Core.Auditoria.Infrastructure.Cache
 {
-    public interface ICacheService<TEntity> where TEntity : class 
+    public interface ICacheService<TEntity> : ICacheXmlUtilActions where TEntity : class 
     {
         #region ADD: Métodos para adicionar ao cache
         public void Add(TEntity entity);

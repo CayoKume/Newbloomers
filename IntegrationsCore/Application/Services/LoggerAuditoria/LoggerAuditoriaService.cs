@@ -1,5 +1,6 @@
 ﻿using IntegrationsCore.Domain.Entities.Enums;
 using IntegrationsCore.Domain.Entities.Errors;
+using IntegrationsCore.Infrastructure.Connections.SQLServer;
 using IntegrationsCore.Infrastructure.Connections.SQLServer.Auditing;
 using IntegrationsCore.Infrastructure.Repository.LogMsgsRepository;
 using IntegrationsCore.Infrastructure.Repository.LogStatusRepository;
@@ -22,10 +23,31 @@ namespace Bloomers.Core.Auditoria.Infrastructure.Logger
     public class LoggerAuditoriaService : ILoggerAuditoriaService
     {
         #region PROPRIEDADES INTERNAS
-        private readonly IAuditing _conn;
-        private readonly ILoggerConfigService _logger_config;
 
         private IList<LogMsg> _ListLogMsgs { get; set; } = new List<LogMsg>();
+        private readonly ILoggerConfigService _logger_config;
+        private readonly ILogDetailsRepository _logDetailsRepository;
+        private readonly ILogStatusRepository _logStatusRepository;
+        private readonly ILogMsgsRepository _logMsgsRepository;
+
+        private LogMsg? _LogMsgStatus;
+        /// <summary>
+        /// StatusLog: O log inicial de status da rotina
+        /// , um log diferenciado.para marcar o início e final da rotina e status de processamento.
+        /// </summary>
+        public LogMsg? LogMsgStatus
+        {
+            get
+            {
+                if (_LogMsgStatus == null)
+                {
+                    if (_ListLogMsgs != null && _ListLogMsgs.Count > 0)
+                        _LogMsgStatus = _ListLogMsgs.FirstOrDefault();
+                }
+                return _LogMsgStatus;
+            }
+        }
+
 
         /// <summary>
         //   Status Atual De Processamento:
@@ -35,55 +57,12 @@ namespace Bloomers.Core.Auditoria.Infrastructure.Logger
         ///  e iria adicionar complexidade desnecessária.
         /// </summary>
         private IList<LogStatus> _ListLogStatus { get; set; } = new List<LogStatus>();
-        
+
         /// <summary>
         /// A lista de Detalhes , do Log, onde prevemos para gravar os XML 
         /// os trechos de códigos a serem logados dos registros recebidos.
         /// </summary>
         private IList<LogMsgsDetail> _ListLogMsgsDetail { get; set; } = new List<LogMsgsDetail>();
-
-        /// <summary>
-        /// Repositório de mensagens
-        /// </summary>
-        private ILogMsgsRepository? _LogMsgs_Repository = null;
-        private ILogMsgsRepository LogMsgs_Repository
-        {
-            get
-            {
-                if (_LogMsgs_Repository == null)
-                {
-                    // Cria as classes necessárias
-                    _LogMsgs_Repository = new LogMsgsRepository(_conn);
-                    _logStatus_Repository = new LogStatusRepository(_conn);
-                    _logDetails_Repository = new LogDetailsRepository(_conn);
-                }
-                return _LogMsgs_Repository;
-            }
-        }
-
-
-        private ILogStatusRepository? _logStatus_Repository;
-        private ILogStatusRepository LogStatusRepository
-        {
-            get
-            {
-                if (_logStatus_Repository == null)
-                    _logStatus_Repository = new LogStatusRepository(_conn);
-                return _logStatus_Repository;
-            }
-        }
-
-
-        private ILogDetailsRepository? _logDetails_Repository;
-        private ILogDetailsRepository LogDetails_Repository
-        {
-            get
-            {
-                if (_logDetails_Repository == null)
-                    _logDetails_Repository = new LogDetailsRepository(_conn);
-                return _logDetails_Repository;
-            }
-        }
         #endregion
 
         #region PROPRIEDADES: Publicas
@@ -102,17 +81,10 @@ namespace Bloomers.Core.Auditoria.Infrastructure.Logger
         /// <param name="logMessager"></param>
         /// <param name="logStatus"></param>
         /// <param name="logDetails"></param>
-        public LoggerAuditoriaService(IAuditing conn,
-            ILoggerConfigService loggers_Config,
-            ILogMsgsRepository logMessager,
-            ILogStatusRepository logStatus,
-            ILogDetailsRepository logDetails)
+        public LoggerAuditoriaService(
+            ILoggerConfigService loggers_Config)
         {
-            _conn = conn;
             _logger_config = loggers_Config;
-            _LogMsgs_Repository = logMessager;
-            _logStatus_Repository = logStatus;
-            _logDetails_Repository = logDetails;
         }
 
 
@@ -397,7 +369,7 @@ namespace Bloomers.Core.Auditoria.Infrastructure.Logger
                 item.Msg = title;
                 item.Detail = text;
                 item.EndDate = DateTime.Now;
-            }   
+            }
             return this;
         }
 
@@ -415,15 +387,63 @@ namespace Bloomers.Core.Auditoria.Infrastructure.Logger
             return this;
         }
 
-        public ILoggerAuditoriaService SetLogMsg(EnumIdLogLevel idLevel, EnumIdError idError, string text = "")
+        /// <summary>
+        /// Definir (atualizar) a mensagem De LogMsg, referente ao status deste ciclo de execução.
+        /// </summary>
+        /// <param name="idLevel">level</param>
+        /// <param name="idError">error</param>
+        /// <param name="textLog">textLog</param>
+        /// <returns></returns>
+        public ILoggerAuditoriaService SetLogMsgStatus(EnumIdLogLevel idLevel, EnumIdError idError, string textLog = "")
         {
-            var logMsg = _ListLogMsgs.LastOrDefault();
+            if (this.LogMsgStatus != null)
+            {
+                LogMsgStatus.IdError = idError;
+                LogMsgStatus.IdLogLevel = idLevel;
+                LogMsgStatus.TextLog = textLog;
+                LogMsgStatus.EndDate = System.DateTime.Now;
+                LogMsgStatus.LastUpdateOn = System.DateTime.Now;
+            }
+            return this;
+        }
 
-            logMsg.IdError = idError;
-            logMsg.IdLogLevel = idLevel;
-            logMsg.TextLog = text;
-            logMsg.EndDate = System.DateTime.Now;
+        /// <summary>
+        /// Atualizar a Mensagem LogMsg de Status + o Status em único método.
+        /// Quando as duas mensagens são iguais, (quase sempre) use este método
+        /// para atualiar as duas mensagens ao mesmo tempo, economizando uma chamada.
+        /// Os argumentos serão atualizados nas duas exceto o error que não existe no status
+        /// </summary>
+        /// <param name="idLevel">Level do Status de Execução</param>
+        /// <param name="error">Msg de log do ciclo de execução.</param>
+        /// <param name="title">Titulo Status</param>
+        /// <param name="logText">Texto log Adicional</param>
+        /// <returns></returns>
+        public ILoggerAuditoriaService SetLogMsgAndStatus(EnumIdLogLevel idLevel, EnumIdError error, string title, string logText = "")
+        {
+            this.SetLogMsgStatus(idLevel, error, string.Concat(title, " - ", logText));
+            this.SetStatus(idLevel, title, logText);
+            return this;
+        }
 
+        /// <summary>
+        /// Atualizar a Mensagem LogMsg de Status + o Status em único método.
+        /// Quando as duas mensagens são iguais, (quase sempre) use este método
+        /// para atualiar as duas mensagens ao mesmo tempo, economizando uma chamada.
+        /// Os argumentos serão atualizados nas duas exceto o error que não existe no status
+        /// </summary>
+        /// <param name="idLevel">Level do Status de Execução</param>
+        /// <param name="error">Msg de log do ciclo de execução.</param>
+        /// <param name="ex">Código de tipo de msg categorizada para o log.</param>
+        /// <param name="title">Titulo Status</param>
+        /// <param name="logText">Texto log Adicional</param>
+        /// <returns></returns>
+        public ILoggerAuditoriaService SetLogMsgAndStatus(EnumIdLogLevel idLevel,
+                                            EnumIdError error, Exception ex,
+                                            string title, string logText = "")
+        {
+            var textLog = string.Concat(title, " - ", logText, " ", ex.Message);
+            this.SetLogMsgStatus(idLevel, error, textLog);
+            this.SetStatus(idLevel, title, textLog);
             return this;
         }
 
@@ -484,7 +504,7 @@ namespace Bloomers.Core.Auditoria.Infrastructure.Logger
 
             // LogMsgs: Primeiro tem que gravar as mensagens para ter o Id para relacionar
             if (_ListLogMsgs.Count > 0)
-                await LogMsgs_Repository.BulkInsert(_ListLogMsgs);
+                await _logMsgsRepository.BulkInsert(_ListLogMsgs);
                 
             // Detalhe: Migramos para este gravando os filhos do log.
             if (_ListLogMsgs != null)
@@ -492,7 +512,7 @@ namespace Bloomers.Core.Auditoria.Infrastructure.Logger
                 foreach (var iLogMsg in _ListLogMsgs)
                 {
                     if (iLogMsg.LogMsgDetails != null && iLogMsg.LogMsgDetails.Count > 0)
-                        await LogDetails_Repository.BulkInsert(iLogMsg.LogMsgDetails);
+                        await _logDetailsRepository.BulkInsert(iLogMsg.LogMsgDetails);
                 }
             }
             // Status: Grava o status, hoje tem apenas um na lista.
@@ -500,7 +520,7 @@ namespace Bloomers.Core.Auditoria.Infrastructure.Logger
             {
                 foreach (var iLogStatus in _ListLogStatus)
                 {
-                    await LogStatusRepository.Update(iLogStatus);
+                    await _logStatusRepository.Update(iLogStatus);
                 }
             }
 
@@ -515,19 +535,19 @@ namespace Bloomers.Core.Auditoria.Infrastructure.Logger
             ***/
             for (int i = 0; i < _ListLogStatus.Count; i++)
             {
-                await LogStatusRepository.Update(_ListLogStatus[i]);
+                await _logStatusRepository.Update(_ListLogStatus[i]);
             }
 
             if (_ListLogMsgs.Count > 0)
-                await LogMsgs_Repository.BulkInsert(_ListLogMsgs);
+                await _logMsgsRepository.BulkInsert(_ListLogMsgs);
 
             if (_ListLogMsgsDetail.Count > 0)
-                await LogDetails_Repository.BulkInsert(_ListLogMsgsDetail);
+                await _logDetailsRepository.BulkInsert(_ListLogMsgsDetail);
 
             for (int i = 0; i < _ListLogMsgs.Count; i++)
             {
                 if (_ListLogMsgs[i].LogMsgDetails.Count > 0)
-                    await LogDetails_Repository.BulkInsert(_ListLogMsgs[i].LogMsgDetails);
+                    await _logDetailsRepository.BulkInsert(_ListLogMsgs[i].LogMsgDetails);
             }
 
             Clear();

@@ -1,4 +1,6 @@
-﻿namespace Bloomers.Core.Auditoria.Infrastructure.Cache
+﻿using IntegrationsCore.Application.Services.Cache;
+
+namespace Bloomers.Core.Auditoria.Infrastructure.Cache
 {
     /// <summary>
     /// Classe Para Auxiliar o Armazenamento Em Memória dos dados de Entity (Model de Registro de Dados)

@@ -20,6 +20,11 @@ using LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxMicrovix;
 using LinxCommerce.Application.Services.Catolog.SKU;
 using LinxCommerce.Infrastructure.Repository.Catolog.SKURepository;
 using LinxCommerce.Infrastructure.Repository.Base;
+using Bloomers.Core.Auditoria.Infrastructure.Cache;
+using Bloomers.Core.Auditoria.Infrastructure.Logger;
+using IntegrationsCore.Infrastructure.Repository.LogMsgsRepository;
+using IntegrationsCore.Infrastructure.Repositorys.LogDetailsRepository;
+using IntegrationsCore.Infrastructure.Repository.LogStatusRepository;
 
 namespace HangfireDashboard.Domain.Extensions
 {
@@ -80,11 +85,18 @@ namespace HangfireDashboard.Domain.Extensions
             services.AddScoped(typeof(ILinxMicrovixRepositoryBase<>), typeof(LinxMicrovixRepositoryBase<>));
             services.AddScoped<LinxMicrovix_Outbound_Web_Service.Infrastructure.Api.IAPICall, LinxMicrovix_Outbound_Web_Service.Infrastructure.Api.APICall>();
 
+            services.AddSingleton<ILoggerConfigService, LoggerConfigService>();
+            services.AddSingleton<ILoggerAuditoriaService, LoggerAuditoriaService>();
+            services.AddScoped<ILogMsgsRepository, LogMsgsRepository>();
+            services.AddScoped<ILogDetailsRepository, LogDetailsRepository>();
+            services.AddScoped<ILogStatusRepository, LogStatusRepository>();
+
             services.AddScoped<IB2CConsultaClassificacaoService, B2CConsultaClassificacaoService>();
             services.AddScoped<IB2CConsultaClassificacaoRepository, B2CConsultaClassificacaoRepository>();
 
             services.AddScoped<IB2CConsultaClientesService, B2CConsultaClientesService>();
             services.AddScoped<IB2CConsultaClientesRepository, B2CConsultaClientesRepository>();
+            services.AddSingleton<IB2CConsultaClientesCache, B2CConsultaClientesCache>();
 
             services.AddScoped<IB2CConsultaClientesContatosService, B2CConsultaClientesContatosService>();
             services.AddScoped<IB2CConsultaClientesContatosRepository, B2CConsultaClientesContatosRepository>();

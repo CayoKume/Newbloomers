@@ -29,10 +29,12 @@
 
         Integrations = 100,
         IntegrationsLogs = 101,
-        IntegrationsClients = 113,
+
         IntegrationsOrders = 104,
         IntegrationsProducts = 106,
         LogsRepository = 107,
 
+        Integracao_B2CConsultaClientes = 200,
+        Jobs_B2CConsultaClientes = 300,
     }
 }

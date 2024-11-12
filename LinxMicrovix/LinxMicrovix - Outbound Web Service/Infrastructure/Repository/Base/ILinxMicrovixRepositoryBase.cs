@@ -8,6 +8,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.Base
     public interface ILinxMicrovixRepositoryBase<TEntity> where TEntity : class
     {
         public Task<string?> GetParameters(LinxMicrovixJobParameter jobParameter);
+        public Task<List<TEntity>> GetRegistersExists(LinxMicrovixJobParameter jobParameter, string? sql);
         public Task<IEnumerable<Company>> GetB2CCompanys(LinxMicrovixJobParameter jobParameter);
         public Task<IEnumerable<Company>> GetMicrovixCompanys(LinxMicrovixJobParameter jobParameter);
         public Task<string?> GetLast7DaysMinTimestamp(LinxMicrovixJobParameter jobParameter, string? columnDate);

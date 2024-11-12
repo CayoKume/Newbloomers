@@ -5,7 +5,7 @@ using LinxMicrovix_Outbound_Web_Service.Infrastructure.Api;
 using LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.LinxCommerce;
 using IntegrationsCore.Domain.Entities;
 using static IntegrationsCore.Domain.Exceptions.InternalErrorsExceptions;
-using Microsoft.Azure.WebJobs;
+using Bloomers.Core.Auditoria.Infrastructure.Logger;
 
 namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
 {
@@ -20,7 +20,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
         private readonly ILinxMicrovixRepositoryBase<B2CConsultaClassificacao> _linxMicrovixRepositoryBase;
         private readonly IB2CConsultaClassificacaoRepository _b2cConsultaClassificacaoRepository;
-        
+
         public B2CConsultaClassificacaoService(
             IAPICall apiCall, 
             IB2CConsultaClassificacaoRepository b2cConsultaClassificacaoRepository, 
