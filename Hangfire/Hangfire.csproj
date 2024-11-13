@@ -15,9 +15,4 @@
     <Folder Include="Controllers\General\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\_IntegrationsCore\Application.IntegrationsCore\Application.IntegrationsCore.csproj" />
-    <ProjectReference Include="..\_LinxMicrovix\LinxMicrovix - Outbound Web Service\Infrastructure.LinxMicrovix.Outbound.WebService\Infrastructure.LinxMicrovix.Outbound.WebService.csproj" />
-  </ItemGroup>
-
 </Project>
