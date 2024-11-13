@@ -11,6 +11,7 @@ using System.ComponentModel;
 using ISQLLinxMicrovixConnection = IntegrationsCore.Infrastructure.Connections.SQLServer.ILinxMicrovixERP;
 using IMySQLLinxMicrovixConnection = IntegrationsCore.Infrastructure.Connections.MySQL.ILinxMicrovixERP;
 using IPostgreSQLLinxMicrovixConnection = IntegrationsCore.Infrastructure.Connections.PostgreSQL.ILinxMicrovixERP;
+using System.Data.Common;
 
 namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.Base
 {
@@ -92,7 +93,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.Base
 
         public async Task<bool> CreateDataTableIfNotExists(LinxMicrovixJobParameter jobParameter)
         {
-            string? sql = @$"SELECT DISTINCT * FROM [INFORMATION_SCHEMA].[TABLES] (NOLOCK) WHERE TABLE_NAME LIKE '%{jobParameter.tableName}%'";
+            string? sql = @$"SELECT DISTINCT * FROM [INFORMATION_SCHEMA].[TABLES] (NOLOCK) WHERE TABLE_NAME = '{jobParameter.tableName}_raw' OR TABLE_NAME = '{jobParameter.tableName}_trusted'";
 
             try
             {
@@ -148,6 +149,31 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.Base
                     message = $"Error when convert system datatable to bulkinsert",
                     record = $" - ",
                     propertie = " - ",
+                    exception = ex.Message
+                };
+            }
+        }
+
+        public async Task<List<TEntity>> GetRegistersExists(LinxMicrovixJobParameter jobParameter, string? sql)
+        {
+            try
+            {
+                using (var conn = _sqlServerConnection.GetIDbConnection())
+                {
+                    var result = await conn.QueryAsync<TEntity>(sql: sql, commandTimeout: 360);
+                    return result.ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new ObjectsNotFoundExcpetion()
+                {
+                    project = $"{jobParameter.projectName} - IntegrationsCore",
+                    job = jobParameter.jobName,
+                    method = $"GetRegistersExists",
+                    message = $"Error when trying to get allready exists registers from database",
+                    schema = $"[{jobParameter.tableName}]",
+                    command = sql,
                     exception = ex.Message
                 };
             }

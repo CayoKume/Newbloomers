@@ -44,6 +44,8 @@
         Exception = 3,
         Erro = 4,
         ExceptionGenerica = 20,
+        LegthValidation = 23,
+        ConvertValidation = 24,
         ArgumentConectionStringIsNull = 10,
         ArgumentoInvalido = 21,
 
@@ -55,6 +57,8 @@
         EndPointException = 30,
         EndPointReturnEmpty = 31,
         EndPointFailOnDeserialize = 32,
+        CreateClientException = 33,
+
 
         IntegrationsExceptions = 40,
 

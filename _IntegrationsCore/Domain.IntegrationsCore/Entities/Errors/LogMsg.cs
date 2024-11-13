@@ -9,6 +9,7 @@ namespace Domain.IntegrationsCore.Entities.Errors
         public EnumIdLogLevel IdLogLevel { get; set; }
         public EnumIdDomain IdDomain { get; set; }
         public EnumIdError IdError { get; set; }
+        public EnumIdSteps IdStep { get; set; }
         public string? TextLog { get; set; }
         public string? ValueKeyFields { get; set; }
         public bool Checked { get; set; } = false;

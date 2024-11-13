@@ -59,7 +59,7 @@ namespace IntegrationsCore.Infrastructure.Repository.LogMsgsRepository
                             throw 
                                 new LoggerException(ex_loop, EnumIdApp.LogsRepository,
                                       EnumIdLogLevel.Error, EnumIdError.SqlInsert, ex_loop.Message
-                                    ).AddAditionalLog(EnumIdLogLevel.Debug,sql);
+                                    ).AddLog(EnumIdLogLevel.Debug,sql);
                         }
                     }
                 }
@@ -93,6 +93,7 @@ namespace IntegrationsCore.Infrastructure.Repository.LogMsgsRepository
             _SqlBuilder.Add("LastUpdateUser", logMsg.LastUpdateUser, EnumSqlBuilderNullAction.ignore);
             _SqlBuilder.Add("StartDate", logMsg.StartDate, EnumSqlBuilderNullAction.ignore);
             _SqlBuilder.Add("EndDate", logMsg.EndDate, EnumSqlBuilderNullAction.ignore);
+            _SqlBuilder.Add<EnumIdSteps>("IdStep", logMsg.IdStep);
 
             // Quando update, adicionar um where
             if (isUpdate && logMsg.IdLogMsg != null)
