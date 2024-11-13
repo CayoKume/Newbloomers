@@ -1,4 +1,6 @@
-﻿using IntegrationsCore.Domain.Entities;
+﻿using Bloomers.Core.Auditoria.Infrastructure.Logger;
+using IntegrationsCore.Domain.Entities;
+using IntegrationsCore.Domain.Entities.Enums;
 using System.Net;
 using static IntegrationsCore.Domain.Exceptions.APIErrorsExceptions;
 
@@ -6,8 +8,17 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Api
 {
     public class APICall : IAPICall
     {
+        protected readonly ILoggerAuditoriaService _logger;
+
+        public APICall(ILoggerAuditoriaService logger)
+        {
+            _logger = logger;
+        }
+
         public async Task<string?> PostAsync(LinxMicrovixJobParameter jobParameter, string? body)
         {
+            string msgErrorDefault = $"Error when querying endpoint: {jobParameter.jobName} on microvix webservice CallAPIAsync method";
+
             try
             {
                 var bytes = System.Text.Encoding.ASCII.GetBytes(body);
@@ -20,25 +31,26 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Api
                 var response = (HttpWebResponse)await request.GetResponseAsync();
 
                 if (response.StatusCode == HttpStatusCode.OK)
-                    return new StreamReader(response.GetResponseStream()).ReadToEnd().Replace("'", "");
-                else
-                    return String.Empty;
-            }
-            catch (APICallErrorException)
-            {
-                throw;
-            }
-            catch (Exception ex)
-            {
-                throw new APICallErrorException()
                 {
-                    project = jobParameter.projectName,
-                    job = jobParameter.jobName,
-                    method = "CallAPIAsync",
-                    endpoint = jobParameter.jobName,
-                    message = $"Error when querying endpoint: {jobParameter.jobName} on microvix webservice",
-                    exception = ex.Message
-                };
+                    _logger.add
+                    return new StreamReader(response.GetResponseStream()).ReadToEnd().Replace("'", "");
+                }
+                else
+                    throw new LoggerException(
+                                 EnumIdError.EndPointReturnEmpty,
+                                 EnumIdLogLevel.Error,
+                                 $" {msgErrorDefault} .\n A API retorou HttpStatusCode:'{response.StatusCode}' quando era esperado '{HttpStatusCode.OK}' "
+                               )
+                             .AddLog(EnumIdLogLevel.Debug, $"body:{body}"
+                                            , EnumIdError.EndPointReturnEmpty);
+            }
+            catch (Exception ex) when (ex is not LoggerException)
+            {
+                throw new LoggerException(
+                    EnumIdError.EndPointException,
+                    EnumIdLogLevel.Error,
+                    $" {msgErrorDefault} .\n CallAPIAsync retornou a Exception:'{ex.Message}' "
+                );
             }
         }
 
@@ -56,6 +68,11 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Api
             }
             catch (Exception ex)
             {
+                throw new LoggerException(
+                    EnumIdError.EndPointException,
+                    EnumIdLogLevel.Error,
+                    $" Error when creating request to query the endpoint: {jobParameter.jobName} on microvix webservice - Exception:'{ex.Message}' "
+                );
                 throw new APICallErrorException()
                 {
                     project = jobParameter.projectName,

@@ -51,6 +51,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
                 try
                 {
                     var entity = new B2CConsultaClientes(
+                         logger: _logger,
                          cod_cliente_b2c: records[i].Where(pair => pair.Key == "cod_cliente_b2c").Select(pair => pair.Value).FirstOrDefault(),
                          cod_cliente_erp: records[i].Where(pair => pair.Key == "cod_cliente_erp").Select(pair => pair.Value).FirstOrDefault(),
                          doc_cliente: records[i].Where(pair => pair.Key == "doc_cliente").Select(pair => pair.Value).FirstOrDefault(),
@@ -115,9 +116,9 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
         {
             try
             {
-                await _linxMicrovixRepositoryBase.DeleteLogResponse(jobParameter);
-                await _linxMicrovixRepositoryBase.CreateDataTableIfNotExists(jobParameter);
-                await _b2cConsultaClientesRepository.InsertParametersIfNotExists(jobParameter);
+                //await _linxMicrovixRepositoryBase.DeleteLogResponse(jobParameter);
+                //await _linxMicrovixRepositoryBase.CreateDataTableIfNotExists(jobParameter);
+                //await _b2cConsultaClientesRepository.InsertParametersIfNotExists(jobParameter);
 
                 string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter);
 
@@ -138,17 +139,6 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
                         await _b2cConsultaClientesRepository.InsertRecord(record: record, jobParameter: jobParameter);
                     }
 
-                    await _linxMicrovixRepositoryBase.InsertLogResponse(
-                        jobParameter: jobParameter,
-                        response: response,
-                        record: new
-                        {
-                            method = jobParameter.jobName,
-                            parameters_interval = jobParameter.parametersInterval,
-                            response = response
-                        });
-                    await _linxMicrovixRepositoryBase.UpdateLogParameters(jobParameter: jobParameter, lastResponse: response);
-
                     return true;
                 }
 
@@ -162,24 +152,34 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
 
         public async Task<bool> GetRecords(LinxMicrovixJobParameter jobParameter)
         {
+            IList<B2CConsultaClientes> _listNewRecords = new List<B2CConsultaClientes>();
+
             try
             {
                 _logger.Clear()
-                   .SetApp(EnumIdApp.Integracao_B2CConsultaClientes)
-                   .AddLog(EnumIdLogLevel.StatusRunning)
-                   .AddNewStatus(EnumIdLogLevel.StatusRunning);
+                       .SetApp(EnumIdApp.Integracao_B2CConsultaClientes)
+                       .AddLog(EnumIdLogLevel.StatusRunning)
+                       .AddNewStatus(EnumIdLogLevel.StatusRunning);
 
-                //await _linxMicrovixRepositoryBase.DeleteLogResponse(jobParameter);
-                await _linxMicrovixRepositoryBase.CreateDataTableIfNotExists(jobParameter);
-                await _b2cConsultaClientesRepository.CreateTableMerge(jobParameter: jobParameter);
-                await _b2cConsultaClientesRepository.InsertParametersIfNotExists(jobParameter);
-                //await _linxMicrovixRepositoryBase.ExecuteTruncateRawTable(jobParameter);
+                #region colocar em um método separado para rodar na hora da instancia
+                //await _linxMicrovixRepositoryBase.CreateDataTableIfNotExists(jobParameter);
+                //await _b2cConsultaClientesRepository.CreateTableMerge(jobParameter: jobParameter);
+                //await _b2cConsultaClientesRepository.InsertParametersIfNotExists(jobParameter);
+                #endregion
 
+                //classe statica para rodar na entrada
+                //a cada x minuto/horas/dias pega no banco de dados os parametros novamente
                 string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter);
                 string? timestamp = await _linxMicrovixRepositoryBase.GetLast7DaysMinTimestamp(jobParameter: jobParameter, columnDate: "DT_UPDATE");
 
+                //timestamp ultimo no cache da response 1 min no cache
+
+                //a cada hora timestamp do ultimo dia no banco de dados
+
+                //a cada 6 horas timstamp dos ultimos 7 dias no banco de dados
+
                 var body = _linxMicrovixServiceBase.BuildBodyRequest(
-                    parametersList: parameters.Replace("[0]", "149643664"),
+                    parametersList: parameters.Replace("[0]", timestamp),
                     jobParameter: jobParameter,
                     cnpj_emp: jobParameter.docMainCompany
                 );
@@ -190,7 +190,6 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
                 if (xmls.Count() > 0)
                 {
                     List<B2CConsultaClientes> listRecords = DeserializeXMLToObject(jobParameter, xmls);
-                    IList<B2CConsultaClientes> _listNewRecords = new List<B2CConsultaClientes>();
 
                     if (_b2cConsultaClientesCache.GetList().Count == 0)
                     {
@@ -198,15 +197,12 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
                         _b2cConsultaClientesCache.AddList(listRegistersExists);
                     }
 
-                    // Filtra a lista, somente os registros novos
                     _listNewRecords = _b2cConsultaClientesCache.FiltrarList(listRecords);
                     if (_listNewRecords.Count() > 0)
                     {
-                        // ****** INSERT ****** AQUI
                         _b2cConsultaClientesRepository.BulkInsertIntoTableRaw(records: listRecords, jobParameter: jobParameter);
                         for (int i = 0; i < _listNewRecords.Count; i++)
                         {
-                            // Criar os Logs de Detalhes antes de salvar no cache
                             var key = _b2cConsultaClientesCache.GetKey(_listNewRecords[i]);
                             if (_b2cConsultaClientesCache.GetDictionaryXml().ContainsKey(key))
                             {
@@ -214,37 +210,42 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
                                 _logger.AddLogDetail(key, xml);
                             }
                         }
-                        // Neste ponto atualizarmos a mensagem de status como sucesso, é necessário atualizar no status e na mensagem, caso hajam diferenças.
                         _logger.SetLogMsgAndStatus(EnumIdLogLevel.StatusSuccess, EnumIdError.Success,
                             $"Concluída com sucesso: {_listNewRecords.Count} registro(s) novo(s) inserido(s)! ");
                     }
                     else
                     {
-                        // Neste ponto atualizarmos a mensagem de status como sucesso, é necessário atualizar no status e na mensagem, caso hajam diferenças.
                         _logger.SetLogMsgAndStatus(EnumIdLogLevel.StatusSuccess, EnumIdError.Success,
                             $"Concluída com sucesso: {_listNewRecords.Count} registro(s) novo(s) inserido(s)! ");
                     }
                 }
 
-                //await _linxMicrovixRepositoryBase.InsertLogResponse(
-                //    jobParameter: jobParameter,
-                //    response: response,
-                //    record: new
-                //    {
-                //        method = jobParameter.jobName,
-                //        parameters_interval = jobParameter.parametersInterval,
-                //        response = response
-                //    });
-                //await _linxMicrovixRepositoryBase.UpdateLogParameters(jobParameter: jobParameter, lastResponse: response);
-
                 await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter: jobParameter);
-                //await _linxMicrovixRepositoryBase.ExecuteTruncateRawTable(jobParameter);
 
                 return true;
             }
-            catch
+            catch (LoggerException bex)
             {
-                 throw;
+                _logger.ImportLogsFromException(bex)
+                    .SetLogMsgAndStatus(EnumIdLogLevel.StatusError
+                             , EnumIdError.IntegrationsExceptions
+                             , "Execução concluída com falhas previstas!"
+                             , "");
+
+                return false;
+            }
+            catch (Exception ex)
+            {
+                _logger.SetLogMsgAndStatus(EnumIdLogLevel.StatusError
+                             , EnumIdError.IntegrationsExceptions, ex
+                             , $"Exception em IntegraRegistrosAsync: {ex.Message}."
+                             , ex.Message);
+                throw;
+            }
+            finally
+            {
+                await _logger.CommitAllChanges();
+                _b2cConsultaClientesCache.AddList(_listNewRecords);
             }
         }
     }

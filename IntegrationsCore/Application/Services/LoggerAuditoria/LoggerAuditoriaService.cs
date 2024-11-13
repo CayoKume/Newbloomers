@@ -23,12 +23,13 @@ namespace Bloomers.Core.Auditoria.Infrastructure.Logger
     public class LoggerAuditoriaService : ILoggerAuditoriaService
     {
         #region PROPRIEDADES INTERNAS
+        private readonly ILoggerConfigService _logger_config;
+        private readonly ILogMsgsRepository _logMsgsRepository;
+        private readonly ILogStatusRepository _logStatusRepository;
+        private readonly ILogDetailsRepository _logDetailsRepository;
 
         private IList<LogMsg> _ListLogMsgs { get; set; } = new List<LogMsg>();
-        private readonly ILoggerConfigService _logger_config;
-        private readonly ILogDetailsRepository _logDetailsRepository;
-        private readonly ILogStatusRepository _logStatusRepository;
-        private readonly ILogMsgsRepository _logMsgsRepository;
+
 
         private LogMsg? _LogMsgStatus;
         /// <summary>
@@ -63,6 +64,7 @@ namespace Bloomers.Core.Auditoria.Infrastructure.Logger
         /// os trechos de códigos a serem logados dos registros recebidos.
         /// </summary>
         private IList<LogMsgsDetail> _ListLogMsgsDetail { get; set; } = new List<LogMsgsDetail>();
+
         #endregion
 
         #region PROPRIEDADES: Publicas
@@ -82,9 +84,15 @@ namespace Bloomers.Core.Auditoria.Infrastructure.Logger
         /// <param name="logStatus"></param>
         /// <param name="logDetails"></param>
         public LoggerAuditoriaService(
-            ILoggerConfigService loggers_Config)
+            ILoggerConfigService loggers_Config,
+            ILogMsgsRepository logMessager,
+            ILogStatusRepository logStatus,
+            ILogDetailsRepository logDetails)
         {
             _logger_config = loggers_Config;
+            _logMsgsRepository = logMessager;
+            _logStatusRepository = logStatus;
+            _logDetailsRepository = logDetails;
         }
 
 
@@ -127,8 +135,38 @@ namespace Bloomers.Core.Auditoria.Infrastructure.Logger
             return this;
         }
 
+        /// <summary>
+        /// Adicionar um Log de Rotina Com IdStep
+        /// </summary>
+        /// <param name="level"></param>
+        /// <param name="idError"></param>
+        /// <param name="idStep">Informe o idStep</param>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        public ILoggerAuditoriaService AddLog(EnumIdLogLevel level
+                                    , EnumIdError idError
+                                    , EnumIdSteps idStep
+                                    , string message = ""
+                                    )
+        {
+            LogMsg msg = new LogMsg()
+            {
+                IdLogMsg = null,
+                IdApp = this.IdApp,
+                AppName = _logger_config.AppName,
+                IdDomain = _logger_config.Domain,
+                IdStep = idStep,
+                TextLog = message,
+                IdError = idError,
+                IdLogLevel = level,
+                LastUpdateOn = DateTime.Now,
+                StartDate = DateTime.Now,
 
-        
+            };
+
+            _ListLogMsgs.Add(msg);
+            return this;
+        }
 
         /// <summary>
         /// Adicionar registro em memória ao log 
@@ -197,7 +235,7 @@ namespace Bloomers.Core.Auditoria.Infrastructure.Logger
         /// <param name="string_Key">A chave do registro onde ocorreu o erro! Lembre-se este campo será usado para referênciar os registros. Quando não houver, registro relacionado, poderá ser omitido.</param>
         /// <param name="message_xml">Este campo trata-se da mensagem xml, json, recebido na integração, de um registro específico, antes de ser parseado, para podermos logar, originalmente, como chegou.</param>
         /// <returns>Retornará o reigstro que foi criado, para ter a referência caso necessário</returns>        
-        public ILoggerAuditoriaService AddLogDetail(string string_Key,string message_xml)
+        public ILoggerAuditoriaService AddLogDetail(string string_Key, string message_xml)
         {
             var msg = _ListLogMsgs.LastOrDefault();
             if (msg != null)
@@ -304,6 +342,7 @@ namespace Bloomers.Core.Auditoria.Infrastructure.Logger
             EnumIdApp idApp,
             EnumIdError idError = EnumIdError.Undefined,
             EnumIdLogLevel level = EnumIdLogLevel.Critical,
+            EnumIdSteps idStep = EnumIdSteps.Default,
             string message_complementar = "",
             string? string_Key = null,
             string user = ""
@@ -312,10 +351,11 @@ namespace Bloomers.Core.Auditoria.Infrastructure.Logger
             LogMsg msg = new LogMsg()
             {
                 // Incrementar o Id da Mensagem Para Controle Da Lista
-                IdLogMsg = _ListLogMsgs.Count() + 1,
+                IdLogMsg = _ListLogMsgs.Count + 1,
                 TextLog = pException.Message,
                 IdApp = idApp,
                 IdError = idError,
+                IdStep = idStep,
                 IdLogLevel = level,
                 LastUpdateUser = user,
                 ValueKeyFields = string_Key,
@@ -330,12 +370,52 @@ namespace Bloomers.Core.Auditoria.Infrastructure.Logger
 
 
         /// <summary>
+        /// Adicionar uma exeception à lista de erros atual
+        /// </summary>
+        /// <param name="pException">Informe o exception ocorrida</param>
+        /// <param name="idApp">A referência do ponto onde ocorreu a exception é obrigatórioa.</param>
+        /// <param name="message_complementar">A mensagem complementar é opcional, caso, haja informação relevante adicional, informe aqui.</param>
+        /// <param name="level">O level pode ser fornecido como opcional caso não seja fornecido será lançado como erro critico..</param>
+        /// <param name="idError">É opcional, pois em caso de exceptions, muitos lugares, não serão erros catalogados. Quando o erro é conhecido, e cadastrado na tabela, informe aqui o erro catalogado, por exemplo, falha ao baixar dados da API do Microvix, se o ponto for exato, poderia haver um erro catalogado, para podermos monitorar este ponto do sistema.</param>
+        /// <param name="string_Key">A chave do registro onde ocorreu o erro! Lembre-se este campo será usado para referênciar os registros. Quando não houver, registro relacionado, poderá ser omitido.</param>
+        /// <param name="user">Permitimos passar o usuário, como opcional,pois quando houver um aplicativo, onde houver logon, poderá ser fornecido o usuário, ou o código do usuário aqui.</param>
+        /// <returns>Retornará o reigstro que foi criado, para ter a referência caso necessário</returns>        
+        public ILoggerAuditoriaService AddLogException(Exception pException,
+            EnumIdError idError = EnumIdError.Undefined,
+            EnumIdLogLevel level = EnumIdLogLevel.Critical,
+            string message_complementar = "",
+            string? string_Key = null,
+            string user = ""
+            )
+        {
+            LogMsg msg = new LogMsg()
+            {
+                // Incrementar o Id da Mensagem Para Controle Da Lista
+                IdLogMsg = _ListLogMsgs.Count + 1,
+                TextLog = pException.Message,
+                IdApp = this.IdApp,
+                IdError = idError,
+                IdLogLevel = level,
+                LastUpdateUser = user,
+                ValueKeyFields = string_Key,
+                AppName = _logger_config.AppName,
+                IdDomain = _logger_config.Domain,
+                LastUpdateOn = DateTime.Now,
+            };
+
+            _ListLogMsgs.Add(msg);
+            return this;
+        }
+
+
+
+        /// <summary>
         /// As mensagens internas da exception serão importadas para poder inserir no banco.
         /// </summary>
         /// <param name="ex">Informe a Exception_Logger, para importar as mensagens</param>
         /// <param name="IdApp">Informe o App, para fazer sobrescrever da exception filha</param>
         /// <returns></returns>
-        public ILoggerAuditoriaService ImportLogsFromException(LoggerException ex, EnumIdApp idApp= EnumIdApp.Undefined)
+        public ILoggerAuditoriaService ImportLogsFromException(LoggerException ex, EnumIdApp idApp = EnumIdApp.Undefined)
         {
             if (idApp == EnumIdApp.Undefined)
                 idApp = this.IdApp;
@@ -446,7 +526,6 @@ namespace Bloomers.Core.Auditoria.Infrastructure.Logger
             this.SetStatus(idLevel, title, textLog);
             return this;
         }
-
         #endregion
 
         #region GET LIST: Métodos para retornar os dados internos.
@@ -484,7 +563,7 @@ namespace Bloomers.Core.Auditoria.Infrastructure.Logger
         /// <summary>
         /// Obter o último log de mensagem inserido na lista
         /// </summary>
-        /// <returns>retorna uma instancia do ILogMsg</returns>
+        /// <returns>retorna uma instancia do LogMsg</returns>
         public LogMsg? GetLastLog()
         {
             if (this._ListLogMsgs.Count == 0)
@@ -504,23 +583,30 @@ namespace Bloomers.Core.Auditoria.Infrastructure.Logger
 
             // LogMsgs: Primeiro tem que gravar as mensagens para ter o Id para relacionar
             if (_ListLogMsgs.Count > 0)
+            {
+                foreach (var logMsg in _ListLogMsgs)
+                {
+                    logMsg.IdDomain = _logger_config.Domain;
+                    logMsg.AppName = _logger_config.AppName;
+                }
                 await _logMsgsRepository.BulkInsert(_ListLogMsgs);
-                
+            }
+
             // Detalhe: Migramos para este gravando os filhos do log.
             if (_ListLogMsgs != null)
             {
-                foreach (var iLogMsg in _ListLogMsgs)
+                foreach (var LogMsg in _ListLogMsgs)
                 {
-                    if (iLogMsg.LogMsgDetails != null && iLogMsg.LogMsgDetails.Count > 0)
-                        await _logDetailsRepository.BulkInsert(iLogMsg.LogMsgDetails);
+                    if (LogMsg.LogMsgDetails != null && LogMsg.LogMsgDetails.Count > 0)
+                        await _logDetailsRepository.BulkInsert(LogMsg.LogMsgDetails);
                 }
             }
             // Status: Grava o status, hoje tem apenas um na lista.
             if (_ListLogStatus != null)
             {
-                foreach (var iLogStatus in _ListLogStatus)
+                foreach (var LogStatus in _ListLogStatus)
                 {
-                    await _logStatusRepository.Update(iLogStatus);
+                    await _logStatusRepository.Update(LogStatus);
                 }
             }
 
@@ -572,6 +658,8 @@ namespace Bloomers.Core.Auditoria.Infrastructure.Logger
 
             if (clearStatus)
                 _ListLogStatus.Clear();
+
+            this._LogMsgStatus = null;
 
             return this;
         }

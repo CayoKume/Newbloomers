@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Bloomers.Core.Auditoria.Infrastructure.Logger;
+using IntegrationsCore.Domain.Entities.Enums;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 
@@ -6,6 +8,8 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
 {
     public class B2CConsultaClientes
     {
+        protected readonly ILoggerAuditoriaService _logger;
+
         [Column(TypeName = "datetime")]
         public DateTime? lastupdateon { get; private set; }
 
@@ -129,6 +133,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
         public B2CConsultaClientes() { }
 
         public B2CConsultaClientes(
+            ILoggerAuditoriaService logger,
             string? cod_cliente_b2c,
             string? cod_cliente_erp,
             string? doc_cliente,
@@ -169,6 +174,8 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
             string? aceita_programa_fidelidade
         )
         {
+            _logger = logger;
+
             lastupdateon = DateTime.Now;
 
             this.cod_cliente_b2c =
@@ -179,21 +186,26 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 String.IsNullOrEmpty(cod_cliente_erp) ? 0
                 : Convert.ToInt32(cod_cliente_erp);
 
-            this.doc_cliente =
-                String.IsNullOrEmpty(doc_cliente) ? ""
-                : doc_cliente.Substring(
-                    0,
-                    doc_cliente.Length > 14 ? 14
-                    : doc_cliente.Length
-                );
+            if (String.IsNullOrEmpty(doc_cliente))
+                this.doc_cliente = String.Empty;
+            else if (doc_cliente.Length <= 14)
+                this.doc_cliente = doc_cliente;
+            else
+                this.doc_cliente = LengthValidation(_logger, "doc_cliente", doc_cliente, 14);
 
-            this.nm_cliente =
-                String.IsNullOrEmpty(nm_cliente) ? ""
-                : nm_cliente.Substring(
-                    0,
-                    nm_cliente.Length > 50 ? 50
-                    : nm_cliente.Length
+            if (String.IsNullOrEmpty(nm_cliente))
+                this.nm_cliente = String.Empty;
+            else if (nm_cliente.Length <= 50)
+                this.nm_cliente = nm_cliente;
+            else
+            {
+                _logger.AddLog(
+                    level: EnumIdLogLevel.Validations,
+                    idError: EnumIdError.LegthValidation,
+                    message_log_detalhes_da_ocorrencia: "prop nm_cliente: " + nm_cliente
                 );
+                this.nm_cliente = nm_cliente.Substring(0, 50);
+            }
 
             this.nm_mae =
                 String.IsNullOrEmpty(nm_mae) ? ""
@@ -207,7 +219,7 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
                 String.IsNullOrEmpty(nm_pai) ? ""
                 : nm_pai.Substring(
                     0,
-                    nm_pai.Length > 50 ? 50
+                    nm_pai.Length > 50 ? 50 //add logger //campo 
                     : nm_pai.Length
                 );
 
@@ -418,6 +430,23 @@ namespace LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce
             this.portal =
                 String.IsNullOrEmpty(portal) ? 0
                 : Convert.ToInt32(portal);
+        }
+
+        private string LengthValidation(ILoggerAuditoriaService logger, string propName, string propValue, int propLen)
+        {
+            if (String.IsNullOrEmpty(propValue))
+                return String.Empty;
+            else if (propValue.Length <= propLen)
+                return propValue;
+            else
+            {
+                _logger.AddLog(
+                    level: EnumIdLogLevel.Validations,
+                    idError: EnumIdError.LegthValidation,
+                    message_log_detalhes_da_ocorrencia: $"prop {propName}: {propValue}"
+                );
+                return propValue.Substring(0, propLen);
+            }
         }
     }
 }

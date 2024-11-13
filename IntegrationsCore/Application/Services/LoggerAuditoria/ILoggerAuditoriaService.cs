@@ -20,7 +20,7 @@ namespace Bloomers.Core.Auditoria.Infrastructure.Logger
         #endregion
 
         #region ADD LOG: Métodos de Adição de logs
-        
+
         /// <summary>
         /// Criar e adicionar um Log Inicial De Status
         /// </summary>
@@ -32,10 +32,22 @@ namespace Bloomers.Core.Auditoria.Infrastructure.Logger
         public ILoggerAuditoriaService AddLog(EnumIdLogLevel level
                                     , EnumIdError idError = EnumIdError.Status
                                     , string? string_Key = null
-                                    , string message_log_detalhes_da_ocorrencia = ""
+                                    , string message = ""
                                     , string user = ""
                                     );
 
+        /// <summary>
+        /// Adicionar um Log de Rotina Com IdStep
+        /// </summary>
+        /// <param name="level"></param>
+        /// <param name="idError"></param>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        public ILoggerAuditoriaService AddLog(EnumIdLogLevel level
+                                    , EnumIdError idError
+                                    , EnumIdSteps idStep
+                                    , string message = ""
+                                    );
         /// <summary>
         /// Adicionar registro em memória ao log 
         /// </summary>
@@ -54,9 +66,9 @@ namespace Bloomers.Core.Auditoria.Infrastructure.Logger
                                         , string user = ""
                                         );
 
-        
 
-        public ILoggerAuditoriaService AddLog(  EnumIdApp idApp
+
+        public ILoggerAuditoriaService AddLog(EnumIdApp idApp
                                         , EnumIdLogLevel level
                                         , string msg
                                         , EnumIdError idError = EnumIdError.Undefined
@@ -80,7 +92,7 @@ namespace Bloomers.Core.Auditoria.Infrastructure.Logger
         public ILoggerAuditoriaService AddLogDetail(string string_Key,
                                             string message_xml);
 
-        public ILoggerAuditoriaService AddLogDetails(Dictionary<string, 
+        public ILoggerAuditoriaService AddLogDetails(Dictionary<string,
                                              string> details);
         public ILoggerAuditoriaService AddLogDetails(IList<string> keys);
 
@@ -124,11 +136,29 @@ namespace Bloomers.Core.Auditoria.Infrastructure.Logger
                                                 EnumIdApp idApp,
                                                 EnumIdError idError = EnumIdError.Undefined,
                                                 EnumIdLogLevel level = EnumIdLogLevel.Critical,
+                                                EnumIdSteps idStep = EnumIdSteps.Default,
                                                 string message_complementar = "",
                                                 string? string_Key = null,
                                                 string user = ""
                                                 );
 
+        /// <summary>
+        /// Adicionar uma exeception à lista de erros atual
+        /// </summary>
+        /// <param name="pException">Informe o exception ocorrida</param>
+        /// <param name="message_complementar">A mensagem complementar é opcional, caso, haja informação relevante adicional, informe aqui.</param>
+        /// <param name="level">O level pode ser fornecido como opcional caso não seja fornecido será lançado como erro critico..</param>
+        /// <param name="idError">É opcional, pois em caso de exceptions, muitos lugares, não serão erros catalogados. Quando o erro é conhecido, e cadastrado na tabela, informe aqui o erro catalogado, por exemplo, falha ao baixar dados da API do Microvix, se o ponto for exato, poderia haver um erro catalogado, para podermos monitorar este ponto do sistema.</param>
+        /// <param name="string_Key">A chave do registro onde ocorreu o erro! Lembre-se este campo será usado para referênciar os registros. Quando não houver, registro relacionado, poderá ser omitido.</param>
+        /// <param name="user">Permitimos passar o usuário, como opcional,pois quando houver um aplicativo, onde houver logon, poderá ser fornecido o usuário, ou o código do usuário aqui.</param>
+        /// <returns>Retornará o reigstro que foi criado, para ter a referência caso necessário</returns>        
+        public ILoggerAuditoriaService AddLogException(Exception pException,
+                                                EnumIdError idError = EnumIdError.Undefined,
+                                                EnumIdLogLevel level = EnumIdLogLevel.Critical,
+                                                string message_complementar = "",
+                                                string? string_Key = null,
+                                                string user = ""
+                                                );
         public ILoggerAuditoriaService ImportLogsFromException(LoggerException ex, EnumIdApp idApp = EnumIdApp.Undefined);
 
         #endregion
@@ -142,7 +172,7 @@ namespace Bloomers.Core.Auditoria.Infrastructure.Logger
         /// <param name="title">Título, mensagem curta max 200.</param>
         /// <param name="text">Detalhes da exception por exemplo inserir aqui.</param>
         /// <returns></returns>
-        public ILoggerAuditoriaService SetStatus(EnumIdLogLevel idLevel, string title = "", string text = "");
+        ILoggerAuditoriaService SetStatus(EnumIdLogLevel idLevel, string title = "", string text = "");
 
         /// <summary>
         /// Inicializar o IdApp. Percebemos uma repetição em enviar o IdApp em todo lançamento
@@ -161,7 +191,7 @@ namespace Bloomers.Core.Auditoria.Infrastructure.Logger
         /// <param name="title">Titulo Status</param>
         /// <param name="logText">Texto log Adicional</param>
         /// <returns></returns>
-        public ILoggerAuditoriaService SetLogMsgStatus(EnumIdLogLevel idLevel, EnumIdError error, string logText);
+        ILoggerAuditoriaService SetLogMsgStatus(EnumIdLogLevel idLevel, EnumIdError error, string logText);
 
         /// <summary>
         /// Atualizar a Mensagem LogMsg de Status + o Status em único método.
@@ -174,7 +204,7 @@ namespace Bloomers.Core.Auditoria.Infrastructure.Logger
         /// <param name="title">Titulo Status</param>
         /// <param name="logText">Texto log Adicional</param>
         /// <returns></returns>
-        public ILoggerAuditoriaService SetLogMsgAndStatus(EnumIdLogLevel idLevel, EnumIdError error, string title, string logText = "");
+        ILoggerAuditoriaService SetLogMsgAndStatus(EnumIdLogLevel idLevel, EnumIdError error, string title, string logText = "");
 
         /// <summary>
         /// Atualizar a Mensagem LogMsg de Status + o Status em único método.
@@ -188,7 +218,7 @@ namespace Bloomers.Core.Auditoria.Infrastructure.Logger
         /// <param name="title">Titulo Status</param>
         /// <param name="logText">Texto log Adicional</param>
         /// <returns></returns>
-        public ILoggerAuditoriaService SetLogMsgAndStatus(EnumIdLogLevel idLevel, EnumIdError error, Exception ex, string title, string logText = "");
+        ILoggerAuditoriaService SetLogMsgAndStatus(EnumIdLogLevel idLevel, EnumIdError error, Exception ex, string title, string logText = "");
         #endregion
 
         #region GET LIST: Métodos para retornar os dados internos.
@@ -210,11 +240,7 @@ namespace Bloomers.Core.Auditoria.Infrastructure.Logger
         /// <returns>Retorna o status criado ou null caso não tenha gerado ainda</returns>
         public LogStatus? GetStatus();
 
-        /// <summary>
-        /// Obter o último log de mensagem inserido na lista
-        /// </summary>
-        /// <returns>retorna uma instancia do ILogMsg</returns>
-        public LogMsg? GetLastLog();
+
 
         #endregion
 

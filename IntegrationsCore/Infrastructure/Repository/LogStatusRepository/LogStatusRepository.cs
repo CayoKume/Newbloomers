@@ -35,7 +35,7 @@ namespace IntegrationsCore.Infrastructure.Repository.LogStatusRepository
                 throw
                     new LoggerException(ex, EnumIdApp.LogsRepository,
                           EnumIdLogLevel.Error, EnumIdError.SqlInsert, ex.Message
-                        ).AddAditionalLog(EnumIdLogLevel.Debug, cmdText);
+                        ).AddLog(EnumIdLogLevel.Debug, cmdText);
             }
         }
 

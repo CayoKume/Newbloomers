@@ -32,13 +32,13 @@ namespace Bloomers.Core.Auditoria.Infrastructure.Logger
         /// <param name="message_log_detalhes_da_ocorrencia"></param>
         /// <param name="user"></param>
         public LoggerException(EnumIdApp idApp
-                                    , EnumIdLogLevel level
-                                    , EnumIdError idError = EnumIdError.Undefined
-                                    , string message_log_detalhes_da_ocorrencia = ""
-                                    , string? string_Key = null
-                                    , string user = ""
-                                    , Exception? pInnerException = null
-                                    ) : base(message_log_detalhes_da_ocorrencia, pInnerException)
+                            , EnumIdLogLevel level
+                            , EnumIdError idError = EnumIdError.Undefined
+                            , string message_log_detalhes_da_ocorrencia = ""
+                            , string? string_Key = null
+                            , string user = ""
+                            , Exception? pInnerException = null
+                            ) : base(message_log_detalhes_da_ocorrencia, pInnerException)
         {
             string msgError = string.Empty;
             if (pInnerException != null)
@@ -69,11 +69,13 @@ namespace Bloomers.Core.Auditoria.Infrastructure.Logger
         /// <param name="user"></param>
         public LoggerException(EnumIdError idError
                               , EnumIdLogLevel level
+                              , EnumIdSteps steps
                               , string message_log_detalhes_da_ocorrencia = ""
                    ) : base(message_log_detalhes_da_ocorrencia)
         {
             var newLogMsg = new LogMsg()
             {
+                IdStep = steps,
                 IdLogLevel = level,
                 IdError = idError,
                 TextLog = $"{message_log_detalhes_da_ocorrencia}",
@@ -107,7 +109,7 @@ namespace Bloomers.Core.Auditoria.Infrastructure.Logger
                 IdLogLevel = level,
                 IdError = idError,
                 ValueKeyFields = string_Key,
-                TextLog = $"{mensagem_adicional} {innerException.Message}" ,
+                TextLog = $"{mensagem_adicional} {innerException.Message}",
                 LastUpdateUser = user,
                 LastUpdateOn = DateTime.Now
             };
@@ -133,27 +135,27 @@ namespace Bloomers.Core.Auditoria.Infrastructure.Logger
         /// </summary>
         /// <param name="pLogMsg">Informar n Object LogMsg</param>
         /// <returns></returns>
-        public LoggerException AddAditionalLog(LogMsg pLogMsg)
+        public LoggerException AddLog(LogMsg pLogMsg)
         {
             var f = this.LogsMsgs.FirstOrDefault();
             var n = pLogMsg;
-                (n.AppName, n.IdDomain, n.IdLogMsg, n.IdApp) 
-              = (f.AppName, f.IdDomain, f.IdLogMsg, f.IdApp);
+            (n.AppName, n.IdDomain, n.IdLogMsg, n.IdApp)
+          = (f.AppName, f.IdDomain, f.IdLogMsg, f.IdApp);
             this.LogsMsgs.Add(n);
             return this;
         }
 
-        public LoggerException AddAditionalLog(EnumIdLogLevel level
-                                                    , string message
-                                                    , EnumIdError error = EnumIdError.Undefined
-                                                    , string keyValueFields = "")
+        public LoggerException AddLog(EnumIdLogLevel level
+                                     , string message
+                                     , EnumIdError error = EnumIdError.Undefined
+                                     , string keyValueFields = "")
         {
             var newLog = new LogMsg()
             {
                 IdLogLevel = level,
                 TextLog = message,
                 IdError = error,
-                ValueKeyFields = keyValueFields 
+                ValueKeyFields = keyValueFields
             };
             var firstLog = this.LogsMsgs.LastOrDefault();
             if (firstLog != null)
