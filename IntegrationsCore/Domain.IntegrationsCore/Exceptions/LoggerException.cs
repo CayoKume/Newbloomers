@@ -1,5 +1,6 @@
 ﻿using Domain.IntegrationsCore.Entities.Enums;
 using Domain.IntegrationsCore.Entities.Errors;
+using Domain.IntegrationsCore.Interfaces;
 using System.Runtime.Serialization;
 
 namespace Domain.IntegrationsCore.Exceptions
@@ -19,7 +20,7 @@ namespace Domain.IntegrationsCore.Exceptions
         /// Lista de Mensagens Inseridas. 
         /// Use n AddLog para inserir uma mensagem nova.
         /// </summary>
-        public IList<LogMsg> LogsMsgs { get; private set; } = [];
+        public IList<ILogMsg> LogsMsgs { get; private set; } = [];
 
         /// <summary>
         /// Adicionar uma exception
@@ -93,7 +94,7 @@ namespace Domain.IntegrationsCore.Exceptions
         /// <param name="mensagem_adicional">Use a mensagem adicional com coisas úteis e específicas. Os textos genéricos devem ser criados um tipo em tabela Errors, para evitar consumo de log intenso.</param>
         /// <param name="user"></param>
         /// <param name="innerException"></param>
-        public LoggerException(Exception innerException
+        public LoggerException (Exception innerException
                                     , EnumIdApp idApp
                                     , EnumIdLogLevel level
                                     , EnumIdError idError = EnumIdError.Undefined
@@ -121,7 +122,7 @@ namespace Domain.IntegrationsCore.Exceptions
         /// </summary>
         /// <param name="pLogMsg"></param>
         /// <param name="InnerException"></param>
-        public LoggerException(Exception InnerException,
+        public LoggerException (Exception InnerException,
                                       LogMsg pLogMsg)
             : base(InnerException.Message, InnerException)
         {
@@ -134,7 +135,7 @@ namespace Domain.IntegrationsCore.Exceptions
         /// </summary>
         /// <param name="pLogMsg">Informar n Object LogMsg</param>
         /// <returns></returns>
-        public LoggerException AddLog(LogMsg pLogMsg)
+        public LoggerException  AddLog(ILogMsg pLogMsg)
         {
             var f = this.LogsMsgs.FirstOrDefault();
             var n = pLogMsg;
@@ -144,7 +145,7 @@ namespace Domain.IntegrationsCore.Exceptions
             return this;
         }
 
-        public LoggerException AddLog(EnumIdLogLevel level
+        public LoggerException  AddLog(EnumIdLogLevel level
                                      , string message
                                      , EnumIdError error = EnumIdError.Undefined
                                      , string keyValueFields = "")

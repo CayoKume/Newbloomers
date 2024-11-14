@@ -28,7 +28,7 @@ namespace IntegrationsCore.Infrastructure.Repositorys.LogDetailsRepository
                 .Value;
         }
 
-        public async Task<int> BulkInsert(IList<LogMsgsDetail> plistLogMsgDetail)
+        public async Task<int> BulkInsert(IList<ILogMsgsDetail> plistLogMsgDetail)
         {
             List<LogMsg> registrosComErro = new();
 
@@ -67,7 +67,7 @@ namespace IntegrationsCore.Infrastructure.Repositorys.LogDetailsRepository
             }
         }
         
-        private string BuildCmdSqlString(LogMsgsDetail logMsgDetail, bool isUpdate = false)
+        private string BuildCmdSqlString(ILogMsgsDetail logMsgDetail, bool isUpdate = false)
         {
             _SqlBuilder.Clear();
             

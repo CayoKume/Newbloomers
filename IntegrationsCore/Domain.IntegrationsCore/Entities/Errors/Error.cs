@@ -1,8 +1,9 @@
 ﻿using Domain.IntegrationsCore.Entities.Enums;
+using Domain.IntegrationsCore.Interfaces;
 
 namespace Domain.IntegrationsCore.Entities.Errors
 {
-    public class Error
+    public class Error : IError
     {
         public EnumIdError IdError { get; set; }
         public string Title { get; set; } = "";

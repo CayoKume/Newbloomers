@@ -133,7 +133,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebJobsApplication", "Manag
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HangfireDashboard", "Manager\HangfireDashboard\HangfireDashboard.csproj", "{BB5D8B46-46C0-4C37-A20C-2A7DB54A4D27}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinxMicrovix - Outbound Web Service", "LinxMicrovix\LinxMicrovix - Outbound Web Service\LinxMicrovix - Outbound Web Service\LinxMicrovix - Outbound Web Service.csproj", "{C08E9888-FE90-4AF3-B480-BCA88FE0F2B9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinxMicrovix - Outbound Web Service", "LinxMicrovix\LinxMicrovix\LinxMicrovix - Outbound Web Service.csproj", "{DDEC998F-4372-472A-8474-816BF13E65B8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -543,14 +543,14 @@ Global
 		{BB5D8B46-46C0-4C37-A20C-2A7DB54A4D27}.Production|Any CPU.Build.0 = Debug|Any CPU
 		{BB5D8B46-46C0-4C37-A20C-2A7DB54A4D27}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BB5D8B46-46C0-4C37-A20C-2A7DB54A4D27}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C08E9888-FE90-4AF3-B480-BCA88FE0F2B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C08E9888-FE90-4AF3-B480-BCA88FE0F2B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C08E9888-FE90-4AF3-B480-BCA88FE0F2B9}.Homolog|Any CPU.ActiveCfg = Homolog|Any CPU
-		{C08E9888-FE90-4AF3-B480-BCA88FE0F2B9}.Homolog|Any CPU.Build.0 = Homolog|Any CPU
-		{C08E9888-FE90-4AF3-B480-BCA88FE0F2B9}.Production|Any CPU.ActiveCfg = Debug|Any CPU
-		{C08E9888-FE90-4AF3-B480-BCA88FE0F2B9}.Production|Any CPU.Build.0 = Debug|Any CPU
-		{C08E9888-FE90-4AF3-B480-BCA88FE0F2B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C08E9888-FE90-4AF3-B480-BCA88FE0F2B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DDEC998F-4372-472A-8474-816BF13E65B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDEC998F-4372-472A-8474-816BF13E65B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDEC998F-4372-472A-8474-816BF13E65B8}.Homolog|Any CPU.ActiveCfg = Homolog|Any CPU
+		{DDEC998F-4372-472A-8474-816BF13E65B8}.Homolog|Any CPU.Build.0 = Homolog|Any CPU
+		{DDEC998F-4372-472A-8474-816BF13E65B8}.Production|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDEC998F-4372-472A-8474-816BF13E65B8}.Production|Any CPU.Build.0 = Debug|Any CPU
+		{DDEC998F-4372-472A-8474-816BF13E65B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDEC998F-4372-472A-8474-816BF13E65B8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -611,7 +611,7 @@ Global
 		{E1D626BC-ED4B-4C3D-ABD4-47D809ED262E} = {99BF7375-C5C7-40E7-8DB5-B9AEF839EEE3}
 		{E2830EC8-4873-4508-9BCC-88E1C06C5219} = {99BF7375-C5C7-40E7-8DB5-B9AEF839EEE3}
 		{C3C0BA7E-15CF-4C57-B8AB-16061A7FEF08} = {99BF7375-C5C7-40E7-8DB5-B9AEF839EEE3}
-		{C08E9888-FE90-4AF3-B480-BCA88FE0F2B9} = {99BF7375-C5C7-40E7-8DB5-B9AEF839EEE3}
+		{DDEC998F-4372-472A-8474-816BF13E65B8} = {99BF7375-C5C7-40E7-8DB5-B9AEF839EEE3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C6211D30-DCB0-4037-ACB7-51588200E27B}

@@ -4,7 +4,7 @@ namespace Domain.IntegrationsCore.Interfaces
 {
     public interface ILogStatusRepository
     {
-        Task Update(LogStatus status);
+        Task Update(ILogStatus status);
     }
 }
 

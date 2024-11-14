@@ -17,13 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\IntegrationsCore\IntegrationsCore.csproj" />
-    <ProjectReference Include="..\LinxMicrovix\LinxMicrovix - Outbound Web Service\LinxMicrovix - Outbound Web Service.csproj" />
-    <ProjectReference Include="..\Shippment\FlashCourier\FlashCourier.csproj" />
-    <ProjectReference Include="..\Shippment\TotalExpress\TotalExpress.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="Settings.job">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -1,6 +1,8 @@
-﻿namespace Domain.IntegrationsCore.Entities.Errors
+﻿using Domain.IntegrationsCore.Interfaces;
+
+namespace Domain.IntegrationsCore.Entities.Errors
 {
-    public class LogMsgsDetail
+    public class LogMsgsDetail : ILogMsgsDetail
     {
         public int? IdLogMsgDetail { get; set; }
         public int? IdLogMsg { get; set; }

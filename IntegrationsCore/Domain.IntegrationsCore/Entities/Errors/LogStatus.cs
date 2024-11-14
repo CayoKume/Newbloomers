@@ -1,8 +1,9 @@
 ﻿using Domain.IntegrationsCore.Entities.Enums;
+using Domain.IntegrationsCore.Interfaces;
 
 namespace Domain.IntegrationsCore.Entities.Errors
 {
-    public class LogStatus
+    public class LogStatus : ILogStatus
     {
         public short? IdLogStatus { get; set; }
         public int? IdLogMsg { get; set; }

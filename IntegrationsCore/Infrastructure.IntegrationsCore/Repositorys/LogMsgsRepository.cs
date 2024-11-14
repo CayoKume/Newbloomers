@@ -29,7 +29,7 @@ namespace IntegrationsCore.Infrastructure.Repository.LogMsgsRepository
                 .Value;
         }
 
-        public async Task<int> BulkInsert(IList<LogMsg> plistLogMsg)
+        public async Task<int> BulkInsert(IList<ILogMsg> plistLogMsg)
         {
             IList<LogMsg> registrosComErro = new List<LogMsg>();
             
@@ -78,7 +78,7 @@ namespace IntegrationsCore.Infrastructure.Repository.LogMsgsRepository
         /// <param name="logMsg">Entidade tipo ILogMsg</param>
         /// <param name="isUpdate">Comando do Tipo Update = TRUE, ou false = INSERT</param>
         /// <returns>retorna uma string com o comando SQL</returns>
-        private string BuildCmdSqlString(LogMsg logMsg,bool isUpdate = false)
+        private string BuildCmdSqlString(ILogMsg logMsg,bool isUpdate = false)
         {
             _SqlBuilder.Clear();
             _SqlBuilder.Add<EnumIdApp>("IdApp", logMsg.IdApp);

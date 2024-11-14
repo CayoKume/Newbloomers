@@ -1,8 +1,9 @@
 ﻿using Domain.IntegrationsCore.Entities.Enums;
+using Domain.IntegrationsCore.Interfaces;
 
 namespace Domain.IntegrationsCore.Entities.Errors
 {
-    public class LogMsg
+    public class LogMsg : ILogMsg
     {
         public int? IdLogMsg { get; set; }
         public EnumIdApp IdApp { get; set; } = EnumIdApp.Undefined;
@@ -20,8 +21,8 @@ namespace Domain.IntegrationsCore.Entities.Errors
         public DateTime StartDate { get; set; } = DateTime.Now;
 
         public DateTime EndDate { get; set; } = DateTime.Now;
-        public IList<LogMsgsDetail> LogMsgDetails { get; set; } = [];
-        public IList<LogStatus> LogStatus { get; set; } = [];
+        public IList<ILogMsgsDetail> LogMsgDetails { get; set; } = [];
+        public IList<ILogStatus> LogStatus { get; set; } = [];
     }
 }
 

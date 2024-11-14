@@ -1,6 +1,7 @@
 ﻿using Domain.IntegrationsCore.Entities.Enums;
 using Domain.IntegrationsCore.Entities.Errors;
 using Domain.IntegrationsCore.Exceptions;
+using Domain.IntegrationsCore.Interfaces;
 
 namespace Application.IntegrationsCore.Interfaces
 {
@@ -227,19 +228,19 @@ namespace Application.IntegrationsCore.Interfaces
         /// Obter a lista em memória com as mensagens inseridas
         /// </summary>
         /// <returns></returns>
-        public IList<LogMsg> GetListLogs();
+        public IList<ILogMsg> GetListLogs();
 
         /// <summary>
         /// Obter a lista em memória com as mensagens inseridas
         /// </summary>
         /// <returns></returns>
-        public IList<LogMsgsDetail> GetListDetails();
+        public IList<ILogMsgsDetail> GetListDetails();
 
         /// <summary>
         /// Obter o status gerado em memória
         /// </summary>
         /// <returns>Retorna o status criado ou null caso não tenha gerado ainda</returns>
-        public LogStatus? GetStatus();
+        public ILogStatus? GetStatus();
 
 
 

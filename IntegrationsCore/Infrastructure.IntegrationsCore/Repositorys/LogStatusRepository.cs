@@ -28,7 +28,7 @@ namespace IntegrationsCore.Infrastructure.Repository.LogStatusRepository
                 .Value;
         }
 
-        public async Task Update(LogStatus status)
+        public async Task Update(ILogStatus status)
         {
             string cmdText = BuildCmdSqlString(status);
             try
@@ -51,7 +51,7 @@ namespace IntegrationsCore.Infrastructure.Repository.LogStatusRepository
             }
         }
 
-        private string BuildCmdSqlString(LogStatus status)
+        private string BuildCmdSqlString(ILogStatus status)
         {
             _SqlBuilder.Clear();
             _SqlBuilder.Add<EnumIdDomain>("IdDomain", status.IdDomain);
