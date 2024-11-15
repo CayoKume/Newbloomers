@@ -1,6 +1,6 @@
 ﻿using Domain.IntegrationsCore.Entities.Parameters;
 
-namespace Domain.LinxMicrovix_Outbound_Web_Service.Interfaces.Api
+namespace Domain.LinxMicrovix.Outbound.WebService.Interfaces.Api
 {
     public interface IAPICall
     {

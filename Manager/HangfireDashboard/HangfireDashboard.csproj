@@ -19,7 +19,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\IntegrationsCore\Domain.IntegrationsCore\Domain.IntegrationsCore.csproj" />
-    <ProjectReference Include="..\..\LinxMicrovix\LinxMicrovix - Outbound Web Service\LinxMicrovix - Outbound Web Service\LinxMicrovix - Outbound Web Service.csproj" />
+    <ProjectReference Include="..\..\LinxCommerce\LinxCommerce\LinxCommerce.csproj" />
+    <ProjectReference Include="..\..\LinxMicrovix\LinxMicrovix\LinxMicrovix - Outbound Web Service.csproj" />
+    <ProjectReference Include="..\..\Shippment\FlashCourier\FlashCourier\FlashCourier.csproj" />
+    <ProjectReference Include="..\..\Shippment\TotalExpress\TotalExpress\TotalExpress.csproj" />
   </ItemGroup>
 
 </Project>

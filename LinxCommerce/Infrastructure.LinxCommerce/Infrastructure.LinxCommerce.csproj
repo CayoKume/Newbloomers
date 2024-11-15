@@ -6,4 +6,31 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Repositorys\Configuration\" />
+    <Folder Include="Repositorys\Default\" />
+    <Folder Include="Repositorys\Fulfillment\" />
+    <Folder Include="Repositorys\Inventory\" />
+    <Folder Include="Repositorys\LGPD\" />
+    <Folder Include="Repositorys\Mashup\" />
+    <Folder Include="Repositorys\Multisite\" />
+    <Folder Include="Repositorys\Payment\" />
+    <Folder Include="Repositorys\Pricing\" />
+    <Folder Include="Repositorys\Profile\" />
+    <Folder Include="Repositorys\Promotion\" />
+    <Folder Include="Repositorys\Queue\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.1.35" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\IntegrationsCore\Infrastructure.IntegrationsCore\Infrastructure.IntegrationsCore.csproj" />
+    <ProjectReference Include="..\Application.LinxCommerce\Application.LinxCommerce.csproj" />
+    <ProjectReference Include="..\Domain.LinxCommerce\Domain.LinxCommerce.csproj" />
+  </ItemGroup>
+
 </Project>

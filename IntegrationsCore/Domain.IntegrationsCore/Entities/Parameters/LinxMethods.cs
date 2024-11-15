@@ -1,4 +1,4 @@
-﻿namespace Domain.Hangfire.Entites.Parameters
+﻿namespace Domain.IntegrationsCore.Entities.Parameters
 {
     public class LinxMethods
     {

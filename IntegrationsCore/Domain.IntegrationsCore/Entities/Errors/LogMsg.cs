@@ -6,6 +6,7 @@ namespace Domain.IntegrationsCore.Entities.Errors
     public class LogMsg : ILogMsg
     {
         public int? IdLogMsg { get; set; }
+        public int? IdLogMsgParent { get; set; }
         public EnumIdApp IdApp { get; set; } = EnumIdApp.Undefined;
         public EnumIdLogLevel IdLogLevel { get; set; }
         public EnumIdDomain IdDomain { get; set; }

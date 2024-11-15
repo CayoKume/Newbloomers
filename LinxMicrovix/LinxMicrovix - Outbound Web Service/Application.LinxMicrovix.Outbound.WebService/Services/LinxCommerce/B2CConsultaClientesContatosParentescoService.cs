@@ -1,13 +1,13 @@
-﻿using Domain.LinxMicrovix_Outbound_Web_Service.Interfaces.Api;
-using Domain.LinxMicrovix_Outbound_Web_Service.Entites.LinxCommerce;
-using Domain.LinxMicrovix_Outbound_Web_Service.Interfaces.Repositorys.LinxCommerce;
+﻿using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Api;
+using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce;
+using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxCommerce;
 using Domain.IntegrationsCore.Entities.Parameters;
 using static Domain.IntegrationsCore.Exceptions.InternalErrorsExceptions;
-using Domain.LinxMicrovix_Outbound_Web_Service.Interfaces.Repositorys.Base;
-using Application.LinxMicrovix_Outbound_Web_Service.Interfaces.LinxCommerce;
-using Application.LinxMicrovix_Outbound_Web_Service.Interfaces.Base;
+using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxCommerce;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
 
-namespace Application.LinxMicrovix_Outbound_Web_Service.Services
+namespace Application.LinxMicrovix.Outbound.WebService.Services
 {
     public class B2CConsultaClientesContatosParentescoService: IB2CConsultaClientesContatosParentescoService
     {

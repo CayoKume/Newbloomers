@@ -1,9 +1,9 @@
 ﻿using Domain.IntegrationsCore.Entities.Parameters;
-using Domain.LinxMicrovix_Outbound_Web_Service.Interfaces.Api;
+using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Api;
 using System.Net;
 using static Domain.IntegrationsCore.Exceptions.APIErrorsExceptions;
 
-namespace Infrastructure.LinxMicrovix_Outbound_Web_Service.Api
+namespace Infrastructure.LinxMicrovix.Outbound.WebService.Api
 {
     public class APICall : IAPICall
     {

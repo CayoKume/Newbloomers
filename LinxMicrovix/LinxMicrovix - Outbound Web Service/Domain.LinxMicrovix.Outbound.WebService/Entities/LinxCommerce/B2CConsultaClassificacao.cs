@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Domain.LinxMicrovix_Outbound_Web_Service.Entites.LinxCommerce
+namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
 {
     public class B2CConsultaClassificacao
     {
@@ -51,7 +51,6 @@ namespace Domain.LinxMicrovix_Outbound_Web_Service.Entites.LinxCommerce
             this.portal =
                 String.IsNullOrEmpty(portal) ? 0
                 : Convert.ToInt32(portal);
-
         }
     }
 }

@@ -1,10 +1,10 @@
 ﻿using Dapper;
 using static Dapper.SqlMapper;
 using Z.Dapper.Plus;
-using static IntegrationsCore.Domain.Exceptions.RepositorysExceptions;
-using IntegrationsCore.Infrastructure.Connections.SQLServer;
-using IntegrationsCore.Infrastructure.Connections.PostgreSQL;
-using IntegrationsCore.Infrastructure.Connections.MySQL;
+using Infrastructure.IntegrationsCore.Connections.SQLServer;
+using Infrastructure.IntegrationsCore.Connections.PostgreSQL;
+using Infrastructure.IntegrationsCore.Connections.MySQL;
+using static Domain.IntegrationsCore.Exceptions.RepositorysExceptions;
 
 namespace HangfireDashboard.Infrastructure.Repository
 {
@@ -32,7 +32,7 @@ namespace HangfireDashboard.Infrastructure.Repository
 
             try
             {
-                using (var conn = _sqlServerConnection.GetIDbConnection())
+                using (var conn = _sqlServerConnection.GetIDbConnection(databaseName))
                 {
                     var result = await conn.ExecuteAsync(sql: sql);
 
@@ -63,7 +63,7 @@ namespace HangfireDashboard.Infrastructure.Repository
 
             try
             {
-                using (var conn = _sqlServerConnection.GetIDbConnection())
+                using (var conn = _sqlServerConnection.GetIDbConnection(databaseName))
                 {
                     var result = await conn.QueryAsync(sql: sql);
 

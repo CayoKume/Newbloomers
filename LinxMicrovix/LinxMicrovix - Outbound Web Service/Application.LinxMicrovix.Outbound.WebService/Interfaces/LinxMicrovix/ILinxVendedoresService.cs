@@ -1,7 +1,7 @@
 ﻿using Domain.IntegrationsCore.Entities.Parameters;
-using Domain.LinxMicrovix_Outbound_Web_Service.Entites.LinxMicrovix;
+using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
 
-namespace Application.LinxMicrovix_Outbound_Web_Service.Interfaces.LinxMicrovix
+namespace Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxMicrovix
 {
     public interface ILinxVendedoresService
     {

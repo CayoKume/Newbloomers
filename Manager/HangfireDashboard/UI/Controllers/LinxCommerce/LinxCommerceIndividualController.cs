@@ -1,5 +1,5 @@
 ﻿using HangfireDashboard.Domain.Entites;
-using IntegrationsCore.Domain.Entities.Parameters;
+using Domain.IntegrationsCore.Entities.Parameters;
 using LinxCommerce.Application.Services.Catolog.SKU;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;

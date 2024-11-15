@@ -1,7 +1,7 @@
 ﻿using Infrastructure.IntegrationsCore.Connections.SQLServer;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace IntegrationsCore.Infrastructure
+namespace Infrastructure.IntegrationsCore.DependencyInjection
 {
     public static class DependencyInjection
     {

@@ -1,12 +1,12 @@
 ﻿using Dapper;
 using FlashCourier.Domain.Entites;
-using IntegrationsCore.Infrastructure.Connections.MySQL;
-using IntegrationsCore.Infrastructure.Connections.PostgreSQL;
-using IntegrationsCore.Infrastructure.Connections.SQLServer;
+using Infrastructure.IntegrationsCore.Connections.MySQL;
+using Infrastructure.IntegrationsCore.Connections.PostgreSQL;
+using Infrastructure.IntegrationsCore.Connections.SQLServer;
 using Newtonsoft.Json;
 using System.Data;
 using static Dapper.SqlMapper;
-using static IntegrationsCore.Domain.Exceptions.RepositorysExceptions;
+using static Domain.IntegrationsCore.Exceptions.RepositorysExceptions;
 
 namespace FlashCourier.Infrastructure.Repository
 {
@@ -37,7 +37,7 @@ namespace FlashCourier.Infrastructure.Repository
 
             try
             {
-                using (var conn = _sqlServerConnection.GetIDbConnection())
+                using (var conn = _sqlServerConnection.GetIDbConnection(""))
                 {
                     var result = await conn.ExecuteAsync(
                         sql: sql,
@@ -83,7 +83,7 @@ namespace FlashCourier.Infrastructure.Repository
 
             try
             {
-                using (var conn = _sqlServerConnection.GetIDbConnection())
+                using (var conn = _sqlServerConnection.GetIDbConnection(""))
                 {
                     var result = await conn.ExecuteAsync(
                         sql: sql,
@@ -173,7 +173,7 @@ namespace FlashCourier.Infrastructure.Repository
 
             try
             {
-                using (var conn = _sqlServerConnection.GetIDbConnection())
+                using (var conn = _sqlServerConnection.GetIDbConnection(""))
                 {
                     var result = await conn.QueryAsync<Order, Client, Company, Invoice, Order>(sql: sql, (order, client, company, invoice) =>
                     {
@@ -265,7 +265,7 @@ namespace FlashCourier.Infrastructure.Repository
 
             try
             {
-                using (var conn = _sqlServerConnection.GetIDbConnection())
+                using (var conn = _sqlServerConnection.GetIDbConnection(""))
                 {
                     return await conn.QueryAsync<Order, Client, Company, Invoice, Order>(sql: sql, (order, client, company, invoice) =>
                     {
@@ -297,7 +297,7 @@ namespace FlashCourier.Infrastructure.Repository
 
             try
             {
-                using (var conn = _sqlServerConnection.GetIDbConnection())
+                using (var conn = _sqlServerConnection.GetIDbConnection(""))
                 {
                     return await conn.QueryFirstOrDefaultAsync<Parameters>(sql: sql);
                 }
@@ -323,7 +323,7 @@ namespace FlashCourier.Infrastructure.Repository
 
             try
             {
-                using (var conn = _sqlServerConnection.GetIDbConnection())
+                using (var conn = _sqlServerConnection.GetIDbConnection(""))
                 {
                     return await conn.QueryAsync<Company>(sql: sql);
                 }
@@ -357,7 +357,7 @@ namespace FlashCourier.Infrastructure.Repository
 
             try
             {
-                using (var conn = _sqlServerConnection.GetIDbConnection())
+                using (var conn = _sqlServerConnection.GetIDbConnection(""))
                 {
                     return await conn.QueryAsync<Order, Company, Order>(sql: sql, (order, company) =>
                     {
@@ -387,7 +387,7 @@ namespace FlashCourier.Infrastructure.Repository
 
             try
             {
-                using (var conn = _sqlServerConnection.GetIDbConnection())
+                using (var conn = _sqlServerConnection.GetIDbConnection(""))
                 {
                     var result = await conn.ExecuteAsync(
                         sql: sql,
@@ -423,7 +423,7 @@ namespace FlashCourier.Infrastructure.Repository
 
             try
             {
-                using (var conn = _sqlServerConnection.GetIDbConnection())
+                using (var conn = _sqlServerConnection.GetIDbConnection(""))
                 {
                     var result = await conn.ExecuteAsync(
                         sql: sql,
@@ -459,7 +459,7 @@ namespace FlashCourier.Infrastructure.Repository
 
             try
             {
-                using (var conn = _sqlServerConnection.GetIDbConnection())
+                using (var conn = _sqlServerConnection.GetIDbConnection(""))
                 {
                     var result = await conn.ExecuteAsync(
                         sql: sql,
@@ -494,7 +494,7 @@ namespace FlashCourier.Infrastructure.Repository
 
             try
             {
-                using (var conn = _sqlServerConnection.GetIDbConnection())
+                using (var conn = _sqlServerConnection.GetIDbConnection(""))
                 {
                     var result = await conn.ExecuteAsync(
                         sql: sql,

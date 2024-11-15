@@ -1,9 +1,9 @@
 ﻿using Domain.IntegrationsCore.Entities.Parameters;
-using Domain.LinxMicrovix_Outbound_Web_Service.Entites.LinxMicrovix;
-using Domain.LinxMicrovix_Outbound_Web_Service.Interfaces.Repositorys.Base;
-using Domain.LinxMicrovix_Outbound_Web_Service.Interfaces.Repositorys.LinxMicrovix;
+using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
+using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
+using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxMicrovix;
 
-namespace Infrastructure.LinxMicrovix_Outbound_Web_Service.Repositorys.LinxMicrovix
+namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.LinxMicrovix
 {
     public class LinxVendedoresRepository : ILinxVendedoresRepository
     {

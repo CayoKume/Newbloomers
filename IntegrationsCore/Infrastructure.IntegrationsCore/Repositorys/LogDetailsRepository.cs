@@ -49,7 +49,7 @@ namespace IntegrationsCore.Infrastructure.Repositorys.LogDetailsRepository
                             throw
                                 new LoggerException(ex_loop, EnumIdApp.LogsRepository,
                                       EnumIdLogLevel.Error, EnumIdError.SqlInsert, ex_loop.Message
-                                    ).AddLog(EnumIdLogLevel.Debug, sql);
+                                    ).AddLog(error: EnumIdError.SQLCommand, level: EnumIdLogLevel.Debug, message: sql);
                         }
                     }
                 }

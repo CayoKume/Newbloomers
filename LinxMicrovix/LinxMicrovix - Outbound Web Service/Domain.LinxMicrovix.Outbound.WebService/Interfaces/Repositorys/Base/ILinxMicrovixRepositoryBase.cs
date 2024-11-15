@@ -1,8 +1,8 @@
 ﻿using Domain.IntegrationsCore.Entities.Parameters;
-using Domain.LinxMicrovix_Outbound_Web_Service.Entites.Base;
+using Domain.LinxMicrovix.Outbound.WebService.Entites.Base;
 using System.Data;
 
-namespace Domain.LinxMicrovix_Outbound_Web_Service.Interfaces.Repositorys.Base
+namespace Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base
 {
     public interface ILinxMicrovixRepositoryBase<TEntity> where TEntity : class
     {

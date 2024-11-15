@@ -6,4 +6,38 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Entities\Catolog\Common\" />
+    <Folder Include="Entities\Catolog\Requests\" />
+    <Folder Include="Entities\Catolog\Responses\" />
+    <Folder Include="Entities\Configuration\" />
+    <Folder Include="Entities\Default\" />
+    <Folder Include="Entities\Fulfillment\" />
+    <Folder Include="Entities\Inventory\" />
+    <Folder Include="Entities\LGPD\" />
+    <Folder Include="Entities\Mashup\" />
+    <Folder Include="Entities\Multisite\" />
+    <Folder Include="Entities\Payment\" />
+    <Folder Include="Entities\Pricing\" />
+    <Folder Include="Entities\Promotion\" />
+    <Folder Include="Entities\Queue\" />
+    <Folder Include="Entities\Sales\Requests\" />
+    <Folder Include="Interfaces\Repositorys\Configuration\" />
+    <Folder Include="Interfaces\Repositorys\Default\" />
+    <Folder Include="Interfaces\Repositorys\Fulfillment\" />
+    <Folder Include="Interfaces\Repositorys\Inventory\" />
+    <Folder Include="Interfaces\Repositorys\LGPD\" />
+    <Folder Include="Interfaces\Repositorys\Mashup\" />
+    <Folder Include="Interfaces\Repositorys\Multisite\" />
+    <Folder Include="Interfaces\Repositorys\Payment\" />
+    <Folder Include="Interfaces\Repositorys\Pricing\" />
+    <Folder Include="Interfaces\Repositorys\Profile\" />
+    <Folder Include="Interfaces\Repositorys\Promotion\" />
+    <Folder Include="Interfaces\Repositorys\Queue\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\IntegrationsCore\Domain.IntegrationsCore\Domain.IntegrationsCore.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -197,6 +197,7 @@ namespace Domain.IntegrationsCore.SqlBuilder
             }
             else
             {
+                pStringValue = pStringValue.Replace("'", "''");
                 sValue += $" '{pStringValue.ToString()}' ";
             }
             AddField(tipo, fieldName, sValue);

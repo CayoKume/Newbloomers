@@ -1,6 +1,5 @@
 ﻿using Domain.IntegrationsCore.Entities.Parameters;
 using HangfireDashboard.Domain.Entites;
-using IntegrationsCore.Domain.Entities;
 using LinxMicrovix_Outbound_Web_Service.Application.Services.LinxMicrovix;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;

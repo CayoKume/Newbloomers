@@ -1,9 +1,9 @@
 ﻿using Domain.IntegrationsCore.Entities.Parameters;
-using Domain.LinxMicrovix_Outbound_Web_Service.Entites.LinxCommerce;
-using Domain.LinxMicrovix_Outbound_Web_Service.Interfaces.Repositorys.Base;
-using Domain.LinxMicrovix_Outbound_Web_Service.Interfaces.Repositorys.LinxCommerce;
+using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce;
+using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
+using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxCommerce;
 
-namespace Infrastructure.LinxMicrovix_Outbound_Web_Service.Repository.LinxCommerce
+namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerce
 {
     public class B2CConsultaImagensHDRepository :IB2CConsultaImagensHDRepository
     {

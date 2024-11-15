@@ -11,6 +11,8 @@ using static Domain.IntegrationsCore.Exceptions.InternalErrorsExceptions;
 using System.Data.SqlClient;
 using System.ComponentModel;
 using static Domain.IntegrationsCore.Exceptions.RepositorysExceptions;
+using Domain.IntegrationsCore.Exceptions;
+using Domain.IntegrationsCore.Entities.Enums;
 
 namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.Base
 {
@@ -261,19 +263,27 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Repository.Base
                     return await conn.QueryFirstOrDefaultAsync<string?>(sql: sql, commandTimeout: 360);
                 }
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not LoggerException)
             {
-                throw new ObjectsNotFoundExcpetion()
-                {
-                    project = $"{jobParameter.projectName} - IntegrationsCore",
-                    job = jobParameter.jobName,
-                    method = $"GetParameters",
-                    message = $"Error when trying to get parameters from database",
-                    schema = $"[{jobParameter.parametersTableName}]",
-                    command = sql,
-                    exception = ex.Message
-                };
+                throw new LoggerException(
+                    EnumIdError.GetParametersException,
+                    EnumIdLogLevel.Information,
+                    EnumIdSteps.Default,
+                    $@"Exception:'{ex.Message}'"
+                ).AddLog(error: EnumIdError.SQLCommand, level: EnumIdLogLevel.Error, message: "command: " + sql);
             }
+            //catch (Exception ex)
+            //{
+            //    {
+            //        project = $"{jobParameter.projectName} - IntegrationsCore",
+            //        job = jobParameter.jobName,
+            //        method = $"GetParameters",
+            //        message = $"Error when trying to get parameters from database",
+            //        schema = $"[{jobParameter.parametersTableName}]",
+            //        command = sql,
+            //        exception = ex.Message
+            //    }
+            //}
         }
 
         public async Task<string?> GetLast7DaysMinTimestamp(LinxMicrovixJobParameter jobParameter, string? columnDate)

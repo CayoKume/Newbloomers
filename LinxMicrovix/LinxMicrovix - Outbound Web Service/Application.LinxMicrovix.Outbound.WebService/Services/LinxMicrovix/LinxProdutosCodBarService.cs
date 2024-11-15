@@ -1,13 +1,13 @@
 ﻿using Domain.IntegrationsCore.Entities.Parameters;
-using Domain.LinxMicrovix_Outbound_Web_Service.Entites.LinxMicrovix;
-using Domain.LinxMicrovix_Outbound_Web_Service.Interfaces.Api;
-using Domain.LinxMicrovix_Outbound_Web_Service.Interfaces.Repositorys.Base;
-using Domain.LinxMicrovix_Outbound_Web_Service.Interfaces.Repositorys.LinxMicrovix;
+using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
+using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Api;
+using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
+using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxMicrovix;
 using static Domain.IntegrationsCore.Exceptions.InternalErrorsExceptions;
-using Application.LinxMicrovix_Outbound_Web_Service.Interfaces.Base;
-using Application.LinxMicrovix_Outbound_Web_Service.Interfaces.LinxMicrovix;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxMicrovix;
 
-namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxMicrovix
+namespace LinxMicrovix.Outbound.Web.Service.Application.Services.LinxMicrovix
 {
     public class LinxProdutosCodBarService : ILinxProdutosCodBarService
     {

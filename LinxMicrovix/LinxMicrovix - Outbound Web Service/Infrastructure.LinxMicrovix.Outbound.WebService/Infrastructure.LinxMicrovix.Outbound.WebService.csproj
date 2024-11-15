@@ -10,4 +10,10 @@
     <PackageReference Include="Z.Dapper.Plus" Version="7.5.4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\IntegrationsCore\Infrastructure.IntegrationsCore\Infrastructure.IntegrationsCore.csproj" />
+    <ProjectReference Include="..\Application.LinxMicrovix.Outbound.WebService\Application.LinxMicrovix.Outbound.WebService.csproj" />
+    <ProjectReference Include="..\Domain.LinxMicrovix.Outbound.WebService\Domain.LinxMicrovix.Outbound.WebService.csproj" />
+  </ItemGroup>
+
 </Project>

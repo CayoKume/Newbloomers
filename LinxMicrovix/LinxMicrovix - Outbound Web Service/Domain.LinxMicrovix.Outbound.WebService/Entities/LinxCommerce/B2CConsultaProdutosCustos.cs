@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 
-namespace Domain.LinxMicrovix_Outbound_Web_Service.Entites.LinxCommerce
+namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
 {
     public class B2CConsultaProdutosCustos
     {

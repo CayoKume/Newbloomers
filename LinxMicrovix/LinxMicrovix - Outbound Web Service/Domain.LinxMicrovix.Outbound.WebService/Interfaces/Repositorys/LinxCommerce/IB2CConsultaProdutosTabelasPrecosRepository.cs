@@ -1,7 +1,7 @@
 ﻿using Domain.IntegrationsCore.Entities.Parameters;
-using Domain.LinxMicrovix_Outbound_Web_Service.Entites.LinxCommerce;
+using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce;
 
-namespace Domain.LinxMicrovix_Outbound_Web_Service.Interfaces.Repositorys.LinxCommerce
+namespace Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxCommerce
 {
     public interface IB2CConsultaProdutosTabelasPrecosRepository
     {

@@ -6,14 +6,14 @@ using Microsoft.Extensions.Configuration;
 using static Domain.IntegrationsCore.Exceptions.InternalErrorsExceptions;
 using System.Data.SqlClient;
 using System.ComponentModel;
-using Domain.LinxMicrovix_Outbound_Web_Service.Interfaces.Repositorys.Base;
+using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
 using Infrastructure.IntegrationsCore.Connections.PostgreSQL;
 using Infrastructure.IntegrationsCore.Connections.MySQL;
 using Infrastructure.IntegrationsCore.Connections.SQLServer;
 using Domain.IntegrationsCore.Entities.Parameters;
-using Domain.LinxMicrovix_Outbound_Web_Service.Entites.Base;
+using Domain.LinxMicrovix.Outbound.WebService.Entites.Base;
 
-namespace Infrastructure.LinxMicrovix_Outbound_Web_Service.Repositorys.Base
+namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
 {
     public class LinxMicrovixRepositoryBase<TEntity> : ILinxMicrovixRepositoryBase<TEntity> where TEntity : class, new()
     {

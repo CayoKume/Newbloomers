@@ -1,7 +1,7 @@
 ﻿using Domain.IntegrationsCore.Entities.Parameters;
-using Domain.LinxMicrovix_Outbound_Web_Service.Entites.LinxMicrovix;
+using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
 
-namespace Domain.LinxMicrovix_Outbound_Web_Service.Interfaces.Repositorys.LinxMicrovix
+namespace Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxMicrovix
 {
     public interface ILinxProdutosCodBarRepository
     {

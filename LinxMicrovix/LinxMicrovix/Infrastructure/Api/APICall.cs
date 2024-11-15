@@ -42,8 +42,8 @@ namespace LinxMicrovix_Outbound_Web_Service.Infrastructure.Api
                                  steps: EnumIdSteps.Default,
                                  message_log_detalhes_da_ocorrencia: $" {msgErrorDefault} .\n A API retorou HttpStatusCode:'{response.StatusCode}' quando era esperado '{HttpStatusCode.OK}' "
                                )
-                             .AddLog(EnumIdLogLevel.Debug, $"body:{body}"
-                                            , EnumIdError.EndPointReturnEmpty);
+                             .AddLog(level: EnumIdLogLevel.Information, message: $"body:{body}"
+                                            ,error: EnumIdError.EndPointReturnEmpty);
             }
             catch (Exception ex) when (ex is not LoggerException)
             {

@@ -1,4 +1,4 @@
-﻿using IntegrationsCore.Domain.Entities.Parameters;
+﻿using Domain.IntegrationsCore.Entities.Parameters;
 
 namespace LinxCommerce.Application.Services.Catolog.SKU
 {

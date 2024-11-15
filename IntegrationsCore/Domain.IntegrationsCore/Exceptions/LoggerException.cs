@@ -145,9 +145,9 @@ namespace Domain.IntegrationsCore.Exceptions
             return this;
         }
 
-        public LoggerException  AddLog(EnumIdLogLevel level
+        public LoggerException  AddLog(EnumIdError error
                                      , string message
-                                     , EnumIdError error = EnumIdError.Undefined
+                                     , EnumIdLogLevel level
                                      , string keyValueFields = "")
         {
             var newLog = new LogMsg()
@@ -160,10 +160,8 @@ namespace Domain.IntegrationsCore.Exceptions
             var firstLog = this.LogsMsgs.LastOrDefault();
             if (firstLog != null)
             {
-                newLog.IdError = firstLog.IdError;
                 newLog.AppName = firstLog.AppName;
                 newLog.IdDomain = firstLog.IdDomain;
-                newLog.IdLogMsg = firstLog.IdLogMsg;
             }
             this.LogsMsgs.Add(newLog);
             return this;

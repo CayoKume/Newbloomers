@@ -6,6 +6,7 @@ namespace Domain.IntegrationsCore.Interfaces
     public interface ILogMsg
     {
         int? IdLogMsg { get; set; }
+        int? IdLogMsgParent { get; set; }
         EnumIdApp IdApp { get; set; } 
         EnumIdLogLevel IdLogLevel { get; set; }
         EnumIdDomain IdDomain { get; set; }

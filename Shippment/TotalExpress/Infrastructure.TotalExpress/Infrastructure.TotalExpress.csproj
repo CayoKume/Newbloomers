@@ -6,4 +6,15 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.1.35" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\IntegrationsCore\Infrastructure.IntegrationsCore\Infrastructure.IntegrationsCore.csproj" />
+    <ProjectReference Include="..\Application.TotalExpress\Application.TotalExpress.csproj" />
+    <ProjectReference Include="..\Domain.TotalExpress\Domain.TotalExpress.csproj" />
+  </ItemGroup>
+
 </Project>

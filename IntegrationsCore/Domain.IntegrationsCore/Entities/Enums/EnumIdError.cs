@@ -48,7 +48,8 @@
         ConvertValidation = 24,
         ArgumentConectionStringIsNull = 10,
         ArgumentoInvalido = 21,
-
+        GetParametersException = 25,
+        SQLCommand = 26,
 
         // Erros integração /  API / endpoint
         /// <summary>

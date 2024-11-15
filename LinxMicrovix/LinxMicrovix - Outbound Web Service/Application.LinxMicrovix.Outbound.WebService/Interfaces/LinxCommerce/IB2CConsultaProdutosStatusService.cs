@@ -1,7 +1,7 @@
 ﻿using Domain.IntegrationsCore.Entities.Parameters;
-using Domain.LinxMicrovix_Outbound_Web_Service.Entites.LinxCommerce;
+using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce;
 
-namespace Application.LinxMicrovix_Outbound_Web_Service.Interfaces.LinxCommerce
+namespace Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxCommerce
 {
     public interface IB2CConsultaProdutosStatusService
     {

@@ -37,13 +37,20 @@ namespace IntegrationsCore.Infrastructure.Repository.LogMsgsRepository
             {
                 using (var conn = _conn.GetDbConnection(_catalog))
                 {
+                    int? idLogMsgParent = null;
                     foreach (var i_log in plistLogMsg.Where(p=>p.IdLogMsg==null).ToList())
                     {
+                        if (idLogMsgParent != null)
+                            i_log.IdLogMsgParent = idLogMsgParent;
+
                         var sql = this.BuildCmdSqlString(i_log);
                         try
                         {
                             // Processa atualização e obtém o Identity
                             i_log.IdLogMsg = await conn.QueryFirstOrDefaultAsync<int>(sql, commandTimeout: 360);
+
+                            if (idLogMsgParent == null)
+                                idLogMsgParent = i_log.IdLogMsg;
 
                             // Atualiza nos filhos LogMsgDetails o Id
                             foreach (var i_det in i_log.LogMsgDetails)
@@ -59,7 +66,7 @@ namespace IntegrationsCore.Infrastructure.Repository.LogMsgsRepository
                             throw 
                                 new LoggerException(ex_loop, EnumIdApp.LogsRepository,
                                       EnumIdLogLevel.Error, EnumIdError.SqlInsert, ex_loop.Message
-                                    ).AddLog(EnumIdLogLevel.Debug,sql);
+                                    ).AddLog(error: EnumIdError.SQLCommand, level: EnumIdLogLevel.Debug, message: sql);
                         }
                     }
                 }
@@ -94,6 +101,7 @@ namespace IntegrationsCore.Infrastructure.Repository.LogMsgsRepository
             _SqlBuilder.Add("StartDate", logMsg.StartDate, EnumSqlBuilderNullAction.ignore);
             _SqlBuilder.Add("EndDate", logMsg.EndDate, EnumSqlBuilderNullAction.ignore);
             _SqlBuilder.Add<EnumIdSteps>("IdStep", logMsg.IdStep);
+            _SqlBuilder.Add("IdLogMsgParent", logMsg.IdLogMsgParent, EnumSqlBuilderNullAction.ignore);
 
             // Quando update, adicionar um where
             if (isUpdate && logMsg.IdLogMsg != null)

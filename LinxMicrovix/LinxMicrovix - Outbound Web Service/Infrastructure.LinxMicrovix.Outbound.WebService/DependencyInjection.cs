@@ -1,16 +1,20 @@
-﻿using Application.LinxMicrovix_Outbound_Web_Service.Interfaces.Base;
-using Application.LinxMicrovix_Outbound_Web_Service.Interfaces.LinxCommerce;
-using Application.LinxMicrovix_Outbound_Web_Service.Services;
-using Application.LinxMicrovix_Outbound_Web_Service.Services.Base;
-using Domain.LinxMicrovix_Outbound_Web_Service.Interfaces.Api;
-using Domain.LinxMicrovix_Outbound_Web_Service.Interfaces.Repositorys.Base;
-using Domain.LinxMicrovix_Outbound_Web_Service.Interfaces.Repositorys.LinxCommerce;
-using Infrastructure.LinxMicrovix_Outbound_Web_Service.Api;
-using Infrastructure.LinxMicrovix_Outbound_Web_Service.Repository.LinxCommerce;
-using Infrastructure.LinxMicrovix_Outbound_Web_Service.Repositorys.Base;
+﻿using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxCommerce;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxMicrovix;
+using Application.LinxMicrovix.Outbound.WebService.Services;
+using Application.LinxMicrovix.Outbound.WebService.Services.Base;
+using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Api;
+using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
+using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxCommerce;
+using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxMicrovix;
+using Infrastructure.LinxMicrovix.Outbound.WebService.Api;
+using Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerce;
+using Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base;
+using Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.LinxMicrovix;
+using LinxMicrovix.Outbound.Web.Service.Application.Services.LinxMicrovix;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Infrastructure.LinxMicrovix.Outbound.WebService
+namespace Infrastructure.LinxMicrovix.Outbound.WebService.DependencyInjection
 {
     public static class DependencyInjection
     {
@@ -208,6 +212,21 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService
 
             services.AddScoped<IB2CConsultaVendedoresService, B2CConsultaVendedoresService>();
             services.AddScoped<IB2CConsultaVendedoresRepository, B2CConsultaVendedoresRepository>();
+
+            return services;
+        }
+
+        public static IServiceCollection AddScopedLinxMicrovixServices(this IServiceCollection services)
+        {
+            services.AddScoped<ILinxMicrovixServiceBase, LinxMicrovixServiceBase>();
+            services.AddScoped(typeof(ILinxMicrovixRepositoryBase<>), typeof(LinxMicrovixRepositoryBase<>));
+            services.AddScoped<IAPICall, APICall>();
+
+            services.AddScoped<ILinxVendedoresService, LinxVendedoresService>();
+            services.AddScoped<ILinxVendedoresRepository, LinxVendedoresRepository>();
+
+            services.AddScoped<ILinxProdutosCodBarService, LinxProdutosCodBarService>();
+            services.AddScoped<ILinxProdutosCodBarRepository, LinxProdutosCodBarRepository>();
 
             return services;
         }

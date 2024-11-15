@@ -1,6 +1,5 @@
-﻿using IntegrationsCore.Domain.Entities;
+﻿using Domain.IntegrationsCore.Entities.Parameters;
 using LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce;
-using LinxMicrovix_Outbound_Web_Service.Domain.Entites.LinxCommerce;
 using Microsoft.AspNetCore.Mvc;
 using HangfireDashboard.Domain.Entites;
 
@@ -11,6 +10,7 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
     public class B2CLinxMicrovixController : Controller
     {
         private readonly string? _docMainCompany;
+        private readonly string? _databaseName;
         private readonly string? _projectName;
         private readonly string? _parametersInterval;
         private readonly string? _parametersTableName;
@@ -256,6 +256,11 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                             .GetSection("B2CLinxMicrovix")
                             .GetSection("Methods")
                             .Get<List<Method>>();
+
+            _databaseName = _configuration
+                .GetSection("ConfigureServer")
+                .GetSection("LinxMicrovixCommerceDatabaseName")
+                .Value;
         }
 
         [HttpPost("B2CConsultaClassificacao")]
@@ -313,7 +318,8 @@ namespace HangfireDashboard.UI.Controllers.LinxMicrovix
                         parametersLogTableName = _parametersLogTableName,
                         parametersInterval = _parametersInterval,
                         jobName = method.MethodName,
-                        tableName = method.MethodName
+                        tableName = method.MethodName,
+                        databaseName = _databaseName
                     }
                 );
 
