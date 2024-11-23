@@ -4,6 +4,13 @@ using Infrastructure.LinxCommerce.DependencyInjection;
 using Infrastructure.LinxMicrovix.Outbound.WebService.DependencyInjection;
 using Infrastructure.TotalExpress.DependencyInjection;
 using Infrastructure.FlashCourier.DependencyInjection;
+using Application.IntegrationsCore.Interfaces;
+using Application.IntegrationsCore.Services;
+using Domain.IntegrationsCore.Entities.Errors;
+using Domain.IntegrationsCore.Interfaces;
+using IntegrationsCore.Infrastructure.Repository.LogMsgsRepository;
+using IntegrationsCore.Infrastructure.Repository.LogStatusRepository;
+using IntegrationsCore.Infrastructure.Repositorys.LogDetailsRepository;
 
 namespace Hangfire.IO.Extensions
 {
@@ -12,24 +19,38 @@ namespace Hangfire.IO.Extensions
         public static WebApplicationBuilder AddServices(this WebApplicationBuilder builder)
         {
             var serverName = builder.Configuration.GetSection("ConfigureServer").GetSection("ServerName").Value;
-            var connectionstring = builder.Configuration.GetConnectionString("Connection").Replace("[catalog]", "GENERAL").Replace("[database]", "GENERAL");
+            var databaseName = builder.Configuration.GetSection("ConfigureServer").GetSection("GeneralDatabaseName").Value;
+            var connectionstring = builder.Configuration.GetConnectionString("Connection").Replace("[catalog]", databaseName).Replace("[database]", databaseName);
 
             builder.Services.AddScopedSQLServerConnection();
 
+            builder.Services.AddAuditServices();
             builder.Services.AddScopedLinxCommerceServices();
             builder.Services.AddScopedLinxMicrovixServices();
             builder.Services.AddScopedB2CLinxMicrovixServices();
             builder.Services.AddScopedFlashCourierServices();
             builder.Services.AddScopedTotalExpressServices();
 
-            builder.Services.AddHangfireService(connectionstring, serverName);
+            //builder.Services.AddHangfireService(connectionstring, serverName);
 
             return builder;
         }
 
+        public static IServiceCollection AddAuditServices(this IServiceCollection services)
+        {
+            //services.AddSingleton<ILoggerConfig, LoggerConfig>();
+            services.AddScoped<ILogMsgsRepository, LogMsgsRepository>();
+            services.AddScoped<ILogDetailsRepository, LogDetailsRepository>();
+            services.AddScoped<ILogStatusRepository, LogStatusRepository>();
+            services.AddScoped<ILoggerService, LoggerService>();
+
+            return services;
+        }
+
         public static IServiceCollection AddHangfireService(this IServiceCollection services, string? connectionstring, string? serverName)
         {
-            services.AddHangfire(configuration => configuration
+            services
+                .AddHangfire(configuration => configuration
                 .UseFilter(new AutomaticRetryAttribute { Attempts = 0 })
 
                 .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)

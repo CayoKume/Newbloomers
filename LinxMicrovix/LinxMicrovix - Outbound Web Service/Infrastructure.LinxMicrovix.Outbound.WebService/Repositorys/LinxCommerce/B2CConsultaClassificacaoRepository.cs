@@ -82,7 +82,8 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
             {
                 return await _linxMicrovixRepositoryBase.InsertParametersIfNotExists(
                     jobParameter: jobParameter,
-                    parameter: new { 
+                    parameter: new
+                    {
                         method = jobParameter.jobName,
                         parameters_timestamp = @"<Parameter id=""timestamp"">[0]</Parameter>",
                         parameters_dateinterval = @"<Parameter id=""timestamp"">[0]</Parameter>",

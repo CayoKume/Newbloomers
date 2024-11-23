@@ -1,6 +1,8 @@
 ﻿using Application.IntegrationsCore.Interfaces;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
 using Domain.IntegrationsCore.Entities.Parameters;
+using Domain.IntegrationsCore.Exceptions;
+using Domain.IntegrationsCore.Entities.Enums;
 using System.Xml;
 using static Domain.IntegrationsCore.Exceptions.APIErrorsExceptions;
 
@@ -52,16 +54,13 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.Base
                     xml.LoadXml(response);
 
                     if (xml.GetElementsByTagName("ResponseSuccess")[0].ChildNodes[0].InnerText == "False")
-                        throw new APIErrorException()
-                        { 
-                            project = jobParameter.projectName,
-                            job = jobParameter.jobName,
-                            response = response,
-                            method = "DeserializeResponseToXML",
-                            message = "Error unrealizing XML",
-                            api_error_message = xml.GetElementsByTagName("Message")[0].ChildNodes[0].InnerText,
-                            exception = ""
-                        };
+                        throw new InternalException(
+                            step: EnumSteps.DeserializeResponseToXML,
+                            error: EnumError.EndPointFailOnDeserialize,
+                            level: EnumMessageLevel.Error,
+                            message: "Error unrealizing XML",
+                            exceptionMessage: xml.GetElementsByTagName("Message")[0].ChildNodes[0].InnerText
+                        );
 
                     if (xml.GetElementsByTagName("R").Count > 0)
                     {
@@ -87,22 +86,15 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.Base
                 }
                 return listRegistros;
             }
-            catch (APIErrorException)
-            {
-                throw;
-            }
             catch (Exception ex)
             {
-                throw new APIErrorException()
-                {
-                    project = jobParameter.projectName,
-                    job = jobParameter.jobName,
-                    method = $"DeserializeXML",
-                    response = response,
-                    message = "Error when unrealizing response to records list",
-                    api_error_message = "",
-                    exception = ex.Message
-                };
+                throw new InternalException(
+                    step: EnumSteps.DeserializeResponseToXML,
+                    error: EnumError.EndPointFailOnDeserialize,
+                    level: EnumMessageLevel.Error,
+                    message: "Error when unrealizing response to records list",
+                    exceptionMessage: ex.Message
+                );
             }
         }
 
@@ -118,16 +110,13 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.Base
                     xml.LoadXml(response);
 
                     if (xml.GetElementsByTagName("ResponseSuccess")[0].ChildNodes[0].InnerText == "False")
-                        throw new APIErrorException()
-                        {
-                            project = jobParameter.projectName,
-                            job = jobParameter.jobName,
-                            response = response,
-                            method = "DeserializeResponseToXML",
-                            message = "Error unrealizing XML",
-                            api_error_message = xml.GetElementsByTagName("Message")[0].ChildNodes[0].InnerText,
-                            exception = ""
-                        };
+                        throw new InternalException(
+                            step: EnumSteps.DeserializeResponseToXML,
+                            error: EnumError.EndPointFailOnDeserialize,
+                            level: EnumMessageLevel.Error,
+                            message: "Error unrealizing XML",
+                            exceptionMessage: xml.GetElementsByTagName("Message")[0].ChildNodes[0].InnerText
+                        );
 
                     if (xml.GetElementsByTagName("R").Count > 0)
                     {
@@ -158,24 +147,16 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.Base
                 }
                 return listRegistros;
             }
-            catch (APIErrorException)
-            {
-                throw;
-            }
             catch (Exception ex)
             {
-                throw new APIErrorException()
-                {
-                    project = jobParameter.projectName,
-                    job = jobParameter.jobName,
-                    method = $"DeserializeXML",
-                    response = response,
-                    message = "Error when unrealizing response to records list",
-                    api_error_message = "",
-                    exception = ex.Message
-                };
+                throw new InternalException(
+                    step: EnumSteps.DeserializeResponseToXML,
+                    error: EnumError.EndPointFailOnDeserialize,
+                    level: EnumMessageLevel.Error,
+                    message: "Error when unrealizing response to records list",
+                    exceptionMessage: ex.Message
+                );
             }
         }
-
     }
 }

@@ -12,6 +12,8 @@ using Infrastructure.IntegrationsCore.Connections.MySQL;
 using Infrastructure.IntegrationsCore.Connections.SQLServer;
 using Domain.IntegrationsCore.Entities.Parameters;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.Base;
+using Domain.IntegrationsCore.Exceptions;
+using Domain.IntegrationsCore.Entities.Enums;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
 {
@@ -79,51 +81,13 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
             }
             catch (Exception ex)
             {
-                throw new ExecuteWithoutCommandException()
-                {
-                    project = $"{jobParameter.projectName} - IntegrationsCore",
-                    job = jobParameter.jobName,
-                    method = $"CallDbProcMerge",
-                    message = $"Error when trying to run the merge procedure: P_{jobParameter.tableName}_Sync",
-                    schema = $"{jobParameter.tableName}",
-                    exception = ex.Message
-                };
-            }
-        }
-
-        public async Task<bool> CreateDataTableIfNotExists(LinxMicrovixJobParameter jobParameter)
-        {
-            string? sql = @$"SELECT DISTINCT * FROM [INFORMATION_SCHEMA].[TABLES] (NOLOCK) WHERE TABLE_NAME LIKE '%{jobParameter.tableName}%'";
-
-            try
-            {
-                using (var conn = _sqlServerConnection.GetIDbConnection(jobParameter.databaseName))
-                {
-                    var result = await conn.QueryAsync(sql: sql);
-
-                    if (result.Count() == 0)
-                    {
-                        conn.CreateTable<TEntity>(tableName: $"{jobParameter.tableName}_raw");
-                        conn.CreateTable<TEntity>(tableName: $"{jobParameter.tableName}_trusted");
-
-                        return true;
-                    }
-
-                    return false;
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new ExecuteCommandException()
-                {
-                    project = $"{jobParameter.projectName} - IntegrationsCore",
-                    job = jobParameter.jobName,
-                    method = $"CreateDataTableIfNotExists",
-                    message = $"Error when trying to create table: {jobParameter.tableName}",
-                    schema = $"[{jobParameter.tableName}]",
-                    command = sql,
-                    exception = ex.Message
-                };
+                throw new InternalException(
+                    step: EnumSteps.CallDbProcMerge,
+                    error: EnumError.SQLCommand,
+                    level: EnumMessageLevel.Error,
+                    message: $"Error when trying to run the merge procedure: P_{jobParameter.tableName}_Sync",
+                    exceptionMessage: ex.Message
+                );
             }
         }
 
@@ -141,16 +105,13 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
             }
             catch (Exception ex)
             {
-                throw new InternalErrorException()
-                {
-                    project = jobParameter.projectName,
-                    job = jobParameter.jobName,
-                    method = "CreateSystemDataTable",
-                    message = $"Error when convert system datatable to bulkinsert",
-                    record = $" - ",
-                    propertie = " - ",
-                    exception = ex.Message
-                };
+                throw new InternalException(
+                    step: EnumSteps.CreateSystemDataTable,
+                    error: EnumError.SQLCommand,
+                    level: EnumMessageLevel.Error,
+                    message: $"Error when convert system datatable to bulkinsert",
+                    exceptionMessage: ex.Message
+                );
             }
         }
 
@@ -182,18 +143,24 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
                     return await conn.QueryAsync<Company>(sql: sql);
                 }
             }
+            catch (SqlException ex)
+            {
+                throw new SQLCommandException(
+                    step: EnumSteps.GetParameters,
+                    message: $"Error when trying to get companys from database",
+                    exceptionMessage: ex.Message,
+                    commandSQL: sql
+                );
+            }
             catch (Exception ex)
             {
-                throw new ObjectsNotFoundExcpetion()
-                {
-                    project = $"{jobParameter.projectName} - IntegrationsCore",
-                    job = jobParameter.jobName,
-                    method = $"GetCompanys",
-                    message = $"Error when trying to get companys from database",
-                    schema = $"[{jobParameter.tableName}]",
-                    command = sql,
-                    exception = ex.Message
-                };
+                throw new InternalException(
+                    step: EnumSteps.GetB2CCompanys,
+                    error: EnumError.SQLCommand,
+                    level: EnumMessageLevel.Error,
+                    message: $"Error when trying to get companys from database",
+                    exceptionMessage: ex.Message
+                );
             }
         }
 
@@ -208,27 +175,33 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
                     return await conn.QueryAsync<Company>(sql: sql);
                 }
             }
+            catch (SqlException ex)
+            {
+                throw new SQLCommandException(
+                    step: EnumSteps.GetMicrovixCompanys,
+                    message: $"Error when trying to get companys from database",
+                    exceptionMessage: ex.Message,
+                    commandSQL: sql
+                );
+            }
             catch (Exception ex)
             {
-                throw new ObjectsNotFoundExcpetion()
-                {
-                    project = $"{jobParameter.projectName} - IntegrationsCore",
-                    job = jobParameter.jobName,
-                    method = $"GetCompanys",
-                    message = $"Error when trying to get companys from database",
-                    schema = $"[{jobParameter.tableName}]",
-                    command = sql,
-                    exception = ex.Message
-                };
+                throw new InternalException(
+                    step: EnumSteps.GetMicrovixCompanys,
+                    error: EnumError.SQLCommand,
+                    level: EnumMessageLevel.Error,
+                    message: $"Error when trying to get companys from database",
+                    exceptionMessage: ex.Message
+                );
             }
         }
 
         public async Task<string?> GetParameters(LinxMicrovixJobParameter jobParameter)
         {
             string? sql = $"SELECT {jobParameter.parametersInterval} " +
-                         $"FROM [{jobParameter.parametersTableName}] (NOLOCK) " +
-                          "WHERE " +
-                         $"METHOD = '{jobParameter.jobName}'";
+                          $"FROM [{jobParameter.parametersTableName}] (NOLOCK) " +
+                           "WHERE " +
+                          $"METHOD = '{jobParameter.jobName}'";
 
             try
             {
@@ -237,18 +210,24 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
                     return await conn.QueryFirstOrDefaultAsync<string?>(sql: sql, commandTimeout: 360);
                 }
             }
+            catch (SqlException ex)
+            {
+                throw new SQLCommandException(
+                    step: EnumSteps.GetParameters,
+                    message: $"Error when trying to get parameters from database",
+                    exceptionMessage: ex.Message,
+                    commandSQL: sql
+                );
+            }
             catch (Exception ex)
             {
-                throw new ObjectsNotFoundExcpetion()
-                {
-                    project = $"{jobParameter.projectName} - IntegrationsCore",
-                    job = jobParameter.jobName,
-                    method = $"GetParameters",
-                    message = $"Error when trying to get parameters from database",
-                    schema = $"[{jobParameter.parametersTableName}]",
-                    command = sql,
-                    exception = ex.Message
-                };
+                throw new InternalException(
+                    step: EnumSteps.GetParameters,
+                    error: EnumError.SQLCommand,
+                    level: EnumMessageLevel.Error,
+                    message: $"Error when trying to get parameters from database",
+                    exceptionMessage: ex.Message
+                );
             }
         }
 
@@ -266,18 +245,24 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
                     return await conn.QueryFirstOrDefaultAsync<string?>(sql: sql, commandTimeout: 360);
                 }
             }
+            catch (SqlException ex)
+            {
+                throw new SQLCommandException(
+                    step: EnumSteps.GetLast7DaysMinTimestamp,
+                    message: $"Error when trying to get last timestamp from database",
+                    exceptionMessage: ex.Message,
+                    commandSQL: sql
+                );
+            }
             catch (Exception ex)
             {
-                throw new ObjectsNotFoundExcpetion()
-                {
-                    project = $"{jobParameter.projectName} - IntegrationsCore",
-                    job = jobParameter.jobName,
-                    method = $"GetLast7DaysMinTimestamp",
-                    message = $"Error when trying to get last timestamp from database",
-                    schema = $"[{jobParameter.parametersTableName}]",
-                    command = sql,
-                    exception = ex.Message
-                };
+                throw new InternalException(
+                    step: EnumSteps.GetLast7DaysMinTimestamp,
+                    error: EnumError.SQLCommand,
+                    level: EnumMessageLevel.Error,
+                    message: $"Error when trying to get last timestamp from database",
+                    exceptionMessage: ex.Message
+                );
             }
         }
 
@@ -295,21 +280,285 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
                     return false;
                 }
             }
+            catch (SqlException ex)
+            {
+                throw new SQLCommandException(
+                    step: EnumSteps.InsertRecord,
+                    message: $"Error when trying to insert record in database table: {jobParameter.tableName}",
+                    exceptionMessage: ex.Message,
+                    commandSQL: sql
+                );
+            }
             catch (Exception ex)
             {
-                throw new ExecuteCommandException()
-                {
-                    project = $"{jobParameter.projectName} - IntegrationsCore",
-                    job = jobParameter.jobName,
-                    method = $"InsertRecord",
-                    message = $"Error when trying to insert record in database table: {jobParameter.tableName}",
-                    schema = $"[{jobParameter.tableName}]",
-                    command = sql,
-                    exception = ex.Message
-                };
+                throw new InternalException(
+                    step: EnumSteps.InsertRecord,
+                    error: EnumError.SQLCommand,
+                    level: EnumMessageLevel.Error,
+                    message: $"Error when trying to insert record in database table: {jobParameter.tableName}",
+                    exceptionMessage: ex.Message
+                );
             }
         }
 
+        public async Task<bool> ExecuteQueryCommand(LinxMicrovixJobParameter jobParameter, string? sql)
+        {
+            try
+            {
+                using (var conn = _sqlServerConnection.GetIDbConnection(jobParameter.databaseName))
+                {
+                    var result = await conn.ExecuteAsync(sql: sql, commandTimeout: 360);
+
+                    if (result > 0)
+                        return true;
+
+                    return false;
+                }
+            }
+            catch (SqlException ex)
+            {
+                throw new SQLCommandException(
+                    step: EnumSteps.ExecuteQueryCommand,
+                    message: $"Error when trying to execute command sql",
+                    exceptionMessage: ex.Message,
+                    commandSQL: sql
+                );
+            }
+            catch (Exception ex)
+            {
+                throw new InternalException(
+                    step: EnumSteps.ExecuteQueryCommand,
+                    error: EnumError.SQLCommand,
+                    level: EnumMessageLevel.Error,
+                    message: $"Error when trying to execute command sql",
+                    exceptionMessage: ex.Message
+                );
+            }
+        }
+
+        public bool BulkInsertIntoTableRaw(LinxMicrovixJobParameter jobParameter, DataTable dataTable, int dataTableRowsNumber)
+        {
+            try
+            {
+                using (var conn = _sqlServerConnection.GetDbConnection(jobParameter.databaseName))
+                {
+                    using var bulkCopy = new SqlBulkCopy(conn);
+                    bulkCopy.DestinationTableName = $"[{jobParameter.tableName}_raw]";
+                    bulkCopy.BatchSize = dataTableRowsNumber;
+                    bulkCopy.BulkCopyTimeout = 360;
+                    bulkCopy.WriteToServer(dataTable);
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new InternalException(
+                    step: EnumSteps.BulkInsertIntoTableRaw,
+                    error: EnumError.SQLCommand,
+                    level: EnumMessageLevel.Error,
+                    message: $"Error when trying to bulk insert records on table raw",
+                    exceptionMessage: ex.Message
+                );
+            }
+        }
+
+        public async Task<List<TEntity>> GetRegistersExists(LinxMicrovixJobParameter jobParameter, string sql)
+        {
+            try
+            {
+                using (var conn = _sqlServerConnection.GetDbConnection(jobParameter.databaseName))
+                {
+                    var result = await conn.QueryAsync<TEntity>(sql: sql, commandTimeout: 360);
+                    return result.ToList();
+                }
+            }
+            catch (SqlException ex)
+            {
+                throw new SQLCommandException(
+                    step: EnumSteps.GetRegistersExists,
+                    message: $"Error when trying to get records that already exist in trusted table",
+                    exceptionMessage: ex.Message,
+                    commandSQL: sql
+                );
+            }
+            catch (Exception ex)
+            {
+                throw new InternalException(
+                    step: EnumSteps.GetRegistersExists,
+                    error: EnumError.SQLCommand,
+                    level: EnumMessageLevel.Error,
+                    message: $"Error when trying to get records that already exist in trusted table",
+                    exceptionMessage: ex.Message
+                );
+            }
+        }
+
+        #region MOVER PARA PROJETO DATABASE INITIALIZATION
+        //public async Task<bool> DeleteLogResponse(LinxMicrovixJobParameter jobParameter)
+        //{
+        //    string? sql = $"DELETE FROM [{jobParameter.parametersLogTableName}] " +
+        //                 $"WHERE METHOD = '{jobParameter.jobName}' " +
+        //                 $"AND ID NOT IN (SELECT TOP 15 ID FROM [{jobParameter.parametersLogTableName}] ORDER BY ID DESC)";
+
+        //    try
+        //    {
+        //        using (var conn = _sqlServerConnection.GetIDbConnection(jobParameter.databaseName))
+        //        {
+        //            var result = await conn.ExecuteAsync(sql: sql, commandTimeout: 360);
+
+        //            if (result > 0)
+        //                return true;
+
+        //            return false;
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new ExecuteCommandException()
+        //        {
+        //            project = $"{jobParameter.projectName} - IntegrationsCore",
+        //            job = jobParameter.jobName,
+        //            method = $"DeleteLogResponse",
+        //            message = $"Error when trying to clear parameters log table",
+        //            schema = $"[{jobParameter.tableName}]",
+        //            command = sql,
+        //            exception = ex.Message
+        //        };
+        //    }
+        //}
+        //public async Task<bool> ExecuteTruncateRawTable(LinxMicrovixJobParameter jobParameter)
+        //{
+        //    string? sql = $"TRUNCATE TABLE [{jobParameter.tableName}_raw]";
+
+        //    try
+        //    {
+        //        using (var conn = _sqlServerConnection.GetIDbConnection(jobParameter.databaseName))
+        //        {
+        //            var result = await conn.ExecuteAsync(sql: sql, commandTimeout: 360);
+
+        //            if (result > 0)
+        //                return true;
+
+        //            return false;
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new ExecuteCommandException()
+        //        {
+        //            project = $"{jobParameter.projectName} - IntegrationsCore",
+        //            job = jobParameter.jobName,
+        //            method = $"ExecuteTruncateRawTable",
+        //            message = $"Error when trying to truncate table raw",
+        //            schema = $"[{jobParameter.tableName}_raw]",
+        //            command = sql,
+        //            exception = ex.Message
+        //        };
+        //    }
+        //}
+        //public async Task<bool> UpdateLogParameters(LinxMicrovixJobParameter jobParameter, string? lastResponse)
+        //{
+        //    string? sql = $"UPDATE {jobParameter.parametersTableName} " +
+        //                  "SET LAST_EXECUTION = GETDATE(), " +
+        //                 $"LAST_RESPONSE = '{lastResponse}' " +
+        //                  "WHERE " +
+        //                 $"METHOD = '{jobParameter.jobName}'";
+
+        //    try
+        //    {
+        //        using (var conn = _sqlServerConnection.GetIDbConnection(jobParameter.databaseName))
+        //        {
+        //            var result = await conn.ExecuteAsync(sql: sql, commandTimeout: 360);
+
+        //            if (result > 0)
+        //                return true;
+
+        //            return false;
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new ExecuteCommandException()
+        //        {
+        //            project = $"{jobParameter.projectName} - IntegrationsCore",
+        //            job = jobParameter.jobName,
+        //            method = $"UpdateLogParameters",
+        //            message = $"Error when trying to update date of last execution date in database table: {jobParameter.parametersLogTableName}",
+        //            schema = $"[{jobParameter.parametersLogTableName}]",
+        //            command = sql,
+        //            exception = ex.Message
+        //        };
+        //    }
+        //}
+        //public async Task<bool> InsertLogResponse(LinxMicrovixJobParameter jobParameter, string? response, object record)
+        //{
+        //    string? sql = $"INSERT INTO {jobParameter.parametersLogTableName} " +
+        //      "([method], [execution_date], [parameters_interval], [response]) " +
+        //      "Values " +
+        //      "(@method, GETDATE(), @parameters_interval, @response)";
+
+        //    try
+        //    {
+        //        using (var conn = _sqlServerConnection.GetIDbConnection(jobParameter.databaseName))
+        //        {
+        //            var result = await conn.ExecuteAsync(sql: sql, param: record, commandTimeout: 360);
+
+        //            if (result > 0)
+        //                return true;
+
+        //            return false;
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new ExecuteCommandException()
+        //        {
+        //            project = $"{jobParameter.projectName} - IntegrationsCore",
+        //            job = jobParameter.jobName,
+        //            method = $"InsertRecord",
+        //            message = $"Error when trying to insert record in database table: {jobParameter.tableName}",
+        //            schema = $"[{jobParameter.tableName}]",
+        //            command = sql,
+        //            exception = ex.Message
+        //        };
+        //    }
+        //}
+        //public async Task<bool> CreateDataTableIfNotExists(LinxMicrovixJobParameter jobParameter)
+        //{
+        //    string? sql = @$"SELECT DISTINCT * FROM [INFORMATION_SCHEMA].[TABLES] (NOLOCK) WHERE TABLE_NAME LIKE '%{jobParameter.tableName}%'";
+
+        //    try
+        //    {
+        //        using (var conn = _sqlServerConnection.GetIDbConnection(jobParameter.databaseName))
+        //        {
+        //            var result = await conn.QueryAsync(sql: sql);
+
+        //            if (result.Count() == 0)
+        //            {
+        //                conn.CreateTable<TEntity>(tableName: $"{jobParameter.tableName}_raw");
+        //                conn.CreateTable<TEntity>(tableName: $"{jobParameter.tableName}_trusted");
+
+        //                return true;
+        //            }
+
+        //            return false;
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new ExecuteCommandException()
+        //        {
+        //            project = $"{jobParameter.projectName} - IntegrationsCore",
+        //            job = jobParameter.jobName,
+        //            method = $"CreateDataTableIfNotExists",
+        //            message = $"Error when trying to create table: {jobParameter.tableName}",
+        //            schema = $"[{jobParameter.tableName}]",
+        //            command = sql,
+        //            exception = ex.Message
+        //        };
+        //    }
+        //}
         public async Task<bool> InsertParametersIfNotExists(LinxMicrovixJobParameter jobParameter, object parameter)
         {
             string? sql = $"IF NOT EXISTS (SELECT * FROM [{jobParameter.parametersTableName}] WHERE [method] = '{jobParameter.jobName}') " +
@@ -342,197 +591,6 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
                 };
             }
         }
-
-        public async Task<bool> InsertLogResponse(LinxMicrovixJobParameter jobParameter, string? response, object record)
-        {
-            string? sql = $"INSERT INTO {jobParameter.parametersLogTableName} " +
-              "([method], [execution_date], [parameters_interval], [response]) " +
-              "Values " +
-              "(@method, GETDATE(), @parameters_interval, @response)";
-
-            try
-            {
-                using (var conn = _sqlServerConnection.GetIDbConnection(jobParameter.databaseName))
-                {
-                    var result = await conn.ExecuteAsync(sql: sql, param: record, commandTimeout: 360);
-
-                    if (result > 0)
-                        return true;
-
-                    return false;
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new ExecuteCommandException()
-                {
-                    project = $"{jobParameter.projectName} - IntegrationsCore",
-                    job = jobParameter.jobName,
-                    method = $"InsertRecord",
-                    message = $"Error when trying to insert record in database table: {jobParameter.tableName}",
-                    schema = $"[{jobParameter.tableName}]",
-                    command = sql,
-                    exception = ex.Message
-                };
-            }
-        }
-
-        public async Task<bool> UpdateLogParameters(LinxMicrovixJobParameter jobParameter, string? lastResponse)
-        {
-            string? sql = $"UPDATE {jobParameter.parametersTableName} " +
-                          "SET LAST_EXECUTION = GETDATE(), " +
-                         $"LAST_RESPONSE = '{lastResponse}' " +
-                          "WHERE " +
-                         $"METHOD = '{jobParameter.jobName}'";
-
-            try
-            {
-                using (var conn = _sqlServerConnection.GetIDbConnection(jobParameter.databaseName))
-                {
-                    var result = await conn.ExecuteAsync(sql: sql, commandTimeout: 360);
-
-                    if (result > 0)
-                        return true;
-
-                    return false;
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new ExecuteCommandException()
-                {
-                    project = $"{jobParameter.projectName} - IntegrationsCore",
-                    job = jobParameter.jobName,
-                    method = $"UpdateLogParameters",
-                    message = $"Error when trying to update date of last execution date in database table: {jobParameter.parametersLogTableName}",
-                    schema = $"[{jobParameter.parametersLogTableName}]",
-                    command = sql,
-                    exception = ex.Message
-                };
-            }
-        }
-
-        public async Task<bool> ExecuteQueryCommand(LinxMicrovixJobParameter jobParameter, string? sql)
-        {
-            try
-            {
-                using (var conn = _sqlServerConnection.GetIDbConnection(jobParameter.databaseName))
-                {
-                    var result = await conn.ExecuteAsync(sql: sql, commandTimeout: 360);
-
-                    if (result > 0)
-                        return true;
-
-                    return false;
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new ExecuteCommandException()
-                {
-                    project = $"{jobParameter.projectName} - IntegrationsCore",
-                    job = jobParameter.jobName,
-                    method = $"ExecuteQueryCommand",
-                    message = $"Error when trying to execute command sql",
-                    schema = $"[{jobParameter.tableName}]",
-                    command = sql,
-                    exception = ex.Message
-                };
-            }
-        }
-
-        public async Task<bool> DeleteLogResponse(LinxMicrovixJobParameter jobParameter)
-        {
-            string? sql = $"DELETE FROM [{jobParameter.parametersLogTableName}] " +
-                         $"WHERE METHOD = '{jobParameter.jobName}' " +
-                         $"AND ID NOT IN (SELECT TOP 15 ID FROM [{jobParameter.parametersLogTableName}] ORDER BY ID DESC)";
-
-            try
-            {
-                using (var conn = _sqlServerConnection.GetIDbConnection(jobParameter.databaseName))
-                {
-                    var result = await conn.ExecuteAsync(sql: sql, commandTimeout: 360);
-
-                    if (result > 0)
-                        return true;
-
-                    return false;
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new ExecuteCommandException()
-                {
-                    project = $"{jobParameter.projectName} - IntegrationsCore",
-                    job = jobParameter.jobName,
-                    method = $"DeleteLogResponse",
-                    message = $"Error when trying to clear parameters log table",
-                    schema = $"[{jobParameter.tableName}]",
-                    command = sql,
-                    exception = ex.Message
-                };
-            }
-        }
-
-        public async Task<bool> ExecuteTruncateRawTable(LinxMicrovixJobParameter jobParameter)
-        {
-            string? sql = $"TRUNCATE TABLE [{jobParameter.tableName}_raw]";
-
-            try
-            {
-                using (var conn = _sqlServerConnection.GetIDbConnection(jobParameter.databaseName))
-                {
-                    var result = await conn.ExecuteAsync(sql: sql, commandTimeout: 360);
-
-                    if (result > 0)
-                        return true;
-
-                    return false;
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new ExecuteCommandException()
-                {
-                    project = $"{jobParameter.projectName} - IntegrationsCore",
-                    job = jobParameter.jobName,
-                    method = $"ExecuteTruncateRawTable",
-                    message = $"Error when trying to truncate table raw",
-                    schema = $"[{jobParameter.tableName}_raw]",
-                    command = sql,
-                    exception = ex.Message
-                };
-            }
-        }
-
-        public bool BulkInsertIntoTableRaw(LinxMicrovixJobParameter jobParameter, DataTable dataTable, int dataTableRowsNumber)
-        {
-            try
-            {
-                using (var conn = _sqlServerConnection.GetDbConnection(jobParameter.databaseName))
-                {
-                    using var bulkCopy = new SqlBulkCopy(conn);
-                    bulkCopy.DestinationTableName = $"[{jobParameter.tableName}_raw]";
-                    bulkCopy.BatchSize = dataTableRowsNumber;
-                    bulkCopy.BulkCopyTimeout = 360;
-                    bulkCopy.WriteToServer(dataTable);
-                }
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                throw new ExecuteCommandException()
-                {
-                    project = $"{jobParameter.projectName} - IntegrationsCore",
-                    job = jobParameter.jobName,
-                    method = $"BulkInsertIntoTableRaw",
-                    message = $"Error when trying to bulk insert records on table raw",
-                    schema = $"[{jobParameter.tableName}_raw]",
-                    command = " - ",
-                    exception = ex.Message
-                };
-            }
-        }
+        #endregion
     }
 }

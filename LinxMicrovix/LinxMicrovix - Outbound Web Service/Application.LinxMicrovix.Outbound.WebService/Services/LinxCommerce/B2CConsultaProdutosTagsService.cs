@@ -70,12 +70,6 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
         {
             try
             {
-                await _linxMicrovixRepositoryBase.DeleteLogResponse(jobParameter);
-                await _linxMicrovixRepositoryBase.CreateDataTableIfNotExists(jobParameter);
-                await _b2cConsultaProdutosTagsRepository.CreateTableMerge(jobParameter: jobParameter);
-                await _b2cConsultaProdutosTagsRepository.InsertParametersIfNotExists(jobParameter);
-                await _linxMicrovixRepositoryBase.ExecuteTruncateRawTable(jobParameter);
-
                 string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter);
                 var cnpjs_emp = await _linxMicrovixRepositoryBase.GetB2CCompanys(jobParameter);
 
@@ -95,22 +89,9 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                         var listRecords = DeserializeXMLToObject(jobParameter, xmls);
                         _b2cConsultaProdutosTagsRepository.BulkInsertIntoTableRaw(records: listRecords, jobParameter: jobParameter);
                     }
-
-                    await _linxMicrovixRepositoryBase.InsertLogResponse(
-                        jobParameter: jobParameter,
-                        response: response,
-                        record: new
-                        {
-                            method = jobParameter.jobName,
-                            parameters_interval = jobParameter.parametersInterval,
-                            response = response
-                        });
-                    await _linxMicrovixRepositoryBase.UpdateLogParameters(jobParameter: jobParameter, lastResponse: response); 
                 }
 
                 await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter: jobParameter);
-                await _linxMicrovixRepositoryBase.ExecuteTruncateRawTable(jobParameter);
-
                 return true;
             }
             catch

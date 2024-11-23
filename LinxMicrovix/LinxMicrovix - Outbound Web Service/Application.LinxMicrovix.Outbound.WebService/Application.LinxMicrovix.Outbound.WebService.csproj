@@ -11,4 +11,9 @@
     <ProjectReference Include="..\Domain.LinxMicrovix.Outbound.WebService\Domain.LinxMicrovix.Outbound.WebService.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Interfaces\Cache\LinxMicrovix\" />
+    <Folder Include="Services\Cache\LinxMicrovix\" />
+  </ItemGroup>
+
 </Project>

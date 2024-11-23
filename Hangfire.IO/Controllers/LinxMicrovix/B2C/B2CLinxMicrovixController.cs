@@ -9,6 +9,7 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
     public class B2CLinxMicrovixController : Controller
     {
         private readonly string? _docMainCompany;
+        private readonly string? _databaseName;
         private readonly string? _projectName;
         private readonly string? _parametersInterval;
         private readonly string? _parametersTableName;
@@ -220,6 +221,11 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                 .GetSection("MainCompany")
                 .Value;
 
+            _databaseName = _configuration
+                .GetSection("ConfigureServer")
+                .GetSection("LinxMicrovixCommerceDatabaseName")
+                .Value;
+
             _projectName = _configuration
                 .GetSection("B2CLinxMicrovix")
                 .GetSection("ProjectName")
@@ -304,6 +310,7 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     new LinxMicrovixJobParameter
                     {
                         docMainCompany = _docMainCompany,
+                        databaseName = _databaseName,
                         projectName = _projectName,
                         keyAuthorization = _key,
                         userAuthentication = _authentication,

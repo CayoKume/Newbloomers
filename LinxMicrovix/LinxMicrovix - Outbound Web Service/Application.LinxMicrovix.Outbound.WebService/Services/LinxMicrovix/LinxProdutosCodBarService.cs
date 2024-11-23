@@ -67,10 +67,6 @@ namespace LinxMicrovix.Outbound.Web.Service.Application.Services.LinxMicrovix
         {
             try
             {
-                await _linxMicrovixRepositoryBase.DeleteLogResponse(jobParameter);
-                await _linxMicrovixRepositoryBase.CreateDataTableIfNotExists(jobParameter);
-                await _linxProdutosCodBarRepository.InsertParametersIfNotExists(jobParameter);
-
                 string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter);
 
                 var body = _linxMicrovixServiceBase.BuildBodyRequest(
@@ -90,17 +86,6 @@ namespace LinxMicrovix.Outbound.Web.Service.Application.Services.LinxMicrovix
                         await _linxProdutosCodBarRepository.InsertRecord(record: record, jobParameter: jobParameter);
                     }
 
-                    await _linxMicrovixRepositoryBase.InsertLogResponse(
-                        jobParameter: jobParameter,
-                        response: response,
-                        record: new
-                        {
-                            method = jobParameter.jobName,
-                            parameters_interval = jobParameter.parametersInterval,
-                            response = response
-                        });
-                    await _linxMicrovixRepositoryBase.UpdateLogParameters(jobParameter: jobParameter, lastResponse: response);
-
                     return true;
                 }
 
@@ -116,11 +101,6 @@ namespace LinxMicrovix.Outbound.Web.Service.Application.Services.LinxMicrovix
         {
             try
             {
-                await _linxMicrovixRepositoryBase.DeleteLogResponse(jobParameter);
-                await _linxMicrovixRepositoryBase.CreateDataTableIfNotExists(jobParameter);
-                await _linxProdutosCodBarRepository.InsertParametersIfNotExists(jobParameter);
-                await _linxMicrovixRepositoryBase.ExecuteTruncateRawTable(jobParameter);
-
                 string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter);
 
                 var body = _linxMicrovixServiceBase.BuildBodyRequest(
@@ -137,17 +117,6 @@ namespace LinxMicrovix.Outbound.Web.Service.Application.Services.LinxMicrovix
                     var listRecords = DeserializeXMLToObject(jobParameter, xmls);
                     _linxProdutosCodBarRepository.BulkInsertIntoTableRaw(records: listRecords, jobParameter: jobParameter);
                 }
-
-                await _linxMicrovixRepositoryBase.InsertLogResponse(
-                    jobParameter: jobParameter,
-                    response: response,
-                    record: new
-                    {
-                        method = jobParameter.jobName,
-                        parameters_interval = jobParameter.parametersInterval,
-                        response = response
-                    });
-                await _linxMicrovixRepositoryBase.UpdateLogParameters(jobParameter: jobParameter, lastResponse: response);
 
                 await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter: jobParameter);
                 //await _linxProdutosCodBarRepository.CreateTableMerge(jobParameter: jobParameter);

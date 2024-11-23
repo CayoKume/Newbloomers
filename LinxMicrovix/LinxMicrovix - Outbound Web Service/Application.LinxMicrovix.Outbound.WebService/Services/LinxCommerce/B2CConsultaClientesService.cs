@@ -2,11 +2,17 @@
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxCommerce;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Api;
-using static Domain.IntegrationsCore.Exceptions.InternalErrorsExceptions;
 using System.Data;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxCommerce;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
+using Domain.IntegrationsCore.Entities.Enums;
+using Application.IntegrationsCore.Interfaces;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Cache.LinxCommerce;
+using Application.LinxMicrovix.Outbound.WebService.Entities.Cache.LinxCommerce;
+using Domain.IntegrationsCore.Exceptions;
+using System.ComponentModel.DataAnnotations;
+using static Domain.IntegrationsCore.Exceptions.InternalErrorsExceptions;
 
 namespace Application.LinxMicrovix.Outbound.WebService.Services
 {
@@ -19,18 +25,22 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
     public class B2CConsultaClientesService : IB2CConsultaClientesService
     {
         private readonly IAPICall _apiCall;
+        private readonly ILoggerService _logger;
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
         private readonly ILinxMicrovixRepositoryBase<B2CConsultaClientes> _linxMicrovixRepositoryBase;
         private readonly IB2CConsultaClientesRepository _b2cConsultaClientesRepository;
+        private static IB2CConsultaClientesServiceCache _b2cConsultaClientesCache { get; set; } = new B2CConsultaClientesServiceCache();
 
         public B2CConsultaClientesService(
             IAPICall apiCall,
+            ILoggerService logger,
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
             ILinxMicrovixRepositoryBase<B2CConsultaClientes> linxMicrovixRepositoryBase,
             IB2CConsultaClientesRepository b2cConsultaClientesRepository
         )
         {
             _apiCall = apiCall;
+            _logger = logger;
             _b2cConsultaClientesRepository = b2cConsultaClientesRepository;
             _linxMicrovixServiceBase = linxMicrovixServiceBase;
             _linxMicrovixRepositoryBase = linxMicrovixRepositoryBase;
@@ -44,7 +54,10 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
             {
                 try
                 {
+                    var validations = new List<ValidationResult>();
+
                     var entity = new B2CConsultaClientes(
+                         listValidations: validations,
                          cod_cliente_b2c: records[i].Where(pair => pair.Key == "cod_cliente_b2c").Select(pair => pair.Value).FirstOrDefault(),
                          cod_cliente_erp: records[i].Where(pair => pair.Key == "cod_cliente_erp").Select(pair => pair.Value).FirstOrDefault(),
                          doc_cliente: records[i].Where(pair => pair.Key == "doc_cliente").Select(pair => pair.Value).FirstOrDefault(),
@@ -85,20 +98,35 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                          aceita_programa_fidelidade: records[i].Where(pair => pair.Key == "aceita_programa_fidelidade").Select(pair => pair.Value).FirstOrDefault()
                     );
 
+                    var contexto = new ValidationContext(entity, null, null);
+                    Validator.TryValidateObject(entity, contexto, validations, true);
+
+                    if (validations.Count() > 0)
+                    {
+                        for (int j = 0; j < validations.Count(); j++)
+                        {
+                            _logger.AddMessage(
+                                idStep: EnumSteps.DeserializeXMLToObject,
+                                idError: EnumError.Validation,
+                                idLogLevel: EnumMessageLevel.Warning,
+                                message: $"Error when convert record: {records[i].Where(pair => pair.Key == "cod_cliente_b2c").Select(pair => pair.Value).FirstOrDefault()} - {records[i].Where(pair => pair.Key == "nm_cliente").Select(pair => pair.Value).FirstOrDefault()}\n" +
+                                         $"{validations[j].ErrorMessage}"
+                            );
+                        }
+                        continue;
+                    }
+
                     list.Add(entity);
                 }
                 catch (Exception ex)
                 {
-                    throw new InternalErrorException()
-                    {
-                        project = jobParameter.projectName,
-                        job = jobParameter.jobName,
-                        method = "DeserializeXMLToObject",
-                        message = $"Error when convert record: {records[i].Where(pair => pair.Key == "cod_cliente_b2c").Select(pair => pair.Value).FirstOrDefault()} - {records[i].Where(pair => pair.Key == "nm_cliente").Select(pair => pair.Value).FirstOrDefault()}",
-                        record = $"{records[i].Where(pair => pair.Key == "cod_cliente_b2c").Select(pair => pair.Value).FirstOrDefault()} - {records[i].Where(pair => pair.Key == "nm_cliente").Select(pair => pair.Value).FirstOrDefault()}",
-                        propertie = " - ",
-                        exception = ex.Message
-                    };
+                    throw new InternalException(
+                        step: EnumSteps.DeserializeXMLToObject,
+                        error: EnumError.Exception,
+                        level: EnumMessageLevel.Error,
+                        message: $"Error when convert record: {records[i].Where(pair => pair.Key == "cod_cliente_b2c").Select(pair => pair.Value).FirstOrDefault()} - {records[i].Where(pair => pair.Key == "nm_cliente").Select(pair => pair.Value).FirstOrDefault()}",
+                        exceptionMessage: ex.Message
+                    );
                 }
             };
 
@@ -109,10 +137,6 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
         {
             try
             {
-                await _linxMicrovixRepositoryBase.DeleteLogResponse(jobParameter);
-                await _linxMicrovixRepositoryBase.CreateDataTableIfNotExists(jobParameter);
-                await _b2cConsultaClientesRepository.InsertParametersIfNotExists(jobParameter);
-
                 string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter);
 
                 var body = _linxMicrovixServiceBase.BuildBodyRequest(
@@ -132,17 +156,6 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                         await _b2cConsultaClientesRepository.InsertRecord(record: record, jobParameter: jobParameter);
                     }
 
-                    await _linxMicrovixRepositoryBase.InsertLogResponse(
-                        jobParameter: jobParameter,
-                        response: response,
-                        record: new
-                        {
-                            method = jobParameter.jobName,
-                            parameters_interval = jobParameter.parametersInterval,
-                            response = response
-                        });
-                    await _linxMicrovixRepositoryBase.UpdateLogParameters(jobParameter: jobParameter, lastResponse: response);
-
                     return true;
                 }
 
@@ -156,13 +169,13 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
 
         public async Task<bool> GetRecords(LinxMicrovixJobParameter jobParameter)
         {
+            IList<B2CConsultaClientes> _listSomenteNovos = new List<B2CConsultaClientes>();
+
             try
             {
-                await _linxMicrovixRepositoryBase.DeleteLogResponse(jobParameter);
-                await _linxMicrovixRepositoryBase.CreateDataTableIfNotExists(jobParameter);
-                await _b2cConsultaClientesRepository.CreateTableMerge(jobParameter: jobParameter);
-                await _b2cConsultaClientesRepository.InsertParametersIfNotExists(jobParameter);
-                await _linxMicrovixRepositoryBase.ExecuteTruncateRawTable(jobParameter);
+                _logger
+                   .Clear()
+                   .AddLog(EnumJob.B2CConsultaClientes);
 
                 string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter);
                 string? timestamp = await _linxMicrovixRepositoryBase.GetLast7DaysMinTimestamp(jobParameter: jobParameter, columnDate: "DT_UPDATE");
@@ -174,34 +187,85 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                 );
 
                 string? response = await _apiCall.PostAsync(jobParameter: jobParameter, body: body);
-                var xmls = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response);
+                var xmls = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response, _b2cConsultaClientesCache);
 
                 if (xmls.Count() > 0)
                 {
                     var listRecords = DeserializeXMLToObject(jobParameter, xmls);
-                    _b2cConsultaClientesRepository.BulkInsertIntoTableRaw(records: listRecords, jobParameter: jobParameter);
-                }
 
-                await _linxMicrovixRepositoryBase.InsertLogResponse(
-                    jobParameter: jobParameter,
-                    response: response,
-                    record: new
+                    if (_b2cConsultaClientesCache.GetList().Count == 0)
                     {
-                        method = jobParameter.jobName,
-                        parameters_interval = jobParameter.parametersInterval,
-                        response = response
-                    });
-                await _linxMicrovixRepositoryBase.UpdateLogParameters(jobParameter: jobParameter, lastResponse: response);
+                        var list_existentes = await _b2cConsultaClientesRepository.GetRegistersExists(jobParameter: jobParameter, registros: listRecords);
+                        _b2cConsultaClientesCache.AddList(list_existentes);
+                    }
 
-                await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter: jobParameter);
-                await _linxMicrovixRepositoryBase.ExecuteTruncateRawTable(jobParameter);
+                    _listSomenteNovos = _b2cConsultaClientesCache.FiltrarList(listRecords);
+                    if (_listSomenteNovos.Count() > 0)
+                    {
+                        _b2cConsultaClientesRepository.BulkInsertIntoTableRaw(records: _listSomenteNovos, jobParameter: jobParameter);
+                        for (int i = 0; i < _listSomenteNovos.Count; i++)
+                        {
+                            var key = _b2cConsultaClientesCache.GetKey(_listSomenteNovos[i]);
+                            if (_b2cConsultaClientesCache.GetDictionaryXml().ContainsKey(key))
+                            {
+                                var xml = _b2cConsultaClientesCache.GetDictionaryXml()[key];
+                                _logger.AddRecord(key, xml);
+                            }
+                        }
 
-                return true;
+                        await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter: jobParameter);
+
+                        _logger
+                            .AddMessage(
+                            $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"
+                        );
+                    }
+                    else
+                        _logger
+                            .AddMessage(
+                            $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"
+                        );
+                }
             }
-            catch
+            catch (SQLCommandException ex)
             {
+                _logger.AddMessage(
+                    idStep: ex.Step,
+                    idError: ex.Error,
+                    idLogLevel: ex.MessageLevel,
+                    message: ex.Message,
+                    exceptionMessage: ex.ExceptionMessage,
+                    commandSQL: ex.CommandSQL
+                );
+
                 throw;
             }
+            catch (InternalException ex)
+            {
+                _logger.AddMessage(
+                    idStep: ex.Step,
+                    idError: ex.Error,
+                    idLogLevel: ex.MessageLevel,
+                    message: ex.Message,
+                    exceptionMessage: ex.ExceptionMessage
+                );
+
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.AddMessage(
+                    message: "Error when executing GetRecords method",
+                    exceptionMessage: ex.Message
+                );
+            }
+            finally
+            {
+                //await _logger.CommitAllChanges();
+                _b2cConsultaClientesCache.AddList(_listSomenteNovos);
+            }
+
+            return true;
         }
     }
 }

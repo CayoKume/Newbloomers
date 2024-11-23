@@ -4,6 +4,6 @@ namespace Domain.IntegrationsCore.Interfaces
 {
     public interface ILogDetailsRepository
     {
-        Task<int> BulkInsert(IList<ILogMsgsDetail> pListLogDetails);
+        //Task<int> BulkInsert(IList<ILogMsgsDetail> pListLogDetails);
     }
 }

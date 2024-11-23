@@ -70,10 +70,6 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
         {
             try
             {
-                await _linxMicrovixRepositoryBase.DeleteLogResponse(jobParameter);
-                await _linxMicrovixRepositoryBase.CreateDataTableIfNotExists(jobParameter);
-                await _b2cConsultaPlanosParcelasRepository.InsertParametersIfNotExists(jobParameter);
-
                 string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter);
 
                 var body = _linxMicrovixServiceBase.BuildBodyRequest(
@@ -93,17 +89,6 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                         await _b2cConsultaPlanosParcelasRepository.InsertRecord(record: record, jobParameter: jobParameter);
                     }
 
-                    await _linxMicrovixRepositoryBase.InsertLogResponse(
-                        jobParameter: jobParameter,
-                        response: response,
-                        record: new
-                        {
-                            method = jobParameter.jobName,
-                            parameters_interval = jobParameter.parametersInterval,
-                            response = response
-                        });
-                    await _linxMicrovixRepositoryBase.UpdateLogParameters(jobParameter: jobParameter, lastResponse: response);
-
                     return true;
                 }
 
@@ -119,12 +104,6 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
         {
             try
             {
-                await _linxMicrovixRepositoryBase.DeleteLogResponse(jobParameter);
-                await _linxMicrovixRepositoryBase.CreateDataTableIfNotExists(jobParameter);
-                await _b2cConsultaPlanosParcelasRepository.CreateTableMerge(jobParameter: jobParameter);
-                await _b2cConsultaPlanosParcelasRepository.InsertParametersIfNotExists(jobParameter);
-                await _linxMicrovixRepositoryBase.ExecuteTruncateRawTable(jobParameter);
-
                 string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter);
                 var cnpjs_emp = await _linxMicrovixRepositoryBase.GetB2CCompanys(jobParameter);
 
@@ -145,20 +124,8 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                         _b2cConsultaPlanosParcelasRepository.BulkInsertIntoTableRaw(records: listRecords, jobParameter: jobParameter);
                     }
 
-                    await _linxMicrovixRepositoryBase.InsertLogResponse(
-                        jobParameter: jobParameter,
-                        response: response,
-                        record: new
-                        {
-                            method = jobParameter.jobName,
-                            parameters_interval = jobParameter.parametersInterval,
-                            response = response
-                        });
-                    await _linxMicrovixRepositoryBase.UpdateLogParameters(jobParameter: jobParameter, lastResponse: response);
-
                 }
                 await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter: jobParameter);
-                await _linxMicrovixRepositoryBase.ExecuteTruncateRawTable(jobParameter);
 
                 return true;
             }

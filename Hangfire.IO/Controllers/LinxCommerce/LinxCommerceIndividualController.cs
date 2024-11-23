@@ -14,6 +14,7 @@ namespace HangfireDashboard.UI.Controllers.LinxCommerce
         private readonly string? _parametersLogTableName;
         private readonly string? _key;
         private readonly string? _authentication;
+        private readonly string? _databaseName;
         private readonly List<LinxMethods>? _methods;
 
         private readonly IConfiguration _configuration;
@@ -51,6 +52,11 @@ namespace HangfireDashboard.UI.Controllers.LinxCommerce
                 .GetSection("LinxCommerce")
                 .GetSection("Authentication")
                 .Value;
+
+            _databaseName = _configuration
+                 .GetSection("ConfigureServer")
+                 .GetSection("LinxCommerceDatabaseName")
+                 .Value;
 
             _methods = _configuration
                             .GetSection("LinxCommerce")
@@ -113,6 +119,7 @@ namespace HangfireDashboard.UI.Controllers.LinxCommerce
                     new LinxCommerceJobParameter
                     {
                         projectName = _projectName,
+                        databaseName = _databaseName,
                         keyAuthorization = _key,
                         userAuthentication = _authentication,
                         parametersTableName = _parametersTableName,

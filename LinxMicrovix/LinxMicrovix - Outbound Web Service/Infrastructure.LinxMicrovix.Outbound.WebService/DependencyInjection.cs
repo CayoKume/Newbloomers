@@ -1,4 +1,6 @@
-﻿using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
+﻿using Application.LinxMicrovix.Outbound.WebService.Entities.Cache.LinxCommerce;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Cache.LinxCommerce;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxCommerce;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxMicrovix;
 using Application.LinxMicrovix.Outbound.WebService.Services;
@@ -24,9 +26,11 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.DependencyInjection
             services.AddScoped(typeof(ILinxMicrovixRepositoryBase<>), typeof(LinxMicrovixRepositoryBase<>));
             services.AddScoped<IAPICall, APICall>();
 
+            services.AddSingleton<IB2CConsultaClassificacaoServiceCache, B2CConsultaClassificacaoServiceCache>();
             services.AddScoped<IB2CConsultaClassificacaoService, B2CConsultaClassificacaoService>();
             services.AddScoped<IB2CConsultaClassificacaoRepository, B2CConsultaClassificacaoRepository>();
 
+            services.AddSingleton<IB2CConsultaClientesServiceCache, B2CConsultaClientesServiceCache>();
             services.AddScoped<IB2CConsultaClientesService, B2CConsultaClientesService>();
             services.AddScoped<IB2CConsultaClientesRepository, B2CConsultaClientesRepository>();
 

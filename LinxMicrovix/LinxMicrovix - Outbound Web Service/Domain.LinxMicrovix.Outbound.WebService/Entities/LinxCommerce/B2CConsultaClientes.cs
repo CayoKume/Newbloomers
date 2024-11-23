@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 
@@ -19,18 +20,23 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
 
         [Key]
         [Column(TypeName = "varchar(14)")]
+        [LengthValidation(length: 14, propertyName: "doc_cliente")]
         public string? doc_cliente { get; private set; }
 
         [Column(TypeName = "varchar(50)")]
+        [LengthValidation(length: 50, propertyName: "nm_cliente")]
         public string? nm_cliente { get; private set; }
 
         [Column(TypeName = "varchar(50)")]
+        [LengthValidation(length: 50, propertyName: "nm_mae")]
         public string? nm_mae { get; private set; }
 
         [Column(TypeName = "varchar(50)")]
+        [LengthValidation(length: 50, propertyName: "nm_pai")]
         public string? nm_pai { get; private set; }
 
         [Column(TypeName = "varchar(50)")]
+        [LengthValidation(length: 50, propertyName: "nm_conjuge")]
         public string? nm_conjuge { get; private set; }
 
         [Column(TypeName = "smalldatetime")]
@@ -40,54 +46,70 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public DateTime? dt_nasc_cliente { get; private set; }
 
         [Column(TypeName = "varchar(250)")]
+        [LengthValidation(length: 250, propertyName: "end_cliente")]
         public string? end_cliente { get; private set; }
 
         [Column(TypeName = "varchar(50)")]
+        [LengthValidation(length: 50, propertyName: "complemento_end_cliente")]
         public string? complemento_end_cliente { get; private set; }
 
         [Column(TypeName = "varchar(20)")]
+        [LengthValidation(length: 20, propertyName: "nr_rua_cliente")]
         public string? nr_rua_cliente { get; private set; }
 
         [Column(TypeName = "varchar(60)")]
+        [LengthValidation(length: 60, propertyName: "bairro_cliente")]
         public string? bairro_cliente { get; private set; }
 
         [Column(TypeName = "varchar(9)")]
+        [LengthValidation(length: 9, propertyName: "cep_cliente")]
         public string? cep_cliente { get; private set; }
 
         [Column(TypeName = "varchar(40)")]
+        [LengthValidation(length: 40, propertyName: "cidade_cliente")]
         public string? cidade_cliente { get; private set; }
 
         [Column(TypeName = "char(2)")]
+        [LengthValidation(length: 2, propertyName: "uf_cliente")]
         public string? uf_cliente { get; private set; }
 
         [Column(TypeName = "varchar(20)")]
+        [LengthValidation(length: 20, propertyName: "fone_cliente")]
         public string? fone_cliente { get; private set; }
 
         [Column(TypeName = "varchar(20)")]
+        [LengthValidation(length: 20, propertyName: "fone_comercial")]
         public string? fone_comercial { get; private set; }
 
         [Column(TypeName = "varchar(20)")]
+        [LengthValidation(length: 20, propertyName: "cel_cliente")]
         public string? cel_cliente { get; private set; }
 
         [Column(TypeName = "varchar(50)")]
+        [LengthValidation(length: 50, propertyName: "email_cliente")]
         public string? email_cliente { get; private set; }
 
         [Column(TypeName = "varchar(20)")]
+        [LengthValidation(length: 20, propertyName: "rg_cliente")]
         public string? rg_cliente { get; private set; }
 
         [Column(TypeName = "varchar(7)")]
+        [LengthValidation(length: 7, propertyName: "rg_orgao_emissor")]
         public string? rg_orgao_emissor { get; private set; }
 
         [Column(TypeName = "tinyint")]
         public Int32? estado_civil_cliente { get; private set; }
 
         [Column(TypeName = "varchar(30)")]
+        [LengthValidation(length: 30, propertyName: "empresa_cliente")]
         public string? empresa_cliente { get; private set; }
 
         [Column(TypeName = "varchar(30)")]
+        [LengthValidation(length: 30, propertyName: "cargo_cliente")]
         public string? cargo_cliente { get; private set; }
 
         [Column(TypeName = "char(1)")]
+        [LengthValidation(length: 1, propertyName: "sexo_cliente")]
         public string? sexo_cliente { get; private set; }
 
         [Column(TypeName = "smalldatetime")]
@@ -103,6 +125,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public DateTime? dt_expedicao_rg { get; private set; }
 
         [Column(TypeName = "varchar(40)")]
+        [LengthValidation(length: 40, propertyName: "naturalidade")]
         public string? naturalidade { get; private set; }
 
         [Column(TypeName = "tinyint")]
@@ -112,6 +135,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public decimal? renda { get; private set; }
 
         [Column(TypeName = "varchar(10)")]
+        [LengthValidation(length: 10, propertyName: "numero_compl_rua_cliente")]
         public string? numero_compl_rua_cliente { get; private set; }
 
         [Column(TypeName = "bigint")]
@@ -129,6 +153,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public B2CConsultaClientes() { }
 
         public B2CConsultaClientes(
+            List<ValidationResult> listValidations,
             string? cod_cliente_b2c,
             string? cod_cliente_erp,
             string? doc_cliente,
@@ -172,252 +197,99 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             lastupdateon = DateTime.Now;
 
             this.cod_cliente_b2c =
-                String.IsNullOrEmpty(cod_cliente_b2c) ? 0
-                : Convert.ToInt32(cod_cliente_b2c);
+                ConvertToInt32Validation.IsValid(cod_cliente_b2c, "cod_cliente_b2c", listValidations) ?
+                Convert.ToInt32(cod_cliente_b2c) :
+                0;
 
             this.cod_cliente_erp =
-                String.IsNullOrEmpty(cod_cliente_erp) ? 0
-                : Convert.ToInt32(cod_cliente_erp);
-
-            this.doc_cliente =
-                String.IsNullOrEmpty(doc_cliente) ? ""
-                : doc_cliente.Substring(
-                    0,
-                    doc_cliente.Length > 14 ? 14
-                    : doc_cliente.Length
-                );
-
-            this.nm_cliente =
-                String.IsNullOrEmpty(nm_cliente) ? ""
-                : nm_cliente.Substring(
-                    0,
-                    nm_cliente.Length > 50 ? 50
-                    : nm_cliente.Length
-                );
-
-            this.nm_mae =
-                String.IsNullOrEmpty(nm_mae) ? ""
-                : nm_mae.Substring(
-                    0,
-                    nm_mae.Length > 50 ? 50
-                    : nm_mae.Length
-                );
-
-            this.nm_pai =
-                String.IsNullOrEmpty(nm_pai) ? ""
-                : nm_pai.Substring(
-                    0,
-                    nm_pai.Length > 50 ? 50
-                    : nm_pai.Length
-                );
-
-            this.nm_conjuge =
-                String.IsNullOrEmpty(nm_conjuge) ? ""
-                : nm_conjuge.Substring(
-                    0,
-                    nm_conjuge.Length > 50 ? 50
-                    : nm_conjuge.Length
-                );
-
-            this.dt_cadastro =
-                String.IsNullOrEmpty(dt_cadastro) ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
-                : Convert.ToDateTime( dt_cadastro );
-
-            this.dt_nasc_cliente =
-                String.IsNullOrEmpty(dt_nasc_cliente) ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
-                : Convert.ToDateTime(dt_nasc_cliente);
-
-            this.end_cliente =
-                String.IsNullOrEmpty(end_cliente) ? ""
-                : end_cliente.Substring(
-                    0,
-                    end_cliente.Length > 250 ? 250
-                    : end_cliente.Length
-                );
-
-            this.complemento_end_cliente =
-                String.IsNullOrEmpty(complemento_end_cliente) ? ""
-                : complemento_end_cliente.Substring(
-                    0,
-                    complemento_end_cliente.Length > 50 ? 50
-                    : complemento_end_cliente.Length
-                );
-
-            this.nr_rua_cliente =
-                String.IsNullOrEmpty(nr_rua_cliente) ? ""
-                : nr_rua_cliente.Substring(
-                    0,
-                    nr_rua_cliente.Length > 20 ? 20
-                    : nr_rua_cliente.Length
-                );
-
-            this.bairro_cliente =
-                String.IsNullOrEmpty(bairro_cliente) ? ""
-                : bairro_cliente.Substring(
-                    0,
-                    bairro_cliente.Length > 60 ? 60
-                    : bairro_cliente.Length
-                );
-
-            this.cep_cliente =
-                String.IsNullOrEmpty(cep_cliente) ? ""
-                : cep_cliente.Substring(
-                    0,
-                    cep_cliente.Length > 9 ? 9
-                    : cep_cliente.Length
-                );
-
-            this.cidade_cliente =
-                String.IsNullOrEmpty(cidade_cliente) ? ""
-                : cidade_cliente.Substring(
-                    0,
-                    cidade_cliente.Length > 40 ? 40
-                    : cidade_cliente.Length
-                );
-
-            this.uf_cliente =
-                String.IsNullOrEmpty(uf_cliente) ? ""
-                : uf_cliente.Substring(
-                    0,
-                    uf_cliente.Length > 2 ? 2
-                    : uf_cliente.Length
-                );
-
-            this.fone_cliente =
-                String.IsNullOrEmpty(fone_cliente) ? ""
-                : fone_cliente.Substring(
-                    0,
-                    fone_cliente.Length > 20 ? 20
-                    : fone_cliente.Length
-                );
-
-            this.fone_comercial =
-                String.IsNullOrEmpty(fone_comercial) ? ""
-                : fone_comercial.Substring(
-                    0,
-                    fone_comercial.Length > 20 ? 20
-                    : fone_comercial.Length
-                );
-
-            this.cel_cliente =
-                String.IsNullOrEmpty(cel_cliente) ? ""
-                : cel_cliente.Substring(
-                    0,
-                    cel_cliente.Length > 20 ? 20
-                    : cel_cliente.Length
-                );
-
-            this.email_cliente =
-                String.IsNullOrEmpty(email_cliente) ? ""
-                : email_cliente.Substring(
-                    0,
-                    email_cliente.Length > 50 ? 50
-                    : email_cliente.Length
-                );
-
-            this.rg_cliente =
-                String.IsNullOrEmpty(rg_cliente) ? ""
-                : rg_cliente.Substring(
-                    0,
-                    rg_cliente.Length > 20 ? 20
-                    : rg_cliente.Length
-                );
-
-            this.rg_orgao_emissor =
-                String.IsNullOrEmpty(rg_orgao_emissor) ? ""
-                : rg_orgao_emissor.Substring(
-                    0,
-                    rg_orgao_emissor.Length > 7 ? 7
-                    : rg_orgao_emissor.Length
-                );
+                ConvertToInt32Validation.IsValid(cod_cliente_erp, "cod_cliente_erp", listValidations) ?
+                Convert.ToInt32(cod_cliente_erp) :
+                0;
+            
+            this.portal =
+                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
+                Convert.ToInt32(portal) :
+                0;
 
             this.estado_civil_cliente =
-                String.IsNullOrEmpty(estado_civil_cliente) ? 0
-                : Convert.ToInt32(estado_civil_cliente);
-
-            this.empresa_cliente =
-                String.IsNullOrEmpty(empresa_cliente) ? ""
-                : empresa_cliente.Substring(
-                    0,
-                    empresa_cliente.Length > 30 ? 30
-                    : empresa_cliente.Length
-                );
-
-            this.cargo_cliente =
-                String.IsNullOrEmpty(cargo_cliente) ? ""
-                : cargo_cliente.Substring(
-                    0,
-                    cargo_cliente.Length > 30 ? 30
-                    : cargo_cliente.Length
-                );
-
-            this.sexo_cliente =
-                String.IsNullOrEmpty(sexo_cliente) ? ""
-                : sexo_cliente.Substring(
-                    0,
-                    sexo_cliente.Length > 1 ? 1
-                    : sexo_cliente.Length
-                );
-
-            this.dt_update =
-                String.IsNullOrEmpty(dt_update) ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
-                : Convert.ToDateTime(dt_update);
+                ConvertToInt32Validation.IsValid(estado_civil_cliente, "estado_civil_cliente", listValidations) ?
+                Convert.ToInt32(estado_civil_cliente) :
+                0;
 
             this.ativo =
-                String.IsNullOrEmpty(ativo) ? 0
-                : Convert.ToInt32(ativo);
-
-            this.receber_email =
-                String.IsNullOrEmpty(receber_email) ? false
-                : Convert.ToBoolean(receber_email);
-
-            this.dt_expedicao_rg =
-                String.IsNullOrEmpty(dt_expedicao_rg) ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
-                : Convert.ToDateTime(dt_expedicao_rg);
-
-            this.naturalidade =
-                String.IsNullOrEmpty(naturalidade) ? ""
-                : naturalidade.Substring(
-                    0,
-                    naturalidade.Length > 40 ? 40
-                    : naturalidade.Length
-                );
+                ConvertToInt32Validation.IsValid(ativo, "ativo", listValidations) ?
+                Convert.ToInt32(ativo) :
+                0;
 
             this.tempo_residencia =
-                String.IsNullOrEmpty(tempo_residencia) ? 0
-                : Convert.ToInt32(tempo_residencia);
-
-            this.renda =
-                String.IsNullOrEmpty(renda) ? 0
-                : Convert.ToDecimal(renda);
-
-            this.numero_compl_rua_cliente =
-                String.IsNullOrEmpty(numero_compl_rua_cliente) ? ""
-                : numero_compl_rua_cliente.Substring(
-                    0,
-                    numero_compl_rua_cliente.Length > 10 ? 10
-                    : numero_compl_rua_cliente.Length
-                );
-
-            this.tipo_pessoa =
-                String.IsNullOrEmpty(tipo_pessoa) ? ""
-                : tipo_pessoa.Substring(
-                    0,
-                    tipo_pessoa.Length > 1 ? 1
-                    : tipo_pessoa.Length
-                );
-
-            this.aceita_programa_fidelidade =
-                String.IsNullOrEmpty(aceita_programa_fidelidade) ? false
-                : Convert.ToBoolean(aceita_programa_fidelidade);
+                ConvertToInt32Validation.IsValid(tempo_residencia, "tempo_residencia", listValidations) ?
+                Convert.ToInt32(tempo_residencia) :
+                0;
 
             this.timestamp =
-                String.IsNullOrEmpty(timestamp) ? 0
-                : Convert.ToInt64(timestamp);
+                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
+                Convert.ToInt64(timestamp) :
+                0;
 
-            this.portal =
-                String.IsNullOrEmpty(portal) ? 0
-                : Convert.ToInt32(portal);
+            this.renda =
+                ConvertToDecimalValidation.IsValid(renda, "renda", listValidations) ?
+                Convert.ToDecimal(renda) :
+                0;
+
+            this.receber_email =
+                ConvertToBooleanValidation.IsValid(receber_email, "receber_email", listValidations) ?
+                Convert.ToBoolean(receber_email) :
+                false;
+
+            this.aceita_programa_fidelidade =
+                ConvertToBooleanValidation.IsValid(aceita_programa_fidelidade, "aceita_programa_fidelidade", listValidations) ?
+                Convert.ToBoolean(aceita_programa_fidelidade) :
+                false;
+
+            this.dt_cadastro =
+                ConvertToDateTimeValidation.IsValid(dt_cadastro, "dt_cadastro", listValidations) ?
+                Convert.ToDateTime(dt_cadastro) :
+                new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar);
+
+            this.dt_expedicao_rg =
+                ConvertToDateTimeValidation.IsValid(dt_expedicao_rg, "dt_expedicao_rg", listValidations) ?
+                Convert.ToDateTime(dt_expedicao_rg) :
+                new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar);
+
+            this.dt_update =
+                ConvertToDateTimeValidation.IsValid(dt_update, "dt_update", listValidations) ?
+                Convert.ToDateTime(dt_update) :
+                new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar);
+
+            this.dt_nasc_cliente =
+                ConvertToDateTimeValidation.IsValid(dt_nasc_cliente, "dt_nasc_cliente", listValidations) ?
+                Convert.ToDateTime(dt_nasc_cliente) :
+                new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar);
+
+            this.doc_cliente = doc_cliente;
+            this.nm_cliente = nm_cliente;
+            this.nm_mae = nm_mae;
+            this.nm_pai = nm_pai;
+            this.nm_conjuge = nm_conjuge;
+            this.end_cliente = end_cliente;
+            this.complemento_end_cliente = complemento_end_cliente;
+            this.nr_rua_cliente = nr_rua_cliente;
+            this.bairro_cliente = bairro_cliente;
+            this.cep_cliente = cep_cliente;
+            this.cidade_cliente = cidade_cliente;
+            this.uf_cliente = uf_cliente;
+            this.fone_cliente = fone_cliente;
+            this.fone_comercial = fone_comercial;
+            this.cel_cliente = cel_cliente;
+            this.email_cliente = email_cliente;
+            this.rg_cliente = rg_cliente;
+            this.rg_orgao_emissor = rg_orgao_emissor;
+            this.empresa_cliente = empresa_cliente;
+            this.cargo_cliente = cargo_cliente;
+            this.sexo_cliente = sexo_cliente;
+            this.naturalidade = naturalidade;
+            this.numero_compl_rua_cliente = numero_compl_rua_cliente;
+            this.tipo_pessoa = tipo_pessoa;
         }
     }
 }

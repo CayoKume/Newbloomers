@@ -1,4 +1,5 @@
-﻿using Azure;
+﻿using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxCommerce;
+using Azure;
 using IntegrationsCore.Domain.Entities;
 using LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce;
 using Microsoft.Azure.WebJobs;
