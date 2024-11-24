@@ -1,4 +1,6 @@
-﻿using Domain.IntegrationsCore.Entities.Parameters;
+﻿using Domain.IntegrationsCore.Entities.Enums;
+using Domain.IntegrationsCore.Entities.Parameters;
+using Domain.IntegrationsCore.Exceptions;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxCommerce;
@@ -12,7 +14,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
         public B2CConsultaProdutosDetalhesDepositosRepository(ILinxMicrovixRepositoryBase<B2CConsultaProdutosDetalhesDepositos> linxMicrovixRepositoryBase) =>
             (_linxMicrovixRepositoryBase) = (linxMicrovixRepositoryBase);
 
-        public bool BulkInsertIntoTableRaw(LinxMicrovixJobParameter jobParameter, List<B2CConsultaProdutosDetalhesDepositos> records)
+        public bool BulkInsertIntoTableRaw(LinxMicrovixJobParameter jobParameter, IList<B2CConsultaProdutosDetalhesDepositos> records)
         {
             try
             {
@@ -75,6 +77,39 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
             try
             {
                 return await _linxMicrovixRepositoryBase.ExecuteQueryCommand(jobParameter: jobParameter, sql: sql);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public async Task<List<B2CConsultaProdutosDetalhesDepositos>> GetRegistersExists(LinxMicrovixJobParameter jobParameter, List<B2CConsultaProdutosDetalhesDepositos> registros)
+        {
+            try
+            {
+                var identificadores = String.Empty;
+                for (int i = 0; i < registros.Count(); i++)
+                {
+                    if (i == registros.Count() - 1)
+                        identificadores += $"'{registros[i].deposito}'";
+                    else
+                        identificadores += $"'{registros[i].deposito}', ";
+                }
+
+                string sql = $"SELECT DEPOSITO, TIMESTAMP FROM B2CCONSULTAPRODUTOSDETALHESDEPOSITOS_TRUSTED WHERE DEPOSITO IN ({identificadores})";
+
+                return await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
+            }
+            catch (Exception ex) when (ex is not InternalException && ex is not SQLCommandException)
+            {
+                throw new InternalException(
+                    stage: EnumStages.GetRegistersExists,
+                    error: EnumError.Exception,
+                    level: EnumMessageLevel.Error,
+                    message: "Error when filling identifiers to sql command",
+                    exceptionMessage: ex.Message
+                );
             }
             catch
             {

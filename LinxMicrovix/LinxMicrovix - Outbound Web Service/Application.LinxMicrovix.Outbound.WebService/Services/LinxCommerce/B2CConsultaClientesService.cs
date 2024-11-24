@@ -12,7 +12,7 @@ using Application.LinxMicrovix.Outbound.WebService.Interfaces.Cache.LinxCommerce
 using Application.LinxMicrovix.Outbound.WebService.Entities.Cache.LinxCommerce;
 using Domain.IntegrationsCore.Exceptions;
 using System.ComponentModel.DataAnnotations;
-using static Domain.IntegrationsCore.Exceptions.InternalErrorsExceptions;
+
 
 namespace Application.LinxMicrovix.Outbound.WebService.Services
 {
@@ -106,9 +106,9 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                         for (int j = 0; j < validations.Count(); j++)
                         {
                             _logger.AddMessage(
-                                idStep: EnumSteps.DeserializeXMLToObject,
-                                idError: EnumError.Validation,
-                                idLogLevel: EnumMessageLevel.Warning,
+                                stage: EnumStages.DeserializeXMLToObject,
+                                error: EnumError.Validation,
+                                logLevel: EnumMessageLevel.Warning,
                                 message: $"Error when convert record: {records[i].Where(pair => pair.Key == "cod_cliente_b2c").Select(pair => pair.Value).FirstOrDefault()} - {records[i].Where(pair => pair.Key == "nm_cliente").Select(pair => pair.Value).FirstOrDefault()}\n" +
                                          $"{validations[j].ErrorMessage}"
                             );
@@ -121,7 +121,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                 catch (Exception ex)
                 {
                     throw new InternalException(
-                        step: EnumSteps.DeserializeXMLToObject,
+                        stage: EnumStages.DeserializeXMLToObject,
                         error: EnumError.Exception,
                         level: EnumMessageLevel.Error,
                         message: $"Error when convert record: {records[i].Where(pair => pair.Key == "cod_cliente_b2c").Select(pair => pair.Value).FirstOrDefault()} - {records[i].Where(pair => pair.Key == "nm_cliente").Select(pair => pair.Value).FirstOrDefault()}",
@@ -215,14 +215,12 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
 
                         await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter: jobParameter);
 
-                        _logger
-                            .AddMessage(
+                        _logger.AddMessage(
                             $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"
                         );
                     }
                     else
-                        _logger
-                            .AddMessage(
+                        _logger.AddMessage(
                             $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"
                         );
                 }
@@ -230,9 +228,9 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
             catch (SQLCommandException ex)
             {
                 _logger.AddMessage(
-                    idStep: ex.Step,
-                    idError: ex.Error,
-                    idLogLevel: ex.MessageLevel,
+                    stage: ex.Stage,
+                    error: ex.Error,
+                    logLevel: ex.MessageLevel,
                     message: ex.Message,
                     exceptionMessage: ex.ExceptionMessage,
                     commandSQL: ex.CommandSQL
@@ -243,9 +241,9 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
             catch (InternalException ex)
             {
                 _logger.AddMessage(
-                    idStep: ex.Step,
-                    idError: ex.Error,
-                    idLogLevel: ex.MessageLevel,
+                    stage: ex.stage,
+                    error: ex.Error,
+                    logLevel: ex.MessageLevel,
                     message: ex.Message,
                     exceptionMessage: ex.ExceptionMessage
                 );

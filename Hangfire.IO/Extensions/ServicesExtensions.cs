@@ -6,12 +6,6 @@ using Infrastructure.TotalExpress.DependencyInjection;
 using Infrastructure.FlashCourier.DependencyInjection;
 using Application.IntegrationsCore.Interfaces;
 using Application.IntegrationsCore.Services;
-using Domain.IntegrationsCore.Entities.Errors;
-using Domain.IntegrationsCore.Interfaces;
-using IntegrationsCore.Infrastructure.Repository.LogMsgsRepository;
-using IntegrationsCore.Infrastructure.Repository.LogStatusRepository;
-using IntegrationsCore.Infrastructure.Repositorys.LogDetailsRepository;
-
 namespace Hangfire.IO.Extensions
 {
     public static class ServicesExtensions
@@ -39,9 +33,9 @@ namespace Hangfire.IO.Extensions
         public static IServiceCollection AddAuditServices(this IServiceCollection services)
         {
             //services.AddSingleton<ILoggerConfig, LoggerConfig>();
-            services.AddScoped<ILogMsgsRepository, LogMsgsRepository>();
-            services.AddScoped<ILogDetailsRepository, LogDetailsRepository>();
-            services.AddScoped<ILogStatusRepository, LogStatusRepository>();
+            //services.AddScoped<ILogMsgsRepository, LogMsgsRepository>();
+            //services.AddScoped<ILogDetailsRepository, LogDetailsRepository>();
+            //services.AddScoped<ILogStatusRepository, LogStatusRepository>();
             services.AddScoped<ILoggerService, LoggerService>();
 
             return services;

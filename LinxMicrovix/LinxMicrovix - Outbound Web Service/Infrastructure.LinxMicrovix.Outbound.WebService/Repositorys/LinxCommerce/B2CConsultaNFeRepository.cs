@@ -1,4 +1,6 @@
-﻿using Domain.IntegrationsCore.Entities.Parameters;
+﻿using Domain.IntegrationsCore.Entities.Enums;
+using Domain.IntegrationsCore.Entities.Parameters;
+using Domain.IntegrationsCore.Exceptions;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxCommerce;
@@ -12,7 +14,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
         public B2CConsultaNFeRepository(ILinxMicrovixRepositoryBase<B2CConsultaNFe> linxMicrovixRepositoryBase) =>
             (_linxMicrovixRepositoryBase) = (linxMicrovixRepositoryBase);
 
-        public bool BulkInsertIntoTableRaw(LinxMicrovixJobParameter jobParameter, List<B2CConsultaNFe> records)
+        public bool BulkInsertIntoTableRaw(LinxMicrovixJobParameter jobParameter, IList<B2CConsultaNFe> records)
         {
             try
             {
@@ -87,6 +89,39 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
             try
             {
                 return await _linxMicrovixRepositoryBase.ExecuteQueryCommand(jobParameter: jobParameter, sql: sql);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public async Task<List<B2CConsultaNFe>> GetRegistersExists(LinxMicrovixJobParameter jobParameter, List<B2CConsultaNFe> registros)
+        {
+            try
+            {
+                var identificadores = String.Empty;
+                for (int i = 0; i < registros.Count(); i++)
+                {
+                    if (i == registros.Count() - 1)
+                        identificadores += $"'{registros[i].id_nfe}'";
+                    else
+                        identificadores += $"'{registros[i].id_nfe}', ";
+                }
+
+                string sql = $"SELECT ID_NFE, TIMESTAMP FROM B2CCONSULTANFE_TRUSTED WHERE ID_NFE IN ({identificadores})";
+
+                return await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
+            }
+            catch (Exception ex) when (ex is not InternalException && ex is not SQLCommandException)
+            {
+                throw new InternalException(
+                    stage: EnumStages.GetRegistersExists,
+                    error: EnumError.Exception,
+                    level: EnumMessageLevel.Error,
+                    message: "Error when filling identifiers to sql command",
+                    exceptionMessage: ex.Message
+                );
             }
             catch
             {

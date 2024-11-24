@@ -1,4 +1,6 @@
-﻿using Domain.IntegrationsCore.Entities.Parameters;
+﻿using Domain.IntegrationsCore.Entities.Enums;
+using Domain.IntegrationsCore.Entities.Parameters;
+using Domain.IntegrationsCore.Exceptions;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxCommerce;
@@ -12,7 +14,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
         public B2CConsultaPedidosPlanosRepository(ILinxMicrovixRepositoryBase<B2CConsultaPedidosPlanos> linxMicrovixRepositoryBase) =>
             (_linxMicrovixRepositoryBase) = (linxMicrovixRepositoryBase);
 
-        public bool BulkInsertIntoTableRaw(LinxMicrovixJobParameter jobParameter, List<B2CConsultaPedidosPlanos> records)
+        public bool BulkInsertIntoTableRaw(LinxMicrovixJobParameter jobParameter, IList<B2CConsultaPedidosPlanos> records)
         {
             try
             {
@@ -78,6 +80,39 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
             try
             {
                 return await _linxMicrovixRepositoryBase.ExecuteQueryCommand(jobParameter: jobParameter, sql: sql);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public async Task<List<B2CConsultaPedidosPlanos>> GetRegistersExists(LinxMicrovixJobParameter jobParameter, List<B2CConsultaPedidosPlanos> registros)
+        {
+            try
+            {
+                var identificadores = String.Empty;
+                for (int i = 0; i < registros.Count(); i++)
+                {
+                    if (i == registros.Count() - 1)
+                        identificadores += $"'{registros[i].id_pedido_planos}'";
+                    else
+                        identificadores += $"'{registros[i].id_pedido_planos}', ";
+                }
+
+                string sql = $"SELECT ID_PEDIDO_PLANOS, TIMESTAMP FROM B2CCONSULTAPEDIDOSPLANOS_TRUSTED WHERE ID_PEDIDO_PLANOS IN ({identificadores})";
+
+                return await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
+            }
+            catch (Exception ex) when (ex is not InternalException && ex is not SQLCommandException)
+            {
+                throw new InternalException(
+                    stage: EnumStages.GetRegistersExists,
+                    error: EnumError.Exception,
+                    level: EnumMessageLevel.Error,
+                    message: "Error when filling identifiers to sql command",
+                    exceptionMessage: ex.Message
+                );
             }
             catch
             {

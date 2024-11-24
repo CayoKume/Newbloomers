@@ -40,7 +40,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
             catch (Exception ex) when (ex is not InternalException && ex is not SQLCommandException)
             {
                 throw new InternalException(
-                    step: EnumSteps.BulkInsertIntoTableRaw,
+                    stage: EnumStages.BulkInsertIntoTableRaw,
                     error: EnumError.Exception,
                     level: EnumMessageLevel.Error,
                     message: "Error when filling system data table",
@@ -206,7 +206,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
             catch (Exception ex) when (ex is not InternalException && ex is not SQLCommandException)
             {
                 throw new InternalException(
-                    step: EnumSteps.GetRegistersExists,
+                    stage: EnumStages.GetRegistersExists,
                     error: EnumError.Exception,
                     level: EnumMessageLevel.Error,
                     message: "Error when filling identifiers to sql command",

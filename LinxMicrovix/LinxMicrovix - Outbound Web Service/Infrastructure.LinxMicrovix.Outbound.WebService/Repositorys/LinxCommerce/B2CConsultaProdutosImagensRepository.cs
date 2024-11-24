@@ -1,4 +1,6 @@
-﻿using Domain.IntegrationsCore.Entities.Parameters;
+﻿using Domain.IntegrationsCore.Entities.Enums;
+using Domain.IntegrationsCore.Entities.Parameters;
+using Domain.IntegrationsCore.Exceptions;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxCommerce;
@@ -12,7 +14,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
         public B2CConsultaProdutosImagensRepository(ILinxMicrovixRepositoryBase<B2CConsultaProdutosImagens> linxMicrovixRepositoryBase) =>
             (_linxMicrovixRepositoryBase) = (linxMicrovixRepositoryBase);
 
-        public bool BulkInsertIntoTableRaw(LinxMicrovixJobParameter jobParameter, List<B2CConsultaProdutosImagens> records)
+        public bool BulkInsertIntoTableRaw(LinxMicrovixJobParameter jobParameter, IList<B2CConsultaProdutosImagens> records)
         {
             try
             {
@@ -72,6 +74,39 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
             try
             {
                 return await _linxMicrovixRepositoryBase.ExecuteQueryCommand(jobParameter: jobParameter, sql: sql);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public async Task<List<B2CConsultaProdutosImagens>> GetRegistersExists(LinxMicrovixJobParameter jobParameter, List<B2CConsultaProdutosImagens> registros)
+        {
+            try
+            {
+                var identificadores = String.Empty;
+                for (int i = 0; i < registros.Count(); i++)
+                {
+                    if (i == registros.Count() - 1)
+                        identificadores += $"'{registros[i].id_imagem}'";
+                    else
+                        identificadores += $"'{registros[i].id_imagem}', ";
+                }
+
+                string sql = $"SELECT ID_IMAGEM, TIMESTAMP FROM B2CCONSULTAPRODUTOSIMAGENS_TRUSTED WHERE ID_IMAGEM IN ({identificadores})";
+
+                return await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
+            }
+            catch (Exception ex) when (ex is not InternalException && ex is not SQLCommandException)
+            {
+                throw new InternalException(
+                    stage: EnumStages.GetRegistersExists,
+                    error: EnumError.Exception,
+                    level: EnumMessageLevel.Error,
+                    message: "Error when filling identifiers to sql command",
+                    exceptionMessage: ex.Message
+                );
             }
             catch
             {

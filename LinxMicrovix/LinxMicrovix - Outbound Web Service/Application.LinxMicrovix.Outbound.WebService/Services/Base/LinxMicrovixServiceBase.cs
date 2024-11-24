@@ -4,7 +4,7 @@ using Domain.IntegrationsCore.Entities.Parameters;
 using Domain.IntegrationsCore.Exceptions;
 using Domain.IntegrationsCore.Entities.Enums;
 using System.Xml;
-using static Domain.IntegrationsCore.Exceptions.APIErrorsExceptions;
+
 
 namespace Application.LinxMicrovix.Outbound.WebService.Services.Base
 {
@@ -55,7 +55,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.Base
 
                     if (xml.GetElementsByTagName("ResponseSuccess")[0].ChildNodes[0].InnerText == "False")
                         throw new InternalException(
-                            step: EnumSteps.DeserializeResponseToXML,
+                            stage: EnumStages.DeserializeResponseToXML,
                             error: EnumError.EndPointFailOnDeserialize,
                             level: EnumMessageLevel.Error,
                             message: "Error unrealizing XML",
@@ -89,7 +89,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.Base
             catch (Exception ex)
             {
                 throw new InternalException(
-                    step: EnumSteps.DeserializeResponseToXML,
+                    stage: EnumStages.DeserializeResponseToXML,
                     error: EnumError.EndPointFailOnDeserialize,
                     level: EnumMessageLevel.Error,
                     message: "Error when unrealizing response to records list",
@@ -111,7 +111,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.Base
 
                     if (xml.GetElementsByTagName("ResponseSuccess")[0].ChildNodes[0].InnerText == "False")
                         throw new InternalException(
-                            step: EnumSteps.DeserializeResponseToXML,
+                            stage: EnumStages.DeserializeResponseToXML,
                             error: EnumError.EndPointFailOnDeserialize,
                             level: EnumMessageLevel.Error,
                             message: "Error unrealizing XML",
@@ -150,7 +150,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.Base
             catch (Exception ex)
             {
                 throw new InternalException(
-                    step: EnumSteps.DeserializeResponseToXML,
+                    stage: EnumStages.DeserializeResponseToXML,
                     error: EnumError.EndPointFailOnDeserialize,
                     level: EnumMessageLevel.Error,
                     message: "Error when unrealizing response to records list",

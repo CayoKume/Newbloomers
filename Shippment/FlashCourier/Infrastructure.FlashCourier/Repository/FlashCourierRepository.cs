@@ -7,7 +7,7 @@ using Infrastructure.IntegrationsCore.Connections.SQLServer;
 using Newtonsoft.Json;
 using System.Data;
 using static Dapper.SqlMapper;
-using static Domain.IntegrationsCore.Exceptions.RepositorysExceptions;
+
 
 namespace Infrastructure.FlashCourier.Repository
 {
@@ -55,17 +55,18 @@ namespace Infrastructure.FlashCourier.Repository
             }
             catch (Exception ex)
             {
-                throw new ExecuteCommandWithParametersException()
-                {
-                    project = "FlashCourier",
-                    method = "GenerateRequestLog",
-                    job = "",
-                    schema = "[GENERAL].[dbo].[FLASHCOURIERREQUESTLOG]",
-                    parameter = JsonConvert.SerializeObject(parameter),
-                    command = sql,
-                    message = "",
-                    exception = ex.Message
-                };
+                throw;
+                //throw new ExecuteCommandWithParametersException()
+                //{
+                //    project = "FlashCourier",
+                //    method = "GenerateRequestLog",
+                //    job = "",
+                //    schema = "[GENERAL].[dbo].[FLASHCOURIERREQUESTLOG]",
+                //    parameter = JsonConvert.SerializeObject(parameter),
+                //    command = sql,
+                //    message = "",
+                //    exception = ex.Message
+                //};
             }
         }
 
@@ -101,17 +102,18 @@ namespace Infrastructure.FlashCourier.Repository
             }
             catch (Exception ex)
             {
-                throw new ExecuteCommandWithParametersException()
-                {
-                    project = "FlashCourier",
-                    method = "GenerateResponseLog",
-                    job = "",
-                    schema = "[GENERAL].[dbo].[FLASHCOURIERREGISTROLOG]",
-                    parameter = JsonConvert.SerializeObject(parameter),
-                    command = sql,
-                    message = "",
-                    exception = ex.Message
-                };
+                throw;
+                //throw new ExecuteCommandWithParametersException()
+                //{
+                //    project = "FlashCourier",
+                //    method = "GenerateResponseLog",
+                //    job = "",
+                //    schema = "[GENERAL].[dbo].[FLASHCOURIERREGISTROLOG]",
+                //    parameter = JsonConvert.SerializeObject(parameter),
+                //    command = sql,
+                //    message = "",
+                //    exception = ex.Message
+                //};
             }
         }
 
@@ -189,16 +191,17 @@ namespace Infrastructure.FlashCourier.Repository
             }
             catch (Exception ex)
             {
-                throw new ObjectNotFoundExcpetion()
-                {
-                    project = "FlashCourier",
-                    method = "GetInvoicedOrder",
-                    job = "",
-                    message = "",
-                    schema = "[GENERAL].[dbo].[IT4_WMS_DOCUMENTO]",
-                    command = sql,
-                    exception = ex.Message
-                };
+                throw;
+                //throw new ObjectNotFoundExcpetion()
+                //{
+                //    project = "FlashCourier",
+                //    method = "GetInvoicedOrder",
+                //    job = "",
+                //    message = "",
+                //    schema = "[GENERAL].[dbo].[IT4_WMS_DOCUMENTO]",
+                //    command = sql,
+                //    exception = ex.Message
+                //};
             }
         }
 
@@ -279,16 +282,17 @@ namespace Infrastructure.FlashCourier.Repository
             }
             catch (Exception ex)
             {
-                throw new ObjectsNotFoundExcpetion()
-                {
-                    project = "FlashCourier",
-                    method = "GetInvoicedOrders",
-                    job = "",
-                    message = "",
-                    schema = "[GENERAL].[dbo].[IT4_WMS_DOCUMENTO]",
-                    command = sql,
-                    exception = ex.Message
-                };
+                throw;
+                //throw new ObjectsNotFoundExcpetion()
+                //{
+                //    project = "FlashCourier",
+                //    method = "GetInvoicedOrders",
+                //    job = "",
+                //    message = "",
+                //    schema = "[GENERAL].[dbo].[IT4_WMS_DOCUMENTO]",
+                //    command = sql,
+                //    exception = ex.Message
+                //};
             }
         }
 
@@ -305,16 +309,17 @@ namespace Infrastructure.FlashCourier.Repository
             }
             catch (Exception ex)
             {
-                throw new ObjectNotFoundExcpetion()
-                {
-                    project = "FlashCourier",
-                    method = "GetParameters",
-                    message = "",
-                    job = "",
-                    schema = "[GENERAL].[dbo].[PARAMETROS_FLASHCOURIER]",
-                    command = sql,
-                    exception = ex.Message
-                };
+                throw;
+                //throw new ObjectNotFoundExcpetion()
+                //{
+                //    project = "FlashCourier",
+                //    method = "GetParameters",
+                //    message = "",
+                //    job = "",
+                //    schema = "[GENERAL].[dbo].[PARAMETROS_FLASHCOURIER]",
+                //    command = sql,
+                //    exception = ex.Message
+                //};
             }
         }
 
@@ -331,16 +336,17 @@ namespace Infrastructure.FlashCourier.Repository
             }
             catch (Exception ex)
             {
-                throw new ObjectNotFoundExcpetion()
-                {
-                    project = "FlashCourier",
-                    method = "GetCompanys",
-                    schema = "[BLOOMERS_LINX].[dbo].[LINXLOJAS_TRUSTED]",
-                    job = "",
-                    message = "",
-                    command = sql,
-                    exception = ex.Message
-                };
+                throw;
+                //throw new ObjectNotFoundExcpetion()
+                //{
+                //    project = "FlashCourier",
+                //    method = "GetCompanys",
+                //    schema = "[BLOOMERS_LINX].[dbo].[LINXLOJAS_TRUSTED]",
+                //    job = "",
+                //    message = "",
+                //    command = sql,
+                //    exception = ex.Message
+                //};
             }
         }
 
@@ -369,16 +375,17 @@ namespace Infrastructure.FlashCourier.Repository
             }
             catch (Exception ex)
             {
-                throw new ObjectsNotFoundExcpetion()
-                {
-                    project = "FlashCourier",
-                    method = "GetShippedOrders",
-                    message = "",
-                    job = "",
-                    schema = "[GENERAL].[dbo].[IT4_WMS_DOCUMENTO]",
-                    command = sql,
-                    exception = ex.Message
-                };
+                throw;
+                //throw new ObjectsNotFoundExcpetion()
+                //{
+                //    project = "FlashCourier",
+                //    method = "GetShippedOrders",
+                //    message = "",
+                //    job = "",
+                //    schema = "[GENERAL].[dbo].[IT4_WMS_DOCUMENTO]",
+                //    command = sql,
+                //    exception = ex.Message
+                //};
             }
         }
 
@@ -404,16 +411,17 @@ namespace Infrastructure.FlashCourier.Repository
             }
             catch (Exception ex)
             {
-                throw new ExecuteCommandException()
-                {
-                    project = "FlashCourier",
-                    job = "",
-                    method = "UpdateCollectionDate",
-                    schema = "[GENERAL].[dbo].[IT4_WMS_DOCUMENTO]",
-                    command = sql,
-                    message = "",
-                    exception = ex.Message
-                };
+                throw;
+                //throw new ExecuteCommandException()
+                //{
+                //    project = "FlashCourier",
+                //    job = "",
+                //    method = "UpdateCollectionDate",
+                //    schema = "[GENERAL].[dbo].[IT4_WMS_DOCUMENTO]",
+                //    command = sql,
+                //    message = "",
+                //    exception = ex.Message
+                //};
             }
         }
 
@@ -440,16 +448,17 @@ namespace Infrastructure.FlashCourier.Repository
             }
             catch (Exception ex)
             {
-                throw new ExecuteCommandException()
-                {
-                    project = "FlashCourier",
-                    method = "UpdateDeliveryMadeDate",
-                    schema = "[GENERAL].[dbo].[IT4_WMS_DOCUMENTO]",
-                    job = "",
-                    message = "",
-                    command = sql,
-                    exception = ex.Message
-                };
+                throw;
+                //throw new ExecuteCommandException()
+                //{
+                //    project = "FlashCourier",
+                //    method = "UpdateDeliveryMadeDate",
+                //    schema = "[GENERAL].[dbo].[IT4_WMS_DOCUMENTO]",
+                //    job = "",
+                //    message = "",
+                //    command = sql,
+                //    exception = ex.Message
+                //};
             }
         }
 
@@ -476,16 +485,17 @@ namespace Infrastructure.FlashCourier.Repository
             }
             catch (Exception ex)
             {
-                throw new ExecuteCommandException()
-                {
-                    project = "FlashCourier",
-                    method = "UpdateLastStatusDate",
-                    schema = "[GENERAL].[dbo].[IT4_WMS_DOCUMENTO]",
-                    message = "",
-                    job = "",
-                    command = sql,
-                    exception = ex.Message
-                };
+                throw;
+                //throw new ExecuteCommandException()
+                //{
+                //    project = "FlashCourier",
+                //    method = "UpdateLastStatusDate",
+                //    schema = "[GENERAL].[dbo].[IT4_WMS_DOCUMENTO]",
+                //    message = "",
+                //    job = "",
+                //    command = sql,
+                //    exception = ex.Message
+                //};
             }
         }
 
@@ -511,16 +521,17 @@ namespace Infrastructure.FlashCourier.Repository
             }
             catch (Exception ex)
             {
-                throw new ExecuteCommandException()
-                {
-                    project = "FlashCourier",
-                    method = "UpdateRealDeliveryForecastDate",
-                    schema = "[GENERAL].[dbo].[IT4_WMS_DOCUMENTO]",
-                    job = "",
-                    message = "",
-                    command = sql,
-                    exception = ex.Message
-                };
+                throw;
+                //throw new ExecuteCommandException()
+                //{
+                //    project = "FlashCourier",
+                //    method = "UpdateRealDeliveryForecastDate",
+                //    schema = "[GENERAL].[dbo].[IT4_WMS_DOCUMENTO]",
+                //    job = "",
+                //    message = "",
+                //    command = sql,
+                //    exception = ex.Message
+                //};
             }
         }
     }

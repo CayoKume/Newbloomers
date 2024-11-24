@@ -2,7 +2,6 @@
 using Domain.LinxCommerce.Interfaces.Api;
 using System.Net;
 using System.Text;
-using static Domain.IntegrationsCore.Exceptions.APIErrorsExceptions;
 
 namespace Infrastructure.LinxCommerce.Api
 {
@@ -33,21 +32,22 @@ namespace Infrastructure.LinxCommerce.Api
                 else
                     throw new Exception($"{response.StatusCode}");
             }
-            catch (APICallErrorException)
-            {
-                throw;
-            }
+            //catch (APICallErrorException)
+            //{
+            //    throw;
+            //}
             catch (Exception ex)
             {
-                throw new APICallErrorException()
-                {
-                    project = jobParameter.projectName,
-                    job = jobParameter.jobName,
-                    method = "CallAPIAsync",
-                    endpoint = jobParameter.jobName,
-                    message = $"Error when querying endpoint: {jobParameter.jobName} on linxcommerce webservice",
-                    exception = ex.Message
-                };
+                throw;
+                //throw new APICallErrorException()
+                //{
+                //    project = jobParameter.projectName,
+                //    job = jobParameter.jobName,
+                //    method = "CallAPIAsync",
+                //    endpoint = jobParameter.jobName,
+                //    message = $"Error when querying endpoint: {jobParameter.jobName} on linxcommerce webservice",
+                //    exception = ex.Message
+                //};
             }
         }
 
@@ -71,21 +71,22 @@ namespace Infrastructure.LinxCommerce.Api
                 else
                     throw new Exception($"{response.StatusCode}");
             }
-            catch (APICallErrorException)
-            {
-                throw;
-            }
+            //catch (APICallErrorException)
+            //{
+            //    throw;
+            //}
             catch (Exception ex)
             {
-                throw new APICallErrorException()
-                {
-                    project = jobParameter.projectName,
-                    job = jobParameter.jobName,
-                    method = "CallAPIAsync",
-                    endpoint = jobParameter.jobName,
-                    message = $"Error when querying endpoint: {jobParameter.jobName} on linxcommerce webservice",
-                    exception = ex.Message
-                };
+                throw;
+                //throw new APICallErrorException()
+                //{
+                //    project = jobParameter.projectName,
+                //    job = jobParameter.jobName,
+                //    method = "CallAPIAsync",
+                //    endpoint = jobParameter.jobName,
+                //    message = $"Error when querying endpoint: {jobParameter.jobName} on linxcommerce webservice",
+                //    exception = ex.Message
+                //};
             }
         }
 
@@ -109,21 +110,22 @@ namespace Infrastructure.LinxCommerce.Api
                 else
                     throw new Exception($"{response.StatusCode}");
             }
-            catch (APICallErrorException)
-            {
-                throw;
-            }
+            //catch (APICallErrorException)
+            //{
+            //    throw;
+            //}
             catch (Exception ex)
             {
-                throw new APICallErrorException()
-                {
-                    project = jobParameter.projectName,
-                    job = jobParameter.jobName,
-                    method = "CallAPIAsync",
-                    endpoint = jobParameter.jobName,
-                    message = $"Error when querying endpoint: {jobParameter.jobName} on linxcommerce webservice",
-                    exception = ex.Message
-                };
+                throw;
+                //throw new APICallErrorException()
+                //{
+                //    project = jobParameter.projectName,
+                //    job = jobParameter.jobName,
+                //    method = "CallAPIAsync",
+                //    endpoint = jobParameter.jobName,
+                //    message = $"Error when querying endpoint: {jobParameter.jobName} on linxcommerce webservice",
+                //    exception = ex.Message
+                //};
             }
         }
 
@@ -140,15 +142,16 @@ namespace Infrastructure.LinxCommerce.Api
             }
             catch (Exception ex)
             {
-                throw new APICallErrorException()
-                {
-                    project = jobParameter.projectName,
-                    job = jobParameter.jobName,
-                    method = "CreateClient",
-                    endpoint = jobParameter.jobName,
-                    message = $"Error when creating request to query the endpoint: {route} on linxcommerce webservice",
-                    exception = ex.Message
-                };
+                throw;
+                //throw new APICallErrorException()
+                //{
+                //    project = jobParameter.projectName,
+                //    job = jobParameter.jobName,
+                //    method = "CreateClient",
+                //    endpoint = jobParameter.jobName,
+                //    message = $"Error when creating request to query the endpoint: {route} on linxcommerce webservice",
+                //    exception = ex.Message
+                //};
             }
         }
     }

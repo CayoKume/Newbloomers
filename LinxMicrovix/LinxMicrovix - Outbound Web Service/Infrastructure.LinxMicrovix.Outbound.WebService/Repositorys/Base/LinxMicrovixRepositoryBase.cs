@@ -1,9 +1,9 @@
 ﻿using Dapper;
 using System.Data;
-using static Domain.IntegrationsCore.Exceptions.RepositorysExceptions;
+
 using Z.Dapper.Plus;
 using Microsoft.Extensions.Configuration;
-using static Domain.IntegrationsCore.Exceptions.InternalErrorsExceptions;
+
 using System.Data.SqlClient;
 using System.ComponentModel;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
@@ -82,7 +82,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
             catch (Exception ex)
             {
                 throw new InternalException(
-                    step: EnumSteps.CallDbProcMerge,
+                    stage: EnumStages.CallDbProcMerge,
                     error: EnumError.SQLCommand,
                     level: EnumMessageLevel.Error,
                     message: $"Error when trying to run the merge procedure: P_{jobParameter.tableName}_Sync",
@@ -106,7 +106,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
             catch (Exception ex)
             {
                 throw new InternalException(
-                    step: EnumSteps.CreateSystemDataTable,
+                    stage: EnumStages.CreateSystemDataTable,
                     error: EnumError.SQLCommand,
                     level: EnumMessageLevel.Error,
                     message: $"Error when convert system datatable to bulkinsert",
@@ -146,7 +146,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
             catch (SqlException ex)
             {
                 throw new SQLCommandException(
-                    step: EnumSteps.GetParameters,
+                    stage: EnumStages.GetParameters,
                     message: $"Error when trying to get companys from database",
                     exceptionMessage: ex.Message,
                     commandSQL: sql
@@ -155,7 +155,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
             catch (Exception ex)
             {
                 throw new InternalException(
-                    step: EnumSteps.GetB2CCompanys,
+                    stage: EnumStages.GetB2CCompanys,
                     error: EnumError.SQLCommand,
                     level: EnumMessageLevel.Error,
                     message: $"Error when trying to get companys from database",
@@ -178,7 +178,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
             catch (SqlException ex)
             {
                 throw new SQLCommandException(
-                    step: EnumSteps.GetMicrovixCompanys,
+                    stage: EnumStages.GetMicrovixCompanys,
                     message: $"Error when trying to get companys from database",
                     exceptionMessage: ex.Message,
                     commandSQL: sql
@@ -187,7 +187,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
             catch (Exception ex)
             {
                 throw new InternalException(
-                    step: EnumSteps.GetMicrovixCompanys,
+                    stage: EnumStages.GetMicrovixCompanys,
                     error: EnumError.SQLCommand,
                     level: EnumMessageLevel.Error,
                     message: $"Error when trying to get companys from database",
@@ -213,7 +213,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
             catch (SqlException ex)
             {
                 throw new SQLCommandException(
-                    step: EnumSteps.GetParameters,
+                    stage: EnumStages.GetParameters,
                     message: $"Error when trying to get parameters from database",
                     exceptionMessage: ex.Message,
                     commandSQL: sql
@@ -222,7 +222,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
             catch (Exception ex)
             {
                 throw new InternalException(
-                    step: EnumSteps.GetParameters,
+                    stage: EnumStages.GetParameters,
                     error: EnumError.SQLCommand,
                     level: EnumMessageLevel.Error,
                     message: $"Error when trying to get parameters from database",
@@ -248,7 +248,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
             catch (SqlException ex)
             {
                 throw new SQLCommandException(
-                    step: EnumSteps.GetLast7DaysMinTimestamp,
+                    stage: EnumStages.GetLast7DaysMinTimestamp,
                     message: $"Error when trying to get last timestamp from database",
                     exceptionMessage: ex.Message,
                     commandSQL: sql
@@ -257,7 +257,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
             catch (Exception ex)
             {
                 throw new InternalException(
-                    step: EnumSteps.GetLast7DaysMinTimestamp,
+                    stage: EnumStages.GetLast7DaysMinTimestamp,
                     error: EnumError.SQLCommand,
                     level: EnumMessageLevel.Error,
                     message: $"Error when trying to get last timestamp from database",
@@ -283,7 +283,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
             catch (SqlException ex)
             {
                 throw new SQLCommandException(
-                    step: EnumSteps.InsertRecord,
+                    stage: EnumStages.InsertRecord,
                     message: $"Error when trying to insert record in database table: {jobParameter.tableName}",
                     exceptionMessage: ex.Message,
                     commandSQL: sql
@@ -292,7 +292,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
             catch (Exception ex)
             {
                 throw new InternalException(
-                    step: EnumSteps.InsertRecord,
+                    stage: EnumStages.InsertRecord,
                     error: EnumError.SQLCommand,
                     level: EnumMessageLevel.Error,
                     message: $"Error when trying to insert record in database table: {jobParameter.tableName}",
@@ -318,7 +318,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
             catch (SqlException ex)
             {
                 throw new SQLCommandException(
-                    step: EnumSteps.ExecuteQueryCommand,
+                    stage: EnumStages.ExecuteQueryCommand,
                     message: $"Error when trying to execute command sql",
                     exceptionMessage: ex.Message,
                     commandSQL: sql
@@ -327,7 +327,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
             catch (Exception ex)
             {
                 throw new InternalException(
-                    step: EnumSteps.ExecuteQueryCommand,
+                    stage: EnumStages.ExecuteQueryCommand,
                     error: EnumError.SQLCommand,
                     level: EnumMessageLevel.Error,
                     message: $"Error when trying to execute command sql",
@@ -354,7 +354,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
             catch (Exception ex)
             {
                 throw new InternalException(
-                    step: EnumSteps.BulkInsertIntoTableRaw,
+                    stage: EnumStages.BulkInsertIntoTableRaw,
                     error: EnumError.SQLCommand,
                     level: EnumMessageLevel.Error,
                     message: $"Error when trying to bulk insert records on table raw",
@@ -376,7 +376,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
             catch (SqlException ex)
             {
                 throw new SQLCommandException(
-                    step: EnumSteps.GetRegistersExists,
+                    stage: EnumStages.GetRegistersExists,
                     message: $"Error when trying to get records that already exist in trusted table",
                     exceptionMessage: ex.Message,
                     commandSQL: sql
@@ -385,7 +385,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
             catch (Exception ex)
             {
                 throw new InternalException(
-                    step: EnumSteps.GetRegistersExists,
+                    stage: EnumStages.GetRegistersExists,
                     error: EnumError.SQLCommand,
                     level: EnumMessageLevel.Error,
                     message: $"Error when trying to get records that already exist in trusted table",

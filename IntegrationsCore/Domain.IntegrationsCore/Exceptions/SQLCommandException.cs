@@ -4,7 +4,7 @@ namespace Domain.IntegrationsCore.Exceptions
 {
     public class SQLCommandException : Exception
     {
-        public EnumSteps Step { get; private set; }
+        public EnumStages Stage { get; private set; }
         public EnumError Error { get; private set; }
         public EnumMessageLevel MessageLevel { get; private set; }
         public string Message { get; private set; }
@@ -14,13 +14,13 @@ namespace Domain.IntegrationsCore.Exceptions
         public SQLCommandException() { }
 
         public SQLCommandException(
-            EnumSteps step,
+            EnumStages stage,
             string message,
             string exceptionMessage,
             string commandSQL
         )
         {
-            this.Step = step;
+            this.Stage = stage;
             this.Error = EnumError.SQLCommand;
             this.MessageLevel = EnumMessageLevel.Error;
             this.Message = message;

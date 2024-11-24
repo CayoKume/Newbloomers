@@ -1,6 +1,6 @@
 ﻿namespace Domain.IntegrationsCore.Entities.Enums
 {
-    public enum EnumSteps
+    public enum EnumStages
     {
         None = 0,
         GetParameters = 1,

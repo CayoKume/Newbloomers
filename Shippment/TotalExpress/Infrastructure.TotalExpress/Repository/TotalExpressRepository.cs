@@ -6,7 +6,6 @@ using Infrastructure.IntegrationsCore.Connections.PostgreSQL;
 using Infrastructure.IntegrationsCore.Connections.SQLServer;
 using Newtonsoft.Json;
 using System.Data;
-using static Domain.IntegrationsCore.Exceptions.RepositorysExceptions;
 
 namespace Infrastructure.TotalExpress.Repository
 {
@@ -53,17 +52,18 @@ namespace Infrastructure.TotalExpress.Repository
             }
             catch (Exception ex)
             {
-                throw new ExecuteCommandWithParametersException()
-                {
-                    project = "TotalExpress",
-                    method = "GenerateRequestLog",
-                    schema = "[GENERAL].[dbo].[TOTALEXPRESSREQUESTLOG]",
-                    message = "",
-                    job = "",
-                    parameter = JsonConvert.SerializeObject(parameter),
-                    command = sql,
-                    exception = ex.Message
-                };
+                throw;
+                //throw new ExecuteCommandWithParametersException()
+                //{
+                //    project = "TotalExpress",
+                //    method = "GenerateRequestLog",
+                //    schema = "[GENERAL].[dbo].[TOTALEXPRESSREQUESTLOG]",
+                //    message = "",
+                //    job = "",
+                //    parameter = JsonConvert.SerializeObject(parameter),
+                //    command = sql,
+                //    exception = ex.Message
+                //};
             }
         }
 
@@ -96,17 +96,18 @@ namespace Infrastructure.TotalExpress.Repository
             }
             catch (Exception ex)
             {
-                throw new ExecuteCommandWithParametersException()
-                {
-                    project = "TotalExpress",
-                    method = "GenerateResponseLog",
-                    schema = "[GENERAL].[dbo].[TOTALEXPRESSREGISTROLOG]",
-                    job = "",
-                    message = "",
-                    parameter = JsonConvert.SerializeObject(parameter),
-                    command = sql,
-                    exception = ex.Message
-                };
+                throw;
+                //throw new ExecuteCommandWithParametersException()
+                //{
+                //    project = "TotalExpress",
+                //    method = "GenerateResponseLog",
+                //    schema = "[GENERAL].[dbo].[TOTALEXPRESSREGISTROLOG]",
+                //    job = "",
+                //    message = "",
+                //    parameter = JsonConvert.SerializeObject(parameter),
+                //    command = sql,
+                //    exception = ex.Message
+                //};
             }
         }
 
@@ -230,16 +231,17 @@ namespace Infrastructure.TotalExpress.Repository
             }
             catch (Exception ex)
             {
-                throw new ObjectNotFoundExcpetion()
-                {
-                    project = "TotalExpress",
-                    method = "GetInvoicedOrder",
-                    schema = "[GENERAL].[dbo].[IT4_WMS_DOCUMENTO]",
-                    job = "",
-                    message = "",
-                    command = sql,
-                    exception = ex.Message
-                };
+                throw;
+                //throw new ObjectNotFoundExcpetion()
+                //{
+                //    project = "TotalExpress",
+                //    method = "GetInvoicedOrder",
+                //    schema = "[GENERAL].[dbo].[IT4_WMS_DOCUMENTO]",
+                //    job = "",
+                //    message = "",
+                //    command = sql,
+                //    exception = ex.Message
+                //};
             }
         }
 
@@ -363,16 +365,17 @@ namespace Infrastructure.TotalExpress.Repository
             }
             catch (Exception ex)
             {
-                throw new ObjectNotFoundExcpetion()
-                {
-                    project = "TotalExpress",
-                    method = "GetInvoicedOrders",
-                    job = "",
-                    message = "",
-                    schema = "[GENERAL].[dbo].[IT4_WMS_DOCUMENTO]",
-                    command = sql,
-                    exception = ex.Message
-                };
+                throw;
+                //throw new ObjectNotFoundExcpetion()
+                //{
+                //    project = "TotalExpress",
+                //    method = "GetInvoicedOrders",
+                //    job = "",
+                //    message = "",
+                //    schema = "[GENERAL].[dbo].[IT4_WMS_DOCUMENTO]",
+                //    command = sql,
+                //    exception = ex.Message
+                //};
             }
         }
 
@@ -396,16 +399,17 @@ namespace Infrastructure.TotalExpress.Repository
             }
             catch (Exception ex)
             {
-                throw new ObjectNotFoundExcpetion()
-                {
-                    project = "TotalExpress",
-                    method = "GetParameters",
-                    job = "",
-                    message = "",
-                    schema = "[GENERAL].[dbo].[PARAMETROS_TOTALEXPRESS]",
-                    command = sql,
-                    exception = ex.Message
-                };
+                throw;
+                //throw new ObjectNotFoundExcpetion()
+                //{
+                //    project = "TotalExpress",
+                //    method = "GetParameters",
+                //    job = "",
+                //    message = "",
+                //    schema = "[GENERAL].[dbo].[PARAMETROS_TOTALEXPRESS]",
+                //    command = sql,
+                //    exception = ex.Message
+                //};
             }
         }
 
@@ -425,16 +429,17 @@ namespace Infrastructure.TotalExpress.Repository
             }
             catch (Exception ex)
             {
-                throw new ObjectNotFoundExcpetion()
-                {
-                    project = "TotalExpress",
-                    method = "GetSenderIds",
-                    schema = "[GENERAL].[dbo].[PARAMETROS_TOTALEXPRESS]",
-                    message = "",
-                    job = "",
-                    command = sql,
-                    exception = ex.Message
-                };
+                throw;
+                //throw new ObjectNotFoundExcpetion()
+                //{
+                //    project = "TotalExpress",
+                //    method = "GetSenderIds",
+                //    schema = "[GENERAL].[dbo].[PARAMETROS_TOTALEXPRESS]",
+                //    message = "",
+                //    job = "",
+                //    command = sql,
+                //    exception = ex.Message
+                //};
             }
         }
 
@@ -471,16 +476,17 @@ namespace Infrastructure.TotalExpress.Repository
             }
             catch (Exception ex)
             {
-                throw new ObjectNotFoundExcpetion()
-                {
-                    project = "TotalExpress",
-                    method = "UpdateDeliveryDates",
-                    schema = "[GENERAL].[dbo].[IT4_WMS_DOCUMENTO]",
-                    job = "",
-                    message = "",
-                    command = sql,
-                    exception = ex.Message
-                };
+                throw;
+                //throw new ObjectNotFoundExcpetion()
+                //{
+                //    project = "TotalExpress",
+                //    method = "UpdateDeliveryDates",
+                //    schema = "[GENERAL].[dbo].[IT4_WMS_DOCUMENTO]",
+                //    job = "",
+                //    message = "",
+                //    command = sql,
+                //    exception = ex.Message
+                //};
             }
         }
     }

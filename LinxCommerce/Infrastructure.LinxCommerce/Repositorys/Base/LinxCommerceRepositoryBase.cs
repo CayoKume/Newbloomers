@@ -6,8 +6,6 @@ using System.ComponentModel;
 using Infrastructure.IntegrationsCore.Connections.SQLServer;
 using Infrastructure.IntegrationsCore.Connections.MySQL;
 using Infrastructure.IntegrationsCore.Connections.PostgreSQL;
-using static Domain.IntegrationsCore.Exceptions.RepositorysExceptions;
-using static Domain.IntegrationsCore.Exceptions.InternalErrorsExceptions;
 using System.Data.SqlClient;
 using Domain.LinxCommerce.Interfaces.Repositorys.Base;
 

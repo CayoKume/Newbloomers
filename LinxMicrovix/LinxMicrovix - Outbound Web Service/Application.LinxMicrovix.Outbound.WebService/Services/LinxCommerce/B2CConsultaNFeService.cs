@@ -2,7 +2,7 @@
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Api;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxCommerce;
 using Domain.IntegrationsCore.Entities.Parameters;
-using static Domain.IntegrationsCore.Exceptions.InternalErrorsExceptions;
+
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce;
 using System.Globalization;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxCommerce;

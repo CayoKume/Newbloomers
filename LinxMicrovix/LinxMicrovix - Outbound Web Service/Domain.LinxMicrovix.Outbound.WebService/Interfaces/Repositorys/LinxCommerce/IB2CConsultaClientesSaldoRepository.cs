@@ -8,6 +8,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxCom
         public Task<bool> InsertRecord(LinxMicrovixJobParameter jobParameter, B2CConsultaClientesSaldo? record);
         public Task<bool> InsertParametersIfNotExists(LinxMicrovixJobParameter jobParameter);
         public Task<bool> CreateTableMerge(LinxMicrovixJobParameter jobParameter);
-        public bool BulkInsertIntoTableRaw(LinxMicrovixJobParameter jobParameter, List<B2CConsultaClientesSaldo> records);
+        public bool BulkInsertIntoTableRaw(LinxMicrovixJobParameter jobParameter, IList<B2CConsultaClientesSaldo> records);
+        public Task<List<B2CConsultaClientesSaldo>> GetRegistersExists(LinxMicrovixJobParameter jobParameter, List<B2CConsultaClientesSaldo> registros);
     }
 }

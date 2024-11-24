@@ -3,7 +3,7 @@ using Domain.IntegrationsCore.Entities.Parameters;
 using Domain.IntegrationsCore.Exceptions;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Api;
 using System.Net;
-using static Domain.IntegrationsCore.Exceptions.APIErrorsExceptions;
+
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Api
@@ -27,7 +27,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Api
                     return new StreamReader(response.GetResponseStream()).ReadToEnd().Replace("'", "");
                 else
                     throw new InternalException(
-                        step: EnumSteps.PostAsync,
+                        stage: EnumStages.PostAsync,
                         error: EnumError.EndPointException,
                         level: EnumMessageLevel.Error,
                         message: $"Error when querying endpoint: { jobParameter.jobName } on microvix webservice\n" +
@@ -38,7 +38,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Api
             catch (Exception ex)
             {
                 throw new InternalException(
-                    step: EnumSteps.PostAsync,
+                    stage: EnumStages.PostAsync,
                     error: EnumError.Exception,
                     level: EnumMessageLevel.Error,
                     message: $"Error when querying endpoint: {jobParameter.jobName} on microvix webservice\n" +

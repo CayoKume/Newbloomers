@@ -4,7 +4,7 @@ namespace Domain.IntegrationsCore.Exceptions
 {
     public class InternalException : Exception
     {
-        public EnumSteps Step { get; private set; }
+        public EnumStages stage { get; private set; }
         public EnumError Error { get; private set; }
         public EnumMessageLevel MessageLevel { get; private set; }
         public string Message { get; private set; }
@@ -13,27 +13,27 @@ namespace Domain.IntegrationsCore.Exceptions
         public InternalException() { }
 
         public InternalException(
-            EnumSteps step,
+            EnumStages stage,
             string message,
             EnumError error,
             EnumMessageLevel level
         )
         {
-            this.Step = step;
+            this.stage = stage;
             this.Error = error;
             this.MessageLevel = level;
             this.Message = message;
         }
 
         public InternalException(
-            EnumSteps step,
+            EnumStages stage,
             string message,
             EnumError error,
             EnumMessageLevel level,
             string exceptionMessage
         )
         {
-            this.Step = step;
+            this.stage = stage;
             this.Error = error;
             this.MessageLevel = level;
             this.Message = message;

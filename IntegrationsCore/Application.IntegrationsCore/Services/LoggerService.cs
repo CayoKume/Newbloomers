@@ -6,7 +6,7 @@ namespace Application.IntegrationsCore.Services
 {
     public class LoggerService : ILoggerService
     {
-        public Log log { get; private set; }
+        public Log? log { get; private set; }
 
         public ILoggerService AddLog(EnumJob job)
         {
@@ -16,9 +16,9 @@ namespace Application.IntegrationsCore.Services
         }
 
         public ILoggerService AddMessage(
-            EnumSteps idStep,
-            EnumError idError,
-            EnumMessageLevel idLogLevel,
+            EnumStages stage,
+            EnumError error,
+            EnumMessageLevel logLevel,
             string message,
             string exceptionMessage,
             string commandSQL
@@ -26,13 +26,13 @@ namespace Application.IntegrationsCore.Services
         {
             this.log?.Messages.Add(
                 new Message(
-                    idStep: idStep,
-                    idError: idError,
-                    idLogLevel: idLogLevel,
+                    stage: stage,
+                    error: error,
+                    logLevel: logLevel,
                     message: message,
                     exceptionMessage: exceptionMessage,
                     commandSQL: commandSQL,
-                    guidExecution: this.log.Execution
+                    execution: this.log.Execution
                 )
             );
 
@@ -40,21 +40,21 @@ namespace Application.IntegrationsCore.Services
         }
 
         public ILoggerService AddMessage(
-            EnumSteps idStep,
-            EnumError idError,
-            EnumMessageLevel idLogLevel,
+            EnumStages stage,
+            EnumError error,
+            EnumMessageLevel logLevel,
             string message,
             string exceptionMessage
         )
         {
             this.log?.Messages.Add(
                 new Message (
-                    idStep: idStep,
-                    idError: idError,
-                    idLogLevel: idLogLevel,
+                    stage: stage,
+                    error: error,
+                    logLevel: logLevel,
                     message: message,
                     exceptionMessage: exceptionMessage,
-                    guidExecution: this.log.Execution
+                    execution: this.log.Execution
                 )
             );
 
@@ -62,19 +62,19 @@ namespace Application.IntegrationsCore.Services
         }
 
         public ILoggerService AddMessage(
-            EnumSteps idStep,
-            EnumError idError,
-            EnumMessageLevel idLogLevel,
+            EnumStages stage,
+            EnumError error,
+            EnumMessageLevel logLevel,
             string message
         )
         {
             this.log?.Messages.Add(
                 new Message(
-                    idStep: idStep,
-                    idError: idError,
-                    idLogLevel: idLogLevel,
+                    stage: stage,
+                    error: error,
+                    logLevel: logLevel,
                     message: message,
-                    guidExecution: this.log.Execution
+                    execution: this.log.Execution
                 )
             );
 
@@ -87,7 +87,7 @@ namespace Application.IntegrationsCore.Services
                 new Message(
                     message: message,
                     exceptionMessage: exceptionMessage,
-                    guidExecution: this.log.Execution
+                    execution: this.log.Execution
                 )
             );
 
@@ -118,7 +118,7 @@ namespace Application.IntegrationsCore.Services
         public ILoggerService SetLogEndDate()
         {
             if (this.log != null)
-                this.log.EndDate = DateTime.Now;
+                this.log.SetEndDate(DateTime.Now);
 
             return this;
         }
@@ -128,6 +128,11 @@ namespace Application.IntegrationsCore.Services
             this.log?.Records.Clear();
 
             return this;
+        }
+
+        public Task CommitAllChanges()
+        {
+            throw new NotImplementedException();
         }
     }
 }
