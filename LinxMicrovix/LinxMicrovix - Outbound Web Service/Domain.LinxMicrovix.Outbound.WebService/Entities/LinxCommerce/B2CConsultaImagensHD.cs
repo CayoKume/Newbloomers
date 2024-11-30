@@ -48,21 +48,17 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                 String.IsNullOrEmpty(codigoproduto) ? 0
                 : Convert.ToInt32(codigoproduto);
 
-            this.url_imagem_blob =
-                String.IsNullOrEmpty(url_imagem_blob) ? ""
-                : url_imagem_blob.Substring(
-                    0,
-                    url_imagem_blob.Length > 200 ? 200
-                    : url_imagem_blob.Length
-                );
-
-            this.timestamp =
-                String.IsNullOrEmpty(timestamp) ? 0
-                : Convert.ToInt64(timestamp);
+            this.url_imagem_blob = url_imagem_blob;
 
             this.portal =
-                String.IsNullOrEmpty(portal) ? 0
-                : Convert.ToInt32(portal);
+                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
+                Convert.ToInt32(portal) :
+                0;
+
+            this.timestamp =
+                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
+                Convert.ToInt64(timestamp) :
+                0;
         }
     }
 }

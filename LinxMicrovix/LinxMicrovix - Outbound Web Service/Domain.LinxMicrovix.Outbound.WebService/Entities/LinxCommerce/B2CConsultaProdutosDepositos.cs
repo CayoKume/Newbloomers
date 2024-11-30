@@ -52,21 +52,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                 String.IsNullOrEmpty(id_deposito) ? 0
                 : Convert.ToInt32(id_deposito);
 
-            this.nome_deposito =
-                String.IsNullOrEmpty(nome_deposito) ? ""
-                : nome_deposito.Substring(
-                    0,
-                    nome_deposito.Length > 50 ? 50
-                    : nome_deposito.Length
-                );
-
-            this.disponivel =
-                String.IsNullOrEmpty(disponivel) ? ""
-                : disponivel.Substring(
-                    0,
-                    disponivel.Length > 1 ? 1
-                    : disponivel.Length
-                );
+            this.nome_deposito = nome_deposito;
+            this.disponivel = disponivel;
 
             this.disponivel_transferencia =
                 String.IsNullOrEmpty(disponivel_transferencia) ? 0
@@ -76,13 +63,15 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                 String.IsNullOrEmpty(disponivel_franquias) ? 0
                 : Convert.ToInt32(disponivel_franquias);
 
-            this.timestamp =
-                String.IsNullOrEmpty(timestamp) ? 0
-                : Convert.ToInt64(timestamp);
-
             this.portal =
-                String.IsNullOrEmpty(portal) ? 0
-                : Convert.ToInt32(portal);
+                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
+                Convert.ToInt32(portal) :
+                0;
+
+            this.timestamp =
+                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
+                Convert.ToInt64(timestamp) :
+                0;
         }
     }
 }

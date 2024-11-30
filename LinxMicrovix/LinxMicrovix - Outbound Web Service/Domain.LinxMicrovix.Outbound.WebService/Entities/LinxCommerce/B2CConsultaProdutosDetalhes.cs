@@ -85,41 +85,23 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                 String.IsNullOrEmpty(controla_lote) ? 0
                 : Convert.ToInt32(controla_lote);
 
-            this.nomeproduto_alternativo =
-                String.IsNullOrEmpty(nomeproduto_alternativo) ? ""
-                : nomeproduto_alternativo.Substring(
-                    0,
-                    nomeproduto_alternativo.Length > 250 ? 250
-                    : nomeproduto_alternativo.Length
-                );
-
-            this.referencia =
-                String.IsNullOrEmpty(referencia) ? ""
-                : referencia.Substring(
-                    0,
-                    referencia.Length > 20 ? 20
-                    : referencia.Length
-                );
-
-            this.localizacao =
-                String.IsNullOrEmpty(localizacao) ? ""
-                : localizacao.Substring(
-                    0,
-                    localizacao.Length > 50 ? 50
-                    : localizacao.Length
-                );
+            this.nomeproduto_alternativo = nomeproduto_alternativo;
+            this.referencia = referencia;
+            this.localizacao = localizacao;
 
             this.tempo_preparacao_estoque =
                 String.IsNullOrEmpty(tempo_preparacao_estoque) ? 0
                 : Convert.ToInt32(tempo_preparacao_estoque);
 
-            this.timestamp =
-                String.IsNullOrEmpty(timestamp) ? 0
-                : Convert.ToInt64(timestamp);
-
             this.portal =
-                String.IsNullOrEmpty(portal) ? 0
-                : Convert.ToInt32(portal);
+                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
+                Convert.ToInt32(portal) :
+                0;
+
+            this.timestamp =
+                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
+                Convert.ToInt64(timestamp) :
+                0;
         }
     }
 }

@@ -39,21 +39,17 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                 String.IsNullOrEmpty(cod_forma_pgto) ? 0
                 : Convert.ToInt32(cod_forma_pgto);
 
-            this.forma_pgto =
-                String.IsNullOrEmpty(forma_pgto) ? ""
-                : forma_pgto.Substring(
-                    0,
-                    forma_pgto.Length > 50 ? 50
-                    : forma_pgto.Length
-                );
-
-            this.timestamp =
-                String.IsNullOrEmpty(timestamp) ? 0
-                : Convert.ToInt64(timestamp);
+            this.forma_pgto = forma_pgto;
 
             this.portal =
-                String.IsNullOrEmpty(portal) ? 0
-                : Convert.ToInt32(portal);
+                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
+                Convert.ToInt32(portal) :
+                0;
+
+            this.timestamp =
+                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
+                Convert.ToInt64(timestamp) :
+                0;
         }
     }
 }

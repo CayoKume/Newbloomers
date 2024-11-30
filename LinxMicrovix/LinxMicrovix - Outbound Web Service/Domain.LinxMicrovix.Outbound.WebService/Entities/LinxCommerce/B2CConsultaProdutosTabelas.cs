@@ -44,29 +44,18 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                String.IsNullOrEmpty(id_tabela) ? 0
                : Convert.ToInt32(id_tabela);
 
-            this.nome_tabela =
-               String.IsNullOrEmpty(nome_tabela) ? ""
-               : nome_tabela.Substring(
-                   0,
-                   nome_tabela.Length > 50 ? 50
-                   : nome_tabela.Length
-               );
-
-            this.ativa =
-                String.IsNullOrEmpty(ativa) ? ""
-                : ativa.Substring(
-                    0,
-                    ativa.Length > 1 ? 1
-                    : ativa.Length
-                );
-
-            this.timestamp =
-                String.IsNullOrEmpty(timestamp) ? 0
-                : Convert.ToInt64(timestamp);
+            this.nome_tabela = nome_tabela;
+            this.ativa = ativa;
 
             this.portal =
-                String.IsNullOrEmpty(portal) ? 0
-                : Convert.ToInt32(portal);
+                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
+                Convert.ToInt32(portal) :
+                0;
+
+            this.timestamp =
+                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
+                Convert.ToInt64(timestamp) :
+                0;
         }
     }
 }

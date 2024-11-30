@@ -56,13 +56,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                 String.IsNullOrEmpty(codigo_campanha) ? 0
                 : Convert.ToInt32(codigo_campanha);
 
-            this.nome_campanha =
-                String.IsNullOrEmpty(nome_campanha) ? ""
-                : nome_campanha.Substring(
-                    0,
-                    nome_campanha.Length > 60 ? 60
-                    : nome_campanha.Length
-                );
+            this.nome_campanha = nome_campanha;
+            this.observacao = observacao;
 
             this.vigencia_inicio =
                 String.IsNullOrEmpty(vigencia_inicio) ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
@@ -72,21 +67,19 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                 String.IsNullOrEmpty(vigencia_fim) ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
                 : Convert.ToDateTime(vigencia_fim);
 
-            this.observacao =
-                String.IsNullOrEmpty(observacao) ? ""
-                : observacao;
-
             this.ativo =
                 String.IsNullOrEmpty(ativo) ? 0
                 : Convert.ToInt32(ativo);
 
-            this.timestamp =
-                String.IsNullOrEmpty(timestamp) ? 0
-                : Convert.ToInt64(timestamp);
-
             this.portal =
-                String.IsNullOrEmpty(portal) ? 0
-                : Convert.ToInt32(portal);
+                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
+                Convert.ToInt32(portal) :
+                0;
+
+            this.timestamp =
+                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
+                Convert.ToInt64(timestamp) :
+                0;
         }
     }
 }

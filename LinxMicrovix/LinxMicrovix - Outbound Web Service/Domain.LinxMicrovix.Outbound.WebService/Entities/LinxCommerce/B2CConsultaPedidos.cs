@@ -165,13 +165,10 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                String.IsNullOrEmpty(plano_pagamento) ? 0
                : Convert.ToInt32(plano_pagamento);
 
-            this.anotacao =
-                String.IsNullOrEmpty(anotacao) ? ""
-                : anotacao.Substring(
-                    0,
-                    anotacao.Length > 400 ? 400
-                    : anotacao.Length
-                );
+            this.anotacao = anotacao;
+            this.ecommerce_origem = ecommerce_origem;
+            this.order_id = order_id;
+            this.mensagem_falha_faturamento = mensagem_falha_faturamento;
 
             this.taxa_impressao =
                 String.IsNullOrEmpty(taxa_impressao) ? 0
@@ -229,37 +226,22 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                 String.IsNullOrEmpty(dt_disponivel_faturamento) ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
                 : Convert.ToDateTime(dt_disponivel_faturamento);
 
-            this.mensagem_falha_faturamento =
-                String.IsNullOrEmpty(mensagem_falha_faturamento) ? ""
-                : mensagem_falha_faturamento;
 
             this.id_tipo_b2c =
                 String.IsNullOrEmpty(id_tipo_b2c) ? 0
                 : Convert.ToInt32(id_tipo_b2c);
 
-            this.ecommerce_origem =
-                String.IsNullOrEmpty(ecommerce_origem) ? ""
-                : ecommerce_origem.Substring(
-                    0,
-                    ecommerce_origem.Length > 200 ? 200
-                    : ecommerce_origem.Length
-                );
 
-            this.order_id =
-                String.IsNullOrEmpty(order_id) ? ""
-                : order_id.Substring(
-                    0,
-                    order_id.Length > 40 ? 40
-                    : order_id.Length
-                );
-
-            this.timestamp =
-                String.IsNullOrEmpty(timestamp) ? 0
-                : Convert.ToInt64(timestamp);
 
             this.portal =
-                String.IsNullOrEmpty(portal) ? 0
-                : Convert.ToInt32(portal);
+                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
+                Convert.ToInt32(portal) :
+                0;
+
+            this.timestamp =
+                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
+                Convert.ToInt64(timestamp) :
+                0;
         }
     }
 }

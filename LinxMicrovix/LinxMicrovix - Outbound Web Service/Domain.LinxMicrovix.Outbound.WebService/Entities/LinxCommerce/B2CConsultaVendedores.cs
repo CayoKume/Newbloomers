@@ -60,14 +60,6 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                 String.IsNullOrEmpty(cod_vendedor) ? 0
                 : Convert.ToInt32(cod_vendedor);
 
-            this.nome_vendedor =
-                String.IsNullOrEmpty(nome_vendedor) ? ""
-                : nome_vendedor.Substring(
-                    0,
-                    nome_vendedor.Length > 50 ? 50
-                    : nome_vendedor.Length
-                );
-
             this.comissao_produtos =
                 String.IsNullOrEmpty(comissao_produtos) ? 0
                 : Convert.ToDecimal(comissao_produtos);
@@ -75,14 +67,6 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             this.comissao_servicos =
                 String.IsNullOrEmpty(comissao_servicos) ? 0
                 : Convert.ToDecimal(comissao_servicos);
-
-            this.tipo =
-                String.IsNullOrEmpty(tipo) ? ""
-                : tipo.Substring(
-                    0,
-                    tipo.Length > 1 ? 1
-                    : tipo.Length
-                );
 
             this.ativo =
                 String.IsNullOrEmpty(ativo) ? 0
@@ -92,13 +76,18 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                 String.IsNullOrEmpty(comissionado) ? 0
                 : Convert.ToInt32(comissionado);
 
-            this.timestamp =
-                String.IsNullOrEmpty(timestamp) ? 0
-                : Convert.ToInt64(timestamp);
-
             this.portal =
-                String.IsNullOrEmpty(portal) ? 0
-                : Convert.ToInt32(portal);
+                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
+                Convert.ToInt32(portal) :
+                0;
+
+            this.timestamp =
+                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
+                Convert.ToInt64(timestamp) :
+                0;
+
+            this.nome_vendedor = nome_vendedor;
+            this.tipo = tipo;
         }
     }
 }

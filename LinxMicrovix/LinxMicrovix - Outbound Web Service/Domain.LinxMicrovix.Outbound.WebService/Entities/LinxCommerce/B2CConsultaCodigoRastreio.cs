@@ -57,37 +57,19 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                 String.IsNullOrEmpty(documento) ? 0
                 : Convert.ToInt32(documento);
 
-            this.serie =
-                String.IsNullOrEmpty(serie) ? ""
-                : serie.Substring(
-                    0,
-                    serie.Length > 10 ? 10
-                    : serie.Length
-                );
-
-            this.codigo_rastreio =
-                String.IsNullOrEmpty(codigo_rastreio) ? ""
-                : codigo_rastreio.Substring(
-                    0,
-                    codigo_rastreio.Length > 20 ? 20
-                    : codigo_rastreio.Length
-                );
-
-            this.sequencia_volume =
-                String.IsNullOrEmpty(sequencia_volume) ? ""
-                : sequencia_volume.Substring(
-                    0,
-                    sequencia_volume.Length > 20 ? 20
-                    : sequencia_volume.Length
-                );
-
-            this.timestamp =
-                String.IsNullOrEmpty(timestamp) ? 0
-                : Convert.ToInt64(timestamp);
+            this.serie = serie;
+            this.codigo_rastreio = codigo_rastreio;
+            this.sequencia_volume = sequencia_volume;
 
             this.portal =
-                String.IsNullOrEmpty(portal) ? 0
-                : Convert.ToInt32(portal);
+                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
+                Convert.ToInt32(portal) :
+                0;
+
+            this.timestamp =
+                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
+                Convert.ToInt64(timestamp) :
+                0;
 
         }
     }

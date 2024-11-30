@@ -52,29 +52,18 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                 String.IsNullOrEmpty(ordem) ? 0
                 : Convert.ToInt32(ordem);
 
-            this.legenda =
-                String.IsNullOrEmpty(legenda) ? ""
-                : legenda.Substring(
-                    0,
-                    legenda.Length > 30 ? 30
-                    : legenda.Length
-                );
-
-            this.tipo =
-                String.IsNullOrEmpty(tipo) ? ""
-                : tipo.Substring(
-                    0,
-                    tipo.Length > 1 ? 1
-                    : tipo.Length
-                );
-
-            this.timestamp =
-                String.IsNullOrEmpty(timestamp) ? 0
-                : Convert.ToInt64(timestamp);
+            this.legenda = legenda;
+            this.tipo = tipo;
 
             this.portal =
-                String.IsNullOrEmpty(portal) ? 0
-                : Convert.ToInt32(portal);
+                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
+                Convert.ToInt32(portal) :
+                0;
+
+            this.timestamp =
+                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
+                Convert.ToInt64(timestamp) :
+                0;
         }
     }
 }

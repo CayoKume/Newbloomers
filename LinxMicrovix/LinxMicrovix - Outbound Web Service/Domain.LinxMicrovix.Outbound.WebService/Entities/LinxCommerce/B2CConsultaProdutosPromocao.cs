@@ -101,13 +101,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                 String.IsNullOrEmpty(data_cadastro) ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
                 : Convert.ToDateTime(data_cadastro);
 
-            this.ativa =
-                String.IsNullOrEmpty(ativa) ? ""
-                : ativa.Substring(
-                    0,
-                    ativa.Length > 1 ? 1
-                    : ativa.Length
-                );
+            this.ativa = ativa;
+            this.referencia = referencia;
 
             this.codigo_campanha =
                 String.IsNullOrEmpty(codigo_campanha) ? 0
@@ -117,21 +112,15 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                 String.IsNullOrEmpty(promocao_opcional) ? 0
                 : Convert.ToInt32(promocao_opcional);
 
-            this.referencia =
-                String.IsNullOrEmpty(referencia) ? ""
-                : referencia.Substring(
-                    0,
-                    referencia.Length > 20 ? 20
-                    : referencia.Length
-                );
+            this.portal =
+                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
+                Convert.ToInt32(portal) :
+                0;
 
             this.timestamp =
-                String.IsNullOrEmpty(timestamp) ? 0
-                : Convert.ToInt64(timestamp);
-
-            this.portal =
-                String.IsNullOrEmpty(portal) ? 0
-                : Convert.ToInt32(portal);
+                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
+                Convert.ToInt64(timestamp) :
+                0;
         }
     }
 }

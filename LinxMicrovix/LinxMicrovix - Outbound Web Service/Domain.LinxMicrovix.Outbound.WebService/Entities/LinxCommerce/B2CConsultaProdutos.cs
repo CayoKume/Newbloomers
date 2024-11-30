@@ -182,21 +182,14 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                 String.IsNullOrEmpty(peso_bruto) ? 0
                 : Convert.ToDecimal(peso_bruto);
 
-            this.descricao_completa_commerce =
-                String.IsNullOrEmpty(descricao_completa_commerce) ? ""
-                : descricao_completa_commerce.Substring(
-                    0,
-                    descricao_completa_commerce.Length > 8000 ? 8000
-                    : descricao_completa_commerce.Length
-                );
-
-            this.codigo_integracao_oms =
-                String.IsNullOrEmpty(codigo_integracao_oms) ? ""
-                : codigo_integracao_oms.Substring(
-                    0,
-                    codigo_integracao_oms.Length > 50 ? 50
-                    : codigo_integracao_oms.Length
-                );
+            this.unidade = unidade;
+            this.observacao = observacao;
+            this.referencia = referencia;
+            this.codauxiliar1 = codauxiliar1;
+            this.descricao_basica = descricao_basica;
+            this.nome_produto = nome_produto;
+            this.descricao_completa_commerce = descricao_completa_commerce;
+            this.codigo_integracao_oms = codigo_integracao_oms;
 
             this.dt_update =
                 String.IsNullOrEmpty(dt_update) ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
@@ -206,37 +199,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                 String.IsNullOrEmpty(codigoproduto) ? 0
                 : Convert.ToInt64(codigoproduto);
 
-            this.referencia =
-                String.IsNullOrEmpty(referencia) ? ""
-                : referencia.Substring(
-                    0,
-                    referencia.Length > 20 ? 20
-                    : referencia.Length
-                );
-
-            this.codauxiliar1 =
-                String.IsNullOrEmpty(codauxiliar1) ? ""
-                : codauxiliar1.Substring(
-                    0,
-                    codauxiliar1.Length > 40 ? 40
-                    : codauxiliar1.Length
-                );
-
-            this.descricao_basica =
-                String.IsNullOrEmpty(descricao_basica) ? ""
-                : descricao_basica.Substring(
-                    0,
-                    descricao_basica.Length > 100 ? 100
-                    : descricao_basica.Length
-                );
-
-            this.nome_produto =
-                String.IsNullOrEmpty(nome_produto) ? ""
-                : nome_produto.Substring(
-                    0,
-                    nome_produto.Length > 250 ? 250
-                    : nome_produto.Length
-                );
+            
 
             this.peso_liquido =
                 String.IsNullOrEmpty(peso_liquido) ? 0
@@ -270,14 +233,6 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                 String.IsNullOrEmpty(codigo_grade2) ? 0
                 : Convert.ToInt32(codigo_grade2);
 
-            this.unidade =
-                String.IsNullOrEmpty(unidade) ? ""
-                : unidade.Substring(
-                    0,
-                    unidade.Length > 50 ? 50
-                    : unidade.Length
-                );
-
             this.ativo =
                 String.IsNullOrEmpty(ativo) ? 0
                 : Convert.ToInt32(ativo);
@@ -290,17 +245,17 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                 String.IsNullOrEmpty(dt_cadastro) ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
                 : Convert.ToDateTime(dt_cadastro);
 
-            this.observacao =
-                String.IsNullOrEmpty(observacao) ? ""
-                : observacao;
 
-            this.timestamp =
-                String.IsNullOrEmpty(timestamp) ? 0
-                : Convert.ToInt64(timestamp);
 
             this.portal =
-                String.IsNullOrEmpty(portal) ? 0
-                : Convert.ToInt32(portal);
+                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
+                Convert.ToInt32(portal) :
+                0;
+
+            this.timestamp =
+                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
+                Convert.ToInt64(timestamp) :
+                0;
         }
     }
 }

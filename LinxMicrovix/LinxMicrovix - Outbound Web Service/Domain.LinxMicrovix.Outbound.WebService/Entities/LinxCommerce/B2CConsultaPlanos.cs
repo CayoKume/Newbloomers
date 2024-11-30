@@ -65,15 +65,11 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                 String.IsNullOrEmpty(plano) ? 0
                 : Convert.ToInt32(plano);
 
-            this.nome_plano =
-                String.IsNullOrEmpty(nome_plano) ? ""
-                : nome_plano.Substring(
-                    0,
-                    nome_plano.Length > 30 ? 30
-                    : nome_plano.Length
-                );
+            this.nome_plano = nome_plano;
+            this.desativado = desativado;
+            this.tipo_plano = tipo_plano;
 
-            this.forma_pagamento =
+            this.forma_pagamento = 
                 String.IsNullOrEmpty(forma_pagamento) ? 0
                 : Convert.ToInt32(forma_pagamento);
 
@@ -89,29 +85,16 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                 String.IsNullOrEmpty(indice) ? 0
                 : Convert.ToDecimal(indice);
 
-            this.desativado =
-                String.IsNullOrEmpty(desativado) ? ""
-                : desativado.Substring(
-                    0,
-                    desativado.Length > 1 ? 1
-                    : desativado.Length
-                );
-
-            this.tipo_plano =
-                String.IsNullOrEmpty(tipo_plano) ? ""
-                : tipo_plano.Substring(
-                    0,
-                    tipo_plano.Length > 1 ? 1
-                    : tipo_plano.Length
-                );
-
-            this.timestamp =
-                String.IsNullOrEmpty(timestamp) ? 0
-                : Convert.ToInt64(timestamp);
 
             this.portal =
-                String.IsNullOrEmpty(portal) ? 0
-                : Convert.ToInt32(portal);
+                 ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
+                 Convert.ToInt32(portal) :
+                 0;
+
+            this.timestamp =
+                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
+                Convert.ToInt64(timestamp) :
+                0;
         }
     }
 }

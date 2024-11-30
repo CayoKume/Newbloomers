@@ -94,85 +94,16 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                 String.IsNullOrEmpty(empresa) ? 0
                 : Convert.ToInt32(empresa);
 
-            this.nome_emp =
-                String.IsNullOrEmpty(nome_emp) ? ""
-                : nome_emp.Substring(
-                    0,
-                    nome_emp.Length > 50 ? 50
-                    : nome_emp.Length
-                );
-
-            this.cnpj_emp =
-                String.IsNullOrEmpty(cnpj_emp) ? ""
-                : cnpj_emp.Substring(
-                    0,
-                    cnpj_emp.Length > 14 ? 14
-                    : cnpj_emp.Length
-                );
-
-            this.end_unidade =
-                String.IsNullOrEmpty(end_unidade) ? ""
-                : end_unidade.Substring(
-                    0,
-                    end_unidade.Length > 250 ? 250
-                    : end_unidade.Length
-                );
-
-            this.complemento_end_unidade =
-                String.IsNullOrEmpty(complemento_end_unidade) ? ""
-                : complemento_end_unidade.Substring(
-                    0,
-                    complemento_end_unidade.Length > 60 ? 60
-                    : complemento_end_unidade.Length
-                );
-
-            this.nr_rua_unidade =
-                String.IsNullOrEmpty(nr_rua_unidade) ? ""
-                : nr_rua_unidade.Substring(
-                    0,
-                    nr_rua_unidade.Length > 20 ? 20
-                    : nr_rua_unidade.Length
-                );
-
-            this.bairro_unidade =
-                String.IsNullOrEmpty(bairro_unidade) ? ""
-                : bairro_unidade.Substring(
-                    0,
-                    bairro_unidade.Length > 60 ? 60
-                    : bairro_unidade.Length
-                );
-
-            this.cep_unidade =
-                String.IsNullOrEmpty(cep_unidade) ? ""
-                : cep_unidade.Substring(
-                    0,
-                    cep_unidade.Length > 9 ? 9
-                    : cep_unidade.Length
-                );
-
-            this.cidade_unidade =
-                String.IsNullOrEmpty(cidade_unidade) ? ""
-                : cidade_unidade.Substring(
-                    0,
-                    cidade_unidade.Length > 50 ? 50
-                    : cidade_unidade.Length
-                );
-
-            this.uf_unidade =
-                String.IsNullOrEmpty(uf_unidade) ? ""
-                : uf_unidade.Substring(
-                    0,
-                    uf_unidade.Length > 2 ? 2
-                    : uf_unidade.Length
-                );
-
-            this.email_unidade =
-                String.IsNullOrEmpty(email_unidade) ? ""
-                : email_unidade.Substring(
-                    0,
-                    email_unidade.Length > 50 ? 50
-                    : email_unidade.Length
-                );
+            this.nome_emp = nome_emp;
+            this.cnpj_emp = cnpj_emp;
+            this.end_unidade = end_unidade;
+            this.complemento_end_unidade = complemento_end_unidade;
+            this.nr_rua_unidade = nr_rua_unidade;
+            this.bairro_unidade = bairro_unidade;
+            this.cep_unidade = cep_unidade;
+            this.cidade_unidade = cidade_unidade;
+            this.uf_unidade = uf_unidade;
+            this.email_unidade = end_unidade;
 
             this.data_criacao =
                 String.IsNullOrEmpty(data_criacao) ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
@@ -182,13 +113,15 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                 String.IsNullOrEmpty(centro_distribuicao) ? false
                 : Convert.ToBoolean(centro_distribuicao);
 
-            this.timestamp =
-                String.IsNullOrEmpty(timestamp) ? 0
-                : Convert.ToInt64(timestamp);
-
             this.portal =
-                String.IsNullOrEmpty(portal) ? 0
-                : Convert.ToInt32(portal);
+                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
+                Convert.ToInt32(portal) :
+                0;
+
+            this.timestamp =
+                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
+                Convert.ToInt64(timestamp) :
+                0;
         }
     }
 }

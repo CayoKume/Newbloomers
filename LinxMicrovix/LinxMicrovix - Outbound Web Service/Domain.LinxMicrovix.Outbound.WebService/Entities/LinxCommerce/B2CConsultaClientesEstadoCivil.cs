@@ -36,24 +36,21 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             lastupdateon = DateTime.Now;
 
             this.id_estado_civil =
-                String.IsNullOrEmpty(id_estado_civil) ? 0
-                : Convert.ToInt32(id_estado_civil);
-
-            this.estado_civil =
-                String.IsNullOrEmpty(estado_civil) ? ""
-                : estado_civil.Substring(
-                    0,
-                    estado_civil.Length > 20 ? 20
-                    : estado_civil.Length
-                );
-
-            this.timestamp =
-                String.IsNullOrEmpty(timestamp) ? 0
-                : Convert.ToInt64(timestamp);
+                ConvertToInt32Validation.IsValid(id_estado_civil, "id_estado_civil", listValidations) ?
+                Convert.ToInt32(id_estado_civil) :
+                0;
 
             this.portal =
-                String.IsNullOrEmpty(portal) ? 0
-                : Convert.ToInt32(portal);
+                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
+                Convert.ToInt32(portal) :
+                0;
+
+            this.timestamp =
+                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
+                Convert.ToInt64(timestamp) :
+                0;
+
+            this.estado_civil = estado_civil;
         }
     }
 }

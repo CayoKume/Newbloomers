@@ -109,129 +109,31 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                 String.IsNullOrEmpty(cod_fornecedor) ? 0
                 : Convert.ToInt32(cod_fornecedor);
 
-            this.nome =
-                String.IsNullOrEmpty(nome) ? ""
-                : nome.Substring(
-                    0,
-                    nome.Length > 60 ? 60
-                    : nome.Length
-                );
-
-            this.nome_fantasia =
-                String.IsNullOrEmpty(nome_fantasia) ? ""
-                : nome_fantasia.Substring(
-                    0,
-                    nome_fantasia.Length > 60 ? 60
-                    : nome_fantasia.Length
-                );
-
-            this.tipo_pessoa =
-                String.IsNullOrEmpty(tipo_pessoa) ? ""
-                : tipo_pessoa.Substring(
-                    0,
-                    tipo_pessoa.Length > 1 ? 1
-                    : tipo_pessoa.Length
-                );
-
-            this.tipo_fornecedor =
-                String.IsNullOrEmpty(tipo_fornecedor) ? ""
-                : tipo_fornecedor.Substring(
-                    0,
-                    tipo_fornecedor.Length > 1 ? 1
-                    : tipo_fornecedor.Length
-                );
-
-            this.endereco =
-                String.IsNullOrEmpty(endereco) ? ""
-                : endereco.Substring(
-                    0,
-                    endereco.Length > 250 ? 250
-                    : endereco.Length
-                );
-
-            this.numero_rua =
-                String.IsNullOrEmpty(numero_rua) ? ""
-                : numero_rua.Substring(
-                    0,
-                    numero_rua.Length > 20 ? 20
-                    : numero_rua.Length
-                );
-
-            this.bairro =
-                String.IsNullOrEmpty(bairro) ? ""
-                : bairro.Substring(
-                    0,
-                    bairro.Length > 60 ? 60
-                    : bairro.Length
-                );
-
-            this.cep =
-                String.IsNullOrEmpty(cep) ? ""
-                : cep.Substring(
-                    0,
-                    cep.Length > 9 ? 9
-                    : cep.Length
-                );
-
-            this.cidade =
-                String.IsNullOrEmpty(cidade) ? ""
-                : cidade.Substring(
-                    0,
-                    cidade.Length > 40 ? 40
-                    : cidade.Length
-                );
-
-            this.uf =
-                String.IsNullOrEmpty(uf) ? ""
-                : uf.Substring(
-                    0,
-                    uf.Length > 2 ? 2
-                    : uf.Length
-                );
-
-            this.documento =
-                String.IsNullOrEmpty(documento) ? ""
-                : documento.Substring(
-                    0,
-                    documento.Length > 14 ? 14
-                    : documento.Length
-                );
-
-            this.fone =
-                String.IsNullOrEmpty(fone) ? ""
-                : fone.Substring(
-                    0,
-                    fone.Length > 20 ? 20
-                    : fone.Length
-                );
-
-            this.email =
-                String.IsNullOrEmpty(email) ? ""
-                : email.Substring(
-                    0,
-                    email.Length > 50 ? 50
-                    : email.Length
-                );
-
-            this.pais =
-                String.IsNullOrEmpty(pais) ? ""
-                : pais.Substring(
-                    0,
-                    pais.Length > 80 ? 80
-                    : pais.Length
-                );
-
-            this.obs =
-                String.IsNullOrEmpty(obs) ? ""
-                : obs;
-
-            this.timestamp =
-                String.IsNullOrEmpty(timestamp) ? 0
-                : Convert.ToInt64(timestamp);
+            this.nome = nome;
+            this.nome_fantasia = nome_fantasia;
+            this.tipo_pessoa = tipo_pessoa;
+            this.tipo_fornecedor = tipo_fornecedor;
+            this.endereco = endereco;
+            this.numero_rua = numero_rua;
+            this.bairro = bairro;
+            this.cep = cep;
+            this.cidade = cidade;
+            this.uf = uf;
+            this.documento = documento;
+            this.fone = fone;
+            this.email = email;
+            this.pais = pais;
+            this.obs = obs;
 
             this.portal =
-                String.IsNullOrEmpty(portal) ? 0
-                : Convert.ToInt32(portal);
+                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
+                Convert.ToInt32(portal) :
+                0;
+
+            this.timestamp =
+                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
+                Convert.ToInt64(timestamp) :
+                0;
         }
     }
 }

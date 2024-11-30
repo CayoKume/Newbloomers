@@ -118,21 +118,17 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                 String.IsNullOrEmpty(data_emissao) ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
                 : Convert.ToDateTime(data_emissao);
 
-            this.chave_nfe =
-                String.IsNullOrEmpty(chave_nfe) ? ""
-                : chave_nfe.Substring(
-                    0,
-                    chave_nfe.Length > 44 ? 44
-                    : chave_nfe.Length
-                );
+            this.chave_nfe = chave_nfe;
+            this.xml = xml;
+            this.nProt = nProt;
+            this.codigo_modelo_nf = codigo_modelo_nf;
+            this.justificativa = justificativa;
+            this.serie = serie;
 
             this.situacao =
                 String.IsNullOrEmpty(situacao) ? 0
                 : Convert.ToInt32(situacao);
 
-            this.xml =
-                String.IsNullOrEmpty(xml) ? ""
-                : xml;
 
             this.excluido =
                 String.IsNullOrEmpty(excluido) ? 0
@@ -150,53 +146,26 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                 String.IsNullOrEmpty(valor_nota) ? 0
                 : Convert.ToDecimal(valor_nota);
 
-            this.serie =
-                String.IsNullOrEmpty(serie) ? ""
-                : serie.Substring(
-                    0,
-                    serie.Length > 10 ? 10
-                    : serie.Length
-                );
 
             this.frete =
                 String.IsNullOrEmpty(frete) ? 0
                 : Convert.ToDecimal(frete);
 
-            this.nProt =
-                String.IsNullOrEmpty(nProt) ? ""
-                : nProt.Substring(
-                    0,
-                    nProt.Length > 15 ? 15
-                    : nProt.Length
-                );
 
-            this.codigo_modelo_nf =
-                String.IsNullOrEmpty(codigo_modelo_nf) ? ""
-                : codigo_modelo_nf.Substring(
-                    0,
-                    codigo_modelo_nf.Length > 3 ? 3
-                    : codigo_modelo_nf.Length
-                );
-
-            this.justificativa =
-                String.IsNullOrEmpty(justificativa) ? ""
-                : justificativa.Substring(
-                    0,
-                    justificativa.Length > 255 ? 255
-                    : justificativa.Length
-                );
 
             this.tpAmb =
                 String.IsNullOrEmpty(tpAmb) ? 0
                 : Convert.ToInt32(tpAmb);
 
-            this.timestamp =
-                String.IsNullOrEmpty(timestamp) ? 0
-                : Convert.ToInt64(timestamp);
-
             this.portal =
-                String.IsNullOrEmpty(portal) ? 0
-                : Convert.ToInt32(portal);
+                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
+                Convert.ToInt32(portal) :
+                0;
+
+            this.timestamp =
+                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
+                Convert.ToInt64(timestamp) :
+                0;
         }
     }
 }

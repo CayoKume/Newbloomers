@@ -44,29 +44,18 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                 String.IsNullOrEmpty(codigo_marca) ? 0
                 : Convert.ToInt32(codigo_marca);
 
-            this.nome_marca =
-                String.IsNullOrEmpty(nome_marca) ? ""
-                : nome_marca.Substring(
-                    0,
-                    nome_marca.Length > 100 ? 100
-                    : nome_marca.Length
-                );
-
-            this.linhas =
-                String.IsNullOrEmpty(linhas) ? ""
-                : linhas.Substring(
-                    0,
-                    linhas.Length > 250 ? 250
-                    : linhas.Length
-                );
-
-            this.timestamp =
-                String.IsNullOrEmpty(timestamp) ? 0
-                : Convert.ToInt64(timestamp);
+            this.nome_marca = nome_marca;
+            this.linhas = linhas;
 
             this.portal =
-                String.IsNullOrEmpty(portal) ? 0
-                : Convert.ToInt32(portal);
+                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
+                Convert.ToInt32(portal) :
+                0;
+
+            this.timestamp =
+                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
+                Convert.ToInt64(timestamp) :
+                0;
         }
     }
 }

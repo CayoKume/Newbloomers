@@ -55,13 +55,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                 String.IsNullOrEmpty(ordem) ? 0
                 : Convert.ToInt32(ordem);
 
-            this.descricao =
-                String.IsNullOrEmpty(descricao) ? ""
-                : descricao.Substring(
-                    0,
-                    descricao.Length > 30 ? 30
-                    : descricao.Length
-                );
+            this.descricao = descricao;
 
             this.id_campo =
                 String.IsNullOrEmpty(id_campo) ? 0
@@ -71,13 +65,15 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                 String.IsNullOrEmpty(ativo) ? 0
                 : Convert.ToInt32(ativo);
 
-            this.timestamp =
-                String.IsNullOrEmpty(timestamp) ? 0
-                : Convert.ToInt64(timestamp);
-
             this.portal =
-                String.IsNullOrEmpty(portal) ? 0
-                : Convert.ToInt32(portal);
+                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
+                Convert.ToInt32(portal) :
+                0;
+
+            this.timestamp =
+                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
+                Convert.ToInt64(timestamp) :
+                0;
         }
     }
 }

@@ -90,96 +90,48 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             lastupdateon = DateTime.Now;
 
             this.id_endereco_entrega =
-                String.IsNullOrEmpty(id_endereco_entrega) ? 0
-                : Convert.ToInt32(id_endereco_entrega);
+                ConvertToInt32Validation.IsValid(id_endereco_entrega, "id_endereco_entrega", listValidations) ?
+                Convert.ToInt32(id_endereco_entrega) :
+                0;
 
             this.cod_cliente_erp =
-                String.IsNullOrEmpty(cod_cliente_erp) ? 0
-                : Convert.ToInt32(cod_cliente_erp);
+                ConvertToInt32Validation.IsValid(cod_cliente_erp, "cod_cliente_erp", listValidations) ?
+                Convert.ToInt32(cod_cliente_erp) :
+                0;
 
             this.cod_cliente_b2c =
-                String.IsNullOrEmpty(cod_cliente_b2c) ? 0
-                : Convert.ToInt32(cod_cliente_b2c);
-
-            this.endereco_cliente =
-                String.IsNullOrEmpty(endereco_cliente) ? ""
-                : endereco_cliente.Substring(
-                    0,
-                    endereco_cliente.Length > 250 ? 250
-                    : endereco_cliente.Length
-                );
-
-            this.numero_rua_cliente =
-                String.IsNullOrEmpty(numero_rua_cliente) ? ""
-                : numero_rua_cliente.Substring(
-                    0,
-                    numero_rua_cliente.Length > 20 ? 20
-                    : numero_rua_cliente.Length
-                );
-
-            this.complemento_end_cli =
-                String.IsNullOrEmpty(complemento_end_cli) ? ""
-                : complemento_end_cli.Substring(
-                    0,
-                    complemento_end_cli.Length > 60 ? 60
-                    : complemento_end_cli.Length
-                );
-
-            this.cep_cliente =
-                String.IsNullOrEmpty(cep_cliente) ? ""
-                : cep_cliente.Substring(
-                    0,
-                    cep_cliente.Length > 9 ? 9
-                    : cep_cliente.Length
-                );
-
-            this.bairro_cliente =
-                String.IsNullOrEmpty(bairro_cliente) ? ""
-                : bairro_cliente.Substring(
-                    0,
-                    bairro_cliente.Length > 60 ? 60
-                    : bairro_cliente.Length
-                );
-
-            this.cidade_cliente =
-                String.IsNullOrEmpty(cidade_cliente) ? ""
-                : cidade_cliente.Substring(
-                    0,
-                    cidade_cliente.Length > 40 ? 40
-                    : cidade_cliente.Length
-                );
-
-            this.uf_cliente =
-                String.IsNullOrEmpty(uf_cliente) ? ""
-                : uf_cliente.Substring(
-                    0,
-                    uf_cliente.Length > 2 ? 2
-                    : uf_cliente.Length
-                );
-
-            this.descricao =
-                String.IsNullOrEmpty(descricao) ? ""
-                : descricao.Substring(
-                    0,
-                    descricao.Length > 250 ? 250
-                    : descricao.Length
-                );
+                ConvertToInt32Validation.IsValid(cod_cliente_b2c, "cod_cliente_b2c", listValidations) ?
+                Convert.ToInt32(cod_cliente_b2c) :
+                0;
 
             this.principal =
-                String.IsNullOrEmpty(principal) ? false
-                : Convert.ToBoolean(principal);
+                ConvertToBooleanValidation.IsValid(principal, "principal", listValidations) ?
+                Convert.ToBoolean(principal) :
+                false;
 
             this.id_cidade =
-                String.IsNullOrEmpty(id_cidade) ? 0
-                : Convert.ToInt32(id_cidade);
-
-            this.timestamp =
-                String.IsNullOrEmpty(timestamp) ? 0
-                : Convert.ToInt64(timestamp);
+                ConvertToInt32Validation.IsValid(id_cidade, "id_cidade", listValidations) ?
+                Convert.ToInt32(id_cidade) :
+                0;
 
             this.portal =
-                String.IsNullOrEmpty(portal) ? 0
-                : Convert.ToInt32(portal);
+                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
+                Convert.ToInt32(portal) :
+                0;
+
+            this.timestamp =
+                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
+                Convert.ToInt64(timestamp) :
+                0;
+
+            this.endereco_cliente = endereco_cliente;
+            this.numero_rua_cliente = numero_rua_cliente;
+            this.complemento_end_cli = complemento_end_cli;
+            this.cep_cliente = cep_cliente;
+            this.bairro_cliente = bairro_cliente;
+            this.cidade_cliente = cep_cliente;
+            this.uf_cliente = uf_cliente;
+            this.descricao = descricao;
         }
     }
 }

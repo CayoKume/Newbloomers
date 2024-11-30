@@ -35,25 +35,21 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         {
             lastupdateon = DateTime.Now;
 
-            this.descricao_status =
-                String.IsNullOrEmpty(descricao_status) ? ""
-                : descricao_status.Substring(
-                    0,
-                    descricao_status.Length > 30 ? 30
-                    : descricao_status.Length
-                );
+            this.descricao_status = descricao_status;
 
             this.id_status =
                 String.IsNullOrEmpty(id_status) ? 0
                 : Convert.ToInt32(id_status);
 
-            this.timestamp =
-                String.IsNullOrEmpty(timestamp) ? 0
-                : Convert.ToInt64(timestamp);
-
             this.portal =
-                String.IsNullOrEmpty(portal) ? 0
-                : Convert.ToInt32(portal);
+                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
+                Convert.ToInt32(portal) :
+                0;
+
+            this.timestamp =
+                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
+                Convert.ToInt64(timestamp) :
+                0;
         }
     }
 }

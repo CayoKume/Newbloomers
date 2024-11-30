@@ -47,13 +47,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                String.IsNullOrEmpty(codigoproduto) ? 0
                : Convert.ToInt64(codigoproduto);
 
-            this.referencia =
-                String.IsNullOrEmpty(referencia) ? ""
-                : referencia.Substring(
-                    0,
-                    referencia.Length > 20 ? 20
-                    : referencia.Length
-                );
+            this.referencia = referencia;
 
             this.ativo =
                String.IsNullOrEmpty(ativo) ? 0
@@ -63,13 +57,15 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                String.IsNullOrEmpty(b2c) ? 0
                : Convert.ToInt32(b2c);
 
-            this.timestamp =
-                String.IsNullOrEmpty(timestamp) ? 0
-                : Convert.ToInt64(timestamp);
-
             this.portal =
-                String.IsNullOrEmpty(portal) ? 0
-                : Convert.ToInt32(portal);
+                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
+                Convert.ToInt32(portal) :
+                0;
+
+            this.timestamp =
+                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
+                Convert.ToInt64(timestamp) :
+                0;
         }
     }
 }

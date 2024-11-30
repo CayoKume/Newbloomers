@@ -78,41 +78,20 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                 String.IsNullOrEmpty(valor_plano) ? 0
                 : Convert.ToDecimal(valor_plano);
 
-            this.nsu_sitef =
-                String.IsNullOrEmpty(nsu_sitef) ? ""
-                : nsu_sitef.Substring(
-                    0,
-                    nsu_sitef.Length > 20 ? 20
-                    : nsu_sitef.Length
-                );
-
-            this.cod_autorizacao =
-                String.IsNullOrEmpty(cod_autorizacao) ? ""
-                : cod_autorizacao.Substring(
-                    0,
-                    cod_autorizacao.Length > 50 ? 50
-                    : cod_autorizacao.Length
-                );
-
-            this.texto_comprovante =
-                String.IsNullOrEmpty(texto_comprovante) ? ""
-                : texto_comprovante;
-
-            this.cod_loja_sitef =
-                String.IsNullOrEmpty(cod_loja_sitef) ? ""
-                : cod_loja_sitef.Substring(
-                    0,
-                    cod_loja_sitef.Length > 10 ? 10
-                    : cod_loja_sitef.Length
-                );
-
-            this.timestamp =
-                String.IsNullOrEmpty(timestamp) ? 0
-                : Convert.ToInt64(timestamp);
+            this.nsu_sitef = nsu_sitef;
+            this.cod_autorizacao = cod_autorizacao;
+            this.texto_comprovante = texto_comprovante;
+            this.cod_loja_sitef = cod_loja_sitef;
 
             this.portal =
-                String.IsNullOrEmpty(portal) ? 0
-                : Convert.ToInt32(portal);
+                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
+                Convert.ToInt32(portal) :
+                0;
+
+            this.timestamp =
+                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
+                Convert.ToInt64(timestamp) :
+                0;
         }
     }
 }

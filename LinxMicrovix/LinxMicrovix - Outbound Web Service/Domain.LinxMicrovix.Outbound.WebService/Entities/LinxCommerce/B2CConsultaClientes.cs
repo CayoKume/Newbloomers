@@ -211,6 +211,11 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                 Convert.ToInt32(portal) :
                 0;
 
+            this.timestamp =
+                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
+                Convert.ToInt64(timestamp) :
+                0;
+
             this.estado_civil_cliente =
                 ConvertToInt32Validation.IsValid(estado_civil_cliente, "estado_civil_cliente", listValidations) ?
                 Convert.ToInt32(estado_civil_cliente) :
@@ -224,11 +229,6 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             this.tempo_residencia =
                 ConvertToInt32Validation.IsValid(tempo_residencia, "tempo_residencia", listValidations) ?
                 Convert.ToInt32(tempo_residencia) :
-                0;
-
-            this.timestamp =
-                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
-                Convert.ToInt64(timestamp) :
                 0;
 
             this.renda =

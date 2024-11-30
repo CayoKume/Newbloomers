@@ -39,21 +39,17 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                 String.IsNullOrEmpty(id_b2c_palavras_chave_pesquisa) ? 0
                 : Convert.ToInt32(id_b2c_palavras_chave_pesquisa);
 
-            this.nome_colecao =
-                String.IsNullOrEmpty(nome_colecao) ? ""
-                : nome_colecao.Substring(
-                    0,
-                    nome_colecao.Length > 300 ? 300
-                    : nome_colecao.Length
-                );
-
-            this.timestamp =
-                String.IsNullOrEmpty(timestamp) ? 0
-                : Convert.ToInt64(timestamp);
+            this.nome_colecao = nome_colecao;
 
             this.portal =
-                String.IsNullOrEmpty(portal) ? 0
-                : Convert.ToInt32(portal);
+                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
+                Convert.ToInt32(portal) :
+                0;
+
+            this.timestamp =
+                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
+                Convert.ToInt64(timestamp) :
+                0;
         }
     }
 }

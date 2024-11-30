@@ -57,13 +57,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                 String.IsNullOrEmpty(codigoproduto) ? 0
                 : Convert.ToInt64(codigoproduto);
 
-            this.codebar =
-                String.IsNullOrEmpty(codebar) ? ""
-                : codebar.Substring(
-                    0,
-                    codebar.Length > 20 ? 20
-                    : codebar.Length
-                );
+            this.codebar = codebar;
 
             this.id_produtos_codebar =
                 String.IsNullOrEmpty(id_produtos_codebar) ? 0
@@ -77,21 +71,17 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                 String.IsNullOrEmpty(empresa) ? 0
                 : Convert.ToInt32(empresa);
 
-            this.tipo_codebar =
-                String.IsNullOrEmpty(tipo_codebar) ? ""
-                : tipo_codebar.Substring(
-                    0,
-                    tipo_codebar.Length > 20 ? 20
-                    : tipo_codebar.Length
-                );
-
-            this.timestamp =
-                String.IsNullOrEmpty(timestamp) ? 0
-                : Convert.ToInt64(timestamp);
+            this.tipo_codebar = tipo_codebar;
 
             this.portal =
-                String.IsNullOrEmpty(portal) ? 0
-                : Convert.ToInt32(portal);
+                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
+                Convert.ToInt32(portal) :
+                0;
+
+            this.timestamp =
+                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
+                Convert.ToInt64(timestamp) :
+                0;
         }
     }
 }

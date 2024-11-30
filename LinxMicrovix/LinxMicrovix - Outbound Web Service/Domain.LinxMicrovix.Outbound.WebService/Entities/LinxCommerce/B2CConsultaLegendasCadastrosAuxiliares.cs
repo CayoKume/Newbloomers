@@ -70,73 +70,19 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                 String.IsNullOrEmpty(empresa) ? 0
                 : Convert.ToInt32(empresa);
 
-            this.legenda_setor =
-                String.IsNullOrEmpty(legenda_setor) ? ""
-                : legenda_setor.Substring(
-                    0,
-                    legenda_setor.Length > 20 ? 20
-                    : legenda_setor.Length
-                );
-
-            this.legenda_linha =
-                String.IsNullOrEmpty(legenda_linha) ? ""
-                : legenda_linha.Substring(
-                    0,
-                    legenda_linha.Length > 20 ? 20
-                    : legenda_linha.Length
-                );
-
-            this.legenda_marca =
-                String.IsNullOrEmpty(legenda_marca) ? ""
-                : legenda_marca.Substring(
-                    0,
-                    legenda_marca.Length > 20 ? 20
-                    : legenda_marca.Length
-                );
-
-            this.legenda_colecao =
-                String.IsNullOrEmpty(legenda_colecao) ? ""
-                : legenda_colecao.Substring(
-                    0,
-                    legenda_colecao.Length > 20 ? 20
-                    : legenda_colecao.Length
-                );
-
-            this.legenda_grade1 =
-                String.IsNullOrEmpty(legenda_grade1) ? ""
-                : legenda_grade1.Substring(
-                    0,
-                    legenda_grade1.Length > 20 ? 20
-                    : legenda_grade1.Length
-                );
-
-            this.legenda_grade2 =
-                String.IsNullOrEmpty(legenda_grade2) ? ""
-                : legenda_grade2.Substring(
-                    0,
-                    legenda_grade2.Length > 20 ? 20
-                    : legenda_grade2.Length
-                );
-
-            this.legenda_espessura =
-                String.IsNullOrEmpty(legenda_espessura) ? ""
-                : legenda_espessura.Substring(
-                    0,
-                    legenda_espessura.Length > 20 ? 20
-                    : legenda_espessura.Length
-                );
-
-            this.legenda_classificacao =
-                String.IsNullOrEmpty(legenda_classificacao) ? ""
-                : legenda_classificacao.Substring(
-                    0,
-                    legenda_classificacao.Length > 20 ? 20
-                    : legenda_classificacao.Length
-                );
+            this.legenda_setor = legenda_setor;
+            this.legenda_linha = legenda_linha;
+            this.legenda_marca = legenda_marca;
+            this.legenda_colecao = legenda_colecao;
+            this.legenda_grade1 = legenda_grade1;
+            this.legenda_grade2 = legenda_grade2;
+            this.legenda_espessura = legenda_espessura;
+            this.legenda_classificacao = legenda_classificacao;
 
             this.timestamp =
-                String.IsNullOrEmpty(timestamp) ? 0
-                : Convert.ToInt64(timestamp);
+                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
+                Convert.ToInt64(timestamp) :
+                0;
         }
     }
 }
