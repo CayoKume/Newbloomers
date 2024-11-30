@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using Domain.IntegrationsCore.CustomValidations;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
 {
@@ -13,9 +14,11 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public Int32? id_deposito { get; private set; }
 
         [Column(TypeName = "varchar(50)")]
+        [LengthValidation(length: 50, propertyName: "nome_deposito")]
         public string? nome_deposito { get; private set; }
 
         [Column(TypeName = "char(1)")]
+        [LengthValidation(length: 1, propertyName: "disponivel")]
         public string? disponivel { get; private set; }
 
         [Column(TypeName = "bit")]
@@ -33,6 +36,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public B2CConsultaProdutosDepositos() { }
 
         public B2CConsultaProdutosDepositos(
+            List<ValidationResult> listValidations,
             string? id_deposito,
             string? nome_deposito,
             string? disponivel,

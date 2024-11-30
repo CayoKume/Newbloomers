@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using Domain.IntegrationsCore.CustomValidations;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
 {
@@ -25,15 +26,18 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public Int32? controla_lote { get; private set; }
 
         [Column(TypeName = "varchar(250)")]
+        [LengthValidation(length: 250, propertyName: "nomeproduto_alternativo")]
         public string? nomeproduto_alternativo { get; private set; }
 
         [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
         [Column(TypeName = "varchar(20)")]
+        [LengthValidation(length: 20, propertyName: "referencia")]
         public string? referencia { get; private set; }
 
         [Column(TypeName = "varchar(50)")]
+        [LengthValidation(length: 50, propertyName: "localizacao")]
         public string? localizacao { get; private set; }
 
         [Column(TypeName = "int")]
@@ -45,6 +49,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public B2CConsultaProdutosDetalhes() { }
 
         public B2CConsultaProdutosDetalhes(
+            List<ValidationResult> listValidations,
             string? id_prod_det,
             string? codigoproduto,
             string? empresa,

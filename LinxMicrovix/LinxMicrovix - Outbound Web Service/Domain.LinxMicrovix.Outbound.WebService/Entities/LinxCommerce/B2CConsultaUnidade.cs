@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Domain.IntegrationsCore.CustomValidations;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
@@ -10,6 +11,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
 
         [Key]
         [Column(TypeName = "varchar(50)")]
+        [LengthValidation(length: 50, propertyName: "unidade")]
         public string? unidade { get; private set; }
 
         [Column(TypeName = "bigint")]
@@ -21,6 +23,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public B2CConsultaUnidade() { }
 
         public B2CConsultaUnidade(
+            List<ValidationResult> listValidations,
             string? unidade,
             string? timestamp,
             string? portal

@@ -82,7 +82,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
             }
         }
 
-        public Task<List<B2CConsultaProdutosCamposAdicionaisNomes>> GetRegistersExists(LinxMicrovixJobParameter jobParameter, List<B2CConsultaProdutosCamposAdicionaisNomes> registros)
+        public async Task<List<B2CConsultaProdutosCamposAdicionaisNomes>> GetRegistersExists(LinxMicrovixJobParameter jobParameter, List<B2CConsultaProdutosCamposAdicionaisNomes> registros)
         {
             try
             {

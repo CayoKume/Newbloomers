@@ -30,6 +30,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public B2CConsultaPlanosParcelas() { }
 
         public B2CConsultaPlanosParcelas(
+            List<ValidationResult> listValidations,
             string? plano,
             string? ordem_parcela,
             string? prazo_parc,

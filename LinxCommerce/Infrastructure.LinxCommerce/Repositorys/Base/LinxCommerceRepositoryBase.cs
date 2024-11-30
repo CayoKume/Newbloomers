@@ -76,16 +76,17 @@ namespace Infrastructure.LinxCommerce.Repository.Base
             }
             catch (Exception ex)
             {
-                throw new ExecuteCommandException()
-                {
-                    project = $"{jobParameter.projectName} - IntegrationsCore",
-                    job = jobParameter.jobName,
-                    method = $"BulkInsertIntoTableRaw",
-                    message = $"Error when trying to bulk insert records on table raw",
-                    schema = $"[{jobParameter.tableName}_raw]",
-                    command = " - ",
-                    exception = ex.Message
-                };
+                throw;
+                //throw new ExecuteCommandException()
+                //{
+                //    project = $"{jobParameter.projectName} - IntegrationsCore",
+                //    job = jobParameter.jobName,
+                //    method = $"BulkInsertIntoTableRaw",
+                //    message = $"Error when trying to bulk insert records on table raw",
+                //    schema = $"[{jobParameter.tableName}_raw]",
+                //    command = " - ",
+                //    exception = ex.Message
+                //};
             }
         }
 
@@ -105,15 +106,16 @@ namespace Infrastructure.LinxCommerce.Repository.Base
             }
             catch (Exception ex)
             {
-                throw new ExecuteWithoutCommandException()
-                {
-                    project = $"{jobParameter.projectName} - IntegrationsCore",
-                    job = jobParameter.jobName,
-                    method = $"CallDbProcMerge",
-                    message = $"Error when trying to run the merge procedure: P_{jobParameter.tableName}_Sync",
-                    schema = $"{jobParameter.tableName}",
-                    exception = ex.Message
-                };
+                throw;
+                //throw new ExecuteWithoutCommandException()
+                //{
+                //    project = $"{jobParameter.projectName} - IntegrationsCore",
+                //    job = jobParameter.jobName,
+                //    method = $"CallDbProcMerge",
+                //    message = $"Error when trying to run the merge procedure: P_{jobParameter.tableName}_Sync",
+                //    schema = $"{jobParameter.tableName}",
+                //    exception = ex.Message
+                //};
             }
         }
 
@@ -136,16 +138,17 @@ namespace Infrastructure.LinxCommerce.Repository.Base
             }
             catch (Exception ex)
             {
-                throw new InternalErrorException()
-                {
-                    project = jobParameter.projectName,
-                    job = jobParameter.jobName,
-                    method = "CreateSystemDataTable",
-                    message = $"Error when convert system datatable to bulkinsert",
-                    record = $" - ",
-                    propertie = " - ",
-                    exception = ex.Message
-                };
+                throw;
+                //throw new InternalErrorException()
+                //{
+                //    project = jobParameter.projectName,
+                //    job = jobParameter.jobName,
+                //    method = "CreateSystemDataTable",
+                //    message = $"Error when convert system datatable to bulkinsert",
+                //    record = $" - ",
+                //    propertie = " - ",
+                //    exception = ex.Message
+                //};
             }
         }
 
@@ -169,16 +172,17 @@ namespace Infrastructure.LinxCommerce.Repository.Base
             }
             catch (Exception ex)
             {
-                throw new ExecuteCommandException()
-                {
-                    project = $"{jobParameter.projectName} - IntegrationsCore",
-                    job = jobParameter.jobName,
-                    method = $"DeleteLogResponse",
-                    message = $"Error when trying to clear parameters log table",
-                    schema = $"[{jobParameter.tableName}]",
-                    command = sql,
-                    exception = ex.Message
-                };
+                throw;
+                //throw new ExecuteCommandException()
+                //{
+                //    project = $"{jobParameter.projectName} - IntegrationsCore",
+                //    job = jobParameter.jobName,
+                //    method = $"DeleteLogResponse",
+                //    message = $"Error when trying to clear parameters log table",
+                //    schema = $"[{jobParameter.tableName}]",
+                //    command = sql,
+                //    exception = ex.Message
+                //};
             }
         }
 
@@ -198,16 +202,17 @@ namespace Infrastructure.LinxCommerce.Repository.Base
             }
             catch (Exception ex)
             {
-                throw new ExecuteCommandException()
-                {
-                    project = $"{jobParameter.projectName} - IntegrationsCore",
-                    job = jobParameter.jobName,
-                    method = $"ExecuteQueryCommand",
-                    message = $"Error when trying to execute command sql",
-                    schema = $"[{jobParameter.tableName}]",
-                    command = sql,
-                    exception = ex.Message
-                };
+                throw;
+                //throw new ExecuteCommandException()
+                //{
+                //    project = $"{jobParameter.projectName} - IntegrationsCore",
+                //    job = jobParameter.jobName,
+                //    method = $"ExecuteQueryCommand",
+                //    message = $"Error when trying to execute command sql",
+                //    schema = $"[{jobParameter.tableName}]",
+                //    command = sql,
+                //    exception = ex.Message
+                //};
             }
         }
 
@@ -229,16 +234,17 @@ namespace Infrastructure.LinxCommerce.Repository.Base
             }
             catch (Exception ex)
             {
-                throw new ExecuteCommandException()
-                {
-                    project = $"{jobParameter.projectName} - IntegrationsCore",
-                    job = jobParameter.jobName,
-                    method = $"ExecuteTruncateRawTable",
-                    message = $"Error when trying to truncate table raw",
-                    schema = $"[{jobParameter.tableName}_raw]",
-                    command = sql,
-                    exception = ex.Message
-                };
+                throw;
+                //throw new ExecuteCommandException()
+                //{
+                //    project = $"{jobParameter.projectName} - IntegrationsCore",
+                //    job = jobParameter.jobName,
+                //    method = $"ExecuteTruncateRawTable",
+                //    message = $"Error when trying to truncate table raw",
+                //    schema = $"[{jobParameter.tableName}_raw]",
+                //    command = sql,
+                //    exception = ex.Message
+                //};
             }
         }
 
@@ -258,16 +264,17 @@ namespace Infrastructure.LinxCommerce.Repository.Base
             }
             catch (Exception ex)
             {
-                throw new ObjectsNotFoundExcpetion()
-                {
-                    project = $"{jobParameter.projectName} - IntegrationsCore",
-                    job = jobParameter.jobName,
-                    method = $"GetParameters",
-                    message = $"Error when trying to get parameters from database",
-                    schema = $"[{jobParameter.parametersTableName}]",
-                    command = sql,
-                    exception = ex.Message
-                };
+                throw;
+                //throw new ObjectsNotFoundExcpetion()
+                //{
+                //    project = $"{jobParameter.projectName} - IntegrationsCore",
+                //    job = jobParameter.jobName,
+                //    method = $"GetParameters",
+                //    message = $"Error when trying to get parameters from database",
+                //    schema = $"[{jobParameter.parametersTableName}]",
+                //    command = sql,
+                //    exception = ex.Message
+                //};
             }
         }
 
@@ -284,16 +291,17 @@ namespace Infrastructure.LinxCommerce.Repository.Base
             }
             catch (Exception ex)
             {
-                throw new ExecuteCommandException()
-                {
-                    project = $"{jobParameter.projectName} - IntegrationsCore",
-                    job = jobParameter.jobName,
-                    method = $"GetParameters",
-                    message = $"Error when trying to insert record in database table: {jobParameter.tableName}",
-                    schema = $"[{jobParameter.tableName}]",
-                    command = sql,
-                    exception = ex.Message
-                };
+                throw;
+                //throw new ExecuteCommandException()
+                //{
+                //    project = $"{jobParameter.projectName} - IntegrationsCore",
+                //    job = jobParameter.jobName,
+                //    method = $"GetParameters",
+                //    message = $"Error when trying to insert record in database table: {jobParameter.tableName}",
+                //    schema = $"[{jobParameter.tableName}]",
+                //    command = sql,
+                //    exception = ex.Message
+                //};
             }
         }
 
@@ -318,16 +326,17 @@ namespace Infrastructure.LinxCommerce.Repository.Base
             }
             catch (Exception ex)
             {
-                throw new ExecuteCommandException()
-                {
-                    project = $"{jobParameter.projectName} - IntegrationsCore",
-                    job = jobParameter.jobName,
-                    method = $"InsertRecord",
-                    message = $"Error when trying to insert record in database table: {jobParameter.tableName}",
-                    schema = $"[{jobParameter.tableName}]",
-                    command = sql,
-                    exception = ex.Message
-                };
+                throw;
+                //throw new ExecuteCommandException()
+                //{
+                //    project = $"{jobParameter.projectName} - IntegrationsCore",
+                //    job = jobParameter.jobName,
+                //    method = $"InsertRecord",
+                //    message = $"Error when trying to insert record in database table: {jobParameter.tableName}",
+                //    schema = $"[{jobParameter.tableName}]",
+                //    command = sql,
+                //    exception = ex.Message
+                //};
             }
         }
 
@@ -351,16 +360,17 @@ namespace Infrastructure.LinxCommerce.Repository.Base
             }
             catch (Exception ex)
             {
-                throw new ExecuteCommandException()
-                {
-                    project = $"{jobParameter.projectName} - IntegrationsCore",
-                    job = jobParameter.jobName,
-                    method = $"InsertRecord",
-                    message = $"Error when trying to insert record in database table: {jobParameter.tableName}",
-                    schema = $"[{jobParameter.tableName}]",
-                    command = sql,
-                    exception = ex.Message
-                };
+                throw;
+                //throw new ExecuteCommandException()
+                //{
+                //    project = $"{jobParameter.projectName} - IntegrationsCore",
+                //    job = jobParameter.jobName,
+                //    method = $"InsertRecord",
+                //    message = $"Error when trying to insert record in database table: {jobParameter.tableName}",
+                //    schema = $"[{jobParameter.tableName}]",
+                //    command = sql,
+                //    exception = ex.Message
+                //};
             }
         }
 
@@ -380,16 +390,17 @@ namespace Infrastructure.LinxCommerce.Repository.Base
             }
             catch (Exception ex)
             {
-                throw new ExecuteCommandException()
-                {
-                    project = $"{jobParameter.projectName} - IntegrationsCore",
-                    job = jobParameter.jobName,
-                    method = $"InsertRecord",
-                    message = $"Error when trying to insert record in database table: {jobParameter.tableName}",
-                    schema = $"[{jobParameter.tableName}]",
-                    command = sql,
-                    exception = ex.Message
-                };
+                throw;
+                //throw new ExecuteCommandException()
+                //{
+                //    project = $"{jobParameter.projectName} - IntegrationsCore",
+                //    job = jobParameter.jobName,
+                //    method = $"InsertRecord",
+                //    message = $"Error when trying to insert record in database table: {jobParameter.tableName}",
+                //    schema = $"[{jobParameter.tableName}]",
+                //    command = sql,
+                //    exception = ex.Message
+                //};
             }
         }
 
@@ -415,16 +426,17 @@ namespace Infrastructure.LinxCommerce.Repository.Base
             }
             catch (Exception ex)
             {
-                throw new ExecuteCommandException()
-                {
-                    project = $"{jobParameter.projectName} - IntegrationsCore",
-                    job = jobParameter.jobName,
-                    method = $"UpdateLogParameters",
-                    message = $"Error when trying to update date of last execution date in database table: {jobParameter.parametersLogTableName}",
-                    schema = $"[{jobParameter.parametersLogTableName}]",
-                    command = sql,
-                    exception = ex.Message
-                };
+                throw;
+                //throw new ExecuteCommandException()
+                //{
+                //    project = $"{jobParameter.projectName} - IntegrationsCore",
+                //    job = jobParameter.jobName,
+                //    method = $"UpdateLogParameters",
+                //    message = $"Error when trying to update date of last execution date in database table: {jobParameter.parametersLogTableName}",
+                //    schema = $"[{jobParameter.parametersLogTableName}]",
+                //    command = sql,
+                //    exception = ex.Message
+                //};
             }
         }
     }

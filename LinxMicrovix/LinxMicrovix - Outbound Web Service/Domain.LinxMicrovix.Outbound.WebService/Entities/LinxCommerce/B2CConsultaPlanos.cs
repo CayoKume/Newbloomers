@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Domain.IntegrationsCore.CustomValidations;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
@@ -13,6 +14,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public Int32? plano { get; private set; }
 
         [Column(TypeName = "varchar(30)")]
+        [LengthValidation(length: 30, propertyName: "nome_plano")]
         public string? nome_plano { get; private set; }
 
         [Column(TypeName = "int")]
@@ -31,9 +33,11 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public Int64? timestamp { get; private set; }
 
         [Column(TypeName = "char(1)")]
+        [LengthValidation(length: 1, propertyName: "desativado")]
         public string? desativado { get; private set; }
 
         [Column(TypeName = "char(1)")]
+        [LengthValidation(length: 1, propertyName: "tipo_plano")]
         public string? tipo_plano { get; private set; }
 
         [Column(TypeName = "int")]
@@ -42,6 +46,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public B2CConsultaPlanos() { }
 
         public B2CConsultaPlanos(
+            List<ValidationResult> listValidations,
             string? plano,
             string? nome_plano,
             string? forma_pagamento,

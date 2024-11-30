@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.1.35" />
+    <PackageReference Include="Z.Dapper.Plus" Version="7.5.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\IntegrationsCore\Domain.IntegrationsCore\Domain.IntegrationsCore.csproj" />
+    <ProjectReference Include="..\..\IntegrationsCore\Infrastructure.IntegrationsCore\Infrastructure.IntegrationsCore.csproj" />
+    <ProjectReference Include="..\..\LinxMicrovix\LinxMicrovix - Outbound Web Service\Domain.LinxMicrovix.Outbound.WebService\Domain.LinxMicrovix.Outbound.WebService.csproj" />
+    <ProjectReference Include="..\Domain.DatabaseInit\Domain.DatabaseInit.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Repositorys\Shippment\FlashCourier\" />
+    <Folder Include="Repositorys\Shippment\Jadlog\" />
+    <Folder Include="Repositorys\General\AfterSale\" />
+    <Folder Include="Repositorys\General\Dootax\" />
+    <Folder Include="Repositorys\General\Mobsim\" />
+    <Folder Include="Repositorys\General\Movidesk\" />
+    <Folder Include="Repositorys\General\" />
+    <Folder Include="Repositorys\General\Pagarme\" />
+    <Folder Include="Repositorys\Shippment\" />
+    <Folder Include="Repositorys\Shippment\TotalExpress\" />
+  </ItemGroup>
+
+</Project>

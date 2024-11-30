@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Interfaces\Shippments\FlashCourier\" />
+    <Folder Include="Interfaces\Shippments\" />
+    <Folder Include="Interfaces\General\AfterSale\" />
+    <Folder Include="Interfaces\General\Dootax\" />
+    <Folder Include="Interfaces\Shippments\Jadlog\" />
+    <Folder Include="Interfaces\LinxCommerce\" />
+    <Folder Include="Interfaces\General\Mobsim\" />
+    <Folder Include="Interfaces\General\Movidesk\" />
+    <Folder Include="Interfaces\General\" />
+    <Folder Include="Interfaces\General\Pagarme\" />
+    <Folder Include="Interfaces\Shippments\TotalExpress\" />
+    <Folder Include="Services\General\AfterSale\" />
+    <Folder Include="Services\General\Dootax\" />
+    <Folder Include="Services\Shippment\Jadlog\" />
+    <Folder Include="Services\LinxCommerce\" />
+    <Folder Include="Services\Shippment\FlashCourier\" />
+    <Folder Include="Services\General\Mobsim\" />
+    <Folder Include="Services\General\Movidesk\" />
+    <Folder Include="Services\General\" />
+    <Folder Include="Services\General\Pagarme\" />
+    <Folder Include="Services\Shippment\" />
+    <Folder Include="Services\Shippment\TotalExpress\" />
+  </ItemGroup>
+
+</Project>

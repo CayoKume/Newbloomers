@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Domain.IntegrationsCore.CustomValidations;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
@@ -13,46 +14,60 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public Int32? cod_fornecedor { get; private set; }
 
         [Column(TypeName = "varchar(60)")]
+        [LengthValidation(length: 60, propertyName: "nome")]
         public string? nome { get; private set; }
 
         [Column(TypeName = "varchar(60)")]
+        [LengthValidation(length: 60, propertyName: "nome_fantasia")]
         public string? nome_fantasia { get; private set; }
 
         [Column(TypeName = "char(1)")]
+        [LengthValidation(length: 1, propertyName: "tipo_pessoa")]
         public string? tipo_pessoa { get; private set; }
 
         [Column(TypeName = "char(1)")]
+        [LengthValidation(length: 1, propertyName: "tipo_fornecedor")]
         public string? tipo_fornecedor { get; private set; }
 
         [Column(TypeName = "varchar(250)")]
+        [LengthValidation(length: 250, propertyName: "endereco")]
         public string? endereco { get; private set; }
 
         [Column(TypeName = "varchar(20)")]
+        [LengthValidation(length: 20, propertyName: "numero_rua")]
         public string? numero_rua { get; private set; }
 
         [Column(TypeName = "varchar(60)")]
+        [LengthValidation(length: 60, propertyName: "bairro")]
         public string? bairro { get; private set; }
 
         [Column(TypeName = "char(9)")]
+        [LengthValidation(length: 9, propertyName: "cep")]
         public string? cep { get; private set; }
 
         [Column(TypeName = "varchar(40)")]
+        [LengthValidation(length: 40, propertyName: "cidade")]
         public string? cidade { get; private set; }
 
         [Column(TypeName = "char(2)")]
+        [LengthValidation(length: 2, propertyName: "uf")]
         public string? uf { get; private set; }
 
         [Key]
         [Column(TypeName = "varchar(14)")]
+        [LengthValidation(length: 14, propertyName: "documento")]
         public string? documento { get; private set; }
 
         [Column(TypeName = "varchar(20)")]
+        [LengthValidation(length: 20, propertyName: "fone")]
         public string? fone { get; private set; }
 
         [Column(TypeName = "varchar(50)")]
+        [LengthValidation(length: 50, propertyName: "email")]
         public string? email { get; private set; }
 
         [Column(TypeName = "varchar(80)")]
+        [LengthValidation(length: 80, propertyName: "pais")]
         public string? pais { get; private set; }
 
         [Column(TypeName = "varchar(MAX)")]
@@ -67,6 +82,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public B2CConsultaFornecedores() { }
 
         public B2CConsultaFornecedores(
+            List<ValidationResult> listValidations,
             string? cod_fornecedor,
             string? nome,
             string? nome_fantasia,

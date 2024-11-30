@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using Domain.IntegrationsCore.CustomValidations;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
 {
@@ -13,6 +14,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public Int32? codigo_grade2 { get; private set; }
 
         [Column(TypeName = "varchar(100)")]
+        [LengthValidation(length: 100, propertyName: "nome_grade2")]
         public string? nome_grade2 { get; private set; }
 
         [Column(TypeName = "bigint")]
@@ -24,6 +26,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public B2CConsultaGrade2() { }
 
         public B2CConsultaGrade2(
+            List<ValidationResult> listValidations,
             string? codigo_grade2,
             string? nome_grade2,
             string? timestamp,

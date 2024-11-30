@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Domain.IntegrationsCore.CustomValidations;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
@@ -16,6 +17,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public Int32? id_b2c_palavras_chave_pesquisa { get; private set; }
 
         [Column(TypeName = "varchar(300)")]
+        [LengthValidation(length: 300, propertyName: "nome_colecao")]
         public string? nome_colecao { get; private set; }
 
         [Column(TypeName = "bigint")]
@@ -24,6 +26,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public B2CConsultaPalavrasChavePesquisa() { }
 
         public B2CConsultaPalavrasChavePesquisa(
+            List<ValidationResult> listValidations,
             string? portal,
             string? id_b2c_palavras_chave_pesquisa,
             string? nome_colecao,

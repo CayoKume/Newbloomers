@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Domain.IntegrationsCore.CustomValidations;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 
@@ -24,6 +25,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public DateTime? data_hora { get; private set; }
 
         [Column(TypeName = "varchar(80)")]
+        [LengthValidation(length: 80, propertyName: "anotacao")]
         public string? anotacao { get; private set; }
 
         [Column(TypeName = "bigint")]
@@ -35,6 +37,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public B2CConsultaPedidosStatus() { }
 
         public B2CConsultaPedidosStatus(
+            List<ValidationResult> listValidations,
             string? id,
             string? id_status,
             string? id_pedido,

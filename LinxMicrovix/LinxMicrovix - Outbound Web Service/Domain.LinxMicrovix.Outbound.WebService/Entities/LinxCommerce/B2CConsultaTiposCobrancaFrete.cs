@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using Domain.IntegrationsCore.CustomValidations;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
 {
@@ -13,6 +14,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public Int32? codigo_tipo_cobranca_frete { get; private set; }
 
         [Column(TypeName = "varchar(60)")]
+        [LengthValidation(length: 60, propertyName: "nome_tipo_cobranca_frete")]
         public string? nome_tipo_cobranca_frete { get; private set; }
 
         [Column(TypeName = "bigint")]
@@ -24,6 +26,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public B2CConsultaTiposCobrancaFrete() { }
 
         public B2CConsultaTiposCobrancaFrete(
+            List<ValidationResult> listValidations,
             string? codigo_tipo_cobranca_frete,
             string? nome_tipo_cobranca_frete,
             string? timestamp,

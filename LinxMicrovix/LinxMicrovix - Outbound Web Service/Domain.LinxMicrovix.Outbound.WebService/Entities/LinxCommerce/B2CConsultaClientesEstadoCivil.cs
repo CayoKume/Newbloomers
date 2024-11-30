@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Domain.IntegrationsCore.CustomValidations;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
@@ -13,6 +14,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public Int32? id_estado_civil { get; private set; }
 
         [Column(TypeName = "varchar(20)")]
+        [LengthValidation(length: 20, propertyName: "estado_civil")]
         public string? estado_civil { get; private set; }
 
         [Column(TypeName = "bigint")]
@@ -24,6 +26,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public B2CConsultaClientesEstadoCivil() { }
 
         public B2CConsultaClientesEstadoCivil(
+            List<ValidationResult> listValidations,
             string? id_estado_civil,
             string? estado_civil,
             string? timestamp,

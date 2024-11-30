@@ -30,6 +30,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public B2CConsultaProdutosTabelasPrecos() { }
 
         public B2CConsultaProdutosTabelasPrecos(
+            List<ValidationResult> listValidations,
             string? id_prod_tab_preco,
             string? id_tabela,
             string? codigoproduto,

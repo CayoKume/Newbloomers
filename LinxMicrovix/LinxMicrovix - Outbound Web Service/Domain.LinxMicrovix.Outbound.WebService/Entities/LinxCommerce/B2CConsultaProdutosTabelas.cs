@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Domain.IntegrationsCore.CustomValidations;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
@@ -13,9 +14,11 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public Int32? id_tabela { get; private set; }
 
         [Column(TypeName = "varchar(50)")]
+        [LengthValidation(length: 50, propertyName: "nome_tabela")]
         public string? nome_tabela { get; private set; }
 
         [Column(TypeName = "char(1)")]
+        [LengthValidation(length: 1, propertyName: "ativa")]
         public string? ativa { get; private set; }
 
         [Column(TypeName = "bigint")]
@@ -27,6 +30,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public B2CConsultaProdutosTabelas() { }
 
         public B2CConsultaProdutosTabelas(
+            List<ValidationResult> listValidations,
             string? id_tabela,
             string? nome_tabela,
             string? ativa,

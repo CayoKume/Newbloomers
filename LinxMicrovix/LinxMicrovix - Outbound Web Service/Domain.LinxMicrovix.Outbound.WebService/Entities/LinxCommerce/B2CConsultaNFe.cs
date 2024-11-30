@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Domain.IntegrationsCore.CustomValidations;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 
@@ -25,6 +26,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
 
         [Key]
         [Column(TypeName = "char(44)")]
+        [LengthValidation(length: 44, propertyName: "chave_nfe")]
         public string? chave_nfe { get; private set; }
 
         [Column(TypeName = "tinyint")]
@@ -46,6 +48,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public decimal? valor_nota { get; private set; }
 
         [Column(TypeName = "varchar(10)")]
+        [LengthValidation(length: 10, propertyName: "serie")]
         public string? serie { get; private set; }
 
         [Column(TypeName = "decimal(10,2)")]
@@ -58,12 +61,15 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public Int32? portal { get; private set; }
         
         [Column(TypeName = "varchar(15)")]
+        [LengthValidation(length: 15, propertyName: "nProt")]
         public string? nProt { get; private set; }
 
         [Column(TypeName = "varchar(3)")]
+        [LengthValidation(length: 3, propertyName: "codigo_modelo_nf")]
         public string? codigo_modelo_nf { get; private set; }
 
         [Column(TypeName = "varchar(255)")]
+        [LengthValidation(length: 255, propertyName: "justificativa")]
         public string? justificativa { get; private set; }
 
         [Column(TypeName = "int")]
@@ -72,6 +78,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public B2CConsultaNFe() { }
 
         public B2CConsultaNFe(
+            List<ValidationResult> listValidations,
             string? id_nfe,
             string? id_pedido,
             string? documento,

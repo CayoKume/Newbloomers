@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using Domain.IntegrationsCore.CustomValidations;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
 {
@@ -13,6 +14,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public Int32? id_tipo_encomenda { get; private set; }
 
         [Column(TypeName = "varchar(100)")]
+        [LengthValidation(length: 100, propertyName: "nm_tipo_encomenda")]
         public string? nm_tipo_encomenda { get; private set; }
 
         [Column(TypeName = "bigint")]
@@ -24,6 +26,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public B2CConsultaTipoEncomenda() { }
 
         public B2CConsultaTipoEncomenda(
+            List<ValidationResult> listValidations,
             string? id_tipo_encomenda,
             string? nm_tipo_encomenda,
             string? timestamp,

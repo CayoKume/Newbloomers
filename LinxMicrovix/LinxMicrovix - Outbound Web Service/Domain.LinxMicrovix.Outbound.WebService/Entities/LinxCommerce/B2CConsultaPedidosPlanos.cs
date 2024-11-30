@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using Domain.IntegrationsCore.CustomValidations;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
 {
@@ -23,15 +24,18 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public decimal? valor_plano { get; private set; }
 
         [Column(TypeName = "varchar(20)")]
+        [LengthValidation(length: 20, propertyName: "nsu_sitef")]
         public string? nsu_sitef { get; private set; }
 
         [Column(TypeName = "varchar(50)")]
+        [LengthValidation(length: 50, propertyName: "        public string? cod_autorizacao { get; private set; }\r\n")]
         public string? cod_autorizacao { get; private set; }
 
         [Column(TypeName = "varchar(MAX)")]
         public string? texto_comprovante { get; private set; }
 
         [Column(TypeName = "varchar(10)")]
+        [LengthValidation(length: 10, propertyName: "cod_loja_sitef")]
         public string? cod_loja_sitef { get; private set; }
 
         [Column(TypeName = "bigint")]
@@ -43,6 +47,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public B2CConsultaPedidosPlanos() { }
 
         public B2CConsultaPedidosPlanos(
+            List<ValidationResult> listValidations,
             string? id_pedido_planos,
             string? id_pedido,
             string? plano_pagamento,

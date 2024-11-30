@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Domain.IntegrationsCore.CustomValidations;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 
@@ -25,6 +26,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
 
         [Key]
         [Column(TypeName = "varchar(40)")]
+        [LengthValidation(length: 40, propertyName: "order_id")]
         public string? order_id { get; private set; }
 
         [Key]
@@ -43,6 +45,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public B2CConsultaPedidosIdentificador() { }
 
         public B2CConsultaPedidosIdentificador(
+            List<ValidationResult> listValidations,
             string? portal,
             string? empresa,
             string? identificador,

@@ -1,9 +1,7 @@
 ﻿using Dapper;
 using System.Data;
-
 using Z.Dapper.Plus;
 using Microsoft.Extensions.Configuration;
-
 using System.Data.SqlClient;
 using System.ComponentModel;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
@@ -579,16 +577,17 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
             }
             catch (Exception ex)
             {
-                throw new ExecuteCommandException()
-                {
-                    project = $"{jobParameter.projectName} - IntegrationsCore",
-                    job = jobParameter.jobName,
-                    method = $"InsertRecord",
-                    message = $"Error when trying to insert record in database table: {jobParameter.tableName}",
-                    schema = $"[{jobParameter.tableName}]",
-                    command = sql,
-                    exception = ex.Message
-                };
+                throw;
+                //throw new ExecuteCommandException()
+                //{
+                //    project = $"{jobParameter.projectName} - IntegrationsCore",
+                //    job = jobParameter.jobName,
+                //    method = $"InsertRecord",
+                //    message = $"Error when trying to insert record in database table: {jobParameter.tableName}",
+                //    schema = $"[{jobParameter.tableName}]",
+                //    command = sql,
+                //    exception = ex.Message
+                //};
             }
         }
         #endregion

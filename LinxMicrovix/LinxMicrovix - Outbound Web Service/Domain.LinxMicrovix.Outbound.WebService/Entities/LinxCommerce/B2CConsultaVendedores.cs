@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using Domain.IntegrationsCore.CustomValidations;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
 {
@@ -13,6 +14,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public Int32? cod_vendedor { get; private set; }
 
         [Column(TypeName = "varchar(50)")]
+        [LengthValidation(length: 50, propertyName: "nome_vendedor")]
         public string? nome_vendedor { get; private set; }
 
         [Column(TypeName = "decimal(10,2)")]
@@ -22,6 +24,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public decimal? comissao_servicos { get; private set; }
 
         [Column(TypeName = "char(1)")]
+        [LengthValidation(length: 1, propertyName: "tipo")]
         public string? tipo { get; private set; }
 
         [Column(TypeName = "bit")]
@@ -39,6 +42,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public B2CConsultaVendedores() { }
 
         public B2CConsultaVendedores(
+            List<ValidationResult> listValidations,
             string? cod_vendedor,
             string? nome_vendedor,
             string? comissao_produtos,

@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
+using Domain.IntegrationsCore.CustomValidations;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
 {
@@ -14,6 +15,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public Int32? codigo_campanha { get; private set; }
 
         [Column(TypeName = "varchar(60)")]
+        [LengthValidation(length: 60, propertyName: "nome_campanha")]
         public string? nome_campanha { get; private set; }
 
         [Column(TypeName = "smalldatetime")]
@@ -37,6 +39,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public B2CConsultaProdutosCampanhas() { }
 
         public B2CConsultaProdutosCampanhas(
+            List<ValidationResult> listValidations,
             string? codigo_campanha,
             string? nome_campanha,
             string? vigencia_inicio,

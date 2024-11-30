@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Domain.IntegrationsCore.CustomValidations;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
@@ -13,12 +14,14 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public Int32? codigo_linha { get; private set; }
 
         [Column(TypeName = "varchar(30)")]
+        [LengthValidation(length: 30, propertyName: "nome_linha")]
         public string? nome_linha { get; private set; }
 
         [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
         [Column(TypeName = "varchar(250)")]
+        [LengthValidation(length: 250, propertyName: "setores")]
         public string? setores { get; private set; }
 
         [Column(TypeName = "int")]
@@ -27,6 +30,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public B2CConsultaLinhas() { }
 
         public B2CConsultaLinhas(
+            List<ValidationResult> listValidations,
             string? codigo_linha,
             string? nome_linha,
             string? timestamp,

@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
+using Domain.IntegrationsCore.CustomValidations;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
 {
@@ -32,6 +33,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public DateTime? data_cadastro { get; private set; }
 
         [Column(TypeName = "char(1)")]
+        [LengthValidation(length: 1, propertyName: "ativa")]
         public string? ativa { get; private set; }
 
         [Column(TypeName = "int")]
@@ -44,6 +46,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public Int64? timestamp { get; private set; }
 
         [Column(TypeName = "varchar(20)")]
+        [LengthValidation(length: 20, propertyName: "referencia")]
         public string? referencia { get; private set; }
 
         [Column(TypeName = "int")]
@@ -52,6 +55,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public B2CConsultaProdutosPromocao() { }
 
         public B2CConsultaProdutosPromocao(
+            List<ValidationResult> listValidations,
             string? codigo_promocao,
             string? empresa,
             string? codigoproduto,

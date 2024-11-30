@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Domain.IntegrationsCore.CustomValidations;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 
@@ -14,34 +15,44 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public Int32? empresa { get; private set; }
 
         [Column(TypeName = "varchar(50)")]
+        [LengthValidation(length: 50, propertyName: "nome_emp")]
         public string? nome_emp { get; private set; }
 
         [Key]
         [Column(TypeName = "varchar(14)")]
+        [LengthValidation(length: 14, propertyName: "cnpj_emp")]
         public string? cnpj_emp { get; private set; }
 
         [Column(TypeName = "varchar(250)")]
+        [LengthValidation(length: 250, propertyName: "end_unidade")]
         public string? end_unidade { get; private set; }
 
         [Column(TypeName = "varchar(60)")]
+        [LengthValidation(length: 60, propertyName: "complemento_end_unidade")]
         public string? complemento_end_unidade { get; private set; }
 
         [Column(TypeName = "varchar(20)")]
+        [LengthValidation(length: 20, propertyName: "nr_rua_unidade")]
         public string? nr_rua_unidade { get; private set; }
 
         [Column(TypeName = "varchar(60)")]
+        [LengthValidation(length: 60, propertyName: "bairro_unidade")]
         public string? bairro_unidade { get; private set; }
 
         [Column(TypeName = "varchar(9)")]
+        [LengthValidation(length: 9, propertyName: "cep_unidade")]
         public string? cep_unidade { get; private set; }
 
         [Column(TypeName = "varchar(50)")]
+        [LengthValidation(length: 50, propertyName: "cidade_unidade")]
         public string? cidade_unidade { get; private set; }
 
         [Column(TypeName = "char(2)")]
+        [LengthValidation(length: 2, propertyName: "uf_unidade")]
         public string? uf_unidade { get; private set; }
 
         [Column(TypeName = "varchar(50)")]
+        [LengthValidation(length: 50, propertyName: "email_unidade")]
         public string? email_unidade { get; private set; }
 
         [Column(TypeName = "bigint")]
@@ -59,6 +70,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public B2CConsultaEmpresas() { }
 
         public B2CConsultaEmpresas(
+            List<ValidationResult> listValidations,
             string? empresa,
             string? nome_emp,
             string? cnpj_emp,

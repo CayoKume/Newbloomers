@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Domain.IntegrationsCore.CustomValidations;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
@@ -13,6 +14,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public Int32? id_parentesco { get; private set; }
 
         [Column(TypeName = "varchar(50)")]
+        [LengthValidation(length: 50, propertyName: "descricao_parentesco")]
         public string? descricao_parentesco { get; private set; }
 
         [Column(TypeName = "bigint")]
@@ -24,6 +26,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public B2CConsultaClientesContatosParentesco() { }
 
         public B2CConsultaClientesContatosParentesco(
+            List<ValidationResult> listValidations,
             string? id_parentesco,
             string? descricao_parentesco,
             string? timestamp,
@@ -33,8 +36,9 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             lastupdateon = DateTime.Now;
 
             this.id_parentesco =
-                String.IsNullOrEmpty(id_parentesco) ? 0
-                : Convert.ToInt32(id_parentesco);
+                ConvertToInt32Validation.IsValid(id_parentesco, "id_parentesco", listValidations) ?
+                Convert.ToInt32(id_parentesco) :
+                0;
 
             this.descricao_parentesco =
                 String.IsNullOrEmpty(descricao_parentesco) ? ""
@@ -49,8 +53,9 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                 : Convert.ToInt64(timestamp);
 
             this.portal =
-                String.IsNullOrEmpty(portal) ? 0
-                : Convert.ToInt32(portal);
+                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
+                Convert.ToInt32(portal) :
+                0;
         }
     }
 }

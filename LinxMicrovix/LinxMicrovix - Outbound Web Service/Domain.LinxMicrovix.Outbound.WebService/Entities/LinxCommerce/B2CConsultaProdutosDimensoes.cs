@@ -30,6 +30,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public B2CConsultaProdutosDimensoes() { }
         
         public B2CConsultaProdutosDimensoes(
+            List<ValidationResult> listValidations,
             string? codigoproduto,
             string? altura,
             string? comprimento,

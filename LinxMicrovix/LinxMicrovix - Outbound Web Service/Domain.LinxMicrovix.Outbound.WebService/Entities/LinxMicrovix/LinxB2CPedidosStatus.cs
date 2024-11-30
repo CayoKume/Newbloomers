@@ -6,6 +6,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 {
     public class LinxB2CPedidosStatus
     {
+        [Column(TypeName = "datetime")]
         public DateTime lastupdateon { get; set; }
 
         [Key]

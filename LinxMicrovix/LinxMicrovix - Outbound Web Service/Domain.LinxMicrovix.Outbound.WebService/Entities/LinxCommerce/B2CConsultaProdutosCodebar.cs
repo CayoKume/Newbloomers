@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using Domain.IntegrationsCore.CustomValidations;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
 {
@@ -13,6 +14,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public Int64? codigoproduto { get; private set; }
 
         [Column(TypeName = "varchar(20)")]
+        [LengthValidation(length: 20, propertyName: "codebar")]
         public string? codebar { get; private set; }
 
         [Key]
@@ -29,6 +31,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public Int64? timestamp { get; private set; }
 
         [Column(TypeName = "varchar(20)")]
+        [LengthValidation(length: 20, propertyName: "tipo_codebar")]
         public string? tipo_codebar { get; private set; }
 
         [Column(TypeName = "int")]
@@ -37,6 +40,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public B2CConsultaProdutosCodebar() { }
 
         public B2CConsultaProdutosCodebar(
+            List<ValidationResult> listValidations,
             string? codigoproduto,
             string? codebar,
             string? id_produtos_codebar,

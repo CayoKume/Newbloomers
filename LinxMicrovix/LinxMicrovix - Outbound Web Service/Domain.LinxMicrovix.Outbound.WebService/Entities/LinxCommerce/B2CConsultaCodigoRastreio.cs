@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using Domain.IntegrationsCore.CustomValidations;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
 {
@@ -16,12 +17,15 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public Int32? documento { get; private set; }
 
         [Column(TypeName = "varchar(10)")]
+        [LengthValidation(length: 10, propertyName: "serie")]
         public string? serie { get; private set; }
 
         [Column(TypeName = "varchar(20)")]
+        [LengthValidation(length: 20, propertyName: "codigo_rastreio")]
         public string? codigo_rastreio { get; private set; }
 
         [Column(TypeName = "varchar(20)")]
+        [LengthValidation(length: 20, propertyName: "sequencia_volume")]
         public string? sequencia_volume { get; private set; }
 
         [Column(TypeName = "bigint")]
@@ -33,6 +37,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public B2CConsultaCodigoRastreio() { }
 
         public B2CConsultaCodigoRastreio(
+            List<ValidationResult> listValidations,
             string? id_pedido,
             string? documento,
             string? serie,

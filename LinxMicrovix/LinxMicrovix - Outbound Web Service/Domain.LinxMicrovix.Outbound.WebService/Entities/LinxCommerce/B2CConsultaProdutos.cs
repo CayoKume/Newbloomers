@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
+using Domain.IntegrationsCore.CustomValidations;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
 {
@@ -14,15 +15,19 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public Int64? codigoproduto { get; private set; }
 
         [Column(TypeName = "varchar(20)")]
+        [LengthValidation(length: 20, propertyName: "referencia")]
         public string? referencia { get; private set; }
 
         [Column(TypeName = "varchar(40)")]
+        [LengthValidation(length: 40, propertyName: "codauxiliar1")]
         public string? codauxiliar1 { get; private set; }
 
         [Column(TypeName = "varchar(100)")]
+        [LengthValidation(length: 100, propertyName: "descricao_basica")]
         public string? descricao_basica { get; private set; }
 
         [Column(TypeName = "varchar(250)")]
+        [LengthValidation(length: 250, propertyName: "nome_produto")]
         public string? nome_produto { get; private set; }
 
         [Column(TypeName = "decimal(10,2)")]
@@ -50,6 +55,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public Int32? codigo_grade2 { get; private set; }
 
         [Column(TypeName = "varchar(50)")]
+        [LengthValidation(length: 50, propertyName: "unidade")]
         public string? unidade { get; private set; }
 
         [Column(TypeName = "bit")]
@@ -89,6 +95,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public Int32? portal { get; private set; }
 
         [Column(TypeName = "varchar(8000)")]
+        [LengthValidation(length: 8000, propertyName: "descricao_completa_commerce")]
         public string? descricao_completa_commerce { get; private set; }
 
         [Column(TypeName = "tinyint")]
@@ -101,11 +108,13 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public DateTime? fim_publicacao_produto { get; private set; }
 
         [Column(TypeName = "varchar(50)")]
+        [LengthValidation(length: 50, propertyName: "codigo_integracao_oms")]
         public string? codigo_integracao_oms { get; private set; }
 
         public B2CConsultaProdutos() { }
 
         public B2CConsultaProdutos(
+            List<ValidationResult> listValidations,
             string? codigoproduto,
             string? referencia,
             string? codauxiliar1,

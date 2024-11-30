@@ -32,6 +32,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public B2CConsultaClientesSaldoLinx() { }
 
         public B2CConsultaClientesSaldoLinx(
+            List<ValidationResult> listValidations,
             string? cod_cliente_erp,
             string? cod_cliente_b2c,
             string? empresa,

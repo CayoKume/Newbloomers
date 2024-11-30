@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Domain.IntegrationsCore.CustomValidations;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
@@ -20,6 +21,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public Int64? timestamp { get; private set; }
 
         [Column(TypeName = "varchar(200)")]
+        [LengthValidation(length: 200, propertyName: "url_imagem_blob")]
         public string? url_imagem_blob { get; private set; }
 
         [Column(TypeName = "int")]
@@ -28,6 +30,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public B2CConsultaImagensHD() { }
 
         public B2CConsultaImagensHD(
+            List<ValidationResult> listValidations,
             string? identificador_imagem,
             string? codigoproduto,
             string? timestamp,

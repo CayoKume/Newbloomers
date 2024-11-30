@@ -38,6 +38,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public B2CConsultaProdutosAssociados() { }
 
         public B2CConsultaProdutosAssociados(
+            List<ValidationResult> listValidations,
             string? id,
             string? codigoproduto,
             string? codigoproduto_associado,
