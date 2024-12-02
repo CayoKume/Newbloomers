@@ -31,8 +31,6 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         {
             lastupdateon = DateTime.Now;
 
-            this.unidade = unidade;
-
             this.portal =
                 ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
                 Convert.ToInt32(portal) :
@@ -42,6 +40,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                 ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
                 Convert.ToInt64(timestamp) :
                 0;
+
+            this.unidade = unidade;
         }
     }
 }

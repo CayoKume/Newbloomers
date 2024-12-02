@@ -43,20 +43,24 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             lastupdateon = DateTime.Now;
 
             this.altura =
-                String.IsNullOrEmpty(altura) ? 0
-                : Convert.ToDecimal(altura);
+                ConvertToDecimalValidation.IsValid(altura, "altura", listValidations) ?
+                Convert.ToDecimal(altura) :
+                0;
 
             this.comprimento =
-                String.IsNullOrEmpty(comprimento) ? 0
-                : Convert.ToDecimal(comprimento);
+                ConvertToDecimalValidation.IsValid(comprimento, "comprimento", listValidations) ?
+                Convert.ToDecimal(comprimento) :
+                0;
 
             this.largura =
-                String.IsNullOrEmpty(largura) ? 0
-                : Convert.ToDecimal(largura);
+                ConvertToDecimalValidation.IsValid(largura, "largura", listValidations) ?
+                Convert.ToDecimal(largura) :
+                0;
 
             this.codigoproduto =
-                String.IsNullOrEmpty(codigoproduto) ? 0
-                : Convert.ToInt64(codigoproduto);
+                ConvertToInt64Validation.IsValid(codigoproduto, "codigoproduto", listValidations) ?
+                Convert.ToInt64(codigoproduto) :
+                0;
 
             this.portal =
                 ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?

@@ -138,100 +138,113 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             lastupdateon = DateTime.Now;
 
             this.id_pedido =
-                String.IsNullOrEmpty(id_pedido) ? 0
-                : Convert.ToInt32(id_pedido);
+                ConvertToInt32Validation.IsValid(id_pedido, "id_pedido", listValidations) ?
+                Convert.ToInt32(id_pedido) :
+                0;
 
             this.dt_pedido =
-                String.IsNullOrEmpty(dt_pedido) ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
-                : Convert.ToDateTime(dt_pedido);
+                ConvertToDateTimeValidation.IsValid(dt_pedido, "dt_pedido", listValidations) ?
+                Convert.ToDateTime(dt_pedido) :
+                new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar);
 
             this.cod_cliente_erp =
-                String.IsNullOrEmpty(cod_cliente_erp) ? 0
-                : Convert.ToInt32(cod_cliente_erp);
+                ConvertToInt32Validation.IsValid(cod_cliente_erp, "cod_cliente_erp", listValidations) ?
+                Convert.ToInt32(cod_cliente_erp) :
+                0;
 
             this.cod_cliente_b2c =
-                String.IsNullOrEmpty(cod_cliente_b2c) ? 0
-                : Convert.ToInt32(cod_cliente_b2c);
+                ConvertToInt32Validation.IsValid(cod_cliente_b2c, "cod_cliente_b2c", listValidations) ?
+                Convert.ToInt32(cod_cliente_b2c) :
+                0;
 
             this.vl_frete =
-                String.IsNullOrEmpty(vl_frete) ? 0
-                : Convert.ToDecimal(vl_frete);
+                ConvertToDecimalValidation.IsValid(vl_frete, "vl_frete", listValidations) ?
+                Convert.ToDecimal(vl_frete) :
+                0;
 
             this.forma_pgto =
-                String.IsNullOrEmpty(forma_pgto) ? 0
-                : Convert.ToInt32(forma_pgto);
+                ConvertToInt32Validation.IsValid(forma_pgto, "forma_pgto", listValidations) ?
+                Convert.ToInt32(forma_pgto) :
+                0;
 
             this.plano_pagamento =
-               String.IsNullOrEmpty(plano_pagamento) ? 0
-               : Convert.ToInt32(plano_pagamento);
-
-            this.anotacao = anotacao;
-            this.ecommerce_origem = ecommerce_origem;
-            this.order_id = order_id;
-            this.mensagem_falha_faturamento = mensagem_falha_faturamento;
+                ConvertToInt32Validation.IsValid(plano_pagamento, "plano_pagamento", listValidations) ?
+                Convert.ToInt32(plano_pagamento) :
+                0;
 
             this.taxa_impressao =
                 String.IsNullOrEmpty(taxa_impressao) ? 0
                 : Convert.ToDecimal(taxa_impressao);
 
             this.finalizado =
-                String.IsNullOrEmpty(finalizado) ? 0
-                : Convert.ToInt32(finalizado);
+                ConvertToInt32Validation.IsValid(finalizado, "finalizado", listValidations) ?
+                Convert.ToInt32(finalizado) :
+                0;
 
             this.valor_frete_gratis =
-                String.IsNullOrEmpty(valor_frete_gratis) ? 0
-                : Convert.ToDecimal(valor_frete_gratis);
+                ConvertToDecimalValidation.IsValid(valor_frete_gratis, "valor_frete_gratis", listValidations) ?
+                Convert.ToDecimal(valor_frete_gratis) :
+                0;
 
             this.tipo_frete =
-                String.IsNullOrEmpty(tipo_frete) ? 0
-                : Convert.ToInt32(tipo_frete);
+                ConvertToInt32Validation.IsValid(tipo_frete, "tipo_frete", listValidations) ?
+                Convert.ToInt32(tipo_frete) :
+                0;
 
             this.id_status =
-                String.IsNullOrEmpty(id_status) ? 0
-                : Convert.ToInt32(id_status);
+                ConvertToInt32Validation.IsValid(id_status, "id_status", listValidations) ?
+                Convert.ToInt32(id_status) :
+                0;
 
             this.cod_transportador =
-                String.IsNullOrEmpty(cod_transportador) ? 0
-                : Convert.ToInt32(cod_transportador);
+                ConvertToInt32Validation.IsValid(cod_transportador, "cod_transportador", listValidations) ?
+                Convert.ToInt32(cod_transportador) :
+                0;
 
             this.tipo_cobranca_frete =
-                String.IsNullOrEmpty(tipo_cobranca_frete) ? 0
-                : Convert.ToInt32(tipo_cobranca_frete);
+                ConvertToInt32Validation.IsValid(tipo_cobranca_frete, "tipo_cobranca_frete", listValidations) ?
+                Convert.ToInt32(tipo_cobranca_frete) :
+                0;
 
             this.ativo =
-                String.IsNullOrEmpty(ativo) ? 0
-                : Convert.ToInt32(ativo);
+                ConvertToInt32Validation.IsValid(ativo, "ativo", listValidations) ?
+                Convert.ToInt32(ativo) :
+                0;
 
             this.empresa =
-                String.IsNullOrEmpty(empresa) ? 0
-                : Convert.ToInt32(empresa);
+                ConvertToInt32Validation.IsValid(empresa, "empresa", listValidations) ?
+                Convert.ToInt32(empresa) :
+                0;
 
             this.id_tabela_preco =
-                String.IsNullOrEmpty(id_tabela_preco) ? 0
-                : Convert.ToInt32(id_tabela_preco);
+                ConvertToInt32Validation.IsValid(id_tabela_preco, "id_tabela_preco", listValidations) ?
+                Convert.ToInt32(id_tabela_preco) :
+                0;
 
             this.valor_credito =
-                String.IsNullOrEmpty(valor_credito) ? 0
-                : Convert.ToDecimal(valor_credito);
+                ConvertToDecimalValidation.IsValid(valor_credito, "valor_credito", listValidations) ?
+                Convert.ToDecimal(valor_credito) :
+                0;
 
             this.cod_vendedor =
-                String.IsNullOrEmpty(cod_vendedor) ? 0
-                : Convert.ToInt32(cod_vendedor);
+                ConvertToInt32Validation.IsValid(cod_vendedor, "cod_vendedor", listValidations) ?
+                Convert.ToInt32(cod_vendedor) :
+                0;
 
             this.dt_insert =
-                String.IsNullOrEmpty(dt_insert) ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
-                : Convert.ToDateTime(dt_insert);
+                ConvertToDateTimeValidation.IsValid(dt_insert, "dt_insert", listValidations) ?
+                Convert.ToDateTime(dt_insert) :
+                new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar);
 
             this.dt_disponivel_faturamento =
-                String.IsNullOrEmpty(dt_disponivel_faturamento) ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
-                : Convert.ToDateTime(dt_disponivel_faturamento);
-
+                ConvertToDateTimeValidation.IsValid(dt_disponivel_faturamento, "dt_disponivel_faturamento", listValidations) ?
+                Convert.ToDateTime(dt_disponivel_faturamento) :
+                new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar);
 
             this.id_tipo_b2c =
-                String.IsNullOrEmpty(id_tipo_b2c) ? 0
-                : Convert.ToInt32(id_tipo_b2c);
-
-
+                ConvertToInt32Validation.IsValid(id_tipo_b2c, "id_tipo_b2c", listValidations) ?
+                Convert.ToInt32(id_tipo_b2c) :
+                0;
 
             this.portal =
                 ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
@@ -242,6 +255,11 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                 ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
                 Convert.ToInt64(timestamp) :
                 0;
+
+            this.anotacao = anotacao;
+            this.ecommerce_origem = ecommerce_origem;
+            this.order_id = order_id;
+            this.mensagem_falha_faturamento = mensagem_falha_faturamento;
         }
     }
 }

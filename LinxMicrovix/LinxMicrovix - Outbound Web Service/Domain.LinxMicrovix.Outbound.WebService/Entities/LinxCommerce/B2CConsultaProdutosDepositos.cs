@@ -49,19 +49,19 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             lastupdateon = DateTime.Now;
 
             this.id_deposito =
-                String.IsNullOrEmpty(id_deposito) ? 0
-                : Convert.ToInt32(id_deposito);
-
-            this.nome_deposito = nome_deposito;
-            this.disponivel = disponivel;
+                ConvertToInt32Validation.IsValid(id_deposito, "id_deposito", listValidations) ?
+                Convert.ToInt32(id_deposito) :
+                0;
 
             this.disponivel_transferencia =
-                String.IsNullOrEmpty(disponivel_transferencia) ? 0
-                : Convert.ToInt32(disponivel_transferencia);
+                ConvertToInt32Validation.IsValid(disponivel_transferencia, "disponivel_transferencia", listValidations) ?
+                Convert.ToInt32(disponivel_transferencia) :
+                0;
 
             this.disponivel_franquias =
-                String.IsNullOrEmpty(disponivel_franquias) ? 0
-                : Convert.ToInt32(disponivel_franquias);
+                ConvertToInt32Validation.IsValid(disponivel_franquias, "disponivel_franquias", listValidations) ?
+                Convert.ToInt32(disponivel_franquias) :
+                0;
 
             this.portal =
                 ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
@@ -72,6 +72,9 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                 ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
                 Convert.ToInt64(timestamp) :
                 0;
+
+            this.nome_deposito = nome_deposito;
+            this.disponivel = disponivel;
         }
     }
 }

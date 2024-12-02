@@ -67,8 +67,14 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             lastupdateon = DateTime.Now;
 
             this.empresa =
-                String.IsNullOrEmpty(empresa) ? 0
-                : Convert.ToInt32(empresa);
+                ConvertToInt32Validation.IsValid(empresa, "empresa", listValidations) ?
+                Convert.ToInt32(empresa) :
+                0;
+
+            this.timestamp =
+                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
+                Convert.ToInt64(timestamp) :
+                0;
 
             this.legenda_setor = legenda_setor;
             this.legenda_linha = legenda_linha;
@@ -78,11 +84,6 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             this.legenda_grade2 = legenda_grade2;
             this.legenda_espessura = legenda_espessura;
             this.legenda_classificacao = legenda_classificacao;
-
-            this.timestamp =
-                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
-                Convert.ToInt64(timestamp) :
-                0;
         }
     }
 }

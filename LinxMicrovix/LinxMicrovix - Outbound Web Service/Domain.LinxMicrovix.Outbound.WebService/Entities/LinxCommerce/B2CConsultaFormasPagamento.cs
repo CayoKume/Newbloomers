@@ -36,10 +36,9 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             lastupdateon = DateTime.Now;
 
             this.cod_forma_pgto =
-                String.IsNullOrEmpty(cod_forma_pgto) ? 0
-                : Convert.ToInt32(cod_forma_pgto);
-
-            this.forma_pgto = forma_pgto;
+                ConvertToInt32Validation.IsValid(cod_forma_pgto, "cod_forma_pgto", listValidations) ?
+                Convert.ToInt32(cod_forma_pgto) :
+                0;
 
             this.portal =
                 ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
@@ -50,6 +49,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                 ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
                 Convert.ToInt64(timestamp) :
                 0;
+
+            this.forma_pgto = forma_pgto;
         }
     }
 }

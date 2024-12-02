@@ -50,6 +50,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                     var validations = new List<ValidationResult>();
 
                     var entity = new B2CConsultaNFe(
+                        listValidations: validations,
                         id_nfe: records[i].Where(pair => pair.Key == "id_nfe").Select(pair => pair.Value).FirstOrDefault(),
                         id_pedido: records[i].Where(pair => pair.Key == "id_pedido").Select(pair => pair.Value).FirstOrDefault(),
                         documento: records[i].Where(pair => pair.Key == "documento").Select(pair => pair.Value).FirstOrDefault(),

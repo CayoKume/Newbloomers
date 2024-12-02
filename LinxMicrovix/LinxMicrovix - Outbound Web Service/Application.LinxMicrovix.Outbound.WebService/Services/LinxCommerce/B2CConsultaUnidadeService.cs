@@ -50,6 +50,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                     var validations = new List<ValidationResult>();
 
                     var entity = new B2CConsultaUnidade(
+                        listValidations: validations,
                         unidade: records[i].Where(pair => pair.Key == "unidade").Select(pair => pair.Value).FirstOrDefault(),
                         timestamp: records[i].Where(pair => pair.Key == "timestamp").Select(pair => pair.Value).FirstOrDefault(),
                         portal: records[i].Where(pair => pair.Key == "portal").Select(pair => pair.Value).FirstOrDefault()

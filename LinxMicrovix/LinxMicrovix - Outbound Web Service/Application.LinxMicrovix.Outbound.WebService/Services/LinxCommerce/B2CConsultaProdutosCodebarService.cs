@@ -50,6 +50,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                     var validations = new List<ValidationResult>();
 
                     var entity = new B2CConsultaProdutosCodebar(
+                        listValidations: validations,
                         codigoproduto: records[i].Where(pair => pair.Key == "codigoproduto").Select(pair => pair.Value).FirstOrDefault(),
                         codebar: records[i].Where(pair => pair.Key == "codebar").Select(pair => pair.Value).FirstOrDefault(),
                         id_produtos_codebar: records[i].Where(pair => pair.Key == "id_produtos_codebar").Select(pair => pair.Value).FirstOrDefault(),

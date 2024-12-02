@@ -41,11 +41,9 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             lastupdateon = DateTime.Now;
 
             this.codigo_marca =
-                String.IsNullOrEmpty(codigo_marca) ? 0
-                : Convert.ToInt32(codigo_marca);
-
-            this.nome_marca = nome_marca;
-            this.linhas = linhas;
+                ConvertToInt32Validation.IsValid(codigo_marca, "codigo_marca", listValidations) ?
+                Convert.ToInt32(codigo_marca) :
+                0;
 
             this.portal =
                 ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
@@ -56,6 +54,9 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                 ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
                 Convert.ToInt64(timestamp) :
                 0;
+
+            this.nome_marca = nome_marca;
+            this.linhas = linhas;
         }
     }
 }

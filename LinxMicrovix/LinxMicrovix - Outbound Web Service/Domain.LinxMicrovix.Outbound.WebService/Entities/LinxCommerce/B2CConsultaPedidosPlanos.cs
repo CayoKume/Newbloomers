@@ -63,25 +63,24 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             lastupdateon = DateTime.Now;
 
             this.id_pedido_planos =
-                String.IsNullOrEmpty(id_pedido_planos) ? 0
-                : Convert.ToInt32(id_pedido_planos);
+                ConvertToInt32Validation.IsValid(id_pedido_planos, "id_pedido_planos", listValidations) ?
+                Convert.ToInt32(id_pedido_planos) :
+                0;
 
             this.id_pedido =
-                String.IsNullOrEmpty(id_pedido) ? 0
-                : Convert.ToInt32(id_pedido);
+                ConvertToInt32Validation.IsValid(id_pedido, "id_pedido", listValidations) ?
+                Convert.ToInt32(id_pedido) :
+                0;
 
             this.plano_pagamento =
-                String.IsNullOrEmpty(plano_pagamento) ? 0
-                : Convert.ToInt32(plano_pagamento);
+                ConvertToInt32Validation.IsValid(plano_pagamento, "plano_pagamento", listValidations) ?
+                Convert.ToInt32(plano_pagamento) :
+                0;
 
             this.valor_plano =
-                String.IsNullOrEmpty(valor_plano) ? 0
-                : Convert.ToDecimal(valor_plano);
-
-            this.nsu_sitef = nsu_sitef;
-            this.cod_autorizacao = cod_autorizacao;
-            this.texto_comprovante = texto_comprovante;
-            this.cod_loja_sitef = cod_loja_sitef;
+                ConvertToDecimalValidation.IsValid(valor_plano, "valor_plano", listValidations) ?
+                Convert.ToDecimal(valor_plano) :
+                0;
 
             this.portal =
                 ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
@@ -92,6 +91,11 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                 ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
                 Convert.ToInt64(timestamp) :
                 0;
+
+            this.nsu_sitef = nsu_sitef;
+            this.cod_autorizacao = cod_autorizacao;
+            this.texto_comprovante = texto_comprovante;
+            this.cod_loja_sitef = cod_loja_sitef;
         }
     }
 }

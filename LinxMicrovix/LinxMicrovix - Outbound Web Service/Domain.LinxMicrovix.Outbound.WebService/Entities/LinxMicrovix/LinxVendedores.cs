@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Domain.IntegrationsCore.CustomValidations;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 
@@ -14,36 +15,47 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         public Int32? cod_vendedor { get; private set; }
 
         [Column(TypeName = "varchar(50)")]
+        [LengthValidation(length: 50, propertyName: "nome_vendedor")]
         public string? nome_vendedor { get; private set; }
 
         [Column(TypeName = "char(1)")]
+        [LengthValidation(length: 1, propertyName: "tipo_vendedor")]
         public string? tipo_vendedor { get; private set; }
 
         [Column(TypeName = "varchar(250)")]
+        [LengthValidation(length: 250, propertyName: "end_vend_rua")]
         public string? end_vend_rua { get; private set; }
 
         [Column(TypeName = "varchar(20)")]
+        [LengthValidation(length: 20, propertyName: "end_vend_numero")]
         public string? end_vend_numero { get; private set; }
 
         [Column(TypeName = "varchar(60)")]
+        [LengthValidation(length: 60, propertyName: "end_vend_complemento")]
         public string? end_vend_complemento { get; private set; }
 
         [Column(TypeName = "varchar(60)")]
+        [LengthValidation(length: 60, propertyName: "end_vend_bairro")]
         public string? end_vend_bairro { get; private set; }
 
         [Column(TypeName = "varchar(9)")]
+        [LengthValidation(length: 9, propertyName: "end_vend_cep")]
         public string? end_vend_cep { get; private set; }
 
         [Column(TypeName = "varchar(40)")]
+        [LengthValidation(length: 40, propertyName: "end_vend_cidade")]
         public string? end_vend_cidade { get; private set; }
 
         [Column(TypeName = "char(2)")]
+        [LengthValidation(length: 2, propertyName: "end_vend_uf")]
         public string? end_vend_uf { get; private set; }
 
         [Column(TypeName = "varchar(20)")]
+        [LengthValidation(length: 20, propertyName: "fone_vendedor")]
         public string? fone_vendedor { get; private set; }
 
         [Column(TypeName = "varchar(50)")]
+        [LengthValidation(length: 50, propertyName: "mail_vendedor")]
         public string? mail_vendedor { get; private set; }
 
         [Column(TypeName = "smalldatetime")]
@@ -51,9 +63,11 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
         [Key]
         [Column(TypeName = "varchar(14)")]
+        [LengthValidation(length: 14, propertyName: "cpf_vendedor")]
         public string? cpf_vendedor { get; private set; }
 
         [Column(TypeName = "char(1)")]
+        [LengthValidation(length: 1, propertyName: "ativo")]
         public string? ativo { get; private set; }
 
         [Column(TypeName = "smalldatetime")]
@@ -69,20 +83,24 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         public Int64? timestamp { get; private set; }
 
         [Column(TypeName = "varchar(30)")]
+        [LengthValidation(length: 30, propertyName: "matricula")]
         public string? matricula { get; private set; }
 
         [Column(TypeName = "int")]
         public Int32? id_tipo_venda { get; private set; }
 
         [Column(TypeName = "varchar(100)")]
+        [LengthValidation(length: 100, propertyName: "descricao_tipo_venda")]
         public string? descricao_tipo_venda { get; private set; }
 
         [Column(TypeName = "varchar(20)")]
+        [LengthValidation(length: 20, propertyName: "cargo")]
         public string? cargo { get; private set; }
 
         public LinxVendedores() { }
 
         public LinxVendedores(
+            List<ValidationResult> listValidations,
             string? cod_vendedor,
             string? nome_vendedor,
             string? tipo_vendedor,
@@ -111,160 +129,56 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             lastupdateon = DateTime.Now;
 
             this.cod_vendedor =
-                cod_vendedor == String.Empty ? 0
-                : Convert.ToInt32(cod_vendedor);
-
-            this.nome_vendedor =
-                nome_vendedor == String.Empty ? ""
-                : nome_vendedor.Substring(
-                    0,
-                    nome_vendedor.Length > 50 ? 50
-                    : nome_vendedor.Length
-                );
+                ConvertToInt32Validation.IsValid(cod_vendedor, "cod_vendedor", listValidations) ?
+                Convert.ToInt32(cod_vendedor) :
+                0;
 
             this.dt_upd =
-                String.IsNullOrEmpty(dt_upd) ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
-                : Convert.ToDateTime(dt_upd);
+                ConvertToDateTimeValidation.IsValid(dt_upd, "dt_upd", listValidations) ?
+                Convert.ToDateTime(dt_upd) :
+                new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar);
 
             this.data_admissao =
-                String.IsNullOrEmpty(data_admissao) ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
-                : Convert.ToDateTime(data_admissao);
+                ConvertToDateTimeValidation.IsValid(data_admissao, "data_admissao", listValidations) ?
+                Convert.ToDateTime(data_admissao) :
+                new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar);
 
             this.data_saida =
-                String.IsNullOrEmpty(data_saida) ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
-                : Convert.ToDateTime(data_saida);
-
-            this.tipo_vendedor =
-                tipo_vendedor == String.Empty ? ""
-                : tipo_vendedor.Substring(
-                    0,
-                    tipo_vendedor.Length > 1 ? 1
-                    : tipo_vendedor.Length
-                );
-
-            this.end_vend_rua =
-                end_vend_rua == String.Empty ? ""
-                : end_vend_rua.Substring(
-                    0,
-                    end_vend_rua.Length > 250 ? 250
-                    : end_vend_rua.Length
-                );
-
-            this.end_vend_numero =
-                end_vend_numero == String.Empty ? ""
-                : end_vend_numero.Substring(
-                    0,
-                    end_vend_numero.Length > 20 ? 20
-                    : end_vend_numero.Length
-                );
-
-            this.end_vend_complemento =
-                end_vend_complemento == String.Empty ? ""
-                : end_vend_complemento.Substring(
-                    0,
-                    end_vend_complemento.Length > 60 ? 60
-                    : end_vend_complemento.Length
-                );
-
-            this.end_vend_bairro =
-                end_vend_bairro == String.Empty ? ""
-                : end_vend_bairro.Substring(
-                    0,
-                    end_vend_bairro.Length > 60 ? 60
-                    : end_vend_bairro.Length
-                );
-
-            this.end_vend_cep =
-                end_vend_cep == String.Empty ? ""
-                : end_vend_cep.Substring(
-                    0,
-                    end_vend_cep.Length > 9 ? 9
-                    : end_vend_cep.Length
-                );
-
-            this.end_vend_cidade =
-                end_vend_cidade == String.Empty ? ""
-                : end_vend_cidade.Substring(
-                    0,
-                    end_vend_cidade.Length > 40 ? 40
-                    : end_vend_cidade.Length
-                );
-
-            this.end_vend_uf =
-                end_vend_uf == String.Empty ? ""
-                : end_vend_uf.Substring(
-                    0,
-                    end_vend_uf.Length > 2 ? 2
-                    : end_vend_uf.Length
-                );
-
-            this.fone_vendedor =
-                fone_vendedor == String.Empty ? ""
-                : fone_vendedor.Substring(
-                    0,
-                    fone_vendedor.Length > 20 ? 20
-                    : fone_vendedor.Length
-                );
-
-            this.mail_vendedor =
-                mail_vendedor == String.Empty ? ""
-                : mail_vendedor.Substring(
-                    0,
-                    mail_vendedor.Length > 50 ? 50
-                    : mail_vendedor.Length
-                );
-
-            this.cpf_vendedor =
-                cpf_vendedor == String.Empty ? ""
-                : cpf_vendedor.Substring(
-                    0,
-                    cpf_vendedor.Length > 14 ? 14
-                    : cpf_vendedor.Length
-                );
-
-            this.ativo =
-                ativo == String.Empty ? ""
-                : ativo.Substring(
-                    0,
-                    ativo.Length > 1 ? 1
-                    : ativo.Length
-                );
-
-            this.matricula =
-                String.IsNullOrEmpty(matricula) ? ""
-                : matricula.Substring(
-                    0,
-                    matricula.Length > 30 ? 30
-                    : matricula.Length
-                );
-
-            this.descricao_tipo_venda =
-                descricao_tipo_venda == String.Empty ? ""
-                : descricao_tipo_venda.Substring(
-                    0,
-                    descricao_tipo_venda.Length > 100 ? 100
-                    : descricao_tipo_venda.Length
-                );
-
-            this.cargo =
-                cargo == String.Empty ? ""
-                : cargo.Substring(
-                    0,
-                    cargo.Length > 20 ? 20
-                    : cargo.Length
-                );
+                ConvertToDateTimeValidation.IsValid(data_saida, "data_saida", listValidations) ?
+                Convert.ToDateTime(data_saida) :
+                new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar);
 
             this.id_tipo_venda =
-                id_tipo_venda == String.Empty ? 0
-                : Convert.ToInt32(id_tipo_venda);
-
-            this.timestamp =
-                timestamp == String.Empty ? 0
-                : Convert.ToInt64(timestamp);
+                ConvertToInt32Validation.IsValid(id_tipo_venda, "id_tipo_venda", listValidations) ?
+                Convert.ToInt32(id_tipo_venda) :
+                0;
 
             this.portal =
-                portal == String.Empty ? 0
-                : Convert.ToInt32(portal);
+                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
+                Convert.ToInt32(portal) :
+                0;
+
+            this.timestamp =
+                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
+                Convert.ToInt64(timestamp) :
+                0;
+
+            this.nome_vendedor = nome_vendedor;
+            this.tipo_vendedor = tipo_vendedor;
+            this.end_vend_rua = end_vend_rua;
+            this.end_vend_numero = end_vend_numero;
+            this.end_vend_complemento = end_vend_complemento;
+            this.end_vend_bairro = end_vend_bairro;
+            this.end_vend_cep = end_vend_cep;
+            this.end_vend_cidade = end_vend_cidade;
+            this.end_vend_uf = end_vend_uf;
+            this.fone_vendedor = fone_vendedor;
+            this.mail_vendedor = mail_vendedor;
+            this.cpf_vendedor = cpf_vendedor;
+            this.ativo = ativo;
+            this.matricula = matricula;
+            this.descricao_tipo_venda = descricao_tipo_venda;
+            this.cargo = cargo;
         }
     }
 }

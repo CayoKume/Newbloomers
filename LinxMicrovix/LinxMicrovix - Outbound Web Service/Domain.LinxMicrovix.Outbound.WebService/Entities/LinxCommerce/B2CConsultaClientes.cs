@@ -142,6 +142,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public Int64? timestamp { get; private set; }
 
         [Column(TypeName = "char(1)")]
+        [LengthValidation(length: 1, propertyName: "tipo_pessoa")]
         public string? tipo_pessoa { get; private set; }
 
         [Column(TypeName = "int")]

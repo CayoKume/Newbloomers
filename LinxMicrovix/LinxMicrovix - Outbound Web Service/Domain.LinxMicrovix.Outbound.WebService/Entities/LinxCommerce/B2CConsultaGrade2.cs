@@ -36,10 +36,9 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             lastupdateon = DateTime.Now;
 
             this.codigo_grade2 =
-                String.IsNullOrEmpty(codigo_grade2) ? 0
-                : Convert.ToInt32(codigo_grade2);
-
-            this.nome_grade2 = nome_grade2;
+                ConvertToInt32Validation.IsValid(codigo_grade2, "codigo_grade2", listValidations) ?
+                Convert.ToInt32(codigo_grade2) :
+                0;
 
             this.portal =
                 ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
@@ -50,6 +49,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                 ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
                 Convert.ToInt64(timestamp) :
                 0;
+
+            this.nome_grade2 = nome_grade2;
         }
     }
 }

@@ -151,101 +151,109 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             lastupdateon = DateTime.Now;
 
             this.cod_fornecedor =
-                String.IsNullOrEmpty(cod_fornecedor) ? 0
-                : Convert.ToInt32(cod_fornecedor);
+                ConvertToInt32Validation.IsValid(cod_fornecedor, "cod_fornecedor", listValidations) ?
+                Convert.ToInt32(cod_fornecedor) :
+                0;
 
             this.canais_ecommerce_publicados =
-                String.IsNullOrEmpty(canais_ecommerce_publicados) ? 0
-                : Convert.ToInt32(canais_ecommerce_publicados);
+                ConvertToInt32Validation.IsValid(canais_ecommerce_publicados, "canais_ecommerce_publicados", listValidations) ?
+                Convert.ToInt32(canais_ecommerce_publicados) :
+                0;
 
             this.inicio_publicacao_produto =
-                String.IsNullOrEmpty(inicio_publicacao_produto) ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
-                : Convert.ToDateTime(inicio_publicacao_produto);
+                ConvertToDateTimeValidation.IsValid(inicio_publicacao_produto, "inicio_publicacao_produto", listValidations) ?
+                Convert.ToDateTime(inicio_publicacao_produto) :
+                new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar);
 
             this.fim_publicacao_produto =
-                String.IsNullOrEmpty(fim_publicacao_produto) ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
-                : Convert.ToDateTime(fim_publicacao_produto);
+                ConvertToDateTimeValidation.IsValid(fim_publicacao_produto, "fim_publicacao_produto", listValidations) ?
+                Convert.ToDateTime(fim_publicacao_produto) :
+                new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar);
 
             this.altura_para_frete =
-                String.IsNullOrEmpty(altura_para_frete) ? 0
-                : Convert.ToDecimal(altura_para_frete);
+                ConvertToDecimalValidation.IsValid(altura_para_frete, "altura_para_frete", listValidations) ?
+                Convert.ToDecimal(altura_para_frete) :
+                0;
 
             this.largura_para_frete =
-                String.IsNullOrEmpty(largura_para_frete) ? 0
-                : Convert.ToDecimal(largura_para_frete);
+                ConvertToDecimalValidation.IsValid(largura_para_frete, "largura_para_frete", listValidations) ?
+                Convert.ToDecimal(largura_para_frete) :
+                0;
 
             this.comprimento_para_frete =
-                String.IsNullOrEmpty(comprimento_para_frete) ? 0
-                : Convert.ToDecimal(comprimento_para_frete);
+                ConvertToDecimalValidation.IsValid(comprimento_para_frete, "comprimento_para_frete", listValidations) ?
+                Convert.ToDecimal(comprimento_para_frete) :
+                0;
 
             this.peso_bruto =
-                String.IsNullOrEmpty(peso_bruto) ? 0
-                : Convert.ToDecimal(peso_bruto);
-
-            this.unidade = unidade;
-            this.observacao = observacao;
-            this.referencia = referencia;
-            this.codauxiliar1 = codauxiliar1;
-            this.descricao_basica = descricao_basica;
-            this.nome_produto = nome_produto;
-            this.descricao_completa_commerce = descricao_completa_commerce;
-            this.codigo_integracao_oms = codigo_integracao_oms;
+                ConvertToDecimalValidation.IsValid(peso_bruto, "peso_bruto", listValidations) ?
+                Convert.ToDecimal(peso_bruto) :
+                0;
 
             this.dt_update =
-                String.IsNullOrEmpty(dt_update) ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
-                : Convert.ToDateTime(dt_update);
+                ConvertToDateTimeValidation.IsValid(dt_update, "dt_update", listValidations) ?
+                Convert.ToDateTime(dt_update) :
+                new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar);
 
             this.codigoproduto =
-                String.IsNullOrEmpty(codigoproduto) ? 0
-                : Convert.ToInt64(codigoproduto);
-
-            
+                ConvertToInt64Validation.IsValid(codigoproduto, "codigoproduto", listValidations) ?
+                Convert.ToInt64(codigoproduto) :
+                0;
 
             this.peso_liquido =
-                String.IsNullOrEmpty(peso_liquido) ? 0
-                : Convert.ToDecimal(peso_liquido);
+                ConvertToDecimalValidation.IsValid(peso_liquido, "peso_liquido", listValidations) ?
+                Convert.ToDecimal(peso_liquido) :
+                0;
 
             this.codigo_setor =
-                String.IsNullOrEmpty(codigo_setor) ? 0
-                : Convert.ToInt32(codigo_setor);
+                ConvertToInt32Validation.IsValid(codigo_setor, "codigo_setor", listValidations) ?
+                Convert.ToInt32(codigo_setor) :
+                0;
 
             this.codigo_linha =
-                String.IsNullOrEmpty(codigo_linha) ? 0
-                : Convert.ToInt32(codigo_linha);
+                ConvertToInt32Validation.IsValid(codigo_linha, "codigo_linha", listValidations) ?
+                Convert.ToInt32(codigo_linha) :
+                0;
 
             this.codigo_marca =
-                String.IsNullOrEmpty(codigo_marca) ? 0
-                : Convert.ToInt32(codigo_marca);
+                ConvertToInt32Validation.IsValid(codigo_marca, "codigo_marca", listValidations) ?
+                Convert.ToInt32(codigo_marca) :
+                0;
 
             this.codigo_colecao =
-                String.IsNullOrEmpty(codigo_colecao) ? 0
-                : Convert.ToInt32(codigo_colecao);
+                ConvertToInt32Validation.IsValid(codigo_colecao, "codigo_colecao", listValidations) ?
+                Convert.ToInt32(codigo_colecao) :
+                0;
 
             this.codigo_espessura =
-                String.IsNullOrEmpty(codigo_espessura) ? 0
-                : Convert.ToInt32(codigo_espessura);
+                ConvertToInt32Validation.IsValid(codigo_espessura, "codigo_espessura", listValidations) ?
+                Convert.ToInt32(codigo_espessura) :
+                0;
 
             this.codigo_grade1 =
-                String.IsNullOrEmpty(codigo_grade1) ? 0
-                : Convert.ToInt32(codigo_grade1);
+                ConvertToInt32Validation.IsValid(codigo_grade1, "codigo_grade1", listValidations) ?
+                Convert.ToInt32(codigo_grade1) :
+                0;
 
             this.codigo_grade2 =
-                String.IsNullOrEmpty(codigo_grade2) ? 0
-                : Convert.ToInt32(codigo_grade2);
+                ConvertToInt32Validation.IsValid(codigo_grade2, "codigo_grade2", listValidations) ?
+                Convert.ToInt32(codigo_grade2) :
+                0;
 
             this.ativo =
-                String.IsNullOrEmpty(ativo) ? 0
-                : Convert.ToInt32(ativo);
+                ConvertToInt32Validation.IsValid(ativo, "ativo", listValidations) ?
+                Convert.ToInt32(ativo) :
+                0;
 
             this.codigo_classificacao =
-                String.IsNullOrEmpty(codigo_classificacao) ? 0
-                : Convert.ToInt32(codigo_classificacao);
+                ConvertToInt32Validation.IsValid(codigo_classificacao, "codigo_classificacao", listValidations) ?
+                Convert.ToInt32(codigo_classificacao) :
+                0;
 
             this.dt_cadastro =
-                String.IsNullOrEmpty(dt_cadastro) ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
-                : Convert.ToDateTime(dt_cadastro);
-
-
+                ConvertToDateTimeValidation.IsValid(dt_cadastro, "dt_cadastro", listValidations) ?
+                Convert.ToDateTime(dt_cadastro) :
+                new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar);
 
             this.portal =
                 ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
@@ -256,6 +264,15 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                 ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
                 Convert.ToInt64(timestamp) :
                 0;
+
+            this.unidade = unidade;
+            this.observacao = observacao;
+            this.referencia = referencia;
+            this.codauxiliar1 = codauxiliar1;
+            this.descricao_basica = descricao_basica;
+            this.nome_produto = nome_produto;
+            this.descricao_completa_commerce = descricao_completa_commerce;
+            this.codigo_integracao_oms = codigo_integracao_oms;
         }
     }
 }

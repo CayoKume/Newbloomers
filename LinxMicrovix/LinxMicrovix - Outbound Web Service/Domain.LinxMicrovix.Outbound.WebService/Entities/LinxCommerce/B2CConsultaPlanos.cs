@@ -62,29 +62,29 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             lastupdateon = DateTime.Now;
 
             this.plano =
-                String.IsNullOrEmpty(plano) ? 0
-                : Convert.ToInt32(plano);
+                 ConvertToInt32Validation.IsValid(plano, "plano", listValidations) ?
+                 Convert.ToInt32(plano) :
+                 0;
 
-            this.nome_plano = nome_plano;
-            this.desativado = desativado;
-            this.tipo_plano = tipo_plano;
-
-            this.forma_pagamento = 
-                String.IsNullOrEmpty(forma_pagamento) ? 0
-                : Convert.ToInt32(forma_pagamento);
+            this.forma_pagamento =
+                 ConvertToInt32Validation.IsValid(forma_pagamento, "forma_pagamento", listValidations) ?
+                 Convert.ToInt32(forma_pagamento) :
+                 0;
 
             this.qtde_parcelas =
-                String.IsNullOrEmpty(qtde_parcelas) ? 0
-                : Convert.ToInt32(qtde_parcelas);
+                 ConvertToInt32Validation.IsValid(qtde_parcelas, "qtde_parcelas", listValidations) ?
+                 Convert.ToInt32(qtde_parcelas) :
+                 0;
 
             this.valor_minimo_parcela =
-                String.IsNullOrEmpty(valor_minimo_parcela) ? 0
-                : Convert.ToDecimal(valor_minimo_parcela);
+                ConvertToDecimalValidation.IsValid(valor_minimo_parcela, "valor_minimo_parcela", listValidations) ?
+                Convert.ToDecimal(valor_minimo_parcela) :
+                0;
 
             this.indice =
-                String.IsNullOrEmpty(indice) ? 0
-                : Convert.ToDecimal(indice);
-
+                ConvertToDecimalValidation.IsValid(indice, "indice", listValidations) ?
+                Convert.ToDecimal(indice) :
+                0;
 
             this.portal =
                  ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
@@ -95,6 +95,10 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                 ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
                 Convert.ToInt64(timestamp) :
                 0;
+
+            this.nome_plano = nome_plano;
+            this.desativado = desativado;
+            this.tipo_plano = tipo_plano;
         }
     }
 }

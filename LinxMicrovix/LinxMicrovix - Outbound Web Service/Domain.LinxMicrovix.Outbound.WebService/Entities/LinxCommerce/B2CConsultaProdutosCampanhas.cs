@@ -53,23 +53,24 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             lastupdateon = DateTime.Now;
 
             this.codigo_campanha =
-                String.IsNullOrEmpty(codigo_campanha) ? 0
-                : Convert.ToInt32(codigo_campanha);
-
-            this.nome_campanha = nome_campanha;
-            this.observacao = observacao;
+                ConvertToInt32Validation.IsValid(codigo_campanha, "codigo_campanha", listValidations) ?
+                Convert.ToInt32(codigo_campanha) :
+                0;
 
             this.vigencia_inicio =
-                String.IsNullOrEmpty(vigencia_inicio) ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
-                : Convert.ToDateTime(vigencia_inicio);
+                ConvertToDateTimeValidation.IsValid(vigencia_inicio, "vigencia_inicio", listValidations) ?
+                Convert.ToDateTime(vigencia_inicio) :
+                new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar);
 
             this.vigencia_fim =
-                String.IsNullOrEmpty(vigencia_fim) ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
-                : Convert.ToDateTime(vigencia_fim);
+                ConvertToDateTimeValidation.IsValid(vigencia_fim, "vigencia_fim", listValidations) ?
+                Convert.ToDateTime(vigencia_fim) :
+                new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar);
 
             this.ativo =
-                String.IsNullOrEmpty(ativo) ? 0
-                : Convert.ToInt32(ativo);
+                ConvertToInt32Validation.IsValid(ativo, "ativo", listValidations) ?
+                Convert.ToInt32(ativo) :
+                0;
 
             this.portal =
                 ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
@@ -80,6 +81,9 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                 ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
                 Convert.ToInt64(timestamp) :
                 0;
+
+            this.nome_campanha = nome_campanha;
+            this.observacao = observacao;
         }
     }
 }

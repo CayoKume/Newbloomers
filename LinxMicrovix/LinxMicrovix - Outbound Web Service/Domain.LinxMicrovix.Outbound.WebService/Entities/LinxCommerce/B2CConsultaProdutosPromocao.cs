@@ -74,43 +74,49 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             lastupdateon = DateTime.Now;
 
             this.codigo_promocao =
-                String.IsNullOrEmpty(codigo_promocao) ? 0
-                : Convert.ToInt32(codigo_promocao);
+                ConvertToInt32Validation.IsValid(codigo_promocao, "codigo_promocao", listValidations) ?
+                Convert.ToInt32(codigo_promocao) :
+                0;
 
             this.empresa =
-                String.IsNullOrEmpty(empresa) ? 0
-                : Convert.ToInt32(empresa);
+                ConvertToInt32Validation.IsValid(empresa, "empresa", listValidations) ?
+                Convert.ToInt32(empresa) :
+                0;
 
             this.codigoproduto =
-                String.IsNullOrEmpty(codigoproduto) ? 0
-                : Convert.ToInt64(codigoproduto);
+                ConvertToInt64Validation.IsValid(codigoproduto, "codigoproduto", listValidations) ?
+                Convert.ToInt64(codigoproduto) :
+                0;
 
             this.preco =
-                String.IsNullOrEmpty(preco) ? 0
-                : Convert.ToDecimal(preco);
+                ConvertToDecimalValidation.IsValid(preco, "preco", listValidations) ?
+                Convert.ToDecimal(preco) :
+                0;
 
             this.data_inicio =
-                String.IsNullOrEmpty(data_inicio) ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
-                : Convert.ToDateTime(data_inicio);
+                ConvertToDateTimeValidation.IsValid(data_inicio, "data_inicio", listValidations) ?
+                Convert.ToDateTime(data_inicio) :
+                new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar);
 
             this.data_termino =
-                String.IsNullOrEmpty(data_termino) ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
-                : Convert.ToDateTime(data_termino);
+                ConvertToDateTimeValidation.IsValid(data_termino, "data_termino", listValidations) ?
+                Convert.ToDateTime(data_termino) :
+                new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar);
 
             this.data_cadastro =
-                String.IsNullOrEmpty(data_cadastro) ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
-                : Convert.ToDateTime(data_cadastro);
-
-            this.ativa = ativa;
-            this.referencia = referencia;
+                ConvertToDateTimeValidation.IsValid(data_cadastro, "data_cadastro", listValidations) ?
+                Convert.ToDateTime(data_cadastro) :
+                new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar);
 
             this.codigo_campanha =
-                String.IsNullOrEmpty(codigo_campanha) ? 0
-                : Convert.ToInt32(codigo_campanha);
+                ConvertToInt32Validation.IsValid(codigo_campanha, "codigo_campanha", listValidations) ?
+                Convert.ToInt32(codigo_campanha) :
+                0;
 
             this.promocao_opcional =
-                String.IsNullOrEmpty(promocao_opcional) ? 0
-                : Convert.ToInt32(promocao_opcional);
+                ConvertToInt32Validation.IsValid(promocao_opcional, "promocao_opcional", listValidations) ?
+                Convert.ToInt32(promocao_opcional) :
+                0;
 
             this.portal =
                 ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
@@ -121,6 +127,9 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                 ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
                 Convert.ToInt64(timestamp) :
                 0;
+
+            this.ativa = ativa;
+            this.referencia = referencia;
         }
     }
 }

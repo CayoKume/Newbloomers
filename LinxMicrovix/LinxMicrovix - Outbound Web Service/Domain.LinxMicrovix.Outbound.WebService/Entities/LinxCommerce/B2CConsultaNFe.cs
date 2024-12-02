@@ -103,59 +103,57 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             lastupdateon = DateTime.Now;
 
             this.id_nfe =
-                String.IsNullOrEmpty(id_nfe) ? 0
-                : Convert.ToInt32(id_nfe);
+                ConvertToInt32Validation.IsValid(id_nfe, "id_nfe", listValidations) ?
+                Convert.ToInt32(id_nfe) :
+                0;
 
             this.id_pedido =
-                String.IsNullOrEmpty(id_pedido) ? 0
-                : Convert.ToInt32(id_pedido);
+                ConvertToInt32Validation.IsValid(id_pedido, "id_pedido", listValidations) ?
+                Convert.ToInt32(id_pedido) :
+                0;
 
             this.documento =
-                String.IsNullOrEmpty(documento) ? 0
-                : Convert.ToInt32(documento);
+                ConvertToInt32Validation.IsValid(documento, "documento", listValidations) ?
+                Convert.ToInt32(documento) :
+                0;
 
             this.data_emissao =
-                String.IsNullOrEmpty(data_emissao) ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
-                : Convert.ToDateTime(data_emissao);
-
-            this.chave_nfe = chave_nfe;
-            this.xml = xml;
-            this.nProt = nProt;
-            this.codigo_modelo_nf = codigo_modelo_nf;
-            this.justificativa = justificativa;
-            this.serie = serie;
+                ConvertToDateTimeValidation.IsValid(data_emissao, "data_emissao", listValidations) ?
+                Convert.ToDateTime(data_emissao) :
+                new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar);
 
             this.situacao =
-                String.IsNullOrEmpty(situacao) ? 0
-                : Convert.ToInt32(situacao);
-
+                ConvertToInt32Validation.IsValid(situacao, "situacao", listValidations) ?
+                Convert.ToInt32(situacao) :
+                0;
 
             this.excluido =
-                String.IsNullOrEmpty(excluido) ? 0
-                : Convert.ToInt32(excluido);
+                ConvertToInt32Validation.IsValid(excluido, "excluido", listValidations) ?
+                Convert.ToInt32(excluido) :
+                0;
 
             this.identificador_microvix =
                 String.IsNullOrEmpty(identificador_microvix) ? null
                 : Guid.Parse(identificador_microvix);
 
             this.dt_insert =
-                String.IsNullOrEmpty(dt_insert) ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
-                : Convert.ToDateTime(dt_insert);
+               ConvertToDateTimeValidation.IsValid(dt_insert, "dt_insert", listValidations) ?
+               Convert.ToDateTime(dt_insert) :
+               new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar);
 
             this.valor_nota =
-                String.IsNullOrEmpty(valor_nota) ? 0
-                : Convert.ToDecimal(valor_nota);
-
+                ConvertToDecimalValidation.IsValid(valor_nota, "valor_nota", listValidations) ?
+                Convert.ToDecimal(valor_nota) :
 
             this.frete =
-                String.IsNullOrEmpty(frete) ? 0
-                : Convert.ToDecimal(frete);
-
-
+                ConvertToDecimalValidation.IsValid(frete, "frete", listValidations) ?
+                Convert.ToDecimal(frete) :
+                0;
 
             this.tpAmb =
-                String.IsNullOrEmpty(tpAmb) ? 0
-                : Convert.ToInt32(tpAmb);
+                ConvertToInt32Validation.IsValid(tpAmb, "tpAmb", listValidations) ?
+                Convert.ToInt32(tpAmb) :
+                0;
 
             this.portal =
                 ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
@@ -166,6 +164,13 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                 ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
                 Convert.ToInt64(timestamp) :
                 0;
+
+            this.chave_nfe = chave_nfe;
+            this.xml = xml;
+            this.nProt = nProt;
+            this.codigo_modelo_nf = codigo_modelo_nf;
+            this.justificativa = justificativa;
+            this.serie = serie;
         }
     }
 }

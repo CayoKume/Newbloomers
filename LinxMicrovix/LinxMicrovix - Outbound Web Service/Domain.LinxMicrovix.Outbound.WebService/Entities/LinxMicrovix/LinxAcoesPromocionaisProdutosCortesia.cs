@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Domain.IntegrationsCore.CustomValidations;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
@@ -30,6 +31,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         public LinxAcoesPromocionaisProdutosCortesia() { }
 
         public LinxAcoesPromocionaisProdutosCortesia(
+            List<ValidationResult> listValidations,
             string? id_acoes_promocionais_produtos_cortesia,
             string? id_acoes_promocionais,
             string? codigoproduto,
@@ -38,35 +40,37 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             string? timestamp
         )
         {
-            this.lastupdateon = DateTime.Now;
+            lastupdateon = DateTime.Now;
 
             this.id_acoes_promocionais_produtos_cortesia =
-                id_acoes_promocionais_produtos_cortesia == String.Empty ? 0
-                : Convert.ToInt32(id_acoes_promocionais_produtos_cortesia);
-            
-            this.id_acoes_promocionais =
-                id_acoes_promocionais == String.Empty ? 0
-                : Convert.ToInt32(id_acoes_promocionais);
+                ConvertToInt32Validation.IsValid(id_acoes_promocionais_produtos_cortesia, "id_acoes_promocionais_produtos_cortesia", listValidations) ?
+                Convert.ToInt32(id_acoes_promocionais_produtos_cortesia) :
+                0;
 
-            this.portal =
-                portal == String.Empty ? 0
-                : Convert.ToInt32(portal);
+            this.id_acoes_promocionais =
+                ConvertToInt32Validation.IsValid(id_acoes_promocionais, "id_acoes_promocionais", listValidations) ?
+                Convert.ToInt32(id_acoes_promocionais) :
+                0;
 
             this.codigoproduto =
-                codigoproduto == String.Empty ? 0
-                : Convert.ToInt64(codigoproduto);
+                ConvertToInt64Validation.IsValid(codigoproduto, "codigoproduto", listValidations) ?
+                Convert.ToInt64(codigoproduto) :
+                0;
 
             this.id_combinacao_produto =
-                id_combinacao_produto == String.Empty ? 0
-                : Convert.ToInt32(id_combinacao_produto);
-
-            this.timestamp =
-                timestamp == String.Empty ? 0
-                : Convert.ToInt64(timestamp);
+                ConvertToInt32Validation.IsValid(id_combinacao_produto, "id_combinacao_produto", listValidations) ?
+                Convert.ToInt32(id_combinacao_produto) :
+                0;
 
             this.portal =
-                portal == String.Empty ? 0
-                : Convert.ToInt32(portal);
+                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
+                Convert.ToInt32(portal) :
+                0;
+
+            this.timestamp =
+                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
+                Convert.ToInt64(timestamp) :
+                0;
         }
     }
 }

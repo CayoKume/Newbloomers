@@ -40,16 +40,19 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             lastupdateon = DateTime.Now;
 
             this.id_imagem_produto =
-                String.IsNullOrEmpty(id_imagem_produto) ? 0
-                : Convert.ToInt32(id_imagem_produto);
+                ConvertToInt32Validation.IsValid(id_imagem_produto, "id_imagem_produto", listValidations) ?
+                Convert.ToInt32(id_imagem_produto) :
+                0;
 
             this.codigoproduto =
-                String.IsNullOrEmpty(codigoproduto) ? 0
-                : Convert.ToInt64(codigoproduto);
+                ConvertToInt64Validation.IsValid(codigoproduto, "codigoproduto", listValidations) ?
+                Convert.ToInt64(codigoproduto) :
+                0;
 
             this.id_imagem =
-                String.IsNullOrEmpty(id_imagem) ? 0
-                : Convert.ToInt32(id_imagem);
+                ConvertToInt32Validation.IsValid(id_imagem, "id_imagem", listValidations) ?
+                Convert.ToInt32(id_imagem) :
+                0;
 
             this.portal =
                 ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?

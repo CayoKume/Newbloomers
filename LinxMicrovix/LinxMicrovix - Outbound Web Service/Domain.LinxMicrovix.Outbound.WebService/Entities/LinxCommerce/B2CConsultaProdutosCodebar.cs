@@ -54,24 +54,24 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             lastupdateon = DateTime.Now;
 
             this.codigoproduto =
-                String.IsNullOrEmpty(codigoproduto) ? 0
-                : Convert.ToInt64(codigoproduto);
-
-            this.codebar = codebar;
+                ConvertToInt64Validation.IsValid(codigoproduto, "codigoproduto", listValidations) ?
+                Convert.ToInt64(codigoproduto) :
+                0;
 
             this.id_produtos_codebar =
-                String.IsNullOrEmpty(id_produtos_codebar) ? 0
-                : Convert.ToInt32(id_produtos_codebar);
+                ConvertToInt32Validation.IsValid(id_produtos_codebar, "id_produtos_codebar", listValidations) ?
+                Convert.ToInt32(id_produtos_codebar) :
+                0;
 
             this.principal =
-                String.IsNullOrEmpty(principal) ? 0
-                : Convert.ToInt32(principal);
+                ConvertToInt32Validation.IsValid(principal, "principal", listValidations) ?
+                Convert.ToInt32(principal) :
+                0;
 
             this.empresa =
-                String.IsNullOrEmpty(empresa) ? 0
-                : Convert.ToInt32(empresa);
-
-            this.tipo_codebar = tipo_codebar;
+                ConvertToInt32Validation.IsValid(empresa, "empresa", listValidations) ?
+                Convert.ToInt32(empresa) :
+                0;
 
             this.portal =
                 ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
@@ -82,6 +82,9 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                 ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
                 Convert.ToInt64(timestamp) :
                 0;
+
+            this.tipo_codebar = tipo_codebar;
+            this.codebar = codebar;
         }
     }
 }

@@ -66,32 +66,34 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             lastupdateon = DateTime.Now;
 
             this.id_prod_det =
-                String.IsNullOrEmpty(id_prod_det) ? 0
-                : Convert.ToInt32(id_prod_det);
+                ConvertToInt32Validation.IsValid(id_prod_det, "id_prod_det", listValidations) ?
+                Convert.ToInt32(id_prod_det) :
+                0;
 
             this.codigoproduto =
-                String.IsNullOrEmpty(codigoproduto) ? 0
-                : Convert.ToInt64(codigoproduto);
+                ConvertToInt64Validation.IsValid(codigoproduto, "codigoproduto", listValidations) ?
+                Convert.ToInt64(codigoproduto) :
+                0;
 
             this.empresa =
-                String.IsNullOrEmpty(empresa) ? 0
-                : Convert.ToInt32(empresa);
+                ConvertToInt32Validation.IsValid(empresa, "empresa", listValidations) ?
+                Convert.ToInt32(empresa) :
+                0;
 
             this.saldo =
-                String.IsNullOrEmpty(saldo) ? 0
-                : Convert.ToDecimal(saldo);
+                ConvertToDecimalValidation.IsValid(saldo, "saldo", listValidations) ?
+                Convert.ToDecimal(saldo) :
+                0;
 
             this.controla_lote =
-                String.IsNullOrEmpty(controla_lote) ? 0
-                : Convert.ToInt32(controla_lote);
-
-            this.nomeproduto_alternativo = nomeproduto_alternativo;
-            this.referencia = referencia;
-            this.localizacao = localizacao;
+                ConvertToInt32Validation.IsValid(controla_lote, "controla_lote", listValidations) ?
+                Convert.ToInt32(controla_lote) :
+                0;
 
             this.tempo_preparacao_estoque =
-                String.IsNullOrEmpty(tempo_preparacao_estoque) ? 0
-                : Convert.ToInt32(tempo_preparacao_estoque);
+                ConvertToInt32Validation.IsValid(tempo_preparacao_estoque, "tempo_preparacao_estoque", listValidations) ?
+                Convert.ToInt32(tempo_preparacao_estoque) :
+                0;
 
             this.portal =
                 ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
@@ -102,6 +104,10 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                 ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
                 Convert.ToInt64(timestamp) :
                 0;
+
+            this.nomeproduto_alternativo = nomeproduto_alternativo;
+            this.referencia = referencia;
+            this.localizacao = localizacao;
         }
     }
 }

@@ -91,8 +91,29 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             lastupdateon = DateTime.Now;
 
             this.empresa =
-                String.IsNullOrEmpty(empresa) ? 0
-                : Convert.ToInt32(empresa);
+                ConvertToInt32Validation.IsValid(empresa, "empresa", listValidations) ?
+                Convert.ToInt32(empresa) :
+                0;
+
+            this.data_criacao =
+                ConvertToDateTimeValidation.IsValid(data_criacao, "data_criacao", listValidations) ?
+                Convert.ToDateTime(data_criacao) :
+                new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar);
+
+            this.centro_distribuicao =
+                ConvertToBooleanValidation.IsValid(centro_distribuicao, "centro_distribuicao", listValidations) ?
+                Convert.ToBoolean(centro_distribuicao) :
+                false;
+
+            this.portal =
+                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
+                Convert.ToInt32(portal) :
+                0;
+
+            this.timestamp =
+                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
+                Convert.ToInt64(timestamp) :
+                0;
 
             this.nome_emp = nome_emp;
             this.cnpj_emp = cnpj_emp;
@@ -104,24 +125,6 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             this.cidade_unidade = cidade_unidade;
             this.uf_unidade = uf_unidade;
             this.email_unidade = end_unidade;
-
-            this.data_criacao =
-                String.IsNullOrEmpty(data_criacao) ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
-                : Convert.ToDateTime(data_criacao);
-
-            this.centro_distribuicao =
-                String.IsNullOrEmpty(centro_distribuicao) ? false
-                : Convert.ToBoolean(centro_distribuicao);
-
-            this.portal =
-                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
-                Convert.ToInt32(portal) :
-                0;
-
-            this.timestamp =
-                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
-                Convert.ToInt64(timestamp) :
-                0;
         }
     }
 }

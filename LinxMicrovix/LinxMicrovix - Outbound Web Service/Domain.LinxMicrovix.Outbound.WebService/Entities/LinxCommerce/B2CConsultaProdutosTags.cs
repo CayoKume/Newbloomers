@@ -44,18 +44,19 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             lastupdateon = DateTime.Now;
 
             this.id_b2c_tags_produtos =
-                String.IsNullOrEmpty(id_b2c_tags_produtos) ? 0
-                : Convert.ToInt32(id_b2c_tags_produtos);
+                ConvertToInt32Validation.IsValid(id_b2c_tags_produtos, "id_b2c_tags_produtos", listValidations) ?
+                Convert.ToInt32(id_b2c_tags_produtos) :
+                0;
 
             this.id_b2c_tags =
-                String.IsNullOrEmpty(id_b2c_tags) ? 0
-                : Convert.ToInt32(id_b2c_tags);
+                ConvertToInt32Validation.IsValid(id_b2c_tags, "id_b2c_tags", listValidations) ?
+                Convert.ToInt32(id_b2c_tags) :
+                0;
 
             this.codigoproduto =
-                String.IsNullOrEmpty(codigoproduto) ? 0
-                : Convert.ToInt64(codigoproduto);
-
-            this.descricao_b2c_tags = descricao_b2c_tags;
+                ConvertToInt64Validation.IsValid(codigoproduto, "codigoproduto", listValidations) ?
+                Convert.ToInt64(codigoproduto) :
+                0;
 
             this.portal =
                 ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
@@ -66,6 +67,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                 ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
                 Convert.ToInt64(timestamp) :
                 0;
+
+            this.descricao_b2c_tags = descricao_b2c_tags;
         }
     }
 }

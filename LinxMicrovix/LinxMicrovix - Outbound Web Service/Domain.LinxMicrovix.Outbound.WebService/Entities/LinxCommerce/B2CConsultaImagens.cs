@@ -41,11 +41,9 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             lastupdateon = DateTime.Now;
 
             this.id_imagem =
-                String.IsNullOrEmpty(id_imagem) ? 0
-                : Convert.ToInt32(id_imagem);
-
-            this.md5 = md5;
-            this.url_imagem_blob = url_imagem_blob;
+                ConvertToInt32Validation.IsValid(id_imagem, "id_imagem", listValidations) ?
+                Convert.ToInt32(id_imagem) :
+                0;
 
             this.portal =
                 ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
@@ -56,6 +54,9 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                 ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
                 Convert.ToInt64(timestamp) :
                 0;
+
+            this.md5 = md5;
+            this.url_imagem_blob = url_imagem_blob;
         }
     }
 }

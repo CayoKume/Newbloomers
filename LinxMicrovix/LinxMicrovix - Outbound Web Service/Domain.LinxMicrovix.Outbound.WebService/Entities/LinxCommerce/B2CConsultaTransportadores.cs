@@ -105,8 +105,19 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             lastupdateon = DateTime.Now;
 
             this.cod_transportador =
-                String.IsNullOrEmpty(cod_transportador) ? 0
-                : Convert.ToInt32(cod_transportador);
+                ConvertToInt32Validation.IsValid(cod_transportador, "cod_transportador", listValidations) ?
+                Convert.ToInt32(cod_transportador) :
+                0;
+
+            this.portal =
+                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
+                Convert.ToInt32(portal) :
+                0;
+
+            this.timestamp =
+                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
+                Convert.ToInt64(timestamp) :
+                0;
 
             this.nome = nome;
             this.nome_fantasia = nome_fantasia;
@@ -123,16 +134,6 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             this.email = email;
             this.pais = pais;
             this.obs = obs;
-
-            this.portal =
-                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
-                Convert.ToInt32(portal) :
-                0;
-
-            this.timestamp =
-                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
-                Convert.ToInt64(timestamp) :
-                0;
         }
     }
 }

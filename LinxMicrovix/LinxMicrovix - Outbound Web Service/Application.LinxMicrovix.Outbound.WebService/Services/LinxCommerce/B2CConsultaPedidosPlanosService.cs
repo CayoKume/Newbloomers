@@ -49,6 +49,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                     var validations = new List<ValidationResult>();
 
                     var entity = new B2CConsultaPedidosPlanos(
+                        listValidations: validations,
                         id_pedido_planos: records[i].Where(pair => pair.Key == "id_pedido_planos").Select(pair => pair.Value).FirstOrDefault(),
                         id_pedido: records[i].Where(pair => pair.Key == "id_pedido").Select(pair => pair.Value).FirstOrDefault(),
                         plano_pagamento: records[i].Where(pair => pair.Key == "plano_pagamento").Select(pair => pair.Value).FirstOrDefault(),

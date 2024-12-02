@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Domain.IntegrationsCore.CustomValidations;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 
@@ -7,33 +8,35 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
     public class LinxB2CPedidosStatus
     {
         [Column(TypeName = "datetime")]
-        public DateTime lastupdateon { get; set; }
+        public DateTime lastupdateon { get; private set; }
 
         [Key]
         [Column(TypeName = "int")]
-        public Int32? id { get; set; }
+        public Int32? id { get; private set; }
 
         [Column(TypeName = "int")]
-        public Int32? id_status { get; set; }
+        public Int32? id_status { get; private set; }
 
         [Column(TypeName = "int")]
-        public Int32? id_pedido { get; set; }
+        public Int32? id_pedido { get; private set; }
 
         [Column(TypeName = "datetime")]
-        public DateTime? data_hora { get; set; }
+        public DateTime? data_hora { get; private set; }
 
         [Column(TypeName = "varchar(80)")]
-        public string? anotacao { get; set; }
+        [LengthValidation(length: 80, propertyName: "anotacao")]
+        public string? anotacao { get; private set; }
 
         [Column(TypeName = "bigint")]
-        public Int64? timestamp { get; set; }
+        public Int64? timestamp { get; private set; }
 
         [Column(TypeName = "int")]
-        public Int32? portal { get; set; }
+        public Int32? portal { get; private set; }
 
         public LinxB2CPedidosStatus() { }
 
         public LinxB2CPedidosStatus(
+            List<ValidationResult> listValidations,
             string id,
             string id_status,
             string id_pedido,
@@ -46,36 +49,36 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             lastupdateon = DateTime.Now;
 
             this.id =
-                id == String.Empty ? 0
-                : Convert.ToInt32(id);
+                 ConvertToInt32Validation.IsValid(id, "id", listValidations) ?
+                 Convert.ToInt32(id) :
+                 0;
 
             this.id_status =
-                id_status == String.Empty ? 0
-                : Convert.ToInt32(id_status);
+                 ConvertToInt32Validation.IsValid(id_status, "id_status", listValidations) ?
+                 Convert.ToInt32(id_status) :
+                 0;
 
             this.id_pedido =
-                id_pedido == String.Empty ? 0
-                : Convert.ToInt32(id_pedido);
+                 ConvertToInt32Validation.IsValid(id_pedido, "id_pedido", listValidations) ?
+                 Convert.ToInt32(id_pedido) :
+                 0;
 
             this.data_hora =
-                String.IsNullOrEmpty(data_hora) ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
-                : Convert.ToDateTime(data_hora);
-
-            this.anotacao =
-                anotacao == String.Empty ? ""
-                : anotacao.Substring(
-                    0,
-                    anotacao.Length > 80 ? 80
-                    : anotacao.Length
-                );
-
-            this.timestamp =
-                timestamp == String.Empty ? 0
-                : Convert.ToInt64(timestamp);
+                ConvertToDateTimeValidation.IsValid(data_hora, "data_hora", listValidations) ?
+                Convert.ToDateTime(data_hora) :
+                new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar);
 
             this.portal =
-                portal == String.Empty ? 0
-                : Convert.ToInt32(portal);
+                 ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
+                 Convert.ToInt32(portal) :
+                 0;
+
+            this.timestamp =
+                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
+                Convert.ToInt64(timestamp) :
+                0;
+
+            this.anotacao = anotacao;
         }
     }
 }

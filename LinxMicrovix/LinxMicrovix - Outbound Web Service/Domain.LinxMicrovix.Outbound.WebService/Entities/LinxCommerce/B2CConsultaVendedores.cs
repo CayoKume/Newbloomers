@@ -57,24 +57,29 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             lastupdateon = DateTime.Now;
 
             this.cod_vendedor =
-                String.IsNullOrEmpty(cod_vendedor) ? 0
-                : Convert.ToInt32(cod_vendedor);
+                ConvertToInt32Validation.IsValid(cod_vendedor, "cod_vendedor", listValidations) ?
+                Convert.ToInt32(cod_vendedor) :
+                0;
 
             this.comissao_produtos =
-                String.IsNullOrEmpty(comissao_produtos) ? 0
-                : Convert.ToDecimal(comissao_produtos);
+                ConvertToDecimalValidation.IsValid(comissao_produtos, "comissao_produtos", listValidations) ?
+                Convert.ToDecimal(comissao_produtos) :
+                0;
 
             this.comissao_servicos =
-                String.IsNullOrEmpty(comissao_servicos) ? 0
-                : Convert.ToDecimal(comissao_servicos);
+                ConvertToDecimalValidation.IsValid(comissao_servicos, "comissao_servicos", listValidations) ?
+                Convert.ToDecimal(comissao_servicos) :
+                0;
 
             this.ativo =
-                String.IsNullOrEmpty(ativo) ? 0
-                : Convert.ToInt32(ativo);
+                ConvertToInt32Validation.IsValid(ativo, "ativo", listValidations) ?
+                Convert.ToInt32(ativo) :
+                0;
 
             this.comissionado =
-                String.IsNullOrEmpty(comissionado) ? 0
-                : Convert.ToInt32(comissionado);
+                ConvertToInt32Validation.IsValid(comissionado, "comissionado", listValidations) ?
+                Convert.ToInt32(comissionado) :
+                0;
 
             this.portal =
                 ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?

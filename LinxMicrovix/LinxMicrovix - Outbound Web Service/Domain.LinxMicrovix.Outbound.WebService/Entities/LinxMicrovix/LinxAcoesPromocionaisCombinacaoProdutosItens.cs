@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Domain.IntegrationsCore.CustomValidations;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
@@ -27,6 +28,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         public LinxAcoesPromocionaisCombinacaoProdutosItens() { }
 
         public LinxAcoesPromocionaisCombinacaoProdutosItens(
+            List<ValidationResult> listValidations,
             string? id_acoes_promocionais_combinacao_produtos_itens,
             string? id_combinacao_produto,
             string? codigoproduto,
@@ -37,24 +39,29 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             lastupdateon = DateTime.Now;
 
             this.id_acoes_promocionais_combinacao_produtos_itens =
-                id_acoes_promocionais_combinacao_produtos_itens == String.Empty ? 0
-                : Convert.ToInt32(id_acoes_promocionais_combinacao_produtos_itens);
+                ConvertToInt32Validation.IsValid(id_acoes_promocionais_combinacao_produtos_itens, "id_acoes_promocionais_combinacao_produtos_itens", listValidations) ?
+                Convert.ToInt32(id_acoes_promocionais_combinacao_produtos_itens) :
+                0;
 
             this.id_combinacao_produto =
-                id_combinacao_produto == String.Empty ? 0
-                : Convert.ToInt32(id_combinacao_produto);
+                ConvertToInt32Validation.IsValid(id_combinacao_produto, "id_combinacao_produto", listValidations) ?
+                Convert.ToInt32(id_combinacao_produto) :
+                0;
 
             this.codigoproduto =
-                codigoproduto == String.Empty ? 0
-                : Convert.ToInt64(codigoproduto);
-
-            this.timestamp =
-                timestamp == String.Empty ? 0
-                : Convert.ToInt64(timestamp);
+                ConvertToInt64Validation.IsValid(codigoproduto, "codigoproduto", listValidations) ?
+                Convert.ToInt64(codigoproduto) :
+                0;
 
             this.portal =
-                portal == String.Empty ? 0
-                : Convert.ToInt32(portal);
+                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
+                Convert.ToInt32(portal) :
+                0;
+
+            this.timestamp =
+                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
+                Convert.ToInt64(timestamp) :
+                0;
         }
     }
 }

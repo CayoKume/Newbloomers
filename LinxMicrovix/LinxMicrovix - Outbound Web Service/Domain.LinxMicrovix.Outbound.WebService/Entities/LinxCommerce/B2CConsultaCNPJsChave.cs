@@ -65,35 +65,36 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         {
             lastupdateon = DateTime.Now;
 
-            this.cnpj = cnpj;
-            this.nome_empresa = nome_empresa;
-            this.classificacao_portal = classificacao_portal;
-            this.rede = rede;
-            this.nome_portal = nome_portal;
-
             this.id_empresas_rede =
-                String.IsNullOrEmpty(id_empresas_rede) ? 0
-                : Convert.ToInt32(id_empresas_rede);
-
-            
-            
+                ConvertToInt32Validation.IsValid(id_empresas_rede, "id_empresas_rede", listValidations) ?
+                Convert.ToInt32(id_empresas_rede) :
+                0;
 
             this.empresa =
-                String.IsNullOrEmpty(empresa) ? 0
-                : Convert.ToInt32(empresa);
+                ConvertToInt32Validation.IsValid(empresa, "empresa", listValidations) ?
+                Convert.ToInt32(empresa) :
+                0;
 
             this.b2c =
-                String.IsNullOrEmpty(b2c) ? false
-                : Convert.ToBoolean(b2c);
+                ConvertToBooleanValidation.IsValid(b2c, "b2c", listValidations) ?
+                Convert.ToBoolean(b2c) :
+                false;
 
             this.oms =
-                String.IsNullOrEmpty(oms) ? false
-                : Convert.ToBoolean(oms);
+                ConvertToBooleanValidation.IsValid(oms, "oms", listValidations) ?
+                Convert.ToBoolean(oms) :
+                false;
 
             this.portal =
                 ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
                 Convert.ToInt32(portal) :
                 0;
+
+            this.cnpj = cnpj;
+            this.nome_empresa = nome_empresa;
+            this.classificacao_portal = classificacao_portal;
+            this.rede = rede;
+            this.nome_portal = nome_portal;
         }
     }
 }

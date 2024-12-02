@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using Domain.IntegrationsCore.CustomValidations;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 {
@@ -33,6 +34,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         public LinxB2CPedidosItens() { }
 
         public LinxB2CPedidosItens(
+            List<ValidationResult> listValidations,
             string? id_pedido_item,
             string? id_pedido,
             string? codigoproduto,
@@ -45,32 +47,39 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             this.lastupdateon = DateTime.Now;
 
             this.id_pedido_item =
-                id_pedido_item == String.Empty ? 0
-                : Convert.ToInt32(id_pedido_item);
+                ConvertToInt32Validation.IsValid(id_pedido_item, "id_pedido_item", listValidations) ?
+                Convert.ToInt32(id_pedido_item) :
+                0;
 
             this.id_pedido =
-                id_pedido == String.Empty ? 0
-                : Convert.ToInt32(id_pedido);
+                ConvertToInt32Validation.IsValid(id_pedido, "id_pedido", listValidations) ?
+                Convert.ToInt32(id_pedido) :
+                0;
 
             this.codigoproduto =
-                codigoproduto == String.Empty ? 0
-                : Convert.ToInt64(codigoproduto);
+                ConvertToInt64Validation.IsValid(codigoproduto, "codigoproduto", listValidations) ?
+                Convert.ToInt64(codigoproduto) :
+                0;
 
             this.quantidade =
-               quantidade == String.Empty ? 0
-               : Convert.ToInt32(quantidade);
+                ConvertToInt32Validation.IsValid(quantidade, "porquantidadetal", listValidations) ?
+                Convert.ToInt32(quantidade) :
+                0;
 
             this.vl_unitario =
-               vl_unitario == String.Empty ? 0
-               : Convert.ToDecimal(vl_unitario);
-
-            this.timestamp =
-                timestamp == String.Empty ? 0
-                : Convert.ToInt64(timestamp);
+                ConvertToDecimalValidation.IsValid(vl_unitario, "vl_unitario", listValidations) ?
+                Convert.ToDecimal(vl_unitario) :
+                0;
 
             this.portal =
-                portal == String.Empty ? 0
-                : Convert.ToInt32(portal);
+                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
+                Convert.ToInt32(portal) :
+                0;
+
+            this.timestamp =
+                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
+                Convert.ToInt64(timestamp) :
+                0;
         }
     }
 }

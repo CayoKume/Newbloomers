@@ -50,22 +50,24 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             lastupdateon = DateTime.Now;
 
             this.id =
-                String.IsNullOrEmpty(id) ? 0
-                : Convert.ToInt32(id);
+                ConvertToInt32Validation.IsValid(id, "id", listValidations) ?
+                Convert.ToInt32(id) :
+                0;
 
             this.id_status =
-                String.IsNullOrEmpty(id_status) ? 0
-                : Convert.ToInt32(id_status);
+                ConvertToInt32Validation.IsValid(id_status, "id_status", listValidations) ?
+                Convert.ToInt32(id_status) :
+                0;
 
             this.id_pedido =
-                String.IsNullOrEmpty(id_pedido) ? 0
-                : Convert.ToInt32(id_pedido);
+                ConvertToInt32Validation.IsValid(id_pedido, "id_pedido", listValidations) ?
+                Convert.ToInt32(id_pedido) :
+                0;
 
             this.data_hora =
-                String.IsNullOrEmpty(data_hora) ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
-                : Convert.ToDateTime(data_hora);
-
-            this.anotacao = anotacao;
+                ConvertToDateTimeValidation.IsValid(data_hora, "data_hora", listValidations) ?
+                Convert.ToDateTime(data_hora) :
+                new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar);
 
             this.portal =
                 ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
@@ -76,6 +78,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                 ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
                 Convert.ToInt64(timestamp) :
                 0;
+
+            this.anotacao = anotacao;
         }
     }
 }

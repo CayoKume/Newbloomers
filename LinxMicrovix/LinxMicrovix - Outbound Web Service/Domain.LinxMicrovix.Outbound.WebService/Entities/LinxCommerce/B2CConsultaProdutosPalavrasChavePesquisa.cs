@@ -44,18 +44,19 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             lastupdateon = DateTime.Now;
 
             this.id_b2c_palavras_chave_pesquisa_produtos =
-                String.IsNullOrEmpty(id_b2c_palavras_chave_pesquisa_produtos) ? 0
-                : Convert.ToInt32(id_b2c_palavras_chave_pesquisa_produtos);
+                ConvertToInt32Validation.IsValid(id_b2c_palavras_chave_pesquisa_produtos, "id_b2c_palavras_chave_pesquisa_produtos", listValidations) ?
+                Convert.ToInt32(id_b2c_palavras_chave_pesquisa_produtos) :
+                0;
 
             this.id_b2c_palavras_chave_pesquisa =
-                String.IsNullOrEmpty(id_b2c_palavras_chave_pesquisa) ? 0
-                : Convert.ToInt32(id_b2c_palavras_chave_pesquisa);
+                ConvertToInt32Validation.IsValid(id_b2c_palavras_chave_pesquisa, "id_b2c_palavras_chave_pesquisa", listValidations) ?
+                Convert.ToInt32(id_b2c_palavras_chave_pesquisa) :
+                0;
 
             this.codigoproduto =
-                String.IsNullOrEmpty(codigoproduto) ? 0
-                : Convert.ToInt64(codigoproduto);
-
-            this.descricao_b2c_palavras_chave_pesquisa = descricao_b2c_palavras_chave_pesquisa;
+                ConvertToInt64Validation.IsValid(codigoproduto, "codigoproduto", listValidations) ?
+                Convert.ToInt64(codigoproduto) :
+                0;
 
             this.portal =
                 ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
@@ -66,6 +67,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                 ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
                 Convert.ToInt64(timestamp) :
                 0;
+
+            this.descricao_b2c_palavras_chave_pesquisa = descricao_b2c_palavras_chave_pesquisa;
         }
     }
 }

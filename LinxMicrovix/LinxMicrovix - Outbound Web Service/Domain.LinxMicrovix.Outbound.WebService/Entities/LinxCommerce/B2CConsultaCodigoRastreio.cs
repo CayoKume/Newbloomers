@@ -50,16 +50,14 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             lastupdateon = DateTime.Now;
 
             this.id_pedido =
-                String.IsNullOrEmpty(id_pedido) ? 0
-                : Convert.ToInt32(id_pedido);
+                ConvertToInt32Validation.IsValid(id_pedido, "id_pedido", listValidations) ?
+                Convert.ToInt32(id_pedido) :
+                0;
 
             this.documento =
-                String.IsNullOrEmpty(documento) ? 0
-                : Convert.ToInt32(documento);
-
-            this.serie = serie;
-            this.codigo_rastreio = codigo_rastreio;
-            this.sequencia_volume = sequencia_volume;
+                ConvertToInt32Validation.IsValid(documento, "documento", listValidations) ?
+                Convert.ToInt32(documento) :
+                0;
 
             this.portal =
                 ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
@@ -71,6 +69,9 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                 Convert.ToInt64(timestamp) :
                 0;
 
+            this.serie = serie;
+            this.codigo_rastreio = codigo_rastreio;
+            this.sequencia_volume = sequencia_volume;
         }
     }
 }

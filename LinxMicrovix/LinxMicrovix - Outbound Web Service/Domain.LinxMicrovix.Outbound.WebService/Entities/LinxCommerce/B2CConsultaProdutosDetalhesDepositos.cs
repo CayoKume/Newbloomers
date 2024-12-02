@@ -51,28 +51,34 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             lastupdateon = DateTime.Now;
 
             this.codigoproduto =
-                String.IsNullOrEmpty(codigoproduto) ? 0
-                : Convert.ToInt64(codigoproduto);
+                ConvertToInt64Validation.IsValid(codigoproduto, "codigoproduto", listValidations) ?
+                Convert.ToInt64(codigoproduto) :
+                0;
 
             this.empresa =
-                String.IsNullOrEmpty(empresa) ? 0
-                : Convert.ToInt32(empresa);
+                ConvertToInt32Validation.IsValid(empresa, "empresa", listValidations) ?
+                Convert.ToInt32(empresa) :
+                0;
 
             this.id_deposito =
-                String.IsNullOrEmpty(id_deposito) ? 0
-                : Convert.ToInt32(id_deposito);
+                ConvertToInt32Validation.IsValid(id_deposito, "id_deposito", listValidations) ?
+                Convert.ToInt32(id_deposito) :
+                0;
 
             this.saldo =
-                String.IsNullOrEmpty(saldo) ? 0
-                : Convert.ToDecimal(saldo);
+                ConvertToDecimalValidation.IsValid(saldo, "saldo", listValidations) ?
+                Convert.ToDecimal(saldo) :
+                0;
 
             this.deposito =
-                String.IsNullOrEmpty(deposito) ? 0
-                : Convert.ToInt32(deposito);
+                ConvertToInt32Validation.IsValid(deposito, "deposito", listValidations) ?
+                Convert.ToInt32(deposito) :
+                0;
 
             this.tempo_preparacao_estoque =
-                String.IsNullOrEmpty(tempo_preparacao_estoque) ? 0
-                : Convert.ToInt32(tempo_preparacao_estoque);
+                ConvertToInt32Validation.IsValid(tempo_preparacao_estoque, "tempo_preparacao_estoque", listValidations) ?
+                Convert.ToInt32(tempo_preparacao_estoque) :
+                0;
 
             this.portal =
                 ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?

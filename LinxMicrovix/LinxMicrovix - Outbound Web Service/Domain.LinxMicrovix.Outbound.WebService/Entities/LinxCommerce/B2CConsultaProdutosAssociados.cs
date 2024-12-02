@@ -53,28 +53,34 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             lastupdateon = DateTime.Now;
 
             this.id =
-                String.IsNullOrEmpty(id) ? 0
-                : Convert.ToInt32(id);
+                ConvertToInt32Validation.IsValid(id, "id", listValidations) ?
+                Convert.ToInt32(id) :
+                0;
 
             this.codigoproduto =
-                String.IsNullOrEmpty(codigoproduto) ? 0
-                : Convert.ToInt64(codigoproduto);
+                ConvertToInt64Validation.IsValid(codigoproduto, "codigoproduto", listValidations) ?
+                Convert.ToInt64(codigoproduto) :
+                0;
 
             this.codigoproduto_associado =
-                String.IsNullOrEmpty(codigoproduto_associado) ? 0
-                : Convert.ToInt64(codigoproduto_associado);
+                ConvertToInt64Validation.IsValid(codigoproduto_associado, "codigoproduto_associado", listValidations) ?
+                Convert.ToInt64(codigoproduto_associado) :
+                0;
 
             this.coeficiente_desconto =
-                String.IsNullOrEmpty(coeficiente_desconto) ? 0
-                : Convert.ToDecimal(coeficiente_desconto);
+                ConvertToDecimalValidation.IsValid(coeficiente_desconto, "coeficiente_desconto", listValidations) ?
+                Convert.ToDecimal(coeficiente_desconto) :
+                0;
 
             this.qtde_item =
-                String.IsNullOrEmpty(qtde_item) ? 0
-                : Convert.ToDecimal(qtde_item);
+                ConvertToDecimalValidation.IsValid(qtde_item, "qtde_item", listValidations) ?
+                Convert.ToDecimal(qtde_item) :
+                0;
 
             this.item_obrigatorio =
-                String.IsNullOrEmpty(item_obrigatorio) ? 0
-                : Convert.ToInt32(item_obrigatorio);
+                ConvertToInt32Validation.IsValid(item_obrigatorio, "item_obrigatorio", listValidations) ?
+                Convert.ToInt32(item_obrigatorio) :
+                0;
 
             this.portal =
                 ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?

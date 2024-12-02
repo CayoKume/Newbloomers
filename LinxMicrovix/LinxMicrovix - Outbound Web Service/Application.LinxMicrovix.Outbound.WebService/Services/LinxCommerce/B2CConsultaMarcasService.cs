@@ -49,6 +49,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                     var validations = new List<ValidationResult>();
 
                     var entity = new B2CConsultaMarcas(
+                        listValidations: validations,
                         codigo_marca: records[i].Where(pair => pair.Key == "codigo_marca").Select(pair => pair.Value).FirstOrDefault(),
                         nome_marca: records[i].Where(pair => pair.Key == "nome_marca").Select(pair => pair.Value).FirstOrDefault(),
                         timestamp: records[i].Where(pair => pair.Key == "timestamp").Select(pair => pair.Value).FirstOrDefault(),
