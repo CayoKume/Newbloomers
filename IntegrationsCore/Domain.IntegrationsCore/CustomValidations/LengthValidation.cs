@@ -7,6 +7,8 @@ namespace Domain.IntegrationsCore.CustomValidations
         private string _propertyName { get; set; }
         private int _length { get; set; }
 
+        /// <param name="length"></param>
+        /// <param name="propertyName"></param>
         public LengthValidation(int length, string propertyName) =>
             (_length, _propertyName) = (length, propertyName);
 
