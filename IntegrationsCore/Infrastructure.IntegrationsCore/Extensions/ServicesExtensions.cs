@@ -9,7 +9,7 @@ namespace HangfireDashboard.Domain.Extensions
         {
             services.AddScoped<ISQLServerConnection, SQLServerConnection>();
 
-            //services.AddScoped<IDBInitializationRepository<ServerParameter>, DBInitializationRepository<ServerParameter>>();
+            //services.AddScoped<IDBInitializationRepository<DatabaseParameter>, DBInitializationRepository<DatabaseParameter>>();
             //services.AddScoped<IDBInitializationRepository<LinxAPIParam>, DBInitializationRepository<LinxAPIParam>>();
             //services.AddScoped<IDBInitializationRepository<LinxAPILog>, DBInitializationRepository<LinxAPILog>>();
 

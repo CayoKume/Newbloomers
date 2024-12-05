@@ -6,6 +6,7 @@ using Infrastructure.TotalExpress.DependencyInjection;
 using Infrastructure.FlashCourier.DependencyInjection;
 using Application.IntegrationsCore.Interfaces;
 using Application.IntegrationsCore.Services;
+using Infrastructure.DatabaseInit;
 namespace Hangfire.IO.Extensions
 {
     public static class ServicesExtensions
@@ -24,6 +25,9 @@ namespace Hangfire.IO.Extensions
             builder.Services.AddScopedB2CLinxMicrovixServices();
             builder.Services.AddScopedFlashCourierServices();
             builder.Services.AddScopedTotalExpressServices();
+
+            builder.Services.AddScopedB2CLinxMicrovixDatabaseInitServices();
+            builder.Services.AddScopedLinxMicrovixDatabaseInitServices();
 
             //builder.Services.AddHangfireService(connectionstring, serverName);
 

@@ -130,9 +130,9 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                     parameter: new
                     {
                         method = jobParameter.jobName,
-                        parameters_timestamp = @"",
-                        parameters_dateinterval = @"",
-                        parameters_individual = @"<Parameter id=""cod_cliente_erp"">[cod_cliente_erp]</Parameter>",
+                        timestamp = @"",
+                        dateinterval = @"",
+                        individual = @"<Parameter id=""cod_cliente_erp"">[cod_cliente_erp]</Parameter>",
                         ativo = 1
                     }
                 );

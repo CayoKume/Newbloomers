@@ -131,7 +131,7 @@ namespace LinxMicrovix.Outbound.Web.Service.Application.Services.LinxMicrovix
                 var body = _linxMicrovixServiceBase.BuildBodyRequest(
                     parametersList: parameters.Replace("[0]", "0"),
                     jobParameter: jobParameter,
-                    cnpj_emp: jobParameter.docMainCompany
+                    cnpj_emp: jobParameter.docDocMainCompany
                 );
 
                 string? response = await _apiCall.PostAsync(jobParameter: jobParameter, body: body);

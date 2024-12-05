@@ -7,14 +7,7 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
 {
     public class LinxMicrovixIndividualController : Controller
     {
-        private readonly string? _docMainCompany;
-        private readonly string? _databaseName;
-        private readonly string? _projectName;
-        private readonly string? _parametersInterval;
-        private readonly string? _parametersTableName;
-        private readonly string? _parametersLogTableName;
-        private readonly string? _key;
-        private readonly string? _authentication;
+        private readonly LinxMicrovixJobParameter _linxMicrovixJobParameter;
         private readonly List<LinxMethods>? _methods;
         private readonly IConfiguration _configuration;
 
@@ -31,45 +24,42 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
             _linxVendedoresService = linxVendedoresService;
             _linxProdutosCodBarService = linxProdutosCodBarService;
 
-            _docMainCompany = _configuration
-                .GetSection("LinxMicrovix")
-                .GetSection("MainCompany")
-                .Value;
+            _linxMicrovixJobParameter = new LinxMicrovixJobParameter(
+                docDocMainCompany: _configuration
+                                .GetSection("LinxMicrovix")
+                                .GetSection("DocMainCompany")
+                                .Value,
 
-            _databaseName = _configuration
-                .GetSection("ConfigureServer")
-                .GetSection("LinxMicrovixDatabaseName")
-                .Value;
+                databaseName: _configuration
+                                .GetSection("ConfigureServer")
+                                .GetSection("LinxMicrovixCommerceDatabaseName")
+                                .Value,
 
-            _projectName = _configuration
-                .GetSection("LinxMicrovix")
-                .GetSection("ProjectName")
-                .Value;
+                projectName: _configuration
+                                .GetSection("LinxMicrovix")
+                                .GetSection("ProjectName")
+                                .Value,
 
-            _parametersLogTableName = _configuration
-                .GetSection("LinxMicrovix")
-                .GetSection("ProjectParametersLogTableName")
-                .Value;
+                parametersInterval: _configuration
+                                .GetSection("LinxMicrovix")
+                                .GetSection("ParametersDateInterval")
+                                .Value,
 
-            _parametersTableName = _configuration
-                .GetSection("LinxMicrovix")
-                .GetSection("ProjectParametersTableName")
-                .Value;
+                parametersTableName: _configuration
+                                .GetSection("LinxMicrovix")
+                                .GetSection("ProjectParametersTableName")
+                                .Value,
 
-            _key = _configuration
-                .GetSection("LinxMicrovix")
-                .GetSection("Key")
-                .Value;
+                keyAuthorization: _configuration
+                                .GetSection("LinxMicrovix")
+                                .GetSection("Key")
+                                .Value,
 
-            _authentication = _configuration
-                .GetSection("LinxMicrovix")
-                .GetSection("Authentication")
-                .Value;
-
-            _parametersInterval = _configuration
-                            .GetSection("LinxMicrovix")
-                            .GetSection("ParametersIndividual")
-                            .Value;
+                userAuthentication: _configuration
+                                .GetSection("LinxMicrovix")
+                                .GetSection("Authentication")
+                                .Value
+            );
 
             _methods = _configuration
                             .GetSection("LinxMicrovix")
@@ -87,19 +77,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _linxVendedoresService.GetRecord(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        databaseName = _databaseName,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = "_" + method.MethodName
-                    },
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    ),
                     identificador: cod_vendedor,
                     cnpj_emp: cnpj_emp
                 );

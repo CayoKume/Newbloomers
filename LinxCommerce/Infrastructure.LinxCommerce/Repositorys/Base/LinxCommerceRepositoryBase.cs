@@ -343,8 +343,8 @@ namespace Infrastructure.LinxCommerce.Repository.Base
         public async Task<bool> InsertParametersIfNotExists(LinxCommerceJobParameter jobParameter, object parameter)
         {
             string? sql = $"IF NOT EXISTS (SELECT * FROM [{jobParameter.parametersTableName}] WHERE [method] = '{jobParameter.jobName}') " +
-                         $"INSERT INTO [{jobParameter.parametersTableName}] ([method], [parameters_timestamp], [parameters_dateinterval], [parameters_individual], [ativo]) " +
-                          "VALUES (@method, @parameters_timestamp, @parameters_dateinterval, @parameters_individual, @ativo)";
+                         $"INSERT INTO [{jobParameter.parametersTableName}] ([method], [timestamp], [dateinterval], [individual], [ativo]) " +
+                          "VALUES (@method, @timestamp, @dateinterval, @individual, @ativo)";
 
             try
             {

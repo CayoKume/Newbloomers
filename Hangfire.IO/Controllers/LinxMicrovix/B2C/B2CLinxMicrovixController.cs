@@ -8,14 +8,7 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
     [Route("MicrovixJobs/B2CLinxMicrovix")]
     public class B2CLinxMicrovixController : Controller
     {
-        private readonly string? _docMainCompany;
-        private readonly string? _databaseName;
-        private readonly string? _projectName;
-        private readonly string? _parametersInterval;
-        private readonly string? _parametersTableName;
-        private readonly string? _parametersLogTableName;
-        private readonly string? _key;
-        private readonly string? _authentication;
+        private readonly LinxMicrovixJobParameter _linxMicrovixJobParameter;
         private readonly List<LinxMethods>? _methods;
         private readonly IConfiguration _configuration;
 
@@ -216,45 +209,42 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
             _b2cConsultaUnidadeService = b2cConsultaUnidadeService;
             _b2cConsultaVendedoresService = b2cConsultaVendedoresService;
 
-            _docMainCompany = _configuration
-                .GetSection("B2CLinxMicrovix")
-                .GetSection("MainCompany")
-                .Value;
+            _linxMicrovixJobParameter = new LinxMicrovixJobParameter(
+                docDocMainCompany: _configuration
+                                .GetSection("B2CLinxMicrovix")
+                                .GetSection("DocMainCompany")
+                                .Value,
 
-            _databaseName = _configuration
-                .GetSection("ConfigureServer")
-                .GetSection("LinxMicrovixCommerceDatabaseName")
-                .Value;
+                databaseName: _configuration
+                                .GetSection("ConfigureServer")
+                                .GetSection("LinxMicrovixCommerceDatabaseName")
+                                .Value,
 
-            _projectName = _configuration
-                .GetSection("B2CLinxMicrovix")
-                .GetSection("ProjectName")
-                .Value;
+                projectName: _configuration
+                                .GetSection("B2CLinxMicrovix")
+                                .GetSection("ProjectName")
+                                .Value,
 
-            _parametersLogTableName = _configuration
-                .GetSection("B2CLinxMicrovix")
-                .GetSection("ProjectParametersLogTableName")
-                .Value;
+                parametersInterval: _configuration
+                                .GetSection("B2CLinxMicrovix")
+                                .GetSection("ParametersDateInterval")
+                                .Value,
 
-            _parametersTableName = _configuration
-                .GetSection("B2CLinxMicrovix")
-                .GetSection("ProjectParametersTableName")
-                .Value;
+                parametersTableName: _configuration
+                                .GetSection("B2CLinxMicrovix")
+                                .GetSection("ProjectParametersTableName")
+                                .Value,
 
-            _key = _configuration
-                .GetSection("B2CLinxMicrovix")
-                .GetSection("Key")
-                .Value;
+                keyAuthorization: _configuration
+                                .GetSection("B2CLinxMicrovix")
+                                .GetSection("Key")
+                                .Value,
 
-            _authentication = _configuration
-                .GetSection("B2CLinxMicrovix")
-                .GetSection("Authentication")
-                .Value;
-
-            _parametersInterval = _configuration
-                            .GetSection("B2CLinxMicrovix")
-                            .GetSection("ParametersDateInterval")
-                            .Value;
+                userAuthentication: _configuration
+                                .GetSection("B2CLinxMicrovix")
+                                .GetSection("Authentication")
+                                .Value
+            );
 
             _methods = _configuration
                             .GetSection("B2CLinxMicrovix")
@@ -272,17 +262,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
                 
                 var result = await _b2cConsultaClassificacaoService.GetRecords(
-                    new LinxMicrovixJobParameter {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -307,19 +290,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaClientesService.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        databaseName = _databaseName,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -344,18 +318,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaClientesContatosService.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -380,18 +346,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaClientesContatosParentescoService.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -416,18 +374,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaClientesEnderecosEntregaService.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -452,18 +402,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaClientesEstadoCivilService.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -488,18 +430,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaClientesSaldoService.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -524,18 +458,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaClientesSaldoLinxService.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -560,18 +486,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaCNPJsChaveService.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -596,18 +514,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaCodigoRastreioService.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -632,18 +542,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaColecoesService.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -668,18 +570,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaEmpresasService.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -704,18 +598,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaEspessurasService.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -740,18 +626,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaFlagsService.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -776,18 +654,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaFormasPagamentoService.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -812,18 +682,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaFornecedoresService.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -848,18 +710,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaGrade1Service.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -884,18 +738,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaGrade2Service.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -920,18 +766,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaImagensService.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -956,18 +794,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaImagensHDService.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -992,18 +822,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaLegendasCadastrosAuxiliaresService.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -1028,18 +850,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaLinhasService.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -1064,18 +878,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaMarcasService.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -1100,18 +906,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaNFeService.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -1136,18 +934,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaNFeSituacaoService.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -1172,18 +962,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaPalavrasChavePesquisaService.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -1208,18 +990,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaPedidosService.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -1244,18 +1018,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaPedidosIdentificadorService.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -1280,18 +1046,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaPedidosItensService.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -1316,18 +1074,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaPedidosPlanosService.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -1352,18 +1102,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaPedidosStatusService.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -1388,18 +1130,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaPedidosTiposService.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -1424,18 +1158,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaPlanosService.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -1460,18 +1186,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaPlanosParcelasService.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -1496,18 +1214,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaProdutosService.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -1532,18 +1242,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaProdutosAssociadosService.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -1568,18 +1270,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaProdutosCampanhasService.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -1604,18 +1298,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaProdutosCamposAdicionaisDetalhesService.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -1640,18 +1326,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaProdutosCamposAdicionaisNomesService.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -1676,18 +1354,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaProdutosCamposAdicionaisValoresService.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -1712,18 +1382,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaProdutosCodebarService.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -1748,18 +1410,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaProdutosCustosService.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -1784,18 +1438,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaProdutosDepositosService.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -1820,18 +1466,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaProdutosDetalhesService.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -1856,18 +1494,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaProdutosDetalhesDepositosService.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -1892,18 +1522,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaProdutosDimensoesService.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -1928,18 +1550,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaProdutosFlagsService.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -1964,18 +1578,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaProdutosImagensService.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -2000,18 +1606,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaProdutosInformacoesService.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -2036,18 +1634,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaProdutosPalavrasChavePesquisaService.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -2072,18 +1662,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaProdutosPromocaoService.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -2108,18 +1690,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaProdutosStatusService.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -2144,18 +1718,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaProdutosTabelasService.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -2180,18 +1746,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaProdutosTabelasPrecosService.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -2216,18 +1774,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaProdutosTagsService.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -2252,18 +1802,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaSetoresService.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -2288,18 +1830,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaStatusService.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -2324,18 +1858,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaTagsService.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -2360,18 +1886,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaTipoEncomendaService.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -2396,18 +1914,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaTiposCobrancaFreteService.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -2432,18 +1942,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaTransportadoresService.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -2468,18 +1970,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaUnidadeService.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)
@@ -2504,18 +1998,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaVendedoresService.GetRecords(
-                    new LinxMicrovixJobParameter
-                    {
-                        docMainCompany = _docMainCompany,
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    }
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)

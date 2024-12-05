@@ -2,7 +2,7 @@
 {
     public class LinxCommerceJobParameter
     {
-        public string? docMainCompany { get; set; }
+        public string? docDocMainCompany { get; set; }
         public string? databaseName { get; set; }
 
         public string? jobName { get; set; }

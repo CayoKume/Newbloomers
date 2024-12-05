@@ -63,9 +63,9 @@ namespace Infrastructure.LinxCommerce.Repositorys.Catolog
                     parameter: new
                     {
                         method = jobParameter.jobName,
-                        parameters_timestamp = @"",
-                        parameters_dateinterval = @"",
-                        parameters_individual = @"",
+                        timestamp = @"",
+                        dateinterval = @"",
+                        individual = @"",
                         ativo = 1
                     }
                 );

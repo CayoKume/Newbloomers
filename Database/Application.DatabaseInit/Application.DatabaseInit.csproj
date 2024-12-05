@@ -28,7 +28,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Infrastructure.DatabaseInit\Infrastructure.DatabaseInit.csproj" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Domain.DatabaseInit\Domain.DatabaseInit.csproj" />
   </ItemGroup>
 
 </Project>

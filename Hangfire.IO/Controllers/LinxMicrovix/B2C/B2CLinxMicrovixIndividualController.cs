@@ -9,14 +9,7 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
     [Route("MicrovixJobs/B2CLinxMicrovixIndividual")]
     public class B2CLinxMicrovixIndividualController : Controller
     {
-        private readonly string? _docMainCompany;
-        private readonly string? _databaseName;
-        private readonly string? _projectName;
-        private readonly string? _parametersInterval;
-        private readonly string? _parametersTableName;
-        private readonly string? _parametersLogTableName;
-        private readonly string? _key;
-        private readonly string? _authentication;
+        private readonly LinxMicrovixJobParameter _linxMicrovixJobParameter;
         private readonly List<LinxMethods>? _methods;
         private readonly IConfiguration _configuration;
 
@@ -43,45 +36,42 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
             _b2cConsultaClientesContatosParentescoService = b2cConsultaClientesContatosParentescoService;
             _b2cConsultaImagensService = b2cConsultaImagensService;
 
-            _docMainCompany = _configuration
-                .GetSection("B2CLinxMicrovix")
-                .GetSection("MainCompany")
-                .Value;
+            _linxMicrovixJobParameter = new LinxMicrovixJobParameter(
+                docDocMainCompany: _configuration
+                                .GetSection("B2CLinxMicrovix")
+                                .GetSection("DocMainCompany")
+                                .Value,
 
-            _databaseName = _configuration
-                .GetSection("ConfigureServer")
-                .GetSection("LinxMicrovixCommerceDatabaseName")
-                .Value;
+                databaseName: _configuration
+                                .GetSection("ConfigureServer")
+                                .GetSection("LinxMicrovixCommerceDatabaseName")
+                                .Value,
 
-            _projectName = _configuration
-                .GetSection("B2CLinxMicrovix")
-                .GetSection("ProjectName")
-                .Value;
+                projectName: _configuration
+                                .GetSection("B2CLinxMicrovix")
+                                .GetSection("ProjectName")
+                                .Value,
 
-            _parametersLogTableName = _configuration
-                .GetSection("B2CLinxMicrovix")
-                .GetSection("ProjectParametersLogTableName")
-                .Value;
+                parametersInterval: _configuration
+                                .GetSection("B2CLinxMicrovix")
+                                .GetSection("ParametersDateInterval")
+                                .Value,
 
-            _parametersTableName = _configuration
-                .GetSection("B2CLinxMicrovix")
-                .GetSection("ProjectParametersTableName")
-                .Value;
+                parametersTableName: _configuration
+                                .GetSection("B2CLinxMicrovix")
+                                .GetSection("ProjectParametersTableName")
+                                .Value,
 
-            _key = _configuration
-                .GetSection("B2CLinxMicrovix")
-                .GetSection("Key")
-                .Value;
+                keyAuthorization: _configuration
+                                .GetSection("B2CLinxMicrovix")
+                                .GetSection("Key")
+                                .Value,
 
-            _authentication = _configuration
-                .GetSection("B2CLinxMicrovix")
-                .GetSection("Authentication")
-                .Value;
-
-            _parametersInterval = _configuration
-                            .GetSection("B2CLinxMicrovix")
-                            .GetSection("ParametersIndividual")
-                            .Value;
+                userAuthentication: _configuration
+                                .GetSection("B2CLinxMicrovix")
+                                .GetSection("Authentication")
+                                .Value
+            );
 
             _methods = _configuration
                             .GetSection("B2CLinxMicrovix")
@@ -99,19 +89,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaClassificacaoService.GetRecord(
-                    new LinxMicrovixJobParameter
-                    {
-                        projectName = _projectName,
-                        docMainCompany = _docMainCompany,
-                        databaseName = _databaseName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    },
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    ),
                     cnpj_emp: cnpj_emp,
                     identificador: codigo_classificacao
                 );
@@ -138,19 +119,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaClientesService.GetRecord(
-                    new LinxMicrovixJobParameter
-                    {
-                        projectName = _projectName,
-                        docMainCompany = _docMainCompany,
-                        databaseName = _databaseName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    },
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    ),
                     cnpj_emp: cnpj_emp,
                     identificador: doc_cliente
                 );
@@ -177,17 +149,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaClientesContatosParentescoService.GetRecord(
-                    new LinxMicrovixJobParameter
-                    {
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    },
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    ),
                     cnpj_emp: cnpj_emp,
                     identificador: id_parentesco
                 );
@@ -214,17 +179,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _b2cConsultaImagensService.GetRecord(
-                    new LinxMicrovixJobParameter
-                    {
-                        projectName = _projectName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        parametersInterval = _parametersInterval,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName
-                    },
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    ),
                     cnpj_emp: cnpj_emp,
                     identificador: id_imagem
                 );

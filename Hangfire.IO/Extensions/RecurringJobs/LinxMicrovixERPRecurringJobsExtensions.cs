@@ -6,7 +6,7 @@ namespace Hangfire.IO.Extensions.RecurringJobs
 {
     public static class LinxMicrovixERPRecurringJobsExtensions
     {
-        private static string? _docMainCompany;
+        private static string? _docDocMainCompany;
         private static string? _databaseName;
         private static string? _projectName;
         private static string? _parametersInterval;
@@ -18,9 +18,9 @@ namespace Hangfire.IO.Extensions.RecurringJobs
 
         public static void AddRecurringJobs()
         {
-            _docMainCompany = ConfigurationHelperExtensions.config
+            _docDocMainCompany = ConfigurationHelperExtensions.config
                 .GetSection("LinxMicrovix")
-                .GetSection("MainCompany")
+                .GetSection("DocMainCompany")
                 .Value;
 
             _databaseName = ConfigurationHelperExtensions.config
@@ -81,27 +81,28 @@ namespace Hangfire.IO.Extensions.RecurringJobs
 
         private static void LinxMicrovixRecurringJobs()
         {
-            RecurringJob.AddOrUpdate<ILinxProdutosCodBarService>("LinxProdutosCodBar", service => service.GetRecords(
-                new LinxMicrovixJobParameter
-                {
-                    docMainCompany = _docMainCompany,
-                    databaseName = _databaseName,
-                    projectName = _projectName,
-                    keyAuthorization = _key,
-                    userAuthentication = _authentication,
-                    parametersTableName = _parametersTableName,
-                    parametersLogTableName = _parametersLogTableName,
-                    parametersInterval = _parametersInterval,
-                    jobName = _methods
-                                .Where(m => m.MethodName == "LinxProdutosCodBar")
-                                .FirstOrDefault().MethodName,
-                    tableName = _methods
-                                .Where(m => m.MethodName == "LinxProdutosCodBar")
-                                .FirstOrDefault().MethodName
-                }),
-                Cron.MinuteInterval(3)
-                , queue: "srv-vm-app02"
-            );
+            //RecurringJob.AddOrUpdate<ILinxProdutosCodBarService>("LinxProdutosCodBar", service => service.GetRecords(
+                //new LinxMicrovixJobParameter
+                //{
+                //    docDocMainCompany = _docDocMainCompany,
+                //    databaseName = _databaseName,
+                //    projectName = _projectName,
+                //    keyAuthorization = _key,
+                //    userAuthentication = _authentication,
+                //    parametersTableName = _parametersTableName,
+                //    parametersLogTableName = _parametersLogTableName,
+                //    parametersInterval = _parametersInterval,
+                //    jobName = _methods
+                //                .Where(m => m.MethodName == "LinxProdutosCodBar")
+                //                .FirstOrDefault().MethodName,
+                //    tableName = _methods
+                //                .Where(m => m.MethodName == "LinxProdutosCodBar")
+                //                .FirstOrDefault().MethodName
+                //}
+                //),
+                //Cron.MinuteInterval(3)
+                //, queue: "srv-vm-app02"
+            //);
         }
 
         //private static void FlashCourierRecurringJobs()

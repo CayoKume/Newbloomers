@@ -5,8 +5,9 @@ using Microsoft.Extensions.Configuration;
 
 namespace Application.DatabaseInit.Services
 {
-    public class B2CLinxMicrovixService : IB2CLinxMicrovixServiceService
+    public class B2CLinxMicrovixService : IB2CLinxMicrovixService
     {
+        private readonly LinxMicrovixJobParameter _linxMicrovixJobParameter;
         private readonly List<LinxMethods>? _methods;
         private readonly IConfiguration _configuration;
         
@@ -206,28 +207,119 @@ namespace Application.DatabaseInit.Services
             _b2cConsultaUnidadeRepository = b2cConsultaUnidadeRepository;
             _b2cConsultaVendedoresRepository = b2cConsultaVendedoresRepository;
 
-            _methods = _configuration
-                            .GetSection("B2CLinxMicrovix")
-                            .GetSection("Methods")
-                            .Get<List<LinxMethods>>();
+            _linxMicrovixJobParameter = new LinxMicrovixJobParameter(
+                databaseName: _configuration
+                                .GetSection("ConfigureServer")
+                                .GetSection("Databases")
+                                .GetSection("LinxMicrovixCommerce")
+                                .Value,
+
+                projectName: _configuration
+                                .GetSection("B2CLinxMicrovix")
+                                .GetSection("ProjectName")
+                                .Value,
+
+                userAuthentication: _configuration
+                                .GetSection("B2CLinxMicrovix")
+                                .GetSection("Authentication")
+                                .Value,
+
+                keyAuthorization: _configuration
+                                .GetSection("B2CLinxMicrovix")
+                                .GetSection("Key")
+                                .Value,
+
+                parametersInterval: _configuration
+                                .GetSection("B2CLinxMicrovix")
+                                .GetSection("ParametersDateInterval")
+                                .Value,
+
+                parametersTableName: _configuration
+                                .GetSection("B2CLinxMicrovix")
+                                .GetSection("ParametersTableName")
+                                .Value,
+
+                docDocMainCompany: _configuration
+                                .GetSection("B2CLinxMicrovix")
+                                .GetSection("DocMainCompany")
+                                .Value
+            );
+
         }
 
-        public void CreateDatabasesIfNotExists()
+        //public async Task<bool> CreateDatabasesIfNotExists()
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        public async Task<bool> CreateTablesIfNotExists(List<LinxMethods> listMethods)
         {
-            _configuration.
+            if (
+                listMethods
+                    .Where(m => m.MethodName == "B2CConsultaClassificacao")
+                    .First()
+                    .IsActive
+                )
+                await _b2cConsultaClassificacaoRepository.CreateDataTableIfNotExists(
+                        _linxMicrovixJobParameter.SetParameters(
+                            jobName: listMethods
+                                    .Where(m => m.MethodName == "B2CConsultaClassificacao")
+                                    .First()
+                                    .MethodName,
+                            tableName: listMethods
+                                    .Where(m => m.MethodName == "B2CConsultaClassificacao")
+                                    .First()
+                                    .MethodName
+                        )
+                    );
+
+            if (
+                listMethods
+                    .Where(m => m.MethodName == "B2CConsultaClientesContatos")
+                    .First()
+                    .IsActive
+                )
+                await _b2cConsultaClientesContatosParentescoRepository.CreateDataTableIfNotExists(
+                        _linxMicrovixJobParameter.SetParameters(
+                            jobName: listMethods
+                                    .Where(m => m.MethodName == "B2CConsultaClientesContatos")
+                                    .First()
+                                    .MethodName,
+                            tableName: listMethods
+                                    .Where(m => m.MethodName == "B2CConsultaClientesContatos")
+                                    .First()
+                                    .MethodName
+                        )
+                    );
+
+            if (
+                listMethods
+                    .Where(m => m.MethodName == "B2CConsultaClientes")
+                    .First()
+                    .IsActive
+                )
+                await _b2cConsultaClientesRepository.CreateDataTableIfNotExists(
+                        _linxMicrovixJobParameter.SetParameters(
+                            jobName: listMethods
+                                    .Where(m => m.MethodName == "B2CConsultaClientes")
+                                    .First()
+                                    .MethodName,
+                            tableName: listMethods
+                                    .Where(m => m.MethodName == "B2CConsultaClientes")
+                                    .First()
+                                    .MethodName
+                        )
+                    );
+
+            return true;
         }
 
-        public void CreateTablesIfNotExists()
+        public async Task<bool> CreateTablesMerges(List<LinxMethods> listMethods)
         {
             throw new NotImplementedException();
         }
 
-        public void CreateTablesMerges()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void InsertParametersIfNotExists()
+        public async Task<bool> InsertParametersIfNotExists(List<LinxMethods> listMethods)
         {
             throw new NotImplementedException();
         }

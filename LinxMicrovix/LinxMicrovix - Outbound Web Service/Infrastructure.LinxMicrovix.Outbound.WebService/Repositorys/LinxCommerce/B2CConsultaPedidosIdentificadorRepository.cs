@@ -128,11 +128,11 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                     parameter: new
                     {
                         method = jobParameter.jobName,
-                        parameters_timestamp = @"<Parameter id=""timestamp"">[0]</Parameter>",
-                        parameters_dateinterval = @"<Parameter id=""timestamp"">[0]</Parameter>
+                        timestamp = @"<Parameter id=""timestamp"">[0]</Parameter>",
+                        dateinterval = @"<Parameter id=""timestamp"">[0]</Parameter>
                                                     <Parameter id=""data_origem_fim"">[data_origem_fim]</Parameter>
                                                     <Parameter id=""data_origem_inicial"">[data_origem_inicial]</Parameter>",
-                        parameters_individual = @"<Parameter id=""timestamp"">[0]</Parameter>
+                        individual = @"<Parameter id=""timestamp"">[0]</Parameter>
                                                   <Parameter id=""order_id"">[order_id]</Parameter>",
                         ativo = 1
                     }

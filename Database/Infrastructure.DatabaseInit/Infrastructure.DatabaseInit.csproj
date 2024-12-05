@@ -15,6 +15,7 @@
     <ProjectReference Include="..\..\IntegrationsCore\Domain.IntegrationsCore\Domain.IntegrationsCore.csproj" />
     <ProjectReference Include="..\..\IntegrationsCore\Infrastructure.IntegrationsCore\Infrastructure.IntegrationsCore.csproj" />
     <ProjectReference Include="..\..\LinxMicrovix\LinxMicrovix - Outbound Web Service\Domain.LinxMicrovix.Outbound.WebService\Domain.LinxMicrovix.Outbound.WebService.csproj" />
+    <ProjectReference Include="..\Application.DatabaseInit\Application.DatabaseInit.csproj" />
     <ProjectReference Include="..\Domain.DatabaseInit\Domain.DatabaseInit.csproj" />
   </ItemGroup>
 

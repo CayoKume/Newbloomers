@@ -101,18 +101,18 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxCommerce
             {
                 var parameter = new {
                     method = jobParameter.jobName,
-                    parameters_timestamp = @"<Parameter id=""timestamp"">[0]</Parameter>",
-                    parameters_dateinterval = @"<Parameter id=""timestamp"">[0]</Parameter>
+                    timestamp = @"<Parameter id=""timestamp"">[0]</Parameter>",
+                    dateinterval = @"<Parameter id=""timestamp"">[0]</Parameter>
                                                 <Parameter id=""data_origem_fim"">[data_origem_fim]</Parameter>
                                                 <Parameter id=""data_origem_inicial"">[data_origem_inicial]</Parameter>",
-                    parameters_individual = @"<Parameter id=""timestamp"">[0]</Parameter>
+                    individual = @"<Parameter id=""timestamp"">[0]</Parameter>
                                                 <Parameter id=""order_id"">[order_id]</Parameter>",
                     ativo = 1
                 };
 
                 string? sql = $"IF NOT EXISTS (SELECT * FROM [{jobParameter.parametersTableName}] WHERE [method] = '{jobParameter.jobName}') " +
-                              $"INSERT INTO [{jobParameter.parametersTableName}] ([method], [parameters_timestamp], [parameters_dateinterval], [parameters_individual], [ativo]) " +
-                               "VALUES (@method, @parameters_timestamp, @parameters_dateinterval, @parameters_individual, @ativo)";
+                              $"INSERT INTO [{jobParameter.parametersTableName}] ([method], [timestamp], [dateinterval], [individual], [ativo]) " +
+                               "VALUES (@method, @timestamp, @dateinterval, @individual, @ativo)";
 
 
                 using (var conn = _conn.GetIDbConnection(jobParameter.databaseName))

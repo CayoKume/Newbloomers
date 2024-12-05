@@ -5,7 +5,7 @@ namespace Hangfire.IO.Extensions.RecurringJobs
 {
     public static class GeneralIntegrationsRecurringJobsExtensions
     {
-        private static string? _docMainCompany;
+        private static string? _docDocMainCompany;
         private static string? _databaseName;
         private static string? _projectName;
         private static string? _parametersInterval;
@@ -17,7 +17,7 @@ namespace Hangfire.IO.Extensions.RecurringJobs
 
         public static void AddRecurringJobs()
         {
-            _docMainCompany = ConfigurationHelperExtensions.config
+            _docDocMainCompany = ConfigurationHelperExtensions.config
                 .GetSection("")
                 .GetSection("")
                 .Value;

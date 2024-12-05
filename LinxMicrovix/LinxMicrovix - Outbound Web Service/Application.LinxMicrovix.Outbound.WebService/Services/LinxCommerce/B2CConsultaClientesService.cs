@@ -183,7 +183,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                 var body = _linxMicrovixServiceBase.BuildBodyRequest(
                     parametersList: parameters.Replace("[0]", timestamp),
                     jobParameter: jobParameter,
-                    cnpj_emp: jobParameter.docMainCompany
+                    cnpj_emp: jobParameter.docDocMainCompany
                 );
 
                 string? response = await _apiCall.PostAsync(jobParameter: jobParameter, body: body);
