@@ -66,5 +66,8 @@
         B2CConsultaTransportadores = 61,
         B2CConsultaUnidade = 62,
         B2CConsultaVendedores = 63,
+
+        LinxProdutosCodBar = 64,
+        LinxVendedores = 65,
     }
 }

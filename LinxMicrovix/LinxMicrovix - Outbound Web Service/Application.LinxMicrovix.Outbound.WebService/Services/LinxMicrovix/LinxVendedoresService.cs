@@ -6,6 +6,7 @@ using Domain.IntegrationsCore.Entities.Parameters;
 
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxMicrovix;
+using System.ComponentModel.DataAnnotations;
 
 namespace LinxMicrovix.Outbound.Web.Service.Application.Services.LinxMicrovix
 {
@@ -101,7 +102,10 @@ namespace LinxMicrovix.Outbound.Web.Service.Application.Services.LinxMicrovix
             {
                 try
                 {
+                    var validations = new List<ValidationResult>();
+
                     var entity = new LinxVendedores(
+                        listValidations: validations,
                         cod_vendedor: records[i].Where(pair => pair.Key == "cod_vendedor").Select(pair => pair.Value).FirstOrDefault(),
                         nome_vendedor: records[i].Where(pair => pair.Key == "nome_vendedor").Select(pair => pair.Value).FirstOrDefault(),
                         tipo_vendedor: records[i].Where(pair => pair.Key == "tipo_vendedor").Select(pair => pair.Value).FirstOrDefault(),

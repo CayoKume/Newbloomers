@@ -23,6 +23,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         public LinxDevolucaoRemanejoFabricaTipo() { }
 
         public LinxDevolucaoRemanejoFabricaTipo(
+            List<ValidationResult> listValidations,
             string? id_devolucao_remanejo_fabrica_tipo,
             string? descricao,
             string? timestamp

@@ -7,28 +7,28 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Interfaces\Shippments\FlashCourier\" />
-    <Folder Include="Interfaces\Shippments\" />
-    <Folder Include="Interfaces\General\AfterSale\" />
-    <Folder Include="Interfaces\General\Dootax\" />
-    <Folder Include="Interfaces\Shippments\Jadlog\" />
-    <Folder Include="Interfaces\LinxCommerce\" />
-    <Folder Include="Interfaces\General\Mobsim\" />
-    <Folder Include="Interfaces\General\Movidesk\" />
-    <Folder Include="Interfaces\General\" />
-    <Folder Include="Interfaces\General\Pagarme\" />
-    <Folder Include="Interfaces\Shippments\TotalExpress\" />
-    <Folder Include="Services\General\AfterSale\" />
-    <Folder Include="Services\General\Dootax\" />
-    <Folder Include="Services\Shippment\Jadlog\" />
-    <Folder Include="Services\LinxCommerce\" />
-    <Folder Include="Services\Shippment\FlashCourier\" />
-    <Folder Include="Services\General\Mobsim\" />
-    <Folder Include="Services\General\Movidesk\" />
-    <Folder Include="Services\General\" />
-    <Folder Include="Services\General\Pagarme\" />
-    <Folder Include="Services\Shippment\" />
-    <Folder Include="Services\Shippment\TotalExpress\" />
+    <Compile Remove="Interfaces\General\**" />
+    <Compile Remove="Interfaces\LinxCommerce\**" />
+    <Compile Remove="Interfaces\Shippments\**" />
+    <Compile Remove="Services\General\**" />
+    <Compile Remove="Services\LinxCommerce\**" />
+    <Compile Remove="Services\Shippment\**" />
+    <EmbeddedResource Remove="Interfaces\General\**" />
+    <EmbeddedResource Remove="Interfaces\LinxCommerce\**" />
+    <EmbeddedResource Remove="Interfaces\Shippments\**" />
+    <EmbeddedResource Remove="Services\General\**" />
+    <EmbeddedResource Remove="Services\LinxCommerce\**" />
+    <EmbeddedResource Remove="Services\Shippment\**" />
+    <None Remove="Interfaces\General\**" />
+    <None Remove="Interfaces\LinxCommerce\**" />
+    <None Remove="Interfaces\Shippments\**" />
+    <None Remove="Services\General\**" />
+    <None Remove="Services\LinxCommerce\**" />
+    <None Remove="Services\Shippment\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Infrastructure.DatabaseInit\Infrastructure.DatabaseInit.csproj" />
   </ItemGroup>
 
 </Project>

@@ -6,24 +6,31 @@ using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxMicrovi
 
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxMicrovix;
+using System.ComponentModel.DataAnnotations;
+using Domain.IntegrationsCore.Entities.Enums;
+using Application.IntegrationsCore.Interfaces;
+using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce;
 
 namespace LinxMicrovix.Outbound.Web.Service.Application.Services.LinxMicrovix
 {
     public class LinxProdutosCodBarService : ILinxProdutosCodBarService
     {
         private readonly IAPICall _apiCall;
+        private readonly ILoggerService _logger;
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
         private readonly ILinxMicrovixRepositoryBase<LinxProdutosCodBar> _linxMicrovixRepositoryBase;
         private readonly ILinxProdutosCodBarRepository _linxProdutosCodBarRepository;
 
         public LinxProdutosCodBarService(
             IAPICall apiCall,
+            ILoggerService logger,
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
             ILinxMicrovixRepositoryBase<LinxProdutosCodBar> linxMicrovixRepositoryBase,
             ILinxProdutosCodBarRepository linxProdutosCodBarRepository
         )
         {
             _apiCall = apiCall;
+            _logger = logger;
             _linxMicrovixServiceBase = linxMicrovixServiceBase;
             _linxMicrovixRepositoryBase = linxMicrovixRepositoryBase;
             _linxProdutosCodBarRepository = linxProdutosCodBarRepository;
@@ -36,12 +43,33 @@ namespace LinxMicrovix.Outbound.Web.Service.Application.Services.LinxMicrovix
             {
                 try
                 {
+                    var validations = new List<ValidationResult>();
+
                     var entity = new LinxProdutosCodBar(
+                        listValidations: validations,
                         cod_produto: records[i].Where(pair => pair.Key == "cod_produto").Select(pair => pair.Value).FirstOrDefault(),
                         cod_barra: records[i].Where(pair => pair.Key == "cod_barra").Select(pair => pair.Value).FirstOrDefault(),
                         timestamp: records[i].Where(pair => pair.Key == "timestamp").Select(pair => pair.Value).FirstOrDefault(),
                         portal: records[i].Where(pair => pair.Key == "portal").Select(pair => pair.Value).FirstOrDefault()
                     );
+
+                    var contexto = new ValidationContext(entity, null, null);
+                    Validator.TryValidateObject(entity, contexto, validations, true);
+
+                    if (validations.Count() > 0)
+                    {
+                        for (int j = 0; j < validations.Count(); j++)
+                        {
+                            _logger.AddMessage(
+                                stage: EnumStages.DeserializeXMLToObject,
+                                error: EnumError.Validation,
+                                logLevel: EnumMessageLevel.Warning,
+                                message: $"Error when convert record - cod_produto: {records[i].Where(pair => pair.Key == "cod_produto").Select(pair => pair.Value).FirstOrDefault()} | cod_barra: {records[i].Where(pair => pair.Key == "cod_barra").Select(pair => pair.Value).FirstOrDefault()}\n" +
+                                         $"{validations[j].ErrorMessage}"
+                            );
+                        }
+                        continue;
+                    }
 
                     list.Add(entity);
                 }
@@ -90,8 +118,14 @@ namespace LinxMicrovix.Outbound.Web.Service.Application.Services.LinxMicrovix
 
         public async Task<bool> GetRecords(LinxMicrovixJobParameter jobParameter)
         {
+            IList<LinxProdutosCodBar> _listSomenteNovos = new List<LinxProdutosCodBar>();
+
             try
             {
+                _logger
+                   .Clear()
+                   .AddLog(EnumJob.LinxProdutosCodBar);
+
                 string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter);
 
                 var body = _linxMicrovixServiceBase.BuildBodyRequest(

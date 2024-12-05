@@ -52,7 +52,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             this.ativo =
                 ConvertToBooleanValidation.IsValid(ativo, "ativo", listValidations) ?
                 Convert.ToBoolean(ativo) :
-                0;
+                false;
 
             this.timestamp =
                 ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?

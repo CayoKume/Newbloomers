@@ -92,8 +92,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [Column(TypeName = "bit")]
         public bool? import_produtos { get; private set; }
         
-        [Column(TypeName = "bit")]
-        public bool? deposito_reserva_venda { get; private set; }
+        [Column(TypeName = "int")]
+        public Int32? deposito_reserva_venda { get; private set; }
         
         [Column(TypeName = "bit")]
         public bool? exibe_nfe { get; private set; }

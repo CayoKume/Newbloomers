@@ -14,7 +14,7 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxCommerce
         public B2CConsultaLegendasCadastrosAuxiliaresRepository(ISQLServerConnection? conn) =>
             (_conn) = (conn);
 
-        public Task<bool> CreateDataTableIfNotExists(LinxMicrovixJobParameter jobParameter)
+        public async Task<bool> CreateDataTableIfNotExists(LinxMicrovixJobParameter jobParameter)
         {
             string? sql = @$"SELECT DISTINCT * FROM [INFORMATION_SCHEMA].[TABLES] (NOLOCK) WHERE TABLE_NAME LIKE '%{jobParameter.jobName}%'";
 
