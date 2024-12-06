@@ -4,6 +4,7 @@
     {
         public string? docDocMainCompany { get; private set; }
         public string? databaseName { get; private set; }
+        public string? untreatedDatabaseName { get; private set; }
         public string? jobName { get; private set; }
         public string? projectName { get; private set; }
         public string? tableName { get; private set; }
@@ -17,6 +18,7 @@
         /// </summary>
         /// <param name="docDocMainCompany"></param>
         /// <param name="databaseName"></param>
+        /// <param name="untreatedDatabaseName"></param>
         /// <param name="projectName"></param>
         /// <param name="keyAuthorization"></param>
         /// <param name="userAuthentication"></param>
@@ -25,6 +27,7 @@
         public LinxMicrovixJobParameter(
             string? docDocMainCompany,
             string? databaseName,
+            string? untreatedDatabaseName,
             string? projectName,
             string? keyAuthorization,
             string? userAuthentication,
@@ -34,6 +37,7 @@
         {
             this.docDocMainCompany = docDocMainCompany;
             this.databaseName = databaseName;
+            this.untreatedDatabaseName = untreatedDatabaseName;
             this.projectName = projectName;
             this.keyAuthorization = keyAuthorization;
             this.userAuthentication = userAuthentication;

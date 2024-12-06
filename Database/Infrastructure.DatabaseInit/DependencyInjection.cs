@@ -2,8 +2,8 @@
 using Application.DatabaseInit.Services;
 using Domain.DatabaseInit.Interfaces.LinxCommerce;
 using Domain.DatabaseInit.Interfaces.LinxMicrovix;
-using Infrastructure.DatabaseInit.Repository.LinxMicrovix;
-using Infrastructure.DatabaseInit.Repositorys.LinxCommerce;
+using Infrastructure.DatabaseInit.Repositorys.NovaPasta.LinxCommerce;
+using Infrastructure.DatabaseInit.Repositorys.NovaPasta.LinxMicrovix;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Infrastructure.DatabaseInit

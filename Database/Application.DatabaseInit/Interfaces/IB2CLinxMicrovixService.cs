@@ -4,8 +4,8 @@ namespace Application.DatabaseInit.Interfaces
 {
     public interface IB2CLinxMicrovixService
     {
-        public Task<bool> InsertParametersIfNotExists(List<LinxMethods> listMethods);
-        public Task<bool> CreateTablesIfNotExists(List<LinxMethods> listMethods);
-        public Task<bool> CreateTablesMerges(List<LinxMethods> listMethods);
+        public Task<bool> InsertParametersIfNotExists(LinxMicrovixJobParameter linxMicrovixJobParameter, List<LinxMethods> listMethods);
+        public Task<bool> CreateTablesIfNotExists(LinxMicrovixJobParameter linxMicrovixJobParameter, List<LinxMethods> listMethods);
+        public Task<bool> CreateTablesMerges(LinxMicrovixJobParameter linxMicrovixJobParameter, List<LinxMethods> listMethods);
     }
 }

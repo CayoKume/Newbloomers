@@ -47,6 +47,12 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                                 .GetSection("LinxMicrovixCommerceDatabaseName")
                                 .Value,
 
+                untreatedDatabaseName: _configuration
+                                .GetSection("ConfigureServer")
+                                .GetSection("Databases")
+                                .GetSection("Untreated")
+                                .Value,
+
                 projectName: _configuration
                                 .GetSection("B2CLinxMicrovix")
                                 .GetSection("ProjectName")
@@ -59,7 +65,7 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
 
                 parametersTableName: _configuration
                                 .GetSection("B2CLinxMicrovix")
-                                .GetSection("ProjectParametersTableName")
+                                .GetSection("ParametersTableName")
                                 .Value,
 
                 keyAuthorization: _configuration

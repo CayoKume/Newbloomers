@@ -7,10 +7,6 @@ namespace Application.DatabaseInit.Services
 {
     public class B2CLinxMicrovixService : IB2CLinxMicrovixService
     {
-        private readonly LinxMicrovixJobParameter _linxMicrovixJobParameter;
-        private readonly List<LinxMethods>? _methods;
-        private readonly IConfiguration _configuration;
-        
         private readonly IB2CConsultaClassificacaoRepository _b2cConsultaClassificacaoRepository;
         private readonly IB2CConsultaClientesContatosRepository _b2cConsultaClientesContatosRepository;
         private readonly IB2CConsultaClientesContatosParentescoRepository _b2cConsultaClientesContatosParentescoRepository;
@@ -76,7 +72,6 @@ namespace Application.DatabaseInit.Services
         private readonly IB2CConsultaVendedoresRepository _b2cConsultaVendedoresRepository;
 
         public B2CLinxMicrovixService(
-            IConfiguration configuration,
             IB2CConsultaClassificacaoRepository b2cConsultaClassificacaoRepository,
             IB2CConsultaClientesContatosRepository b2cConsultaClientesContatosRepository,
             IB2CConsultaClientesContatosParentescoRepository b2cConsultaClientesContatosParentescoRepository,
@@ -142,7 +137,6 @@ namespace Application.DatabaseInit.Services
             IB2CConsultaVendedoresRepository b2cConsultaVendedoresRepository
         )
         {
-            _configuration = configuration;
             _b2cConsultaClassificacaoRepository = b2cConsultaClassificacaoRepository;
             _b2cConsultaClientesContatosRepository = b2cConsultaClientesContatosRepository;
             _b2cConsultaClientesContatosParentescoRepository = b2cConsultaClientesContatosParentescoRepository;
@@ -206,53 +200,9 @@ namespace Application.DatabaseInit.Services
             _b2cConsultaTransportadoresRepository = b2cConsultaTransportadoresRepository;
             _b2cConsultaUnidadeRepository = b2cConsultaUnidadeRepository;
             _b2cConsultaVendedoresRepository = b2cConsultaVendedoresRepository;
-
-            _linxMicrovixJobParameter = new LinxMicrovixJobParameter(
-                databaseName: _configuration
-                                .GetSection("ConfigureServer")
-                                .GetSection("Databases")
-                                .GetSection("LinxMicrovixCommerce")
-                                .Value,
-
-                projectName: _configuration
-                                .GetSection("B2CLinxMicrovix")
-                                .GetSection("ProjectName")
-                                .Value,
-
-                userAuthentication: _configuration
-                                .GetSection("B2CLinxMicrovix")
-                                .GetSection("Authentication")
-                                .Value,
-
-                keyAuthorization: _configuration
-                                .GetSection("B2CLinxMicrovix")
-                                .GetSection("Key")
-                                .Value,
-
-                parametersInterval: _configuration
-                                .GetSection("B2CLinxMicrovix")
-                                .GetSection("ParametersDateInterval")
-                                .Value,
-
-                parametersTableName: _configuration
-                                .GetSection("B2CLinxMicrovix")
-                                .GetSection("ParametersTableName")
-                                .Value,
-
-                docDocMainCompany: _configuration
-                                .GetSection("B2CLinxMicrovix")
-                                .GetSection("DocMainCompany")
-                                .Value
-            );
-
         }
 
-        //public async Task<bool> CreateDatabasesIfNotExists()
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        public async Task<bool> CreateTablesIfNotExists(List<LinxMethods> listMethods)
+        public async Task<bool> CreateTablesIfNotExists(LinxMicrovixJobParameter linxMicrovixJobParameter, List<LinxMethods> listMethods)
         {
             if (
                 listMethods
@@ -260,8 +210,8 @@ namespace Application.DatabaseInit.Services
                     .First()
                     .IsActive
                 )
-                await _b2cConsultaClassificacaoRepository.CreateDataTableIfNotExists(
-                        _linxMicrovixJobParameter.SetParameters(
+                _b2cConsultaClassificacaoRepository.CreateDataTableIfNotExists(
+                        linxMicrovixJobParameter.SetParameters(
                             jobName: listMethods
                                     .Where(m => m.MethodName == "B2CConsultaClassificacao")
                                     .First()
@@ -279,8 +229,8 @@ namespace Application.DatabaseInit.Services
                     .First()
                     .IsActive
                 )
-                await _b2cConsultaClientesContatosParentescoRepository.CreateDataTableIfNotExists(
-                        _linxMicrovixJobParameter.SetParameters(
+                _b2cConsultaClientesContatosParentescoRepository.CreateDataTableIfNotExists(
+                        linxMicrovixJobParameter.SetParameters(
                             jobName: listMethods
                                     .Where(m => m.MethodName == "B2CConsultaClientesContatos")
                                     .First()
@@ -298,8 +248,8 @@ namespace Application.DatabaseInit.Services
                     .First()
                     .IsActive
                 )
-                await _b2cConsultaClientesRepository.CreateDataTableIfNotExists(
-                        _linxMicrovixJobParameter.SetParameters(
+                _b2cConsultaClientesRepository.CreateDataTableIfNotExists(
+                        linxMicrovixJobParameter.SetParameters(
                             jobName: listMethods
                                     .Where(m => m.MethodName == "B2CConsultaClientes")
                                     .First()
@@ -314,12 +264,31 @@ namespace Application.DatabaseInit.Services
             return true;
         }
 
-        public async Task<bool> CreateTablesMerges(List<LinxMethods> listMethods)
+        public async Task<bool> CreateTablesMerges(LinxMicrovixJobParameter linxMicrovixJobParameter, List<LinxMethods> listMethods)
         {
-            throw new NotImplementedException();
+            if (
+                listMethods
+                    .Where(m => m.MethodName == "B2CConsultaClassificacao")
+                    .First()
+                    .IsActive
+                )
+                await _b2cConsultaClassificacaoRepository.CreateTableMerge(
+                        linxMicrovixJobParameter.SetParameters(
+                            jobName: listMethods
+                                    .Where(m => m.MethodName == "B2CConsultaClassificacao")
+                                    .First()
+                                    .MethodName,
+                            tableName: listMethods
+                                    .Where(m => m.MethodName == "B2CConsultaClassificacao")
+                                    .First()
+                                    .MethodName
+                        )
+                    );
+
+            return true;
         }
 
-        public async Task<bool> InsertParametersIfNotExists(List<LinxMethods> listMethods)
+        public async Task<bool> InsertParametersIfNotExists(LinxMicrovixJobParameter linxMicrovixJobParameter, List<LinxMethods> listMethods)
         {
             throw new NotImplementedException();
         }
