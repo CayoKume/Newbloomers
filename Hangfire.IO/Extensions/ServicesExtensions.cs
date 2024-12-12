@@ -26,6 +26,7 @@ namespace Hangfire.IO.Extensions
             builder.Services.AddScopedFlashCourierServices();
             builder.Services.AddScopedTotalExpressServices();
 
+            builder.Services.AddScopedDatabaseIniService();
             builder.Services.AddScopedB2CLinxMicrovixDatabaseInitServices();
             builder.Services.AddScopedLinxMicrovixDatabaseInitServices();
 

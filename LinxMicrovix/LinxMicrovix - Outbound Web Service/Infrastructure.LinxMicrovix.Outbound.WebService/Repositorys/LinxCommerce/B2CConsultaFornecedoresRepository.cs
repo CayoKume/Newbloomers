@@ -1,5 +1,5 @@
 ﻿using Domain.IntegrationsCore.Entities.Enums;
-using Domain.IntegrationsCore.Entities.Parameters;
+using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
 using Domain.IntegrationsCore.Exceptions;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
@@ -14,7 +14,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
         public B2CConsultaFornecedoresRepository(ILinxMicrovixRepositoryBase<B2CConsultaFornecedores> linxMicrovixRepositoryBase) =>
             (_linxMicrovixRepositoryBase) = (linxMicrovixRepositoryBase);
 
-        public bool BulkInsertIntoTableRaw(LinxMicrovixJobParameter jobParameter, IList<B2CConsultaFornecedores> records)
+        public bool BulkInsertIntoTableRaw(LinxAPIParam jobParameter, IList<B2CConsultaFornecedores> records)
         {
             try
             {
@@ -40,7 +40,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
             }
         }
 
-        public async Task<bool> CreateTableMerge(LinxMicrovixJobParameter jobParameter)
+        public async Task<bool> CreateTableMerge(LinxAPIParam jobParameter)
         {
             string? sql = @"IF NOT EXISTS (SELECT * FROM SYS.OBJECTS WHERE TYPE = 'P' AND NAME = 'P_B2CCONSULTAFORNECEDORES_SYNC')
                            BEGIN
@@ -95,7 +95,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
             }
         }
 
-        public async Task<List<B2CConsultaFornecedores>> GetRegistersExists(LinxMicrovixJobParameter jobParameter, List<B2CConsultaFornecedores> registros)
+        public async Task<List<B2CConsultaFornecedores>> GetRegistersExists(LinxAPIParam jobParameter, List<B2CConsultaFornecedores> registros)
         {
             try
             {
@@ -128,7 +128,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
             }
         }
 
-        public async Task<bool> InsertParametersIfNotExists(LinxMicrovixJobParameter jobParameter)
+        public async Task<bool> InsertParametersIfNotExists(LinxAPIParam jobParameter)
         {
             try
             {
@@ -151,7 +151,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
             }
         }
 
-        public async Task<bool> InsertRecord(LinxMicrovixJobParameter jobParameter, B2CConsultaFornecedores? record)
+        public async Task<bool> InsertRecord(LinxAPIParam jobParameter, B2CConsultaFornecedores? record)
         {
             string? sql = $"INSERT INTO {jobParameter.tableName}_raw " +
                           "([lastupdateon], [cod_fornecedor], [nome], [nome_fantasia], [tipo_pessoa], [tipo_fornecedor], [endereco], [numero_rua], [bairro], [cep], [cidade], [uf], [documento], [fone], [email], [pais], [obs], [timestamp], [portal]) " +

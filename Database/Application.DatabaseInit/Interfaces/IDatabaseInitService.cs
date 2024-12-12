@@ -1,9 +1,9 @@
-﻿using Domain.IntegrationsCore.Entities.Parameters;
+﻿using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
 
 namespace Application.DatabaseInit.Interfaces
 {
     public interface IDatabaseInitService
     {
-        public Task<bool> CreateDatabasesIfNotExists(LinxMicrovixJobParameter linxMicrovixJobParameter);
+        public Task<bool> CreateDatabasesIfNotExists(List<string> databases);
     }
 }

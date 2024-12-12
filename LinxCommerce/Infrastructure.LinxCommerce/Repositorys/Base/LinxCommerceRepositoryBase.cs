@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Domain.IntegrationsCore.Entities.Parameters;
+using Domain.LinxCommerce.Entities.Parameters;
 using System.Data;
 using Dapper;
 using System.ComponentModel;
@@ -248,35 +248,36 @@ namespace Infrastructure.LinxCommerce.Repository.Base
             }
         }
 
-        public async Task<string?> GetParameters(LinxMicrovixJobParameter jobParameter)
-        {
-            string? sql = $"SELECT {jobParameter.parametersInterval} " +
-                         $"FROM [{jobParameter.parametersTableName}] (NOLOCK) " +
-                          "WHERE " +
-                         $"METHOD = '{jobParameter.jobName}'";
+        //public async Task<string?> GetParameters(LinxCommerceJobParameter jobParameter)
+        //{
+        //    string? sql = $"SELECT {jobParameter.parametersInterval} " +
+        //                 $"FROM [{jobParameter.parametersTableName}] (NOLOCK) " +
+        //                  "WHERE " +
+        //                 $"METHOD = '{jobParameter.jobName}'";
 
-            try
-            {
-                using (var conn = _sqlServerConnection.GetDbConnection(jobParameter.databaseName))
-                {
-                    return await conn.QueryFirstOrDefaultAsync<string?>(sql: sql, commandTimeout: 360);
-                }
-            }
-            catch (Exception ex)
-            {
-                throw;
-                //throw new ObjectsNotFoundExcpetion()
-                //{
-                //    project = $"{jobParameter.projectName} - IntegrationsCore",
-                //    job = jobParameter.jobName,
-                //    method = $"GetParameters",
-                //    message = $"Error when trying to get parameters from database",
-                //    schema = $"[{jobParameter.parametersTableName}]",
-                //    command = sql,
-                //    exception = ex.Message
-                //};
-            }
-        }
+        //    try
+        //    {
+        //        throw new NotImplementedException();
+        //        using (var conn = _sqlServerConnection.GetDbConnection(jobParameter.databaseName))
+        //        {
+        //            return await conn.QueryFirstOrDefaultAsync<string?>(sql: sql, commandTimeout: 360);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw;
+        //        throw new ObjectsNotFoundExcpetion()
+        //        {
+        //            project = $"{jobParameter.projectName} - IntegrationsCore",
+        //            job = jobParameter.jobName,
+        //            method = $"GetParameters",
+        //            message = $"Error when trying to get parameters from database",
+        //            schema = $"[{jobParameter.parametersTableName}]",
+        //            command = sql,
+        //            exception = ex.Message
+        //        };
+        //    }
+        //}
 
         public async Task<string?> GetParameters(LinxCommerceJobParameter jobParameter)
         {

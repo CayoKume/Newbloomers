@@ -2,7 +2,6 @@
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Api;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxCommerce;
-using Domain.IntegrationsCore.Entities.Parameters;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxCommerce;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
 using Application.IntegrationsCore.Interfaces;
@@ -11,6 +10,7 @@ using Application.LinxMicrovix.Outbound.WebService.Interfaces.Cache.LinxCommerce
 using System.ComponentModel.DataAnnotations;
 using Domain.IntegrationsCore.Entities.Enums;
 using Domain.IntegrationsCore.Exceptions;
+using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
 
 namespace Application.LinxMicrovix.Outbound.WebService.Services
 {
@@ -38,7 +38,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
             _b2cConsultaLegendasCadastrosAuxiliaresRepository = b2cConsultaLegendasCadastrosAuxiliaresRepository;
         }
 
-        public List<B2CConsultaLegendasCadastrosAuxiliares?> DeserializeXMLToObject(LinxMicrovixJobParameter jobParameter, List<Dictionary<string?, string?>> records)
+        public List<B2CConsultaLegendasCadastrosAuxiliares?> DeserializeXMLToObject(LinxAPIParam jobParameter, List<Dictionary<string?, string?>> records)
         {
             var list = new List<B2CConsultaLegendasCadastrosAuxiliares>();
 
@@ -97,7 +97,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
             return list;
         }
 
-        public async Task<bool> GetRecords(LinxMicrovixJobParameter jobParameter)
+        public async Task<bool> GetRecords(LinxAPIParam jobParameter)
         {
             IList<B2CConsultaLegendasCadastrosAuxiliares> _listSomenteNovos = new List<B2CConsultaLegendasCadastrosAuxiliares>();
 

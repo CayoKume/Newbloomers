@@ -2,7 +2,7 @@
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Api;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxCommerce;
-using Domain.IntegrationsCore.Entities.Parameters;
+using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxCommerce;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
 using Application.IntegrationsCore.Interfaces;
@@ -38,7 +38,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
             _b2cConsultaStatusRepository = b2cConsultaStatusRepository;
         }
 
-        public List<B2CConsultaStatus?> DeserializeXMLToObject(LinxMicrovixJobParameter jobParameter, List<Dictionary<string?, string?>> records)
+        public List<B2CConsultaStatus?> DeserializeXMLToObject(LinxAPIParam jobParameter, List<Dictionary<string?, string?>> records)
         {
             var list = new List<B2CConsultaStatus>();
 
@@ -91,7 +91,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
             return list;
         }
 
-        public async Task<bool> GetRecords(LinxMicrovixJobParameter jobParameter)
+        public async Task<bool> GetRecords(LinxAPIParam jobParameter)
         {
             IList<B2CConsultaStatus> _listSomenteNovos = new List<B2CConsultaStatus>();
 

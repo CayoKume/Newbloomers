@@ -1,12 +1,12 @@
 ﻿using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxCommerce;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxMicrovix;
-using Domain.IntegrationsCore.Entities.Parameters;
+using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
 
 namespace Hangfire.IO.Extensions.RecurringJobs
 {
     public static class LinxMicrovixERPRecurringJobsExtensions
     {
-        private static string? _docDocMainCompany;
+        private static string? _docMainCompany;
         private static string? _databaseName;
         private static string? _projectName;
         private static string? _parametersInterval;
@@ -18,7 +18,7 @@ namespace Hangfire.IO.Extensions.RecurringJobs
 
         public static void AddRecurringJobs()
         {
-            _docDocMainCompany = ConfigurationHelperExtensions.config
+            _docMainCompany = ConfigurationHelperExtensions.config
                 .GetSection("LinxMicrovix")
                 .GetSection("DocMainCompany")
                 .Value;
@@ -82,9 +82,9 @@ namespace Hangfire.IO.Extensions.RecurringJobs
         private static void LinxMicrovixRecurringJobs()
         {
             //RecurringJob.AddOrUpdate<ILinxProdutosCodBarService>("LinxProdutosCodBar", service => service.GetRecords(
-                //new LinxMicrovixJobParameter
+                //new LinxAPIParam
                 //{
-                //    docDocMainCompany = _docDocMainCompany,
+                //    docMainCompany = _docMainCompany,
                 //    databaseName = _databaseName,
                 //    projectName = _projectName,
                 //    keyAuthorization = _key,

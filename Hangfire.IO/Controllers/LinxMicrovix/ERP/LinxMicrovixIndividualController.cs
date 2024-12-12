@@ -1,5 +1,5 @@
 ﻿using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxMicrovix;
-using Domain.IntegrationsCore.Entities.Parameters;
+using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
@@ -7,7 +7,7 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
 {
     public class LinxMicrovixIndividualController : Controller
     {
-        private readonly LinxMicrovixJobParameter _linxMicrovixJobParameter;
+        private readonly LinxAPIParam _linxMicrovixJobParameter;
         private readonly List<LinxMethods>? _methods;
         private readonly IConfiguration _configuration;
 
@@ -24,8 +24,8 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
             _linxVendedoresService = linxVendedoresService;
             _linxProdutosCodBarService = linxProdutosCodBarService;
 
-            _linxMicrovixJobParameter = new LinxMicrovixJobParameter(
-                docDocMainCompany: _configuration
+            _linxMicrovixJobParameter = new LinxAPIParam(
+                docMainCompany: _configuration
                                 .GetSection("LinxMicrovix")
                                 .GetSection("DocMainCompany")
                                 .Value,

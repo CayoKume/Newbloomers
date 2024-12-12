@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.Entities.Parameters;
+﻿using Domain.LinxCommerce.Entities.Parameters;
 using System.Data;
 
 namespace Domain.LinxCommerce.Interfaces.Repositorys.Base

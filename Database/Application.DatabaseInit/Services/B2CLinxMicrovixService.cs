@@ -1,12 +1,14 @@
 ﻿using Application.DatabaseInit.Interfaces;
-using Domain.DatabaseInit.Interfaces.LinxCommerce;
-using Domain.IntegrationsCore.Entities.Parameters;
-using Microsoft.Extensions.Configuration;
+using Domain.DatabaseInit.Interfaces.LinxMicrovix.LinxCommerce;
+using Domain.DatabaseInit.Interfaces.LinxMicrovix.Parameters;
+using Domain.DatabaseInit.Parameters;
+using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
 
 namespace Application.DatabaseInit.Services
 {
     public class B2CLinxMicrovixService : IB2CLinxMicrovixService
     {
+        private readonly ILinxAPIParamRepository _linxAPIParamRepository;
         private readonly IB2CConsultaClassificacaoRepository _b2cConsultaClassificacaoRepository;
         private readonly IB2CConsultaClientesContatosRepository _b2cConsultaClientesContatosRepository;
         private readonly IB2CConsultaClientesContatosParentescoRepository _b2cConsultaClientesContatosParentescoRepository;
@@ -72,6 +74,7 @@ namespace Application.DatabaseInit.Services
         private readonly IB2CConsultaVendedoresRepository _b2cConsultaVendedoresRepository;
 
         public B2CLinxMicrovixService(
+            ILinxAPIParamRepository linxAPIParamRepository,
             IB2CConsultaClassificacaoRepository b2cConsultaClassificacaoRepository,
             IB2CConsultaClientesContatosRepository b2cConsultaClientesContatosRepository,
             IB2CConsultaClientesContatosParentescoRepository b2cConsultaClientesContatosParentescoRepository,
@@ -137,6 +140,7 @@ namespace Application.DatabaseInit.Services
             IB2CConsultaVendedoresRepository b2cConsultaVendedoresRepository
         )
         {
+            _linxAPIParamRepository = linxAPIParamRepository;
             _b2cConsultaClassificacaoRepository = b2cConsultaClassificacaoRepository;
             _b2cConsultaClientesContatosRepository = b2cConsultaClientesContatosRepository;
             _b2cConsultaClientesContatosParentescoRepository = b2cConsultaClientesContatosParentescoRepository;
@@ -202,8 +206,13 @@ namespace Application.DatabaseInit.Services
             _b2cConsultaVendedoresRepository = b2cConsultaVendedoresRepository;
         }
 
-        public async Task<bool> CreateTablesIfNotExists(LinxMicrovixJobParameter linxMicrovixJobParameter, List<LinxMethods> listMethods)
+        public async Task<bool> CreateTablesIfNotExists(Parameter parameters, List<LinxMethods> listMethods)
         {
+            _linxAPIParamRepository.CreateTableIfNotExists(
+                    databaseName: parameters.databaseName,
+                    "LinxAPIParam"
+                );
+
             if (
                 listMethods
                     .Where(m => m.MethodName == "B2CConsultaClassificacao")
@@ -211,16 +220,12 @@ namespace Application.DatabaseInit.Services
                     .IsActive
                 )
                 _b2cConsultaClassificacaoRepository.CreateDataTableIfNotExists(
-                        linxMicrovixJobParameter.SetParameters(
-                            jobName: listMethods
-                                    .Where(m => m.MethodName == "B2CConsultaClassificacao")
-                                    .First()
-                                    .MethodName,
-                            tableName: listMethods
-                                    .Where(m => m.MethodName == "B2CConsultaClassificacao")
-                                    .First()
-                                    .MethodName
-                        )
+                        databaseName: parameters.databaseName,
+                        jobName: listMethods
+                                .Where(m => m.MethodName == "B2CConsultaClassificacao")
+                                .First()
+                                .MethodName,
+                        untreatedDatabaseName: parameters.untreatedDatabaseName
                     );
 
             if (
@@ -230,16 +235,12 @@ namespace Application.DatabaseInit.Services
                     .IsActive
                 )
                 _b2cConsultaClientesContatosParentescoRepository.CreateDataTableIfNotExists(
-                        linxMicrovixJobParameter.SetParameters(
-                            jobName: listMethods
-                                    .Where(m => m.MethodName == "B2CConsultaClientesContatos")
-                                    .First()
-                                    .MethodName,
-                            tableName: listMethods
-                                    .Where(m => m.MethodName == "B2CConsultaClientesContatos")
-                                    .First()
-                                    .MethodName
-                        )
+                        databaseName: parameters.databaseName,
+                        jobName: listMethods
+                                .Where(m => m.MethodName == "B2CConsultaClientesContatos")
+                                .First()
+                                .MethodName,
+                        untreatedDatabaseName: parameters.untreatedDatabaseName
                     );
 
             if (
@@ -249,22 +250,18 @@ namespace Application.DatabaseInit.Services
                     .IsActive
                 )
                 _b2cConsultaClientesRepository.CreateDataTableIfNotExists(
-                        linxMicrovixJobParameter.SetParameters(
-                            jobName: listMethods
-                                    .Where(m => m.MethodName == "B2CConsultaClientes")
-                                    .First()
-                                    .MethodName,
-                            tableName: listMethods
-                                    .Where(m => m.MethodName == "B2CConsultaClientes")
-                                    .First()
-                                    .MethodName
-                        )
+                        databaseName: parameters.databaseName,
+                        jobName: listMethods
+                                .Where(m => m.MethodName == "B2CConsultaClientes")
+                                .First()
+                                .MethodName,
+                        untreatedDatabaseName: parameters.untreatedDatabaseName
                     );
 
             return true;
         }
 
-        public async Task<bool> CreateTablesMerges(LinxMicrovixJobParameter linxMicrovixJobParameter, List<LinxMethods> listMethods)
+        public async Task<bool> CreateTablesMerges(Parameter parameters, List<LinxMethods> listMethods)
         {
             if (
                 listMethods
@@ -273,24 +270,33 @@ namespace Application.DatabaseInit.Services
                     .IsActive
                 )
                 await _b2cConsultaClassificacaoRepository.CreateTableMerge(
-                        linxMicrovixJobParameter.SetParameters(
-                            jobName: listMethods
-                                    .Where(m => m.MethodName == "B2CConsultaClassificacao")
-                                    .First()
-                                    .MethodName,
-                            tableName: listMethods
-                                    .Where(m => m.MethodName == "B2CConsultaClassificacao")
-                                    .First()
-                                    .MethodName
-                        )
+                        databaseName: parameters.databaseName,
+                        listMethods
+                                .Where(m => m.MethodName == "B2CConsultaClassificacao")
+                                .First()
+                                .MethodName
                     );
 
             return true;
         }
 
-        public async Task<bool> InsertParametersIfNotExists(LinxMicrovixJobParameter linxMicrovixJobParameter, List<LinxMethods> listMethods)
+        public async Task<bool> InsertParametersIfNotExists(Parameter parameters, List<LinxMethods> listMethods)
         {
-            throw new NotImplementedException();
+            if (
+                listMethods
+                    .Where(m => m.MethodName == "B2CConsultaClassificacao")
+                    .First()
+                    .IsActive
+                )
+                await _b2cConsultaClassificacaoRepository.InsertParametersIfNotExists(
+                        databaseName: parameters.databaseName,
+                        jobName: listMethods
+                                .Where(m => m.MethodName == "B2CConsultaClassificacao")
+                                .First()
+                                .MethodName,
+                        parametersTableName: parameters.parametersTableName
+                    );
+            return true;
         }
     }
 }

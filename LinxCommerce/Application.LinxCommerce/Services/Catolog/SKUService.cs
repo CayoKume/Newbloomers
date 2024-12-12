@@ -1,5 +1,5 @@
 ﻿using Application.LinxCommerce.Interfaces.Catolog;
-using Domain.IntegrationsCore.Entities.Parameters;
+using Domain.LinxCommerce.Entities.Parameters;
 using Domain.LinxCommerce.Entities.Catolog.Sku;
 using Domain.LinxCommerce.Interfaces.Api;
 using Domain.LinxCommerce.Interfaces.Repositorys.Base;

@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.Entities.Parameters;
+﻿using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
 using System;
 using System.Collections.Generic;
@@ -10,8 +10,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxMic
 {
     public interface ILinxClientesFornecCreditoAvulsoRepository
     {
-        public Task<bool> InsertRecord(LinxMicrovixJobParameter jobParameter, LinxClientesFornecCreditoAvulso? record);
-        public bool BulkInsertIntoTableRaw(LinxMicrovixJobParameter jobParameter, IList<LinxClientesFornecCreditoAvulso> records);
-        public Task<List<LinxClientesFornecCreditoAvulso>> GetRegistersExists(LinxMicrovixJobParameter jobParameter, List<LinxClientesFornecCreditoAvulso> registros);
+        public Task<bool> InsertRecord(LinxAPIParam jobParameter, LinxClientesFornecCreditoAvulso? record);
+        public bool BulkInsertIntoTableRaw(LinxAPIParam jobParameter, IList<LinxClientesFornecCreditoAvulso> records);
+        public Task<List<LinxClientesFornecCreditoAvulso>> GetRegistersExists(LinxAPIParam jobParameter, List<LinxClientesFornecCreditoAvulso> registros);
     }
 }

@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.Entities.Parameters;
+﻿using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxMicrovix;
@@ -12,7 +12,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.LinxMicrov
         public LinxVendedoresRepository(ILinxMicrovixRepositoryBase<LinxVendedores> linxMicrovixRepositoryBase) =>
             (_linxMicrovixRepositoryBase) = (linxMicrovixRepositoryBase);
 
-        public bool BulkInsertIntoTableRaw(LinxMicrovixJobParameter jobParameter, List<LinxVendedores> records)
+        public bool BulkInsertIntoTableRaw(LinxAPIParam jobParameter, List<LinxVendedores> records)
         {
             try
             {
@@ -40,7 +40,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.LinxMicrov
             }
         }
 
-        public async Task<bool> CreateTableMerge(LinxMicrovixJobParameter jobParameter)
+        public async Task<bool> CreateTableMerge(LinxAPIParam jobParameter)
         {
             string? sql = $"MERGE [{jobParameter.tableName}_trusted] AS TARGET " +
                          $"USING [{jobParameter.tableName}_raw] AS SOURCE " +
@@ -91,7 +91,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.LinxMicrov
             }
         }
 
-        public async Task<bool> InsertParametersIfNotExists(LinxMicrovixJobParameter jobParameter)
+        public async Task<bool> InsertParametersIfNotExists(LinxAPIParam jobParameter)
         {
             try
             {
@@ -116,7 +116,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.LinxMicrov
             }
         }
 
-        public async Task<bool> InsertRecord(LinxMicrovixJobParameter jobParameter, LinxVendedores? record)
+        public async Task<bool> InsertRecord(LinxAPIParam jobParameter, LinxVendedores? record)
         {
             string? sql = $"INSERT INTO {jobParameter.tableName}_raw " +
                           "([lastupdateon], [portal], [cod_vendedor], [nome_vendedor], [tipo_vendedor], [end_vend_rua], [end_vend_numero], [end_vend_complemento], [end_vend_bairro], [end_vend_cep], [end_vend_cidade], [end_vend_uf], [fone_vendedor], [mail_vendedor], [dt_upd], [cpf_vendedor], [ativo], [data_admissao], [data_saida], [timestamp], [matricula], [id_tipo_venda], [descricao_tipo_venda], [cargo]) " +

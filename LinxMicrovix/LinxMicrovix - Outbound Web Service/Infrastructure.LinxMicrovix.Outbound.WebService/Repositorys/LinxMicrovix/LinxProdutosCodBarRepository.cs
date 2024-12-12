@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.Entities.Parameters;
+﻿using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxMicrovix;
@@ -12,7 +12,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.LinxMicrov
         public LinxProdutosCodBarRepository(ILinxMicrovixRepositoryBase<LinxProdutosCodBar> linxMicrovixRepositoryBase) =>
             (_linxMicrovixRepositoryBase) = (linxMicrovixRepositoryBase);
 
-        public bool BulkInsertIntoTableRaw(LinxMicrovixJobParameter jobParameter, List<LinxProdutosCodBar> records)
+        public bool BulkInsertIntoTableRaw(LinxAPIParam jobParameter, List<LinxProdutosCodBar> records)
         {
             try
             {
@@ -37,7 +37,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.LinxMicrov
             }
         }
 
-        public async Task<bool> CreateTableMerge(LinxMicrovixJobParameter jobParameter)
+        public async Task<bool> CreateTableMerge(LinxAPIParam jobParameter)
         {
             string? sql = @"IF NOT EXISTS (SELECT * FROM SYS.OBJECTS WHERE TYPE = 'P' AND NAME = 'P_LINXPRODUTOSCODBAR_SYNC')
                            BEGIN
@@ -78,7 +78,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.LinxMicrov
             }
         }
 
-        public async Task<bool> InsertParametersIfNotExists(LinxMicrovixJobParameter jobParameter)
+        public async Task<bool> InsertParametersIfNotExists(LinxAPIParam jobParameter)
         {
             try
             {
@@ -101,7 +101,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.LinxMicrov
             }
         }
 
-        public async Task<bool> InsertRecord(LinxMicrovixJobParameter jobParameter, LinxProdutosCodBar? record)
+        public async Task<bool> InsertRecord(LinxAPIParam jobParameter, LinxProdutosCodBar? record)
         {
             string? sql = $"INSERT INTO {jobParameter.tableName}_raw " +
                           "([lastupdateon], [portal], [cod_produto], [cod_barra], [timestamp]) " +

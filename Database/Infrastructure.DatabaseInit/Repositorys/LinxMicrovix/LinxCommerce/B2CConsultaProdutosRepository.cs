@@ -1,6 +1,6 @@
 ﻿using Dapper;
-using Domain.DatabaseInit.Interfaces.LinxCommerce;
-using Domain.IntegrationsCore.Entities.Parameters;
+using Domain.DatabaseInit.Interfaces.LinxMicrovix.LinxCommerce;
+
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce;
 using Infrastructure.IntegrationsCore.Connections.SQLServer;
 using Z.Dapper.Plus;
@@ -14,26 +14,26 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
         public B2CConsultaProdutosRepository(ISQLServerConnection? conn) =>
             _conn = conn;
 
-        public bool CreateDataTableIfNotExists(LinxMicrovixJobParameter jobParameter)
+        public bool CreateDataTableIfNotExists(string databaseName, string jobName, string untreatedDatabaseName)
         {
-            string? sql = @$"SELECT DISTINCT * FROM [INFORMATION_SCHEMA].[TABLES] (NOLOCK) WHERE TABLE_NAME = '{jobParameter.jobName}'";
+            string? sql = @$"SELECT DISTINCT * FROM [INFORMATION_SCHEMA].[TABLES] (NOLOCK) WHERE TABLE_NAME = '{jobName}'";
 
             try
             {
-                using (var conn = _conn.GetIDbConnection(jobParameter.databaseName))
+                using (var conn = _conn.GetIDbConnection(databaseName))
                 {
                     var result = conn.Query(sql: sql);
 
                     if (result.Count() == 0)
-                        conn.CreateTable<B2CConsultaProdutos>(tableName: $"{jobParameter.jobName}");
+                        conn.CreateTable<B2CConsultaProdutos>(tableName: $"{jobName}");
                 }
 
-                using (var conn = _conn.GetIDbConnection(jobParameter.untreatedDatabaseName))
+                using (var conn = _conn.GetIDbConnection(untreatedDatabaseName))
                 {
                     var result = conn.Query(sql: sql);
 
                     if (result.Count() == 0)
-                        conn.CreateTable<B2CConsultaProdutos>(tableName: $"{jobParameter.jobName}");
+                        conn.CreateTable<B2CConsultaProdutos>(tableName: $"{jobName}");
                 }
 
                 return true;
@@ -44,7 +44,7 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
             }
         }
 
-        public async Task<bool> CreateTableMerge(LinxMicrovixJobParameter jobParameter)
+        public async Task<bool> CreateTableMerge(string databaseName, string tableName)
         {
             string? sql = @"IF NOT EXISTS (SELECT * FROM SYS.OBJECTS WHERE TYPE = 'P' AND NAME = 'P_B2CCONSULTAPRODUTOS_SYNC')
                            BEGIN
@@ -58,7 +58,7 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
 			                           TARGET.[CODIGOPRODUTO] = SOURCE.[CODIGOPRODUTO]
 		                           )
 
-                                   WHEN MATCHED AND TARGET.[TIMESTAMP] != SOURCE.[TIMESTAMP] THEN 
+                                   WHEN MATCHED AND TARGET.[parameters_timestamp] != SOURCE.[parameters_timestamp] THEN 
 			                           UPDATE SET
 			                           TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON],
 			                           TARGET.[CODIGOPRODUTO] = SOURCE.[CODIGOPRODUTO],
@@ -84,7 +84,7 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
 			                           TARGET.[ALTURA_PARA_FRETE] = SOURCE.[ALTURA_PARA_FRETE],
 			                           TARGET.[LARGURA_PARA_FRETE] = SOURCE.[LARGURA_PARA_FRETE],
 			                           TARGET.[COMPRIMENTO_PARA_FRETE] = SOURCE.[COMPRIMENTO_PARA_FRETE],
-			                           TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP],
+			                           TARGET.[parameters_timestamp] = SOURCE.[parameters_timestamp],
 			                           TARGET.[PESO_BRUTO] = SOURCE.[PESO_BRUTO],
 			                           TARGET.[PORTAL] = SOURCE.[PORTAL],
 			                           TARGET.[DESCRICAO_COMPLETA_COMMERCE] = SOURCE.[DESCRICAO_COMPLETA_COMMERCE],
@@ -95,11 +95,11 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
 
                                    WHEN NOT MATCHED BY TARGET AND SOURCE.[CODIGOPRODUTO] NOT IN (SELECT [CODIGOPRODUTO] FROM [B2CCONSULTAPRODUTOS_TRUSTED]) THEN
 			                           INSERT
-			                           ([LASTUPDATEON], [CODIGOPRODUTO], [REFERENCIA], [CODAUXILIAR1], [DESCRICAO_BASICA], [NOME_PRODUTO], [PESO_LIQUIDO], [CODIGO_SETOR], [CODIGO_LINHA], [CODIGO_MARCA], [CODIGO_COLECAO], [CODIGO_ESPESSURA], [CODIGO_GRADE1], [CODIGO_GRADE2], [UNIDADE], [ATIVO], [CODIGO_CLASSIFICACAO], [DT_CADASTRO], 
-			                           [OBSERVACAO], [COD_FORNECEDOR], [DT_UPDATE], [ALTURA_PARA_FRETE], [LARGURA_PARA_FRETE], [COMPRIMENTO_PARA_FRETE], [TIMESTAMP], [PESO_BRUTO], [PORTAL], [DESCRICAO_COMPLETA_COMMERCE], [CANAIS_ECOMMERCE_PUBLICADOS], [INICIO_PUBLICACAO_PRODUTO], [FIM_PUBLICACAO_PRODUTO], [CODIGO_INTEGRACAO_OMS])
+			                           ([LASTUPDATEON], [CODIGOPRODUTO], [REFERENCIA], [CODAUXILIAR1], [DESCRICAO_BASICA], [NOME_PRODUTO], [PESO_LIQUIDO], [CODIGO_SETOR], [CODIGO_LINHA], [CODIGO_MARCA], [CODIGO_COLECAO], [CODIGO_ESPESSURA], [CODIGO_GRADE1], [CODIGO_GRADE2], [UNIDADE], [CODIGO_CLASSIFICACAO], [DT_CADASTRO], 
+			                           [OBSERVACAO], [COD_FORNECEDOR], [DT_UPDATE], [ALTURA_PARA_FRETE], [LARGURA_PARA_FRETE], [COMPRIMENTO_PARA_FRETE], [parameters_timestamp], [PESO_BRUTO], [PORTAL], [DESCRICAO_COMPLETA_COMMERCE], [CANAIS_ECOMMERCE_PUBLICADOS], [INICIO_PUBLICACAO_PRODUTO], [FIM_PUBLICACAO_PRODUTO], [CODIGO_INTEGRACAO_OMS])
 			                           VALUES
 			                           (SOURCE.[LASTUPDATEON], SOURCE.[CODIGOPRODUTO], SOURCE.[REFERENCIA], SOURCE.[CODAUXILIAR1], SOURCE.[DESCRICAO_BASICA], SOURCE.[NOME_PRODUTO], SOURCE.[PESO_LIQUIDO], SOURCE.[CODIGO_SETOR], SOURCE.[CODIGO_LINHA], SOURCE.[CODIGO_MARCA], SOURCE.[CODIGO_COLECAO],
-			                           SOURCE.[CODIGO_ESPESSURA], SOURCE.[CODIGO_GRADE1], SOURCE.[CODIGO_GRADE2], SOURCE.[UNIDADE], SOURCE.[ATIVO], SOURCE.[CODIGO_CLASSIFICACAO], SOURCE.[DT_CADASTRO], SOURCE.[OBSERVACAO], SOURCE.[COD_FORNECEDOR], SOURCE.[DT_UPDATE], SOURCE.[ALTURA_PARA_FRETE], SOURCE.[LARGURA_PARA_FRETE], SOURCE.[COMPRIMENTO_PARA_FRETE], SOURCE.[TIMESTAMP], SOURCE.[PESO_BRUTO], SOURCE.[PORTAL], SOURCE.[DESCRICAO_COMPLETA_COMMERCE],
+			                           SOURCE.[CODIGO_ESPESSURA], SOURCE.[CODIGO_GRADE1], SOURCE.[CODIGO_GRADE2], SOURCE.[UNIDADE], SOURCE.[ATIVO], SOURCE.[CODIGO_CLASSIFICACAO], SOURCE.[DT_CADASTRO], SOURCE.[OBSERVACAO], SOURCE.[COD_FORNECEDOR], SOURCE.[DT_UPDATE], SOURCE.[ALTURA_PARA_FRETE], SOURCE.[LARGURA_PARA_FRETE], SOURCE.[COMPRIMENTO_PARA_FRETE], SOURCE.[parameters_timestamp], SOURCE.[PESO_BRUTO], SOURCE.[PORTAL], SOURCE.[DESCRICAO_COMPLETA_COMMERCE],
 			                           SOURCE.[CANAIS_ECOMMERCE_PUBLICADOS], SOURCE.[INICIO_PUBLICACAO_PRODUTO], SOURCE.[FIM_PUBLICACAO_PRODUTO], SOURCE.[CODIGO_INTEGRACAO_OMS]);
 	                           END'
                            )
@@ -107,7 +107,7 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
 
             try
             {
-                using (var conn = _conn.GetIDbConnection(jobParameter.databaseName))
+                using (var conn = _conn.GetIDbConnection(databaseName))
                 {
                     var result = await conn.ExecuteAsync(sql: sql, commandTimeout: 360);
 
@@ -123,28 +123,27 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
             }
         }
 
-        public async Task<bool> InsertParametersIfNotExists(LinxMicrovixJobParameter jobParameter)
+        public async Task<bool> InsertParametersIfNotExists(string jobName, string parametersTableName, string databaseName)
         {
             try
             {
                 var parameter = new
                 {
-                    method = jobParameter.jobName,
+                    method = jobName,
                     timestamp = @"<Parameter id=""timestamp"">[0]</Parameter>",
                     dateinterval = @"<Parameter id=""timestamp"">[0]</Parameter>
                                                 <Parameter id=""dt_cadastro_inicial"">[dt_cadastro_inicial]</Parameter>
                                                 <Parameter id=""dt_cadastro_fim"">[dt_cadastro_fim]</Parameter>",
                     individual = @"<Parameter id=""timestamp"">[0]</Parameter>
-                                              <Parameter id=""codigoproduto"">[codigoproduto]</Parameter>",
-                    ativo = 1
+                                              <Parameter id=""codigoproduto"">[codigoproduto]</Parameter>"
                 };
 
-                string? sql = $"IF NOT EXISTS (SELECT * FROM [{jobParameter.parametersTableName}] WHERE [method] = '{jobParameter.jobName}') " +
-                              $"INSERT INTO [{jobParameter.parametersTableName}] ([method], [timestamp], [dateinterval], [individual], [ativo]) " +
-                               "VALUES (@method, @timestamp, @dateinterval, @individual, @ativo)";
+                string? sql = $"IF NOT EXISTS (SELECT * FROM [{parametersTableName}] WHERE [method] = '{jobName}') " +
+                              $"INSERT INTO [{parametersTableName}] ([method], [parameters_timestamp], [parameters_dateinterval], [parameters_individual]) " +
+                               "VALUES (@method, @timestamp, @dateinterval, @individual)";
 
 
-                using (var conn = _conn.GetIDbConnection(jobParameter.databaseName))
+                using (var conn = _conn.GetIDbConnection(databaseName))
                 {
                     var result = await conn.ExecuteAsync(sql: sql, param: parameter, commandTimeout: 360);
 

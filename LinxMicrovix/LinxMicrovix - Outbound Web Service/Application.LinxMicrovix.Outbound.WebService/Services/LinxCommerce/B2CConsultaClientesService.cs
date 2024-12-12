@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.Entities.Parameters;
+﻿using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxCommerce;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Api;
@@ -46,7 +46,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
             _linxMicrovixRepositoryBase = linxMicrovixRepositoryBase;
         }
 
-        public List<B2CConsultaClientes?> DeserializeXMLToObject(LinxMicrovixJobParameter jobParameter, List<Dictionary<string?, string?>> records)
+        public List<B2CConsultaClientes?> DeserializeXMLToObject(LinxAPIParam jobParameter, List<Dictionary<string?, string?>> records)
         {
             var list = new List<B2CConsultaClientes>();
 
@@ -133,7 +133,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
             return list;
         }
 
-        public async Task<bool> GetRecord(LinxMicrovixJobParameter jobParameter, string? identificador, string? cnpj_emp)
+        public async Task<bool> GetRecord(LinxAPIParam jobParameter, string? identificador, string? cnpj_emp)
         {
             try
             {
@@ -167,7 +167,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
             }
         }
 
-        public async Task<bool> GetRecords(LinxMicrovixJobParameter jobParameter)
+        public async Task<bool> GetRecords(LinxAPIParam jobParameter)
         {
             IList<B2CConsultaClientes> _listSomenteNovos = new List<B2CConsultaClientes>();
 
@@ -183,7 +183,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                 var body = _linxMicrovixServiceBase.BuildBodyRequest(
                     parametersList: parameters.Replace("[0]", timestamp),
                     jobParameter: jobParameter,
-                    cnpj_emp: jobParameter.docDocMainCompany
+                    cnpj_emp: jobParameter.docMainCompany
                 );
 
                 string? response = await _apiCall.PostAsync(jobParameter: jobParameter, body: body);

@@ -1,4 +1,4 @@
-﻿namespace Domain.IntegrationsCore.Entities.Parameters
+﻿namespace Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters
 {
     public class LinxMethods
     {

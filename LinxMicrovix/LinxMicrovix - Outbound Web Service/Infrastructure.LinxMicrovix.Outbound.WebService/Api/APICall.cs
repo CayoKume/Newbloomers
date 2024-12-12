@@ -1,5 +1,5 @@
 ﻿using Domain.IntegrationsCore.Entities.Enums;
-using Domain.IntegrationsCore.Entities.Parameters;
+using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
 using Domain.IntegrationsCore.Exceptions;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Api;
 using System.Net;
@@ -10,7 +10,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Api
 {
     public class APICall : IAPICall
     {
-        public async Task<string?> PostAsync(LinxMicrovixJobParameter jobParameter, string? body)
+        public async Task<string?> PostAsync(LinxAPIParam jobParameter, string? body)
         {
             try
             {
@@ -47,7 +47,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Api
             }
         }
 
-        private HttpWebRequest CreateClient(LinxMicrovixJobParameter jobParameter, byte[] bytes)
+        private HttpWebRequest CreateClient(LinxAPIParam jobParameter, byte[] bytes)
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create($"https://webapi.microvix.com.br/1.0/api/integracao/{jobParameter.jobName}");
             request.ContentType = "text/xml; encoding='utf-8'";

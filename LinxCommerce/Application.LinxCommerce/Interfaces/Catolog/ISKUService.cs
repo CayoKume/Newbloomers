@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.Entities.Parameters;
+﻿using Domain.LinxCommerce.Entities.Parameters;
 
 namespace Application.LinxCommerce.Interfaces.Catolog
 {

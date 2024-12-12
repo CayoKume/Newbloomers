@@ -1,8 +1,8 @@
-﻿namespace Domain.IntegrationsCore.Entities.Parameters
+﻿namespace Domain.LinxCommerce.Entities.Parameters
 {
     public class LinxCommerceJobParameter
     {
-        public string? docDocMainCompany { get; set; }
+        public string? docMainCompany { get; set; }
         public string? databaseName { get; set; }
 
         public string? jobName { get; set; }

@@ -1,5 +1,5 @@
 ﻿using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxCommerce;
-using Domain.IntegrationsCore.Entities.Parameters;
+using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
@@ -9,7 +9,7 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
     [Route("MicrovixJobs/B2CLinxMicrovixIndividual")]
     public class B2CLinxMicrovixIndividualController : Controller
     {
-        private readonly LinxMicrovixJobParameter _linxMicrovixJobParameter;
+        private readonly LinxAPIParam _linxMicrovixJobParameter;
         private readonly List<LinxMethods>? _methods;
         private readonly IConfiguration _configuration;
 
@@ -36,8 +36,8 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
             _b2cConsultaClientesContatosParentescoService = b2cConsultaClientesContatosParentescoService;
             _b2cConsultaImagensService = b2cConsultaImagensService;
 
-            _linxMicrovixJobParameter = new LinxMicrovixJobParameter(
-                docDocMainCompany: _configuration
+            _linxMicrovixJobParameter = new LinxAPIParam(
+                docMainCompany: _configuration
                                 .GetSection("B2CLinxMicrovix")
                                 .GetSection("DocMainCompany")
                                 .Value,

@@ -1,5 +1,6 @@
 ﻿using Application.DatabaseInit.Interfaces;
-using Domain.IntegrationsCore.Entities.Parameters;
+using Domain.DatabaseInit.Parameters;
+using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hangfire.IO.Controllers.Database
@@ -8,7 +9,7 @@ namespace Hangfire.IO.Controllers.Database
     [Route("DatabaseInit/B2CLinxMicrovix")]
     public class B2CLinxMicrovixController : Controller
     {
-        private readonly LinxMicrovixJobParameter _linxMicrovixJobParameter;
+        private readonly Parameter _parameter;
         private readonly List<LinxMethods>? _methods;
         private readonly IConfiguration _configuration;
         private readonly IB2CLinxMicrovixService _b2cLinxMicrovixService;
@@ -21,7 +22,7 @@ namespace Hangfire.IO.Controllers.Database
             _b2cLinxMicrovixService = b2cLinxMicrovixService;
             _configuration = configuration;
 
-            _linxMicrovixJobParameter = new LinxMicrovixJobParameter(
+            _parameter = new Parameter(
                 databaseName: _configuration
                                 .GetSection("ConfigureServer")
                                 .GetSection("Databases")
@@ -34,34 +35,9 @@ namespace Hangfire.IO.Controllers.Database
                                 .GetSection("Untreated")
                                 .Value,
 
-                projectName: _configuration
-                                .GetSection("B2CLinxMicrovix")
-                                .GetSection("ProjectName")
-                                .Value,
-
-                userAuthentication: _configuration
-                                .GetSection("B2CLinxMicrovix")
-                                .GetSection("Authentication")
-                                .Value,
-
-                keyAuthorization: _configuration
-                                .GetSection("B2CLinxMicrovix")
-                                .GetSection("Key")
-                                .Value,
-
-                parametersInterval: _configuration
-                                .GetSection("B2CLinxMicrovix")
-                                .GetSection("ParametersDateInterval")
-                                .Value,
-
                 parametersTableName: _configuration
                                 .GetSection("B2CLinxMicrovix")
                                 .GetSection("ParametersTableName")
-                                .Value,
-
-                docDocMainCompany: _configuration
-                                .GetSection("B2CLinxMicrovix")
-                                .GetSection("DocMainCompany")
                                 .Value
             );
 
@@ -74,7 +50,7 @@ namespace Hangfire.IO.Controllers.Database
         [HttpPost("CreateTablesIfNotExists")]
         public async Task<ActionResult> CreateTablesIfNotExists()
         {
-            _b2cLinxMicrovixService.CreateTablesIfNotExists(_linxMicrovixJobParameter, _methods);
+            await _b2cLinxMicrovixService.CreateTablesIfNotExists(_parameter, _methods);
 
             return Ok($"Tables created successfully.");
         }
@@ -82,7 +58,7 @@ namespace Hangfire.IO.Controllers.Database
         [HttpPost("CreateTablesMerges")]
         public async Task<ActionResult> CreateTablesMerges()
         {
-            _b2cLinxMicrovixService.CreateTablesMerges(_linxMicrovixJobParameter, _methods);
+            await _b2cLinxMicrovixService.CreateTablesMerges(_parameter, _methods);
 
             return Ok($"Tables merges created successfully.");
         }
@@ -90,7 +66,9 @@ namespace Hangfire.IO.Controllers.Database
         [HttpPost("InsertParametersIfNotExists")]
         public async Task<ActionResult> InsertParametersIfNotExists()
         {
-            throw new NotImplementedException();
+            await _b2cLinxMicrovixService.InsertParametersIfNotExists(_parameter, _methods);
+
+            return Ok($"Parameters created successfully.");
         }
     }
 }

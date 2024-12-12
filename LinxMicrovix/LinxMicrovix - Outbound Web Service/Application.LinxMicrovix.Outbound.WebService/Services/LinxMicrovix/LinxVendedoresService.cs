@@ -2,7 +2,7 @@
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Api;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxMicrovix;
-using Domain.IntegrationsCore.Entities.Parameters;
+using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
 
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxMicrovix;
@@ -30,7 +30,7 @@ namespace LinxMicrovix.Outbound.Web.Service.Application.Services.LinxMicrovix
             _linxVendedoresRepository = linxVendedoresRepository;
         }
 
-        public async Task<bool> GetRecords(LinxMicrovixJobParameter jobParameter)
+        public async Task<bool> GetRecords(LinxAPIParam jobParameter)
         {
             try
             {
@@ -39,7 +39,7 @@ namespace LinxMicrovix.Outbound.Web.Service.Application.Services.LinxMicrovix
                 var body = _linxMicrovixServiceBase.BuildBodyRequest(
                     parametersList: parameters.Replace("[0]", "0").Replace("[data_upd_inicial]", DateTime.Now.AddDays(-7).ToString("yyyy-MM-dd")).Replace("[data_upd_fim]", DateTime.Now.ToString("yyyy-MM-dd")),
                     jobParameter: jobParameter,
-                    cnpj_emp: jobParameter.docDocMainCompany
+                    cnpj_emp: jobParameter.docMainCompany
                 );
 
                 string? response = await _apiCall.PostAsync(jobParameter: jobParameter, body: body);
@@ -61,7 +61,7 @@ namespace LinxMicrovix.Outbound.Web.Service.Application.Services.LinxMicrovix
             }
         }
 
-        public async Task<bool> GetRecord(LinxMicrovixJobParameter jobParameter, string? identificador, string? cnpj_emp)
+        public async Task<bool> GetRecord(LinxAPIParam jobParameter, string? identificador, string? cnpj_emp)
         {
             try
             {
@@ -95,7 +95,7 @@ namespace LinxMicrovix.Outbound.Web.Service.Application.Services.LinxMicrovix
             }
         }
 
-        public List<LinxVendedores?> DeserializeXMLToObject(LinxMicrovixJobParameter jobParameter, List<Dictionary<string?, string?>> records)
+        public List<LinxVendedores?> DeserializeXMLToObject(LinxAPIParam jobParameter, List<Dictionary<string?, string?>> records)
         {
             var list = new List<LinxVendedores>();
             for (int i = 0; i < records.Count(); i++)

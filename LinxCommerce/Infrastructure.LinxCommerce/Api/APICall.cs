@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.Entities.Parameters;
+﻿using Domain.LinxCommerce.Entities.Parameters;
 using Domain.LinxCommerce.Interfaces.Api;
 using System.Net;
 using System.Text;

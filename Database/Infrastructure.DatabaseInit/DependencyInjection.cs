@@ -1,18 +1,33 @@
 ﻿using Application.DatabaseInit.Interfaces;
 using Application.DatabaseInit.Services;
-using Domain.DatabaseInit.Interfaces.LinxCommerce;
-using Domain.DatabaseInit.Interfaces.LinxMicrovix;
-using Infrastructure.DatabaseInit.Repositorys.NovaPasta.LinxCommerce;
-using Infrastructure.DatabaseInit.Repositorys.NovaPasta.LinxMicrovix;
+using Domain.DatabaseInit.Interfaces.Database;
+using Domain.DatabaseInit.Interfaces.LinxMicrovix.LinxCommerce;
+using Domain.DatabaseInit.Interfaces.LinxMicrovix.LinxMicrovix;
+using Domain.DatabaseInit.Interfaces.LinxMicrovix.Parameters;
+using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
+using Infrastructure.DatabaseInit.Repositorys.Database;
+using Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce;
+using Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxMicrovix;
+using Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.Parameters;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Infrastructure.DatabaseInit
 {
     public static class DependencyInjection
     {
+        public static IServiceCollection AddScopedDatabaseIniService(this IServiceCollection services)
+        {
+            services.AddScoped<IDatabaseInitService, DatabaseInitService>();
+            services.AddScoped<IDatabaseInitRepository, DatabaseInitRepository>();
+
+            return services;
+        }
+
         public static IServiceCollection AddScopedB2CLinxMicrovixDatabaseInitServices(this IServiceCollection services)
         {
             services.AddScoped<IB2CLinxMicrovixService, B2CLinxMicrovixService>();
+
+            services.AddScoped<ILinxAPIParamRepository, LinxAPIParamRepository>();
 
             services.AddScoped<IB2CConsultaClassificacaoRepository, B2CConsultaClassificacaoRepository>();
             services.AddScoped<IB2CConsultaClientesRepository, B2CConsultaClientesRepository>();

@@ -1,6 +1,6 @@
 ﻿using Application.IntegrationsCore.Interfaces;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
-using Domain.IntegrationsCore.Entities.Parameters;
+using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
 using Domain.IntegrationsCore.Exceptions;
 using Domain.IntegrationsCore.Entities.Enums;
 using System.Xml;
@@ -10,7 +10,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.Base
 {
     public class LinxMicrovixServiceBase : ILinxMicrovixServiceBase
     {
-        public string? BuildBodyRequest(LinxMicrovixJobParameter jobParameter, string? parametersList, string? cnpj_emp)
+        public string? BuildBodyRequest(LinxAPIParam jobParameter, string? parametersList, string? cnpj_emp)
         {
             return @$"<?xml version=""1.0"" encoding=""utf-8""?>
                           <LinxMicrovix>
@@ -27,7 +27,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.Base
                           </LinxMicrovix>";
         }
 
-        public string? BuildBodyRequest(LinxMicrovixJobParameter jobParameter)
+        public string? BuildBodyRequest(LinxAPIParam jobParameter)
         {
             return @$"<?xml version=""1.0"" encoding=""utf-8""?>
                           <LinxMicrovix>
@@ -42,7 +42,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.Base
                           </LinxMicrovix>";
         }
 
-        public List<Dictionary<string?, string?>> DeserializeResponseToXML(LinxMicrovixJobParameter jobParameter, string? response)
+        public List<Dictionary<string?, string?>> DeserializeResponseToXML(LinxAPIParam jobParameter, string? response)
         {
             try
             {
@@ -98,7 +98,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.Base
             }
         }
 
-        public List<Dictionary<string?, string?>> DeserializeResponseToXML(LinxMicrovixJobParameter jobParameter, string? response, ICacheBase entityCache)
+        public List<Dictionary<string?, string?>> DeserializeResponseToXML(LinxAPIParam jobParameter, string? response, ICacheBase entityCache)
         {
             try
             {

@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.Entities.Parameters;
+﻿using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Api;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
@@ -36,7 +36,7 @@ namespace LinxMicrovix.Outbound.Web.Service.Application.Services.LinxMicrovix
             _linxProdutosCodBarRepository = linxProdutosCodBarRepository;
         }
 
-        public List<LinxProdutosCodBar?> DeserializeXMLToObject(LinxMicrovixJobParameter jobParameter, List<Dictionary<string?, string?>> records)
+        public List<LinxProdutosCodBar?> DeserializeXMLToObject(LinxAPIParam jobParameter, List<Dictionary<string?, string?>> records)
         {
             var list = new List<LinxProdutosCodBar>();
             for (int i = 0; i < records.Count(); i++)
@@ -82,7 +82,7 @@ namespace LinxMicrovix.Outbound.Web.Service.Application.Services.LinxMicrovix
             return list;
         }
 
-        public async Task<bool> GetRecord(LinxMicrovixJobParameter jobParameter, string? identificador, string? cnpj_emp)
+        public async Task<bool> GetRecord(LinxAPIParam jobParameter, string? identificador, string? cnpj_emp)
         {
             try
             {
@@ -116,7 +116,7 @@ namespace LinxMicrovix.Outbound.Web.Service.Application.Services.LinxMicrovix
             }
         }
 
-        public async Task<bool> GetRecords(LinxMicrovixJobParameter jobParameter)
+        public async Task<bool> GetRecords(LinxAPIParam jobParameter)
         {
             IList<LinxProdutosCodBar> _listSomenteNovos = new List<LinxProdutosCodBar>();
 
@@ -131,7 +131,7 @@ namespace LinxMicrovix.Outbound.Web.Service.Application.Services.LinxMicrovix
                 var body = _linxMicrovixServiceBase.BuildBodyRequest(
                     parametersList: parameters.Replace("[0]", "0"),
                     jobParameter: jobParameter,
-                    cnpj_emp: jobParameter.docDocMainCompany
+                    cnpj_emp: jobParameter.docMainCompany
                 );
 
                 string? response = await _apiCall.PostAsync(jobParameter: jobParameter, body: body);

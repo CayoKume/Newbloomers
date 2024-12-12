@@ -1,22 +1,50 @@
-﻿namespace Domain.IntegrationsCore.Entities.Parameters
+﻿using Domain.IntegrationsCore.Entities.Bases;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+
+namespace Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters
 {
-    public class LinxMicrovixJobParameter
+    public class LinxAPIParam : ParameterBase
     {
-        public string? docDocMainCompany { get; private set; }
+        [Key]
+        [Column(TypeName = "int")]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int? methodID { get; set; }
+
+        [Column(TypeName = "varchar(300)")]
+        public string? method { get; set; }
+
+        [Column(TypeName = "varchar(800)")]
+        public string? parameters_timestamp { get; set; }
+
+        [Column(TypeName = "varchar(800)")]
+        public string? parameters_dateinterval { get; set; }
+
+        [Column(TypeName = "varchar(800)")]
+        public string? parameters_individual { get; set; }
+
+        [Column(TypeName = "datetime")]
+        public DateTime? last_execution { get; set; }
+
+        [NotMapped]
         public string? databaseName { get; private set; }
+
+        [NotMapped]
         public string? untreatedDatabaseName { get; private set; }
+        
+        [NotMapped]
         public string? jobName { get; private set; }
-        public string? projectName { get; private set; }
+        
+        [NotMapped]
         public string? tableName { get; private set; }
-        public string? keyAuthorization { get; private set; }
-        public string? userAuthentication { get; private set; }
+
+        [NotMapped]
         public string? parametersInterval { get; private set; }
-        public string? parametersTableName { get; private set; }
 
         /// <summary>
         /// Set parameters for any job
         /// </summary>
-        /// <param name="docDocMainCompany"></param>
+        /// <param name="docMainCompany"></param>
         /// <param name="databaseName"></param>
         /// <param name="untreatedDatabaseName"></param>
         /// <param name="projectName"></param>
@@ -24,8 +52,8 @@
         /// <param name="userAuthentication"></param>
         /// <param name="parametersInterval"></param>
         /// <param name="parametersTableName"></param>
-        public LinxMicrovixJobParameter(
-            string? docDocMainCompany,
+        public LinxAPIParam(
+            string? docMainCompany,
             string? databaseName,
             string? untreatedDatabaseName,
             string? projectName,
@@ -33,16 +61,17 @@
             string? userAuthentication,
             string? parametersInterval,
             string? parametersTableName
+        ) : base (
+            docMainCompany: docMainCompany,
+            projectName: projectName,
+            keyAuthorization: keyAuthorization,
+            userAuthentication: userAuthentication,
+            parametersTableName: parametersTableName
         )
         {
-            this.docDocMainCompany = docDocMainCompany;
             this.databaseName = databaseName;
             this.untreatedDatabaseName = untreatedDatabaseName;
-            this.projectName = projectName;
-            this.keyAuthorization = keyAuthorization;
-            this.userAuthentication = userAuthentication;
             this.parametersInterval = parametersInterval;
-            this.parametersTableName = parametersTableName;
         }
 
         /// <summary>
@@ -51,7 +80,7 @@
         /// <param name="jobName"></param>
         /// <param name="tableName"></param>
         /// <returns></returns>
-        public LinxMicrovixJobParameter SetParameters(string? jobName, string? tableName)
+        public LinxAPIParam SetParameters(string? jobName, string? tableName)
         {
             this.jobName = jobName;
             this.tableName = tableName;

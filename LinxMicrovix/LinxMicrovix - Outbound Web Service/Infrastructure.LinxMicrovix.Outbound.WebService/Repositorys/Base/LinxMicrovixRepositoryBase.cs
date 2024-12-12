@@ -7,10 +7,10 @@ using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
 using Infrastructure.IntegrationsCore.Connections.PostgreSQL;
 using Infrastructure.IntegrationsCore.Connections.MySQL;
 using Infrastructure.IntegrationsCore.Connections.SQLServer;
-using Domain.IntegrationsCore.Entities.Parameters;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.Base;
 using Domain.IntegrationsCore.Exceptions;
 using Domain.IntegrationsCore.Entities.Enums;
+using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
 {
@@ -62,7 +62,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
                                     .Value;
         }
 
-        public async Task<bool> CallDbProcMerge(LinxMicrovixJobParameter jobParameter)
+        public async Task<bool> CallDbProcMerge(LinxAPIParam jobParameter)
         {
             try
             {
@@ -88,7 +88,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
             }
         }
 
-        public DataTable CreateSystemDataTable(LinxMicrovixJobParameter jobParameter, TEntity entity)
+        public DataTable CreateSystemDataTable(LinxAPIParam jobParameter, TEntity entity)
         {
             try
             {
@@ -112,7 +112,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
             }
         }
 
-        public async Task<IEnumerable<Company>> GetB2CCompanys(LinxMicrovixJobParameter jobParameter)
+        public async Task<IEnumerable<Company>> GetB2CCompanys(LinxAPIParam jobParameter)
         {
             string? sql = @"SELECT  
                            EMPRESA AS COD_COMPANY,
@@ -161,7 +161,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
             }
         }
 
-        public async Task<IEnumerable<Company>> GetMicrovixCompanys(LinxMicrovixJobParameter jobParameter)
+        public async Task<IEnumerable<Company>> GetMicrovixCompanys(LinxAPIParam jobParameter)
         {
             string? sql = @"";
 
@@ -193,7 +193,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
             }
         }
 
-        public async Task<string?> GetParameters(LinxMicrovixJobParameter jobParameter)
+        public async Task<string?> GetParameters(LinxAPIParam jobParameter)
         {
             string? sql = $"SELECT {jobParameter.parametersInterval} " +
                           $"FROM [{jobParameter.parametersTableName}] (NOLOCK) " +
@@ -228,7 +228,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
             }
         }
 
-        public async Task<string?> GetLast7DaysMinTimestamp(LinxMicrovixJobParameter jobParameter, string? columnDate)
+        public async Task<string?> GetLast7DaysMinTimestamp(LinxAPIParam jobParameter, string? columnDate)
         {
             string? sql = "SELECT ISNULL(MIN(TIMESTAMP), 0) " +
                          $"FROM [{jobParameter.tableName}_trusted] (NOLOCK) " +
@@ -263,7 +263,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
             }
         }
 
-        public async Task<bool> InsertRecord(LinxMicrovixJobParameter jobParameter, string? sql, object record)
+        public async Task<bool> InsertRecord(LinxAPIParam jobParameter, string? sql, object record)
         {
             try
             {
@@ -298,7 +298,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
             }
         }
 
-        public async Task<bool> ExecuteQueryCommand(LinxMicrovixJobParameter jobParameter, string? sql)
+        public async Task<bool> ExecuteQueryCommand(LinxAPIParam jobParameter, string? sql)
         {
             try
             {
@@ -333,7 +333,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
             }
         }
 
-        public bool BulkInsertIntoTableRaw(LinxMicrovixJobParameter jobParameter, DataTable dataTable, int dataTableRowsNumber)
+        public bool BulkInsertIntoTableRaw(LinxAPIParam jobParameter, DataTable dataTable, int dataTableRowsNumber)
         {
             try
             {
@@ -360,7 +360,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
             }
         }
 
-        public async Task<List<TEntity>> GetRegistersExists(LinxMicrovixJobParameter jobParameter, string sql)
+        public async Task<List<TEntity>> GetRegistersExists(LinxAPIParam jobParameter, string sql)
         {
             try
             {
@@ -392,7 +392,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
         }
 
         #region MOVER PARA PROJETO DATABASE INITIALIZATION
-        public async Task<bool> InsertParametersIfNotExists(LinxMicrovixJobParameter jobParameter, object parameter)
+        public async Task<bool> InsertParametersIfNotExists(LinxAPIParam jobParameter, object parameter)
         {
             string? sql = $"IF NOT EXISTS (SELECT * FROM [{jobParameter.parametersTableName}] WHERE [method] = '{jobParameter.jobName}') " +
                          $"INSERT INTO [{jobParameter.parametersTableName}] ([method], [timestamp], [dateinterval], [individual], [ativo]) " +

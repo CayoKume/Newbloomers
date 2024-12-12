@@ -42,7 +42,7 @@ public class APICall : IAPICall
     {
         try
         {
-
+            throw new NotImplementedException();
         }
         catch
         {
@@ -54,7 +54,7 @@ public class APICall : IAPICall
     {
         try
         {
-
+            throw new NotImplementedException();
         }
         catch
         {

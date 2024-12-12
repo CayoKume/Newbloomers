@@ -1,7 +1,7 @@
 ﻿using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Api;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxCommerce;
-using Domain.IntegrationsCore.Entities.Parameters;
+using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce;
 using System.Globalization;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxCommerce;
@@ -39,7 +39,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
             _b2cConsultaNFeRepository = b2cConsultaNFeRepository;
         }
 
-        public List<B2CConsultaNFe?> DeserializeXMLToObject(LinxMicrovixJobParameter jobParameter, List<Dictionary<string?, string?>> records)
+        public List<B2CConsultaNFe?> DeserializeXMLToObject(LinxAPIParam jobParameter, List<Dictionary<string?, string?>> records)
         {
             var list = new List<B2CConsultaNFe>();
 
@@ -107,7 +107,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
             return list;
         }
 
-        public async Task<bool> GetRecord(LinxMicrovixJobParameter jobParameter, string? identificador, string? cnpj_emp)
+        public async Task<bool> GetRecord(LinxAPIParam jobParameter, string? identificador, string? cnpj_emp)
         {
             try
             {
@@ -141,7 +141,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
             }
         }
 
-        public async Task<bool> GetRecords(LinxMicrovixJobParameter jobParameter)
+        public async Task<bool> GetRecords(LinxAPIParam jobParameter)
         {
             IList<B2CConsultaNFe> _listSomenteNovos = new List<B2CConsultaNFe>();
 

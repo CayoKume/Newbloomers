@@ -1,6 +1,6 @@
 ﻿using Dapper;
-using Domain.DatabaseInit.Interfaces.LinxCommerce;
-using Domain.IntegrationsCore.Entities.Parameters;
+using Domain.DatabaseInit.Interfaces.LinxMicrovix.LinxCommerce;
+
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce;
 using Infrastructure.IntegrationsCore.Connections.SQLServer;
 using Z.Dapper.Plus;
@@ -14,26 +14,26 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
         public B2CConsultaClientesSaldoLinxRepository(ISQLServerConnection? conn) =>
             _conn = conn;
 
-        public bool CreateDataTableIfNotExists(LinxMicrovixJobParameter jobParameter)
+        public bool CreateDataTableIfNotExists(string databaseName, string jobName, string untreatedDatabaseName)
         {
-            string? sql = @$"SELECT DISTINCT * FROM [INFORMATION_SCHEMA].[TABLES] (NOLOCK) WHERE TABLE_NAME = '{jobParameter.jobName}'";
+            string? sql = @$"SELECT DISTINCT * FROM [INFORMATION_SCHEMA].[TABLES] (NOLOCK) WHERE TABLE_NAME = '{jobName}'";
 
             try
             {
-                using (var conn = _conn.GetIDbConnection(jobParameter.databaseName))
+                using (var conn = _conn.GetIDbConnection(databaseName))
                 {
                     var result = conn.Query(sql: sql);
 
                     if (result.Count() == 0)
-                        conn.CreateTable<B2CConsultaClientesSaldoLinx>(tableName: $"{jobParameter.jobName}");
+                        conn.CreateTable<B2CConsultaClientesSaldoLinx>(tableName: $"{jobName}");
                 }
 
-                using (var conn = _conn.GetIDbConnection(jobParameter.untreatedDatabaseName))
+                using (var conn = _conn.GetIDbConnection(untreatedDatabaseName))
                 {
                     var result = conn.Query(sql: sql);
 
                     if (result.Count() == 0)
-                        conn.CreateTable<B2CConsultaClientesSaldoLinx>(tableName: $"{jobParameter.jobName}");
+                        conn.CreateTable<B2CConsultaClientesSaldoLinx>(tableName: $"{jobName}");
                 }
 
                 return true;
@@ -44,7 +44,7 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
             }
         }
 
-        public async Task<bool> CreateTableMerge(LinxMicrovixJobParameter jobParameter)
+        public async Task<bool> CreateTableMerge(string databaseName, string tableName)
         {
             string? sql = @"IF NOT EXISTS (SELECT * FROM SYS.OBJECTS WHERE TYPE = 'P' AND NAME = 'P_B2CCONSULTACLIENTESSALDOLINX_SYNC')
                            BEGIN
@@ -58,28 +58,28 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
 			                           TARGET.[COD_CLIENTE_B2C] = SOURCE.[COD_CLIENTE_B2C]
 		                           )
 
-                                   WHEN MATCHED AND TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP] THEN
+                                   WHEN MATCHED AND TARGET.[parameters_timestamp] = SOURCE.[parameters_timestamp] THEN
 			                           UPDATE SET
 			                           TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON],
 			                           TARGET.[COD_CLIENTE_ERP] = SOURCE.[COD_CLIENTE_ERP],
 			                           TARGET.[COD_CLIENTE_B2C] = SOURCE.[COD_CLIENTE_B2C],
 			                           TARGET.[EMPRESA] = SOURCE.[EMPRESA],
 			                           TARGET.[VALOR] = SOURCE.[VALOR],
-			                           TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP],
+			                           TARGET.[parameters_timestamp] = SOURCE.[parameters_timestamp],
 			                           TARGET.[PORTAL] = SOURCE.[PORTAL]
 
                                    WHEN NOT MATCHED BY TARGET AND SOURCE.[COD_CLIENTE_B2C] NOT IN (SELECT [COD_CLIENTE_B2C] FROM [B2CCONSULTACLIENTESSALDOLINX_TRUSTED]) THEN
 			                           INSERT
-			                           ([LASTUPDATEON], [COD_CLIENTE_ERP], [COD_CLIENTE_B2C], [EMPRESA], [VALOR], [TIMESTAMP], [PORTAL])
+			                           ([LASTUPDATEON], [COD_CLIENTE_ERP], [COD_CLIENTE_B2C], [EMPRESA], [VALOR], [parameters_timestamp], [PORTAL])
 			                           VALUES
-			                           (SOURCE.[LASTUPDATEON], SOURCE.[COD_CLIENTE_ERP], SOURCE.[COD_CLIENTE_B2C], SOURCE.[EMPRESA], SOURCE.[VALOR], SOURCE.[TIMESTAMP], SOURCE.[PORTAL]);
+			                           (SOURCE.[LASTUPDATEON], SOURCE.[COD_CLIENTE_ERP], SOURCE.[COD_CLIENTE_B2C], SOURCE.[EMPRESA], SOURCE.[VALOR], SOURCE.[parameters_timestamp], SOURCE.[PORTAL]);
 	                           END'
                            )
                             END";
 
             try
             {
-                using (var conn = _conn.GetIDbConnection(jobParameter.databaseName))
+                using (var conn = _conn.GetIDbConnection(databaseName))
                 {
                     var result = await conn.ExecuteAsync(sql: sql, commandTimeout: 360);
 
@@ -95,26 +95,25 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
             }
         }
 
-        public async Task<bool> InsertParametersIfNotExists(LinxMicrovixJobParameter jobParameter)
+        public async Task<bool> InsertParametersIfNotExists(string jobName, string parametersTableName, string databaseName)
         {
             try
             {
                 var parameter = new
                 {
-                    method = jobParameter.jobName,
+                    method = jobName,
                     timestamp = @"<Parameter id=""timestamp"">[0]</Parameter>",
                     dateinterval = @"<Parameter id=""timestamp"">[0]</Parameter>",
                     individual = @"<Parameter id=""timestamp"">[0]</Parameter>
-                                                <Parameter id=""cod_cliente_erp"">[cod_cliente_erp]</Parameter>",
-                    ativo = 1
+                                                <Parameter id=""cod_cliente_erp"">[cod_cliente_erp]</Parameter>"
                 };
 
-                string? sql = $"IF NOT EXISTS (SELECT * FROM [{jobParameter.parametersTableName}] WHERE [method] = '{jobParameter.jobName}') " +
-                              $"INSERT INTO [{jobParameter.parametersTableName}] ([method], [timestamp], [dateinterval], [individual], [ativo]) " +
-                               "VALUES (@method, @timestamp, @dateinterval, @individual, @ativo)";
+                string? sql = $"IF NOT EXISTS (SELECT * FROM [{parametersTableName}] WHERE [method] = '{jobName}') " +
+                              $"INSERT INTO [{parametersTableName}] ([method], [parameters_timestamp], [parameters_dateinterval], [parameters_individual]) " +
+                               "VALUES (@method, @timestamp, @dateinterval, @individual)";
 
 
-                using (var conn = _conn.GetIDbConnection(jobParameter.databaseName))
+                using (var conn = _conn.GetIDbConnection(databaseName))
                 {
                     var result = await conn.ExecuteAsync(sql: sql, param: parameter, commandTimeout: 360);
 

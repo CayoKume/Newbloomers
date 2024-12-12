@@ -1,11 +1,11 @@
 ﻿using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxMicrovix;
-using Domain.IntegrationsCore.Entities.Parameters;
+using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
 
 namespace Hangfire.IO.Extensions.RecurringJobs
 {
     public static class GeneralIntegrationsRecurringJobsExtensions
     {
-        private static string? _docDocMainCompany;
+        private static string? _docMainCompany;
         private static string? _databaseName;
         private static string? _projectName;
         private static string? _parametersInterval;
@@ -17,7 +17,7 @@ namespace Hangfire.IO.Extensions.RecurringJobs
 
         public static void AddRecurringJobs()
         {
-            _docDocMainCompany = ConfigurationHelperExtensions.config
+            _docMainCompany = ConfigurationHelperExtensions.config
                 .GetSection("")
                 .GetSection("")
                 .Value;

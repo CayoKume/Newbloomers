@@ -1,6 +1,6 @@
 ﻿using Dapper;
-using Domain.DatabaseInit.Interfaces.LinxMicrovix;
-using Domain.IntegrationsCore.Entities.Parameters;
+using Domain.DatabaseInit.Interfaces.LinxMicrovix.LinxMicrovix;
+
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
 using Infrastructure.IntegrationsCore.Connections.SQLServer;
 using Z.Dapper.Plus;
@@ -14,26 +14,26 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxMicrovix
         public LinxVendedoresRepository(ISQLServerConnection? conn) =>
             _conn = conn;
 
-        public bool CreateTableIfNotExists(LinxMicrovixJobParameter jobParameter)
+        public bool CreateTableIfNotExists(string databaseName, string jobName, string untreatedDatabaseName)
         {
-            string? sql = @$"SELECT DISTINCT * FROM [INFORMATION_SCHEMA].[TABLES] (NOLOCK) WHERE TABLE_NAME = '{jobParameter.jobName}'";
+            string? sql = @$"SELECT DISTINCT * FROM [INFORMATION_SCHEMA].[TABLES] (NOLOCK) WHERE TABLE_NAME = '{jobName}'";
 
             try
             {
-                using (var conn = _conn.GetIDbConnection(jobParameter.databaseName))
+                using (var conn = _conn.GetIDbConnection(databaseName))
                 {
                     var result = conn.Query(sql: sql);
 
                     if (result.Count() == 0)
-                        conn.CreateTable<LinxVendedores>(tableName: $"{jobParameter.jobName}");
+                        conn.CreateTable<LinxVendedores>(tableName: $"{jobName}");
                 }
 
-                using (var conn = _conn.GetIDbConnection(jobParameter.untreatedDatabaseName))
+                using (var conn = _conn.GetIDbConnection(untreatedDatabaseName))
                 {
                     var result = conn.Query(sql: sql);
 
                     if (result.Count() == 0)
-                        conn.CreateTable<LinxVendedores>(tableName: $"{jobParameter.jobName}");
+                        conn.CreateTable<LinxVendedores>(tableName: $"{jobName}");
                 }
 
                 return true;
@@ -44,10 +44,10 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxMicrovix
             }
         }
 
-        public async Task<bool> CreateTableMerge(LinxMicrovixJobParameter jobParameter)
+        public async Task<bool> CreateTableMerge(string databaseName, string tableName)
         {
-            string? sql = $"MERGE [{jobParameter.tableName}_trusted] AS TARGET " +
-                         $"USING [{jobParameter.tableName}_raw] AS SOURCE " +
+            string? sql = $"MERGE [{tableName}_trusted] AS TARGET " +
+                         $"USING [{tableName}_raw] AS SOURCE " +
                           "ON ( " +
                           "TARGET.COD_VENDEDOR = SOURCE.COD_VENDEDOR " +
                           ") " +
@@ -70,7 +70,7 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxMicrovix
                           "TARGET.[ATIVO] = SOURCE.[ATIVO], " +
                           "TARGET.[DATA_ADMISSAO] = SOURCE.[DATA_ADMISSAO], " +
                           "TARGET.[DATA_SAIDA] = SOURCE.[DATA_SAIDA], " +
-                          "TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP], " +
+                          "TARGET.[parameters_timestamp] = SOURCE.[parameters_timestamp], " +
                           "TARGET.[MATRICULA] = SOURCE.[MATRICULA], " +
                           "TARGET.[ID_TIPO_VENDA] = SOURCE.[ID_TIPO_VENDA], " +
                           "TARGET.[DESCRICAO_TIPO_VENDA] = SOURCE.[DESCRICAO_TIPO_VENDA], " +
@@ -78,16 +78,16 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxMicrovix
                           "WHEN NOT MATCHED THEN " +
                           "INSERT " +
                           "([LASTUPDATEON], [PORTAL], [COD_VENDEDOR], [NOME_VENDEDOR], [TIPO_VENDEDOR], [END_VEND_RUA], [END_VEND_NUMERO], [END_VEND_COMPLEMENTO], [END_VEND_BAIRRO], [END_VEND_CEP], " +
-                          "[END_VEND_CIDADE], [END_VEND_UF], [FONE_VENDEDOR], [MAIL_VENDEDOR], [DT_UPD], [CPF_VENDEDOR], [ATIVO], [DATA_ADMISSAO], [DATA_SAIDA], [TIMESTAMP], [MATRICULA], [ID_TIPO_VENDA], " +
+                          "[END_VEND_CIDADE], [END_VEND_UF], [FONE_VENDEDOR], [MAIL_VENDEDOR], [DT_UPD], [CPF_VENDEDOR], [DATA_ADMISSAO], [DATA_SAIDA], [parameters_timestamp], [MATRICULA], [ID_TIPO_VENDA], " +
                           "[DESCRICAO_TIPO_VENDA], [CARGO])" +
                           "VALUES " +
                           "(SOURCE.[LASTUPDATEON], SOURCE.[PORTAL], SOURCE.[COD_VENDEDOR], SOURCE.[NOME_VENDEDOR], SOURCE.[TIPO_VENDEDOR], SOURCE.[END_VEND_RUA], SOURCE.[END_VEND_NUMERO], SOURCE.[END_VEND_COMPLEMENTO], " +
                           "SOURCE.[END_VEND_BAIRRO], SOURCE.[END_VEND_CEP], SOURCE.[END_VEND_CIDADE], SOURCE.[END_VEND_UF], SOURCE.[FONE_VENDEDOR], SOURCE.[MAIL_VENDEDOR], SOURCE.[DT_UPD], SOURCE.[CPF_VENDEDOR], " +
-                          "SOURCE.[ATIVO], SOURCE.[DATA_ADMISSAO], SOURCE.[DATA_SAIDA], SOURCE.[TIMESTAMP], SOURCE.[MATRICULA], SOURCE.[ID_TIPO_VENDA], SOURCE.[DESCRICAO_TIPO_VENDA], SOURCE.[CARGO]);";
+                          "SOURCE.[ATIVO], SOURCE.[DATA_ADMISSAO], SOURCE.[DATA_SAIDA], SOURCE.[parameters_timestamp], SOURCE.[MATRICULA], SOURCE.[ID_TIPO_VENDA], SOURCE.[DESCRICAO_TIPO_VENDA], SOURCE.[CARGO]);";
 
             try
             {
-                using (var conn = _conn.GetIDbConnection(jobParameter.databaseName))
+                using (var conn = _conn.GetIDbConnection(databaseName))
                 {
                     var result = await conn.ExecuteAsync(sql: sql, commandTimeout: 360);
 
@@ -103,28 +103,27 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxMicrovix
             }
         }
 
-        public async Task<bool> InsertParametersIfNotExists(LinxMicrovixJobParameter jobParameter)
+        public async Task<bool> InsertParametersIfNotExists(string jobName, string parametersTableName, string databaseName)
         {
             try
             {
                 var parameter = new
                 {
-                    method = jobParameter.jobName,
+                    method = jobName,
                     timestamp = @"<Parameter id=""timestamp"">[0]</Parameter>",
                     dateinterval = @"<Parameter id=""timestamp"">[0]</Parameter>
                                                 <Parameter id=""data_upd_inicial"">[data_upd_inicial]</Parameter>
                                                 <Parameter id=""data_upd_fim"">[data_upd_fim]</Parameter>",
                     individual = @"<Parameter id=""timestamp"">[0]</Parameter>
-                                                <Parameter id=""cod_vendedor"">[cod_vendedor]</Parameter>",
-                    ativo = 1
+                                                <Parameter id=""cod_vendedor"">[cod_vendedor]</Parameter>"
                 };
 
-                string? sql = $"IF NOT EXISTS (SELECT * FROM [{jobParameter.parametersTableName}] WHERE [method] = '{jobParameter.jobName}') " +
-                              $"INSERT INTO [{jobParameter.parametersTableName}] ([method], [timestamp], [dateinterval], [individual], [ativo]) " +
-                               "VALUES (@method, @timestamp, @dateinterval, @individual, @ativo)";
+                string? sql = $"IF NOT EXISTS (SELECT * FROM [{parametersTableName}] WHERE [method] = '{jobName}') " +
+                              $"INSERT INTO [{parametersTableName}] ([method], [parameters_timestamp], [parameters_dateinterval], [parameters_individual]) " +
+                               "VALUES (@method, @timestamp, @dateinterval, @individual)";
 
 
-                using (var conn = _conn.GetIDbConnection(jobParameter.databaseName))
+                using (var conn = _conn.GetIDbConnection(databaseName))
                 {
                     var result = await conn.ExecuteAsync(sql: sql, param: parameter, commandTimeout: 360);
 
