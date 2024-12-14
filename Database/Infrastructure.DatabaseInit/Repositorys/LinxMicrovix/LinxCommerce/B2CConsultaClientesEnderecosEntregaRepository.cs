@@ -51,12 +51,14 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
                            EXECUTE (
 	                           'CREATE PROCEDURE [P_B2CCONSULTACLIENTESENDERECOSENTREGA_SYNC] AS
 	                           BEGIN
-		                           MERGE [B2CCONSULTACLIENTESENDERECOSENTREGA_TRUSTED] AS TARGET
-		                           USING [B2CCONSULTACLIENTESENDERECOSENTREGA_RAW] AS SOURCE
+		                           MERGE [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTACLIENTESENDERECOSENTREGA] AS TARGET
+		                           USING [UNTREATED].[dbo].[B2CCONSULTACLIENTESENDERECOSENTREGA] AS SOURCE
 
 		                           ON (
 			                           TARGET.ID_ENDERECO_ENTREGA = SOURCE.ID_ENDERECO_ENTREGA
-		                           )		                           WHEN MATCHED AND TARGET.[parameters_timestamp] != SOURCE.[parameters_timestamp] THEN 
+		                           )
+
+                                   WHEN MATCHED AND TARGET.[TIMESTAMP] != SOURCE.[TIMESTAMP] THEN 
 			                           UPDATE SET
 			                           TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON],
 			                           TARGET.[ID_ENDERECO_ENTREGA] = SOURCE.[ID_ENDERECO_ENTREGA],
@@ -72,16 +74,16 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
 			                           TARGET.[DESCRICAO] = SOURCE.[DESCRICAO],
 			                           TARGET.[PRINCIPAL] = SOURCE.[PRINCIPAL],
 			                           TARGET.[ID_CIDADE] = SOURCE.[ID_CIDADE],
-			                           TARGET.[parameters_timestamp] = SOURCE.[parameters_timestamp],
+			                           TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP],
 			                           TARGET.[PORTAL] = SOURCE.[PORTAL]
 
-		                           WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_ENDERECO_ENTREGA] NOT IN (SELECT [ID_ENDERECO_ENTREGA] FROM [B2CCONSULTACLIENTESENDERECOSENTREGA_TRUSTED]) THEN
+		                           WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_ENDERECO_ENTREGA] NOT IN (SELECT [ID_ENDERECO_ENTREGA] FROM [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTACLIENTESENDERECOSENTREGA]) THEN
 			                           INSERT
 			                           ([LASTUPDATEON], [ID_ENDERECO_ENTREGA], [COD_CLIENTE_ERP], [COD_CLIENTE_B2C], [ENDERECO_CLIENTE], [NUMERO_RUA_CLIENTE], [COMPLEMENTO_END_CLI], [CEP_CLIENTE], [BAIRRO_CLIENTE], [CIDADE_CLIENTE],
-			                           [UF_CLIENTE], [DESCRICAO], [PRINCIPAL], [ID_CIDADE], [parameters_timestamp], [PORTAL])
+			                           [UF_CLIENTE], [DESCRICAO], [PRINCIPAL], [ID_CIDADE], [TIMESTAMP], [PORTAL])
 			                           VALUES
 			                           (SOURCE.[LASTUPDATEON], SOURCE.[ID_ENDERECO_ENTREGA], SOURCE.[COD_CLIENTE_ERP], SOURCE.[COD_CLIENTE_B2C], SOURCE.[ENDERECO_CLIENTE], SOURCE.[NUMERO_RUA_CLIENTE], SOURCE.[COMPLEMENTO_END_CLI], SOURCE.[CEP_CLIENTE],
-			                           SOURCE.[BAIRRO_CLIENTE], SOURCE.[CIDADE_CLIENTE], SOURCE.[UF_CLIENTE], SOURCE.[DESCRICAO], SOURCE.[PRINCIPAL], SOURCE.[ID_CIDADE], SOURCE.[parameters_timestamp], SOURCE.[PORTAL]);
+			                           SOURCE.[BAIRRO_CLIENTE], SOURCE.[CIDADE_CLIENTE], SOURCE.[UF_CLIENTE], SOURCE.[DESCRICAO], SOURCE.[PRINCIPAL], SOURCE.[ID_CIDADE], SOURCE.[TIMESTAMP], SOURCE.[PORTAL]);
 	                           END'
                            )
                            END"

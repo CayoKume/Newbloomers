@@ -25,7 +25,7 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
                     var result = conn.Query(sql: sql);
 
                     if (result.Count() == 0)
-                        conn.CreateTable<B2CConsultaVendedores>(tableName: $"{jobName}");
+                        conn.CreateTable<B2CConsultaMarcas>(tableName: $"{jobName}");
                 }
 
                 using (var conn = _conn.GetIDbConnection(untreatedDatabaseName))
@@ -33,7 +33,7 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
                     var result = conn.Query(sql: sql);
 
                     if (result.Count() == 0)
-                        conn.CreateTable<B2CConsultaVendedores>(tableName: $"{jobName}");
+                        conn.CreateTable<B2CConsultaMarcas>(tableName: $"{jobName}");
                 }
 
                 return true;
@@ -51,25 +51,25 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
                            EXECUTE (
 	                           'CREATE PROCEDURE [P_B2CCONSULTAMARCAS_SYNC] AS
 	                           BEGIN
-		                           MERGE [B2CCONSULTAMARCAS_TRUSTED] AS TARGET
-		                           USING [B2CCONSULTAMARCAS_RAW] AS SOURCE
+		                           MERGE [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTAMARCAS] AS TARGET
+		                           USING [UNTREATED].[dbo].[B2CCONSULTAMARCAS] AS SOURCE
 
 		                           ON (TARGET.[CODIGO_MARCA] = SOURCE.[CODIGO_MARCA])
 
-		                           WHEN MATCHED AND TARGET.[parameters_timestamp] != SOURCE.[parameters_timestamp] THEN
+		                           WHEN MATCHED AND TARGET.[TIMESTAMP] != SOURCE.[TIMESTAMP] THEN
 			                           UPDATE SET
 			                           TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON],
 			                           TARGET.[CODIGO_MARCA] = SOURCE.[CODIGO_MARCA],
 			                           TARGET.[NOME_MARCA] = SOURCE.[NOME_MARCA],
-			                           TARGET.[parameters_timestamp] = SOURCE.[parameters_timestamp],
+			                           TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP],
 			                           TARGET.[LINHAS] = SOURCE.[LINHAS],
 			                           TARGET.[PORTAL] = SOURCE.[PORTAL]
 
-		                           WHEN NOT MATCHED BY TARGET AND SOURCE.[CODIGO_MARCA] NOT IN (SELECT [CODIGO_MARCA] FROM [B2CCONSULTAMARCAS_TRUSTED]) THEN
+		                           WHEN NOT MATCHED BY TARGET AND SOURCE.[CODIGO_MARCA] NOT IN (SELECT [CODIGO_MARCA] FROM [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTAMARCAS]) THEN
 			                           INSERT
-			                           ([LASTUPDATEON], [CODIGO_MARCA], [NOME_MARCA], [parameters_timestamp], [LINHAS], [PORTAL])
+			                           ([LASTUPDATEON], [CODIGO_MARCA], [NOME_MARCA], [TIMESTAMP], [LINHAS], [PORTAL])
 			                           VALUES
-			                           (SOURCE.[LASTUPDATEON], SOURCE.[CODIGO_MARCA], SOURCE.[NOME_MARCA], SOURCE.[parameters_timestamp], SOURCE.[LINHAS], SOURCE.[PORTAL]);
+			                           (SOURCE.[LASTUPDATEON], SOURCE.[CODIGO_MARCA], SOURCE.[NOME_MARCA], SOURCE.[TIMESTAMP], SOURCE.[LINHAS], SOURCE.[PORTAL]);
 	                           END'
                            )
                            END";

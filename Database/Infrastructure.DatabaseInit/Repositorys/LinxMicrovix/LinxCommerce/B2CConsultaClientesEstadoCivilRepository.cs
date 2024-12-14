@@ -25,7 +25,7 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
                     var result = conn.Query(sql: sql);
 
                     if (result.Count() == 0)
-                        conn.CreateTable<B2CConsultaClientesEstadoCivil>(tableName: $"{jobName}_raw");
+                        conn.CreateTable<B2CConsultaClientesEstadoCivil>(tableName: $"{jobName}");
                 }
 
                 using (var conn = _conn.GetIDbConnection(untreatedDatabaseName))
@@ -33,7 +33,7 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
                     var result = conn.Query(sql: sql);
 
                     if (result.Count() == 0)
-                        conn.CreateTable<B2CConsultaClientesEstadoCivil>(tableName: $"{jobName}_raw");
+                        conn.CreateTable<B2CConsultaClientesEstadoCivil>(tableName: $"{jobName}");
                 }
 
                 return true;
@@ -51,26 +51,26 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
                            EXECUTE (
 	                           'CREATE PROCEDURE [P_B2CCONSULTACLIENTESESTADOCIVIL_SYNC] AS
 	                           BEGIN
-		                           MERGE [B2CCONSULTACLIENTESESTADOCIVIL_TRUSTED] AS TARGET
-		                           USING [B2CCONSULTACLIENTESESTADOCIVIL_RAW] AS SOURCE
+		                           MERGE [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTACLIENTESESTADOCIVIL] AS TARGET
+		                           USING [UNTREATED].[dbo].[B2CCONSULTACLIENTESESTADOCIVIL] AS SOURCE
 
 		                           ON (
 			                           TARGET.[ID_ESTADO_CIVIL] = SOURCE.[ID_ESTADO_CIVIL]
 		                           )
 
-		                           WHEN MATCHED AND TARGET.[parameters_timestamp] != SOURCE.[parameters_timestamp] THEN 
+		                           WHEN MATCHED AND TARGET.[TIMESTAMP] != SOURCE.[TIMESTAMP] THEN 
 			                           UPDATE SET
 			                           TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON],
 			                           TARGET.[ID_ESTADO_CIVIL] = SOURCE.[ID_ESTADO_CIVIL],
 			                           TARGET.[ESTADO_CIVIL] = SOURCE.[ESTADO_CIVIL],
-			                           TARGET.[parameters_timestamp] = SOURCE.[parameters_timestamp],
+			                           TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP],
 			                           TARGET.[PORTAL] = SOURCE.[PORTAL]
 
-		                           WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_ESTADO_CIVIL] NOT IN (SELECT [ID_ESTADO_CIVIL] FROM [B2CCONSULTACLIENTESESTADOCIVIL_TRUSTED]) THEN
+		                           WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_ESTADO_CIVIL] NOT IN (SELECT [ID_ESTADO_CIVIL] FROM [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTACLIENTESESTADOCIVIL]) THEN
 			                           INSERT
-			                           ([LASTUPDATEON], [ID_ESTADO_CIVIL], [ESTADO_CIVIL], [parameters_timestamp], [PORTAL])
+			                           ([LASTUPDATEON], [ID_ESTADO_CIVIL], [ESTADO_CIVIL], [TIMESTAMP], [PORTAL])
 			                           VALUES
-			                           (SOURCE.[LASTUPDATEON], SOURCE.[ID_ESTADO_CIVIL], SOURCE.[ESTADO_CIVIL], SOURCE.[parameters_timestamp], SOURCE.[PORTAL]);
+			                           (SOURCE.[LASTUPDATEON], SOURCE.[ID_ESTADO_CIVIL], SOURCE.[ESTADO_CIVIL], SOURCE.[TIMESTAMP], SOURCE.[PORTAL]);
 	                           END'
                            )
                            END";

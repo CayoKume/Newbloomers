@@ -41,8 +41,8 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 
         public async Task<bool> CreateTableMerge(LinxAPIParam jobParameter)
         {
-            string? sql = $"MERGE [{jobParameter.tableName}_trusted] AS TARGET " +
-                         $"USING [{jobParameter.tableName}_raw] AS SOURCE " +
+            string? sql = $"MERGE [{jobParameter.tableName}] AS TARGET " +
+                         $"USING [{jobParameter.tableName}] AS SOURCE " +
                           "ON (TARGET.ID_STATUS = SOURCE.ID_STATUS) " +
                           "WHEN MATCHED THEN UPDATE SET " +
                           "TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON], " +
@@ -79,7 +79,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                         identificadores += $"'{registros[i].id_status}', ";
                 }
 
-                string sql = $"SELECT ID_STATUS, TIMESTAMP FROM B2CCONSULTASTATUS_TRUSTED WHERE ID_STATUS IN ({identificadores})";
+                string sql = $"SELECT ID_STATUS, TIMESTAMP FROM B2CCONSULTASTATUS WHERE ID_STATUS IN ({identificadores})";
 
                 return await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
             }

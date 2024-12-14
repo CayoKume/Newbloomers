@@ -52,14 +52,14 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
                            EXECUTE (
 	                           'CREATE PROCEDURE [P_B2CCONSULTAPEDIDOSSTATUS_SYNC] AS
 	                           BEGIN
-		                           MERGE [B2CCONSULTAPEDIDOSSTATUS_TRUSTED] AS TARGET
-		                           USING [B2CCONSULTAPEDIDOSSTATUS_RAW] AS SOURCE
+		                           MERGE [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTAPEDIDOSSTATUS] AS TARGET
+		                           USING [UNTREATED].[dbo].[B2CCONSULTAPEDIDOSSTATUS] AS SOURCE
 
 		                           ON (
 			                           TARGET.[ID] = SOURCE.[ID]
 		                           )
 
-		                           WHEN MATCHED AND TARGET.[parameters_timestamp] != SOURCE.[parameters_timestamp] THEN 
+		                           WHEN MATCHED AND TARGET.[TIMESTAMP] != SOURCE.[TIMESTAMP] THEN 
 			                           UPDATE SET
 			                           TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON],
 			                           TARGET.[ID] = SOURCE.[ID],
@@ -67,14 +67,14 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
 			                           TARGET.[ID_PEDIDO] = SOURCE.[ID_PEDIDO],
 			                           TARGET.[DATA_HORA] = SOURCE.[DATA_HORA],
 			                           TARGET.[ANOTACAO] = SOURCE.[ANOTACAO],
-			                           TARGET.[parameters_timestamp] = SOURCE.[parameters_timestamp],
+			                           TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP],
 			                           TARGET.[PORTAL] = SOURCE.[PORTAL]
 
-		                           WHEN NOT MATCHED BY TARGET AND SOURCE.[ID] NOT IN (SELECT [ID] FROM [B2CCONSULTAPEDIDOSSTATUS_TRUSTED]) THEN
+		                           WHEN NOT MATCHED BY TARGET AND SOURCE.[ID] NOT IN (SELECT [ID] FROM [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTAPEDIDOSSTATUS]) THEN
 			                           INSERT
-			                           ([LASTUPDATEON], [ID], [ID_STATUS], [ID_PEDIDO], [DATA_HORA], [ANOTACAO], [parameters_timestamp], [PORTAL])
+			                           ([LASTUPDATEON], [ID], [ID_STATUS], [ID_PEDIDO], [DATA_HORA], [ANOTACAO], [TIMESTAMP], [PORTAL])
 			                           VALUES
-			                           (SOURCE.[LASTUPDATEON], SOURCE.[ID], SOURCE.[ID_STATUS], SOURCE.[ID_PEDIDO], SOURCE.[DATA_HORA], SOURCE.[ANOTACAO], SOURCE.[parameters_timestamp], SOURCE.[PORTAL]);
+			                           (SOURCE.[LASTUPDATEON], SOURCE.[ID], SOURCE.[ID_STATUS], SOURCE.[ID_PEDIDO], SOURCE.[DATA_HORA], SOURCE.[ANOTACAO], SOURCE.[TIMESTAMP], SOURCE.[PORTAL]);
 	                           END'
                            )
                            END";

@@ -46,8 +46,8 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                            EXECUTE (
 	                           'CREATE PROCEDURE [P_B2CCONSULTAPRODUTOSTABELASPRECOS_SYNC] AS
 	                           BEGIN
-		                           MERGE [B2CCONSULTAPRODUTOSTABELASPRECOS_TRUSTED] AS TARGET
-                                   USING [B2CCONSULTAPRODUTOSTABELASPRECOS_RAW] AS SOURCE
+		                           MERGE [B2CCONSULTAPRODUTOSTABELASPRECOS] AS TARGET
+                                   USING [B2CCONSULTAPRODUTOSTABELASPRECOS] AS SOURCE
 
                                    ON (
 			                           TARGET.[ID_PROD_TAB_PRECO] = SOURCE.[ID_PROD_TAB_PRECO]
@@ -63,7 +63,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 			                           TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP],
 			                           TARGET.[PORTAL] = SOURCE.[PORTAL]
 
-                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_PROD_TAB_PRECO] NOT IN (SELECT [ID_PROD_TAB_PRECO] FROM [B2CCONSULTAPRODUTOSTABELASPRECOS_TRUSTED]) THEN
+                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_PROD_TAB_PRECO] NOT IN (SELECT [ID_PROD_TAB_PRECO] FROM [B2CCONSULTAPRODUTOSTABELASPRECOS]) THEN
 			                           INSERT
 			                           ([LASTUPDATEON], [ID_PROD_TAB_PRECO], [ID_TABELA], [CODIGOPRODUTO], [PRECOVENDA], [TIMESTAMP], [PORTAL])
 			                           VALUES
@@ -95,7 +95,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                         identificadores += $"'{registros[i].id_prod_tab_preco}', ";
                 }
 
-                string sql = $"SELECT ID_PROD_TAB_PRECO, TIMESTAMP FROM B2CCONSULTACLIENTES_TRUSTED WHERE ID_PROD_TAB_PRECO IN ({identificadores})";
+                string sql = $"SELECT ID_PROD_TAB_PRECO, TIMESTAMP FROM B2CCONSULTACLIENTES WHERE ID_PROD_TAB_PRECO IN ({identificadores})";
 
                 return await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
             }
@@ -141,7 +141,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 
         public async Task<bool> InsertRecord(LinxAPIParam jobParameter, B2CConsultaProdutosTabelasPrecos? record)
         {
-            string? sql = $"INSERT INTO {jobParameter.tableName}_raw " +
+            string? sql = $"INSERT INTO {jobParameter.tableName} " +
                           "([lastupdateon], [id_prod_tab_preco], [id_tabela], [codigoproduto], [precovenda], [timestamp], [portal]) " +
                           "Values " +
                           "(@lastupdateon, @id_prod_tab_preco, @id_tabela, @codigoproduto, @precovenda, @timestamp, @portal)";

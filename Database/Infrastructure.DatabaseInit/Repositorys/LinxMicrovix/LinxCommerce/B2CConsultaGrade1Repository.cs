@@ -51,26 +51,26 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
                            EXECUTE (
 	                           'CREATE PROCEDURE [P_B2CCONSULTAGRADE1_SYNC] AS
 	                           BEGIN
-		                           MERGE [B2CCONSULTAGRADE1_TRUSTED] AS TARGET
-                                   USING [B2CCONSULTAGRADE1_RAW] AS SOURCE
+		                           MERGE [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTAGRADE1] AS TARGET
+                                   USING [UNTREATED].[dbo].[B2CCONSULTAGRADE1] AS SOURCE
 
                                    ON (
 			                           TARGET.[CODIGO_GRADE1] = SOURCE.[CODIGO_GRADE1]
 		                           )
 
-                                   WHEN MATCHED AND TARGET.[parameters_timestamp] != SOURCE.[parameters_timestamp] THEN 
+                                   WHEN MATCHED AND TARGET.[TIMESTAMP] != SOURCE.[TIMESTAMP] THEN 
 			                           UPDATE SET
 			                           TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON],
 			                           TARGET.[CODIGO_GRADE1] = SOURCE.[CODIGO_GRADE1],
 			                           TARGET.[NOME_GRADE1] = SOURCE.[NOME_GRADE1],
-			                           TARGET.[parameters_timestamp] = SOURCE.[parameters_timestamp],
+			                           TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP],
 			                           TARGET.[PORTAL] = SOURCE.[PORTAL]
 
-                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[CODIGO_GRADE1] NOT IN (SELECT [CODIGO_GRADE1] FROM [B2CCONSULTAGRADE1_TRUSTED]) THEN
+                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[CODIGO_GRADE1] NOT IN (SELECT [CODIGO_GRADE1] FROM [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTAGRADE1]) THEN
 			                           INSERT
-			                           ([LASTUPDATEON], [CODIGO_GRADE1], [NOME_GRADE1], [parameters_timestamp], [PORTAL])
+			                           ([LASTUPDATEON], [CODIGO_GRADE1], [NOME_GRADE1], [TIMESTAMP], [PORTAL])
 			                           VALUES
-			                           (SOURCE.[LASTUPDATEON], SOURCE.[CODIGO_GRADE1], SOURCE.[NOME_GRADE1], SOURCE.[parameters_timestamp], SOURCE.[PORTAL]);
+			                           (SOURCE.[LASTUPDATEON], SOURCE.[CODIGO_GRADE1], SOURCE.[NOME_GRADE1], SOURCE.[TIMESTAMP], SOURCE.[PORTAL]);
 	                           END'
                            )
                            END";

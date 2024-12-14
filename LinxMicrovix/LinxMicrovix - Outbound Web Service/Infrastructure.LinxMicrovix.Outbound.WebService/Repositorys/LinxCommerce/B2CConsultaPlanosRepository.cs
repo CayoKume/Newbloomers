@@ -47,8 +47,8 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                            EXECUTE (
 	                           'CREATE PROCEDURE [P_B2CCONSULTAPLANOS_SYNC] AS
 	                           BEGIN
-		                           MERGE [B2CCONSULTAPLANOS_TRUSTED] AS TARGET
-                                   USING [B2CCONSULTAPLANOS_RAW] AS SOURCE
+		                           MERGE [B2CCONSULTAPLANOS] AS TARGET
+                                   USING [B2CCONSULTAPLANOS] AS SOURCE
 
                                    ON (
 			                           TARGET.[PLANO] = SOURCE.[PLANO]
@@ -68,7 +68,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 			                           TARGET.[TIPO_PLANO] = SOURCE.[TIPO_PLANO],
 			                           TARGET.[PORTAL] = SOURCE.[PORTAL]
 
-                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[PLANO] NOT IN (SELECT [PLANO] FROM [B2CCONSULTAPLANOS_TRUSTED]) THEN
+                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[PLANO] NOT IN (SELECT [PLANO] FROM [B2CCONSULTAPLANOS]) THEN
 			                           INSERT
 			                           ([LASTUPDATEON], [PLANO], [NOME_PLANO], [FORMA_PAGAMENTO], [QTDO_PARCELA], [VALOR_MINIMO_PARCELA], [INDICE], [TIMESTAMP], [DESATIVADO], [TIPO_PLANO], [PORTAL])
 			                           VALUES
@@ -100,7 +100,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                         identificadores += $"'{registros[i].plano}', ";
                 }
 
-                string sql = $"SELECT PLANO, TIMESTAMP FROM B2CCONSULTAPLANOS_TRUSTED WHERE PLANO IN ({identificadores})";
+                string sql = $"SELECT PLANO, TIMESTAMP FROM B2CCONSULTAPLANOS WHERE PLANO IN ({identificadores})";
 
                 return await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
             }
@@ -145,7 +145,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 
         public async Task<bool> InsertRecord(LinxAPIParam jobParameter, B2CConsultaPlanos? record)
         {
-            string? sql = $"INSERT INTO {jobParameter.tableName}_raw " +
+            string? sql = $"INSERT INTO {jobParameter.tableName} " +
                           "([lastupdateon], [plano], [nome_plano], [forma_pagamento], [qtde_parcelas], [valor_minimo_parcela], [indice], [timestamp], [desativado], [tipo_plano], [portal]) " +
                           "Values " +
                           "(@lastupdateon, @plano, @nome_plano, @forma_pagamento, @qtde_parcelas, @valor_minimo_parcela, @indice, @timestamp, @desativado, @tipo_plano, @portal)";

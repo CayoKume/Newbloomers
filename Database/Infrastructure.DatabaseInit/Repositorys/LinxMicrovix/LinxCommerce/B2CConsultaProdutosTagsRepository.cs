@@ -52,28 +52,28 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
                             EXECUTE (
 	                            'CREATE PROCEDURE [P_B2CCONSULTAPRODUTOSTAGS_SYNC] AS
 	                            BEGIN
-		                            MERGE [B2CCONSULTAPRODUTOSTAGS_TRUSTED] AS TARGET
-                                    USING [B2CCONSULTAPRODUTOSTAGS_RAW] AS SOURCE
+		                            MERGE [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTAPRODUTOSTAGS] AS TARGET
+                                    USING [UNTREATED].[dbo].[B2CCONSULTAPRODUTOSTAGS] AS SOURCE
 
                                     ON (
 			                            TARGET.[ID_B2C_TAGS_PRODUTOS] = SOURCE.[ID_B2C_TAGS_PRODUTOS]
 		                            )
 
-                                    WHEN MATCHED AND TARGET.[parameters_timestamp] != SOURCE.[parameters_timestamp] THEN
+                                    WHEN MATCHED AND TARGET.[TIMESTAMP] != SOURCE.[TIMESTAMP] THEN
 			                            UPDATE SET
 			                            TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON],
 			                            TARGET.[ID_B2C_TAGS_PRODUTOS] = SOURCE.[ID_B2C_TAGS_PRODUTOS],
 			                            TARGET.[ID_B2C_TAGS] = SOURCE.[ID_B2C_TAGS],
 			                            TARGET.[CODIGOPRODUTO] = SOURCE.[CODIGOPRODUTO],
 			                            TARGET.[DESCRICAO_B2C_TAGS] = SOURCE.[DESCRICAO_B2C_TAGS],
-			                            TARGET.[parameters_timestamp] = SOURCE.[parameters_timestamp],
+			                            TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP],
 			                            TARGET.[PORTAL] = SOURCE.[PORTAL]
 
-                                    WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_B2C_TAGS_PRODUTOS] NOT IN (SELECT [ID_B2C_TAGS_PRODUTOS] FROM [B2CCONSULTAPRODUTOSTAGS_TRUSTED]) THEN
+                                    WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_B2C_TAGS_PRODUTOS] NOT IN (SELECT [ID_B2C_TAGS_PRODUTOS] FROM [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTAPRODUTOSTAGS]) THEN
 			                            INSERT
-			                            ([LASTUPDATEON], [ID_B2C_TAGS_PRODUTOS], [ID_B2C_TAGS], [CODIGOPRODUTO], [DESCRICAO_B2C_TAGS], [parameters_timestamp], [PORTAL])
+			                            ([LASTUPDATEON], [ID_B2C_TAGS_PRODUTOS], [ID_B2C_TAGS], [CODIGOPRODUTO], [DESCRICAO_B2C_TAGS], [TIMESTAMP], [PORTAL])
 			                            VALUES
-			                            (SOURCE.[LASTUPDATEON], SOURCE.[ID_B2C_TAGS_PRODUTOS], SOURCE.[ID_B2C_TAGS], SOURCE.[CODIGOPRODUTO], SOURCE.[DESCRICAO_B2C_TAGS], SOURCE.[parameters_timestamp], SOURCE.[PORTAL]);
+			                            (SOURCE.[LASTUPDATEON], SOURCE.[ID_B2C_TAGS_PRODUTOS], SOURCE.[ID_B2C_TAGS], SOURCE.[CODIGOPRODUTO], SOURCE.[DESCRICAO_B2C_TAGS], SOURCE.[TIMESTAMP], SOURCE.[PORTAL]);
 	                            END'
                             )
                             END";

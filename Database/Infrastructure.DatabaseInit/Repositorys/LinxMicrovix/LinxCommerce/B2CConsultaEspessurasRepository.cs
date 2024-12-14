@@ -52,26 +52,26 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
                            EXECUTE (
 	                           'CREATE PROCEDURE [P_B2CCONSULTAESPESSURAS_SYNC] AS
 	                           BEGIN
-		                           MERGE [B2CCONSULTAESPESSURAS_TRUSTED] AS TARGET
-                                   USING [B2CCONSULTAESPESSURAS_RAW] AS SOURCE
+		                           MERGE [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTAESPESSURAS] AS TARGET
+                                   USING [UNTREATED].[dbo].[B2CCONSULTAESPESSURAS] AS SOURCE
 
                                    ON (
 			                           TARGET.CODIGO_ESPESSURA = SOURCE.CODIGO_ESPESSURA
 		                           )
 
-                                   WHEN MATCHED AND TARGET.[parameters_timestamp] != SOURCE.[parameters_timestamp] THEN
+                                   WHEN MATCHED AND TARGET.[TIMESTAMP] != SOURCE.[TIMESTAMP] THEN
 			                           UPDATE SET
 			                           TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON],
 			                           TARGET.[CODIGO_ESPESSURA] = SOURCE.[CODIGO_ESPESSURA],
 			                           TARGET.[NOME_ESPESSURA] = SOURCE.[NOME_ESPESSURA],
-			                           TARGET.[parameters_timestamp] = SOURCE.[parameters_timestamp],
+			                           TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP],
 			                           TARGET.[PORTAL] = SOURCE.[PORTAL]
 
-                                   WHEN NOT MATCHED BY TARGET AND CODIGO_ESPESSURA NOT IN (SELECT [CODIGO_ESPESSURA] FROM [B2CCONSULTAESPESSURAS_TRUSTED]) THEN
+                                   WHEN NOT MATCHED BY TARGET AND CODIGO_ESPESSURA NOT IN (SELECT [CODIGO_ESPESSURA] FROM [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTAESPESSURAS]) THEN
 			                           INSERT
-			                           ([LASTUPDATEON], [CODIGO_ESPESSURA], [NOME_ESPESSURA], [parameters_timestamp], [PORTAL])
+			                           ([LASTUPDATEON], [CODIGO_ESPESSURA], [NOME_ESPESSURA], [TIMESTAMP], [PORTAL])
 			                           VALUES
-			                           (SOURCE.[LASTUPDATEON], SOURCE.[CODIGO_ESPESSURA], SOURCE.[NOME_ESPESSURA], SOURCE.[parameters_timestamp], SOURCE.[PORTAL]);
+			                           (SOURCE.[LASTUPDATEON], SOURCE.[CODIGO_ESPESSURA], SOURCE.[NOME_ESPESSURA], SOURCE.[TIMESTAMP], SOURCE.[PORTAL]);
 	                           END'
                            )
                            END";

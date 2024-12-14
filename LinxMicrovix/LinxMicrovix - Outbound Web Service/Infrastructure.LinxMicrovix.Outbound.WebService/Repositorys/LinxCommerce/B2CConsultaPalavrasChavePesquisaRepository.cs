@@ -46,8 +46,8 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                             EXECUTE (
 	                            'CREATE PROCEDURE [P_B2CCONSULTAPALAVRASCHAVEPESQUISA_SYNC] AS
 	                            BEGIN
-		                            MERGE [B2CCONSULTAPALAVRASCHAVEPESQUISA_TRUSTED] AS TARGET
-                                    USING [B2CCONSULTAPALAVRASCHAVEPESQUISA_RAW] AS SOURCE
+		                            MERGE [B2CCONSULTAPALAVRASCHAVEPESQUISA] AS TARGET
+                                    USING [B2CCONSULTAPALAVRASCHAVEPESQUISA] AS SOURCE
 
                                     ON (TARGET.[ID_B2C_PALAVRAS_CHAVE_PESQUISA] = SOURCE.[ID_B2C_PALAVRAS_CHAVE_PESQUISA])
 
@@ -59,7 +59,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 			                            TARGET.[NOME_COLECAO] = SOURCE.[NOME_COLECAO],
 			                            TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP]
 
-                                    WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_B2C_PALAVRAS_CHAVE_PESQUISA] NOT IN (SELECT [ID_B2C_PALAVRAS_CHAVE_PESQUISA] FROM [B2CCONSULTAPALAVRASCHAVEPESQUISA_TRUSTED]) THEN
+                                    WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_B2C_PALAVRAS_CHAVE_PESQUISA] NOT IN (SELECT [ID_B2C_PALAVRAS_CHAVE_PESQUISA] FROM [B2CCONSULTAPALAVRASCHAVEPESQUISA]) THEN
 			                            INSERT
 			                            ([LASTUPDATEON], [PORTAL], [ID_B2C_PALAVRAS_CHAVE_PESQUISA], [NOME_COLECAO], [TIMESTAMP])
 			                            VALUES
@@ -91,7 +91,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                         identificadores += $"'{registros[i].id_b2c_palavras_chave_pesquisa}', ";
                 }
 
-                string sql = $"SELECT ID_B2C_PALAVRAS_CHAVE_PESQUISA, TIMESTAMP FROM B2CCONSULTAPALAVRASCHAVEPESQUISA_TRUSTED WHERE ID_B2C_PALAVRAS_CHAVE_PESQUISA IN ({identificadores})";
+                string sql = $"SELECT ID_B2C_PALAVRAS_CHAVE_PESQUISA, TIMESTAMP FROM B2CCONSULTAPALAVRASCHAVEPESQUISA WHERE ID_B2C_PALAVRAS_CHAVE_PESQUISA IN ({identificadores})";
 
                 return await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
             }

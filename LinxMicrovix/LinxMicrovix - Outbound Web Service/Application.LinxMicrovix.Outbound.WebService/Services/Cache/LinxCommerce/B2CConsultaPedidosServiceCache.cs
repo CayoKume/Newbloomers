@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using System.Globalization;
-using Application.IntegrationsCore.Services;
+﻿using Application.IntegrationsCore.Services;
 using Application.IntegrationsCore.Interfaces;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Cache.LinxCommerce;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce;
@@ -12,12 +9,12 @@ namespace Application.LinxMicrovix.Outbound.WebService.Entities.Cache.LinxCommer
     {
         public override string GetKey(B2CConsultaPedidos entity)
         {
-            throw new NotImplementedException();
+            return $"[{entity.id_pedido}]|[{entity.timestamp}]";
         }
 
         public override string GetKeyInDictionary(IDictionary<string, string> dictionaryFields)
         {
-            throw new NotImplementedException();
+            return $"[{dictionaryFields["id_pedido"]}]|[{dictionaryFields["timestamp"]}]";
         }
     }
 }

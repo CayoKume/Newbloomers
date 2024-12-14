@@ -47,8 +47,8 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                            EXECUTE (
 	                           'CREATE PROCEDURE [P_B2CCONSULTACNPJSCHAVE_SYNC] AS
 	                           BEGIN
-		                           MERGE [B2CCONSULTACNPJSCHAVE_TRUSTED] AS TARGET
-                                   USING [B2CCONSULTACNPJSCHAVE_RAW] AS SOURCE
+		                           MERGE [B2CCONSULTACNPJSCHAVE] AS TARGET
+                                   USING [B2CCONSULTACNPJSCHAVE] AS SOURCE
 
                                    ON (
 			                           TARGET.[CNPJ] = SOURCE.[CNPJ]
@@ -68,7 +68,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 			                           TARGET.[B2C] = SOURCE.[B2C],
 			                           TARGET.[OMS] = SOURCE.[OMS]
 
-                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[CNPJ] NOT IN (SELECT [CNPJ] FROM [B2CCONSULTACNPJSCHAVE_TRUSTED]) THEN
+                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[CNPJ] NOT IN (SELECT [CNPJ] FROM [B2CCONSULTACNPJSCHAVE]) THEN
 			                           INSERT
 			                           ([LASTUPDATEON], [CNPJ], [NOME_EMPRESA], [ID_EMPRESAS_REDE], [REDE], [PORTAL], [NOME_PORTAL], [EMPRESA], [CLASSIFICACAO_PORTAL], [B2C], [OMS])
 			                           VALUES
@@ -101,7 +101,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                         identificadores += $"'{registros[i].id_empresas_rede}', ";
                 }
 
-                string sql = $"SELECT ID_EMPRESAS_REDE, TIMESTAMP FROM B2CCONSULTACNPJSCHAVE_TRUSTED WHERE ID_EMPRESAS_REDE IN ({identificadores})";
+                string sql = $"SELECT ID_EMPRESAS_REDE, TIMESTAMP FROM B2CCONSULTACNPJSCHAVE WHERE ID_EMPRESAS_REDE IN ({identificadores})";
 
                 return await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
             }
@@ -145,7 +145,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 
         public async Task<bool> InsertRecord(LinxAPIParam jobParameter, B2CConsultaCNPJsChave? record)
         {
-            string? sql = $"INSERT INTO {jobParameter.tableName}_raw " +
+            string? sql = $"INSERT INTO {jobParameter.tableName} " +
                           "([lastupdateon], [cnpj], [nome_empresa], [id_empresas_rede], [rede], [portal], [nome_portal], [empresa], [classificacao_portal], [b2c], [oms]) " +
                           "Values " +
                           "(@lastupdateon, @cnpj, @nome_empresa, @id_empresas_rede, @rede, @portal, @nome_portal, @empresa, @classificacao_portal, @b2c, @oms)";

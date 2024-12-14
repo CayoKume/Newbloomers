@@ -42,8 +42,8 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 
         public async Task<bool> CreateTableMerge(LinxAPIParam jobParameter)
         {
-            string? sql = $"MERGE [{jobParameter.tableName}_trusted] AS TARGET " +
-                         $"USING [{jobParameter.tableName}_raw] AS SOURCE " +
+            string? sql = $"MERGE [{jobParameter.tableName}] AS TARGET " +
+                         $"USING [{jobParameter.tableName}] AS SOURCE " +
                           "ON (TARGET.COD_TRANSPORTADOR = SOURCE.COD_TRANSPORTADOR) " +
                           "WHEN MATCHED THEN UPDATE SET " +
                           "TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON], " +
@@ -95,7 +95,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                         identificadores += $"'{registros[i].documento}', ";
                 }
 
-                string sql = $"SELECT DOCUMENTO, TIMESTAMP FROM B2CCONSULTATRANSPORTADORES_TRUSTED WHERE DOCUMENTO IN ({identificadores})";
+                string sql = $"SELECT DOCUMENTO, TIMESTAMP FROM B2CCONSULTATRANSPORTADORES WHERE DOCUMENTO IN ({identificadores})";
 
                 return await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
             }
@@ -140,7 +140,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 
         public async Task<bool> InsertRecord(LinxAPIParam jobParameter, B2CConsultaTransportadores? record)
         {
-            string? sql = $"INSERT INTO {jobParameter.tableName}_raw " +
+            string? sql = $"INSERT INTO {jobParameter.tableName} " +
                           "([lastupdateon], [cod_transportador], [nome], [nome_fantasia], [tipo_pessoa], [tipo_transportador], [endereco], [numero_rua], [bairro], [cep], [cidade], [uf], [documento], [fone], [email], [pais], [obs], [timestamp], [portal]) " +
                           "Values " +
                           "(@lastupdateon, @cod_transportador, @nome, @nome_fantasia, @tipo_pessoa, @tipo_transportador, @endereco, @numero_rua, @bairro, @cep, @cidade, @uf, @documento, @fone, @email, @pais, @obs, @timestamp, @portal)";

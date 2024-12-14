@@ -51,27 +51,27 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
                            EXECUTE (
 	                           'CREATE PROCEDURE [P_B2CCONSULTACOLECOES_SYNC] AS
 	                           BEGIN
-		                           MERGE [B2CCONSULTACOLECOES_TRUSTED] AS TARGET
-                                   USING [B2CCONSULTACOLECOES_RAW] AS SOURCE
+		                           MERGE [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTACOLECOES] AS TARGET
+                                   USING [UNTREATED].[dbo].[B2CCONSULTACOLECOES] AS SOURCE
 
                                    ON (
 			                           TARGET.CODIGO_COLECAO = SOURCE.CODIGO_COLECAO
 		                           )
 
-                                   WHEN MATCHED AND TARGET.[parameters_timestamp] != SOURCE.[parameters_timestamp] THEN 
+                                   WHEN MATCHED AND TARGET.[TIMESTAMP] != SOURCE.[TIMESTAMP] THEN 
 			                           UPDATE SET
 			                           TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON],
 			                           TARGET.[CODIGO_COLECAO] = SOURCE.[CODIGO_COLECAO],
 			                           TARGET.[NOME_COLECAO] = SOURCE.[NOME_COLECAO],
-			                           TARGET.[parameters_timestamp] = SOURCE.[parameters_timestamp],
+			                           TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP],
 			                           TARGET.[MARCAS] = SOURCE.[MARCAS],
 			                           TARGET.[PORTAL] = SOURCE.[PORTAL]
 
-                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[CODIGO_COLECAO] NOT IN (SELECT [CODIGO_COLECAO] FROM [B2CCONSULTACOLECOES_TRUSTED]) THEN
+                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[CODIGO_COLECAO] NOT IN (SELECT [CODIGO_COLECAO] FROM [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTACOLECOES]) THEN
 			                           INSERT
-			                           ([LASTUPDATEON], [CODIGO_COLECAO], [NOME_COLECAO], [parameters_timestamp], [MARCAS], [PORTAL])
+			                           ([LASTUPDATEON], [CODIGO_COLECAO], [NOME_COLECAO], [TIMESTAMP], [MARCAS], [PORTAL])
 			                           VALUES
-			                           (SOURCE.[LASTUPDATEON], SOURCE.[CODIGO_COLECAO], SOURCE.[NOME_COLECAO], SOURCE.[parameters_timestamp], SOURCE.[MARCAS], SOURCE.[PORTAL]);
+			                           (SOURCE.[LASTUPDATEON], SOURCE.[CODIGO_COLECAO], SOURCE.[NOME_COLECAO], SOURCE.[TIMESTAMP], SOURCE.[MARCAS], SOURCE.[PORTAL]);
 	                           END'
                            )
                            END";

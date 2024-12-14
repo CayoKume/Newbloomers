@@ -25,7 +25,7 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
                     var result = conn.Query(sql: sql);
 
                     if (result.Count() == 0)
-                        conn.CreateTable<B2CConsultaCNPJsChave>(tableName: $"{jobName}_raw");
+                        conn.CreateTable<B2CConsultaCNPJsChave>(tableName: $"{jobName}");
 
                 }
 
@@ -34,7 +34,7 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
                     var result = conn.Query(sql: sql);
 
                     if (result.Count() == 0)
-                        conn.CreateTable<B2CConsultaCNPJsChave>(tableName: $"{jobName}_raw");
+                        conn.CreateTable<B2CConsultaCNPJsChave>(tableName: $"{jobName}");
 
                 }
 
@@ -53,8 +53,8 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
                            EXECUTE (
 	                           'CREATE PROCEDURE [P_B2CCONSULTACNPJSCHAVE_SYNC] AS
 	                           BEGIN
-		                           MERGE [B2CCONSULTACNPJSCHAVE_TRUSTED] AS TARGET
-                                   USING [B2CCONSULTACNPJSCHAVE_RAW] AS SOURCE
+		                           MERGE [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTACNPJSCHAVE] AS TARGET
+                                   USING [UNTREATED].[dbo].[B2CCONSULTACNPJSCHAVE] AS SOURCE
 
                                    ON (
 			                           TARGET.[CNPJ] = SOURCE.[CNPJ]
@@ -74,7 +74,7 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
 			                           TARGET.[B2C] = SOURCE.[B2C],
 			                           TARGET.[OMS] = SOURCE.[OMS]
 
-                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[CNPJ] NOT IN (SELECT [CNPJ] FROM [B2CCONSULTACNPJSCHAVE_TRUSTED]) THEN
+                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[CNPJ] NOT IN (SELECT [CNPJ] FROM [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTACNPJSCHAVE]) THEN
 			                           INSERT
 			                           ([LASTUPDATEON], [CNPJ], [NOME_EMPRESA], [ID_EMPRESAS_REDE], [REDE], [PORTAL], [NOME_PORTAL], [EMPRESA], [CLASSIFICACAO_PORTAL], [B2C], [OMS])
 			                           VALUES

@@ -46,8 +46,8 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                             EXECUTE (
 	                            'CREATE PROCEDURE [P_B2CCONSULTAPRODUTOSTAGS_SYNC] AS
 	                            BEGIN
-		                            MERGE [B2CCONSULTAPRODUTOSTAGS_TRUSTED] AS TARGET
-                                    USING [B2CCONSULTAPRODUTOSTAGS_RAW] AS SOURCE
+		                            MERGE [B2CCONSULTAPRODUTOSTAGS] AS TARGET
+                                    USING [B2CCONSULTAPRODUTOSTAGS] AS SOURCE
 
                                     ON (
 			                            TARGET.[ID_B2C_TAGS_PRODUTOS] = SOURCE.[ID_B2C_TAGS_PRODUTOS]
@@ -63,7 +63,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 			                            TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP],
 			                            TARGET.[PORTAL] = SOURCE.[PORTAL]
 
-                                    WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_B2C_TAGS_PRODUTOS] NOT IN (SELECT [ID_B2C_TAGS_PRODUTOS] FROM [B2CCONSULTAPRODUTOSTAGS_TRUSTED]) THEN
+                                    WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_B2C_TAGS_PRODUTOS] NOT IN (SELECT [ID_B2C_TAGS_PRODUTOS] FROM [B2CCONSULTAPRODUTOSTAGS]) THEN
 			                            INSERT
 			                            ([LASTUPDATEON], [ID_B2C_TAGS_PRODUTOS], [ID_B2C_TAGS], [CODIGOPRODUTO], [DESCRICAO_B2C_TAGS], [TIMESTAMP], [PORTAL])
 			                            VALUES
@@ -95,7 +95,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                         identificadores += $"'{registros[i].id_b2c_tags}', ";
                 }
 
-                string sql = $"SELECT ID_B2C_TAGS, TIMESTAMP FROM B2CCONSULTAPRODUTOSTAGS_TRUSTED WHERE ID_B2C_TAGS IN ({identificadores})";
+                string sql = $"SELECT ID_B2C_TAGS, TIMESTAMP FROM B2CCONSULTAPRODUTOSTAGS WHERE ID_B2C_TAGS IN ({identificadores})";
 
                 return await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
             }

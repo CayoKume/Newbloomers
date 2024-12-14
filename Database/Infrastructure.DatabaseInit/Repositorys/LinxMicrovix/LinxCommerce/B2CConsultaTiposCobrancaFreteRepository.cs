@@ -46,20 +46,28 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
 
         public async Task<bool> CreateTableMerge(string databaseName, string tableName)
         {
-            string? sql = $"MERGE [{tableName}_trusted] AS TARGET " +
-                         $"USING [{tableName}_raw] AS SOURCE " +
-                          "ON (TARGET.CODIG_TIPO_COBRANCA_FRETE = SOURCE.CODIG_TIPO_COBRANCA_FRETE) " +
-                          "WHEN MATCHED THEN UPDATE SET " +
-                          "TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON], " +
-                          "TARGET.[CODIG_TIPO_COBRANCA_FRETE] = SOURCE.[CODIG_TIPO_COBRANCA_FRETE], " +
-                          "TARGET.[NOME_TIPO_COBRANCA_FRETE] = SOURCE.[NOME_TIPO_COBRANCA_FRETE], " +
-                          "TARGET.[parameters_timestamp] = SOURCE.[parameters_timestamp], " +
-                          "TARGET.[PORTAL] = SOURCE.[PORTAL] " +
-                          "WHEN NOT MATCHED BY TARGET THEN " +
-                          "INSERT " +
-                          "([LASTUPDATEON], [CODIG_TIPO_COBRANCA_FRETE], [NOME_TIPO_COBRANCA_FRETE], [parameters_timestamp], [PORTAL])" +
-                          "VALUES " +
-                          "(SOURCE.[LASTUPDATEON], SOURCE.[CODIG_TIPO_COBRANCA_FRETE], SOURCE.[NOME_TIPO_COBRANCA_FRETE], SOURCE.[parameters_timestamp], SOURCE.[PORTAL]);";
+            string? sql = @$"IF NOT EXISTS (SELECT * FROM SYS.OBJECTS WHERE TYPE = 'P' AND NAME = 'P_B2CCONSULTATIPOFRETE_SYNC')
+                           BEGIN
+                           EXECUTE (
+                               'CREATE PROCEDURE [P_B2CCONSULTATIPOFRETE_SYNC] AS
+                               BEGIN
+									MERGE [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTATIPOFRETE] AS TARGET
+									USING [UNTREATED].[dbo].[B2CCONSULTATIPOFRETE] AS SOURCE
+									ON (TARGET.CODIG_TIPO_COBRANCA_FRETE = SOURCE.CODIG_TIPO_COBRANCA_FRETE)
+									WHEN MATCHED THEN UPDATE SET
+									TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON],
+									TARGET.[CODIG_TIPO_COBRANCA_FRETE] = SOURCE.[CODIG_TIPO_COBRANCA_FRETE],
+									TARGET.[NOME_TIPO_COBRANCA_FRETE] = SOURCE.[NOME_TIPO_COBRANCA_FRETE],
+									TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP],
+									TARGET.[PORTAL] = SOURCE.[PORTAL]
+									WHEN NOT MATCHED BY TARGET THEN
+									INSERT
+									([LASTUPDATEON], [CODIG_TIPO_COBRANCA_FRETE], [NOME_TIPO_COBRANCA_FRETE], [TIMESTAMP], [PORTAL])
+									VALUES
+									(SOURCE.[LASTUPDATEON], SOURCE.[CODIG_TIPO_COBRANCA_FRETE], SOURCE.[NOME_TIPO_COBRANCA_FRETE], SOURCE.[TIMESTAMP], SOURCE.[PORTAL]);                        
+								END'
+                           )
+                           END";
 
             try
             {

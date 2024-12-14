@@ -46,8 +46,8 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                            EXECUTE (
 	                           'CREATE PROCEDURE [P_B2CCONSULTAPLANOSPARCELAS_SYNC] AS
 	                           BEGIN
-		                           MERGE [B2CCONSULTAPLANOSPARCELAS_TRUSTED] AS TARGET
-                                   USING [B2CCONSULTAPLANOSPARCELAS_RAW] AS SOURCE
+		                           MERGE [B2CCONSULTAPLANOSPARCELAS] AS TARGET
+                                   USING [B2CCONSULTAPLANOSPARCELAS] AS SOURCE
 
                                    ON (
 			                           TARGET.[PLANO] = SOURCE.[PLANO]
@@ -63,7 +63,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 			                           TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP],
 			                           TARGET.[PORTAL] = SOURCE.[PORTAL]
 
-                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[PLANO] NOT IN (SELECT [PLANO] FROM [B2CCONSULTAPLANOSPARCELAS_TRUSTED]) THEN
+                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[PLANO] NOT IN (SELECT [PLANO] FROM [B2CCONSULTAPLANOSPARCELAS]) THEN
 			                           INSERT
 			                           ([LASTUPDATEON], [PLANO], [ORDEM_PARCELA], [PRAZO_PARC], [ID_PLANOS_PARCELAS], [TIMESTAMP], [PORTAL])
 			                           VALUES
@@ -95,7 +95,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                         identificadores += $"'{registros[i].id_planos_parcelas}', ";
                 }
 
-                string sql = $"SELECT ID_PLANOS_PARCELAS, TIMESTAMP FROM B2CCONSULTACLIENTES_TRUSTED WHERE ID_PLANOS_PARCELAS IN ({identificadores})";
+                string sql = $"SELECT ID_PLANOS_PARCELAS, TIMESTAMP FROM B2CCONSULTACLIENTES WHERE ID_PLANOS_PARCELAS IN ({identificadores})";
 
                 return await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
             }
@@ -140,7 +140,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 
         public async Task<bool> InsertRecord(LinxAPIParam jobParameter, B2CConsultaPlanosParcelas? record)
         {
-            string? sql = $"INSERT INTO {jobParameter.tableName}_raw " +
+            string? sql = $"INSERT INTO {jobParameter.tableName} " +
                           "([lastupdateon], [plano], [ordem_parcela], [prazo_parc], [id_planos_parcelas], [timestamp], [portal]) " +
                           "Values " +
                           "(@lastupdateon, @plano, @ordem_parcela, @prazo_parc, @id_planos_parcelas, @timestamp, @portal)";

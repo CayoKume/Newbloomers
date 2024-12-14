@@ -25,7 +25,7 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
                     var result = conn.Query(sql: sql);
 
                     if (result.Count() == 0)
-                        conn.CreateTable<B2CConsultaVendedores>(tableName: $"{jobName}");
+                        conn.CreateTable<B2CConsultaLegendasCadastrosAuxiliares>(tableName: $"{jobName}");
                 }
 
                 using (var conn = _conn.GetIDbConnection(untreatedDatabaseName))
@@ -33,7 +33,7 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
                     var result = conn.Query(sql: sql);
 
                     if (result.Count() == 0)
-                        conn.CreateTable<B2CConsultaVendedores>(tableName: $"{jobName}");
+                        conn.CreateTable<B2CConsultaLegendasCadastrosAuxiliares>(tableName: $"{jobName}");
                 }
 
                 return true;
@@ -51,14 +51,14 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
                            EXECUTE (
 	                           'CREATE PROCEDURE [P_B2CCONSULTALEGENDASCADASTROSAUXILIARES_SYNC] AS
 	                           BEGIN
-		                           MERGE [B2CCONSULTALEGENDASCADASTROSAUXILIARES_TRUSTED] AS TARGET
-                                   USING [B2CCONSULTALEGENDASCADASTROSAUXILIARES_RAW] AS SOURCE
+		                           MERGE [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTALEGENDASCADASTROSAUXILIARES] AS TARGET
+                                   USING [UNTREATED].[dbo].[B2CCONSULTALEGENDASCADASTROSAUXILIARES] AS SOURCE
 
                                    ON (
 			                           TARGET.[EMPRESA] = SOURCE.[EMPRESA]
 		                           )
 
-                                   WHEN MATCHED AND TARGET.[parameters_timestamp] != SOURCE.[parameters_timestamp] THEN
+                                   WHEN MATCHED AND TARGET.[TIMESTAMP] != SOURCE.[TIMESTAMP] THEN
 			                           UPDATE SET
 			                           TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON],
 			                           TARGET.[EMPRESA] = SOURCE.[EMPRESA],
@@ -70,15 +70,15 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
 			                           TARGET.[LEGENDA_GRADE2] = SOURCE.[LEGENDA_GRADE2],
 			                           TARGET.[LEGENDA_ESPESSURA] = SOURCE.[LEGENDA_ESPESSURA],
 			                           TARGET.[LEGENDA_CLASSIFICACAO] = SOURCE.[LEGENDA_CLASSIFICACAO],
-			                           TARGET.[parameters_timestamp] = SOURCE.[parameters_timestamp]
+			                           TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP]
 
-                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[EMPRESA] NOT IN (SELECT [EMPRESA] FROM [B2CCONSULTALEGENDASCADASTROSAUXILIARES_TRUSTED]) THEN
+                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[EMPRESA] NOT IN (SELECT [EMPRESA] FROM [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTALEGENDASCADASTROSAUXILIARES]) THEN
 			                           INSERT
 			                           ([LASTUPDATEON], [EMPRESA], [LEGENDA_SETOR], [LEGENDA_LINHA], [LEGENDA_MARCA], [LEGENDA_COLECAO], [LEGENDA_GRADE1], [LEGENDA_GRADE2],
-			                           [LEGENDA_ESPESSURA], [LEGENDA_CLASSIFICACAO], [parameters_timestamp])
+			                           [LEGENDA_ESPESSURA], [LEGENDA_CLASSIFICACAO], [TIMESTAMP])
 			                           VALUES
 			                           (SOURCE.[LASTUPDATEON], SOURCE.[EMPRESA], SOURCE.[LEGENDA_SETOR], SOURCE.[LEGENDA_LINHA], SOURCE.[LEGENDA_MARCA], SOURCE.[LEGENDA_COLECAO], 
-			                           SOURCE.[LEGENDA_GRADE1], SOURCE.[LEGENDA_GRADE2], SOURCE.[LEGENDA_ESPESSURA], SOURCE.[LEGENDA_CLASSIFICACAO], SOURCE.[parameters_timestamp]);
+			                           SOURCE.[LEGENDA_GRADE1], SOURCE.[LEGENDA_GRADE2], SOURCE.[LEGENDA_ESPESSURA], SOURCE.[LEGENDA_CLASSIFICACAO], SOURCE.[TIMESTAMP]);
 	                           END'
                            )
                            END";

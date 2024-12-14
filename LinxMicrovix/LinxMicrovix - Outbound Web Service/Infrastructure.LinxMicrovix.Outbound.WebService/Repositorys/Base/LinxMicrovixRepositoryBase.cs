@@ -337,10 +337,10 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
         {
             try
             {
-                using (var conn = _sqlServerConnection.GetDbConnection(jobParameter.databaseName))
+                using (var conn = _sqlServerConnection.GetDbConnection(jobParameter.untreatedDatabaseName))
                 {
                     using var bulkCopy = new SqlBulkCopy(conn);
-                    bulkCopy.DestinationTableName = $"[{jobParameter.tableName}_raw]";
+                    bulkCopy.DestinationTableName = $"[{jobParameter.tableName}]";
                     bulkCopy.BatchSize = dataTableRowsNumber;
                     bulkCopy.BulkCopyTimeout = 360;
                     bulkCopy.WriteToServer(dataTable);

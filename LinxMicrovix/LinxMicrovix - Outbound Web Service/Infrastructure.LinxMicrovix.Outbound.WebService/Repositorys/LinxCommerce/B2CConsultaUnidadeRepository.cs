@@ -41,8 +41,8 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 
         public async Task<bool> CreateTableMerge(LinxAPIParam jobParameter)
         {
-            string? sql = $"MERGE [{jobParameter.tableName}_trusted] AS TARGET " +
-                         $"USING [{jobParameter.tableName}_raw] AS SOURCE " +
+            string? sql = $"MERGE [{jobParameter.tableName}] AS TARGET " +
+                         $"USING [{jobParameter.tableName}] AS SOURCE " +
                           "ON (TARGET.UNIDADE = SOURCE.UNIDADE) " +
                           "WHEN MATCHED THEN UPDATE SET " +
                           "TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON], " +
@@ -78,7 +78,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                         identificadores += $"'{registros[i].unidade}', ";
                 }
 
-                string sql = $"SELECT UNIDADE, TIMESTAMP FROM B2CCONSULTAUNIDADE_TRUSTED WHERE UNIDADE IN ({identificadores})";
+                string sql = $"SELECT UNIDADE, TIMESTAMP FROM B2CCONSULTAUNIDADE WHERE UNIDADE IN ({identificadores})";
 
                 return await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
             }
@@ -123,7 +123,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 
         public async Task<bool> InsertRecord(LinxAPIParam jobParameter, B2CConsultaUnidade? record)
         {
-            string? sql = $"INSERT INTO {jobParameter.tableName}_raw " +
+            string? sql = $"INSERT INTO {jobParameter.tableName} " +
                           "([lastupdateon], [unidade], [timestamp], [portal]) " +
                           "Values " +
                           "(@lastupdateon, @unidade, @timestamp, @portal)";

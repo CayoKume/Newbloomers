@@ -52,26 +52,26 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
                            EXECUTE (
 	                           'CREATE PROCEDURE [P_B2CCONSULTAFORMASPAGAMENTO_SYNC] AS
 	                           BEGIN
-		                           MERGE [B2CCONSULTAFORMASPAGAMENTO_TRUSTED] AS TARGET
-                                   USING [B2CCONSULTAFORMASPAGAMENTO_RAW] AS SOURCE
+		                           MERGE [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTAFORMASPAGAMENTO] AS TARGET
+                                   USING [UNTREATED].[dbo].[B2CCONSULTAFORMASPAGAMENTO] AS SOURCE
 
                                    ON (
 			                           TARGET.[COD_FORMA_PGTO] = SOURCE.[COD_FORMA_PGTO]
 		                           )
 
-                                   WHEN MATCHED AND TARGET.[parameters_timestamp] != SOURCE.[parameters_timestamp] THEN 
+                                   WHEN MATCHED AND TARGET.[TIMESTAMP] != SOURCE.[TIMESTAMP] THEN 
 			                           UPDATE SET
 			                           TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON],
 			                           TARGET.[COD_FORMA_PGTO] = SOURCE.[COD_FORMA_PGTO],
 			                           TARGET.[FORMA_PGTO] = SOURCE.[FORMA_PGTO],
-			                           TARGET.[parameters_timestamp] = SOURCE.[parameters_timestamp],
+			                           TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP],
 			                           TARGET.[PORTAL] = SOURCE.[PORTAL]
 
-                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[COD_FORMA_PGTO] NOT IN (SELECT [COD_FORMA_PGTO] FROM [B2CCONSULTAFORMASPAGAMENTO_TRUSTED]) THEN
+                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[COD_FORMA_PGTO] NOT IN (SELECT [COD_FORMA_PGTO] FROM [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTAFORMASPAGAMENTO]) THEN
 			                           INSERT
-			                           ([LASTUPDATEON], [COD_FORMA_PGTO], [FORMA_PGTO], [parameters_timestamp], [PORTAL])
+			                           ([LASTUPDATEON], [COD_FORMA_PGTO], [FORMA_PGTO], [TIMESTAMP], [PORTAL])
 			                           VALUES
-			                           (SOURCE.[LASTUPDATEON], SOURCE.[COD_FORMA_PGTO], SOURCE.[FORMA_PGTO], SOURCE.[parameters_timestamp], SOURCE.[PORTAL]);
+			                           (SOURCE.[LASTUPDATEON], SOURCE.[COD_FORMA_PGTO], SOURCE.[FORMA_PGTO], SOURCE.[TIMESTAMP], SOURCE.[PORTAL]);
 	                           END'
                            )
                            END";

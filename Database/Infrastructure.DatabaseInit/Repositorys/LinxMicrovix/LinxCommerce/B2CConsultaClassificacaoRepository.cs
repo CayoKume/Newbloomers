@@ -50,24 +50,24 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
                            EXECUTE (
                                'CREATE PROCEDURE [P_B2CCONSULTACLASSIFICACAO_SYNC] AS
                                BEGIN
-	                               MERGE [B2CCONSULTACLASSIFICACAO_TRUSTED] AS TARGET 
-	                               USING [B2CCONSULTACLASSIFICACAO_RAW] AS SOURCE 
+	                               MERGE [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTACLASSIFICACAO] AS TARGET 
+	                               USING [UNTREATED].[dbo].[B2CCONSULTACLASSIFICACAO] AS SOURCE 
 
 	                               ON (
                                         TARGET.[CODIGO_CLASSIFICACAO] = SOURCE.[CODIGO_CLASSIFICACAO]
                                    ) 
 	                           
-                                   WHEN MATCHED AND SOURCE.[parameters_timestamp] != TARGET.[parameters_timestamp] THEN 
+                                   WHEN MATCHED AND SOURCE.[TIMESTAMP] != TARGET.[TIMESTAMP] THEN 
                                        UPDATE SET 
 	                                   TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON], 
 	                                   TARGET.[CODIGO_CLASSIFICACAO] = SOURCE.[CODIGO_CLASSIFICACAO], 
 	                                   TARGET.[NOME_CLASSIFICACAO] = SOURCE.[NOME_CLASSIFICACAO], 
-	                                   TARGET.[parameters_timestamp] = SOURCE.[parameters_timestamp], 
+	                                   TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP], 
 	                                   TARGET.[PORTAL] = SOURCE.[PORTAL] 
 	                           
-                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[CODIGO_CLASSIFICACAO] NOT IN (SELECT [CODIGO_CLASSIFICACAO] FROM [B2CCONSULTACLASSIFICACAO_TRUSTED]) THEN 
-	                                   INSERT ([LASTUPDATEON], [CODIGO_CLASSIFICACAO], [NOME_CLASSIFICACAO], [parameters_timestamp], [PORTAL])
-	                                   VALUES (SOURCE.[LASTUPDATEON], SOURCE.[CODIGO_CLASSIFICACAO], SOURCE.[NOME_CLASSIFICACAO], SOURCE.[parameters_timestamp], SOURCE.[PORTAL]);
+                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[CODIGO_CLASSIFICACAO] NOT IN (SELECT [CODIGO_CLASSIFICACAO] FROM [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTACLASSIFICACAO]) THEN 
+	                                   INSERT ([LASTUPDATEON], [CODIGO_CLASSIFICACAO], [NOME_CLASSIFICACAO], [TIMESTAMP], [PORTAL])
+	                                   VALUES (SOURCE.[LASTUPDATEON], SOURCE.[CODIGO_CLASSIFICACAO], SOURCE.[NOME_CLASSIFICACAO], SOURCE.[TIMESTAMP], SOURCE.[PORTAL]);
                                END'
                            )
                            END";

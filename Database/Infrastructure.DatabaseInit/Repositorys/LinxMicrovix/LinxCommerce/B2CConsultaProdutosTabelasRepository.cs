@@ -52,27 +52,27 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
                            EXECUTE (
 	                           'CREATE PROCEDURE [P_B2CCONSULTAPRODUTOSTABELAS_SYNC] AS
 	                           BEGIN
-		                           MERGE [B2CCONSULTAPRODUTOSTABELAS_TRUSTED] AS TARGET
-                                   USING [B2CCONSULTAPRODUTOSTABELAS_RAW] AS SOURCE
+		                           MERGE [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTAPRODUTOSTABELAS] AS TARGET
+                                   USING [UNTREATED].[dbo].[B2CCONSULTAPRODUTOSTABELAS] AS SOURCE
 
                                    ON (
 			                           TARGET.[ID_TABELA] = SOURCE.[ID_TABELA]
 		                           )
 
-                                   WHEN MATCHED AND TARGET.[parameters_timestamp] != SOURCE.[parameters_timestamp] THEN
+                                   WHEN MATCHED AND TARGET.[TIMESTAMP] != SOURCE.[TIMESTAMP] THEN
 			                           UPDATE SET
 			                           TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON],
 			                           TARGET.[ID_TABELA] = SOURCE.[ID_TABELA],
 			                           TARGET.[NOME_TABELA] = SOURCE.[NOME_TABELA],
 			                           TARGET.[ATIVA] = SOURCE.[ATIVA],
-			                           TARGET.[parameters_timestamp] = SOURCE.[parameters_timestamp],
+			                           TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP],
 			                           TARGET.[PORTAL] = SOURCE.[PORTAL]
 
-                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_TABELA] NOT IN (SELECT [ID_TABELA] FROM [B2CCONSULTAPRODUTOSTABELAS_TRUSTED]) THEN
+                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_TABELA] NOT IN (SELECT [ID_TABELA] FROM [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTAPRODUTOSTABELAS]) THEN
 			                           INSERT
-			                           ([LASTUPDATEON], [ID_TABELA], [NOME_TABELA], [ATIVA], [parameters_timestamp], [PORTAL])
+			                           ([LASTUPDATEON], [ID_TABELA], [NOME_TABELA], [ATIVA], [TIMESTAMP], [PORTAL])
 			                           VALUES
-			                           (SOURCE.[LASTUPDATEON], SOURCE.[ID_TABELA], SOURCE.[NOME_TABELA], SOURCE.[ATIVA], SOURCE.[parameters_timestamp], SOURCE.[PORTAL]);
+			                           (SOURCE.[LASTUPDATEON], SOURCE.[ID_TABELA], SOURCE.[NOME_TABELA], SOURCE.[ATIVA], SOURCE.[TIMESTAMP], SOURCE.[PORTAL]);
 	                           END'
                            )
                            END";

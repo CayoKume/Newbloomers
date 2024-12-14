@@ -46,8 +46,8 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                            EXECUTE (
 	                           'CREATE PROCEDURE [P_B2CCONSULTAFLAGS_SYNC] AS
 	                           BEGIN
-		                           MERGE [B2CCONSULTAFLAGS_TRUSTED] AS TARGET
-                                   USING [B2CCONSULTAFLAGS_RAW] AS SOURCE
+		                           MERGE [B2CCONSULTAFLAGS] AS TARGET
+                                   USING [B2CCONSULTAFLAGS] AS SOURCE
 
                                    ON (
 			                           TARGET.[ID_B2C_FLAGS] = SOURCE.[ID_B2C_FLAGS]
@@ -60,7 +60,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 			                           TARGET.[DESCRICAO] = SOURCE.[DESCRICAO],
 			                           TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP]
 
-                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_B2C_FLAGS] NOT IN (SELECT [ID_B2C_FLAGS] FROM [B2CCONSULTAFLAGS_TRUSTED]) THEN
+                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_B2C_FLAGS] NOT IN (SELECT [ID_B2C_FLAGS] FROM [B2CCONSULTAFLAGS]) THEN
 			                           INSERT
 			                           ([LASTUPDATEON], [PORTAL], [ID_B2C_FLAGS], [DESCRICAO], [TIMESTAMP])
 			                           VALUES
@@ -92,7 +92,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                         identificadores += $"'{registros[i].id_b2c_flags}', ";
                 }
 
-                string sql = $"SELECT ID_B2C_FLAGS, TIMESTAMP FROM B2CCONSULTAFLAGS_TRUSTED WHERE ID_B2C_FLAGS IN ({identificadores})";
+                string sql = $"SELECT ID_B2C_FLAGS, TIMESTAMP FROM B2CCONSULTAFLAGS WHERE ID_B2C_FLAGS IN ({identificadores})";
 
                 return await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
             }

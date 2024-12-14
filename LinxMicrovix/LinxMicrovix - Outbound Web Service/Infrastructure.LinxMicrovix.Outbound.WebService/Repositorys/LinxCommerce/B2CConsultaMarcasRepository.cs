@@ -46,8 +46,8 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                            EXECUTE (
 	                           'CREATE PROCEDURE [P_B2CCONSULTAMARCAS_SYNC] AS
 	                           BEGIN
-		                           MERGE [B2CCONSULTAMARCAS_TRUSTED] AS TARGET
-		                           USING [B2CCONSULTAMARCAS_RAW] AS SOURCE
+		                           MERGE [B2CCONSULTAMARCAS] AS TARGET
+		                           USING [B2CCONSULTAMARCAS] AS SOURCE
 
 		                           ON (TARGET.[CODIGO_MARCA] = SOURCE.[CODIGO_MARCA])
 
@@ -60,7 +60,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 			                           TARGET.[LINHAS] = SOURCE.[LINHAS],
 			                           TARGET.[PORTAL] = SOURCE.[PORTAL]
 
-		                           WHEN NOT MATCHED BY TARGET AND SOURCE.[CODIGO_MARCA] NOT IN (SELECT [CODIGO_MARCA] FROM [B2CCONSULTAMARCAS_TRUSTED]) THEN
+		                           WHEN NOT MATCHED BY TARGET AND SOURCE.[CODIGO_MARCA] NOT IN (SELECT [CODIGO_MARCA] FROM [B2CCONSULTAMARCAS]) THEN
 			                           INSERT
 			                           ([LASTUPDATEON], [CODIGO_MARCA], [NOME_MARCA], [TIMESTAMP], [LINHAS], [PORTAL])
 			                           VALUES
@@ -92,7 +92,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                         identificadores += $"'{registros[i].codigo_marca}', ";
                 }
 
-                string sql = $"SELECT CODIGO_MARCA, TIMESTAMP FROM B2CCONSULTAMARCAS_TRUSTED WHERE CODIGO_MARCA IN ({identificadores})";
+                string sql = $"SELECT CODIGO_MARCA, TIMESTAMP FROM B2CCONSULTAMARCAS WHERE CODIGO_MARCA IN ({identificadores})";
 
                 return await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
             }
@@ -137,7 +137,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 
         public async Task<bool> InsertRecord(LinxAPIParam jobParameter, B2CConsultaMarcas? record)
         {
-            string? sql = $"INSERT INTO {jobParameter.tableName}_raw " +
+            string? sql = $"INSERT INTO {jobParameter.tableName} " +
                           "([lastupdateon], [codigo_marca], [nome_marca], [timestamp], [linhas], [portal]) " +
                           "Values " +
                           "(@lastupdateon, @codigo_marca, @nome_marca, @timestamp, @linhas, @portal)";

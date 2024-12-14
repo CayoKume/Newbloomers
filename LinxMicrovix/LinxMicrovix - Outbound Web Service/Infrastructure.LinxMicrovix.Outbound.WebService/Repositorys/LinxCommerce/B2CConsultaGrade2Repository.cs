@@ -46,8 +46,8 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                            EXECUTE (
 	                           'CREATE PROCEDURE [P_B2CCONSULTAGRADE2_SYNC] AS
 	                           BEGIN
-		                           MERGE [B2CCONSULTAGRADE2_TRUSTED] AS TARGET
-                                   USING [B2CCONSULTAGRADE2_RAW] AS SOURCE
+		                           MERGE [B2CCONSULTAGRADE2] AS TARGET
+                                   USING [B2CCONSULTAGRADE2] AS SOURCE
 
                                    ON (
 			                           TARGET.[CODIGO_GRADE2] = SOURCE.[CODIGO_GRADE2]
@@ -61,7 +61,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 			                           TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP],
 			                           TARGET.[PORTAL] = SOURCE.[PORTAL]
 
-                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[CODIGO_GRADE2] NOT IN (SELECT [CODIGO_GRADE2] FROM [B2CCONSULTAGRADE2_TRUSTED]) THEN
+                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[CODIGO_GRADE2] NOT IN (SELECT [CODIGO_GRADE2] FROM [B2CCONSULTAGRADE2]) THEN
 			                           INSERT
 			                           ([LASTUPDATEON], [CODIGO_GRADE2], [NOME_GRADE2], [TIMESTAMP], [PORTAL])
 			                           VALUES
@@ -93,7 +93,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                         identificadores += $"'{registros[i].codigo_grade2}', ";
                 }
 
-                string sql = $"SELECT CODIGO_GRADE2, TIMESTAMP FROM B2CCONSULTAGRADE2_TRUSTED WHERE CODIGO_GRADE2 IN ({identificadores})";
+                string sql = $"SELECT CODIGO_GRADE2, TIMESTAMP FROM B2CCONSULTAGRADE2 WHERE CODIGO_GRADE2 IN ({identificadores})";
 
                 return await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
             }
@@ -138,7 +138,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 
         public async Task<bool> InsertRecord(LinxAPIParam jobParameter, B2CConsultaGrade2? record)
         {
-            string? sql = $"INSERT INTO {jobParameter.tableName}_raw " +
+            string? sql = $"INSERT INTO {jobParameter.tableName} " +
                           "([lastupdateon], [codigo_grade2], [nome_grade2], [timestamp], [portal]) " +
                           "Values " +
                           "(@lastupdateon, @codigo_grade2, @nome_grade2, @timestamp, @portal)";

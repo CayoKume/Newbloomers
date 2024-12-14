@@ -51,14 +51,14 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
                            EXECUTE (
 	                           'CREATE PROCEDURE [P_B2CCONSULTAPEDIDOSIDENTIFICADOR_SYNC] AS
 	                           BEGIN
-		                           MERGE [B2CCONSULTAPEDIDOSIDENTIFICADOR_TRUSTED] AS TARGET
-		                           USING [B2CCONSULTAPEDIDOSIDENTIFICADOR_RAW] AS SOURCE
+		                           MERGE [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTAPEDIDOSIDENTIFICADOR] AS TARGET
+		                           USING [UNTREATED].[dbo].[B2CCONSULTAPEDIDOSIDENTIFICADOR] AS SOURCE
 		
 		                           ON (
 			                           TARGET.[ID_VENDA] = SOURCE.[ID_VENDA]
 		                           )
 		
-		                           WHEN MATCHED AND TARGET.[parameters_timestamp] != SOURCE.[parameters_timestamp] THEN 
+		                           WHEN MATCHED AND TARGET.[TIMESTAMP] != SOURCE.[TIMESTAMP] THEN 
 			                           UPDATE SET
 			                           TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON],
 			                           TARGET.[PORTAL] = SOURCE.[PORTAL],
@@ -69,13 +69,13 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
 			                           TARGET.[ID_CLIENTE] = SOURCE.[ID_CLIENTE],
 			                           TARGET.[VALOR_FRETE] = SOURCE.[VALOR_FRETE],
 			                           TARGET.[DATA_ORIGEM] = SOURCE.[DATA_ORIGEM],
-			                           TARGET.[parameters_timestamp] = SOURCE.[parameters_timestamp]
+			                           TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP]
 		
-		                           WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_VENDA] NOT IN (SELECT [ID_VENDA] FROM [B2CCONSULTAPEDIDOSIDENTIFICADOR_TRUSTED]) THEN
+		                           WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_VENDA] NOT IN (SELECT [ID_VENDA] FROM [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTAPEDIDOSIDENTIFICADOR]) THEN
 			                           INSERT
-			                           ([LASTUPDATEON], [PORTAL], [EMPRESA], [IDENTIFICADOR], [ID_VENDA], [ORDER_ID], [ID_CLIENTE], [VALOR_FRETE], [DATA_ORIGEM], [parameters_timestamp])
+			                           ([LASTUPDATEON], [PORTAL], [EMPRESA], [IDENTIFICADOR], [ID_VENDA], [ORDER_ID], [ID_CLIENTE], [VALOR_FRETE], [DATA_ORIGEM], [TIMESTAMP])
 			                           VALUES
-			                           (SOURCE.[LASTUPDATEON], SOURCE.[PORTAL], SOURCE.[EMPRESA], SOURCE.[IDENTIFICADOR], SOURCE.[ID_VENDA], SOURCE.[ORDER_ID], SOURCE.[ID_CLIENTE], SOURCE.[VALOR_FRETE], SOURCE.[DATA_ORIGEM], SOURCE.[parameters_timestamp]);
+			                           (SOURCE.[LASTUPDATEON], SOURCE.[PORTAL], SOURCE.[EMPRESA], SOURCE.[IDENTIFICADOR], SOURCE.[ID_VENDA], SOURCE.[ORDER_ID], SOURCE.[ID_CLIENTE], SOURCE.[VALOR_FRETE], SOURCE.[DATA_ORIGEM], SOURCE.[TIMESTAMP]);
 	                           END'
                            )
                            END";

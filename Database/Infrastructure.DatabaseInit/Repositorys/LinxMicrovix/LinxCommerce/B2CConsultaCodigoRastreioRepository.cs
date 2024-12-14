@@ -51,14 +51,14 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
                            EXECUTE (
 	                           'CREATE PROCEDURE [P_B2CCONSULTACODIGORASTREIO_SYNC] AS
 	                           BEGIN
-		                           MERGE [B2CCONSULTACODIGORASTREIO_TRUSTED] AS TARGET
-                                   USING [B2CCONSULTACODIGORASTREIO_RAW] AS SOURCE
+		                           MERGE [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTACODIGORASTREIO] AS TARGET
+                                   USING [UNTREATED].[dbo].[B2CCONSULTACODIGORASTREIO] AS SOURCE
 
                                    ON (
 			                           TARGET.[ID_PEDIDO] = SOURCE.[ID_PEDIDO]
 		                           )
 
-                                   WHEN MATCHED AND TARGET.[parameters_timestamp] != SOURCE.[parameters_timestamp] THEN 
+                                   WHEN MATCHED AND TARGET.[TIMESTAMP] != SOURCE.[TIMESTAMP] THEN 
                                        UPDATE SET
 			                           TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON],
 			                           TARGET.[ID_PEDIDO] = SOURCE.[ID_PEDIDO],
@@ -66,15 +66,15 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
 			                           TARGET.[SERIE] = SOURCE.[SERIE],
 			                           TARGET.[CODIGO_RASTREIO] = SOURCE.[CODIGO_RASTREIO],
 			                           TARGET.[SEQUENCIA_VOLUME] = SOURCE.[SEQUENCIA_VOLUME],
-			                           TARGET.[parameters_timestamp] = SOURCE.[parameters_timestamp],
+			                           TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP],
 			                           TARGET.[PORTAL] = SOURCE.[PORTAL]
 
-                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_PEDIDO] NOT IN (SELECT [ID_PEDIDO] FROM [B2CCONSULTACODIGORASTREIO_TRUSTED]) THEN
+                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_PEDIDO] NOT IN (SELECT [ID_PEDIDO] FROM [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTACODIGORASTREIO]) THEN
 			                           INSERT
-			                           ([LASTUPDATEON], [ID_PEDIDO], [DOCUMENTO], [SERIE], [CODIGO_RASTREIO], [SEQUENCIA_VOLUME], [parameters_timestamp], [PORTAL])
+			                           ([LASTUPDATEON], [ID_PEDIDO], [DOCUMENTO], [SERIE], [CODIGO_RASTREIO], [SEQUENCIA_VOLUME], [TIMESTAMP], [PORTAL])
 			                           VALUES
 			                           (SOURCE.[LASTUPDATEON], SOURCE.[ID_PEDIDO], SOURCE.[DOCUMENTO], SOURCE.[SERIE], SOURCE.[CODIGO_RASTREIO], SOURCE.[SEQUENCIA_VOLUME], 
-			                           SOURCE.[parameters_timestamp], SOURCE.[PORTAL]);
+			                           SOURCE.[TIMESTAMP], SOURCE.[PORTAL]);
 	                           END'
                            )
                            END";

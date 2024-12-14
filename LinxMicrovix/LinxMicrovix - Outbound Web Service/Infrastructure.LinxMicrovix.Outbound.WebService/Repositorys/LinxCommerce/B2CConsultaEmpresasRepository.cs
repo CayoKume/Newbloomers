@@ -48,8 +48,8 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                            EXECUTE (
 	                           'CREATE PROCEDURE [P_B2CCONSULTAEMPRESAS_SYNC] AS
 	                           BEGIN
-		                           MERGE [B2CCONSULTAEMPRESAS_TRUSTED] AS TARGET
-                                   USING [B2CCONSULTAEMPRESAS_RAW] AS SOURCE
+		                           MERGE [B2CCONSULTAEMPRESAS] AS TARGET
+                                   USING [B2CCONSULTAEMPRESAS] AS SOURCE
 
                                    ON (
 			                           TARGET.[EMPRESA] = SOURCE.[EMPRESA]
@@ -74,7 +74,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 			                           TARGET.[CENTRO_DISTRIBUICAO] = SOURCE.[CENTRO_DISTRIBUICAO],
 			                           TARGET.[PORTAL] = SOURCE.[PORTAL]
 
-                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[EMPRESA] NOT IN (SELECT [EMPRESA] FROM [B2CCONSULTAEMPRESAS_TRUSTED]) THEN
+                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[EMPRESA] NOT IN (SELECT [EMPRESA] FROM [B2CCONSULTAEMPRESAS]) THEN
 			                           INSERT
 			                           ([LASTUPDATEON], [EMPRESA], [NOME_EMP], [CNPJ_EMP], [END_UNIDADE], [COMPLEMENTO_END_UNIDADE], [NR_RUA_UNIDADE], [BAIRRO_UNIDADE], [CEP_UNIDADE], [CIDADE_UNIDADE], [UF_UNIDADE], [EMAIL_UNIDADE], [TIMESTAMP],
 			                           [DATA_CRIACAO], [CENTRO_DISTRIBUICAO], [PORTAL])
@@ -108,7 +108,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                         identificadores += $"'{registros[i].cnpj_emp}', ";
                 }
 
-                string sql = $"SELECT CNPJ_EMP, TIMESTAMP FROM B2CCONSULTAEMPRESAS_TRUSTED WHERE CNPJ_EMP IN ({identificadores})";
+                string sql = $"SELECT CNPJ_EMP, TIMESTAMP FROM B2CCONSULTAEMPRESAS WHERE CNPJ_EMP IN ({identificadores})";
 
                 return await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
             }

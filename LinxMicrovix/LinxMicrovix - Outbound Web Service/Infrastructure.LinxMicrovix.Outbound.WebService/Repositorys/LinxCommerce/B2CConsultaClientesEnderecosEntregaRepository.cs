@@ -47,8 +47,8 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                            EXECUTE (
 	                           'CREATE PROCEDURE [P_B2CCONSULTACLIENTESENDERECOSENTREGA_SYNC] AS
 	                           BEGIN
-		                           MERGE [B2CCONSULTACLIENTESENDERECOSENTREGA_TRUSTED] AS TARGET
-		                           USING [B2CCONSULTACLIENTESENDERECOSENTREGA_RAW] AS SOURCE
+		                           MERGE [B2CCONSULTACLIENTESENDERECOSENTREGA] AS TARGET
+		                           USING [B2CCONSULTACLIENTESENDERECOSENTREGA] AS SOURCE
 
 		                           ON (
 			                           TARGET.ID_ENDERECO_ENTREGA = SOURCE.ID_ENDERECO_ENTREGA
@@ -71,7 +71,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 			                           TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP],
 			                           TARGET.[PORTAL] = SOURCE.[PORTAL]
 
-		                           WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_ENDERECO_ENTREGA] NOT IN (SELECT [ID_ENDERECO_ENTREGA] FROM [B2CCONSULTACLIENTESENDERECOSENTREGA_TRUSTED]) THEN
+		                           WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_ENDERECO_ENTREGA] NOT IN (SELECT [ID_ENDERECO_ENTREGA] FROM [B2CCONSULTACLIENTESENDERECOSENTREGA]) THEN
 			                           INSERT
 			                           ([LASTUPDATEON], [ID_ENDERECO_ENTREGA], [COD_CLIENTE_ERP], [COD_CLIENTE_B2C], [ENDERECO_CLIENTE], [NUMERO_RUA_CLIENTE], [COMPLEMENTO_END_CLI], [CEP_CLIENTE], [BAIRRO_CLIENTE], [CIDADE_CLIENTE],
 			                           [UF_CLIENTE], [DESCRICAO], [PRINCIPAL], [ID_CIDADE], [TIMESTAMP], [PORTAL])
@@ -107,7 +107,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                         identificadores += $"'{registros[i].id_endereco_entrega}', ";
                 }
 
-                string sql = $"SELECT ID_ENDERECO_ENTREGA, TIMESTAMP FROM B2CCONSULTACLIENTESENDERECOSENTREGA_TRUSTED WHERE ID_ENDERECO_ENTREGA IN ({identificadores})";
+                string sql = $"SELECT ID_ENDERECO_ENTREGA, TIMESTAMP FROM B2CCONSULTACLIENTESENDERECOSENTREGA WHERE ID_ENDERECO_ENTREGA IN ({identificadores})";
 
                 return await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
             }

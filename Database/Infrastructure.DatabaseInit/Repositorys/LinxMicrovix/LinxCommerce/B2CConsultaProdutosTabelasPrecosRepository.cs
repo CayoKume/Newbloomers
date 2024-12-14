@@ -52,28 +52,28 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
                            EXECUTE (
 	                           'CREATE PROCEDURE [P_B2CCONSULTAPRODUTOSTABELASPRECOS_SYNC] AS
 	                           BEGIN
-		                           MERGE [B2CCONSULTAPRODUTOSTABELASPRECOS_TRUSTED] AS TARGET
-                                   USING [B2CCONSULTAPRODUTOSTABELASPRECOS_RAW] AS SOURCE
+		                           MERGE [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTAPRODUTOSTABELASPRECOS] AS TARGET
+                                   USING [UNTREATED].[dbo].[B2CCONSULTAPRODUTOSTABELASPRECOS] AS SOURCE
 
                                    ON (
 			                           TARGET.[ID_PROD_TAB_PRECO] = SOURCE.[ID_PROD_TAB_PRECO]
 		                           )
 
-                                   WHEN MATCHED AND TARGET.[parameters_timestamp] != SOURCE.[parameters_timestamp] THEN 
+                                   WHEN MATCHED AND TARGET.[TIMESTAMP] != SOURCE.[TIMESTAMP] THEN 
 			                           UPDATE SET
 			                           TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON],
 			                           TARGET.[ID_PROD_TAB_PRECO] = SOURCE.[ID_PROD_TAB_PRECO],
 			                           TARGET.[ID_TABELA] = SOURCE.[ID_TABELA],
 			                           TARGET.[CODIGOPRODUTO] = SOURCE.[CODIGOPRODUTO],
 			                           TARGET.[PRECOVENDA] = SOURCE.[PRECOVENDA],
-			                           TARGET.[parameters_timestamp] = SOURCE.[parameters_timestamp],
+			                           TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP],
 			                           TARGET.[PORTAL] = SOURCE.[PORTAL]
 
-                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_PROD_TAB_PRECO] NOT IN (SELECT [ID_PROD_TAB_PRECO] FROM [B2CCONSULTAPRODUTOSTABELASPRECOS_TRUSTED]) THEN
+                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_PROD_TAB_PRECO] NOT IN (SELECT [ID_PROD_TAB_PRECO] FROM [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTAPRODUTOSTABELASPRECOS]) THEN
 			                           INSERT
-			                           ([LASTUPDATEON], [ID_PROD_TAB_PRECO], [ID_TABELA], [CODIGOPRODUTO], [PRECOVENDA], [parameters_timestamp], [PORTAL])
+			                           ([LASTUPDATEON], [ID_PROD_TAB_PRECO], [ID_TABELA], [CODIGOPRODUTO], [PRECOVENDA], [TIMESTAMP], [PORTAL])
 			                           VALUES
-			                           (SOURCE.[LASTUPDATEON], SOURCE.[ID_PROD_TAB_PRECO], SOURCE.[ID_TABELA], SOURCE.[CODIGOPRODUTO], SOURCE.[PRECOVENDA], SOURCE.[parameters_timestamp], SOURCE.[PORTAL]);
+			                           (SOURCE.[LASTUPDATEON], SOURCE.[ID_PROD_TAB_PRECO], SOURCE.[ID_TABELA], SOURCE.[CODIGOPRODUTO], SOURCE.[PRECOVENDA], SOURCE.[TIMESTAMP], SOURCE.[PORTAL]);
 	                           END'
                            )
                             END";

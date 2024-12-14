@@ -51,14 +51,14 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
                            EXECUTE (
 	                           'CREATE PROCEDURE [P_B2CCONSULTAFORNECEDORES_SYNC] AS
 	                           BEGIN
-		                           MERGE [B2CCONSULTAFORNECEDORES_TRUSTED] AS TARGET
-                                   USING [B2CCONSULTAFORNECEDORES_RAW] AS SOURCE
+		                           MERGE [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTAFORNECEDORES] AS TARGET
+                                   USING [UNTREATED].[dbo].[B2CCONSULTAFORNECEDORES] AS SOURCE
 
                                    ON (
 			                           TARGET.COD_FORNECEDOR = SOURCE.COD_FORNECEDOR
 		                           )
 
-                                   WHEN MATCHED AND SOURCE.[parameters_timestamp] != TARGET.[parameters_timestamp] THEN UPDATE SET
+                                   WHEN MATCHED AND SOURCE.[TIMESTAMP] != TARGET.[TIMESTAMP] THEN UPDATE SET
 			                           TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON],
 			                           TARGET.[COD_FORNECEDOR] = SOURCE.[COD_FORNECEDOR],
 			                           TARGET.[NOME] = SOURCE.[NOME],
@@ -76,15 +76,15 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
 			                           TARGET.[EMAIL] = SOURCE.[EMAIL],
 			                           TARGET.[PAIS] = SOURCE.[PAIS],
 			                           TARGET.[OBS] = SOURCE.[OBS],
-			                           TARGET.[parameters_timestamp] = SOURCE.[parameters_timestamp],
+			                           TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP],
 			                           TARGET.[PORTAL] = SOURCE.[PORTAL]
 
-                                   WHEN NOT MATCHED BY TARGET AND [COD_FORNECEDOR] NOT IN (SELECT [COD_FORNECEDOR] FROM [B2CCONSULTAFORNECEDORES_TRUSTED]) THEN
+                                   WHEN NOT MATCHED BY TARGET AND [COD_FORNECEDOR] NOT IN (SELECT [COD_FORNECEDOR] FROM [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTAFORNECEDORES]) THEN
 			                           INSERT
-			                           ([LASTUPDATEON], [COD_FORNECEDOR], [NOME], [NOME_FANTASIA], [TIPO_PESSOA], [TIPO_FORNECEDOR], [ENDERECO], [NUMERO_RUA], [BAIRRO], [CEP], [CIDADE], [UF], [DOCUMENTO], [FONE], [EMAIL], [PAIS], [OBS], [parameters_timestamp], [PORTAL])
+			                           ([LASTUPDATEON], [COD_FORNECEDOR], [NOME], [NOME_FANTASIA], [TIPO_PESSOA], [TIPO_FORNECEDOR], [ENDERECO], [NUMERO_RUA], [BAIRRO], [CEP], [CIDADE], [UF], [DOCUMENTO], [FONE], [EMAIL], [PAIS], [OBS], [TIMESTAMP], [PORTAL])
 			                           VALUES
 			                           (SOURCE.[LASTUPDATEON], SOURCE.[COD_FORNECEDOR], SOURCE.[NOME], SOURCE.[NOME_FANTASIA], SOURCE.[TIPO_PESSOA], SOURCE.[TIPO_FORNECEDOR], SOURCE.[ENDERECO], SOURCE.[NUMERO_RUA], SOURCE.[BAIRRO], SOURCE.[CEP], SOURCE.[CIDADE], SOURCE.[UF], 
-			                           SOURCE.[DOCUMENTO], SOURCE.[FONE], SOURCE.[EMAIL], SOURCE.[PAIS], SOURCE.[OBS], SOURCE.[parameters_timestamp], SOURCE.[PORTAL]);
+			                           SOURCE.[DOCUMENTO], SOURCE.[FONE], SOURCE.[EMAIL], SOURCE.[PAIS], SOURCE.[OBS], SOURCE.[TIMESTAMP], SOURCE.[PORTAL]);
 	                           END'
                            )
                            END";

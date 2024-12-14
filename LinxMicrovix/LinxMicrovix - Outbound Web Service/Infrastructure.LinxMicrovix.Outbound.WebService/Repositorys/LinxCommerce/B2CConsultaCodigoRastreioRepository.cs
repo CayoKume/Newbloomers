@@ -47,8 +47,8 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                            EXECUTE (
 	                           'CREATE PROCEDURE [P_B2CCONSULTACODIGORASTREIO_SYNC] AS
 	                           BEGIN
-		                           MERGE [B2CCONSULTACODIGORASTREIO_TRUSTED] AS TARGET
-                                   USING [B2CCONSULTACODIGORASTREIO_RAW] AS SOURCE
+		                           MERGE [B2CCONSULTACODIGORASTREIO] AS TARGET
+                                   USING [B2CCONSULTACODIGORASTREIO] AS SOURCE
 
                                    ON (
 			                           TARGET.[ID_PEDIDO] = SOURCE.[ID_PEDIDO]
@@ -65,7 +65,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 			                           TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP],
 			                           TARGET.[PORTAL] = SOURCE.[PORTAL]
 
-                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_PEDIDO] NOT IN (SELECT [ID_PEDIDO] FROM [B2CCONSULTACODIGORASTREIO_TRUSTED]) THEN
+                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_PEDIDO] NOT IN (SELECT [ID_PEDIDO] FROM [B2CCONSULTACODIGORASTREIO]) THEN
 			                           INSERT
 			                           ([LASTUPDATEON], [ID_PEDIDO], [DOCUMENTO], [SERIE], [CODIGO_RASTREIO], [SEQUENCIA_VOLUME], [TIMESTAMP], [PORTAL])
 			                           VALUES
@@ -98,7 +98,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                         identificadores += $"'{registros[i].codigo_rastreio}', ";
                 }
 
-                string sql = $"SELECT CODIGO_RASTREIO, TIMESTAMP FROM B2CCONSULTACODIGORASTREIO_TRUSTED WHERE CODIGO_RASTREIO IN ({identificadores})";
+                string sql = $"SELECT CODIGO_RASTREIO, TIMESTAMP FROM B2CCONSULTACODIGORASTREIO WHERE CODIGO_RASTREIO IN ({identificadores})";
 
                 return await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
             }
@@ -143,7 +143,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 
         public async Task<bool> InsertRecord(LinxAPIParam jobParameter, B2CConsultaCodigoRastreio? record)
         {
-            string? sql = $"INSERT INTO {jobParameter.tableName}_raw " +
+            string? sql = $"INSERT INTO {jobParameter.tableName} " +
                           "([lastupdateon], [id_pedido], [documento], [serie], [codigo_rastreio], [sequencia_volume], [timestamp], [portal]) " +
                           "Values " +
                           "(@lastupdateon, @id_pedido, @documento, @serie, @codigo_rastreio, @sequencia_volume, @timestamp, @portal)";

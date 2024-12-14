@@ -46,8 +46,8 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                            EXECUTE (
 	                           'CREATE PROCEDURE [P_B2CCONSULTAIMAGENS_SYNC] AS
 	                           BEGIN
-		                           MERGE [B2CCONSULTAIMAGENS_TRUSTED] AS TARGET
-                                   USING [B2CCONSULTAIMAGENS_RAW] AS SOURCE
+		                           MERGE [B2CCONSULTAIMAGENS] AS TARGET
+                                   USING [B2CCONSULTAIMAGENS] AS SOURCE
 
                                    ON (
 			                           TARGET.[ID_IMAGEM] = SOURCE.[ID_IMAGEM]
@@ -62,7 +62,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 			                           TARGET.[PORTAL] = SOURCE.[PORTAL],
 			                           TARGET.[URL_IMAGEM_BLOB] = SOURCE.[URL_IMAGEM_BLOB]
 
-                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_IMAGEM] NOT IN (SELECT [ID_IMAGEM] FROM [B2CCONSULTAIMAGENS_TRUSTED]) THEN
+                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_IMAGEM] NOT IN (SELECT [ID_IMAGEM] FROM [B2CCONSULTAIMAGENS]) THEN
 			                           INSERT
 			                           ([LASTUPDATEON], [ID_IMAGEM], [MD5], [TIMESTAMP], [PORTAL], [URL_IMAGEM_BLOB])
 			                           VALUES
@@ -94,7 +94,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                         identificadores += $"'{registros[i].id_imagem}', ";
                 }
 
-                string sql = $"SELECT ID_IMAGEM, TIMESTAMP FROM B2CCONSULTAIMAGENS_TRUSTED WHERE ID_IMAGEM IN ({identificadores})";
+                string sql = $"SELECT ID_IMAGEM, TIMESTAMP FROM B2CCONSULTAIMAGENS WHERE ID_IMAGEM IN ({identificadores})";
 
                 return await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
             }
@@ -139,7 +139,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 
         public async Task<bool> InsertRecord(LinxAPIParam jobParameter, B2CConsultaImagens? record)
         {
-            string? sql = $"INSERT INTO {jobParameter.tableName}_raw " +
+            string? sql = $"INSERT INTO {jobParameter.tableName} " +
                           "([lastupdateon], [id_imagem], [md5], [timestamp], [portal], [url_imagem_blob]) " +
                           "Values " +
                           "(@lastupdateon, @id_imagem, @md5, @timestamp, @portal, @url_imagem_blob)";

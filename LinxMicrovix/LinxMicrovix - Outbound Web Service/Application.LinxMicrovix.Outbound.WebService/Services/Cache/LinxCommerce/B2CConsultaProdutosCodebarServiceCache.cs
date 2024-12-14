@@ -9,12 +9,12 @@ namespace Application.LinxMicrovix.Outbound.WebService.Entities.Cache.LinxCommer
     {
         public override string GetKey(B2CConsultaProdutosCodebar entity)
         {
-            throw new NotImplementedException();
+            return $"[{entity.id_produtos_codebar}]|[{entity.timestamp}]";
         }
 
         public override string GetKeyInDictionary(IDictionary<string, string> dictionaryFields)
         {
-            throw new NotImplementedException();
+            return $"[{dictionaryFields["id_produtos_codebar"]}]|[{dictionaryFields["timestamp"]}]";
         }
     }
 }

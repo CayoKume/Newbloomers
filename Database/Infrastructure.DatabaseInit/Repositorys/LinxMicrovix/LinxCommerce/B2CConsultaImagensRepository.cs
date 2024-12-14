@@ -51,27 +51,27 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
                            EXECUTE (
 	                           'CREATE PROCEDURE [P_B2CCONSULTAIMAGENS_SYNC] AS
 	                           BEGIN
-		                           MERGE [B2CCONSULTAIMAGENS_TRUSTED] AS TARGET
-                                   USING [B2CCONSULTAIMAGENS_RAW] AS SOURCE
+		                           MERGE [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTAIMAGENS] AS TARGET
+                                   USING [UNTREATED].[dbo].[B2CCONSULTAIMAGENS] AS SOURCE
 
                                    ON (
 			                           TARGET.[ID_IMAGEM] = SOURCE.[ID_IMAGEM]
 		                           )
 
-                                   WHEN MATCHED AND TARGET.[parameters_timestamp] != SOURCE.[parameters_timestamp] THEN 
+                                   WHEN MATCHED AND TARGET.[TIMESTAMP] != SOURCE.[TIMESTAMP] THEN 
 			                           UPDATE SET
 			                           TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON],
 			                           TARGET.[ID_IMAGEM] = SOURCE.[ID_IMAGEM],
 			                           TARGET.[MD5] = SOURCE.[MD5],
-			                           TARGET.[parameters_timestamp] = SOURCE.[parameters_timestamp],
+			                           TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP],
 			                           TARGET.[PORTAL] = SOURCE.[PORTAL],
 			                           TARGET.[URL_IMAGEM_BLOB] = SOURCE.[URL_IMAGEM_BLOB]
 
-                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_IMAGEM] NOT IN (SELECT [ID_IMAGEM] FROM [B2CCONSULTAIMAGENS_TRUSTED]) THEN
+                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_IMAGEM] NOT IN (SELECT [ID_IMAGEM] FROM [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTAIMAGENS]) THEN
 			                           INSERT
-			                           ([LASTUPDATEON], [ID_IMAGEM], [MD5], [parameters_timestamp], [PORTAL], [URL_IMAGEM_BLOB])
+			                           ([LASTUPDATEON], [ID_IMAGEM], [MD5], [TIMESTAMP], [PORTAL], [URL_IMAGEM_BLOB])
 			                           VALUES
-			                           (SOURCE.[LASTUPDATEON], SOURCE.[ID_IMAGEM], SOURCE.[MD5], SOURCE.[parameters_timestamp], SOURCE.[PORTAL], SOURCE.[URL_IMAGEM_BLOB]);
+			                           (SOURCE.[LASTUPDATEON], SOURCE.[ID_IMAGEM], SOURCE.[MD5], SOURCE.[TIMESTAMP], SOURCE.[PORTAL], SOURCE.[URL_IMAGEM_BLOB]);
 	                           END'
                            )
                            END";

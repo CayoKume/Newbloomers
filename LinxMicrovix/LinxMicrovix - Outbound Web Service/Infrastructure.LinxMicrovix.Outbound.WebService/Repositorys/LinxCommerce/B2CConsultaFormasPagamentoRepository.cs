@@ -46,8 +46,8 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                            EXECUTE (
 	                           'CREATE PROCEDURE [P_B2CCONSULTAFORMASPAGAMENTO_SYNC] AS
 	                           BEGIN
-		                           MERGE [B2CCONSULTAFORMASPAGAMENTO_TRUSTED] AS TARGET
-                                   USING [B2CCONSULTAFORMASPAGAMENTO_RAW] AS SOURCE
+		                           MERGE [B2CCONSULTAFORMASPAGAMENTO] AS TARGET
+                                   USING [B2CCONSULTAFORMASPAGAMENTO] AS SOURCE
 
                                    ON (
 			                           TARGET.[COD_FORMA_PGTO] = SOURCE.[COD_FORMA_PGTO]
@@ -61,7 +61,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 			                           TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP],
 			                           TARGET.[PORTAL] = SOURCE.[PORTAL]
 
-                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[COD_FORMA_PGTO] NOT IN (SELECT [COD_FORMA_PGTO] FROM [B2CCONSULTAFORMASPAGAMENTO_TRUSTED]) THEN
+                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[COD_FORMA_PGTO] NOT IN (SELECT [COD_FORMA_PGTO] FROM [B2CCONSULTAFORMASPAGAMENTO]) THEN
 			                           INSERT
 			                           ([LASTUPDATEON], [COD_FORMA_PGTO], [FORMA_PGTO], [TIMESTAMP], [PORTAL])
 			                           VALUES
@@ -93,7 +93,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                         identificadores += $"'{registros[i].cod_forma_pgto}', ";
                 }
 
-                string sql = $"SELECT COD_FORMA_PGTO, TIMESTAMP FROM B2CCONSULTAFORMASPAGAMENTO_TRUSTED WHERE COD_FORMA_PGTO IN ({identificadores})";
+                string sql = $"SELECT COD_FORMA_PGTO, TIMESTAMP FROM B2CCONSULTAFORMASPAGAMENTO WHERE COD_FORMA_PGTO IN ({identificadores})";
 
                 return await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
             }

@@ -51,26 +51,26 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
                            EXECUTE (
 	                           'CREATE PROCEDURE [P_B2CCONSULTACLIENTESCONTATOSPARENTESCO_SYNC] AS
 	                           BEGIN
-		                           MERGE [B2CCONSULTACLIENTESCONTATOSPARENTESCO_TRUSTED] AS TARGET
-                                   USING [B2CCONSULTACLIENTESCONTATOSPARENTESCO_RAW] AS SOURCE
+		                           MERGE [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTACLIENTESCONTATOSPARENTESCO] AS TARGET
+                                   USING [UNTREATED].[dbo].[B2CCONSULTACLIENTESCONTATOSPARENTESCO] AS SOURCE
 
                                    ON (
 			                           TARGET.[ID_PARENTESCO] = SOURCE.[ID_PARENTESCO]
 		                           )
 
-                                   WHEN MATCHED AND SOURCE.[parameters_timestamp] != TARGET.[parameters_timestamp] THEN 
+                                   WHEN MATCHED AND SOURCE.[TIMESTAMP] != TARGET.[TIMESTAMP] THEN 
 			                           UPDATE SET
 			                           TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON],
 			                           TARGET.[ID_PARENTESCO] = SOURCE.[ID_PARENTESCO],
 			                           TARGET.[DESCRICAO_PARENTESCO] = SOURCE.[DESCRICAO_PARENTESCO],
-			                           TARGET.[parameters_timestamp] = SOURCE.[parameters_timestamp],
+			                           TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP],
 			                           TARGET.[PORTAL] = SOURCE.[PORTAL]
 
-                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_PARENTESCO] NOT IN (SELECT [ID_PARENTESCO] FROM [B2CCONSULTACLIENTESCONTATOSPARENTESCO_TRUSTED]) THEN
+                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_PARENTESCO] NOT IN (SELECT [ID_PARENTESCO] FROM [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTACLIENTESCONTATOSPARENTESCO]) THEN
 			                           INSERT
-			                           ([LASTUPDATEON], [ID_PARENTESCO], [DESCRICAO_PARENTESCO], [parameters_timestamp], [PORTAL])
+			                           ([LASTUPDATEON], [ID_PARENTESCO], [DESCRICAO_PARENTESCO], [TIMESTAMP], [PORTAL])
 			                           VALUES
-			                           (SOURCE.[LASTUPDATEON], SOURCE.[ID_PARENTESCO], SOURCE.[DESCRICAO_PARENTESCO], SOURCE.[parameters_timestamp], SOURCE.[PORTAL]);
+			                           (SOURCE.[LASTUPDATEON], SOURCE.[ID_PARENTESCO], SOURCE.[DESCRICAO_PARENTESCO], SOURCE.[TIMESTAMP], SOURCE.[PORTAL]);
 	                           END'
                            )
                            END";

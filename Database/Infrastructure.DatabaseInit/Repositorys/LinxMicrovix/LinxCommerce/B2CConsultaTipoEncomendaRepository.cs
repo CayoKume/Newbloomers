@@ -46,20 +46,28 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
 
         public async Task<bool> CreateTableMerge(string databaseName, string tableName)
         {
-            string? sql = $"MERGE [{tableName}_trusted] AS TARGET " +
-                         $"USING [{tableName}_raw] AS SOURCE " +
-                          "ON (TARGET.ID_TIPO_ENCOMENDA = SOURCE.ID_TIPO_ENCOMENDA) " +
-                          "WHEN MATCHED THEN UPDATE SET " +
-                          "TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON], " +
-                          "TARGET.[ID_TIPO_ENCOMENDA] = SOURCE.[ID_TIPO_ENCOMENDA], " +
-                          "TARGET.[NM_TIPO_ENCOMENDA] = SOURCE.[NM_TIPO_ENCOMENDA], " +
-                          "TARGET.[parameters_timestamp] = SOURCE.[parameters_timestamp], " +
-                          "TARGET.[PORTAL] = SOURCE.[PORTAL] " +
-                          "WHEN NOT MATCHED BY TARGET THEN " +
-                          "INSERT " +
-                          "([LASTUPDATEON], [ID_TIPO_ENCOMENDA], [NM_TIPO_ENCOMENDA], [parameters_timestamp], [PORTAL])" +
-                          "VALUES " +
-                          "(SOURCE.[LASTUPDATEON], SOURCE.[ID_TIPO_ENCOMENDA], SOURCE.[NM_TIPO_ENCOMENDA], SOURCE.[parameters_timestamp], SOURCE.[PORTAL]);";
+            string? sql = $@"IF NOT EXISTS (SELECT * FROM SYS.OBJECTS WHERE TYPE = 'P' AND NAME = 'P_B2CCONSULTATIPOENCOMENDA_SYNC')
+                           BEGIN
+                           EXECUTE (
+                               'CREATE PROCEDURE [P_B2CCONSULTATIPOENCOMENDA_SYNC] AS
+                               BEGIN
+									MERGE [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTATIPOENCOMENDA] AS TARGET
+									USING [UNTREATED].[dbo].[B2CCONSULTATIPOENCOMENDA] AS SOURCE
+									ON (TARGET.ID_TIPO_ENCOMENDA = SOURCE.ID_TIPO_ENCOMENDA)
+									WHEN MATCHED THEN UPDATE SET
+									TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON],
+									TARGET.[ID_TIPO_ENCOMENDA] = SOURCE.[ID_TIPO_ENCOMENDA],
+									TARGET.[NM_TIPO_ENCOMENDA] = SOURCE.[NM_TIPO_ENCOMENDA],
+									TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP],
+									TARGET.[PORTAL] = SOURCE.[PORTAL]
+									WHEN NOT MATCHED BY TARGET THEN
+									INSERT
+									([LASTUPDATEON], [ID_TIPO_ENCOMENDA], [NM_TIPO_ENCOMENDA], [TIMESTAMP], [PORTAL])
+									VALUES
+									(SOURCE.[LASTUPDATEON], SOURCE.[ID_TIPO_ENCOMENDA], SOURCE.[NM_TIPO_ENCOMENDA], SOURCE.[TIMESTAMP], SOURCE.[PORTAL]);                       
+								END'
+                           )
+                           END";
 
             try
             {

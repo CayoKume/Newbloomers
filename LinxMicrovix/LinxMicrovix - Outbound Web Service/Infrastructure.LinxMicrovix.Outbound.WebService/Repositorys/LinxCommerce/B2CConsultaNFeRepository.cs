@@ -48,8 +48,8 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                            EXECUTE (
 	                           'CREATE PROCEDURE [P_B2CCONSULTANFE_SYNC] AS
 	                           BEGIN
-		                           MERGE [B2CCONSULTANFE_TRUSTED] AS TARGET
-                                   USING [B2CCONSULTANFE_RAW] AS SOURCE
+		                           MERGE [B2CCONSULTANFE] AS TARGET
+                                   USING [B2CCONSULTANFE] AS SOURCE
 
                                    ON (TARGET.[ID_NFE] = SOURCE.[ID_NFE])
 
@@ -76,7 +76,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 			                           TARGET.[JUSTIFICATIVA] = SOURCE.[JUSTIFICATIVA],
 			                           TARGET.[TPAMB] = SOURCE.[TPAMB]
 
-                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_NFE] NOT IN (SELECT [ID_NFE] FROM [B2CCONSULTANFE_TRUSTED]) THEN
+                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_NFE] NOT IN (SELECT [ID_NFE] FROM [B2CCONSULTANFE]) THEN
                                        INSERT
                                        ([LASTUPDATEON], [ID_NFE], [ID_PEDIDO], [DOCUMENTO], [DATA_EMISSAO], [CHAVE_NFE], [SITUACAO], [XML], [EXCLUIDO], [IDENTIFICADOR_MICROVIX], [DT_INSERT], [VALOR_NOTA], [SERIE], [FRETE], [TIMESTAMP], [PORTAL], [NPROT], [CODIGO_MODELO_NF], [TPAMB])
                                        VALUES
@@ -109,7 +109,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                         identificadores += $"'{registros[i].id_nfe}', ";
                 }
 
-                string sql = $"SELECT ID_NFE, TIMESTAMP FROM B2CCONSULTANFE_TRUSTED WHERE ID_NFE IN ({identificadores})";
+                string sql = $"SELECT ID_NFE, TIMESTAMP FROM B2CCONSULTANFE WHERE ID_NFE IN ({identificadores})";
 
                 return await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
             }
@@ -154,7 +154,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 
         public async Task<bool> InsertRecord(LinxAPIParam jobParameter, B2CConsultaNFe? record)
         {
-            string? sql = $"INSERT INTO {jobParameter.tableName}_raw " +
+            string? sql = $"INSERT INTO {jobParameter.tableName} " +
                           "([lastupdateon], [id_nfe], [id_pedido], [documento], [data_emissao], [chave_nfe], [situacao], [xml], [excluido], [identificador_microvix], [dt_insert], [valor_nota], [serie], [frete], [timestamp], [portal], [nProt], [codigo_modelo_nf], [justificativa], [tpAmb]) " +
                           "Values " +
                           "(@lastupdateon, @id_nfe, @id_pedido, @documento, @data_emissao, @chave_nfe, @situacao, @xml, @excluido, @identificador_microvix, @dt_insert, @valor_nota, @serie, @frete, @timestamp, @portal, @nProt, @codigo_modelo_nf, @justificativa, @tpAmb)";

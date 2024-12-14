@@ -52,8 +52,8 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
                            EXECUTE (
 	                           'CREATE PROCEDURE [P_B2CCONSULTACLIENTES_SYNC] AS
 	                           BEGIN
-		                           MERGE [B2CCONSULTACLIENTES_TRUSTED] AS TARGET
-		                           USING [B2CCONSULTACLIENTES_RAW] AS SOURCE
+		                           MERGE [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTACLIENTES] AS TARGET
+		                           USING [UNTREATED].[dbo].[B2CCONSULTACLIENTES] AS SOURCE
 
 		                           ON (
 			                           TARGET.[COD_CLIENTE_B2C] = SOURCE.[COD_CLIENTE_B2C] AND
@@ -61,7 +61,7 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
 			                           TARGET.[DOC_CLIENTE]	 = SOURCE.[DOC_CLIENTE]
 		                           )
 
-		                           WHEN MATCHED AND SOURCE.[parameters_timestamp] != TARGET.[parameters_timestamp] THEN 
+		                           WHEN MATCHED AND SOURCE.[TIMESTAMP] != TARGET.[TIMESTAMP] THEN 
 			                           UPDATE SET
 			                           TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON],
 			                           TARGET.[COD_CLIENTE_B2C] = SOURCE.[COD_CLIENTE_B2C],
@@ -98,23 +98,23 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
 			                           TARGET.[TEMPO_RESIDENCIA] = SOURCE.[TEMPO_RESIDENCIA],
 			                           TARGET.[RENDA] = SOURCE.[RENDA],
 			                           TARGET.[NUMERO_COMPL_RUA_CLIENTE] = SOURCE.[NUMERO_COMPL_RUA_CLIENTE],
-			                           TARGET.[parameters_timestamp] = SOURCE.[parameters_timestamp],
+			                           TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP],
 			                           TARGET.[TIPO_PESSOA] = SOURCE.[TIPO_PESSOA],
 			                           TARGET.[PORTAL] = SOURCE.[PORTAL],
 			                           TARGET.[ACEITA_PROGRAMA_FIDELIDADE] = SOURCE.[ACEITA_PROGRAMA_FIDELIDADE]
 	
-		                           WHEN NOT MATCHED BY TARGET AND SOURCE.[DOC_CLIENTE] NOT IN (SELECT [DOC_CLIENTE] FROM [B2CCONSULTACLIENTES_TRUSTED]) THEN 
+		                           WHEN NOT MATCHED BY TARGET AND SOURCE.[DOC_CLIENTE] NOT IN (SELECT [DOC_CLIENTE] FROM [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTACLIENTES]) THEN 
 			                           INSERT 
 			                           ([LASTUPDATEON], [COD_CLIENTE_B2C], [COD_CLIENTE_ERP], [DOC_CLIENTE], [NM_CLIENTE], [NM_MAE], [NM_PAI], [NM_CONJUGE], [DT_CADASTRO], [DT_NASC_CLIENTE], [END_CLIENTE],
 			                           [COMPLEMENTO_END_CLIENTE], [NR_RUA_CLIENTE], [BAIRRO_CLIENTE], [CEP_CLIENTE], [CIDADE_CLIENTE], [UF_CLIENTE], [FONE_CLIENTE], [FONE_COMERCIAL], [CEL_CLIENTE], [EMAIL_CLIENTE], 
-			                           [RG_CLIENTE], [RG_ORGAO_EMISSOR], [ESTADO_CIVIL_CLIENTE], [EMPRESA_CLIENTE], [CARGO_CLIENTE], [SEXO_CLIENTE], [DT_UPDATE], [RECEBER_EMAIL], [DT_EXPEDICAO_RG], 
-			                           [NATURALIDADE], [TEMPO_RESIDENCIA], [RENDA], [NUMERO_COMPL_RUA_CLIENTE], [parameters_timestamp], [TIPO_PESSOA], [PORTAL], [ACEITA_PROGRAMA_FIDELIDADE])
+			                           [RG_CLIENTE], [RG_ORGAO_EMISSOR], [ESTADO_CIVIL_CLIENTE], [EMPRESA_CLIENTE], [CARGO_CLIENTE], [SEXO_CLIENTE], [DT_UPDATE], [ATIVO], [RECEBER_EMAIL], [DT_EXPEDICAO_RG], 
+			                           [NATURALIDADE], [TEMPO_RESIDENCIA], [RENDA], [NUMERO_COMPL_RUA_CLIENTE], [TIMESTAMP], [TIPO_PESSOA], [PORTAL], [ACEITA_PROGRAMA_FIDELIDADE])
 			                           VALUES
 			                           (SOURCE.[LASTUPDATEON], SOURCE.[COD_CLIENTE_B2C], SOURCE.[COD_CLIENTE_ERP], SOURCE.[DOC_CLIENTE], SOURCE.[NM_CLIENTE], SOURCE.[NM_MAE], SOURCE.[NM_PAI], SOURCE.[NM_CONJUGE], 
 			                           SOURCE.[DT_CADASTRO], SOURCE.[DT_NASC_CLIENTE], SOURCE.[END_CLIENTE], SOURCE.[COMPLEMENTO_END_CLIENTE], SOURCE.[NR_RUA_CLIENTE], SOURCE.[BAIRRO_CLIENTE], 
 			                           SOURCE.[CEP_CLIENTE], SOURCE.[CIDADE_CLIENTE], SOURCE.[UF_CLIENTE], SOURCE.[FONE_CLIENTE], SOURCE.[FONE_COMERCIAL], SOURCE.[CEL_CLIENTE], SOURCE.[EMAIL_CLIENTE], 
 			                           SOURCE.[RG_CLIENTE], SOURCE.[RG_ORGAO_EMISSOR], SOURCE.[ESTADO_CIVIL_CLIENTE], SOURCE.[EMPRESA_CLIENTE], SOURCE.[CARGO_CLIENTE], SOURCE.[SEXO_CLIENTE], SOURCE.[DT_UPDATE], 
-			                           SOURCE.[ATIVO], SOURCE.[RECEBER_EMAIL], SOURCE.[DT_EXPEDICAO_RG], SOURCE.[NATURALIDADE], SOURCE.[TEMPO_RESIDENCIA], SOURCE.[RENDA], SOURCE.[NUMERO_COMPL_RUA_CLIENTE], SOURCE.[parameters_timestamp], 
+			                           SOURCE.[ATIVO], SOURCE.[RECEBER_EMAIL], SOURCE.[DT_EXPEDICAO_RG], SOURCE.[NATURALIDADE], SOURCE.[TEMPO_RESIDENCIA], SOURCE.[RENDA], SOURCE.[NUMERO_COMPL_RUA_CLIENTE], SOURCE.[TIMESTAMP], 
 			                           SOURCE.[TIPO_PESSOA], SOURCE.[PORTAL], SOURCE.[ACEITA_PROGRAMA_FIDELIDADE]);
 	                           END'
                            )

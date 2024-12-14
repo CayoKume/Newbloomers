@@ -46,8 +46,8 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                            EXECUTE (
 	                           'CREATE PROCEDURE [P_B2CCONSULTAPRODUTOSCAMPOSADICIONAISDETALHES_SYNC] AS
 	                           BEGIN
-		                           MERGE [B2CCONSULTAPRODUTOSCAMPOSADICIONAISDETALHES_TRUSTED] AS TARGET
-                                   USING [B2CCONSULTAPRODUTOSCAMPOSADICIONAISDETALHES_RAW] AS SOURCE
+		                           MERGE [B2CCONSULTAPRODUTOSCAMPOSADICIONAISDETALHES] AS TARGET
+                                   USING [B2CCONSULTAPRODUTOSCAMPOSADICIONAISDETALHES] AS SOURCE
 
                                    ON (
 			                           TARGET.[ID_CAMPO_DETALHE] = SOURCE.[ID_CAMPO_DETALHE]
@@ -64,7 +64,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 			                           TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP],
 			                           TARGET.[PORTAL] = SOURCE.[PORTAL]
 
-		                           WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_CAMPO_DETALHE] NOT IN (SELECT [ID_CAMPO_DETALHE] FROM [B2CCONSULTAPRODUTOSCAMPOSADICIONAISDETALHES_TRUSTED]) THEN
+		                           WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_CAMPO_DETALHE] NOT IN (SELECT [ID_CAMPO_DETALHE] FROM [B2CCONSULTAPRODUTOSCAMPOSADICIONAISDETALHES]) THEN
 			                           INSERT
 			                           ([LASTUPDATEON], [ID_CAMPO_DETALHE], [ORDEM], [DESCRICAO], [ID_CAMPO], [TIMESTAMP], [PORTAL])
 			                           VALUES
@@ -96,7 +96,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                         identificadores += $"'{registros[i].id_campo_detalhe}', ";
                 }
 
-                string sql = $"SELECT ID_CAMPO_DETALHE, TIMESTAMP FROM B2CCONSULTAPRODUTOSCAMPOSADICIONAISDETALHES_TRUSTED WHERE ID_CAMPO_DETALHE IN ({identificadores})";
+                string sql = $"SELECT ID_CAMPO_DETALHE, TIMESTAMP FROM B2CCONSULTAPRODUTOSCAMPOSADICIONAISDETALHES WHERE ID_CAMPO_DETALHE IN ({identificadores})";
 
                 return await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
             }
@@ -141,7 +141,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 
         public async Task<bool> InsertRecord(LinxAPIParam jobParameter, B2CConsultaProdutosCamposAdicionaisDetalhes? record)
         {
-            string? sql = $"INSERT INTO {jobParameter.tableName}_raw " +
+            string? sql = $"INSERT INTO {jobParameter.tableName} " +
                           "([lastupdateon], [id_campo_detalhe], [ordem], [descricao], [id_campo], [ativo], [timestamp], [portal]) " +
                           "Values " +
                           "(@lastupdateon, @id_campo_detalhe, @ordem, @descricao, @id_campo, @ativo, @timestamp, @portal)";

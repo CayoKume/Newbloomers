@@ -51,8 +51,8 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
                            EXECUTE (
 	                           'CREATE PROCEDURE [P_B2CCONSULTAPEDIDOSTIPOS_SYNC] AS
 	                           BEGIN
-		                           MERGE [B2CCONSULTAPEDIDOSTIPOS_TRUSTED] AS TARGET
-		                           USING [B2CCONSULTAPEDIDOSTIPOS_RAW] AS SOURCE
+		                           MERGE [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTAPEDIDOSTIPOS] AS TARGET
+		                           USING [UNTREATED].[dbo].[B2CCONSULTAPEDIDOSTIPOS] AS SOURCE
 
 		                           ON (
 			                           TARGET.[ID_TIPO_B2C] = SOURCE.[ID_TIPO_B2C]
@@ -66,7 +66,7 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
 			                           TARGET.[POS_TIMESTAMP_OLD] = SOURCE.[POS_TIMESTAMP_OLD],
 			                           TARGET.[PORTAL] = SOURCE.[PORTAL]
 
-		                           WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_TIPO_B2C] NOT IN (SELECT [ID_TIPO_B2C] FROM [B2CCONSULTAPEDIDOSTIPOS_TRUSTED]) THEN
+		                           WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_TIPO_B2C] NOT IN (SELECT [ID_TIPO_B2C] FROM [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTAPEDIDOSTIPOS]) THEN
 			                           INSERT
 			                           ([LASTUPDATEON], [ID_TIPO_B2C], [DESCRICAO], [POS_TIMESTAMP_OLD], [PORTAL])
 			                           VALUES

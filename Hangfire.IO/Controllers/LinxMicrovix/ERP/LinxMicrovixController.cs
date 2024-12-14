@@ -32,7 +32,7 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                 databaseName: _configuration
                                 .GetSection("ConfigureServer")
                                 .GetSection("Databases")
-                                .GetSection("LINX_MICROVIX")
+                                .GetSection("LinxMicrovix")
                                 .Value,
 
                 untreatedDatabaseName: _configuration

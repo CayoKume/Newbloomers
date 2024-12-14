@@ -46,35 +46,43 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
 
         public async Task<bool> CreateTableMerge(string databaseName, string tableName)
         {
-            string? sql = $"MERGE [{tableName}_trusted] AS TARGET " +
-                         $"USING [{tableName}_raw] AS SOURCE " +
-                          "ON (TARGET.COD_TRANSPORTADOR = SOURCE.COD_TRANSPORTADOR) " +
-                          "WHEN MATCHED THEN UPDATE SET " +
-                          "TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON], " +
-                          "TARGET.[COD_TRANSPORTADOR] = SOURCE.[COD_TRANSPORTADOR], " +
-                          "TARGET.[NOME] = SOURCE.[NOME], " +
-                          "TARGET.[NOME_FANTASIA] = SOURCE.[NOME_FANTASIA], " +
-                          "TARGET.[TIPO_PESSOA] = SOURCE.[TIPO_PESSOA], " +
-                          "TARGET.[TIPO_TRANSPORTADOR] = SOURCE.[TIPO_TRANSPORTADOR], " +
-                          "TARGET.[ENDRECO] = SOURCE.[ENDRECO], " +
-                          "TARGET.[NUMERO_RUA] = SOURCE.[NUMERO_RUA], " +
-                          "TARGET.[BAIRRO] = SOURCE.[BAIRRO], " +
-                          "TARGET.[CEP] = SOURCE.[CEP], " +
-                          "TARGET.[CIDADE] = SOURCE.[CIDADE], " +
-                          "TARGET.[UF] = SOURCE.[UF], " +
-                          "TARGET.[DOCUMENTO] = SOURCE.[DOCUMENTO], " +
-                          "TARGET.[FONE] = SOURCE.[FONE], " +
-                          "TARGET.[EMAIL] = SOURCE.[EMAIL], " +
-                          "TARGET.[PAIS] = SOURCE.[PAIS], " +
-                          "TARGET.[OBS] = SOURCE.[OBS], " +
-                          "TARGET.[parameters_timestamp] = SOURCE.[parameters_timestamp], " +
-                          "TARGET.[PORTAL] = SOURCE.[PORTAL] " +
-                          "WHEN NOT MATCHED BY TARGET THEN " +
-                          "INSERT " +
-                          "([LASTUPDATEON], [COD_TRANSPORTADOR], [NOME], [NOME_FANTASIA], [TIPO_PESSOA], [TIPO_TRANSPORTADOR], [ENDRECO], [NUMERO_RUA], [BAIRRO], [CEP], [CIDADE], [UF], [DOCUMENTO], [FONE], [EMAIL], [PAIS], [OBS], [parameters_timestamp], [PORTAL])" +
-                          "VALUES " +
-                          "(SOURCE.[LASTUPDATEON], SOURCE.[COD_TRANSPORTADOR], SOURCE.[NOME], SOURCE.[NOME_FANTASIA], SOURCE.[TIPO_PESSOA], SOURCE.[TIPO_TRANSPORTADOR], SOURCE.[ENDRECO], SOURCE.[NUMERO_RUA], SOURCE.[BAIRRO], SOURCE.[CEP], SOURCE.[CIDADE], SOURCE.[UF], " +
-                          "SOURCE.[DOCUMENTO], SOURCE.[FONE], SOURCE.[EMAIL], SOURCE.[PAIS], SOURCE.[OBS], SOURCE.[parameters_timestamp], SOURCE.[PORTAL]);";
+            string? sql = @$"IF NOT EXISTS (SELECT * FROM SYS.OBJECTS WHERE TYPE = 'P' AND NAME = 'P_B2CCONSULTATRANSPORTADORES_SYNC')
+                           BEGIN
+                           EXECUTE (
+                               'CREATE PROCEDURE [P_B2CCONSULTATRANSPORTADORES_SYNC] AS
+                               BEGIN
+									MERGE [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTATRANSPORTADORES] AS TARGET
+									USING [UNTREATED].[dbo].[B2CCONSULTATRANSPORTADORES] AS SOURCE
+									ON (TARGET.COD_TRANSPORTADOR = SOURCE.COD_TRANSPORTADOR)
+									WHEN MATCHED THEN UPDATE SET
+									TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON],
+									TARGET.[COD_TRANSPORTADOR] = SOURCE.[COD_TRANSPORTADOR],
+									TARGET.[NOME] = SOURCE.[NOME],
+									TARGET.[NOME_FANTASIA] = SOURCE.[NOME_FANTASIA],
+									TARGET.[TIPO_PESSOA] = SOURCE.[TIPO_PESSOA],
+									TARGET.[TIPO_TRANSPORTADOR] = SOURCE.[TIPO_TRANSPORTADOR],
+									TARGET.[ENDERECO] = SOURCE.[ENDERECO],
+									TARGET.[NUMERO_RUA] = SOURCE.[NUMERO_RUA],
+									TARGET.[BAIRRO] = SOURCE.[BAIRRO],
+									TARGET.[CEP] = SOURCE.[CEP],
+									TARGET.[CIDADE] = SOURCE.[CIDADE],
+									TARGET.[UF] = SOURCE.[UF],
+									TARGET.[DOCUMENTO] = SOURCE.[DOCUMENTO],
+									TARGET.[FONE] = SOURCE.[FONE],
+									TARGET.[EMAIL] = SOURCE.[EMAIL],
+									TARGET.[PAIS] = SOURCE.[PAIS],
+									TARGET.[OBS] = SOURCE.[OBS],
+									TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP],
+									TARGET.[PORTAL] = SOURCE.[PORTAL]
+									WHEN NOT MATCHED BY TARGET THEN
+									INSERT
+									([LASTUPDATEON], [COD_TRANSPORTADOR], [NOME], [NOME_FANTASIA], [TIPO_PESSOA], [TIPO_TRANSPORTADOR], [ENDERECO], [NUMERO_RUA], [BAIRRO], [CEP], [CIDADE], [UF], [DOCUMENTO], [FONE], [EMAIL], [PAIS], [OBS], [TIMESTAMP], [PORTAL])
+									VALUES
+									(SOURCE.[LASTUPDATEON], SOURCE.[COD_TRANSPORTADOR], SOURCE.[NOME], SOURCE.[NOME_FANTASIA], SOURCE.[TIPO_PESSOA], SOURCE.[TIPO_TRANSPORTADOR], SOURCE.[ENDERECO], SOURCE.[NUMERO_RUA], SOURCE.[BAIRRO], SOURCE.[CEP], SOURCE.[CIDADE], SOURCE.[UF],
+									SOURCE.[DOCUMENTO], SOURCE.[FONE], SOURCE.[EMAIL], SOURCE.[PAIS], SOURCE.[OBS], SOURCE.[TIMESTAMP], SOURCE.[PORTAL]);                        
+								END'
+                           )
+                           END";
 
             try
             {

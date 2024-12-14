@@ -51,27 +51,27 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
                            EXECUTE (
 	                           'CREATE PROCEDURE [P_B2CCONSULTALINHAS_SYNC] AS
 	                           BEGIN
-		                           MERGE [] AS TARGET
-                                   USING [B2CCONSULTALINHAS_RAW] AS SOURCE
+		                           MERGE [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTALINHAS] AS TARGET
+                                   USING [UNTREATED].[dbo].[B2CCONSULTALINHAS] AS SOURCE
 
                                    ON (
 			                           TARGET.[CODIGO_LINHA] = SOURCE.[CODIGO_LINHA]
 		                           )
 
-                                   WHEN MATCHED AND TARGET.[parameters_timestamp] != SOURCE.[parameters_timestamp] THEN 
+                                   WHEN MATCHED AND TARGET.[TIMESTAMP] != SOURCE.[TIMESTAMP] THEN 
 			                           UPDATE SET
 			                           TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON],
 			                           TARGET.[CODIGO_LINHA] = SOURCE.[CODIGO_LINHA],
 			                           TARGET.[NOME_LINHA] = SOURCE.[NOME_LINHA],
-			                           TARGET.[parameters_timestamp] = SOURCE.[parameters_timestamp],
+			                           TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP],
 			                           TARGET.[SETORES] = SOURCE.[SETORES],
 			                           TARGET.[PORTAL] = SOURCE.[PORTAL]
 
-                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[CODIGO_LINHA] NOT IN (SELECT [CODIGO_LINHA] FROM [B2CCONSULTALINHAS_TRUSTED]) THEN
+                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[CODIGO_LINHA] NOT IN (SELECT [CODIGO_LINHA] FROM [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTALINHAS]) THEN
 			                           INSERT
-			                           ([LASTUPDATEON], [CODIGO_LINHA], [NOME_LINHA], [parameters_timestamp], [SETORES], [PORTAL])
+			                           ([LASTUPDATEON], [CODIGO_LINHA], [NOME_LINHA], [TIMESTAMP], [SETORES], [PORTAL])
 			                           VALUES
-			                           (SOURCE.[LASTUPDATEON], SOURCE.[CODIGO_LINHA], SOURCE.[NOME_LINHA], SOURCE.[parameters_timestamp], SOURCE.[SETORES], SOURCE.[PORTAL]);
+			                           (SOURCE.[LASTUPDATEON], SOURCE.[CODIGO_LINHA], SOURCE.[NOME_LINHA], SOURCE.[TIMESTAMP], SOURCE.[SETORES], SOURCE.[PORTAL]);
 		                           END'
                            )
                            END";

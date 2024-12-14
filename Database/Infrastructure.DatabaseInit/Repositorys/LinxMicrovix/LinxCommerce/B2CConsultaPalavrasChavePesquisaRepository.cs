@@ -52,24 +52,24 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
                             EXECUTE (
 	                            'CREATE PROCEDURE [P_B2CCONSULTAPALAVRASCHAVEPESQUISA_SYNC] AS
 	                            BEGIN
-		                            MERGE [B2CCONSULTAPALAVRASCHAVEPESQUISA_TRUSTED] AS TARGET
-                                    USING [B2CCONSULTAPALAVRASCHAVEPESQUISA_RAW] AS SOURCE
+		                            MERGE [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTAPALAVRASCHAVEPESQUISA] AS TARGET
+                                    USING [UNTREATED].[dbo].[B2CCONSULTAPALAVRASCHAVEPESQUISA] AS SOURCE
 
                                     ON (TARGET.[ID_B2C_PALAVRAS_CHAVE_PESQUISA] = SOURCE.[ID_B2C_PALAVRAS_CHAVE_PESQUISA])
 
-                                    WHEN MATCHED AND TARGET.[parameters_timestamp] != SOURCE.[parameters_timestamp] THEN
+                                    WHEN MATCHED AND TARGET.[TIMESTAMP] != SOURCE.[TIMESTAMP] THEN
 			                            UPDATE SET
 			                            TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON],
 			                            TARGET.[PORTAL] = SOURCE.[PORTAL],
 			                            TARGET.[ID_B2C_PALAVRAS_CHAVE_PESQUISA] = SOURCE.[ID_B2C_PALAVRAS_CHAVE_PESQUISA],
 			                            TARGET.[NOME_COLECAO] = SOURCE.[NOME_COLECAO],
-			                            TARGET.[parameters_timestamp] = SOURCE.[parameters_timestamp]
+			                            TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP]
 
-                                    WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_B2C_PALAVRAS_CHAVE_PESQUISA] NOT IN (SELECT [ID_B2C_PALAVRAS_CHAVE_PESQUISA] FROM [B2CCONSULTAPALAVRASCHAVEPESQUISA_TRUSTED]) THEN
+                                    WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_B2C_PALAVRAS_CHAVE_PESQUISA] NOT IN (SELECT [ID_B2C_PALAVRAS_CHAVE_PESQUISA] FROM [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTAPALAVRASCHAVEPESQUISA]) THEN
 			                            INSERT
-			                            ([LASTUPDATEON], [PORTAL], [ID_B2C_PALAVRAS_CHAVE_PESQUISA], [NOME_COLECAO], [parameters_timestamp])
+			                            ([LASTUPDATEON], [PORTAL], [ID_B2C_PALAVRAS_CHAVE_PESQUISA], [NOME_COLECAO], [TIMESTAMP])
 			                            VALUES
-			                            (SOURCE.[LASTUPDATEON], SOURCE.[PORTAL], SOURCE.[ID_B2C_PALAVRAS_CHAVE_PESQUISA], SOURCE.[NOME_COLECAO], SOURCE.[parameters_timestamp]);
+			                            (SOURCE.[LASTUPDATEON], SOURCE.[PORTAL], SOURCE.[ID_B2C_PALAVRAS_CHAVE_PESQUISA], SOURCE.[NOME_COLECAO], SOURCE.[TIMESTAMP]);
 	                            END'
                             )
                             END";

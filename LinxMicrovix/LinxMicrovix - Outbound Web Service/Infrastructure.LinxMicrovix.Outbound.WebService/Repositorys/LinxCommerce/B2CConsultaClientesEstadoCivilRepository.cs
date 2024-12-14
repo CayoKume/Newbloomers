@@ -46,8 +46,8 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                            EXECUTE (
 	                           'CREATE PROCEDURE [P_B2CCONSULTACLIENTESESTADOCIVIL_SYNC] AS
 	                           BEGIN
-		                           MERGE [B2CCONSULTACLIENTESESTADOCIVIL_TRUSTED] AS TARGET
-		                           USING [B2CCONSULTACLIENTESESTADOCIVIL_RAW] AS SOURCE
+		                           MERGE [B2CCONSULTACLIENTESESTADOCIVIL] AS TARGET
+		                           USING [B2CCONSULTACLIENTESESTADOCIVIL] AS SOURCE
 
 		                           ON (
 			                           TARGET.[ID_ESTADO_CIVIL] = SOURCE.[ID_ESTADO_CIVIL]
@@ -61,7 +61,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 			                           TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP],
 			                           TARGET.[PORTAL] = SOURCE.[PORTAL]
 
-		                           WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_ESTADO_CIVIL] NOT IN (SELECT [ID_ESTADO_CIVIL] FROM [B2CCONSULTACLIENTESESTADOCIVIL_TRUSTED]) THEN
+		                           WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_ESTADO_CIVIL] NOT IN (SELECT [ID_ESTADO_CIVIL] FROM [B2CCONSULTACLIENTESESTADOCIVIL]) THEN
 			                           INSERT
 			                           ([LASTUPDATEON], [ID_ESTADO_CIVIL], [ESTADO_CIVIL], [TIMESTAMP], [PORTAL])
 			                           VALUES
@@ -93,7 +93,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                         identificadores += $"'{registros[i].id_estado_civil}', ";
                 }
 
-                string sql = $"SELECT ID_ESTADO_CIVIL, TIMESTAMP FROM B2CCONSULTACLIENTESESTADOCIVIL_TRUSTED WHERE ID_ESTADO_CIVIL IN ({identificadores})";
+                string sql = $"SELECT ID_ESTADO_CIVIL, TIMESTAMP FROM B2CCONSULTACLIENTESESTADOCIVIL WHERE ID_ESTADO_CIVIL IN ({identificadores})";
 
                 return await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
             }

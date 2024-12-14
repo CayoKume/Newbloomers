@@ -48,8 +48,8 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                            EXECUTE (
 	                           'CREATE PROCEDURE [P_B2CCONSULTALEGENDASCADASTROSAUXILIARES_SYNC] AS
 	                           BEGIN
-		                           MERGE [B2CCONSULTALEGENDASCADASTROSAUXILIARES_TRUSTED] AS TARGET
-                                   USING [B2CCONSULTALEGENDASCADASTROSAUXILIARES_RAW] AS SOURCE
+		                           MERGE [B2CCONSULTALEGENDASCADASTROSAUXILIARES] AS TARGET
+                                   USING [B2CCONSULTALEGENDASCADASTROSAUXILIARES] AS SOURCE
 
                                    ON (
 			                           TARGET.[EMPRESA] = SOURCE.[EMPRESA]
@@ -69,7 +69,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 			                           TARGET.[LEGENDA_CLASSIFICACAO] = SOURCE.[LEGENDA_CLASSIFICACAO],
 			                           TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP]
 
-                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[EMPRESA] NOT IN (SELECT [EMPRESA] FROM [B2CCONSULTALEGENDASCADASTROSAUXILIARES_TRUSTED]) THEN
+                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[EMPRESA] NOT IN (SELECT [EMPRESA] FROM [B2CCONSULTALEGENDASCADASTROSAUXILIARES]) THEN
 			                           INSERT
 			                           ([LASTUPDATEON], [EMPRESA], [LEGENDA_SETOR], [LEGENDA_LINHA], [LEGENDA_MARCA], [LEGENDA_COLECAO], [LEGENDA_GRADE1], [LEGENDA_GRADE2],
 			                           [LEGENDA_ESPESSURA], [LEGENDA_CLASSIFICACAO], [TIMESTAMP])
@@ -103,7 +103,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                         identificadores += $"'{registros[i].empresa}', ";
                 }
 
-                string sql = $"SELECT EMPRESA, TIMESTAMP FROM B2CCONSULTALEGENDASCADASTROSAUXILIARES_TRUSTED WHERE EMPRESA IN ({identificadores})";
+                string sql = $"SELECT EMPRESA, TIMESTAMP FROM B2CCONSULTALEGENDASCADASTROSAUXILIARES WHERE EMPRESA IN ({identificadores})";
 
                 return await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
             }

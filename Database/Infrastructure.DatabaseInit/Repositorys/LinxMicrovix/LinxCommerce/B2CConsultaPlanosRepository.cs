@@ -52,32 +52,32 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
                            EXECUTE (
 	                           'CREATE PROCEDURE [P_B2CCONSULTAPLANOS_SYNC] AS
 	                           BEGIN
-		                           MERGE [B2CCONSULTAPLANOS_TRUSTED] AS TARGET
-                                   USING [B2CCONSULTAPLANOS_RAW] AS SOURCE
+		                           MERGE [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTAPLANOS] AS TARGET
+                                   USING [UNTREATED].[dbo].[B2CCONSULTAPLANOS] AS SOURCE
 
                                    ON (
 			                           TARGET.[PLANO] = SOURCE.[PLANO]
 		                           )
 
-                                   WHEN MATCHED AND TARGET.[parameters_timestamp] != SOURCE.[parameters_timestamp] THEN 
+                                   WHEN MATCHED AND TARGET.[TIMESTAMP] != SOURCE.[TIMESTAMP] THEN 
 			                           UPDATE SET
 			                           TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON],
 			                           TARGET.[PLANO] = SOURCE.[PLANO],
 			                           TARGET.[NOME_PLANO] = SOURCE.[NOME_PLANO],
 			                           TARGET.[FORMA_PAGAMENTO] = SOURCE.[FORMA_PAGAMENTO],
-			                           TARGET.[QTDO_PARCELA] = SOURCE.[QTDO_PARCELA],
+			                           TARGET.[QTDE_PARCELAS] = SOURCE.[QTDE_PARCELAS],
 			                           TARGET.[VALOR_MINIMO_PARCELA] = SOURCE.[VALOR_MINIMO_PARCELA],
 			                           TARGET.[INDICE] = SOURCE.[INDICE],
-			                           TARGET.[parameters_timestamp] = SOURCE.[parameters_timestamp],
+			                           TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP],
 			                           TARGET.[DESATIVADO] = SOURCE.[DESATIVADO],
 			                           TARGET.[TIPO_PLANO] = SOURCE.[TIPO_PLANO],
 			                           TARGET.[PORTAL] = SOURCE.[PORTAL]
 
-                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[PLANO] NOT IN (SELECT [PLANO] FROM [B2CCONSULTAPLANOS_TRUSTED]) THEN
+                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[PLANO] NOT IN (SELECT [PLANO] FROM [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTAPLANOS]) THEN
 			                           INSERT
-			                           ([LASTUPDATEON], [PLANO], [NOME_PLANO], [FORMA_PAGAMENTO], [QTDO_PARCELA], [VALOR_MINIMO_PARCELA], [INDICE], [parameters_timestamp], [DESATIVADO], [TIPO_PLANO], [PORTAL])
+			                           ([LASTUPDATEON], [PLANO], [NOME_PLANO], [FORMA_PAGAMENTO], [QTDE_PARCELAS], [VALOR_MINIMO_PARCELA], [INDICE], [TIMESTAMP], [DESATIVADO], [TIPO_PLANO], [PORTAL])
 			                           VALUES
-			                           (SOURCE.[LASTUPDATEON], SOURCE.[PLANO], SOURCE.[NOME_PLANO], SOURCE.[FORMA_PAGAMENTO], SOURCE.[QTDO_PARCELA], SOURCE.[VALOR_MINIMO_PARCELA], SOURCE.[INDICE], SOURCE.[parameters_timestamp], SOURCE.[DESATIVADO], SOURCE.[TIPO_PLANO], SOURCE.[PORTAL]);
+			                           (SOURCE.[LASTUPDATEON], SOURCE.[PLANO], SOURCE.[NOME_PLANO], SOURCE.[FORMA_PAGAMENTO], SOURCE.[QTDE_PARCELAS], SOURCE.[VALOR_MINIMO_PARCELA], SOURCE.[INDICE], SOURCE.[TIMESTAMP], SOURCE.[DESATIVADO], SOURCE.[TIPO_PLANO], SOURCE.[PORTAL]);
                            END'
                            )
                            END";

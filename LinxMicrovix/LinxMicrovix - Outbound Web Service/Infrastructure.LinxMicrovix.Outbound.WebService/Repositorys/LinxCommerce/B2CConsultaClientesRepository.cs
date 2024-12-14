@@ -60,8 +60,8 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                            EXECUTE (
 	                           'CREATE PROCEDURE [P_B2CCONSULTACLIENTES_SYNC] AS
 	                           BEGIN
-		                           MERGE [B2CCONSULTACLIENTES_TRUSTED] AS TARGET
-		                           USING [B2CCONSULTACLIENTES_RAW] AS SOURCE
+		                           MERGE [B2CCONSULTACLIENTES] AS TARGET
+		                           USING [B2CCONSULTACLIENTES] AS SOURCE
 
 		                           ON (
 			                           TARGET.[COD_CLIENTE_B2C] = SOURCE.[COD_CLIENTE_B2C] AND
@@ -111,7 +111,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 			                           TARGET.[PORTAL] = SOURCE.[PORTAL],
 			                           TARGET.[ACEITA_PROGRAMA_FIDELIDADE] = SOURCE.[ACEITA_PROGRAMA_FIDELIDADE]
 	
-		                           WHEN NOT MATCHED BY TARGET AND SOURCE.[DOC_CLIENTE] NOT IN (SELECT [DOC_CLIENTE] FROM [B2CCONSULTACLIENTES_TRUSTED]) THEN 
+		                           WHEN NOT MATCHED BY TARGET AND SOURCE.[DOC_CLIENTE] NOT IN (SELECT [DOC_CLIENTE] FROM [B2CCONSULTACLIENTES]) THEN 
 			                           INSERT 
 			                           ([LASTUPDATEON], [COD_CLIENTE_B2C], [COD_CLIENTE_ERP], [DOC_CLIENTE], [NM_CLIENTE], [NM_MAE], [NM_PAI], [NM_CONJUGE], [DT_CADASTRO], [DT_NASC_CLIENTE], [END_CLIENTE],
 			                           [COMPLEMENTO_END_CLIENTE], [NR_RUA_CLIENTE], [BAIRRO_CLIENTE], [CEP_CLIENTE], [CIDADE_CLIENTE], [UF_CLIENTE], [FONE_CLIENTE], [FONE_COMERCIAL], [CEL_CLIENTE], [EMAIL_CLIENTE], 
@@ -163,7 +163,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 
         public async Task<bool> InsertRecord(LinxAPIParam jobParameter, B2CConsultaClientes? record)
         {
-            string? sql = $"INSERT INTO {jobParameter.tableName}_raw " +
+            string? sql = $"INSERT INTO {jobParameter.tableName} " +
                           "([lastupdateon], [cod_cliente_b2c], [cod_cliente_erp], [doc_cliente], [nm_cliente], [nm_mae], [nm_pai], [nm_conjuge], [dt_cadastro], " +
                           "[dt_nasc_cliente], [end_cliente], [complemento_end_cliente], [nr_rua_cliente], [bairro_cliente], [cep_cliente], [cidade_cliente], " +
                           "[uf_cliente], [fone_cliente], [fone_comercial], [cel_cliente], [email_cliente], [rg_cliente], [rg_orgao_emissor], [estado_civil_cliente], " +
@@ -199,7 +199,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                         identificadores += $"'{registros[i].doc_cliente}', ";
                 }
 
-                string sql = $"SELECT DOC_CLIENTE, TIMESTAMP FROM B2CCONSULTACLIENTES_TRUSTED WHERE DOC_CLIENTE IN ({identificadores})";
+                string sql = $"SELECT DOC_CLIENTE, TIMESTAMP FROM B2CCONSULTACLIENTES WHERE DOC_CLIENTE IN ({identificadores})";
 
                 return await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
             }

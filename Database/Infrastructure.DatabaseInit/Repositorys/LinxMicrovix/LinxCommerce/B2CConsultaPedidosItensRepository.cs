@@ -52,14 +52,14 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
                            EXECUTE (
 	                           'CREATE PROCEDURE [P_B2CCONSULTAPEDIDOSITENS_SYNC] AS
 	                           BEGIN
-		                           MERGE [B2CCONSULTAPEDIDOSITENS_TRUSTED] AS TARGET
-                                   USING [B2CCONSULTAPEDIDOSITENS_RAW] AS SOURCE
+		                           MERGE [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTAPEDIDOSITENS] AS TARGET
+                                   USING [UNTREATED].[dbo].[B2CCONSULTAPEDIDOSITENS] AS SOURCE
 
                                    ON (
 			                           TARGET.[ID_PEDIDO_ITEM] = SOURCE.[ID_PEDIDO_ITEM]
 		                           )
 
-                                   WHEN MATCHED AND TARGET.[parameters_timestamp] != SOURCE.[parameters_timestamp] THEN
+                                   WHEN MATCHED AND TARGET.[TIMESTAMP] != SOURCE.[TIMESTAMP] THEN
 			                           UPDATE SET
 			                           TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON],
 			                           TARGET.[ID_PEDIDO_ITEM] = SOURCE.[ID_PEDIDO_ITEM],
@@ -67,14 +67,14 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
 			                           TARGET.[CODIGOPRODUTO] = SOURCE.[CODIGOPRODUTO],
 			                           TARGET.[QUANTIDADE] = SOURCE.[QUANTIDADE],
 			                           TARGET.[VL_UNITARIO] = SOURCE.[VL_UNITARIO],
-			                           TARGET.[parameters_timestamp] = SOURCE.[parameters_timestamp],
+			                           TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP],
 			                           TARGET.[PORTAL] = SOURCE.[PORTAL]
 
-                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_PEDIDO_ITEM] NOT IN (SELECT [ID_PEDIDO_ITEM] FROM [B2CCONSULTAPEDIDOSITENS_TRUSTED]) THEN
+                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_PEDIDO_ITEM] NOT IN (SELECT [ID_PEDIDO_ITEM] FROM [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTAPEDIDOSITENS]) THEN
 			                           INSERT
-			                           ([LASTUPDATEON], [ID_PEDIDO_ITEM], [ID_PEDIDO], [CODIGOPRODUTO], [QUANTIDADE], [VL_UNITARIO], [parameters_timestamp], [PORTAL])
+			                           ([LASTUPDATEON], [ID_PEDIDO_ITEM], [ID_PEDIDO], [CODIGOPRODUTO], [QUANTIDADE], [VL_UNITARIO], [TIMESTAMP], [PORTAL])
 			                           VALUES
-			                           (SOURCE.[LASTUPDATEON], SOURCE.[ID_PEDIDO_ITEM], SOURCE.[ID_PEDIDO], SOURCE.[CODIGOPRODUTO], SOURCE.[QUANTIDADE], SOURCE.[VL_UNITARIO], SOURCE.[parameters_timestamp], SOURCE.[PORTAL]);
+			                           (SOURCE.[LASTUPDATEON], SOURCE.[ID_PEDIDO_ITEM], SOURCE.[ID_PEDIDO], SOURCE.[CODIGOPRODUTO], SOURCE.[QUANTIDADE], SOURCE.[VL_UNITARIO], SOURCE.[TIMESTAMP], SOURCE.[PORTAL]);
 	                           END'
                            )
                            END";

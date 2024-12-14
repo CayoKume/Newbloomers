@@ -51,8 +51,8 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
                            EXECUTE (
 	                           'CREATE PROCEDURE [P_B2CCONSULTAFLAGS_SYNC] AS
 	                           BEGIN
-		                           MERGE [B2CCONSULTAFLAGS_TRUSTED] AS TARGET
-                                   USING [B2CCONSULTAFLAGS_RAW] AS SOURCE
+		                           MERGE [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTAFLAGS] AS TARGET
+                                   USING [UNTREATED].[dbo].[B2CCONSULTAFLAGS] AS SOURCE
 
                                    ON (
 			                           TARGET.[ID_B2C_FLAGS] = SOURCE.[ID_B2C_FLAGS]
@@ -63,13 +63,13 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
 			                           TARGET.[PORTAL] = SOURCE.[PORTAL],
 			                           TARGET.[ID_B2C_FLAGS] = SOURCE.[ID_B2C_FLAGS],
 			                           TARGET.[DESCRICAO] = SOURCE.[DESCRICAO],
-			                           TARGET.[parameters_timestamp] = SOURCE.[parameters_timestamp]
+			                           TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP]
 
-                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_B2C_FLAGS] NOT IN (SELECT [ID_B2C_FLAGS] FROM [B2CCONSULTAFLAGS_TRUSTED]) THEN
+                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_B2C_FLAGS] NOT IN (SELECT [ID_B2C_FLAGS] FROM [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTAFLAGS]) THEN
 			                           INSERT
-			                           ([LASTUPDATEON], [PORTAL], [ID_B2C_FLAGS], [DESCRICAO], [parameters_timestamp])
+			                           ([LASTUPDATEON], [PORTAL], [ID_B2C_FLAGS], [DESCRICAO], [TIMESTAMP])
 			                           VALUES
-			                           (SOURCE.[LASTUPDATEON], SOURCE.[PORTAL], SOURCE.[ID_B2C_FLAGS], SOURCE.[DESCRICAO], SOURCE.[parameters_timestamp]);
+			                           (SOURCE.[LASTUPDATEON], SOURCE.[PORTAL], SOURCE.[ID_B2C_FLAGS], SOURCE.[DESCRICAO], SOURCE.[TIMESTAMP]);
 	                           END'
                            )
                            END";

@@ -49,8 +49,8 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                            EXECUTE (
 	                           'CREATE PROCEDURE [P_B2CCONSULTAPRODUTOS_SYNC] AS
 	                           BEGIN
-		                           MERGE [B2CCONSULTAPRODUTOS_TRUSTED] AS TARGET
-                                   USING [B2CCONSULTAPRODUTOS_RAW] AS SOURCE
+		                           MERGE [B2CCONSULTAPRODUTOS] AS TARGET
+                                   USING [B2CCONSULTAPRODUTOS] AS SOURCE
 
                                    ON (
 			                           TARGET.[CODIGOPRODUTO] = SOURCE.[CODIGOPRODUTO]
@@ -91,7 +91,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 			                           TARGET.[FIM_PUBLICACAO_PRODUTO] = SOURCE.[FIM_PUBLICACAO_PRODUTO],
 			                           TARGET.[CODIGO_INTEGRACAO_OMS] = SOURCE.[CODIGO_INTEGRACAO_OMS]
 
-                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[CODIGOPRODUTO] NOT IN (SELECT [CODIGOPRODUTO] FROM [B2CCONSULTAPRODUTOS_TRUSTED]) THEN
+                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[CODIGOPRODUTO] NOT IN (SELECT [CODIGOPRODUTO] FROM [B2CCONSULTAPRODUTOS]) THEN
 			                           INSERT
 			                           ([LASTUPDATEON], [CODIGOPRODUTO], [REFERENCIA], [CODAUXILIAR1], [DESCRICAO_BASICA], [NOME_PRODUTO], [PESO_LIQUIDO], [CODIGO_SETOR], [CODIGO_LINHA], [CODIGO_MARCA], [CODIGO_COLECAO], [CODIGO_ESPESSURA], [CODIGO_GRADE1], [CODIGO_GRADE2], [UNIDADE], [ATIVO], [CODIGO_CLASSIFICACAO], [DT_CADASTRO], 
 			                           [OBSERVACAO], [COD_FORNECEDOR], [DT_UPDATE], [ALTURA_PARA_FRETE], [LARGURA_PARA_FRETE], [COMPRIMENTO_PARA_FRETE], [TIMESTAMP], [PESO_BRUTO], [PORTAL], [DESCRICAO_COMPLETA_COMMERCE], [CANAIS_ECOMMERCE_PUBLICADOS], [INICIO_PUBLICACAO_PRODUTO], [FIM_PUBLICACAO_PRODUTO], [CODIGO_INTEGRACAO_OMS])
@@ -126,7 +126,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                         identificadores += $"'{registros[i].codigoproduto}', ";
                 }
 
-                string sql = $"SELECT CODIGOPRODUTO, TIMESTAMP FROM B2CCONSULTAPRODUTOS_TRUSTED WHERE CODIGOPRODUTO IN ({identificadores})";
+                string sql = $"SELECT CODIGOPRODUTO, TIMESTAMP FROM B2CCONSULTAPRODUTOS WHERE CODIGOPRODUTO IN ({identificadores})";
 
                 return await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
             }
@@ -173,7 +173,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 
         public async Task<bool> InsertRecord(LinxAPIParam jobParameter, B2CConsultaProdutos? record)
         {
-            string? sql = $"INSERT INTO {jobParameter.tableName}_raw " +
+            string? sql = $"INSERT INTO {jobParameter.tableName} " +
                           "([lastupdateon], [codigoproduto], [referencia], [codauxiliar1], [descricao_basica], [nome_produto], [peso_liquido], [codigo_setor], [codigo_linha], [codigo_marca], [codigo_colecao], [codigo_espessura], [codigo_grade1], [codigo_grade2], [unidade], [ativo], [codigo_classificacao], [dt_cadastro], [observacao], [cod_fornecedor], [dt_update], [altura_para_frete], [largura_para_frete], [comprimento_para_frete], [timestamp], [peso_bruto], [portal], [descricao_completa_commerce], [canais_ecommerce_publicados], [inicio_publicacao_produto], [fim_publicacao_produto], [codigo_integracao_oms]) " +
                           "Values " +
                           "(@lastupdateon, @codigoproduto, @referencia, @codauxiliar1, @descricao_basica, @nome_produto, @peso_liquido, @codigo_setor, @codigo_linha, @codigo_marca, @codigo_colecao, @codigo_espessura, @codigo_grade1, @codigo_grade2, @unidade, @ativo, @codigo_classificacao, @dt_cadastro, @observacao, @cod_fornecedor, @dt_update, @altura_para_frete, @largura_para_frete, @comprimento_para_frete, @timestamp, @peso_bruto, @portal, @descricao_completa_commerce, @canais_ecommerce_publicados, @inicio_publicacao_produto, @fim_publicacao_produto, @codigo_integracao_oms)";

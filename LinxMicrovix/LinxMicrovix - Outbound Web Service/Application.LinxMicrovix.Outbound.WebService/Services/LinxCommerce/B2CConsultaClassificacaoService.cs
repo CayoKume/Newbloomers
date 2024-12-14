@@ -99,8 +99,6 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                             $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"
                         );
                 }
-
-                await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter: jobParameter);
             }
             catch (SQLCommandException ex)
             {

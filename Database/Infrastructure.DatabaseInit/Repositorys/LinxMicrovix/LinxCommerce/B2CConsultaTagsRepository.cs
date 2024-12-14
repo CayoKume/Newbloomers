@@ -47,20 +47,28 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
 
         public async Task<bool> CreateTableMerge(string databaseName, string tableName)
         {
-            string? sql = $"MERGE [{tableName}_trusted] AS TARGET " +
-                         $"USING [{tableName}_raw] AS SOURCE " +
-                          "ON (TARGET.ID_PEDIDO_ITEM = SOURCE.ID_PEDIDO_ITEM) " +
-                          "WHEN MATCHED THEN UPDATE SET " +
-                          "TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON], " +
-                          "TARGET.[ID_PEDIDO_ITEM] = SOURCE.[ID_PEDIDO_ITEM], " +
-                          "TARGET.[DESCRICAO] = SOURCE.[DESCRICAO], " +
-                          "TARGET.[parameters_timestamp] = SOURCE.[parameters_timestamp], " +
-                          "TARGET.[PORTAL] = SOURCE.[PORTAL] " +
-                          "WHEN NOT MATCHED BY TARGET THEN " +
-                          "INSERT " +
-                          "([LASTUPDATEON], [ID_PEDIDO_ITEM], [DESCRICAO], [parameters_timestamp], [PORTAL])" +
-                          "VALUES " +
-                          "(SOURCE.[LASTUPDATEON], SOURCE.[ID_PEDIDO_ITEM], SOURCE.[DESCRICAO], SOURCE.[parameters_timestamp], SOURCE.[PORTAL]);";
+            string? sql = $@"IF NOT EXISTS (SELECT * FROM SYS.OBJECTS WHERE TYPE = 'P' AND NAME = 'P_B2CCONSULTATAGS_SYNC')
+                           BEGIN
+                           EXECUTE (
+                               'CREATE PROCEDURE [P_B2CCONSULTATAGS_SYNC] AS
+                               BEGIN
+									MERGE [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTATAGS] AS TARGET
+									USING [UNTREATED].[dbo].[B2CCONSULTATAGS] AS SOURCE
+									ON (TARGET.ID_PEDIDO_ITEM = SOURCE.ID_PEDIDO_ITEM)
+									WHEN MATCHED THEN UPDATE SET
+									TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON],
+									TARGET.[ID_PEDIDO_ITEM] = SOURCE.[ID_PEDIDO_ITEM],
+									TARGET.[DESCRICAO] = SOURCE.[DESCRICAO],
+									TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP],
+									TARGET.[PORTAL] = SOURCE.[PORTAL]
+									WHEN NOT MATCHED BY TARGET THEN
+									INSERT
+									([LASTUPDATEON], [ID_PEDIDO_ITEM], [DESCRICAO], [TIMESTAMP], [PORTAL])
+									VALUES
+									(SOURCE.[LASTUPDATEON], SOURCE.[ID_PEDIDO_ITEM], SOURCE.[DESCRICAO], SOURCE.[TIMESTAMP], SOURCE.[PORTAL]);                
+								END'
+                           )
+                           END";
 
             try
             {

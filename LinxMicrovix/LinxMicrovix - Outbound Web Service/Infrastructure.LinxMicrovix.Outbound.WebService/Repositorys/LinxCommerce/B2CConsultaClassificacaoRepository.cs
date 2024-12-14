@@ -46,8 +46,8 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                            EXECUTE (
                                'CREATE PROCEDURE [P_B2CCONSULTACLASSIFICACAO_SYNC] AS
                                BEGIN
-	                               MERGE [B2CCONSULTACLASSIFICACAO_TRUSTED] AS TARGET 
-	                               USING [B2CCONSULTACLASSIFICACAO_RAW] AS SOURCE 
+	                               MERGE [B2CCONSULTACLASSIFICACAO] AS TARGET 
+	                               USING [B2CCONSULTACLASSIFICACAO] AS SOURCE 
 
 	                               ON (
                                         TARGET.[CODIGO_CLASSIFICACAO] = SOURCE.[CODIGO_CLASSIFICACAO]
@@ -61,7 +61,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 	                                   TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP], 
 	                                   TARGET.[PORTAL] = SOURCE.[PORTAL] 
 	                           
-                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[CODIGO_CLASSIFICACAO] NOT IN (SELECT [CODIGO_CLASSIFICACAO] FROM [B2CCONSULTACLASSIFICACAO_TRUSTED]) THEN 
+                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[CODIGO_CLASSIFICACAO] NOT IN (SELECT [CODIGO_CLASSIFICACAO] FROM [B2CCONSULTACLASSIFICACAO]) THEN 
 	                                   INSERT ([LASTUPDATEON], [CODIGO_CLASSIFICACAO], [NOME_CLASSIFICACAO], [TIMESTAMP], [PORTAL])
 	                                   VALUES (SOURCE.[LASTUPDATEON], SOURCE.[CODIGO_CLASSIFICACAO], SOURCE.[NOME_CLASSIFICACAO], SOURCE.[TIMESTAMP], SOURCE.[PORTAL]);
                                END'
@@ -91,7 +91,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                         identificadores += $"'{registros[i].codigo_classificacao}', ";
                 }
 
-                string sql = $"SELECT CODIGO_CLASSIFICACAO, TIMESTAMP FROM B2CCONSULTACLASSIFICACAO_TRUSTED WHERE CODIGO_CLASSIFICACAO IN ({identificadores})";
+                string sql = $"SELECT CODIGO_CLASSIFICACAO, TIMESTAMP FROM B2CCONSULTACLASSIFICACAO WHERE CODIGO_CLASSIFICACAO IN ({identificadores})";
 
                 return await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
             }
@@ -123,7 +123,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                         timestamp = @"<Parameter id=""timestamp"">[0]</Parameter>",
                         dateinterval = @"<Parameter id=""timestamp"">[0]</Parameter>",
                         individual = @"<Parameter id=""timestamp"">[0]</Parameter>
-                                                  <Parameter id=""codigo_classificacao"">[codigo_classificacao]</Parameter>",
+                                       <Parameter id=""codigo_classificacao"">[codigo_classificacao]</Parameter>",
                         ativo = 1
                     }
                 );
@@ -136,7 +136,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 
         public async Task<bool> InsertRecord(LinxAPIParam jobParameter, B2CConsultaClassificacao? record)
         {
-            string? sql = $"INSERT INTO {jobParameter.tableName}_raw " +
+            string? sql = $"INSERT INTO {jobParameter.tableName} " +
                           "([lastupdateon], [codigo_classificacao], [nome_classificacao], [timestamp], [portal]) " +
                           "Values " +
                           "(@lastupdateon, @codigo_classificacao, @nome_classificacao, @timestamp, @portal)";

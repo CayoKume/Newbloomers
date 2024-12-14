@@ -1,6 +1,6 @@
 ﻿using Dapper;
 using Domain.DatabaseInit.Interfaces.LinxMicrovix.LinxCommerce;
-
+using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce;
 using Infrastructure.IntegrationsCore.Connections.SQLServer;
 using Z.Dapper.Plus;
 
@@ -24,7 +24,7 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
                     var result = conn.Query(sql: sql);
 
                     if (result.Count() == 0)
-                        conn.CreateTable<B2CConsultaNFeRepository>(tableName: $"{jobName}");
+                        conn.CreateTable<B2CConsultaNFe>(tableName: $"{jobName}");
                 }
 
                 using (var conn = _conn.GetIDbConnection(untreatedDatabaseName))
@@ -32,7 +32,7 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
                     var result = conn.Query(sql: sql);
 
                     if (result.Count() == 0)
-                        conn.CreateTable<B2CConsultaNFeRepository>(tableName: $"{jobName}");
+                        conn.CreateTable<B2CConsultaNFe>(tableName: $"{jobName}");
                 }
 
                 return true;
@@ -50,12 +50,12 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
                            EXECUTE (
 	                           'CREATE PROCEDURE [P_B2CCONSULTANFE_SYNC] AS
 	                           BEGIN
-		                           MERGE [B2CCONSULTANFE_TRUSTED] AS TARGET
-                                   USING [B2CCONSULTANFE_RAW] AS SOURCE
+		                           MERGE [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTANFE] AS TARGET
+                                   USING [UNTREATED].[dbo].[B2CCONSULTANFE] AS SOURCE
 
                                    ON (TARGET.[ID_NFE] = SOURCE.[ID_NFE])
 
-                                   WHEN MATCHED AND TARGET.[parameters_timestamp] != SOURCE.[parameters_timestamp] THEN 
+                                   WHEN MATCHED AND TARGET.[TIMESTAMP] != SOURCE.[TIMESTAMP] THEN 
 			                           UPDATE SET
 			                           TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON],
 			                           TARGET.[ID_NFE] = SOURCE.[ID_NFE],
@@ -71,19 +71,19 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
 			                           TARGET.[VALOR_NOTA] = SOURCE.[VALOR_NOTA],
 			                           TARGET.[SERIE] = SOURCE.[SERIE],
 			                           TARGET.[FRETE] = SOURCE.[FRETE],
-			                           TARGET.[parameters_timestamp] = SOURCE.[parameters_timestamp],
+			                           TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP],
 			                           TARGET.[PORTAL] = SOURCE.[PORTAL],
 			                           TARGET.[NPROT] = SOURCE.[NPROT],
 			                           TARGET.[CODIGO_MODELO_NF] = SOURCE.[CODIGO_MODELO_NF],
 			                           TARGET.[JUSTIFICATIVA] = SOURCE.[JUSTIFICATIVA],
 			                           TARGET.[TPAMB] = SOURCE.[TPAMB]
 
-                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_NFE] NOT IN (SELECT [ID_NFE] FROM [B2CCONSULTANFE_TRUSTED]) THEN
+                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_NFE] NOT IN (SELECT [ID_NFE] FROM [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTANFE]) THEN
                                        INSERT
-                                       ([LASTUPDATEON], [ID_NFE], [ID_PEDIDO], [DOCUMENTO], [DATA_EMISSAO], [CHAVE_NFE], [SITUACAO], [XML], [EXCLUIDO], [IDENTIFICADOR_MICROVIX], [DT_INSERT], [VALOR_NOTA], [SERIE], [FRETE], [parameters_timestamp], [PORTAL], [NPROT], [CODIGO_MODELO_NF], [TPAMB])
+                                       ([LASTUPDATEON], [ID_NFE], [ID_PEDIDO], [DOCUMENTO], [DATA_EMISSAO], [CHAVE_NFE], [SITUACAO], [XML], [EXCLUIDO], [IDENTIFICADOR_MICROVIX], [DT_INSERT], [VALOR_NOTA], [SERIE], [FRETE], [TIMESTAMP], [PORTAL], [NPROT], [CODIGO_MODELO_NF], [TPAMB])
                                        VALUES
                                        (SOURCE.[LASTUPDATEON], SOURCE.[ID_NFE], SOURCE.[ID_PEDIDO], SOURCE.[DOCUMENTO], SOURCE.[DATA_EMISSAO], SOURCE.[CHAVE_NFE], SOURCE.[SITUACAO], SOURCE.[XML], SOURCE.[EXCLUIDO], SOURCE.[IDENTIFICADOR_MICROVIX], SOURCE.[DT_INSERT],
-                                       SOURCE.[VALOR_NOTA], SOURCE.[SERIE], SOURCE.[FRETE], SOURCE.[parameters_timestamp], SOURCE.[PORTAL], SOURCE.[NPROT], SOURCE.[CODIGO_MODELO_NF], SOURCE.[TPAMB]);
+                                       SOURCE.[VALOR_NOTA], SOURCE.[SERIE], SOURCE.[FRETE], SOURCE.[TIMESTAMP], SOURCE.[PORTAL], SOURCE.[NPROT], SOURCE.[CODIGO_MODELO_NF], SOURCE.[TPAMB]);
 	                           END'
                            )
                            END";

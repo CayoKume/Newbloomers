@@ -1,6 +1,5 @@
 ﻿using Dapper;
 using Domain.DatabaseInit.Interfaces.LinxMicrovix.LinxCommerce;
-
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce;
 using Infrastructure.IntegrationsCore.Connections.SQLServer;
 using Z.Dapper.Plus;
@@ -46,24 +45,32 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
 
         public async Task<bool> CreateTableMerge(string databaseName, string tableName)
         {
-            string? sql = $"MERGE [{tableName}_trusted] AS TARGET " +
-                         $"USING [{tableName}_raw] AS SOURCE " +
-                          "ON (TARGET.COD_VENDEDOR = SOURCE.COD_VENDEDOR) " +
-                          "WHEN MATCHED THEN UPDATE SET " +
-                          "TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON], " +
-                          "TARGET.[COD_VENDEDOR] = SOURCE.[COD_VENDEDOR], " +
-                          "TARGET.[NOME_VENDEDOR] = SOURCE.[NOME_VENDEDOR], " +
-                          "TARGET.[COMISSAO_SERVICOS] = SOURCE.[COMISSAO_SERVICOS], " +
-                          "TARGET.[TIPO] = SOURCE.[TIPO], " +
-                          "TARGET.[ATIVO] = SOURCE.[ATIVO], " +
-                          "TARGET.[COMISSIONADO] = SOURCE.[COMISSIONADO], " +
-                          "TARGET.[parameters_timestamp] = SOURCE.[parameters_timestamp], " +
-                          "TARGET.[PORTAL] = SOURCE.[PORTAL] " +
-                          "WHEN NOT MATCHED BY TARGET THEN " +
-                          "INSERT " +
-                          "([LASTUPDATEON], [COD_VENDEDOR], [NOME_VENDEDOR], [COMISSAO_SERVICOS], [TIPO], [COMISSIONADO], [parameters_timestamp], [PORTAL])" +
-                          "VALUES " +
-                          "(SOURCE.[LASTUPDATEON], SOURCE.[COD_VENDEDOR], SOURCE.[NOME_VENDEDOR], SOURCE.[COMISSAO_SERVICOS], SOURCE.[TIPO], SOURCE.[ATIVO], SOURCE.[COMISSIONADO], SOURCE.[parameters_timestamp], SOURCE.[PORTAL]);";
+            string? sql = @$"IF NOT EXISTS (SELECT * FROM SYS.OBJECTS WHERE TYPE = 'P' AND NAME = 'P_B2CCONSULTAVENDEDORES_SYNC')
+                           BEGIN
+                           EXECUTE (
+                               'CREATE PROCEDURE [P_B2CCONSULTAVENDEDORES_SYNC] AS
+                               BEGIN
+									MERGE [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTAVENDEDORES] AS TARGET
+									USING [UNTREATED].[dbo].[B2CCONSULTAVENDEDORES] AS SOURCE
+									ON (TARGET.COD_VENDEDOR = SOURCE.COD_VENDEDOR)
+									WHEN MATCHED THEN UPDATE SET
+									TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON],
+									TARGET.[COD_VENDEDOR] = SOURCE.[COD_VENDEDOR],
+									TARGET.[NOME_VENDEDOR] = SOURCE.[NOME_VENDEDOR],
+									TARGET.[COMISSAO_SERVICOS] = SOURCE.[COMISSAO_SERVICOS],
+									TARGET.[TIPO] = SOURCE.[TIPO],
+									TARGET.[ATIVO] = SOURCE.[ATIVO],
+									TARGET.[COMISSIONADO] = SOURCE.[COMISSIONADO],
+									TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP],
+									TARGET.[PORTAL] = SOURCE.[PORTAL]
+									WHEN NOT MATCHED BY TARGET THEN
+									INSERT
+									([LASTUPDATEON], [COD_VENDEDOR], [NOME_VENDEDOR], [COMISSAO_SERVICOS], [TIPO], [ATIVO], [COMISSIONADO], [TIMESTAMP], [PORTAL])
+									VALUES
+									(SOURCE.[LASTUPDATEON], SOURCE.[COD_VENDEDOR], SOURCE.[NOME_VENDEDOR], SOURCE.[COMISSAO_SERVICOS], SOURCE.[TIPO], SOURCE.[ATIVO], SOURCE.[COMISSIONADO], SOURCE.[TIMESTAMP], SOURCE.[PORTAL]);                          
+								END'
+                           )
+                           END";
 
             try
             {

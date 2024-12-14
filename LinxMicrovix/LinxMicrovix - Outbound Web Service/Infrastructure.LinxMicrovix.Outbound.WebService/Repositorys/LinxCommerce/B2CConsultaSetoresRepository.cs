@@ -41,8 +41,8 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 
         public async Task<bool> CreateTableMerge(LinxAPIParam jobParameter)
         {
-            string? sql = $"MERGE [{jobParameter.tableName}_trusted] AS TARGET " +
-                         $"USING [{jobParameter.tableName}_raw] AS SOURCE " +
+            string? sql = $"MERGE [{jobParameter.tableName}] AS TARGET " +
+                         $"USING [{jobParameter.tableName}] AS SOURCE " +
                           "ON (TARGET.CODIGO_SETOR = SOURCE.CODIGO_SETOR) " +
                           "WHEN MATCHED THEN UPDATE SET " +
                           "TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON], " +
@@ -79,7 +79,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                         identificadores += $"'{registros[i].codigo_setor}', ";
                 }
 
-                string sql = $"SELECT CODIGO_SETOR, TIMESTAMP FROM B2CCONSULTASETORES_TRUSTED WHERE CODIGO_SETOR IN ({identificadores})";
+                string sql = $"SELECT CODIGO_SETOR, TIMESTAMP FROM B2CCONSULTASETORES WHERE CODIGO_SETOR IN ({identificadores})";
 
                 return await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
             }
@@ -124,7 +124,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 
         public async Task<bool> InsertRecord(LinxAPIParam jobParameter, B2CConsultaSetores? record)
         {
-            string? sql = $"INSERT INTO {jobParameter.tableName}_raw " +
+            string? sql = $"INSERT INTO {jobParameter.tableName} " +
                           "([lastupdateon], [codigo_setor], [nome_setor], [timestamp], [portal]) " +
                           "Values " +
                           "(@lastupdateon, @codigo_setor, @nome_setor, @timestamp, @portal)";

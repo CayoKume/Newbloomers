@@ -51,27 +51,27 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
                            EXECUTE (
 	                           'CREATE PROCEDURE [P_B2CCONSULTAPRODUTOSIMAGENS_SYNC] AS
 	                           BEGIN
-		                           MERGE [B2CCONSULTAPRODUTOSIMAGENS_TRUSTED] AS TARGET
-                                   USING [B2CCONSULTAPRODUTOSIMAGENS_RAW] AS SOURCE
+		                           MERGE [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTAPRODUTOSIMAGENS] AS TARGET
+                                   USING [UNTREATED].[dbo].[B2CCONSULTAPRODUTOSIMAGENS] AS SOURCE
 
                                    ON (
 			                           TARGET.[ID_IMAGEM_PRODUTO] = SOURCE.[ID_IMAGEM_PRODUTO]
 		                           )
 
-                                   WHEN MATCHED AND TARGET.[parameters_timestamp] != SOURCE.[parameters_timestamp] THEN
+                                   WHEN MATCHED AND TARGET.[TIMESTAMP] != SOURCE.[TIMESTAMP] THEN
 			                           UPDATE SET
 			                           TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON],
 			                           TARGET.[ID_IMAGEM_PRODUTO] = SOURCE.[ID_IMAGEM_PRODUTO],
 			                           TARGET.[ID_IMAGEM] = SOURCE.[ID_IMAGEM],
 			                           TARGET.[CODIGOPRODUTO] = SOURCE.[CODIGOPRODUTO],
-			                           TARGET.[parameters_timestamp] = SOURCE.[parameters_timestamp],
+			                           TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP],
 			                           TARGET.[PORTAL] = SOURCE.[PORTAL]
 
-                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_IMAGEM_PRODUTO] NOT IN (SELECT [ID_IMAGEM_PRODUTO] FROM [B2CCONSULTAPRODUTOSIMAGENS_TRUSTED]) THEN
+                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_IMAGEM_PRODUTO] NOT IN (SELECT [ID_IMAGEM_PRODUTO] FROM [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTAPRODUTOSIMAGENS]) THEN
 			                           INSERT
-			                           ([LASTUPDATEON], [ID_IMAGEM_PRODUTO], [ID_IMAGEM], [CODIGOPRODUTO], [parameters_timestamp], [PORTAL])
+			                           ([LASTUPDATEON], [ID_IMAGEM_PRODUTO], [ID_IMAGEM], [CODIGOPRODUTO], [TIMESTAMP], [PORTAL])
 			                           VALUES
-			                           (SOURCE.[LASTUPDATEON], SOURCE.[ID_IMAGEM_PRODUTO], SOURCE.[ID_IMAGEM], SOURCE.[CODIGOPRODUTO], SOURCE.[parameters_timestamp], SOURCE.[PORTAL]);
+			                           (SOURCE.[LASTUPDATEON], SOURCE.[ID_IMAGEM_PRODUTO], SOURCE.[ID_IMAGEM], SOURCE.[CODIGOPRODUTO], SOURCE.[TIMESTAMP], SOURCE.[PORTAL]);
 	                           END'
                            )
                            END";

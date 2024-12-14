@@ -46,20 +46,28 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
 
         public async Task<bool> CreateTableMerge(string databaseName, string tableName)
         {
-            string? sql = $"MERGE [{tableName}_trusted] AS TARGET " +
-                         $"USING [{tableName}_raw] AS SOURCE " +
-                          "ON (TARGET.CODIGO_SETOR = SOURCE.CODIGO_SETOR) " +
-                          "WHEN MATCHED THEN UPDATE SET " +
-                          "TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON], " +
-                          "TARGET.[CODIGO_SETOR] = SOURCE.[CODIGO_SETOR], " +
-                          "TARGET.[NOME_SETOR] = SOURCE.[NOME_SETOR], " +
-                          "TARGET.[parameters_timestamp] = SOURCE.[parameters_timestamp], " +
-                          "TARGET.[PORTAL] = SOURCE.[PORTAL] " +
-                          "WHEN NOT MATCHED BY TARGET THEN " +
-                          "INSERT " +
-                          "([LASTUPDATEON], [CODIGO_SETOR], [NOME_SETOR], [parameters_timestamp], [PORTAL])" +
-                          "VALUES " +
-                          "(SOURCE.[LASTUPDATEON], SOURCE.[CODIGO_SETOR], SOURCE.[NOME_SETOR], SOURCE.[parameters_timestamp], SOURCE.[PORTAL]);";
+            string? sql = $@"IF NOT EXISTS (SELECT * FROM SYS.OBJECTS WHERE TYPE = 'P' AND NAME = 'P_B2CCONSULTASETORES_SYNC')
+                           BEGIN
+                           EXECUTE (
+                               'CREATE PROCEDURE [P_B2CCONSULTASETORES_SYNC] AS
+                               BEGIN
+									MERGE [LINX_MICROVIX_COMMERCE].[dbo].[B2CCONSULTASETORES] AS TARGET
+									USING [UNTREATED].[dbo].[B2CCONSULTASETORES] AS SOURCE
+									ON (TARGET.CODIGO_SETOR = SOURCE.CODIGO_SETOR)
+									WHEN MATCHED THEN UPDATE SET
+									TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON],
+									TARGET.[CODIGO_SETOR] = SOURCE.[CODIGO_SETOR],
+									TARGET.[NOME_SETOR] = SOURCE.[NOME_SETOR],
+									TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP],
+									TARGET.[PORTAL] = SOURCE.[PORTAL]
+									WHEN NOT MATCHED BY TARGET THEN
+									INSERT
+									([LASTUPDATEON], [CODIGO_SETOR], [NOME_SETOR], [TIMESTAMP], [PORTAL])
+									VALUES
+									(SOURCE.[LASTUPDATEON], SOURCE.[CODIGO_SETOR], SOURCE.[NOME_SETOR], SOURCE.[TIMESTAMP], SOURCE.[PORTAL]);
+								END'
+                           )
+                           END";
 
             try
             {
@@ -73,7 +81,7 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
                     return false;
                 }
             }
-            catch
+            catch(Exception ex)
             {
                 throw;
             }

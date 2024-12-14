@@ -46,8 +46,8 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                            EXECUTE (
 	                           'CREATE PROCEDURE [P_B2CCONSULTACLIENTESSALDO_SYNC] AS
 	                           BEGIN
-		                           MERGE [B2CCONSULTACLIENTESSALDO_TRUSTED] AS TARGET
-                                   USING [B2CCONSULTACLIENTESSALDO_RAW] AS SOURCE
+		                           MERGE [B2CCONSULTACLIENTESSALDO] AS TARGET
+                                   USING [B2CCONSULTACLIENTESSALDO] AS SOURCE
 
                                    ON (
 			                           TARGET.[COD_CLIENTE_ERP] = SOURCE.[COD_CLIENTE_ERP]
@@ -62,7 +62,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 			                           TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP],
 			                           TARGET.[PORTAL] = SOURCE.[PORTAL]
 
-                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[COD_CLIENTE_ERP] NOT IN (SELECT [COD_CLIENTE_ERP] FROM [B2CCONSULTACLIENTESSALDO_TRUSTED]) THEN
+                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[COD_CLIENTE_ERP] NOT IN (SELECT [COD_CLIENTE_ERP] FROM [B2CCONSULTACLIENTESSALDO]) THEN
 			                           INSERT
 			                           ([LASTUPDATEON], [SALDO], [COD_CLIENTE_ERP], [EMPRESA], [TIMESTAMP], [PORTAL])
 			                           VALUES
@@ -94,7 +94,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                         identificadores += $"'{registros[i].cod_cliente_erp}', ";
                 }
 
-                string sql = $"SELECT COD_CLIENTE_ERP, TIMESTAMP FROM B2CCONSULTACLIENTESSALDO_TRUSTED WHERE COD_CLIENTE_ERP IN ({identificadores})";
+                string sql = $"SELECT COD_CLIENTE_ERP, TIMESTAMP FROM B2CCONSULTACLIENTESSALDO WHERE COD_CLIENTE_ERP IN ({identificadores})";
 
                 return await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
             }
@@ -139,7 +139,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 
         public async Task<bool> InsertRecord(LinxAPIParam jobParameter, B2CConsultaClientesSaldo? record)
         {
-            string? sql = $"INSERT INTO {jobParameter.tableName}_raw " +
+            string? sql = $"INSERT INTO {jobParameter.tableName} " +
                           "([lastupdateon], [saldo], [cod_cliente_erp], [empresa], [timestamp], [portal]) " +
                           "Values " +
                           "(@lastupdateon, @saldo, @cod_cliente_erp, @empresa, @timestamp, @portal)";

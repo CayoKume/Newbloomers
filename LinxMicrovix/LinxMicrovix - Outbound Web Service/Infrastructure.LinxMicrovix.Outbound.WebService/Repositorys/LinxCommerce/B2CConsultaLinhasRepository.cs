@@ -47,7 +47,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 	                           'CREATE PROCEDURE [P_B2CCONSULTALINHAS_SYNC] AS
 	                           BEGIN
 		                           MERGE [] AS TARGET
-                                   USING [B2CCONSULTALINHAS_RAW] AS SOURCE
+                                   USING [B2CCONSULTALINHAS] AS SOURCE
 
                                    ON (
 			                           TARGET.[CODIGO_LINHA] = SOURCE.[CODIGO_LINHA]
@@ -62,7 +62,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 			                           TARGET.[SETORES] = SOURCE.[SETORES],
 			                           TARGET.[PORTAL] = SOURCE.[PORTAL]
 
-                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[CODIGO_LINHA] NOT IN (SELECT [CODIGO_LINHA] FROM [B2CCONSULTALINHAS_TRUSTED]) THEN
+                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[CODIGO_LINHA] NOT IN (SELECT [CODIGO_LINHA] FROM [B2CCONSULTALINHAS]) THEN
 			                           INSERT
 			                           ([LASTUPDATEON], [CODIGO_LINHA], [NOME_LINHA], [TIMESTAMP], [SETORES], [PORTAL])
 			                           VALUES
@@ -94,7 +94,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                         identificadores += $"'{registros[i].codigo_linha}', ";
                 }
 
-                string sql = $"SELECT CODIGO_LINHA, TIMESTAMP FROM B2CCONSULTALINHAS_TRUSTED WHERE CODIGO_LINHA IN ({identificadores})";
+                string sql = $"SELECT CODIGO_LINHA, TIMESTAMP FROM B2CCONSULTALINHAS WHERE CODIGO_LINHA IN ({identificadores})";
 
                 return await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
             }
@@ -139,7 +139,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 
         public async Task<bool> InsertRecord(LinxAPIParam jobParameter, B2CConsultaLinhas? record)
         {
-            string? sql = $"INSERT INTO {jobParameter.tableName}_raw " +
+            string? sql = $"INSERT INTO {jobParameter.tableName} " +
                           "([lastupdateon], [codigo_linha], [nome_linha], [timestamp], [setores], [portal]) " +
                           "Values " +
                           "(@lastupdateon, @codigo_linha, @nome_linha, @timestamp, @setores, @portal)";

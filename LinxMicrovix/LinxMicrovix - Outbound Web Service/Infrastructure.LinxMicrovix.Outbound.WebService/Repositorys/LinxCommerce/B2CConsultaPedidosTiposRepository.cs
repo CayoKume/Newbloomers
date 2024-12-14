@@ -46,8 +46,8 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                            EXECUTE (
 	                           'CREATE PROCEDURE [P_B2CCONSULTAPEDIDOSTIPOS_SYNC] AS
 	                           BEGIN
-		                           MERGE [B2CCONSULTAPEDIDOSTIPOS_TRUSTED] AS TARGET
-		                           USING [B2CCONSULTAPEDIDOSTIPOS_RAW] AS SOURCE
+		                           MERGE [B2CCONSULTAPEDIDOSTIPOS] AS TARGET
+		                           USING [B2CCONSULTAPEDIDOSTIPOS] AS SOURCE
 
 		                           ON (
 			                           TARGET.[ID_TIPO_B2C] = SOURCE.[ID_TIPO_B2C]
@@ -61,7 +61,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 			                           TARGET.[POS_TIMESTAMP_OLD] = SOURCE.[POS_TIMESTAMP_OLD],
 			                           TARGET.[PORTAL] = SOURCE.[PORTAL]
 
-		                           WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_TIPO_B2C] NOT IN (SELECT [ID_TIPO_B2C] FROM [B2CCONSULTAPEDIDOSTIPOS_TRUSTED]) THEN
+		                           WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_TIPO_B2C] NOT IN (SELECT [ID_TIPO_B2C] FROM [B2CCONSULTAPEDIDOSTIPOS]) THEN
 			                           INSERT
 			                           ([LASTUPDATEON], [ID_TIPO_B2C], [DESCRICAO], [POS_TIMESTAMP_OLD], [PORTAL])
 			                           VALUES
@@ -93,7 +93,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                         identificadores += $"'{registros[i].id_tipo_b2c}', ";
                 }
 
-                string sql = $"SELECT ID_TIPO_B2C, TIMESTAMP FROM B2CCONSULTAPEDIDOSTIPOS_TRUSTED WHERE ID_TIPO_B2C IN ({identificadores})";
+                string sql = $"SELECT ID_TIPO_B2C, TIMESTAMP FROM B2CCONSULTAPEDIDOSTIPOS WHERE ID_TIPO_B2C IN ({identificadores})";
 
                 return await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
             }

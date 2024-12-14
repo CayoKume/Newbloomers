@@ -49,8 +49,8 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                            EXECUTE (
 	                           'CREATE PROCEDURE [P_B2CCONSULTAPEDIDOS_SYNC] AS
 	                           BEGIN
-		                           MERGE [B2CCONSULTAPEDIDOS_TRUSTED] AS TARGET
-                                   USING [B2CCONSULTAPEDIDOS_RAW] AS SOURCE
+		                           MERGE [B2CCONSULTAPEDIDOS] AS TARGET
+                                   USING [B2CCONSULTAPEDIDOS] AS SOURCE
 
                                    ON (
 			                           TARGET.[ID_PEDIDO] = SOURCE.[ID_PEDIDO]
@@ -88,7 +88,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 			                           TARGET.[ECOMMERCE_ORIGEM] = SOURCE.[ECOMMERCE_ORIGEM],
 			                           TARGET.[ORDER_ID] = SOURCE.[ORDER_ID]
 
-                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_PEDIDO] NOT IN (SELECT [ID_PEDIDO] FROM [B2CCONSULTAPEDIDOS_TRUSTED]) THEN
+                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_PEDIDO] NOT IN (SELECT [ID_PEDIDO] FROM [B2CCONSULTAPEDIDOS]) THEN
 			                           INSERT
 			                           ([LASTUPDATEON], [ID_PEDIDO], [DT_PEDIDO], [COD_CLIENTE_ERP], [COD_CLIENTE_B2C], [VL_FRETE], [FORMA_PGTO], [PLANO_PAGAMENTO], [ANOTACAO], [TAXA_IMPRESSAO], [FINALIZADO], [VALOR_FRETE_GRATIS], [TIPO_FRETE], 
 			                           [ID_STATUS], [COD_TRANSPORTADOR], [TIPO_COBRANCA_FRETE], [ATIVO], [EMPRESA], [ID_TABELA_PRECO], [VALOR_CREDITO], [COD_VENDEDOR], [TIMESTAMP], [DT_INSERT], [DT_DISPONIVEL_FATURAMENTO], [PORTAL], [MENSAGEM_FALHA_FATURAMENTO], 
@@ -125,7 +125,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                         identificadores += $"'{registros[i].id_pedido}', ";
                 }
 
-                string sql = $"SELECT ID_PEDIDO, TIMESTAMP FROM B2CCONSULTAPEDIDOS_TRUSTED WHERE ID_PEDIDO IN ({identificadores})";
+                string sql = $"SELECT ID_PEDIDO, TIMESTAMP FROM B2CCONSULTAPEDIDOS WHERE ID_PEDIDO IN ({identificadores})";
 
                 return await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
             }
@@ -170,7 +170,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 
         public async Task<bool> InsertRecord(LinxAPIParam jobParameter, B2CConsultaPedidos? record)
         {
-            string? sql = $"INSERT INTO {jobParameter.tableName}_raw " +
+            string? sql = $"INSERT INTO {jobParameter.tableName} " +
                           "([lastupdateon], [id_pedido], [dt_pedido], [cod_cliente_erp], [cod_cliente_b2c], [vl_frete], [forma_pgto], [plano_pagamento], [anotacao], [taxa_impressao], [finalizado], [valor_frete_gratis], [tipo_frete], " +
                           "[id_status], [cod_transportador], [tipo_cobranca_frete], [ativo], [empresa], [id_tabela_preco], [valor_credito], [cod_vendedor], [timestamp], [dt_insert], [dt_disponivel_faturamento], [portal], " +
                           "[mensagem_falha_faturamento], [id_tipo_b2c], [ecommerce_origem], [order_id]) " +
