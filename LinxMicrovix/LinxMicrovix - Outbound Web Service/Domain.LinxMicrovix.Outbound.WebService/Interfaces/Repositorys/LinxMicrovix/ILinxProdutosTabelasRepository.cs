@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
+using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxMicrovix
 {
-      public interface ILinxProdutosTabelasRepository
-{
-}
+    public interface ILinxProdutosTabelasRepository
+    {
+        public Task<bool> InsertRecord(LinxAPIParam jobParameter, LinxProdutosTabelas? record);
+        public bool BulkInsertIntoTableRaw(LinxAPIParam jobParameter, IList<LinxProdutosTabelas> records);
+        public Task<List<LinxProdutosTabelas>> GetRegistersExists(LinxAPIParam jobParameter, List<LinxProdutosTabelas> registros);
+    }
 }

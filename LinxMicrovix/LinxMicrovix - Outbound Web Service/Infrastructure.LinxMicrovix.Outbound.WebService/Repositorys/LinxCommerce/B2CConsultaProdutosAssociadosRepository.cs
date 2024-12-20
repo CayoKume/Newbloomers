@@ -39,51 +39,6 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
             }
         }
 
-        public async Task<bool> CreateTableMerge(LinxAPIParam jobParameter)
-        {
-            string? sql = @"IF NOT EXISTS (SELECT * FROM SYS.OBJECTS WHERE TYPE = 'P' AND NAME = 'P_B2CCONSULTAPRODUTOSASSOCIADOS_SYNC')
-                           BEGIN
-                           EXECUTE (
-	                           'CREATE PROCEDURE [P_B2CCONSULTAPRODUTOSASSOCIADOS_SYNC] AS
-	                           BEGIN
-		                           MERGE [B2CCONSULTAPRODUTOSASSOCIADOS] AS TARGET
-                                   USING [B2CCONSULTAPRODUTOSASSOCIADOS] AS SOURCE
-
-                                   ON (
-			                           TARGET.[ID] = SOURCE.[ID]
-		                           )
-        
-		                           WHEN MATCHED AND TARGET.[TIMESTAMP] != SOURCE.[TIMESTAMP] THEN 
-			                           UPDATE SET
-			                           TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON],
-			                           TARGET.[ID] = SOURCE.[ID],
-			                           TARGET.[CODIGOPRODUTO] = SOURCE.[CODIGOPRODUTO],
-			                           TARGET.[CODIGOPRODUTO_ASSOCIADO] = SOURCE.[CODIGOPRODUTO_ASSOCIADO],
-			                           TARGET.[COEFICIENTE_DESCONTO] = SOURCE.[COEFICIENTE_DESCONTO],
-			                           TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP],
-			                           TARGET.[PORTAL] = SOURCE.[PORTAL],
-			                           TARGET.[QTDE_ITEM] = SOURCE.[QTDE_ITEM],
-			                           TARGET.[ITEM_OBRIGATORIO] = SOURCE.[ITEM_OBRIGATORIO]
-        
-		                           WHEN NOT MATCHED BY TARGET AND SOURCE.[ID] NOT IN (SELECT [ID] FROM [B2CCONSULTAPRODUTOSASSOCIADOS]) THEN
-			                           INSERT
-			                           ([LASTUPDATEON], [ID], [CODIGOPRODUTO], [CODIGOPRODUTO_ASSOCIADO], [COEFICIENTE_DESCONTO], [TIMESTAMP], [PORTAL], [QTDE_ITEM], [ITEM_OBRIGATORIO])
-			                           VALUES
-			                           (SOURCE.[LASTUPDATEON], SOURCE.[ID], SOURCE.[CODIGOPRODUTO], SOURCE.[CODIGOPRODUTO_ASSOCIADO], SOURCE.[COEFICIENTE_DESCONTO], SOURCE.[TIMESTAMP], SOURCE.[PORTAL], SOURCE.[QTDE_ITEM], SOURCE.[ITEM_OBRIGATORIO]);
-	                           END'
-                           )
-                           END";
-
-            try
-            {
-                return await _linxMicrovixRepositoryBase.ExecuteQueryCommand(jobParameter: jobParameter, sql: sql);
-            }
-            catch
-            {
-                throw;
-            }
-        }
-
         public async Task<List<B2CConsultaProdutosAssociados>> GetRegistersExists(LinxAPIParam jobParameter, List<B2CConsultaProdutosAssociados> registros)
         {
             try
@@ -109,29 +64,6 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                     level: EnumMessageLevel.Error,
                     message: "Error when filling identifiers to sql command",
                     exceptionMessage: ex.Message
-                );
-            }
-            catch
-            {
-                throw;
-            }
-        }
-
-        public async Task<bool> InsertParametersIfNotExists(LinxAPIParam jobParameter)
-        {
-            try
-            {
-                return await _linxMicrovixRepositoryBase.InsertParametersIfNotExists(
-                    jobParameter: jobParameter,
-                    parameter: new
-                    {
-                        method = jobParameter.jobName,
-                        timestamp = @"<Parameter id=""timestamp"">[0]</Parameter>",
-                        dateinterval = @"<Parameter id=""timestamp"">[0]</Parameter>",
-                        individual = @"<Parameter id=""timestamp"">[0]</Parameter>
-                                                  <Parameter id=""codigoproduto"">[codigoproduto]</Parameter>",
-                        ativo = 1
-                    }
                 );
             }
             catch

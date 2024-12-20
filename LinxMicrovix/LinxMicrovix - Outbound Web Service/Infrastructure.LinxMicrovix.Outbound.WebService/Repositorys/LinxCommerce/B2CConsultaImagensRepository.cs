@@ -39,48 +39,6 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
             }
         }
 
-        public async Task<bool> CreateTableMerge(LinxAPIParam jobParameter)
-        {
-            string? sql = @"IF NOT EXISTS (SELECT * FROM SYS.OBJECTS WHERE TYPE = 'P' AND NAME = 'P_B2CCONSULTAIMAGENS_SYNC')
-                           BEGIN
-                           EXECUTE (
-	                           'CREATE PROCEDURE [P_B2CCONSULTAIMAGENS_SYNC] AS
-	                           BEGIN
-		                           MERGE [B2CCONSULTAIMAGENS] AS TARGET
-                                   USING [B2CCONSULTAIMAGENS] AS SOURCE
-
-                                   ON (
-			                           TARGET.[ID_IMAGEM] = SOURCE.[ID_IMAGEM]
-		                           )
-
-                                   WHEN MATCHED AND TARGET.[TIMESTAMP] != SOURCE.[TIMESTAMP] THEN 
-			                           UPDATE SET
-			                           TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON],
-			                           TARGET.[ID_IMAGEM] = SOURCE.[ID_IMAGEM],
-			                           TARGET.[MD5] = SOURCE.[MD5],
-			                           TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP],
-			                           TARGET.[PORTAL] = SOURCE.[PORTAL],
-			                           TARGET.[URL_IMAGEM_BLOB] = SOURCE.[URL_IMAGEM_BLOB]
-
-                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[ID_IMAGEM] NOT IN (SELECT [ID_IMAGEM] FROM [B2CCONSULTAIMAGENS]) THEN
-			                           INSERT
-			                           ([LASTUPDATEON], [ID_IMAGEM], [MD5], [TIMESTAMP], [PORTAL], [URL_IMAGEM_BLOB])
-			                           VALUES
-			                           (SOURCE.[LASTUPDATEON], SOURCE.[ID_IMAGEM], SOURCE.[MD5], SOURCE.[TIMESTAMP], SOURCE.[PORTAL], SOURCE.[URL_IMAGEM_BLOB]);
-	                           END'
-                           )
-                           END";
-
-            try
-            {
-                return await _linxMicrovixRepositoryBase.ExecuteQueryCommand(jobParameter: jobParameter, sql: sql);
-            }
-            catch
-            {
-                throw;
-            }
-        }
-
         public async Task<List<B2CConsultaImagens>> GetRegistersExists(LinxAPIParam jobParameter, List<B2CConsultaImagens> registros)
         {
             try
@@ -106,29 +64,6 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                     level: EnumMessageLevel.Error,
                     message: "Error when filling identifiers to sql command",
                     exceptionMessage: ex.Message
-                );
-            }
-            catch
-            {
-                throw;
-            }
-        }
-
-        public async Task<bool> InsertParametersIfNotExists(LinxAPIParam jobParameter)
-        {
-            try
-            {
-                return await _linxMicrovixRepositoryBase.InsertParametersIfNotExists(
-                    jobParameter: jobParameter,
-                    parameter: new
-                    {
-                        method = jobParameter.jobName,
-                        timestamp = @"<Parameter id=""timestamp"">[0]</Parameter>",
-                        dateinterval = @"<Parameter id=""timestamp"">[0]</Parameter>",
-                        individual = @"<Parameter id=""timestamp"">[0]</Parameter>
-                                                  <Parameter id=""id_imagem"">[id_imagem]</Parameter>",
-                        ativo = 1
-                    }
                 );
             }
             catch

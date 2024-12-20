@@ -39,47 +39,6 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
             }
         }
 
-        public async Task<bool> CreateTableMerge(LinxAPIParam jobParameter)
-        {
-            string? sql = @"IF NOT EXISTS (SELECT * FROM SYS.OBJECTS WHERE TYPE = 'P' AND NAME = 'P_B2CCONSULTAESPESSURAS_SYNC')
-                           BEGIN
-                           EXECUTE (
-	                           'CREATE PROCEDURE [P_B2CCONSULTAESPESSURAS_SYNC] AS
-	                           BEGIN
-		                           MERGE [B2CCONSULTAESPESSURAS] AS TARGET
-                                   USING [B2CCONSULTAESPESSURAS] AS SOURCE
-
-                                   ON (
-			                           TARGET.CODIGO_ESPESSURA = SOURCE.CODIGO_ESPESSURA
-		                           )
-
-                                   WHEN MATCHED AND TARGET.[TIMESTAMP] != SOURCE.[TIMESTAMP] THEN
-			                           UPDATE SET
-			                           TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON],
-			                           TARGET.[CODIGO_ESPESSURA] = SOURCE.[CODIGO_ESPESSURA],
-			                           TARGET.[NOME_ESPESSURA] = SOURCE.[NOME_ESPESSURA],
-			                           TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP],
-			                           TARGET.[PORTAL] = SOURCE.[PORTAL]
-
-                                   WHEN NOT MATCHED BY TARGET AND CODIGO_ESPESSURA NOT IN (SELECT [CODIGO_ESPESSURA] FROM [B2CCONSULTAESPESSURAS]) THEN
-			                           INSERT
-			                           ([LASTUPDATEON], [CODIGO_ESPESSURA], [NOME_ESPESSURA], [TIMESTAMP], [PORTAL])
-			                           VALUES
-			                           (SOURCE.[LASTUPDATEON], SOURCE.[CODIGO_ESPESSURA], SOURCE.[NOME_ESPESSURA], SOURCE.[TIMESTAMP], SOURCE.[PORTAL]);
-	                           END'
-                           )
-                           END";
-
-            try
-            {
-                return await _linxMicrovixRepositoryBase.ExecuteQueryCommand(jobParameter: jobParameter, sql: sql);
-            }
-            catch
-            {
-                throw;
-            }
-        }
-
         public async Task<List<B2CConsultaEspessuras>> GetRegistersExists(LinxAPIParam jobParameter, List<B2CConsultaEspessuras> registros)
         {
             try
@@ -105,29 +64,6 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                     level: EnumMessageLevel.Error,
                     message: "Error when filling identifiers to sql command",
                     exceptionMessage: ex.Message
-                );
-            }
-            catch
-            {
-                throw;
-            }
-        }
-
-        public async Task<bool> InsertParametersIfNotExists(LinxAPIParam jobParameter)
-        {
-            try
-            {
-                return await _linxMicrovixRepositoryBase.InsertParametersIfNotExists(
-                    jobParameter: jobParameter,
-                    parameter: new
-                    {
-                        method = jobParameter.jobName,
-                        timestamp = @"<Parameter id=""timestamp"">[0]</Parameter>",
-                        dateinterval = @"<Parameter id=""timestamp"">[0]</Parameter>",
-                        individual = @"<Parameter id=""timestamp"">[0]</Parameter>
-                                                  <Parameter id=""codigo_espessura"">[codigo_espessura]</Parameter>",
-                        ativo = 1
-                    }
                 );
             }
             catch

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
 {
-    internal class LinxB2CStatusService
+    public class LinxB2CStatusService
     {
     }
 }

@@ -40,51 +40,6 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
             }
         }
 
-        public async Task<bool> CreateTableMerge(LinxAPIParam jobParameter)
-        {
-            string? sql = @"IF NOT EXISTS (SELECT * FROM SYS.OBJECTS WHERE TYPE = 'P' AND NAME = 'P_B2CCONSULTAPRODUTOSCODEBAR_SYNC')
-                           BEGIN
-                           EXECUTE (
-	                           'CREATE PROCEDURE [P_B2CCONSULTAPRODUTOSCODEBAR_SYNC] AS
-	                           BEGIN
-		                           MERGE [B2CCONSULTAPRODUTOSCODEBAR] AS TARGET
-                                   USING [B2CCONSULTAPRODUTOSCODEBAR] AS SOURCE
-
-                                   ON (
-			                           TARGET.[CODIGOPRODUTO] = SOURCE.[CODIGOPRODUTO]
-		                           )
-
-                                   WHEN MATCHED AND TARGET.[TIMESTAMP] != SOURCE.[TIMESTAMP] THEN
-			                           UPDATE SET
-			                           TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON],
-			                           TARGET.[CODIGOPRODUTO] = SOURCE.[CODIGOPRODUTO],
-			                           TARGET.[CODEBAR] = SOURCE.[CODEBAR],
-			                           TARGET.[ID_PRODUTOS_CODEBAR] = SOURCE.[ID_PRODUTOS_CODEBAR],
-			                           TARGET.[PRINCIPAL] = SOURCE.[PRINCIPAL],
-			                           TARGET.[EMPRESA] = SOURCE.[EMPRESA],
-			                           TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP],
-			                           TARGET.[TIPO_CODEBAR] = SOURCE.[TIPO_CODEBAR],
-			                           TARGET.[PORTAL] = SOURCE.[PORTAL]
-
-                                   WHEN NOT MATCHED BY TARGET AND SOURCE.[CODIGOPRODUTO] NOT IN (SELECT [CODIGOPRODUTO] FROM [B2CCONSULTAPRODUTOSCODEBAR]) THEN
-			                           INSERT
-			                           ([LASTUPDATEON], [CODIGOPRODUTO], [CODEBAR], [ID_PRODUTOS_CODEBAR], [PRINCIPAL], [EMPRESA], [TIMESTAMP], [TIPO_CODEBAR], [PORTAL])
-			                           VALUES
-			                           (SOURCE.[LASTUPDATEON], SOURCE.[CODIGOPRODUTO], SOURCE.[CODEBAR], SOURCE.[ID_PRODUTOS_CODEBAR], SOURCE.[PRINCIPAL], SOURCE.[EMPRESA], SOURCE.[TIMESTAMP], SOURCE.[TIPO_CODEBAR], SOURCE.[PORTAL]);
-	                           END'
-                           )
-                           END";
-
-            try
-            {
-                return await _linxMicrovixRepositoryBase.ExecuteQueryCommand(jobParameter: jobParameter, sql: sql);
-            }
-            catch
-            {
-                throw;
-            }
-        }
-
         public async Task<List<B2CConsultaProdutosCodebar>> GetRegistersExists(LinxAPIParam jobParameter, List<B2CConsultaProdutosCodebar> registros)
         {
             try
@@ -110,29 +65,6 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                     level: EnumMessageLevel.Error,
                     message: "Error when filling identifiers to sql command",
                     exceptionMessage: ex.Message
-                );
-            }
-            catch
-            {
-                throw;
-            }
-        }
-
-        public async Task<bool> InsertParametersIfNotExists(LinxAPIParam jobParameter)
-        {
-            try
-            {
-                return await _linxMicrovixRepositoryBase.InsertParametersIfNotExists(
-                    jobParameter: jobParameter,
-                    parameter: new
-                    {
-                        method = jobParameter.jobName,
-                        timestamp = @"<Parameter id=""timestamp"">[0]</Parameter>",
-                        dateinterval = @"<Parameter id=""timestamp"">[0]</Parameter>",
-                        individual = @"<Parameter id=""timestamp"">[0]</Parameter>
-                                                  <Parameter id=""codigoproduto"">[codigoproduto]</Parameter>",
-                        ativo = 1
-                    }
                 );
             }
             catch

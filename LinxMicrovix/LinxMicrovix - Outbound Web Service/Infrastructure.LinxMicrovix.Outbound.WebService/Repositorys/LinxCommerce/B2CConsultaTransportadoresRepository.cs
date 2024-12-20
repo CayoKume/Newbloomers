@@ -40,48 +40,6 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
             }
         }
 
-        public async Task<bool> CreateTableMerge(LinxAPIParam jobParameter)
-        {
-            string? sql = $"MERGE [{jobParameter.tableName}] AS TARGET " +
-                         $"USING [{jobParameter.tableName}] AS SOURCE " +
-                          "ON (TARGET.COD_TRANSPORTADOR = SOURCE.COD_TRANSPORTADOR) " +
-                          "WHEN MATCHED THEN UPDATE SET " +
-                          "TARGET.[LASTUPDATEON] = SOURCE.[LASTUPDATEON], " +
-                          "TARGET.[COD_TRANSPORTADOR] = SOURCE.[COD_TRANSPORTADOR], " +
-                          "TARGET.[NOME] = SOURCE.[NOME], " +
-                          "TARGET.[NOME_FANTASIA] = SOURCE.[NOME_FANTASIA], " +
-                          "TARGET.[TIPO_PESSOA] = SOURCE.[TIPO_PESSOA], " +
-                          "TARGET.[TIPO_TRANSPORTADOR] = SOURCE.[TIPO_TRANSPORTADOR], " +
-                          "TARGET.[ENDRECO] = SOURCE.[ENDRECO], " +
-                          "TARGET.[NUMERO_RUA] = SOURCE.[NUMERO_RUA], " +
-                          "TARGET.[BAIRRO] = SOURCE.[BAIRRO], " +
-                          "TARGET.[CEP] = SOURCE.[CEP], " +
-                          "TARGET.[CIDADE] = SOURCE.[CIDADE], " +
-                          "TARGET.[UF] = SOURCE.[UF], " +
-                          "TARGET.[DOCUMENTO] = SOURCE.[DOCUMENTO], " +
-                          "TARGET.[FONE] = SOURCE.[FONE], " +
-                          "TARGET.[EMAIL] = SOURCE.[EMAIL], " +
-                          "TARGET.[PAIS] = SOURCE.[PAIS], " +
-                          "TARGET.[OBS] = SOURCE.[OBS], " +
-                          "TARGET.[TIMESTAMP] = SOURCE.[TIMESTAMP], " +
-                          "TARGET.[PORTAL] = SOURCE.[PORTAL] " +
-                          "WHEN NOT MATCHED BY TARGET THEN " +
-                          "INSERT " +
-                          "([LASTUPDATEON], [COD_TRANSPORTADOR], [NOME], [NOME_FANTASIA], [TIPO_PESSOA], [TIPO_TRANSPORTADOR], [ENDRECO], [NUMERO_RUA], [BAIRRO], [CEP], [CIDADE], [UF], [DOCUMENTO], [FONE], [EMAIL], [PAIS], [OBS], [TIMESTAMP], [PORTAL])" +
-                          "VALUES " +
-                          "(SOURCE.[LASTUPDATEON], SOURCE.[COD_TRANSPORTADOR], SOURCE.[NOME], SOURCE.[NOME_FANTASIA], SOURCE.[TIPO_PESSOA], SOURCE.[TIPO_TRANSPORTADOR], SOURCE.[ENDRECO], SOURCE.[NUMERO_RUA], SOURCE.[BAIRRO], SOURCE.[CEP], SOURCE.[CIDADE], SOURCE.[UF], " +
-                          "SOURCE.[DOCUMENTO], SOURCE.[FONE], SOURCE.[EMAIL], SOURCE.[PAIS], SOURCE.[OBS], SOURCE.[TIMESTAMP], SOURCE.[PORTAL]);";
-
-            try
-            {
-                return await _linxMicrovixRepositoryBase.ExecuteQueryCommand(jobParameter: jobParameter, sql: sql);
-            }
-            catch
-            {
-                throw;
-            }
-        }
-
         public async Task<List<B2CConsultaTransportadores>> GetRegistersExists(LinxAPIParam jobParameter, List<B2CConsultaTransportadores> registros)
         {
             try
@@ -107,29 +65,6 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                     level: EnumMessageLevel.Error,
                     message: "Error when filling identifiers to sql command",
                     exceptionMessage: ex.Message
-                );
-            }
-            catch
-            {
-                throw;
-            }
-        }
-
-        public async Task<bool> InsertParametersIfNotExists(LinxAPIParam jobParameter)
-        {
-            try
-            {
-                return await _linxMicrovixRepositoryBase.InsertParametersIfNotExists(
-                    jobParameter: jobParameter,
-                    parameter: new
-                    {
-                        method = jobParameter.jobName,
-                        timestamp = @"<Parameter id=""timestamp"">[0]</Parameter>",
-                        dateinterval = @"<Parameter id=""timestamp"">[0]</Parameter>",
-                        individual = @"<Parameter id=""timestamp"">[0]</Parameter>
-                                                  <Parameter id=""documento"">[documento]</Parameter>",
-                        ativo = 1
-                    }
                 );
             }
             catch

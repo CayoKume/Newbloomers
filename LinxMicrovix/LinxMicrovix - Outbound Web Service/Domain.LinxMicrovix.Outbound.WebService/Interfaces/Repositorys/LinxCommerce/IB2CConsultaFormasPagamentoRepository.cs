@@ -5,8 +5,6 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxCom
 {
     public interface IB2CConsultaFormasPagamentoRepository
     {
-        public Task<bool> InsertParametersIfNotExists(LinxAPIParam jobParameter);
-        public Task<bool> CreateTableMerge(LinxAPIParam jobParameter);
         public bool BulkInsertIntoTableRaw(LinxAPIParam jobParameter, IList<B2CConsultaFormasPagamento> records);
         public Task<List<B2CConsultaFormasPagamento>> GetRegistersExists(LinxAPIParam jobParameter, List<B2CConsultaFormasPagamento> registros);
     }

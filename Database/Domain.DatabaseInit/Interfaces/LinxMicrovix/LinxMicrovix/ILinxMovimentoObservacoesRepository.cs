@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
+namespace Domain.DatabaseInit.Interfaces.LinxMicrovix.LinxMicrovix
 {
-    public class LinxMovimentoServiceService
+      public interface ILinxMovimentoObservacoesRepository
 {
 }
 }

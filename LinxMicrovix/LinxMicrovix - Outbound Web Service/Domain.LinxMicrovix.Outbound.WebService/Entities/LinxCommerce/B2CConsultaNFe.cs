@@ -144,6 +144,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             this.valor_nota =
                 ConvertToDecimalValidation.IsValid(valor_nota, "valor_nota", listValidations) ?
                 Convert.ToDecimal(valor_nota) :
+                0;
 
             this.frete =
                 ConvertToDecimalValidation.IsValid(frete, "frete", listValidations) ?

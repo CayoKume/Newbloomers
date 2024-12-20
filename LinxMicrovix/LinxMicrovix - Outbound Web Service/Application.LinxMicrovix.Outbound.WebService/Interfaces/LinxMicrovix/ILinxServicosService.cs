@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
+using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
 
 namespace Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxMicrovix
 {
     public interface ILinxServicosService
-{
-}
+    {
+        public List<LinxServicos?> DeserializeXMLToObject(LinxAPIParam jobParameter, List<Dictionary<string?, string?>> records);
+        public Task<bool> GetRecords(LinxAPIParam jobParameter);
+        public Task<bool> GetRecord(LinxAPIParam jobParameter, string? identificador, string? cnpj_emp);
+    }
 }

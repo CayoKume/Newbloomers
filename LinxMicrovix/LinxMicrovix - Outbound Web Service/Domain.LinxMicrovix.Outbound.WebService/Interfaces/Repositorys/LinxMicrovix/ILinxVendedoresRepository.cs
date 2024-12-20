@@ -6,8 +6,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxMic
     public interface ILinxVendedoresRepository
     {
         public Task<bool> InsertRecord(LinxAPIParam jobParameter, LinxVendedores? record);
-        public Task<bool> InsertParametersIfNotExists(LinxAPIParam jobParameter);
-        public Task<bool> CreateTableMerge(LinxAPIParam jobParameter);
         public bool BulkInsertIntoTableRaw(LinxAPIParam jobParameter, List<LinxVendedores> records);
+        public Task<List<LinxVendedores>> GetRegistersExists(LinxAPIParam jobParameter, List<LinxVendedores> registros);
     }
 }
