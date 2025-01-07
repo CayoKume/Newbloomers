@@ -6,11 +6,11 @@ using Z.Dapper.Plus;
 
 namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxMicrovix
 {
-    public class LinxProdutosFornecRepository : ILinxProdutosFornecRepository
+    public class LinxMovimentoReshopItensRepository : ILinxMovimentoReshopItensRepository
     {
         private readonly ISQLServerConnection? _conn;
 
-        public LinxProdutosFornecRepository(ISQLServerConnection? conn) =>
+        public LinxMovimentoReshopItensRepository(ISQLServerConnection? conn) =>
             _conn = conn;
 
         public bool CreateTableIfNotExists(string databaseName, string jobName, string untreatedDatabaseName)
@@ -24,7 +24,7 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxMicrovix
                     var result = conn.Query(sql: sql);
 
                     if (result.Count() == 0)
-                        conn.CreateTable<LinxProdutosFornec>(tableName: $"{jobName}");
+                        conn.CreateTable<LinxMovimentoReshopItens>(tableName: $"{jobName}");
                 }
 
                 using (var conn = _conn.GetIDbConnection(untreatedDatabaseName))
@@ -32,7 +32,7 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxMicrovix
                     var result = conn.Query(sql: sql);
 
                     if (result.Count() == 0)
-                        conn.CreateTable<LinxProdutosFornec>(tableName: $"{jobName}");
+                        conn.CreateTable<LinxMovimentoReshopItens>(tableName: $"{jobName}");
                 }
 
                 return true;

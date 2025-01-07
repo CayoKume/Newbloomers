@@ -1,6 +1,5 @@
 ﻿using Dapper;
 using Domain.DatabaseInit.Interfaces.LinxMicrovix.LinxMicrovix;
-
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
 using Infrastructure.IntegrationsCore.Connections.SQLServer;
 using Z.Dapper.Plus;
@@ -24,7 +23,7 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxMicrovix
                 {
                     var result = conn.Query(sql: sql);
 
-                    if (result.Count() == 0)
+                    if (result.Count()  == 0)
                         conn.CreateTable<LinxProdutosCodBar>(tableName: $"{jobName}");
                 }
 
@@ -32,7 +31,7 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxMicrovix
                 {
                     var result = conn.Query(sql: sql);
 
-                    if (result.Count() == 0)
+                    if (result.Count()  == 0)
                         conn.CreateTable<LinxProdutosCodBar>(tableName: $"{jobName}");
                 }
 
@@ -103,7 +102,7 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxMicrovix
                     timestamp = @"<Parameter id=""timestamp"">[0]</Parameter>",
                     dateinterval = @"<Parameter id=""timestamp"">[0]</Parameter>",
                     individual = @"<Parameter id=""timestamp"">[0]</Parameter>
-                                                  <Parameter id=""cod_produto"">[cod_produto]</Parameter>"
+                                   <Parameter id=""cod_produto"">[cod_produto]</Parameter>"
 
                 };
 

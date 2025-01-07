@@ -1,6 +1,5 @@
 ﻿using Dapper;
 using Domain.DatabaseInit.Interfaces.LinxMicrovix.LinxMicrovix;
-
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
 using Infrastructure.IntegrationsCore.Connections.SQLServer;
 using Z.Dapper.Plus;
@@ -24,7 +23,7 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxMicrovix
                 {
                     var result = conn.Query(sql: sql);
 
-                    if (result.Count() == 0)
+                    if (result.Count()  == 0)
                         conn.CreateTable<LinxVendedores>(tableName: $"{jobName}");
                 }
 
@@ -32,7 +31,7 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxMicrovix
                 {
                     var result = conn.Query(sql: sql);
 
-                    if (result.Count() == 0)
+                    if (result.Count()  == 0)
                         conn.CreateTable<LinxVendedores>(tableName: $"{jobName}");
                 }
 
