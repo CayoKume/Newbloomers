@@ -1,5 +1,5 @@
-﻿using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
-using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
+﻿using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
+using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxMicrovix;
 
@@ -20,8 +20,8 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.LinxMicrov
 
                 for (int i = 0; i < records.Count(); i++)
                 {
-                    table.Rows.Add(records[i].lastupdateon, records[i].cod_vendedor, records[i].nome_vendedor, records[i].tipo_vendedor, records[i].end_vend_rua, records[i].end_vend_numero, 
-                        records[i].end_vend_complemento, records[i].end_vend_bairro, records[i].end_vend_cep, records[i].end_vend_cidade, records[i].end_vend_uf, records[i].fone_vendedor, 
+                    table.Rows.Add(records[i].lastupdateon, records[i].cod_vendedor, records[i].nome_vendedor, records[i].tipo_vendedor, records[i].end_vend_rua, records[i].end_vend_numero,
+                        records[i].end_vend_complemento, records[i].end_vend_bairro, records[i].end_vend_cep, records[i].end_vend_cidade, records[i].end_vend_uf, records[i].fone_vendedor,
                         records[i].mail_vendedor, records[i].dt_upd, records[i].cpf_vendedor, records[i].ativo, records[i].data_admissao, records[i].data_saida, records[i].portal, records[i].timestamp,
                         records[i].matricula, records[i].id_tipo_venda, records[i].descricao_tipo_venda, records[i].cargo);
                 }
@@ -38,6 +38,11 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.LinxMicrov
             {
                 throw;
             }
+        }
+
+        public Task<List<LinxVendedores>> GetRegistersExists(LinxAPIParam jobParameter, List<LinxVendedores> registros)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<bool> InsertRecord(LinxAPIParam jobParameter, LinxVendedores? record)

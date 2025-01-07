@@ -1,6 +1,5 @@
 ﻿using Application.DatabaseInit.Interfaces;
 using Domain.DatabaseInit.Interfaces.Database;
-using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
 
 namespace Application.DatabaseInit.Services
 {

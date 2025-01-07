@@ -1,13 +1,13 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Dapper;
 using Domain.LinxCommerce.Entities.Parameters;
-using System.Data;
-using Dapper;
-using System.ComponentModel;
-using Infrastructure.IntegrationsCore.Connections.SQLServer;
+using Domain.LinxCommerce.Interfaces.Repositorys.Base;
 using Infrastructure.IntegrationsCore.Connections.MySQL;
 using Infrastructure.IntegrationsCore.Connections.PostgreSQL;
+using Infrastructure.IntegrationsCore.Connections.SQLServer;
+using Microsoft.Extensions.Configuration;
+using System.ComponentModel;
+using System.Data;
 using System.Data.SqlClient;
-using Domain.LinxCommerce.Interfaces.Repositorys.Base;
 
 namespace Infrastructure.LinxCommerce.Repository.Base
 {

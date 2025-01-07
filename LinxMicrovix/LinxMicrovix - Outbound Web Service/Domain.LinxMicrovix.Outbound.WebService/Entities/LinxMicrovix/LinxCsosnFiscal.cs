@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Domain.IntegrationsCore.CustomValidations;
 using System.ComponentModel.DataAnnotations;
-using Domain.IntegrationsCore.CustomValidations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 {
@@ -33,7 +33,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         public LinxCsosnFiscal() { }
 
         public LinxCsosnFiscal(
-            List<ValidationResult> listValidations, 
+            List<ValidationResult> listValidations,
             string? portal,
             string? id_csosn_fiscal,
             string? csosn_fiscal,

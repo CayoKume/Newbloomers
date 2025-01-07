@@ -1,10 +1,8 @@
 ﻿using Domain.IntegrationsCore.Entities.Enums;
-using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
 using Domain.IntegrationsCore.Exceptions;
+using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Api;
 using System.Net;
-
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Api
 {
@@ -30,7 +28,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Api
                         stage: EnumStages.PostAsync,
                         error: EnumError.EndPointException,
                         level: EnumMessageLevel.Error,
-                        message: $"Error when querying endpoint: { jobParameter.jobName } on microvix webservice\n" +
+                        message: $"Error when querying endpoint: {jobParameter.jobName} on microvix webservice\n" +
                                  $"API return HttpStatusCode:'{response.StatusCode}' when it was expected '{HttpStatusCode.OK}'\n" +
                                  $"Request: {body}"
                     );

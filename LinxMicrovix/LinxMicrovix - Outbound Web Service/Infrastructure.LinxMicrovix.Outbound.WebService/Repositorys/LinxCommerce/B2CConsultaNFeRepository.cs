@@ -1,7 +1,7 @@
 ﻿using Domain.IntegrationsCore.Entities.Enums;
-using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
 using Domain.IntegrationsCore.Exceptions;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce;
+using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxCommerce;
 
@@ -23,7 +23,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                 for (int i = 0; i < records.Count(); i++)
                 {
                     table.Rows.Add(records[i].lastupdateon, records[i].id_nfe, records[i].id_pedido, records[i].documento, records[i].data_emissao, records[i].chave_nfe, records[i].situacao, records[i].xml,
-                        records[i].excluido, records[i].identificador_microvix, records[i].dt_insert, records[i].valor_nota, records[i].serie, records[i].frete, records[i].timestamp, records[i].portal, 
+                        records[i].excluido, records[i].identificador_microvix, records[i].dt_insert, records[i].valor_nota, records[i].serie, records[i].frete, records[i].timestamp, records[i].portal,
                         records[i].nProt, records[i].codigo_modelo_nf, records[i].justificativa, records[i].tpAmb);
                 }
 

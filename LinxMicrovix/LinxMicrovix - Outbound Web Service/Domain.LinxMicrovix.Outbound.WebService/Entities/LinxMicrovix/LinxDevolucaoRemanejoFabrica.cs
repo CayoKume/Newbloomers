@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Domain.IntegrationsCore.CustomValidations;
 using System.ComponentModel.DataAnnotations;
-using Domain.IntegrationsCore.CustomValidations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
@@ -16,40 +16,40 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
         [Column(TypeName = "int")]
         public Int32? id_devolucao_remanejo_fabrica_tipo { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? id_motivo_devolucao_fabrica { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? id_deposito { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? id_devolucao_remanejo_fabrica_status { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? empresa { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? fornecedor { get; private set; }
-        
+
         [Column(TypeName = "char(10)")]
         [LengthValidation(length: 10, propertyName: "cfop")]
         public string? cfop { get; private set; }
-        
+
         [Column(TypeName = "varchar(10)")]
         [LengthValidation(length: 10, propertyName: "serie")]
         public string? serie { get; private set; }
-        
+
         [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "codigo_solicitacao")]
         public string? codigo_solicitacao { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
-        
+
         [Column(TypeName = "datetime")]
         public DateTime? data_solicitacao { get; private set; }
-        
+
         [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 

@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Domain.IntegrationsCore.CustomValidations;
 using System.ComponentModel.DataAnnotations;
-using Domain.IntegrationsCore.CustomValidations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
 {
@@ -29,7 +29,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public Int32? portal { get; private set; }
 
         public B2CConsultaProdutosDimensoes() { }
-        
+
         public B2CConsultaProdutosDimensoes(
             List<ValidationResult> listValidations,
             string? codigoproduto,

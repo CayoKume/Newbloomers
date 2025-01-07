@@ -1,15 +1,13 @@
-﻿using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
+﻿using Application.IntegrationsCore.Interfaces;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxMicrovix;
+using Domain.IntegrationsCore.Entities.Enums;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
+using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Api;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxMicrovix;
-
-using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
-using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxMicrovix;
 using System.ComponentModel.DataAnnotations;
-using Domain.IntegrationsCore.Entities.Enums;
-using Application.IntegrationsCore.Interfaces;
-using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce;
 
 namespace LinxMicrovix.Outbound.Web.Service.Application.Services.LinxMicrovix
 {
@@ -144,8 +142,6 @@ namespace LinxMicrovix.Outbound.Web.Service.Application.Services.LinxMicrovix
                 }
 
                 await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter: jobParameter);
-                //await _linxProdutosCodBarRepository.CreateTableMerge(jobParameter: jobParameter);
-                //await _linxMicrovixRepositoryBase.ExecuteTruncateRawTable(jobParameter);
 
                 return true;
             }

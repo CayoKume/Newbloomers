@@ -4,7 +4,6 @@ using Domain.DatabaseInit.Interfaces.Database;
 using Domain.DatabaseInit.Interfaces.LinxMicrovix.LinxCommerce;
 using Domain.DatabaseInit.Interfaces.LinxMicrovix.LinxMicrovix;
 using Domain.DatabaseInit.Interfaces.LinxMicrovix.Parameters;
-using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
 using Infrastructure.DatabaseInit.Repositorys.Database;
 using Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce;
 using Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxMicrovix;

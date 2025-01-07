@@ -59,7 +59,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
 
         [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
-        
+
         [Column(TypeName = "varchar(15)")]
         [LengthValidation(length: 15, propertyName: "nProt")]
         public string? nProt { get; private set; }

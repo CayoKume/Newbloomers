@@ -41,13 +41,13 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
         [Column(TypeName = "int")]
         public Int32? dav_remessa { get; private set; }
-        
+
         [Column(TypeName = "bigint")]
         public Int64? codigoproduto { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? quantidade { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? preco_unitario_produto { get; private set; }
 

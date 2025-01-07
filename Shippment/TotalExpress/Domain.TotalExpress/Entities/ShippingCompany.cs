@@ -2,7 +2,7 @@
 
 namespace Domain.TotalExpress.Entites
 {
-    public class ShippingCompany : ShippingCompanyBase 
+    public class ShippingCompany : ShippingCompanyBase
     {
     }
 }

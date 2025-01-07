@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Domain.IntegrationsCore.CustomValidations;
 using System.ComponentModel.DataAnnotations;
-using Domain.IntegrationsCore.CustomValidations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 {
@@ -15,11 +15,11 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
         [Column(TypeName = "int")]
         public Int32? id_devolucao_remanejo_fabrica_tipo { get; private set; }
-        
+
         [Column(TypeName = "varchar(100)")]
         [LengthValidation(length: 100, propertyName: "descricao")]
         public string? descricao { get; private set; }
-        
+
         [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 

@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Domain.IntegrationsCore.CustomValidations;
 using System.ComponentModel.DataAnnotations;
-using Domain.IntegrationsCore.CustomValidations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 {
@@ -20,14 +20,14 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [Key]
         [Column(TypeName = "int")]
         public Int32? id_empresas_rede { get; private set; }
-        
+
         [Column(TypeName = "varchar(100)")]
         [LengthValidation(length: 100, propertyName: "rede")]
         public string? rede { get; private set; }
 
         [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
-        
+
         [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "nome_portal")]
         public string? nome_portal { get; private set; }

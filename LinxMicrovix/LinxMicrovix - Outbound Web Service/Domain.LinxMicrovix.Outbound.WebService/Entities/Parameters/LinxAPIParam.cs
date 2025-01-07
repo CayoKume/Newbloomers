@@ -1,6 +1,6 @@
 ﻿using Domain.IntegrationsCore.Entities.Bases;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters
 {
@@ -31,10 +31,10 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters
 
         [NotMapped]
         public string? untreatedDatabaseName { get; private set; }
-        
+
         [NotMapped]
         public string? jobName { get; private set; }
-        
+
         [NotMapped]
         public string? tableName { get; private set; }
 
@@ -61,7 +61,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters
             string? userAuthentication,
             string? parametersInterval,
             string? parametersTableName
-        ) : base (
+        ) : base(
             docMainCompany: docMainCompany,
             projectName: projectName,
             keyAuthorization: keyAuthorization,

@@ -19,17 +19,17 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
         [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
-        
+
         [Column(TypeName = "varchar(14)")]
         [LengthValidation(length: 14, propertyName: "cnpj_emp")]
         public string? cnpj_emp { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? quantidade { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? id_config_tributaria { get; private set; }
-        
+
         [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 

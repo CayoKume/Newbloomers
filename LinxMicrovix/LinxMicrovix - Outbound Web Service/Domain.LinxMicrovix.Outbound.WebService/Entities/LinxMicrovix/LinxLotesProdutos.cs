@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Domain.IntegrationsCore.CustomValidations;
 using System.ComponentModel.DataAnnotations;
-using Domain.IntegrationsCore.CustomValidations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
@@ -23,19 +23,19 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
         [Column(TypeName = "uniqueidentifier")]
         public Guid? identificador { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? transacao { get; private set; }
-        
+
         [Column(TypeName = "datetime")]
         public DateTime? data_fabricacao { get; private set; }
-        
+
         [Column(TypeName = "datetime")]
         public DateTime? data_vencimento { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
-        
+
         [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 

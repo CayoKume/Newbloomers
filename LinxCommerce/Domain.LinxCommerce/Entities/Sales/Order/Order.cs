@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Domain.LinxCommerce.Entities.Sales.Common;
 using System.ComponentModel.DataAnnotations;
-using Domain.LinxCommerce.Entities.Sales.Common;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.LinxCommerce.Entities.Sales.Order
 {

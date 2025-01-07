@@ -16,10 +16,10 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [Column(TypeName = "varchar(10)")]
         [LengthValidation(length: 10, propertyName: "descricao")]
         public string? descricao { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
-        
+
         [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 

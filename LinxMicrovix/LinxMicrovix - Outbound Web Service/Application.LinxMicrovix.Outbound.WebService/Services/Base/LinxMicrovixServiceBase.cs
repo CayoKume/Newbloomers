@@ -1,8 +1,8 @@
 ﻿using Application.IntegrationsCore.Interfaces;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
-using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
-using Domain.IntegrationsCore.Exceptions;
 using Domain.IntegrationsCore.Entities.Enums;
+using Domain.IntegrationsCore.Exceptions;
+using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
 using System.Xml;
 
 

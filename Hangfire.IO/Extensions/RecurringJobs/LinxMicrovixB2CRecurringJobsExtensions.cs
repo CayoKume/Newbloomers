@@ -62,26 +62,26 @@ namespace Hangfire.IO.Extensions.RecurringJobs
                             .Get<List<LinxMethods>>();
 
             //RecurringJob.AddOrUpdate<IB2CConsultaClientesService>("B2CConsultaClientes", service => service.GetRecords(
-                //new LinxAPIParam
-                //{
-                //    docMainCompany = _docMainCompany,
-                //    databaseName = _databaseName,
-                //    projectName = _projectName,
-                //    keyAuthorization = _key,
-                //    userAuthentication = _authentication,
-                //    parametersTableName = _parametersTableName,
-                //    parametersLogTableName = _parametersLogTableName,
-                //    parametersInterval = _parametersInterval,
-                //    jobName = _methods
-                //                .Where(m => m.MethodName == "B2CConsultaClientes")
-                //                .FirstOrDefault().MethodName,
-                //    tableName = _methods
-                //                .Where(m => m.MethodName == "B2CConsultaClientes")
-                //                .FirstOrDefault().MethodName
-                //}
-                //),
-                //Cron.MinuteInterval(3), 
-                //queue: "srv-vm-app02"
+            //new LinxAPIParam
+            //{
+            //    docMainCompany = _docMainCompany,
+            //    databaseName = _databaseName,
+            //    projectName = _projectName,
+            //    keyAuthorization = _key,
+            //    userAuthentication = _authentication,
+            //    parametersTableName = _parametersTableName,
+            //    parametersLogTableName = _parametersLogTableName,
+            //    parametersInterval = _parametersInterval,
+            //    jobName = _methods
+            //                .Where(m => m.MethodName == "B2CConsultaClientes")
+            //                .FirstOrDefault().MethodName,
+            //    tableName = _methods
+            //                .Where(m => m.MethodName == "B2CConsultaClientes")
+            //                .FirstOrDefault().MethodName
+            //}
+            //),
+            //Cron.MinuteInterval(3), 
+            //queue: "srv-vm-app02"
             //);
         }
     }

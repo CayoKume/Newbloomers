@@ -1,11 +1,28 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using Domain.IntegrationsCore.CustomValidations;
+﻿using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
+using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxMicrovix;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 {
-    public class LinxGrupoLojasRepository
+    public class LinxGrupoLojasRepository : ILinxGrupoLojasRepository
     {
-        
+        public LinxGrupoLojasRepository()
+        {
+            
+        }
+
+        public bool BulkInsertIntoTableRaw(LinxAPIParam jobParameter, IList<LinxGrupoLojas> records)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<LinxGrupoLojas>> GetRegistersExists(LinxAPIParam jobParameter, List<LinxGrupoLojas> registros)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> InsertRecord(LinxAPIParam jobParameter, LinxGrupoLojas? record)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

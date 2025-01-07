@@ -1,11 +1,10 @@
-﻿using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
-using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
-using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Api;
-using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxMicrovix;
-using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
-
-using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
+﻿using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxMicrovix;
+using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
+using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
+using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Api;
+using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
+using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxMicrovix;
 using System.ComponentModel.DataAnnotations;
 
 namespace LinxMicrovix.Outbound.Web.Service.Application.Services.LinxMicrovix

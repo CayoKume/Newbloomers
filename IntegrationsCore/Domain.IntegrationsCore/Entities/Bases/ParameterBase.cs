@@ -6,13 +6,13 @@ namespace Domain.IntegrationsCore.Entities.Bases
     {
         [NotMapped]
         public string? docMainCompany { get; private set; }
-        
+
         [NotMapped]
         public string? projectName { get; private set; }
-        
+
         [NotMapped]
         public string? keyAuthorization { get; private set; }
-        
+
         [NotMapped]
         public string? userAuthentication { get; private set; }
 

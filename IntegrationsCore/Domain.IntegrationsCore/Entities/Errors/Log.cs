@@ -18,7 +18,7 @@ namespace Domain.IntegrationsCore.Entities.Errors
         /// Create a new log
         /// </summary>
         /// <param name="job"></param>
-        public Log (EnumJob job)
+        public Log(EnumJob job)
         {
             this.Execution = Guid.NewGuid();
             this.Job = job;
@@ -29,7 +29,7 @@ namespace Domain.IntegrationsCore.Entities.Errors
         /// Set execution end date
         /// </summary>
         /// <param name="job"></param>
-        public void SetEndDate (DateTime endDate)
+        public void SetEndDate(DateTime endDate)
         {
             this.EndDate = endDate;
         }

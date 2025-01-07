@@ -12,29 +12,29 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
         [Key]
         [Column(TypeName = "int")]
-        public Int32? id_ordens_servico_posicao_os_ramo_optico_historico { get; private  set; }
+        public Int32? id_ordens_servico_posicao_os_ramo_optico_historico { get; private set; }
 
         [Column(TypeName = "int")]
-        public Int32? numero_os { get; private  set; }
-        
+        public Int32? numero_os { get; private set; }
+
         [Column(TypeName = "int")]
-        public Int32? usuario { get; private  set; }
-        
+        public Int32? usuario { get; private set; }
+
         [Column(TypeName = "int")]
-        public Int64? timestamp { get; private  set; }
-        
+        public Int64? timestamp { get; private set; }
+
         [Column(TypeName = "int")]
-        public Int32? id_posicao_os_ramo_optico { get; private  set; }
-        
+        public Int32? id_posicao_os_ramo_optico { get; private set; }
+
         [Column(TypeName = "datetime")]
-        public DateTime? data { get; private  set; }
-        
+        public DateTime? data { get; private set; }
+
         [Column(TypeName = "varchar(200)")]
         [LengthValidation(length: 200, propertyName: "observacao")]
-        public string? observacao { get; private  set; }
-        
+        public string? observacao { get; private set; }
+
         [Column(TypeName = "bigint")]
-        public Int32? portal { get; private  set; }
+        public Int32? portal { get; private set; }
 
         public LinxOrdensServicoPosicaoOsRamoOpticoHistorico() { }
 

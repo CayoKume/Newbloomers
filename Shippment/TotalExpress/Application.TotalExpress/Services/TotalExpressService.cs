@@ -53,7 +53,7 @@ namespace Application.TotalExpress.Services
                             response
                         );
                     }
-                    
+
                     return true;
                 }
                 return false;
@@ -149,7 +149,7 @@ namespace Application.TotalExpress.Services
                                 order.number,
                                 parameters.sender_id,
                                 response
-                            ); 
+                            );
                         }
                     }
 
@@ -195,7 +195,7 @@ namespace Application.TotalExpress.Services
                                                 headers,
                                                 "TotalExpressEdiAPI"
                                              );
-                        
+
                             var statusList = JsonConvert.DeserializeObject<IEnumerable<Status>>(response);
                             //var status = JsonConvert.DeserializeObject<Status>(response);
 
@@ -205,24 +205,24 @@ namespace Application.TotalExpress.Services
                                 {
                                     var lastStatus = status.detalhes.statusDeEncomenda.LastOrDefault();
 
-                                    var lastStatusDescription = lastStatus == null ? 
+                                    var lastStatusDescription = lastStatus == null ?
                                                                 null : $"{lastStatus.statusid} - {lastStatus.status}";
 
-                                    var lastStatusDate = lastStatus == null ? 
+                                    var lastStatusDate = lastStatus == null ?
                                                          null : $"{lastStatus.data}";
 
-                                    var deliveryForecastDate = status.detalhes.dataPrev == null ? 
+                                    var deliveryForecastDate = status.detalhes.dataPrev == null ?
                                                        null : status.detalhes.dataPrev.PrevEntrega;
 
-                                    var collectionDate = status.detalhes.statusDeEncomenda.Where(p => p.status == "COLETA REALIZADA").FirstOrDefault() == null ? 
+                                    var collectionDate = status.detalhes.statusDeEncomenda.Where(p => p.status == "COLETA REALIZADA").FirstOrDefault() == null ?
                                                      null : status.detalhes.statusDeEncomenda.Where(p => p.status == "COLETA REALIZADA").FirstOrDefault().data;
 
                                     var deliveryMadeDate = status.detalhes.statusDeEncomenda.Where(p => p.status == "ENTREGA REALIZADA").FirstOrDefault() == null ?
                                                      null : status.detalhes.statusDeEncomenda.Where(p => p.status == "ENTREGA REALIZADA").FirstOrDefault().data;
 
                                     await _totalExpressRepository.UpdateDeliveryDates(
-                                        deliveryMadeDate, 
-                                        collectionDate, 
+                                        deliveryMadeDate,
+                                        collectionDate,
                                         deliveryForecastDate,
                                         lastStatusDate,
                                         lastStatusDescription,

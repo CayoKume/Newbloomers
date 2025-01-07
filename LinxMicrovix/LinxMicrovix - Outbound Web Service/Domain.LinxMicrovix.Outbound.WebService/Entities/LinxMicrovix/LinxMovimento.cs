@@ -5,38 +5,38 @@ using System.Globalization;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 {
-  public class LinxMovimento
-  {
+    public class LinxMovimento
+    {
         [Column(TypeName = "datetime")]
         public DateTime? lastupdateon { get; private set; }
 
         [Column(TypeName = "int")]
-		public Int32? portal { get; private set; }
+        public Int32? portal { get; private set; }
 
         [Column(TypeName = "varchar(14)")]
         [LengthValidation(length: 14, propertyName: "cnpj_emp")]
         public string? cnpj_emp { get; private set; }
-		
+
         [Column(TypeName = "int")]
         public Int32? transacao { get; private set; }
-		
+
         [Column(TypeName = "int")]
         public Int32? usuario { get; private set; }
-		
+
         [Column(TypeName = "int")]
         public Int32? documento { get; private set; }
-		
+
         [Column(TypeName = "varchar(44)")]
         [LengthValidation(length: 44, propertyName: "chave_nf")]
         public string? chave_nf { get; private set; }
-		
+
         [Column(TypeName = "int")]
         public Int32? ecf { get; private set; }
-		
+
         [Column(TypeName = "varchar(30)")]
         [LengthValidation(length: 30, propertyName: "numero_serie_ecf")]
         public string? numero_serie_ecf { get; private set; }
-		
+
         [Column(TypeName = "int")]
         public Int32? modelo_nf { get; private set; }
 
@@ -45,119 +45,119 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
         [Column(TypeName = "datetime")]
         public DateTime? data_lancamento { get; private set; }
-		
+
         [Column(TypeName = "int")]
         public Int32? codigo_cliente { get; private set; }
-		
+
         [Column(TypeName = "varchar(10)")]
         [LengthValidation(length: 10, propertyName: "serie")]
         public string? serie { get; private set; }
-		
+
         [Column(TypeName = "varchar(300)")]
         [LengthValidation(length: 300, propertyName: "desc_cfop")]
         public string? desc_cfop { get; private set; }
-		
+
         [Column(TypeName = "varchar(5)")]
         [LengthValidation(length: 5, propertyName: "id_cfop")]
         public string? id_cfop { get; private set; }
-		
+
         [Column(TypeName = "int")]
         public Int32? cod_vendedor { get; private set; }
-		
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? quantidade { get; private set; }
-		
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? preco_custo { get; private set; }
-		
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? valor_liquido { get; private set; }
-		
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? desconto { get; private set; }
-		
+
         [Column(TypeName = "varchar(4)")]
         [LengthValidation(length: 4, propertyName: "cst_icms")]
         public string? cst_icms { get; private set; }
-		
+
         [Column(TypeName = "varchar(4)")]
         [LengthValidation(length: 4, propertyName: "cst_pis")]
         public string? cst_pis { get; private set; }
-		
+
         [Column(TypeName = "varchar(4)")]
         [LengthValidation(length: 4, propertyName: "cst_cofins")]
         public string? cst_cofins { get; private set; }
-		
+
         [Column(TypeName = "varchar(4)")]
         [LengthValidation(length: 4, propertyName: "cst_ipi")]
         public string? cst_ipi { get; private set; }
-		
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? valor_icms { get; private set; }
-		
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? aliquota_icms { get; private set; }
-		
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? base_icms { get; private set; }
-		
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? valor_pis { get; private set; }
-		
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? aliquota_pis { get; private set; }
-		
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? base_pis { get; private set; }
-		
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? valor_cofins { get; private set; }
-		
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? aliquota_cofins { get; private set; }
-		
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? base_cofins { get; private set; }
-		
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? valor_icms_st { get; private set; }
-		
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? aliquota_icms_st { get; private set; }
-		
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? base_icms_st { get; private set; }
-		
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? valor_ipi { get; private set; }
-		
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? aliquota_ipi { get; private set; }
-		
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? base_ipi { get; private set; }
-		
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? valor_total { get; private set; }
-		
+
         [Column(TypeName = "bit")]
         public bool? forma_dinheiro { get; private set; }
-		
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? total_dinheiro { get; private set; }
-		
+
         [Column(TypeName = "bit")]
         public bool? forma_cheque { get; private set; }
-		
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? total_cheque { get; private set; }
-		
+
         [Column(TypeName = "bit")]
         public bool? forma_cartao { get; private set; }
-		
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? total_cartao { get; private set; }
-		
+
         [Column(TypeName = "bit")]
         public bool? forma_crediario { get; private set; }
 
@@ -166,118 +166,118 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
         [Column(TypeName = "bit")]
         public bool? forma_convenio { get; private set; }
-		
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? total_convenio { get; private set; }
-		
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? frete { get; private set; }
-		
+
         [Column(TypeName = "char(2)")]
         [LengthValidation(length: 2, propertyName: "operacao")]
         public string? operacao { get; private set; }
-		
+
         [Column(TypeName = "char(1)")]
         [LengthValidation(length: 1, propertyName: "tipo_transacao")]
         public string? tipo_transacao { get; private set; }
 
         [Column(TypeName = "bigint")]
         public Int64? cod_produto { get; private set; }
-		
+
         [Column(TypeName = "varchar(20)")]
         [LengthValidation(length: 20, propertyName: "cod_barra")]
         public string? cod_barra { get; private set; }
-		
+
         [Column(TypeName = "char(1)")]
         [LengthValidation(length: 1, propertyName: "cancelado")]
         public string? cancelado { get; private set; }
-		
+
         [Column(TypeName = "char(1)")]
         [LengthValidation(length: 1, propertyName: "excluido")]
         public string? excluido { get; private set; }
-		
+
         [Column(TypeName = "char(1)")]
         [LengthValidation(length: 1, propertyName: "soma_relatorio")]
         public string? soma_relatorio { get; private set; }
 
         [Column(TypeName = "uniqueidentifier")]
         public Guid? identificador { get; private set; }
-		
+
         [Column(TypeName = "varchar(100)")]
         [LengthValidation(length: 100, propertyName: "deposito")]
         public string? deposito { get; private set; }
-		
+
         [Column(TypeName = "varchar(max)")]
         public string? obs { get; private set; }
 
         [Column(TypeName = "decimal(10,2)")]
         public decimal? preco_unitario { get; private set; }
-		
+
         [Column(TypeName = "char(5)")]
         [LengthValidation(length: 5, propertyName: "hora_lancamento")]
         public string? hora_lancamento { get; private set; }
-		
+
         [Column(TypeName = "varchar(60)")]
         [LengthValidation(length: 60, propertyName: "natureza_operacao")]
         public string? natureza_operacao { get; private set; }
-		
+
         [Column(TypeName = "int")]
         public Int32? tabela_preco { get; private set; }
-		
+
         [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "nome_tabela_preco")]
         public string? nome_tabela_preco { get; private set; }
-		
+
         [Column(TypeName = "int")]
         public Int32? cod_sefaz_situacao { get; private set; }
-		
+
         [Column(TypeName = "varchar(30)")]
         [LengthValidation(length: 30, propertyName: "desc_sefaz_situacao")]
         public string? desc_sefaz_situacao { get; private set; }
-		
+
         [Column(TypeName = "varchar(15)")]
         [LengthValidation(length: 15, propertyName: "protocolo_aut_nfe")]
         public string? protocolo_aut_nfe { get; private set; }
-		
+
         [Column(TypeName = "datetime")]
         public DateTime? dt_update { get; private set; }
-		
+
         [Column(TypeName = "bit")]
         public bool? forma_cheque_prazo { get; private set; }
-		
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? total_cheque_prazo { get; private set; }
-		
+
         [Column(TypeName = "char(10)")]
         [LengthValidation(length: 10, propertyName: "cod_natureza_operacao")]
         public string? cod_natureza_operacao { get; private set; }
-		
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? preco_tabela_epoca { get; private set; }
-		
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? desconto_total_item { get; private set; }
-		
+
         [Column(TypeName = "char(1)")]
         [LengthValidation(length: 1, propertyName: "conferido")]
         public string? conferido { get; private set; }
-		
+
         [Column(TypeName = "int")]
         public Int32? transacao_pedido_venda { get; private set; }
-		
+
         [Column(TypeName = "varchar(5)")]
         [LengthValidation(length: 5, propertyName: "codigo_modelo_nf")]
         public string? codigo_modelo_nf { get; private set; }
-		
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? acrescimo { get; private set; }
-		
+
         [Column(TypeName = "bit")]
         public bool? mob_checkout { get; private set; }
-		
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? aliquota_iss { get; private set; }
-		
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? base_iss { get; private set; }
 
@@ -286,82 +286,82 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
         [Column(TypeName = "int")]
         public Int32? codigo_rotina_origem { get; private set; }
-		
+
         [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
-		
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? troco { get; private set; }
 
         [Column(TypeName = "int")]
         public Int32? transportador { get; private set; }
-		
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? icms_aliquota_desonerado { get; private set; }
-		
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? icms_valor_desonerado_item { get; private set; }
-		
+
         [Column(TypeName = "int")]
         public Int32? empresa { get; private set; }
-		
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? desconto_item { get; private set; }
-		
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? aliq_iss { get; private set; }
-		
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? iss_base_item { get; private set; }
-		
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? despesas { get; private set; }
-		
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? seguro_total_item { get; private set; }
-		
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? acrescimo_total_item { get; private set; }
-		
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? despesas_total_item { get; private set; }
-		
+
         [Column(TypeName = "bit")]
         public bool? forma_pix { get; private set; }
-		
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? total_pix { get; private set; }
-		
+
         [Column(TypeName = "bit")]
         public bool? forma_deposito_bancario { get; private set; }
-		
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? total_deposito_bancario { get; private set; }
 
         [Column(TypeName = "int")]
         public Int32? id_venda_produto_b2c { get; private set; }
-		
+
         [Column(TypeName = "bit")]
         public bool? item_promocional { get; private set; }
 
         [Column(TypeName = "bit")]
         public bool? acrescimo_item { get; private set; }
-		
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? icms_st_antecipado_aliquota { get; private set; }
-		
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? icms_st_antecipado_margem { get; private set; }
-		
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? icms_st_antecipado_percentual_reducao { get; private set; }
-		
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? icms_st_antecipado_valor_item { get; private set; }
-		
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? icms_base_desonerado_item { get; private set; }
-		
+
         [Column(TypeName = "varchar(5)")]
         [LengthValidation(length: 5, propertyName: "codigo_status_nfe")]
         public string? codigo_status_nfe { get; private set; }
@@ -480,7 +480,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             string? icms_st_antecipado_valor_item,
             string? icms_base_desonerado_item,
             string? codigo_status_nfe
-		)
+        )
         {
             lastupdateon = DateTime.Now;
 

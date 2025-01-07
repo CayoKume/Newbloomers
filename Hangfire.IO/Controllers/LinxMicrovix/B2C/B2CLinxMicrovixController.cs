@@ -267,7 +267,7 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                 var method = _methods
                     .Where(m => m.MethodName == "B2CConsultaClassificacao")
                     .FirstOrDefault();
-                
+
                 var result = await _b2cConsultaClassificacaoService.GetRecords(
                     _linxMicrovixJobParameter.SetParameters(
                         jobName: method.MethodName,
@@ -594,7 +594,7 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                 return Content($"Unable to integrate the records.\nError: {ex.Message}");
             }
         }
-        
+
         [HttpPost("B2CConsultaEspessuras")]
         public async Task<ActionResult> B2CConsultaEspessuras()
         {
@@ -1210,7 +1210,7 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                 return Content($"Unable to integrate the records.\nError: {ex.Message}");
             }
         }
-        
+
         [HttpPost("B2CConsultaProdutos")]
         public async Task<ActionResult> B2CConsultaProdutos()
         {
@@ -1938,7 +1938,7 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                 return Content($"Unable to integrate the records.\nError: {ex.Message}");
             }
         }
-        
+
         [HttpPost("B2CConsultaTransportadores")]
         public async Task<ActionResult> B2CConsultaTransportadores()
         {

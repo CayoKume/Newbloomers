@@ -1,7 +1,7 @@
 ﻿
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
 using Domain.IntegrationsCore.CustomValidations;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
@@ -28,19 +28,19 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
         [Column(TypeName = "datetime")]
         public DateTime? data_inicial_meta { get; private set; }
-        
+
         [Column(TypeName = "datetime")]
         public DateTime? data_final_meta { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? valor_meta_loja { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? valor_meta_vendedor { get; private set; }
 
         [Column(TypeName = "int")]
         public Int32? cod_vendedor { get; private set; }
-        
+
         [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 

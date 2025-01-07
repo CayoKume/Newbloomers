@@ -34,7 +34,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
         [Column(TypeName = "int")]
         public Int32? situacao { get; private set; }
-        
+
         [Column(TypeName = "varchar(max)")]
         public string? xml { get; private set; }
 
@@ -43,24 +43,24 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
         [Column(TypeName = "uniqueidentifier")]
         public Guid? identificador_microvix { get; private set; }
-        
+
         [Column(TypeName = "datetime")]
         public DateTime? dt_insert { get; private set; }
 
         [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
-        
+
         [Column(TypeName = "varchar(15)")]
         [LengthValidation(length: 15, propertyName: "nProtCanc")]
         public string? nProtCanc { get; private set; }
-        
+
         [Column(TypeName = "varchar(15)")]
         [LengthValidation(length: 15, propertyName: "nProtInut")]
         public string? nProtInut { get; private set; }
-        
+
         [Column(TypeName = "varchar(max)")]
         public string? xmlDistribuicao { get; private set; }
-        
+
         [Column(TypeName = "varchar(15)")]
         [LengthValidation(length: 15, propertyName: "nProtDeneg")]
         public string? nProtDeneg { get; private set; }
@@ -68,10 +68,10 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [Column(TypeName = "varchar(5)")]
         [LengthValidation(length: 5, propertyName: "cStat")]
         public string? cStat { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? id_nfe { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? cod_cliente { get; private set; }
 

@@ -1,12 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
+using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxMicrovix;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 {
-    public class LinxTrocaUnificadaResumoBaixaRepository
-{
-}
+    public class LinxTrocaUnificadaResumoBaixaRepository : ILinxTrocaUnificadaResumoBaixaRepository
+    {
+        public LinxTrocaUnificadaResumoBaixaRepository()
+        {
+            
+        }
+
+        public bool BulkInsertIntoTableRaw(LinxAPIParam jobParameter, IList<LinxTrocaUnificadaResumoBaixa> records)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<LinxTrocaUnificadaResumoBaixa>> GetRegistersExists(LinxAPIParam jobParameter, List<LinxTrocaUnificadaResumoBaixa> registros)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> InsertRecord(LinxAPIParam jobParameter, LinxTrocaUnificadaResumoBaixa? record)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

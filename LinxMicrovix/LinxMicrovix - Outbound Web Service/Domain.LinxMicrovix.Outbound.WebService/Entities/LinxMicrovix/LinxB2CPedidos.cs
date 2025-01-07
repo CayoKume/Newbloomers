@@ -1,7 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Domain.IntegrationsCore.CustomValidations;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
-using Domain.IntegrationsCore.CustomValidations;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 {
@@ -19,19 +19,19 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
         [Column(TypeName = "int")]
         public Int32 cod_cliente_erp { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32 cod_cliente_b2c { get; private set; }
 
         [Column(TypeName = "decimal(10,2)")]
         public decimal vl_frete { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32 forma_pgto { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32 plano_pagamento { get; private set; }
-        
+
         [Column(TypeName = "varchar(400)")]
         [LengthValidation(length: 400, propertyName: "anotacao")]
         public string anotacao { get; private set; }
@@ -44,49 +44,49 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
         [Column(TypeName = "decimal(10,2)")]
         public decimal valor_frete_gratis { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32 tipo_frete { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32 id_status { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32 cod_transportador { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32 tipo_cobranca_frete { get; private set; }
 
         [Column(TypeName = "bit")]
         public bool ativo { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32 empresa { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32 id_tabela_preco { get; private set; }
 
         [Column(TypeName = "decimal(10,2)")]
         public decimal valor_credito { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32 cod_vendedor { get; private set; }
-        
+
         [Column(TypeName = "bigint")]
         public Int64 timestamp { get; private set; }
 
         [Column(TypeName = "datetime")]
         public DateTime dt_insert { get; private set; }
-        
+
         [Column(TypeName = "datetime")]
         public DateTime dt_disponivel_faturamento { get; private set; }
-        
+
         [Column(TypeName = "varchar(max)")]
         public string mensagem_falha_faturamento { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32 portal { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32 id_tipo_b2c { get; private set; }
 

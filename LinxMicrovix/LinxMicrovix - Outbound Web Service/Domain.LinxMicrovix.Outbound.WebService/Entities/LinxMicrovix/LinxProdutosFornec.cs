@@ -21,65 +21,65 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
         [Column(TypeName = "decimal(10,2)")]
         public decimal? custo { get; private set; }
-        
+
         [Column(TypeName = "varchar(10)")]
         [LengthValidation(length: 10, propertyName: "moeda")]
         public string? moeda { get; private set; }
-        
+
         [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "unidade_compra")]
         public string? unidade_compra { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? fator_conversao_compra { get; private set; }
 
         [Column(TypeName = "varchar(40)")]
         [LengthValidation(length: 40, propertyName: "codauxiliar")]
         public string? codauxiliar { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? qtde_embalagem { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? prazo_entrega_padrao { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? empresa { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? desconto1 { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? desconto2 { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? desconto3 { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? desconto { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? ipi1 { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? diferencial_icms { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? despesas1 { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? acrescimo { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? valor_custo_substituicao { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? frete1 { get; private set; }
-        
+
         [Column(TypeName = "varchar(1)")]
         [LengthValidation(length: 1, propertyName: "fornecedor_principal")]
         public string? fornecedor_principal { get; private set; }
-        
+
         [Column(TypeName = "varchar(1)")]
         [LengthValidation(length: 1, propertyName: "excluido")]
         public string? excluido { get; private set; }

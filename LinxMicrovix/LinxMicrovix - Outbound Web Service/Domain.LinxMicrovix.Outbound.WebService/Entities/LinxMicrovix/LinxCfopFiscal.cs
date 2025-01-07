@@ -39,7 +39,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             string? cfop_fiscal,
             string? descricao,
             string? excluido,
-            string? timestamp 
+            string? timestamp
         )
         {
             lastupdateon = DateTime.Now;

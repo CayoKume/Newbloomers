@@ -81,7 +81,7 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce
                     return false;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw;
             }

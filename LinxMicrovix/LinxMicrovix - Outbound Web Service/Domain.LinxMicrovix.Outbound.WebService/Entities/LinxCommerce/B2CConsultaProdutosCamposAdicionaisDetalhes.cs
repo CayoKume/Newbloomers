@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Domain.IntegrationsCore.CustomValidations;
 using System.ComponentModel.DataAnnotations;
-using Domain.IntegrationsCore.CustomValidations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
 {
@@ -36,12 +36,12 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
 
         public B2CConsultaProdutosCamposAdicionaisDetalhes(
             List<ValidationResult> listValidations,
-            string? id_campo_detalhe, 
-            string? ordem, 
-            string? descricao, 
-            string? id_campo, 
-            string? ativo, 
-            string? timestamp, 
+            string? id_campo_detalhe,
+            string? ordem,
+            string? descricao,
+            string? id_campo,
+            string? ativo,
+            string? timestamp,
             string? portal
         )
         {

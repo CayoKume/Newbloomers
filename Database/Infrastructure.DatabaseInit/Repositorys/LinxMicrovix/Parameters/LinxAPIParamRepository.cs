@@ -1,6 +1,5 @@
 ﻿using Dapper;
 using Domain.DatabaseInit.Interfaces.LinxMicrovix.Parameters;
-using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
 using Infrastructure.IntegrationsCore.Connections.SQLServer;
 using Z.Dapper.Plus;

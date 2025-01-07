@@ -10,7 +10,7 @@ namespace Application.IntegrationsCore.Services
 
         public ILoggerService AddLog(EnumJob job)
         {
-            this.log ??= new Log(job: job); 
+            this.log ??= new Log(job: job);
 
             return this;
         }
@@ -48,7 +48,7 @@ namespace Application.IntegrationsCore.Services
         )
         {
             this.log?.Messages.Add(
-                new Message (
+                new Message(
                     stage: stage,
                     error: error,
                     logLevel: logLevel,

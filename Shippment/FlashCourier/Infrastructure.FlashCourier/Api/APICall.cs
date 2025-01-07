@@ -1,9 +1,8 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Domain.FlashCourier.Interfaces.Api;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Net;
 using System.Text;
-using Domain.FlashCourier.Interfaces.Api;
-using System.Net.Http;
 
 namespace Infrastructure.FlashCourier.Api
 {
@@ -21,10 +20,10 @@ namespace Infrastructure.FlashCourier.Api
                 var client = CreateCliente(token);
 
                 var response = await client.PostAsync(
-                    client.BaseAddress + rote, 
+                    client.BaseAddress + rote,
                     new StringContent(
-                        Newtonsoft.Json.JsonConvert.SerializeObject(jObject), 
-                        Encoding.UTF8, 
+                        Newtonsoft.Json.JsonConvert.SerializeObject(jObject),
+                        Encoding.UTF8,
                         "application/json"
                     )
                 );
@@ -45,15 +44,15 @@ namespace Infrastructure.FlashCourier.Api
             try
             {
                 var client = CreateCliente(
-                    userName: userName, 
+                    userName: userName,
                     password: password
                 );
 
                 var response = await client.PostAsync(
-                    client.BaseAddress + rote, 
+                    client.BaseAddress + rote,
                     new StringContent(
-                        JsonConvert.SerializeObject(jObject), 
-                        Encoding.UTF8, 
+                        JsonConvert.SerializeObject(jObject),
+                        Encoding.UTF8,
                         "application/json"
                     )
                 );

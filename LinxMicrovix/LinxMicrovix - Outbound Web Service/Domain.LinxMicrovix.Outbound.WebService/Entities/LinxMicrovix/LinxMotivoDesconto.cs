@@ -16,13 +16,13 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [Column(TypeName = "varchar(60)")]
         [LengthValidation(length: 60, propertyName: "desc_motivo_desconto")]
         public string? desc_motivo_desconto { get; private set; }
-        
+
         [Column(TypeName = "bit")]
         public bool? ativo { get; private set; }
-        
+
         [Column(TypeName = "bit")]
         public bool? excluido { get; private set; }
-        
+
         [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
@@ -35,7 +35,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             string? ativo,
             string? excluido,
             string? timestamp
-        )        
+        )
         {
             lastupdateon = DateTime.Now;
 

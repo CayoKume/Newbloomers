@@ -15,23 +15,23 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
         [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? empresa { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? id_tipo { get; private set; }
-        
+
         [Column(TypeName = "uniqueidentifier")]
         public Guid? identificador_remessa { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? status { get; private set; }
-        
+
         [Column(TypeName = "varchar(35)")]
         [LengthValidation(length: 35, propertyName: "status_descricao")]
         public string? status_descricao { get; private set; }
-        
+
         [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 

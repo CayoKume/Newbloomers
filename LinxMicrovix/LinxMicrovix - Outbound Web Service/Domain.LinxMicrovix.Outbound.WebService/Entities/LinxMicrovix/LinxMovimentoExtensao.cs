@@ -12,107 +12,107 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [Key]
         [Column(TypeName = "uniqueidentifier")]
         public Guid? identificador { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
-        
+
         [Column(TypeName = "varchar(14)")]
         [LengthValidation(length: 14, propertyName: "cnpj_emp")]
         public string? cnpj_emp { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? transacao { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? base_fcp_st { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? valor_fcp_st { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? aliq_fcp_st { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? base_icms_fcp_st { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? valor_icms_fcp_st { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? base_icms_fcp_st_retido { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? valor_icms_fcp_st_retido { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? base_icms_fcp_st_antecipado { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? valor_icms_fcp_st_antecipado { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? aliquota_icms_fcp_st_antecipado { get; private set; }
-        
+
         [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public decimal? valor_iss { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? tipo_tributacao_iss { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? icms_fcp_aliquota { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? icms_fcp_base_item { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? icms_fcp_valor_item { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? icms_base_partilha { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? aliq_difal_interna_uf_destinatario { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? aliq_difal_interestadual_uf_envolvidas { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? icms_item_perc_partilha_destino { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? icms_item_perc_partilha_origem { get; private set; }
-        
+
         [Column(TypeName = "bigint")]
         public Int64? codigo_pacote { get; private set; }
-        
+
         [Column(TypeName = "bigint")]
         public Int64? codigo_itens_associados { get; private set; }
-        
+
         [Column(TypeName = "bigint")]
         public Int64? codigo_kit { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? id_motivo_desconto { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? icms_st_antecipado_base_item { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? icms_suportado_valor_item { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? icms_suportado_valor_unitario { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? icms_st_pago_base { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? icms_st_pago_valor { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? icms_st_pago_aliq { get; private set; }
 

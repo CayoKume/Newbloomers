@@ -20,7 +20,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         public Int64? timestamp { get; private set; }
 
         public LinxFaturasOrigem() { }
-        
+
         public LinxFaturasOrigem(
             List<ValidationResult> listValidations,
             string? codigo_fatura,

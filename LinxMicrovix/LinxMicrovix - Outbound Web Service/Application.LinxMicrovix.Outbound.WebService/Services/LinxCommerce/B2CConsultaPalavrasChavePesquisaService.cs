@@ -1,16 +1,16 @@
-﻿using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce;
-using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
-using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Api;
-using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxCommerce;
-using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxCommerce;
-using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
-using Application.IntegrationsCore.Interfaces;
+﻿using Application.IntegrationsCore.Interfaces;
 using Application.LinxMicrovix.Outbound.WebService.Entities.Cache.LinxCommerce;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Cache.LinxCommerce;
-using System.ComponentModel.DataAnnotations;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxCommerce;
 using Domain.IntegrationsCore.Entities.Enums;
 using Domain.IntegrationsCore.Exceptions;
+using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
+using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Api;
+using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
+using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxCommerce;
+using System.ComponentModel.DataAnnotations;
 
 namespace Application.LinxMicrovix.Outbound.WebService.Services
 {

@@ -4,12 +4,12 @@
     {
         public static WebApplicationBuilder AddArchitectures(this WebApplicationBuilder builder)
         {
-            #if DEBUG
-                builder.Services.AddControllers();
-                builder.Services.AddEndpointsApiExplorer();
-                builder.Services.AddSwaggerGen();
-                builder.Services.AddCors();
-            #endif
+#if DEBUG
+            builder.Services.AddControllers();
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen();
+            builder.Services.AddCors();
+#endif
 
             return builder;
         }

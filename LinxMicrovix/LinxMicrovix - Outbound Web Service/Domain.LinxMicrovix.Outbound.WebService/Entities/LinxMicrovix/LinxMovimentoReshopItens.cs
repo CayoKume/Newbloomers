@@ -12,25 +12,25 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [Key]
         [Column(TypeName = "int")]
         public Int32? id_movimento_campanha_reshop_item { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? id_campanha { get; private set; }
-        
+
         [Column(TypeName = "uniqueidentifier")]
         public Guid? identificador { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? valor_unitario { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? valor_desconto_item { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal quantidade { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? valor_original { get; private set; }
-        
+
         [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 

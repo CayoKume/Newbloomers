@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Pagarme.Application.Services
+﻿namespace Pagarme.Application.Services
 {
     internal class PagarmeService
     {

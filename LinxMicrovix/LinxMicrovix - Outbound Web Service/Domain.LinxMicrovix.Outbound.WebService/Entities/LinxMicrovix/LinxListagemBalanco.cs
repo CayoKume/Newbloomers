@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Domain.IntegrationsCore.CustomValidations;
 using System.ComponentModel.DataAnnotations;
-using Domain.IntegrationsCore.CustomValidations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
@@ -20,7 +20,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "nome_arquivo")]
         public string? nome_arquivo { get; private set; }
-        
+
         [Column(TypeName = "varchar(1)")]
         [LengthValidation(length: 1, propertyName: "processado")]
         public string? processado { get; private set; }

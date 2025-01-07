@@ -1,5 +1,5 @@
-﻿using Application.IntegrationsCore.Services;
-using Application.IntegrationsCore.Interfaces;
+﻿using Application.IntegrationsCore.Interfaces;
+using Application.IntegrationsCore.Services;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Cache.LinxCommerce;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce;
 

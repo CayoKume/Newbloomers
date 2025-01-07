@@ -1,5 +1,5 @@
-﻿using Domain.LinxCommerce.Entities.Parameters;
-using Domain.LinxCommerce.Entities.Catolog.Sku;
+﻿using Domain.LinxCommerce.Entities.Catolog.Sku;
+using Domain.LinxCommerce.Entities.Parameters;
 
 namespace Domain.LinxCommerce.Interfaces.Repositorys.Catolog
 {

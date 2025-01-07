@@ -2,9 +2,6 @@
 using Application.IntegrationsCore.Services;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Cache.LinxCommerce;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Globalization;
 
 namespace Application.LinxMicrovix.Outbound.WebService.Entities.Cache.LinxCommerce
 {

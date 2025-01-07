@@ -6,6 +6,6 @@ namespace HangfireDashboard.UI.Controllers.LinxCommerce
     [Route("LinxCommerceJobs/LinxCommerce")]
     public class LinxCommerceController : Controller
     {
-        
+
     }
 }

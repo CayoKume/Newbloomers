@@ -1,20 +1,20 @@
-﻿using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Api;
-using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce;
-using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxCommerce;
-using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
-using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
-using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxCommerce;
+﻿using Application.IntegrationsCore.Interfaces;
+using Application.LinxMicrovix.Outbound.WebService.Entities.Cache.LinxCommerce;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Cache.LinxCommerce;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxCommerce;
 using Domain.IntegrationsCore.Entities.Enums;
 using Domain.IntegrationsCore.Exceptions;
+using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce;
+using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
+using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Api;
+using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
+using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxCommerce;
 using System.ComponentModel.DataAnnotations;
-using Application.IntegrationsCore.Interfaces;
-using Application.LinxMicrovix.Outbound.WebService.Entities.Cache.LinxCommerce;
-using Application.LinxMicrovix.Outbound.WebService.Interfaces.Cache.LinxCommerce;
 
 namespace Application.LinxMicrovix.Outbound.WebService.Services
 {
-    public class B2CConsultaClientesContatosParentescoService: IB2CConsultaClientesContatosParentescoService
+    public class B2CConsultaClientesContatosParentescoService : IB2CConsultaClientesContatosParentescoService
     {
         private readonly IAPICall _apiCall;
         private readonly ILoggerService _logger;
@@ -113,7 +113,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                     {
                         await _b2cConsultaClientesContatosParentescoRepository.InsertRecord(record: record, jobParameter: jobParameter);
                     }
-                    
+
                     return true;
                 }
 

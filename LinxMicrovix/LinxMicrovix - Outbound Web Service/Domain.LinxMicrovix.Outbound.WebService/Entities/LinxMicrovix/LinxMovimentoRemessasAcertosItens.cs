@@ -15,22 +15,22 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
         [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? empresa { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? transacao { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? qtde_total { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? id_remessa_operacoes { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? id_remessas_itens { get; private set; }
-        
+
         [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 

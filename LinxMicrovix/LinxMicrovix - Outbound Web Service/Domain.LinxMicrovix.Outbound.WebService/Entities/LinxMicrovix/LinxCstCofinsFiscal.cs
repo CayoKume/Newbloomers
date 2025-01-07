@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Domain.IntegrationsCore.CustomValidations;
 using System.ComponentModel.DataAnnotations;
-using Domain.IntegrationsCore.CustomValidations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 {
@@ -15,7 +15,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [Key]
         [Column(TypeName = "int")]
         public Int32? id_csosn_fiscal { get; private set; }
-        
+
         [Column(TypeName = "varchar(5)")]
         [LengthValidation(length: 5, propertyName: "csosn_fiscal")]
         public string? csosn_fiscal { get; private set; }

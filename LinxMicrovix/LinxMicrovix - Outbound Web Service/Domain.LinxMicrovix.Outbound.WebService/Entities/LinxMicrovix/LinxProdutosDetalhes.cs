@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Domain.IntegrationsCore.CustomValidations;
 using System.ComponentModel.DataAnnotations;
-using Domain.IntegrationsCore.CustomValidations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 {
@@ -11,7 +11,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
         [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
-        
+
         [Column(TypeName = "varchar(14)")]
         [LengthValidation(length: 14, propertyName: "cnpj_emp")]
         public string? cnpj_emp { get; private set; }
@@ -19,45 +19,45 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [Key]
         [Column(TypeName = "int")]
         public Int64? cod_produto { get; private set; }
-        
+
         [Column(TypeName = "varchar(20)")]
         [LengthValidation(length: 20, propertyName: "cod_barra")]
         public string? cod_barra { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? quantidade { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? preco_custo { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? preco_venda { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? custo_medio { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? id_config_tributaria { get; private set; }
-        
+
         [Column(TypeName = "varchar(100)")]
         [LengthValidation(length: 100, propertyName: "desc_config_tributaria")]
         public string? desc_config_tributaria { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? despesas1 { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? qtde_minima { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? qtde_maxima { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? ipi { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int64? timestamp { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? empresa { get; private set; }
 

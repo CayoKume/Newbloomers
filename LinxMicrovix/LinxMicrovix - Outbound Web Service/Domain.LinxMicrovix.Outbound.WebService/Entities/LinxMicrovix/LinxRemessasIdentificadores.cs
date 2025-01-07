@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Domain.IntegrationsCore.CustomValidations;
 using System.ComponentModel.DataAnnotations;
-using Domain.IntegrationsCore.CustomValidations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 {
@@ -18,22 +18,22 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [Key]
         [Column(TypeName = "int")]
         public Int32? id_remessas { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? id_remessas_acertos { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? transacao_acerto { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public decimal? qtde_total_acerto { get; private set; }
-        
+
         [Column(TypeName = "uniqueidentifier")]
         public Guid? identificador_devolucao { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? transacao_remessa { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? id_remessa_operacoes { get; private set; }
 

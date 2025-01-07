@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Domain.IntegrationsCore.CustomValidations;
 using System.ComponentModel.DataAnnotations;
-using Domain.IntegrationsCore.CustomValidations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 {
@@ -15,25 +15,25 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
         [Column(TypeName = "int")]
         public Int32? id_devolucao_remanejo_fabrica { get; private set; }
-        
+
         [Column(TypeName = "bigint")]
         public Int64? codigoproduto { get; private set; }
-        
+
         [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "codigo_produto_franqueadora")]
         public string? codigo_produto_franqueadora { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? quantidade { get; private set; }
-        
+
         [Column(TypeName = "varchar(20)")]
         [LengthValidation(length: 20, propertyName: "codebar")]
         public string? codebar { get; private set; }
-        
+
         [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "serial")]
         public string? serial { get; private set; }
-        
+
         [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
@@ -52,7 +52,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         )
         {
             lastupdateon = DateTime.Now;
-            
+
             this.id_devolucao_remanejo_fabrica_item =
                 ConvertToInt32Validation.IsValid(id_devolucao_remanejo_fabrica_item, "id_devolucao_remanejo_fabrica_item", listValidations) ?
                 Convert.ToInt32(id_devolucao_remanejo_fabrica_item) :

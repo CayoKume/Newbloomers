@@ -12,32 +12,32 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [Key]
         [Column(TypeName = "int")]
         public Int32? id_pagamento_parcial_tmp { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? id_vendas_pos { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? valor { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? ajuste_valor_desc_acresc_plano { get; private set; }
-        
+
         [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? plano { get; private set; }
-        
+
         [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "forma_pgto")]
         public string? forma_pgto { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? id_bandeira { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? qtde_parcelas { get; private set; }
-        
+
         [Column(TypeName = "varchar(1)")]
         [LengthValidation(length: 1, propertyName: "credito_debito")]
         public string? credito_debito { get; private set; }

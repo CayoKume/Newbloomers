@@ -19,7 +19,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [Column(TypeName = "100")]
         [LengthValidation(length: 100, propertyName: "nome_parceiro")]
         public string? nome_parceiro { get; private set; }
-        
+
         [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 

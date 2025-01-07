@@ -1,6 +1,4 @@
-﻿using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxCommerce;
-using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxMicrovix;
-using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
+﻿using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
 
 namespace Hangfire.IO.Extensions.RecurringJobs
 {
@@ -82,26 +80,26 @@ namespace Hangfire.IO.Extensions.RecurringJobs
         private static void LinxMicrovixRecurringJobs()
         {
             //RecurringJob.AddOrUpdate<ILinxProdutosCodBarService>("LinxProdutosCodBar", service => service.GetRecords(
-                //new LinxAPIParam
-                //{
-                //    docMainCompany = _docMainCompany,
-                //    databaseName = _databaseName,
-                //    projectName = _projectName,
-                //    keyAuthorization = _key,
-                //    userAuthentication = _authentication,
-                //    parametersTableName = _parametersTableName,
-                //    parametersLogTableName = _parametersLogTableName,
-                //    parametersInterval = _parametersInterval,
-                //    jobName = _methods
-                //                .Where(m => m.MethodName == "LinxProdutosCodBar")
-                //                .FirstOrDefault().MethodName,
-                //    tableName = _methods
-                //                .Where(m => m.MethodName == "LinxProdutosCodBar")
-                //                .FirstOrDefault().MethodName
-                //}
-                //),
-                //Cron.MinuteInterval(3)
-                //, queue: "srv-vm-app02"
+            //new LinxAPIParam
+            //{
+            //    docMainCompany = _docMainCompany,
+            //    databaseName = _databaseName,
+            //    projectName = _projectName,
+            //    keyAuthorization = _key,
+            //    userAuthentication = _authentication,
+            //    parametersTableName = _parametersTableName,
+            //    parametersLogTableName = _parametersLogTableName,
+            //    parametersInterval = _parametersInterval,
+            //    jobName = _methods
+            //                .Where(m => m.MethodName == "LinxProdutosCodBar")
+            //                .FirstOrDefault().MethodName,
+            //    tableName = _methods
+            //                .Where(m => m.MethodName == "LinxProdutosCodBar")
+            //                .FirstOrDefault().MethodName
+            //}
+            //),
+            //Cron.MinuteInterval(3)
+            //, queue: "srv-vm-app02"
             //);
         }
 

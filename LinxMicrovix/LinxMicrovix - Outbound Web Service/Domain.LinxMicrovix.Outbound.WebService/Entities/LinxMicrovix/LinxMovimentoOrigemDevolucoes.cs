@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Domain.IntegrationsCore.CustomValidations;
 using System.ComponentModel.DataAnnotations;
-using Domain.IntegrationsCore.CustomValidations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
@@ -17,26 +17,26 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [Column(TypeName = "varchar(14)")]
         [LengthValidation(length: 14, propertyName: "cnpj_emp")]
         public string? cnpj_emp { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? nota_origem { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? ecf_origem { get; private set; }
-        
+
         [Column(TypeName = "datetime")]
         public DateTime? data_origem { get; private set; }
-        
+
         [Column(TypeName = "varchar(10)")]
         [LengthValidation(length: 10, propertyName: "serie_origem")]
         public string? serie_origem { get; private set; }
 
         [Column(TypeName = "int")]
         public Int32? empresa { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
-        
+
         [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 

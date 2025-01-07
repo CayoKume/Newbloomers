@@ -15,28 +15,28 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
         [Column(TypeName = "int")]
         public Int32? empresa_baixa { get; private set; }
-        
+
         [Column(TypeName = "varchar(14)")]
         [LengthValidation(length: 14, propertyName: "cnpj_empresa_baixa")]
         public string? cnpj_empresa_baixa { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? id_troca_baixa { get; private set; }
 
         [Key]
         [Column(TypeName = "bigint")]
         public Int64? id_troca_unificada_resumo_vendas_itens { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public DateTime? data_troca_baixa { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? transacao_baixa { get; private set; }
-        
+
         [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "descricao_empresa_baixa")]
         public string? descricao_empresa_baixa { get; private set; }
-        
+
         [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 

@@ -21,12 +21,12 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [Column(TypeName = "varchar(200)")]
         [LengthValidation(length: 200, propertyName: "descricao")]
         public string? descricao { get; private set; }
-        
+
         [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
         public LinxUnidades() { }
-        
+
         public LinxUnidades(
             List<ValidationResult> listValidations,
             string? unidade,

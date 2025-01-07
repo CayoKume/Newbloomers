@@ -1,6 +1,4 @@
-﻿using Hangfire.IO.Extensions.RecurringJobs;
-
-namespace Hangfire.IO.Extensions
+﻿namespace Hangfire.IO.Extensions
 {
     public static class AppUseExtensions
     {

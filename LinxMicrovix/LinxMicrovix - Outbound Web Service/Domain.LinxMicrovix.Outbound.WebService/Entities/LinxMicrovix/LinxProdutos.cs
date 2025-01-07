@@ -20,157 +20,157 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [Column(TypeName = "varchar(20)")]
         [LengthValidation(length: 20, propertyName: "cod_barra")]
         public string? cod_barra { get; private set; }
-        
+
         [Column(TypeName = "varchar(250)")]
         [LengthValidation(length: 250, propertyName: "nome")]
         public string? nome { get; private set; }
-        
+
         [Column(TypeName = "varchar(20)")]
         [LengthValidation(length: 20, propertyName: "ncm")]
         public string? ncm { get; private set; }
-        
+
         [Column(TypeName = "varchar(10)")]
         [LengthValidation(length: 10, propertyName: "cest")]
         public string? cest { get; private set; }
-        
+
         [Column(TypeName = "varchar(20)")]
         [LengthValidation(length: 20, propertyName: "referencia")]
         public string? referencia { get; private set; }
-        
+
         [Column(TypeName = "varchar(40)")]
         [LengthValidation(length: 40, propertyName: "cod_auxiliar")]
         public string? cod_auxiliar { get; private set; }
-        
+
         [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "unidade")]
         public string? unidade { get; private set; }
-        
+
         [Column(TypeName = "varchar(30)")]
         [LengthValidation(length: 30, propertyName: "desc_cor")]
         public string? desc_cor { get; private set; }
-        
+
         [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "desc_tamanho")]
         public string? desc_tamanho { get; private set; }
-        
+
         [Column(TypeName = "varchar(30)")]
         [LengthValidation(length: 30, propertyName: "desc_setor")]
         public string? desc_setor { get; private set; }
-        
+
         [Column(TypeName = "varchar(30)")]
         [LengthValidation(length: 30, propertyName: "desc_linha")]
         public string? desc_linha { get; private set; }
-        
+
         [Column(TypeName = "varchar(30)")]
         [LengthValidation(length: 30, propertyName: "desc_marca")]
         public string? desc_marca { get; private set; }
-        
+
         [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "desc_colecao")]
         public string? desc_colecao { get; private set; }
 
         [Column(TypeName = "datetime")]
         public DateTime? dt_update { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? cod_fornecedor { get; private set; }
-        
+
         [Column(TypeName = "char(10)")]
         [LengthValidation(length: 10, propertyName: "desativado")]
         public string? desativado { get; private set; }
-        
+
         [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "desc_espessura")]
         public string? desc_espessura { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? id_espessura { get; private set; }
-        
+
         [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "desc_classificacao")]
         public string? desc_classificacao { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? id_classificacao { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? origem_mercadoria { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? peso_liquido { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? peso_bruto { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? id_cor { get; private set; }
-        
+
         [Column(TypeName = "varchar(5)")]
         [LengthValidation(length: 5, propertyName: "id_tamanho")]
         public string? id_tamanho { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? id_setor { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? id_linha { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? id_marca { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? id_colecao { get; private set; }
 
         [Column(TypeName = "datetime")]
         public DateTime? dt_inclusao { get; private set; }
-        
+
         [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? fator_conversao { get; private set; }
-        
+
         [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "codigo_integracao_ws")]
         public string? codigo_integracao_ws { get; private set; }
-        
+
         [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "codigo_integracao_reshop")]
         public string? codigo_integracao_reshop { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? id_produtos_opticos_tipo { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? id_sped_tipo_item { get; private set; }
-        
+
         [Column(TypeName = "char(1)")]
         [LengthValidation(length: 1, propertyName: "componente")]
         public string? componente { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? altura_para_frete { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? largura_para_frete { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? comprimento_para_frete { get; private set; }
 
         [Column(TypeName = "char(1)")]
         [LengthValidation(length: 1, propertyName: "loja_virtual")]
         public string? loja_virtual { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? cod_comprador { get; private set; }
 
         [Column(TypeName = "bit")]
         public bool? obrigatorio_identificacao_cliente { get; private set; }
-        
+
         [Column(TypeName = "varchar(100)")]
         [LengthValidation(length: 100, propertyName: "descricao_basica")]
         public string? descricao_basica { get; private set; }
-        
+
         [Column(TypeName = "char(1)")]
         [LengthValidation(length: 1, propertyName: "curva")]
         public string? curva { get; private set; }

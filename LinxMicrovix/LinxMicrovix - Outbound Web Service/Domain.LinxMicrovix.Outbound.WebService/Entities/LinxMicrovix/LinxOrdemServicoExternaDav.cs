@@ -15,11 +15,11 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
         [Column(TypeName = "int")]
         public Int32? id_vendas_pos { get; private set; }
-        
+
         [Column(TypeName = "varchar(20)")]
         [LengthValidation(length: 20, propertyName: "codigo_ordem_servico_externa")]
         public string? codigo_ordem_servico_externa { get; private set; }
-        
+
         [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 

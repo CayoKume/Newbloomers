@@ -1,12 +1,12 @@
-﻿using Hangfire.SqlServer;
+﻿using Application.IntegrationsCore.Interfaces;
+using Application.IntegrationsCore.Services;
+using Hangfire.SqlServer;
+using Infrastructure.DatabaseInit;
+using Infrastructure.FlashCourier.DependencyInjection;
 using Infrastructure.IntegrationsCore.DependencyInjection;
 using Infrastructure.LinxCommerce.DependencyInjection;
 using Infrastructure.LinxMicrovix.Outbound.WebService.DependencyInjection;
 using Infrastructure.TotalExpress.DependencyInjection;
-using Infrastructure.FlashCourier.DependencyInjection;
-using Application.IntegrationsCore.Interfaces;
-using Application.IntegrationsCore.Services;
-using Infrastructure.DatabaseInit;
 namespace Hangfire.IO.Extensions
 {
     public static class ServicesExtensions

@@ -1,16 +1,16 @@
-﻿using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce;
-using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
-using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Api;
-using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxCommerce;
-using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
-using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxCommerce;
-using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
-using Domain.IntegrationsCore.Exceptions;
-using Application.IntegrationsCore.Interfaces;
-using System.ComponentModel.DataAnnotations;
-using Domain.IntegrationsCore.Entities.Enums;
+﻿using Application.IntegrationsCore.Interfaces;
 using Application.LinxMicrovix.Outbound.WebService.Entities.Cache.LinxCommerce;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Cache.LinxCommerce;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxCommerce;
+using Domain.IntegrationsCore.Entities.Enums;
+using Domain.IntegrationsCore.Exceptions;
+using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce;
+using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
+using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Api;
+using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
+using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxCommerce;
+using System.ComponentModel.DataAnnotations;
 
 namespace Application.LinxMicrovix.Outbound.WebService.Services
 {
@@ -31,10 +31,10 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
         public B2CConsultaClassificacaoService(
             IAPICall apiCall,
             ILoggerService logger,
-            IB2CConsultaClassificacaoRepository b2cConsultaClassificacaoRepository, 
+            IB2CConsultaClassificacaoRepository b2cConsultaClassificacaoRepository,
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
             ILinxMicrovixRepositoryBase<B2CConsultaClassificacao> linxMicrovixRepositoryBase
-        ) 
+        )
         {
             _apiCall = apiCall;
             _logger = logger;
@@ -152,7 +152,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                     jobParameter: jobParameter,
                     cnpj_emp: cnpj_emp);
 
-                string? response = await _apiCall.PostAsync(jobParameter: jobParameter, body: body);  
+                string? response = await _apiCall.PostAsync(jobParameter: jobParameter, body: body);
                 var xmls = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response);
 
                 if (xmls.Count() > 0)
@@ -178,7 +178,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
         public List<B2CConsultaClassificacao?> DeserializeXMLToObject(LinxAPIParam jobParameter, List<Dictionary<string?, string?>> records)
         {
             var list = new List<B2CConsultaClassificacao>();
-            for(int i = 0; i < records.Count(); i++)
+            for (int i = 0; i < records.Count(); i++)
             {
                 try
                 {

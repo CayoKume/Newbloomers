@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Domain.DatabaseInit.Interfaces.LinxMicrovix.LinxMicrovix
+﻿namespace Domain.DatabaseInit.Interfaces.LinxMicrovix.LinxMicrovix
 {
-      public interface ILinxLinhasRepository
-{
-}
+    public interface ILinxLinhasRepository
+    {
+        public Task<bool> InsertParametersIfNotExists(string jobName, string parametersTableName, string databaseName);
+        public bool CreateDataTableIfNotExists(string databaseName, string jobName, string untreatedDatabaseName);
+        public Task<bool> CreateTableMerge(string databaseName, string tableName);
+    }
 }

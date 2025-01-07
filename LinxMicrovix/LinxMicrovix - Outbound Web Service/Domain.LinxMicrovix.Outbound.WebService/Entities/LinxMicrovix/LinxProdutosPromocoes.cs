@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Domain.IntegrationsCore.CustomValidations;
 using System.ComponentModel.DataAnnotations;
-using Domain.IntegrationsCore.CustomValidations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
@@ -20,33 +20,33 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [Key]
         [Column(TypeName = "bigint")]
         public Int64? cod_produto { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? preco_promocao { get; private set; }
-        
+
         [Column(TypeName = "datetime")]
         public DateTime? data_inicio_promocao { get; private set; }
-        
+
         [Column(TypeName = "datetime")]
         public DateTime? data_termino_promocao { get; private set; }
-        
+
         [Column(TypeName = "datetime")]
         public DateTime? data_cadastro_promocao { get; private set; }
-        
+
         [Column(TypeName = "char(1)")]
         [LengthValidation(length: 1, propertyName: "promocao_ativa")]
         public string? promocao_ativa { get; private set; }
-        
+
         [Column(TypeName = "bigint")]
         public Int64? id_campanha { get; private set; }
-        
+
         [Column(TypeName = "varchar(60)")]
         [LengthValidation(length: 60, propertyName: "nome_campanha")]
         public string? nome_campanha { get; private set; }
-        
+
         [Column(TypeName = "bit")]
         public bool? promocao_opcional { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? custo_total_campanha { get; private set; }
 

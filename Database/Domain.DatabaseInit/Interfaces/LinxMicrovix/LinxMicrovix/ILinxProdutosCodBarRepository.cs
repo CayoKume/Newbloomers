@@ -1,6 +1,4 @@
-﻿
-
-namespace Domain.DatabaseInit.Interfaces.LinxMicrovix.LinxMicrovix
+﻿namespace Domain.DatabaseInit.Interfaces.LinxMicrovix.LinxMicrovix
 {
     public interface ILinxProdutosCodBarRepository
     {

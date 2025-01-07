@@ -19,19 +19,19 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [Key]
         [Column(TypeName = "uniqueidentifier")]
         public Guid? identificador { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? transacao { get; private set; }
-        
+
         [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "serial")]
         public string? serial { get; private set; }
-        
+
         [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
         public LinxMovimentoSerial() { }
-        
+
         public LinxMovimentoSerial(
             List<ValidationResult> listValidations,
             string? portal,

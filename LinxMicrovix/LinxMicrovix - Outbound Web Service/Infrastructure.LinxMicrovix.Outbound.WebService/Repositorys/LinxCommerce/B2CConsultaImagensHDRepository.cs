@@ -1,13 +1,13 @@
 ﻿using Domain.IntegrationsCore.Entities.Enums;
-using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
 using Domain.IntegrationsCore.Exceptions;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce;
+using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxCommerce;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerce
 {
-    public class B2CConsultaImagensHDRepository :IB2CConsultaImagensHDRepository
+    public class B2CConsultaImagensHDRepository : IB2CConsultaImagensHDRepository
     {
         private readonly ILinxMicrovixRepositoryBase<B2CConsultaImagensHD> _linxMicrovixRepositoryBase;
 

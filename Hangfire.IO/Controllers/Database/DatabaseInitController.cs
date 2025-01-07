@@ -1,7 +1,6 @@
 ﻿using Application.DatabaseInit.Interfaces;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
 using Microsoft.AspNetCore.Mvc;
-using System.Configuration;
 
 namespace Hangfire.IO.Controllers.Database
 {

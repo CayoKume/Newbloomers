@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Domain.IntegrationsCore.CustomValidations;
 using System.ComponentModel.DataAnnotations;
-using Domain.IntegrationsCore.CustomValidations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
@@ -24,13 +24,13 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "descricao_meta")]
         public string? descricao_meta { get; private set; }
-        
+
         [Column(TypeName = "datetime")]
         public DateTime? data_inicial_meta { get; private set; }
-        
+
         [Column(TypeName = "datetime")]
         public DateTime? data_final_meta { get; private set; }
-        
+
         [Column(TypeName = "datetime")]
         public DateTime? dia { get; private set; }
 

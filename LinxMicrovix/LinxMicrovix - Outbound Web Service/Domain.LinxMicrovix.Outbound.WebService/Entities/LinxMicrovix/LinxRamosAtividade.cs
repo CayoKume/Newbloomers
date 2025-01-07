@@ -15,15 +15,15 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
         [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
-        
+
         [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "nome_ramo_atividade")]
         public string? nome_ramo_atividade { get; private set; }
-        
+
         [Column(TypeName = "varchar(12)")]
         [LengthValidation(length: 12, propertyName: "codigo_ramo_atividade")]
         public string? codigo_ramo_atividade { get; private set; }
-        
+
         [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 

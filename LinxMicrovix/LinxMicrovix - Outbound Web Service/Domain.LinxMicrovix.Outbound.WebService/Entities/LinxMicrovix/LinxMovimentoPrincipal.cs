@@ -1,7 +1,6 @@
 ﻿using Domain.IntegrationsCore.CustomValidations;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Globalization;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 {
@@ -16,32 +15,32 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
         [Column(TypeName = "uniqueidentifier")]
         public Guid? identificador { get; private set; }
-        
+
         [Column(TypeName = "bigint")]
         public Int64? codigoproduto_manutencao { get; private set; }
-        
+
         [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? id_pergunta_venda { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? id_resposta_venda { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? total_fidelidade_cashback { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? plano_fidelidade_cashback { get; private set; }
-        
+
         [Column(TypeName = "varchar(30)")]
         [LengthValidation(length: 30, propertyName: "remessa_pedido_compra")]
         public string? remessa_pedido_compra { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? id_motivo_desconto { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? valor_nota { get; private set; }
 

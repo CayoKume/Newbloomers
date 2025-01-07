@@ -1,7 +1,6 @@
 ﻿using Domain.TotalExpress.Interfaces.Api;
 using Newtonsoft.Json.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Text;
 
 namespace Infrastructure.TotalExpress.Api
@@ -17,12 +16,12 @@ namespace Infrastructure.TotalExpress.Api
         {
             var client = CreateClient(clientName, parameters);
 
-            if(rote == "previsao_entrega_atualizada.php")
+            if (rote == "previsao_entrega_atualizada.php")
                 Thread.Sleep(1000);
 
             var response = await client.PostAsync(
-                client.BaseAddress + rote, 
-                new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(jObject), 
+                client.BaseAddress + rote,
+                new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(jObject),
                 Encoding.UTF8, "application/json")
             );
 

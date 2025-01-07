@@ -15,11 +15,11 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
         [Column(TypeName = "uniqueidentifier")]
         public Guid? identificador { get; private set; }
-        
+
         [Column(TypeName = "varchar(20)")]
         [LengthValidation(length: 20, propertyName: "codigo_ordem_servico")]
         public string? codigo_ordem_servico { get; private set; }
-        
+
         [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 

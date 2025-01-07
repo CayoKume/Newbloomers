@@ -3,8 +3,8 @@ using Application.TotalExpress.Services;
 using Domain.TotalExpress.Interfaces.Api;
 using Domain.TotalExpress.Interfaces.Repository;
 using Infrastructure.TotalExpress.Api;
-using Microsoft.Extensions.DependencyInjection;
 using Infrastructure.TotalExpress.Repository;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Infrastructure.TotalExpress.DependencyInjection
 {

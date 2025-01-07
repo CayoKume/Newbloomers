@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Domain.IntegrationsCore.CustomValidations;
 using System.ComponentModel.DataAnnotations;
-using Domain.IntegrationsCore.CustomValidations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
@@ -20,20 +20,20 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [Column(TypeName = "varchar(4)")]
         [LengthValidation(length: 4, propertyName: "cst_pis_fiscal")]
         public string? cst_pis_fiscal { get; private set; }
-        
+
         [Column(TypeName = "varchar(150)")]
         [LengthValidation(length: 150, propertyName: "descricao")]
         public string? descricao { get; private set; }
-        
+
         [Column(TypeName = "bit")]
         public bool? excluido { get; private set; }
-        
+
         [Column(TypeName = "datetime")]
         public DateTime? inicio_vigencia { get; private set; }
-        
+
         [Column(TypeName = "datetime")]
         public DateTime? termino_vigencia { get; private set; }
-        
+
         [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 

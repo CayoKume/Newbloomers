@@ -18,17 +18,17 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
         [Column(TypeName = "int")]
         public Int32? empresa { get; private set; }
-        
+
         [Column(TypeName = "varchar(60)")]
         [LengthValidation(length: 60, propertyName: "lote")]
         public string? lote { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? deposito { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? saldo_disponivel { get; private set; }
-        
+
         [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 

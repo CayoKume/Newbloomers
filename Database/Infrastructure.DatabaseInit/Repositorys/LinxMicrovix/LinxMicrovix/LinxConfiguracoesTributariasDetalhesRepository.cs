@@ -1,13 +1,22 @@
-﻿using Domain.IntegrationsCore.CustomValidations;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Security.AccessControl;
+﻿using Domain.DatabaseInit.Interfaces.LinxMicrovix.LinxMicrovix;
 
 namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxMicrovix
 {
-    public class LinxConfiguracoesTributariasDetalhesRepository
+    public class LinxConfiguracoesTributariasDetalhesRepository : ILinxConfiguracoesTributariasDetalhesRepository
     {
-        
+        public bool CreateDataTableIfNotExists(string databaseName, string jobName, string untreatedDatabaseName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> CreateTableMerge(string databaseName, string tableName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> InsertParametersIfNotExists(string jobName, string parametersTableName, string databaseName)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
- 

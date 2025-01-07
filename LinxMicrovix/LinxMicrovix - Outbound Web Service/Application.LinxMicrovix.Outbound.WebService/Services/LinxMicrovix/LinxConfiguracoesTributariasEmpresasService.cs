@@ -1,12 +1,46 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Application.IntegrationsCore.Interfaces;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxMicrovix;
+using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
+using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
+using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Api;
+using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
 
 namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
 {
-    public class LinxConfiguracoesTributariasEmpresasService
+    public class LinxConfiguracoesTributariasEmpresasService : ILinxConfiguracoesTributariasEmpresasService
     {
+        private readonly IAPICall _apiCall;
+        private readonly ILoggerService _logger;
+        private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
+        private readonly ILinxMicrovixRepositoryBase<LinxConfiguracoesTributariasEmpresas> _linxMicrovixRepositoryBase;
+
+        public LinxConfiguracoesTributariasEmpresasService(
+            IAPICall apiCall,
+            ILoggerService logger,
+            ILinxMicrovixServiceBase linxMicrovixServiceBase,
+            ILinxMicrovixRepositoryBase<LinxConfiguracoesTributariasEmpresas> linxMicrovixRepositoryBase
+        )
+        {
+            _apiCall = apiCall;
+            _logger = logger;
+            _linxMicrovixServiceBase = linxMicrovixServiceBase;
+            _linxMicrovixRepositoryBase = linxMicrovixRepositoryBase;
+        }
+
+        public List<LinxConfiguracoesTributariasEmpresas?> DeserializeXMLToObject(LinxAPIParam jobParameter, List<Dictionary<string?, string?>> records)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> GetRecord(LinxAPIParam jobParameter, string? identificador, string? cnpj_emp)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> GetRecords(LinxAPIParam jobParameter)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

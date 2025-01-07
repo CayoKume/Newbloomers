@@ -3,7 +3,6 @@ using Domain.DatabaseInit.Interfaces.LinxMicrovix.LinxCommerce;
 
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce;
 using Infrastructure.IntegrationsCore.Connections.SQLServer;
-using System.Reflection.Metadata;
 using Z.Dapper.Plus;
 
 namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxCommerce

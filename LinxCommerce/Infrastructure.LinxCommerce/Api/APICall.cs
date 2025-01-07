@@ -22,8 +22,8 @@ namespace Infrastructure.LinxCommerce.Api
                     );
 
                 var response = await client.PostAsync(
-                    client.BaseAddress + route, 
-                    new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(objRequest), 
+                    client.BaseAddress + route,
+                    new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(objRequest),
                     Encoding.UTF8, "application/json")
                 );
 

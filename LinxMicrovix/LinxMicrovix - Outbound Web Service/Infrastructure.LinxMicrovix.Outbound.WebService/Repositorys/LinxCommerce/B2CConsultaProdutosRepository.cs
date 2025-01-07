@@ -1,7 +1,7 @@
 ﻿using Domain.IntegrationsCore.Entities.Enums;
-using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
 using Domain.IntegrationsCore.Exceptions;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce;
+using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxCommerce;
 
@@ -23,8 +23,8 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                 for (int i = 0; i < records.Count(); i++)
                 {
                     table.Rows.Add(records[i].lastupdateon, records[i].codigoproduto, records[i].referencia, records[i].codauxiliar1, records[i].descricao_basica, records[i].nome_produto, records[i].peso_liquido, records[i].codigo_setor,
-                        records[i].codigo_linha, records[i].codigo_marca, records[i].codigo_colecao, records[i].codigo_espessura, records[i].codigo_grade1, records[i].codigo_grade2, records[i].unidade, records[i].ativo, records[i].codigo_classificacao, 
-                        records[i].dt_cadastro, records[i].observacao, records[i].cod_fornecedor, records[i].dt_update, records[i].altura_para_frete, records[i].largura_para_frete, records[i].comprimento_para_frete, records[i].timestamp, records[i].peso_bruto, 
+                        records[i].codigo_linha, records[i].codigo_marca, records[i].codigo_colecao, records[i].codigo_espessura, records[i].codigo_grade1, records[i].codigo_grade2, records[i].unidade, records[i].ativo, records[i].codigo_classificacao,
+                        records[i].dt_cadastro, records[i].observacao, records[i].cod_fornecedor, records[i].dt_update, records[i].altura_para_frete, records[i].largura_para_frete, records[i].comprimento_para_frete, records[i].timestamp, records[i].peso_bruto,
                         records[i].portal, records[i].descricao_completa_commerce, records[i].canais_ecommerce_publicados, records[i].inicio_publicacao_produto, records[i].fim_publicacao_produto, records[i].codigo_integracao_oms);
                 }
 

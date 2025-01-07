@@ -12,23 +12,23 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [Key]
         [Column(TypeName = "uniqueidentifier")]
         public Guid? identificador { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
         [Column(TypeName = "varchar(14)")]
         [LengthValidation(length: 14, propertyName: "cnpj_emp")]
         public string? cnpj_emp { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? transacao { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? id_acoes_promocionais { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? desconto_item { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? quantidade { get; private set; }
 

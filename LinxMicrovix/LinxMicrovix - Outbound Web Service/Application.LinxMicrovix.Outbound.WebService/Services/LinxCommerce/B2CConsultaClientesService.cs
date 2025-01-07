@@ -1,17 +1,17 @@
-﻿using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
-using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce;
-using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxCommerce;
-using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Api;
-using System.Data;
-using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
-using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxCommerce;
-using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
-using Domain.IntegrationsCore.Entities.Enums;
-using Application.IntegrationsCore.Interfaces;
-using Application.LinxMicrovix.Outbound.WebService.Interfaces.Cache.LinxCommerce;
+﻿using Application.IntegrationsCore.Interfaces;
 using Application.LinxMicrovix.Outbound.WebService.Entities.Cache.LinxCommerce;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Cache.LinxCommerce;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxCommerce;
+using Domain.IntegrationsCore.Entities.Enums;
 using Domain.IntegrationsCore.Exceptions;
+using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce;
+using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
+using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Api;
+using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
+using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxCommerce;
 using System.ComponentModel.DataAnnotations;
+using System.Data;
 
 
 namespace Application.LinxMicrovix.Outbound.WebService.Services
@@ -50,7 +50,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
         {
             var list = new List<B2CConsultaClientes>();
 
-            for(int i = 0; i < records.Count(); i++)
+            for (int i = 0; i < records.Count(); i++)
             {
                 try
                 {

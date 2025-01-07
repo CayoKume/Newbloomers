@@ -15,19 +15,19 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
         [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
-        
+
         [Column(TypeName = "bigint")]
         public Int64? codigoproduto_origem { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? coeficiente_desconto { get; private set; }
-        
+
         [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? qtde_item { get; private set; }
-        
+
         [Column(TypeName = "bit")]
         public bool? item_obrigatorio { get; private set; }
 

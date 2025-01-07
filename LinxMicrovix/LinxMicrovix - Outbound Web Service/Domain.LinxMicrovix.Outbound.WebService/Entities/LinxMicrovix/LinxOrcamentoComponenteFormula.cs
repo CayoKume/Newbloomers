@@ -16,42 +16,42 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
         [Column(TypeName = "int")]
         public Int32? documento { get; private set; }
-        
+
         [Column(TypeName = "bigint")]
         public Int64? codigo_produto { get; private set; }
-        
+
         [Column(TypeName = "varchar(10)")]
         [LengthValidation(length: 10, propertyName: "codigo_componente")]
         public string? codigo_componente { get; private set; }
-        
+
         [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "descricao_componente")]
         public string? descricao_componente { get; private set; }
-        
+
         [Column(TypeName = "varchar(5)")]
         [LengthValidation(length: 5, propertyName: "unidade")]
         public string? unidade { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public decimal? quantidade { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public decimal? valor_componente { get; private set; }
-        
+
         [Column(TypeName = "varchar(30)")]
         [LengthValidation(length: 30, propertyName: "lote_componente")]
         public string? lote_componente { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public DateTime? data_validade_lote { get; private set; }
-        
+
         [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "codigo_ws")]
         public string? codigo_ws { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
-        
+
         [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 

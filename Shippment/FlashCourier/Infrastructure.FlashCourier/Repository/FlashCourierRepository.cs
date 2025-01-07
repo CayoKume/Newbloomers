@@ -4,7 +4,6 @@ using Domain.FlashCourier.Interfaces.Repository;
 using Infrastructure.IntegrationsCore.Connections.MySQL;
 using Infrastructure.IntegrationsCore.Connections.PostgreSQL;
 using Infrastructure.IntegrationsCore.Connections.SQLServer;
-using Newtonsoft.Json;
 using System.Data;
 using static Dapper.SqlMapper;
 
@@ -30,10 +29,11 @@ namespace Infrastructure.FlashCourier.Repository
         {
             string? sql = $@"INSERT INTO [GENERAL].[dbo].[FLASHCOURIERREQUESTLOG] (PEDIDO, DATAENVIO, REQUEST) 
                          VALUES(@OrderNumber, GETDATE(), @request)";
-            
-            var parameter = new { 
-                OrderNumber = orderNumber, 
-                Request = request 
+
+            var parameter = new
+            {
+                OrderNumber = orderNumber,
+                Request = request
             };
 
             try
@@ -74,13 +74,14 @@ namespace Infrastructure.FlashCourier.Repository
         {
             string? sql = $@"INSERT INTO [GENERAL].[dbo].[FLASHCOURIERREGISTROLOG] (PEDIDO, DATAENVIO, RETORNO, REMETENTE, STATUSFLASH, CHAVENFE) 
                          VALUES(@OrderNumber, GETDATE(), @Return, @SenderID, @StatusFlash, @KeyNFe)";
-            
-            var parameter = new { 
-                OrderNumber = orderNumber, 
-                Return = _return, 
-                SenderID = senderID, 
-                StatusFlash = statusFlash, 
-                KeyNFe = keyNFe 
+
+            var parameter = new
+            {
+                OrderNumber = orderNumber,
+                Return = _return,
+                SenderID = senderID,
+                StatusFlash = statusFlash,
+                KeyNFe = keyNFe
             };
 
             try

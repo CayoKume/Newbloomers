@@ -15,11 +15,11 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
         [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
-        
+
         [Column(TypeName = "varchar(200)")]
         [LengthValidation(length: 200, propertyName: "descricao_pergunta")]
         public string? descricao_pergunta { get; private set; }
-        
+
         [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
@@ -30,7 +30,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             string? portal,
             string? id_pergunta_venda,
             string? descricao_pergunta,
-            string? timestamp 
+            string? timestamp
         )
         {
             lastupdateon = DateTime.Now;

@@ -25,7 +25,7 @@ namespace Application.FlashCourier.Services
 
                 if (order is not null)
                 {
-                    var jObject = BuildJObject(order,parameters);
+                    var jObject = BuildJObject(order, parameters);
 
                     await _flashCourierRepository.GenerateRequestLog(
                         order.number,
@@ -33,12 +33,12 @@ namespace Application.FlashCourier.Services
                     );
 
                     string? result = await _apiCall.PostAsync(
-                        parameters.login, 
-                        parameters.senha, 
-                        jObject, 
+                        parameters.login,
+                        parameters.senha,
+                        jObject,
                         "/padrao/importacao"
                     );
-                    
+
                     var postHAWB = JsonConvert.DeserializeObject<List<AWBSucessResponse>>(result);
                     var statusFlash = postHAWB.FirstOrDefault().type.ToUpper() == "SUCESS" ? "Enviado" : "Erro_Flash";
 
@@ -81,12 +81,12 @@ namespace Application.FlashCourier.Services
                         );
 
                         string? result = await _apiCall.PostAsync(
-                            parameters.login, 
-                            parameters.senha, 
-                            jObject, 
+                            parameters.login,
+                            parameters.senha,
+                            jObject,
                             "/padrao/importacao"
                         );
-                        
+
                         var postHAWB = JsonConvert.DeserializeObject<List<AWBSucessResponse>>(result);
                         var statusFlash = postHAWB.FirstOrDefault().type.ToUpper() == "SUCESS" ? "Enviado" : "Erro_Flash";
 

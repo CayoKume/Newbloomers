@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Domain.IntegrationsCore.CustomValidations;
 using System.ComponentModel.DataAnnotations;
-using Domain.IntegrationsCore.CustomValidations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
@@ -19,36 +19,36 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
         [Column(TypeName = "int")]
         public Int32? id_cupom_desconto { get; private set; }
-        
+
         [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "cupom")]
         public string? cupom { get; private set; }
-        
+
         [Column(TypeName = "varchar(255)")]
         [LengthValidation(length: 255, propertyName: "descricao")]
         public string? descricao { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? percentual_desconto { get; private set; }
-        
+
         [Column(TypeName = "datetime")]
         public DateTime? data_inicial_vigencia { get; private set; }
-        
+
         [Column(TypeName = "datetime")]
         public DateTime? data_final_vigencia { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? qtde_original { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? qtde_disponivel { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? cod_vendedor { get; private set; }
-        
+
         [Column(TypeName = "bit")]
         public bool? disponivel { get; private set; }
-        
+
         [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 

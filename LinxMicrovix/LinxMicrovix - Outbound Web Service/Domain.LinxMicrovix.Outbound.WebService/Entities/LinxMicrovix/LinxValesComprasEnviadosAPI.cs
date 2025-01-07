@@ -23,25 +23,25 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
         [Column(TypeName = "int")]
         public Int32? status_vale { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? codigo_portal_resgate { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? codigo_empresa_resgate { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? codigo_usuario_resgate { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? codigo_vale_empresa_resgate { get; private set; }
 
         [Column(TypeName = "datetime")]
         public DateTime? data_criacao { get; private set; }
-        
+
         [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
-        
+
         [Column(TypeName = "varchar(14)")]
         [LengthValidation(length: 14, propertyName: "cnpj_empresa_resgate")]
         public string? cnpj_empresa_resgate { get; private set; }

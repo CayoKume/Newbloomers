@@ -4,7 +4,6 @@ using Domain.TotalExpress.Interfaces.Repository;
 using Infrastructure.IntegrationsCore.Connections.MySQL;
 using Infrastructure.IntegrationsCore.Connections.PostgreSQL;
 using Infrastructure.IntegrationsCore.Connections.SQLServer;
-using Newtonsoft.Json;
 using System.Data;
 
 namespace Infrastructure.TotalExpress.Repository
@@ -28,9 +27,10 @@ namespace Infrastructure.TotalExpress.Repository
         {
             string? sql = $@"INSERT INTO [GENERAL].[dbo].[TOTALEXPRESSREQUESTLOG] (PEDIDO, DATAENVIO, REQUEST) 
                             VALUES (@OrderNumber, GETDATE(), @Request)";
-            var parameter = new { 
-                OrderNumber = orderNumber, 
-                Request = request.Replace("'", "''") 
+            var parameter = new
+            {
+                OrderNumber = orderNumber,
+                Request = request.Replace("'", "''")
             };
 
             try
@@ -71,7 +71,8 @@ namespace Infrastructure.TotalExpress.Repository
         {
             string? sql = @$"INSERT INTO [GENERAL].[dbo].[TOTALEXPRESSREGISTROLOG] (PEDIDO, REMETENTEID, DATAENVIO, RETORNO) 
                          VALUES (@OrderNumber, @SenderID, GETDATE(), @Return)";
-            var parameter = new {
+            var parameter = new
+            {
                 OrderNumber = orderNumber,
                 Return = response,
                 SenderID = sender_id

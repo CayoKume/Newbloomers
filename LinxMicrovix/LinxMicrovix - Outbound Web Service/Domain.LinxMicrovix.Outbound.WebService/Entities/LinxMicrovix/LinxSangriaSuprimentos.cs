@@ -16,29 +16,29 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [Column(TypeName = "varchar(14)")]
         [LengthValidation(length: 14, propertyName: "cnpj_emp")]
         public string? cnpj_emp { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? usuario { get; private set; }
-        
+
         [Column(TypeName = "datetime")]
         public DateTime? data { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? valor { get; private set; }
-        
+
         [Column(TypeName = "varchar(max)")]
         public string? obs { get; private set; }
-        
+
         [Column(TypeName = "char(1)")]
         [LengthValidation(length: 1, propertyName: "cancelado")]
         public string? cancelado { get; private set; }
-        
+
         [Column(TypeName = "bit")]
         public bool? conferido { get; private set; }
-        
+
         [Column(TypeName = "bigint")]
         public Int64? cod_historico { get; private set; }
-        
+
         [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "desc_historico")]
         public string? desc_historico { get; private set; }

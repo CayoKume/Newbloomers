@@ -1,9 +1,9 @@
-﻿using Domain.IntegrationsCore.Exceptions;
-using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
+﻿using Domain.IntegrationsCore.Entities.Enums;
+using Domain.IntegrationsCore.Exceptions;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce;
+using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxCommerce;
-using Domain.IntegrationsCore.Entities.Enums;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerce
 {
@@ -11,7 +11,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
     {
         private readonly ILinxMicrovixRepositoryBase<B2CConsultaClientes> _linxMicrovixRepositoryBase;
 
-        public B2CConsultaClientesRepository (ILinxMicrovixRepositoryBase<B2CConsultaClientes> linxMicrovixRepositoryBase) =>
+        public B2CConsultaClientesRepository(ILinxMicrovixRepositoryBase<B2CConsultaClientes> linxMicrovixRepositoryBase) =>
             (_linxMicrovixRepositoryBase) = (linxMicrovixRepositoryBase);
 
         public bool BulkInsertIntoTableRaw(LinxAPIParam jobParameter, IList<B2CConsultaClientes> records)
@@ -30,8 +30,8 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                 }
 
                 _linxMicrovixRepositoryBase.BulkInsertIntoTableRaw(
-                    jobParameter: jobParameter, 
-                    dataTable: table, 
+                    jobParameter: jobParameter,
+                    dataTable: table,
                     dataTableRowsNumber: table.Rows.Count
                 );
 

@@ -1,16 +1,16 @@
 ﻿using Dapper;
-using System.Data;
-using Microsoft.Extensions.Configuration;
-using System.Data.SqlClient;
-using System.ComponentModel;
-using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
-using Infrastructure.IntegrationsCore.Connections.PostgreSQL;
-using Infrastructure.IntegrationsCore.Connections.MySQL;
-using Infrastructure.IntegrationsCore.Connections.SQLServer;
-using Domain.LinxMicrovix.Outbound.WebService.Entites.Base;
-using Domain.IntegrationsCore.Exceptions;
 using Domain.IntegrationsCore.Entities.Enums;
+using Domain.IntegrationsCore.Exceptions;
+using Domain.LinxMicrovix.Outbound.WebService.Entites.Base;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
+using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
+using Infrastructure.IntegrationsCore.Connections.MySQL;
+using Infrastructure.IntegrationsCore.Connections.PostgreSQL;
+using Infrastructure.IntegrationsCore.Connections.SQLServer;
+using Microsoft.Extensions.Configuration;
+using System.ComponentModel;
+using System.Data;
+using System.Data.SqlClient;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
 {
@@ -24,7 +24,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
         private readonly IPostgreSQLConnection? _postgreSQLConnection;
 
         public LinxMicrovixRepositoryBase(
-            ISQLServerConnection sqlServerConnection, 
+            ISQLServerConnection sqlServerConnection,
             IConfiguration configuration
         )
         {

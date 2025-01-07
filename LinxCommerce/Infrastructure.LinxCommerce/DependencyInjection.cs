@@ -1,11 +1,8 @@
 ﻿using Application.LinxCommerce.Interfaces.Catolog;
-using Application.LinxCommerce.Interfaces.Sales;
 using Application.LinxCommerce.Services.Catolog;
-using Application.LinxCommerce.Services.Sales;
 using Domain.LinxCommerce.Interfaces.Api;
 using Domain.LinxCommerce.Interfaces.Repositorys.Base;
 using Domain.LinxCommerce.Interfaces.Repositorys.Catolog;
-using Domain.LinxCommerce.Interfaces.Repositorys.Sales;
 using Infrastructure.LinxCommerce.Api;
 using Infrastructure.LinxCommerce.Repository.Base;
 using Infrastructure.LinxCommerce.Repositorys.Catolog;

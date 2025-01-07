@@ -1,5 +1,4 @@
-﻿using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxMicrovix;
-using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
+﻿using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
 
 namespace Hangfire.IO.Extensions.RecurringJobs
 {

@@ -1,5 +1,4 @@
 ﻿using Domain.IntegrationsCore.Entities.Enums;
-using System;
 namespace Domain.IntegrationsCore.Entities.Errors
 {
     public class Message
@@ -103,10 +102,10 @@ namespace Domain.IntegrationsCore.Entities.Errors
         /// <param name="commandSQL"></param>
         /// <param name="execution"></param>
         public Message(
-            EnumStages stage, 
-            EnumError error, 
+            EnumStages stage,
+            EnumError error,
             EnumMessageLevel logLevel,
-            string message, 
+            string message,
             string exceptionMessage,
             string commandSQL,
             Guid execution

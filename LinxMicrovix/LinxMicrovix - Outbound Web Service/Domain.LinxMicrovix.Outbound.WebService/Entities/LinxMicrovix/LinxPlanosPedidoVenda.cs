@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Domain.IntegrationsCore.CustomValidations;
 using System.ComponentModel.DataAnnotations;
-using Domain.IntegrationsCore.CustomValidations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 {
@@ -19,29 +19,29 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [Key]
         [Column(TypeName = "int")]
         public Int32? cod_pedido { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? plano { get; private set; }
-        
+
         [Column(TypeName = "varchar(35)")]
         [LengthValidation(length: 35, propertyName: "desc_plano")]
         public string? desc_plano { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? total { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? qtde_parcelas { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? indice_plano { get; private set; }
-        
+
         [Column(TypeName = "decimal(10,2)")]
         public decimal? valor_desc_acresc_plano { get; private set; }
-        
+
         [Column(TypeName = "int")]
         public Int32? cod_forma_pgto { get; private set; }
-        
+
         [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "forma_pgto")]
         public string? forma_pgto { get; private set; }
