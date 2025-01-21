@@ -1,5 +1,10 @@
-﻿using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
+﻿using Application.IntegrationsCore.Interfaces;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Cache.LinxMicrovix;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxMicrovix;
+using Application.LinxMicrovix.Outbound.WebService.Services.Cache.LinxMicrovix;
+using Domain.IntegrationsCore.Entities.Enums;
+using Domain.IntegrationsCore.Exceptions;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Api;
@@ -12,18 +17,22 @@ namespace LinxMicrovix.Outbound.Web.Service.Application.Services.LinxMicrovix
     public class LinxVendedoresService : ILinxVendedoresService
     {
         private readonly IAPICall _apiCall;
+        private readonly ILoggerService _logger;
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
         private readonly ILinxMicrovixRepositoryBase<LinxVendedores> _linxMicrovixRepositoryBase;
         private readonly ILinxVendedoresRepository _linxVendedoresRepository;
+        private static ILinxVendedoresServiceCache _linxVendedoresServiceCache { get; set; } = new LinxVendedoresServiceCache();
 
         public LinxVendedoresService(
             IAPICall apiCall,
+            ILoggerService logger,
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
             ILinxMicrovixRepositoryBase<LinxVendedores> linxMicrovixRepositoryBase,
             ILinxVendedoresRepository linxVendedoresRepository
         )
         {
             _apiCall = apiCall;
+            _logger = logger;
             _linxMicrovixServiceBase = linxMicrovixServiceBase;
             _linxMicrovixRepositoryBase = linxMicrovixRepositoryBase;
             _linxVendedoresRepository = linxVendedoresRepository;
@@ -130,11 +139,35 @@ namespace LinxMicrovix.Outbound.Web.Service.Application.Services.LinxMicrovix
                         portal: records[i].Where(pair => pair.Key == "portal").Select(pair => pair.Value).FirstOrDefault()
                     );
 
+                    var contexto = new ValidationContext(entity, null, null);
+                    Validator.TryValidateObject(entity, contexto, validations, true);
+
+                    if (validations.Count() > 0)
+                    {
+                        for (int j = 0; j < validations.Count(); j++)
+                        {
+                            _logger.AddMessage(
+                                stage: EnumStages.DeserializeXMLToObject,
+                                error: EnumError.Validation,
+                                logLevel: EnumMessageLevel.Warning,
+                                message: $"Error when convert record - cod_vendedor: {records[i].Where(pair => pair.Key == "cod_vendedor").Select(pair => pair.Value).FirstOrDefault()} | nome_vendedor: {records[i].Where(pair => pair.Key == "nome_vendedor").Select(pair => pair.Value).FirstOrDefault()}\n" +
+                                         $"{validations[j].ErrorMessage}"
+                            );
+                        }
+                        continue;
+                    }
+
                     list.Add(entity);
                 }
                 catch (Exception ex)
                 {
-                    throw;
+                    throw new InternalException(
+                        stage: EnumStages.DeserializeXMLToObject,
+                        error: EnumError.Exception,
+                        level: EnumMessageLevel.Error,
+                        message: $"Error when convert record - cod_vendedor: {records[i].Where(pair => pair.Key == "cod_vendedor").Select(pair => pair.Value).FirstOrDefault()} | nome_vendedor: {records[i].Where(pair => pair.Key == "nome_vendedor").Select(pair => pair.Value).FirstOrDefault()}",
+                        exceptionMessage: ex.Message
+                    );
                 }
             };
 

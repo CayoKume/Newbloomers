@@ -1,28 +1,103 @@
-﻿using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
+﻿using Domain.IntegrationsCore.Entities.Enums;
+using Domain.IntegrationsCore.Exceptions;
+using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
+using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxMicrovix;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 {
     public class LinxPedidosVendaRepository : ILinxPedidosVendaRepository
     {
-        public LinxPedidosVendaRepository()
-        {
-            
-        }
+        private readonly ILinxMicrovixRepositoryBase<LinxPedidosVenda> _linxMicrovixRepositoryBase;
+
+        public LinxPedidosVendaRepository(ILinxMicrovixRepositoryBase<LinxPedidosVenda> linxMicrovixRepositoryBase) =>
+            (_linxMicrovixRepositoryBase) = (linxMicrovixRepositoryBase);
 
         public bool BulkInsertIntoTableRaw(LinxAPIParam jobParameter, IList<LinxPedidosVenda> records)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var table = _linxMicrovixRepositoryBase.CreateSystemDataTable(jobParameter, new LinxPedidosVenda());
+
+                for (int i = 0; i < records.Count(); i++)
+                {
+                    table.Rows.Add(records[i].lastupdateon, records[i].portal, records[i].cnpj_emp, records[i].cod_pedido, records[i].data_lancamento, records[i].hora_lancamento,
+                        records[i].transacao, records[i].usuario, records[i].codigo_cliente, records[i].cod_produto, records[i].quantidade, records[i].valor_unitario,
+                        records[i].cod_vendedor, records[i].valor_frete, records[i].valor_total, records[i].desconto_item, records[i].cod_plano_pagamento, records[i].plano_pagamento, records[i].obs, records[i].aprovado,
+                        records[i].cancelado, records[i].data_aprovacao, records[i].data_alteracao, records[i].tipo_frete, records[i].natureza_operacao, records[i].tabela_preco, records[i].nome_tabela_preco, records[i].previsao_entrega, 
+                        records[i].realizado_por, records[i].pontuacao_ser, records[i].venda_externa, records[i].nf_gerada, records[i].status, records[i].numero_projeto_officina, records[i].cod_natureza_operacao, records[i].margem_contribuicao, 
+                        records[i].doc_origem, records[i].posicao_item, records[i].orcamento_origem, records[i].transacao_origem, records[i].timestamp, records[i].desconto, records[i].transacao_ws, records[i].empresa, records[i].transportador, records[i].deposito);
+                }
+
+                _linxMicrovixRepositoryBase.BulkInsertIntoTableRaw(
+                    jobParameter: jobParameter,
+                    dataTable: table,
+                    dataTableRowsNumber: table.Rows.Count
+                );
+
+                return true;
+            }
+            catch
+            {
+                throw;
+            }
         }
 
-        public Task<List<LinxPedidosVenda>> GetRegistersExists(LinxAPIParam jobParameter, List<LinxPedidosVenda> registros)
+        public async Task<List<LinxPedidosVenda>> GetRegistersExists(LinxAPIParam jobParameter, List<LinxPedidosVenda> registros)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var identificadores = String.Empty;
+                for (int i = 0; i < registros.Count(); i++)
+                {
+                    if (i == registros.Count() - 1)
+                        identificadores += $"'{registros[i].cod_pedido}'";
+                    else
+                        identificadores += $"'{registros[i].cod_pedido}', ";
+                }
+
+                string sql = $"SELECT cod_pedido, TIMESTAMP FROM [linx_microvix_erp].[LinxPedidosVenda] WHERE cod_pedido IN ({identificadores})";
+
+                return await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
+            }
+            catch (Exception ex) when (ex is not InternalException && ex is not SQLCommandException)
+            {
+                throw new InternalException(
+                    stage: EnumStages.GetRegistersExists,
+                    error: EnumError.Exception,
+                    level: EnumMessageLevel.Error,
+                    message: "Error when filling identifiers to sql command",
+                    exceptionMessage: ex.Message
+                );
+            }
+            catch
+            {
+                throw;
+            }
         }
 
-        public Task<bool> InsertRecord(LinxAPIParam jobParameter, LinxPedidosVenda? record)
+        public async Task<bool> InsertRecord(LinxAPIParam jobParameter, LinxPedidosVenda? record)
         {
-            throw new NotImplementedException();
+            string? sql = @$"INSERT INTO {jobParameter.tableName} 
+                            ([lastupdateon],[portal],[cnpj_emp],[cod_pedido],[data_lancamento],[hora_lancamento],[transacao],[usuario],[codigo_cliente],[cod_produto],[quantidade],
+                             [valor_unitario],[cod_vendedor],[valor_frete],[valor_total],[desconto_item],[cod_plano_pagamento],[plano_pagamento],[obs],[aprovado],[cancelado],[data_aprovacao],
+                             [data_alteracao],[tipo_frete],[natureza_operacao],[tabela_preco],[nome_tabela_preco],[previsao_entrega],[realizado_por],[pontuacao_ser],[venda_externa],
+                             [nf_gerada],[status],[numero_projeto_officina],[cod_natureza_operacao],[margem_contribuicao],[doc_origem],[posicao_item],[orcamento_origem],[transacao_origem],
+                             [timestamp],[desconto],[transacao_ws],[empresa],[transportador],[deposito])
+                            Values
+                            (@lastupdateon,@portal,@cnpj_emp,@cod_pedido,@data_lancamento,@hora_lancamento,@transacao,@usuario,@codigo_cliente,@cod_produto,@quantidade,@valor_unitario,@cod_vendedor,
+                             @valor_frete,@valor_total,@desconto_item,@cod_plano_pagamento,@plano_pagamento,@obs,@aprovado,@cancelado,@data_aprovacao,@data_alteracao,@tipo_frete,@natureza_operacao,
+                             @tabela_preco,@nome_tabela_preco,@previsao_entrega,@realizado_por,@pontuacao_ser,@venda_externa,@nf_gerada,@status,@numero_projeto_officina,@cod_natureza_operacao,
+                             @margem_contribuicao,@doc_origem,@posicao_item,@orcamento_origem,@transacao_origem,@timestamp,@desconto,@transacao_ws,@empresa,@transportador,@deposito)";
+
+            try
+            {
+                return await _linxMicrovixRepositoryBase.InsertRecord(jobParameter: jobParameter, sql: sql, record: record);
+            }
+            catch
+            {
+                throw;
+            }
         }
     }
 }

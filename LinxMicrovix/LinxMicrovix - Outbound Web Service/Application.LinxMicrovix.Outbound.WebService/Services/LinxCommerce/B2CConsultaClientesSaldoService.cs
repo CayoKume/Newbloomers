@@ -104,7 +104,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                     cnpj_emp: cnpj_emp);
 
                 string? response = await _apiCall.PostAsync(jobParameter: jobParameter, body: body);
-                var xmls = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response);
+                var xmls = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response, _b2cConsultaClientesSaldoCache);
 
                 if (xmls.Count() > 0)
                 {

@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 {
+    [Table("LinxValeOrdemServicoExterna", Schema = "linx_microvix_erp")]
     public class LinxValeOrdemServicoExterna
     {
         [Column(TypeName = "datetime")]

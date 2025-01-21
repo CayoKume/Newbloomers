@@ -1,28 +1,95 @@
-﻿using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
+﻿using Domain.IntegrationsCore.Entities.Enums;
+using Domain.IntegrationsCore.Exceptions;
+using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
+using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxMicrovix;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 {
     public class LinxPlanosRepository : ILinxPlanosRepository
     {
-        public LinxPlanosRepository()
-        {
-            
-        }
+        private readonly ILinxMicrovixRepositoryBase<LinxPlanos> _linxMicrovixRepositoryBase;
+
+        public LinxPlanosRepository(ILinxMicrovixRepositoryBase<LinxPlanos> linxMicrovixRepositoryBase) =>
+            (_linxMicrovixRepositoryBase) = (linxMicrovixRepositoryBase);
 
         public bool BulkInsertIntoTableRaw(LinxAPIParam jobParameter, IList<LinxPlanos> records)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var table = _linxMicrovixRepositoryBase.CreateSystemDataTable(jobParameter, new LinxPlanos());
+
+                for (int i = 0; i < records.Count(); i++)
+                {
+                    table.Rows.Add(records[i].lastupdateon, records[i].portal, records[i].plano, records[i].desc_plano, records[i].qtde_parcelas, records[i].prazo_entre_parcelas,
+                        records[i].tipo_plano, records[i].indice_plano, records[i].cod_forma_pgto, records[i].forma_pgto, records[i].conta_central, records[i].tipo_transacao,
+                        records[i].taxa_financeira, records[i].dt_upd, records[i].desativado, records[i].usa_tef, records[i].timestamp);
+                }
+
+                _linxMicrovixRepositoryBase.BulkInsertIntoTableRaw(
+                    jobParameter: jobParameter,
+                    dataTable: table,
+                    dataTableRowsNumber: table.Rows.Count
+                );
+
+                return true;
+            }
+            catch
+            {
+                throw;
+            }
         }
 
-        public Task<List<LinxPlanos>> GetRegistersExists(LinxAPIParam jobParameter, List<LinxPlanos> registros)
+        public async Task<List<LinxPlanos>> GetRegistersExists(LinxAPIParam jobParameter, List<LinxPlanos> registros)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var identificadores = String.Empty;
+                for (int i = 0; i < registros.Count(); i++)
+                {
+                    if (i == registros.Count() - 1)
+                        identificadores += $"'{registros[i].plano}'";
+                    else
+                        identificadores += $"'{registros[i].plano}', ";
+                }
+
+                string sql = $"SELECT plano, TIMESTAMP FROM [linx_microvix_erp].[LinxPlanos] WHERE plano IN ({identificadores})";
+
+                return await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
+            }
+            catch (Exception ex) when (ex is not InternalException && ex is not SQLCommandException)
+            {
+                throw new InternalException(
+                    stage: EnumStages.GetRegistersExists,
+                    error: EnumError.Exception,
+                    level: EnumMessageLevel.Error,
+                    message: "Error when filling identifiers to sql command",
+                    exceptionMessage: ex.Message
+                );
+            }
+            catch
+            {
+                throw;
+            }
         }
 
-        public Task<bool> InsertRecord(LinxAPIParam jobParameter, LinxPlanos? record)
+        public async Task<bool> InsertRecord(LinxAPIParam jobParameter, LinxPlanos? record)
         {
-            throw new NotImplementedException();
+            string? sql = @$"INSERT INTO {jobParameter.tableName} 
+                            ([lastupdateon],[portal],[plano],[desc_plano],[qtde_parcelas],[prazo_entre_parcelas],[tipo_plano],[indice_plano],[cod_forma_pgto],[forma_pgto],[conta_central],
+                             [tipo_transacao],[taxa_financeira],[dt_upd],[desativado],[usa_tef],[timestamp])
+                            Values
+                            (@lastupdateon,@portal,@plano,@desc_plano,@qtde_parcelas,@prazo_entre_parcelas,@tipo_plano,@indice_plano,@cod_forma_pgto,@forma_pgto,@conta_central,@tipo_transacao,
+                             @taxa_financeira,@dt_upd,@desativado,@usa_tef,@timestamp)";
+
+            try
+            {
+                return await _linxMicrovixRepositoryBase.InsertRecord(jobParameter: jobParameter, sql: sql, record: record);
+            }
+            catch
+            {
+                throw;
+            }
         }
     }
 }

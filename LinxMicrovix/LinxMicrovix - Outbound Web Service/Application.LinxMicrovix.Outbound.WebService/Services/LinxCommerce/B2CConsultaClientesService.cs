@@ -259,7 +259,8 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
             }
             finally
             {
-                //await _logger.CommitAllChanges();
+                _logger.SetLogEndDate();
+                await _logger.CommitAllChanges();
                 _b2cConsultaClientesCache.AddList(_listSomenteNovos);
             }
 

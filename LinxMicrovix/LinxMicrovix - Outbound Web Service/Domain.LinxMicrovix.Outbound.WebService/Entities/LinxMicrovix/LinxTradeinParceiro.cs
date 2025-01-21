@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 {
+    [Table("LinxTradeinParceiro", Schema = "linx_microvix_erp")]
     public class LinxTradeinParceiro
     {
         [Column(TypeName = "datetime")]
@@ -16,7 +17,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [Column(TypeName = "int")]
         public Int32? id_tradein_parceiro { get; private set; }
 
-        [Column(TypeName = "100")]
+        [Column(TypeName = "varchar(100)")]
         [LengthValidation(length: 100, propertyName: "nome_parceiro")]
         public string? nome_parceiro { get; private set; }
 

@@ -1,0 +1,138 @@
+﻿using Domain.IntegrationsCore.CustomValidations;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Domain.DatabaseInit.Entites.LinxMicrovix.LinxCommerce
+{
+    [Table("B2CConsultaClientesEnderecosEntrega", Schema = "untreated")]
+    public class B2CConsultaClientesEnderecosEntrega
+    {
+        [Column(TypeName = "datetime")]
+        public DateTime? lastupdateon { get; private set; }
+
+        [Key]
+        [Column(TypeName = "int")]
+        public Int32? id_endereco_entrega { get; private set; }
+
+        [Key]
+        [Column(TypeName = "int")]
+        public Int32? cod_cliente_erp { get; private set; }
+
+        [Key]
+        [Column(TypeName = "int")]
+        public Int32? cod_cliente_b2c { get; private set; }
+
+        [Column(TypeName = "varchar(250)")]
+        [LengthValidation(length: 250, propertyName: "endereco_cliente")]
+        public string? endereco_cliente { get; private set; }
+
+        [Column(TypeName = "varchar(20)")]
+        [LengthValidation(length: 20, propertyName: "numero_rua_cliente")]
+        public string? numero_rua_cliente { get; private set; }
+
+        [Column(TypeName = "varchar(60)")]
+        [LengthValidation(length: 60, propertyName: "complemento_end_cli")]
+        public string? complemento_end_cli { get; private set; }
+
+        [Column(TypeName = "char(9)")]
+        [LengthValidation(length: 9, propertyName: "cep_cliente")]
+        public string? cep_cliente { get; private set; }
+
+        [Column(TypeName = "varchar(60)")]
+        [LengthValidation(length: 60, propertyName: "bairro_cliente")]
+        public string? bairro_cliente { get; private set; }
+
+        [Column(TypeName = "varchar(40)")]
+        [LengthValidation(length: 40, propertyName: "cidade_cliente")]
+        public string? cidade_cliente { get; private set; }
+
+        [Column(TypeName = "char(2)")]
+        [LengthValidation(length: 2, propertyName: "uf_cliente")]
+        public string? uf_cliente { get; private set; }
+
+        [Column(TypeName = "varchar(250)")]
+        [LengthValidation(length: 250, propertyName: "descricao")]
+        public string? descricao { get; private set; }
+
+        [Column(TypeName = "bit")]
+        public bool? principal { get; private set; }
+
+        [Key]
+        [Column(TypeName = "int")]
+        public Int32? id_cidade { get; private set; }
+
+        [Column(TypeName = "bigint")]
+        public Int64? timestamp { get; private set; }
+
+        [Column(TypeName = "int")]
+        public Int32? portal { get; private set; }
+
+        public B2CConsultaClientesEnderecosEntrega() { }
+
+        public B2CConsultaClientesEnderecosEntrega(
+            List<ValidationResult> listValidations,
+            string? id_endereco_entrega,
+            string? cod_cliente_erp,
+            string? cod_cliente_b2c,
+            string? endereco_cliente,
+            string? numero_rua_cliente,
+            string? complemento_end_cli,
+            string? cep_cliente,
+            string? bairro_cliente,
+            string? cidade_cliente,
+            string? uf_cliente,
+            string? descricao,
+            string? principal,
+            string? id_cidade,
+            string? timestamp,
+            string? portal
+        )
+        {
+            lastupdateon = DateTime.Now;
+
+            this.id_endereco_entrega =
+                ConvertToInt32Validation.IsValid(id_endereco_entrega, "id_endereco_entrega", listValidations) ?
+                Convert.ToInt32(id_endereco_entrega) :
+                0;
+
+            this.cod_cliente_erp =
+                ConvertToInt32Validation.IsValid(cod_cliente_erp, "cod_cliente_erp", listValidations) ?
+                Convert.ToInt32(cod_cliente_erp) :
+                0;
+
+            this.cod_cliente_b2c =
+                ConvertToInt32Validation.IsValid(cod_cliente_b2c, "cod_cliente_b2c", listValidations) ?
+                Convert.ToInt32(cod_cliente_b2c) :
+                0;
+
+            this.principal =
+                ConvertToBooleanValidation.IsValid(principal, "principal", listValidations) ?
+                Convert.ToBoolean(principal) :
+                false;
+
+            this.id_cidade =
+                ConvertToInt32Validation.IsValid(id_cidade, "id_cidade", listValidations) ?
+                Convert.ToInt32(id_cidade) :
+                0;
+
+            this.portal =
+                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
+                Convert.ToInt32(portal) :
+                0;
+
+            this.timestamp =
+                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
+                Convert.ToInt64(timestamp) :
+                0;
+
+            this.endereco_cliente = endereco_cliente;
+            this.numero_rua_cliente = numero_rua_cliente;
+            this.complemento_end_cli = complemento_end_cli;
+            this.cep_cliente = cep_cliente;
+            this.bairro_cliente = bairro_cliente;
+            this.cidade_cliente = cep_cliente;
+            this.uf_cliente = uf_cliente;
+            this.descricao = descricao;
+        }
+    }
+}

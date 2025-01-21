@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 {
+    [Table("LinxB2CPedidosItens", Schema = "linx_microvix_erp")]
     public class LinxB2CPedidosItens
     {
         [Column(TypeName = "datetime")]
@@ -22,7 +23,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [Column(TypeName = "int")]
         public Int32 quantidade { get; private set; }
 
-        [Column(TypeName = "decimeal(10,2)")]
+        [Column(TypeName = "decimal(10,2)")]
         public decimal vl_unitario { get; private set; }
 
         [Column(TypeName = "bigint")]

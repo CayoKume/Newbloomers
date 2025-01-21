@@ -1,28 +1,91 @@
-﻿using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
+﻿using Domain.IntegrationsCore.Entities.Enums;
+using Domain.IntegrationsCore.Exceptions;
+using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
+using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxMicrovix;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 {
     public class LinxB2CStatusRepository : ILinxB2CStatusRepository
     {
-        public LinxB2CStatusRepository()
-        {
-            
-        }
+        private readonly ILinxMicrovixRepositoryBase<LinxB2CStatus> _linxMicrovixRepositoryBase;
+
+        public LinxB2CStatusRepository(ILinxMicrovixRepositoryBase<LinxB2CStatus> linxMicrovixRepositoryBase) =>
+            (_linxMicrovixRepositoryBase) = (linxMicrovixRepositoryBase);
 
         public bool BulkInsertIntoTableRaw(LinxAPIParam jobParameter, IList<LinxB2CStatus> records)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var table = _linxMicrovixRepositoryBase.CreateSystemDataTable(jobParameter, new LinxB2CStatus());
+
+                for (int i = 0; i < records.Count(); i++)
+                {
+                    table.Rows.Add(records[i].lastupdateon, records[i].id_status, records[i].descricao_status, records[i].portal, records[i].timestamp);
+                }
+
+                _linxMicrovixRepositoryBase.BulkInsertIntoTableRaw(
+                    jobParameter: jobParameter,
+                    dataTable: table,
+                    dataTableRowsNumber: table.Rows.Count
+                );
+
+                return true;
+            }
+            catch
+            {
+                throw;
+            }
         }
 
-        public Task<List<LinxB2CStatus>> GetRegistersExists(LinxAPIParam jobParameter, List<LinxB2CStatus> registros)
+        public async Task<List<LinxB2CStatus>> GetRegistersExists(LinxAPIParam jobParameter, List<LinxB2CStatus> registros)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var identificadores = String.Empty;
+                for (int i = 0; i < registros.Count(); i++)
+                {
+                    if (i == registros.Count() - 1)
+                        identificadores += $"'{registros[i].id_status}'";
+                    else
+                        identificadores += $"'{registros[i].id_status}', ";
+                }
+
+                string sql = $"SELECT id_status, TIMESTAMP FROM [linx_microvix_erp].[LinxB2CStatus] WHERE id_status IN ({identificadores})";
+
+                return await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
+            }
+            catch (Exception ex) when (ex is not InternalException && ex is not SQLCommandException)
+            {
+                throw new InternalException(
+                    stage: EnumStages.GetRegistersExists,
+                    error: EnumError.Exception,
+                    level: EnumMessageLevel.Error,
+                    message: "Error when filling identifiers to sql command",
+                    exceptionMessage: ex.Message
+                );
+            }
+            catch
+            {
+                throw;
+            }
         }
 
-        public Task<bool> InsertRecord(LinxAPIParam jobParameter, LinxB2CStatus? record)
+        public async Task<bool> InsertRecord(LinxAPIParam jobParameter, LinxB2CStatus? record)
         {
-            throw new NotImplementedException();
+            string? sql = @$"INSERT INTO {jobParameter.tableName} 
+                            ([lastupdateon],[id_status],[descricao_status],[timestamp],[portal])
+                            Values
+                            (@lastupdateon,@id_status,@descricao_status,@timestamp,@portal)";
+
+            try
+            {
+                return await _linxMicrovixRepositoryBase.InsertRecord(jobParameter: jobParameter, sql: sql, record: record);
+            }
+            catch
+            {
+                throw;
+            }
         }
     }
 }

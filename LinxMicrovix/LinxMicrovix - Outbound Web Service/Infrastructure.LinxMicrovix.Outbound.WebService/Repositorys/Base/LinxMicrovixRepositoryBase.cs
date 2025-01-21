@@ -68,7 +68,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
             {
                 using (var conn = _sqlServerConnection.GetIDbConnection(jobParameter.databaseName))
                 {
-                    var result = await conn.ExecuteAsync($"P_{jobParameter.tableName}_Sync", commandType: CommandType.StoredProcedure, commandTimeout: 2700);
+                    var result = await conn.ExecuteAsync($"[{jobParameter.schema}].[P_{jobParameter.tableName}_Sincronizacao]", commandType: CommandType.StoredProcedure, commandTimeout: 2700);
 
                     if (result > 0)
                         return true;
@@ -131,7 +131,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
                            '' AS STATE_REGISTRATION_COMPANY,
                            '' AS MUNICIPAL_REGISTRATION_COMPANY
                            FROM 
-                           B2CCONSULTAEMPRESAS_TRUSTED (NOLOCK)";
+                           [LINX_MICROVIX_COMMERCE].[B2CCONSULTAEMPRESAS] (NOLOCK)";
 
             try
             {
@@ -196,7 +196,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
         public async Task<string?> GetParameters(LinxAPIParam jobParameter)
         {
             string? sql = $"SELECT {jobParameter.parametersInterval} " +
-                          $"FROM [{jobParameter.parametersTableName}] (NOLOCK) " +
+                          $"FROM [LINX_MICROVIX].[{jobParameter.parametersTableName}] (NOLOCK) " +
                            "WHERE " +
                           $"METHOD = '{jobParameter.jobName}'";
 
@@ -231,7 +231,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
         public async Task<string?> GetLast7DaysMinTimestamp(LinxAPIParam jobParameter, string? columnDate)
         {
             string? sql = "SELECT ISNULL(MIN(TIMESTAMP), 0) " +
-                         $"FROM [{jobParameter.tableName}_trusted] (NOLOCK) " +
+                         $"FROM [{jobParameter.schema}].[{jobParameter.tableName}] (NOLOCK) " +
                           "WHERE " +
                          $"{columnDate} > GETDATE() - 7";
 
@@ -340,7 +340,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
                 using (var conn = _sqlServerConnection.GetDbConnection(jobParameter.untreatedDatabaseName))
                 {
                     using var bulkCopy = new SqlBulkCopy(conn);
-                    bulkCopy.DestinationTableName = $"[{jobParameter.tableName}]";
+                    bulkCopy.DestinationTableName = $"[untreated].[{jobParameter.tableName}]";
                     bulkCopy.BatchSize = dataTableRowsNumber;
                     bulkCopy.BulkCopyTimeout = 360;
                     bulkCopy.WriteToServer(dataTable);

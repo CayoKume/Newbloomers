@@ -1,12 +1,17 @@
 using Application.IntegrationsCore.Interfaces;
 using Domain.IntegrationsCore.Entities.Enums;
 using Domain.IntegrationsCore.Entities.Errors;
+using Domain.IntegrationsCore.Interfaces;
 
 namespace Application.IntegrationsCore.Services
 {
     public class LoggerService : ILoggerService
     {
+        private readonly ILogRepository _logRepository;
         public Log? log { get; private set; }
+
+        public LoggerService(ILogRepository logRepository) =>
+            _logRepository = logRepository;
 
         public ILoggerService AddLog(EnumJob job)
         {
@@ -130,9 +135,9 @@ namespace Application.IntegrationsCore.Services
             return this;
         }
 
-        public Task CommitAllChanges()
+        public async Task CommitAllChanges()
         {
-            throw new NotImplementedException();
+            await _logRepository.LogInsert(this.log);
         }
     }
 }

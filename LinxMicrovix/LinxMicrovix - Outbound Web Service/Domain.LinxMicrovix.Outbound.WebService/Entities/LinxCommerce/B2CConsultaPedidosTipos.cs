@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
 {
+    [Table("B2CConsultaPedidosTipos", Schema = "linx_microvix_commerce")]
     public class B2CConsultaPedidosTipos
     {
         [Column(TypeName = "datetime")]

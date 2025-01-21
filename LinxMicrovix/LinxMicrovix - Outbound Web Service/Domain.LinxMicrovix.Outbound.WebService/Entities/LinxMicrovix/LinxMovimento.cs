@@ -5,6 +5,7 @@ using System.Globalization;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 {
+    [Table("LinxMovimento", Schema = "linx_microvix_erp")]
     public class LinxMovimento
     {
         [Column(TypeName = "datetime")]
@@ -368,6 +369,117 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
         public LinxMovimento() { }
 
+        /// <param name="listValidations"></param>
+        /// <param name="portal"></param>
+        /// <param name="cnpj_emp"></param>
+        /// <param name="transacao"></param>
+        /// <param name="usuario"></param>
+        /// <param name="documento"></param>
+        /// <param name="chave_nf"></param>
+        /// <param name="ecf"></param>
+        /// <param name="numero_serie_ecf"></param>
+        /// <param name="modelo_nf"></param>
+        /// <param name="data_documento"></param>
+        /// <param name="data_lancamento"></param>
+        /// <param name="codigo_cliente"></param>
+        /// <param name="serie"></param>
+        /// <param name="desc_cfop"></param>
+        /// <param name="id_cfop"></param>
+        /// <param name="cod_vendedor"></param>
+        /// <param name="quantidade"></param>
+        /// <param name="preco_custo"></param>
+        /// <param name="valor_liquido"></param>
+        /// <param name="desconto"></param>
+        /// <param name="cst_icms"></param>
+        /// <param name="cst_pis"></param>
+        /// <param name="cst_cofins"></param>
+        /// <param name="cst_ipi"></param>
+        /// <param name="valor_icms"></param>
+        /// <param name="aliquota_icms"></param>
+        /// <param name="base_icms"></param>
+        /// <param name="valor_pis"></param>
+        /// <param name="aliquota_pis"></param>
+        /// <param name="base_pis"></param>
+        /// <param name="valor_cofins"></param>
+        /// <param name="aliquota_cofins"></param>
+        /// <param name="base_cofins"></param>
+        /// <param name="valor_icms_st"></param>
+        /// <param name="aliquota_icms_st"></param>
+        /// <param name="base_icms_st"></param>
+        /// <param name="valor_ipi"></param>
+        /// <param name="aliquota_ipi"></param>
+        /// <param name="base_ipi"></param>
+        /// <param name="valor_total"></param>
+        /// <param name="forma_dinheiro"></param>
+        /// <param name="total_dinheiro"></param>
+        /// <param name="forma_cheque"></param>
+        /// <param name="total_cheque"></param>
+        /// <param name="forma_cartao"></param>
+        /// <param name="total_cartao"></param>
+        /// <param name="total_crediario"></param>
+        /// <param name="forma_crediario"></param>
+        /// <param name="forma_convenio"></param>
+        /// <param name="total_convenio"></param>
+        /// <param name="frete"></param>
+        /// <param name="operacao"></param>
+        /// <param name="tipo_transacao"></param>
+        /// <param name="cod_produto"></param>
+        /// <param name="cod_barra"></param>
+        /// <param name="cancelado"></param>
+        /// <param name="excluido"></param>
+        /// <param name="soma_relatorio"></param>
+        /// <param name="identificador"></param>
+        /// <param name="deposito"></param>
+        /// <param name="obs"></param>
+        /// <param name="preco_unitario"></param>
+        /// <param name="hora_lancamento"></param>
+        /// <param name="natureza_operacao"></param>
+        /// <param name="tabela_preco"></param>
+        /// <param name="nome_tabela_preco"></param>
+        /// <param name="cod_sefaz_situacao"></param>
+        /// <param name="desc_sefaz_situacao"></param>
+        /// <param name="protocolo_aut_nfe"></param>
+        /// <param name="dt_update"></param>
+        /// <param name="forma_cheque_prazo"></param>
+        /// <param name="total_cheque_prazo"></param>
+        /// <param name="cod_natureza_operacao"></param>
+        /// <param name="preco_tabela_epoca"></param>
+        /// <param name="desconto_total_item"></param>
+        /// <param name="conferido"></param>
+        /// <param name="transacao_pedido_venda"></param>
+        /// <param name="codigo_modelo_nf"></param>
+        /// <param name="acrescimo"></param>
+        /// <param name="mob_checkout"></param>
+        /// <param name="aliquota_iss"></param>
+        /// <param name="base_iss"></param>
+        /// <param name="ordem"></param>
+        /// <param name="codigo_rotina_origem"></param>
+        /// <param name="timestamp"></param>
+        /// <param name="troco"></param>
+        /// <param name="transportador"></param>
+        /// <param name="icms_aliquota_desonerado"></param>
+        /// <param name="icms_valor_desonerado_item"></param>
+        /// <param name="empresa"></param>
+        /// <param name="desconto_item"></param>
+        /// <param name="aliq_iss"></param>
+        /// <param name="iss_base_item"></param>
+        /// <param name="despesas"></param>
+        /// <param name="seguro_total_item"></param>
+        /// <param name="acrescimo_total_item"></param>
+        /// <param name="despesas_total_item"></param>
+        /// <param name="forma_pix"></param>
+        /// <param name="total_pix"></param>
+        /// <param name="forma_deposito_bancario"></param>
+        /// <param name="total_deposito_bancario"></param>
+        /// <param name="id_venda_produto_b2c"></param>
+        /// <param name="item_promocional"></param>
+        /// <param name="acrescimo_item"></param>
+        /// <param name="icms_st_antecipado_aliquota"></param>
+        /// <param name="icms_st_antecipado_margem"></param>
+        /// <param name="icms_st_antecipado_percentual_reducao"></param>
+        /// <param name="icms_st_antecipado_valor_item"></param>
+        /// <param name="icms_base_desonerado_item"></param>
+        /// <param name="codigo_status_nfe"></param>
         public LinxMovimento(
             List<ValidationResult> listValidations,
             string? portal,

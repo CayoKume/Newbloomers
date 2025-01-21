@@ -113,7 +113,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                             );
 
                     string? response = await _apiCall.PostAsync(jobParameter: jobParameter, body: body);
-                    var xmls = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response);
+                    var xmls = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response, _b2cConsultaStatusCache);
 
                     if (xmls.Count() > 0)
                     {
@@ -190,7 +190,8 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
             }
             finally
             {
-                //await _logger.CommitAllChanges();
+                _logger.SetLogEndDate();
+                await _logger.CommitAllChanges();
                 _b2cConsultaStatusCache.AddList(_listSomenteNovos);
             }
 

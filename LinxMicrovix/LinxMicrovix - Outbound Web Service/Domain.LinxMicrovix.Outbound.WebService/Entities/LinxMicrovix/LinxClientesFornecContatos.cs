@@ -6,6 +6,7 @@ using System.Globalization;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 {
+    [Table("LinxClientesFornecContatos", Schema = "linx_microvix_erp")]
     public class LinxClientesFornecContatos
     {
         [Column(TypeName = "datetime")]
@@ -22,7 +23,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [LengthValidation(length: 50, propertyName: "nome_contato")]
         public string? nome_contato { get; private set; }
 
-        [Column(TypeName = "varchar(1)")]
+        [Column(TypeName = "char(1)")]
         [LengthValidation(length: 1, propertyName: "sexo_contato")]
         public string? sexo_contato { get; private set; }
 
@@ -37,7 +38,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [LengthValidation(length: 20, propertyName: "fone2_contato")]
         public string? fone2_contato { get; private set; }
 
-        [Column(TypeName = "varchar(20")]
+        [Column(TypeName = "varchar(20)")]
         [LengthValidation(length: 20, propertyName: "celular_contato")]
         public string? celular_contato { get; private set; }
 
@@ -45,7 +46,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [LengthValidation(length: 50, propertyName: "email_contato")]
         public string? email_contato { get; private set; }
 
-        [Column(TypeName = "smalldatetime")]
+        [Column(TypeName = "datetime")]
         public DateTime data_nasc_contato { get; private set; }
 
         [Column(TypeName = "varchar(20)")]

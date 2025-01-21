@@ -215,6 +215,8 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                                 .GetSection("DocMainCompany")
                                 .Value,
 
+                schema: "linx_microvix_commerce",
+
                 databaseName: _configuration
                                 .GetSection("ConfigureServer")
                                 .GetSection("Databases")

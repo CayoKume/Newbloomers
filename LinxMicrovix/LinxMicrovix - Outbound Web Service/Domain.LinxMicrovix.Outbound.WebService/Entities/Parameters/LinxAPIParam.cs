@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters
 {
+    [Table("LinxAPIParam", Schema = "linx_microvix")]
     public class LinxAPIParam : ParameterBase
     {
         [Key]
@@ -27,6 +28,9 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters
         public DateTime? last_execution { get; set; }
 
         [NotMapped]
+        public string? schema { get; private set; }
+
+        [NotMapped]
         public string? databaseName { get; private set; }
 
         [NotMapped]
@@ -45,6 +49,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters
         /// Set parameters for any job
         /// </summary>
         /// <param name="docMainCompany"></param>
+        /// <param name="schema"></param>
         /// <param name="databaseName"></param>
         /// <param name="untreatedDatabaseName"></param>
         /// <param name="projectName"></param>
@@ -54,6 +59,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters
         /// <param name="parametersTableName"></param>
         public LinxAPIParam(
             string? docMainCompany,
+            string? schema,
             string? databaseName,
             string? untreatedDatabaseName,
             string? projectName,
@@ -69,6 +75,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters
             parametersTableName: parametersTableName
         )
         {
+            this.schema = schema;
             this.databaseName = databaseName;
             this.untreatedDatabaseName = untreatedDatabaseName;
             this.parametersInterval = parametersInterval;

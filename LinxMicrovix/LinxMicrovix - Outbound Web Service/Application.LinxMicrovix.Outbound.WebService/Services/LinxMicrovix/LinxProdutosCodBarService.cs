@@ -1,7 +1,10 @@
 ﻿using Application.IntegrationsCore.Interfaces;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Cache.LinxMicrovix;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxMicrovix;
+using Application.LinxMicrovix.Outbound.WebService.Services.Cache.LinxMicrovix;
 using Domain.IntegrationsCore.Entities.Enums;
+using Domain.IntegrationsCore.Exceptions;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Api;
@@ -18,6 +21,7 @@ namespace LinxMicrovix.Outbound.Web.Service.Application.Services.LinxMicrovix
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
         private readonly ILinxMicrovixRepositoryBase<LinxProdutosCodBar> _linxMicrovixRepositoryBase;
         private readonly ILinxProdutosCodBarRepository _linxProdutosCodBarRepository;
+        private static ILinxProdutosCodBarServiceCache _linxProdutosCodBarServiceCache { get; set; } = new LinxProdutosCodBarServiceCache();
 
         public LinxProdutosCodBarService(
             IAPICall apiCall,
@@ -73,7 +77,13 @@ namespace LinxMicrovix.Outbound.Web.Service.Application.Services.LinxMicrovix
                 }
                 catch (Exception ex)
                 {
-                    throw;
+                    throw new InternalException(
+                        stage: EnumStages.DeserializeXMLToObject,
+                        error: EnumError.Exception,
+                        level: EnumMessageLevel.Error,
+                        message: $"Error when convert record - cod_produto: {records[i].Where(pair => pair.Key == "cod_produto").Select(pair => pair.Value).FirstOrDefault()} | cod_barra: {records[i].Where(pair => pair.Key == "cod_barra").Select(pair => pair.Value).FirstOrDefault()}",
+                        exceptionMessage: ex.Message
+                    );
                 }
             };
 

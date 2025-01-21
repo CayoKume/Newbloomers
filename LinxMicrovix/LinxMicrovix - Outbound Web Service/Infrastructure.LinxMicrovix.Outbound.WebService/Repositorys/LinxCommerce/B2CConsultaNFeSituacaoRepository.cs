@@ -52,7 +52,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                         identificadores += $"'{registros[i].id_nfe_situacao}', ";
                 }
 
-                string sql = $"SELECT ID_NFE_SITUACAO, TIMESTAMP FROM B2CCONSULTANFESITUACAO WHERE ID_NFE_SITUACAO IN ({identificadores})";
+                string sql = $"SELECT ID_NFE_SITUACAO, TIMESTAMP FROM [linx_microvix_commerce].[B2CCONSULTANFESITUACAO] WHERE ID_NFE_SITUACAO IN ({identificadores})";
 
                 return await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
             }

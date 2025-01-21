@@ -24,7 +24,7 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.Parameters
                     var result = conn.Query(sql: sql);
 
                     if (result.Count() == 0)
-                        conn.CreateTable<LinxAPIParam>(tableName: $"{jobName}");
+                        conn.CreateTable<LinxAPIParam>();
                 }
 
                 return true;

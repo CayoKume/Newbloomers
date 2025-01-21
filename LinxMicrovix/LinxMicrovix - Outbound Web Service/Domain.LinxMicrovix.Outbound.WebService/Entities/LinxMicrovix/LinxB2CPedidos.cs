@@ -5,6 +5,7 @@ using System.Globalization;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 {
+    [Table("LinxB2CPedidos", Schema = "linx_microvix_erp")]
     public class LinxB2CPedidos
     {
         [Column(TypeName = "datetime")]
@@ -98,6 +99,10 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [LengthValidation(length: 60, propertyName: "marketplace_loja")]
         public string marketplace_loja { get; private set; }
 
+        [Column(TypeName = "varchar(40)")]
+        [LengthValidation(length: 40, propertyName: "order_id")]
+        public string order_id { get; private set; }
+
         public LinxB2CPedidos() { }
 
         public LinxB2CPedidos(
@@ -129,7 +134,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             string? portal,
             string? id_tipo_b2c,
             string? ecommerce_origem,
-            string? marketplace_loja
+            string? marketplace_loja,
+            string? order_id
         )
         {
             this.lastupdateon = DateTime.Now;
@@ -244,6 +250,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
                 Convert.ToInt64(timestamp) :
                 0;
 
+            this.order_id = order_id;
             this.ecommerce_origem = ecommerce_origem;
             this.marketplace_loja = marketplace_loja;
             this.mensagem_falha_faturamento = mensagem_falha_faturamento;

@@ -28,6 +28,8 @@ namespace Hangfire.IO.Controllers.Database
                                 .GetSection("LinxMicrovixCommerce")
                                 .Value,
 
+                schema: "",
+
                 untreatedDatabaseName: _configuration
                                 .GetSection("ConfigureServer")
                                 .GetSection("Databases")

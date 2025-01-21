@@ -17,7 +17,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
     public class B2CConsultaEmpresasService : IB2CConsultaEmpresasService
     {
         private readonly IAPICall _apiCall;
-        ILoggerService _logger;
+        private readonly ILoggerService _logger;
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
         private readonly ILinxMicrovixRepositoryBase<B2CConsultaEmpresas> _linxMicrovixRepositoryBase;
         private readonly IB2CConsultaEmpresasRepository _b2cConsultaEmpresasRepository;
@@ -121,7 +121,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                 );
 
                 string? response = await _apiCall.PostAsync(jobParameter: jobParameter, body: body);
-                var xmls = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response);
+                var xmls = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response, _b2cConsultaEmpresasCache);
 
                 if (xmls.Count() > 0)
                 {
@@ -195,7 +195,8 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
             }
             finally
             {
-                //await _logger.CommitAllChanges();
+                _logger.SetLogEndDate();
+                await _logger.CommitAllChanges();
                 _b2cConsultaEmpresasCache.AddList(_listSomenteNovos);
             }
 

@@ -5,6 +5,7 @@ using System.Globalization;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 {
+    [Table("LinxDadosOpticosDav", Schema = "linx_microvix_erp")]
     public class LinxDadosOpticosDav
     {
         [Column(TypeName = "datetime")]
@@ -181,10 +182,10 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [Column(TypeName = "bigint")]
         public Int64? id_vendas_pos { get; private set; }
 
-        [Column(TypeName = "")]
+        [Column(TypeName = "bit")]
         public bool? cancelado { get; private set; }
 
-        [Column(TypeName = "")]
+        [Column(TypeName = "datetime")]
         public DateTime? previsao_entrega { get; private set; }
 
         [Column(TypeName = "bigint")]

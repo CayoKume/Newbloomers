@@ -6,6 +6,7 @@ using System.Globalization;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 {
+    [Table("LinxMetasVendedores", Schema = "linx_microvix_erp")]
     public class LinxMetasVendedores
     {
         [Column(TypeName = "datetime")]

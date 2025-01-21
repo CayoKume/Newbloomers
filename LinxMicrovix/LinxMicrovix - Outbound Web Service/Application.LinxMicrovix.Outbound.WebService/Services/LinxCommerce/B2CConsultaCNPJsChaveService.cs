@@ -21,7 +21,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
         private readonly ILinxMicrovixRepositoryBase<B2CConsultaCNPJsChave> _linxMicrovixRepositoryBase;
         private readonly IB2CConsultaCNPJsChaveRepository _b2cConsultaCNPJsChaveRepository;
-        private static IB2CConsultaCNPJsChaveServiceCache _b2cConsultaCNPJsChaveServiceCache { get; set; } = new B2CConsultaCNPJsChaveServiceCache();
+        private static IB2CConsultaCNPJsChaveServiceCache _b2cConsultaCNPJsChaveCache { get; set; } = new B2CConsultaCNPJsChaveServiceCache();
 
         public B2CConsultaCNPJsChaveService(
             IAPICall apiCall,
@@ -109,7 +109,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                     cnpj_emp: cnpj_emp);
 
                 string? response = await _apiCall.PostAsync(jobParameter: jobParameter, body: body);
-                var xmls = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response);
+                var xmls = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response, _b2cConsultaCNPJsChaveCache);
 
                 if (xmls.Count() > 0)
                 {
@@ -150,22 +150,22 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                 {
                     var listRecords = DeserializeXMLToObject(jobParameter, xmls);
 
-                    if (_b2cConsultaCNPJsChaveServiceCache.GetList().Count == 0)
+                    if (_b2cConsultaCNPJsChaveCache.GetList().Count == 0)
                     {
                         var list_existentes = await _b2cConsultaCNPJsChaveRepository.GetRegistersExists(jobParameter: jobParameter, registros: listRecords);
-                        _b2cConsultaCNPJsChaveServiceCache.AddList(list_existentes);
+                        _b2cConsultaCNPJsChaveCache.AddList(list_existentes);
                     }
 
-                    _listSomenteNovos = _b2cConsultaCNPJsChaveServiceCache.FiltrarList(listRecords);
+                    _listSomenteNovos = _b2cConsultaCNPJsChaveCache.FiltrarList(listRecords);
                     if (_listSomenteNovos.Count() > 0)
                     {
                         _b2cConsultaCNPJsChaveRepository.BulkInsertIntoTableRaw(records: _listSomenteNovos, jobParameter: jobParameter);
                         for (int i = 0; i < _listSomenteNovos.Count; i++)
                         {
-                            var key = _b2cConsultaCNPJsChaveServiceCache.GetKey(_listSomenteNovos[i]);
-                            if (_b2cConsultaCNPJsChaveServiceCache.GetDictionaryXml().ContainsKey(key))
+                            var key = _b2cConsultaCNPJsChaveCache.GetKey(_listSomenteNovos[i]);
+                            if (_b2cConsultaCNPJsChaveCache.GetDictionaryXml().ContainsKey(key))
                             {
-                                var xml = _b2cConsultaCNPJsChaveServiceCache.GetDictionaryXml()[key];
+                                var xml = _b2cConsultaCNPJsChaveCache.GetDictionaryXml()[key];
                                 _logger.AddRecord(key, xml);
                             }
                         }
@@ -219,7 +219,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
             finally
             {
                 //await _logger.CommitAllChanges();
-                _b2cConsultaCNPJsChaveServiceCache.AddList(_listSomenteNovos);
+                _b2cConsultaCNPJsChaveCache.AddList(_listSomenteNovos);
             }
 
             return true;

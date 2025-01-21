@@ -106,7 +106,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                     cnpj_emp: cnpj_emp);
 
                 string? response = await _apiCall.PostAsync(jobParameter: jobParameter, body: body);
-                var xmls = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response);
+                var xmls = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response, _b2cConsultaPedidosStatusCache);
 
                 if (xmls.Count() > 0)
                 {
@@ -144,13 +144,13 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                 foreach (var cnpj_emp in cnpjs_emp)
                 {
                     var body = _linxMicrovixServiceBase.BuildBodyRequest(
-                                parametersList: parameters.Replace("[0]", "0"),
+                                parametersList: parameters.Replace("[0]", "0").Replace("[data_inicial]", $"{DateTime.Today.AddDays(-7).ToString("yyyy-MM-dd")}").Replace("[data_fim]", $"{DateTime.Today.ToString("yyyy-MM-dd")}"),
                                 jobParameter: jobParameter,
                                 cnpj_emp: cnpj_emp.doc_company
                             );
 
                     string? response = await _apiCall.PostAsync(jobParameter: jobParameter, body: body);
-                    var xmls = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response);
+                    var xmls = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response, _b2cConsultaPedidosStatusCache);
 
                     if (xmls.Count() > 0)
                     {
@@ -225,7 +225,8 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
             }
             finally
             {
-                //await _logger.CommitAllChanges();
+                _logger.SetLogEndDate();
+                await _logger.CommitAllChanges();
                 _b2cConsultaPedidosStatusCache.AddList(_listSomenteNovos);
             }
 

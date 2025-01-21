@@ -1,4 +1,6 @@
-﻿using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
+﻿using Domain.IntegrationsCore.Entities.Enums;
+using Domain.IntegrationsCore.Exceptions;
+using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxMicrovix;
@@ -37,9 +39,37 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.LinxMicrov
             }
         }
 
-        public Task<List<LinxProdutosCodBar>> GetRegistersExists(LinxAPIParam jobParameter, List<LinxProdutosCodBar> registros)
+        public async Task<List<LinxProdutosCodBar>> GetRegistersExists(LinxAPIParam jobParameter, List<LinxProdutosCodBar> registros)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var identificadores = String.Empty;
+                for (int i = 0; i < registros.Count(); i++)
+                {
+                    if (i == registros.Count() - 1)
+                        identificadores += $"'{registros[i].cod_produto}'";
+                    else
+                        identificadores += $"'{registros[i].cod_produto}', ";
+                }
+
+                string sql = $"SELECT cod_produto, TIMESTAMP FROM [linx_microvix_erp].[LinxProdutosCodBar] WHERE cod_produto IN ({identificadores})";
+
+                return await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
+            }
+            catch (Exception ex) when (ex is not InternalException && ex is not SQLCommandException)
+            {
+                throw new InternalException(
+                    stage: EnumStages.GetRegistersExists,
+                    error: EnumError.Exception,
+                    level: EnumMessageLevel.Error,
+                    message: "Error when filling identifiers to sql command",
+                    exceptionMessage: ex.Message
+                );
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public async Task<bool> InsertRecord(LinxAPIParam jobParameter, LinxProdutosCodBar? record)

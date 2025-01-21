@@ -15,7 +15,7 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxMicrovix
 
         public bool CreateTableIfNotExists(string databaseName, string jobName, string untreatedDatabaseName)
         {
-            string? sql = @$"SELECT DISTINCT * FROM [INFORMATION_SCHEMA].[TABLES] (NOLOCK) WHERE TABLE_NAME = '{jobName}'";
+            string? sql = @$"SELECT DISTINCT * FROM [INFORMATION_SCHEMA].[TABLES] (NOLOCK) WHERE TABLE_NAME = '{jobName}' AND TABLE_SCHEMA = 'linx_microvix_erp'";
 
             try
             {
@@ -24,23 +24,32 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxMicrovix
                     var result = conn.Query(sql: sql);
 
                     if (result.Count() == 0)
-                        conn.CreateTable<LinxCstIpiFiscal>(tableName: $"{jobName}");
+                        conn.CreateTable<LinxCstIpiFiscal>();
                 }
-
-                using (var conn = _conn.GetIDbConnection(untreatedDatabaseName))
-                {
-                    var result = conn.Query(sql: sql);
-
-                    if (result.Count() == 0)
-                        conn.CreateTable<LinxCstIpiFiscal>(tableName: $"{jobName}");
-                }
-
-                return true;
             }
             catch (Exception ex)
             {
                 throw;
             }
+
+            sql = @$"SELECT DISTINCT * FROM [INFORMATION_SCHEMA].[TABLES] (NOLOCK) WHERE TABLE_NAME = '{jobName}' AND TABLE_SCHEMA = 'untreated'";
+
+            try
+            {
+                using (var conn = _conn.GetIDbConnection(untreatedDatabaseName))
+                {
+                    var result = conn.Query(sql: sql);
+
+                    if (result.Count() == 0)
+                        conn.CreateTable<Domain.DatabaseInit.Entites.LinxMicrovix.LinxMicrovix.LinxCstIpiFiscal>();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+
+            return true;
         }
 
         public async Task<bool> CreateTableMerge(string databaseName, string tableName)
@@ -60,8 +69,8 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxMicrovix
                     individual = @"<Parameter id=""timestamp"">[0]</Parameter>"
                 };
 
-                string? sql = $"IF NOT EXISTS (SELECT * FROM [{parametersTableName}] WHERE [method] = '{jobName}') " +
-                              $"INSERT INTO [{parametersTableName}] ([method], [parameters_timestamp], [parameters_dateinterval], [parameters_individual]) " +
+                string? sql = $"IF NOT EXISTS (SELECT * FROM [linx_microvix].[{parametersTableName}] WHERE [method] = '{jobName}') " +
+                              $"INSERT INTO [linx_microvix].[{parametersTableName}] ([method], [parameters_timestamp], [parameters_dateinterval], [parameters_individual]) " +
                                "VALUES (@method, @timestamp, @dateinterval, @individual)";
 
 

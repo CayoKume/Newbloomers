@@ -1,9 +1,11 @@
 ﻿using Application.IntegrationsCore.Interfaces;
 using Application.IntegrationsCore.Services;
+using Domain.IntegrationsCore.Interfaces;
 using Hangfire.SqlServer;
 using Infrastructure.DatabaseInit;
 using Infrastructure.FlashCourier.DependencyInjection;
 using Infrastructure.IntegrationsCore.DependencyInjection;
+using Infrastructure.IntegrationsCore.Repositorys;
 using Infrastructure.LinxCommerce.DependencyInjection;
 using Infrastructure.LinxMicrovix.Outbound.WebService.DependencyInjection;
 using Infrastructure.TotalExpress.DependencyInjection;
@@ -40,7 +42,7 @@ namespace Hangfire.IO.Extensions
             //services.AddSingleton<ILoggerConfig, LoggerConfig>();
             //services.AddScoped<ILogMsgsRepository, LogMsgsRepository>();
             //services.AddScoped<ILogDetailsRepository, LogDetailsRepository>();
-            //services.AddScoped<ILogStatusRepository, LogStatusRepository>();
+            services.AddScoped<ILogRepository, LogRepository>();
             services.AddScoped<ILoggerService, LoggerService>();
 
             return services;

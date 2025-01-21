@@ -1,6 +1,9 @@
-﻿namespace Domain.IntegrationsCore.Interfaces
+﻿using Domain.IntegrationsCore.Entities.Errors;
+
+namespace Domain.IntegrationsCore.Interfaces
 {
-    internal interface ILogRepository
+    public interface ILogRepository
     {
+        public Task<bool> LogInsert(Log log);
     }
 }

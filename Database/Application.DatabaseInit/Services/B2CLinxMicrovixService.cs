@@ -236,7 +236,7 @@ namespace Application.DatabaseInit.Services
                         .First()
                         .IsActive
                     )
-                    _b2cConsultaClientesContatosParentescoRepository.CreateDataTableIfNotExists(
+                    _b2cConsultaClientesContatosRepository.CreateDataTableIfNotExists(
                             databaseName: parameters.databaseName,
                             jobName: listMethods
                                     .Where(m => m.MethodName == "B2CConsultaClientesContatos")

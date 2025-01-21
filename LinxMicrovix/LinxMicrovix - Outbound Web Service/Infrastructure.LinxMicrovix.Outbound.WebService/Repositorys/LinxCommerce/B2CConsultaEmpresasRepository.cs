@@ -54,7 +54,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                         identificadores += $"'{registros[i].cnpj_emp}', ";
                 }
 
-                string sql = $"SELECT CNPJ_EMP, TIMESTAMP FROM B2CCONSULTAEMPRESAS WHERE CNPJ_EMP IN ({identificadores})";
+                string sql = $"SELECT CNPJ_EMP, TIMESTAMP FROM [LINX_MICROVIX_COMMERCE].[B2CCONSULTAEMPRESAS] WHERE CNPJ_EMP IN ({identificadores})";
 
                 return await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
             }

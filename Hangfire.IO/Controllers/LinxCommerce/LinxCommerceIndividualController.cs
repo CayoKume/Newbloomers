@@ -1,4 +1,5 @@
 ﻿using Application.LinxCommerce.Interfaces.Catolog;
+using Domain.LinxCommerce.Entities.Parameters;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
@@ -106,40 +107,40 @@ namespace HangfireDashboard.UI.Controllers.LinxCommerce
             //}
         }
 
-        //[HttpPost("GetSKU")]
-        //public async Task<ActionResult> GetSKU([Required][FromQuery] int productId)
-        //{
-        //    try
-        //    {
-        //        var method = _methods
-        //            .Where(m => m.MethodName == "SKU")
-        //            .FirstOrDefault();
+        [HttpPost("GetSKU")]
+        public async Task<ActionResult> GetSKU([Required][FromQuery] int productId)
+        {
+            try
+            {
+                var method = _methods
+                    .Where(m => m.MethodName == "SKU")
+                    .FirstOrDefault();
 
-        //        var result = await _skuService.GetSKU(
-        //            new LinxCommerceJobParameter
-        //            {
-        //                projectName = _projectName,
-        //                databaseName = _databaseName,
-        //                keyAuthorization = _key,
-        //                userAuthentication = _authentication,
-        //                parametersTableName = _parametersTableName,
-        //                parametersLogTableName = _parametersLogTableName,
-        //                jobName = method.MethodName,
-        //                tableName = method.MethodName,
-        //            },
-        //            productID: productId
-        //        );
+                var result = await _skuService.GetSKU(
+                    new LinxCommerceJobParameter
+                    {
+                        projectName = _projectName,
+                        databaseName = _databaseName,
+                        keyAuthorization = _key,
+                        userAuthentication = _authentication,
+                        parametersTableName = _parametersTableName,
+                        parametersLogTableName = _parametersLogTableName,
+                        jobName = method.MethodName,
+                        tableName = method.MethodName,
+                    },
+                    productID: productId
+                );
 
-        //        if (result != true)
-        //            return BadRequest($"Unable to find record: {productId} on endpoint.");
-        //        else
-        //            return Ok($"Record: {productId} integrated successfully.");
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Response.StatusCode = 400;
-        //        return Content($"Unable to integrate the record: {productId}.\nError: {ex.Message}");
-        //    }
-        //}
+                if (result != true)
+                    return BadRequest($"Unable to find record: {productId} on endpoint.");
+                else
+                    return Ok($"Record: {productId} integrated successfully.");
+            }
+            catch (Exception ex)
+            {
+                Response.StatusCode = 400;
+                return Content($"Unable to integrate the record: {productId}.\nError: {ex.Message}");
+            }
+        }
     }
 }
