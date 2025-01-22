@@ -78,7 +78,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
         public async Task<bool> InsertRecord(LinxAPIParam jobParameter, LinxLojas? record)
         {
-            string? sql = @$"INSERT INTO {jobParameter.tableName} 
+            string? sql = @$"INSERT INTO [untreated].[{jobParameter.tableName}]
                             ([lastupdateon],[portal],[empresa],[nome_emp],[razao_emp],[cnpj_emp],[inscricao_emp],[endereco_emp],[num_emp],[complement_emp],[bairro_emp],[cep_emp],
                              [cidade_emp],[estado_emp],[fone_emp],[email_emp],[cod_ibge_municipio],[data_criacao_emp],[data_criacao_portal],[sistema_tributacao],[regime_tributario],
                              [area_empresa],[timestamp],[sigla_empresa],[id_classe_fiscal],[centro_distribuicao],[inscricao_municipal_emp],[cnae_emp],[cod_cliente_linx],

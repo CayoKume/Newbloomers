@@ -38,13 +38,13 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         public Int64? timestamp { get; private set; }
 
         [Column(TypeName = "bit")]
-        public bool? calcula_ipi { get; private set; }
+        public Int32? calcula_ipi { get; private set; }
 
         [Column(TypeName = "bit")]
-        public bool? calcula_iss { get; private set; }
+        public Int32? calcula_iss { get; private set; }
 
         [Column(TypeName = "bit")]
-        public bool? calcula_irrf { get; private set; }
+        public Int32? calcula_irrf { get; private set; }
 
         [Column(TypeName = "char(2)")]
         [LengthValidation(length: 2, propertyName: "tipo_preco")]
@@ -55,10 +55,10 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         public string? atualiza_custo { get; private set; }
 
         [Column(TypeName = "bit")]
-        public bool? transferencia { get; private set; }
+        public Int32? transferencia { get; private set; }
 
         [Column(TypeName = "bit")]
-        public bool? baixar_estoque { get; private set; }
+        public Int32? baixar_estoque { get; private set; }
 
         [Column(TypeName = "bit")]
         public bool? consumo_proprio { get; private set; }
@@ -76,7 +76,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         public bool? exige_nf_origem { get; private set; }
 
         [Column(TypeName = "bit")]
-        public bool? integra_contabilidade { get; private set; }
+        public Int32? integra_contabilidade { get; private set; }
 
         [Column(TypeName = "int")]
         public Int32? id_obs { get; private set; }
@@ -187,29 +187,29 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
                 0;
 
             this.calcula_ipi =
-                ConvertToBooleanValidation.IsValid(calcula_ipi, "calcula_ipi", listValidations) ?
-                Convert.ToBoolean(calcula_ipi) :
-                false;
+                ConvertToInt32Validation.IsValid(calcula_ipi, "calcula_ipi", listValidations) ?
+                Convert.ToInt32(calcula_ipi) :
+                0;
 
             this.calcula_iss =
-                ConvertToBooleanValidation.IsValid(calcula_iss, "calcula_iss", listValidations) ?
-                Convert.ToBoolean(calcula_iss) :
-                false;
+                ConvertToInt32Validation.IsValid(calcula_iss, "calcula_iss", listValidations) ?
+                Convert.ToInt32(calcula_iss) :
+                0;
 
             this.calcula_irrf =
-                ConvertToBooleanValidation.IsValid(calcula_irrf, "calcula_irrf", listValidations) ?
-                Convert.ToBoolean(calcula_irrf) :
-                false;
+                ConvertToInt32Validation.IsValid(calcula_irrf, "calcula_irrf", listValidations) ?
+                Convert.ToInt32(calcula_irrf) :
+                0;
 
             this.transferencia =
-                ConvertToBooleanValidation.IsValid(transferencia, "transferencia", listValidations) ?
-                Convert.ToBoolean(transferencia) :
-                false;
+                ConvertToInt32Validation.IsValid(transferencia, "transferencia", listValidations) ?
+                Convert.ToInt32(transferencia) :
+                0;
 
             this.baixar_estoque =
-                ConvertToBooleanValidation.IsValid(baixar_estoque, "baixar_estoque", listValidations) ?
-                Convert.ToBoolean(baixar_estoque) :
-                false;
+                ConvertToInt32Validation.IsValid(baixar_estoque, "baixar_estoque", listValidations) ?
+                Convert.ToInt32(baixar_estoque) :
+                0;
 
             this.consumo_proprio =
                 ConvertToBooleanValidation.IsValid(consumo_proprio, "consumo_proprio", listValidations) ?
@@ -237,9 +237,9 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
                 false;
 
             this.integra_contabilidade =
-                ConvertToBooleanValidation.IsValid(integra_contabilidade, "integra_contabilidade", listValidations) ?
-                Convert.ToBoolean(integra_contabilidade) :
-                false;
+                ConvertToInt32Validation.IsValid(integra_contabilidade, "integra_contabilidade", listValidations) ?
+                Convert.ToInt32(integra_contabilidade) :
+                0;
 
             this.venda_futura =
                 ConvertToBooleanValidation.IsValid(venda_futura, "venda_futura", listValidations) ?

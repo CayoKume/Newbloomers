@@ -109,7 +109,103 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
 
         public async Task<bool> GetRecords(LinxAPIParam jobParameter)
         {
-            throw new NotImplementedException();
+            IList<LinxPlanos> _listSomenteNovos = new List<LinxPlanos>();
+
+            try
+            {
+                _logger
+                   .Clear()
+                   .AddLog(EnumJob.LinxPlanos);
+
+                string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter);
+
+                var body = _linxMicrovixServiceBase.BuildBodyRequest(
+                            parametersList: parameters.Replace("[0]", "0").Replace("[data_upd_inicial]", $"2000-01-01").Replace("[data_upd_fim]", $"{DateTime.Today.ToString("yyyy-MM-dd")}"),
+                            jobParameter: jobParameter,
+                            cnpj_emp: jobParameter.docMainCompany
+                        );
+
+                string? response = await _apiCall.PostAsync(jobParameter: jobParameter, body: body);
+                var xmls = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response, _linxPlanosServiceCache);
+
+                if (xmls.Count() > 0)
+                {
+                    var listRecords = DeserializeXMLToObject(jobParameter, xmls);
+
+                    if (_linxPlanosServiceCache.GetList().Count == 0)
+                    {
+                        var list_existentes = await _linxPlanosRepository.GetRegistersExists(jobParameter: jobParameter, registros: listRecords);
+                        _linxPlanosServiceCache.AddList(list_existentes);
+                    }
+
+                    _listSomenteNovos = _linxPlanosServiceCache.FiltrarList(listRecords);
+                    if (_listSomenteNovos.Count() > 0)
+                    {
+                        _linxPlanosRepository.BulkInsertIntoTableRaw(records: _listSomenteNovos, jobParameter: jobParameter);
+                        for (int i = 0; i < _listSomenteNovos.Count; i++)
+                        {
+                            var key = _linxPlanosServiceCache.GetKey(_listSomenteNovos[i]);
+                            if (_linxPlanosServiceCache.GetDictionaryXml().ContainsKey(key))
+                            {
+                                var xml = _linxPlanosServiceCache.GetDictionaryXml()[key];
+                                _logger.AddRecord(key, xml);
+                            }
+                        }
+
+                        await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter: jobParameter);
+
+                        _logger.AddMessage(
+                            $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"
+                        );
+                    }
+                    else
+                        _logger.AddMessage(
+                            $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"
+                        );
+                }
+
+                await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter: jobParameter);
+            }
+            catch (SQLCommandException ex)
+            {
+                _logger.AddMessage(
+                    stage: ex.Stage,
+                    error: ex.Error,
+                    logLevel: ex.MessageLevel,
+                    message: ex.Message,
+                    exceptionMessage: ex.ExceptionMessage,
+                    commandSQL: ex.CommandSQL
+                );
+
+                throw;
+            }
+            catch (InternalException ex)
+            {
+                _logger.AddMessage(
+                    stage: ex.stage,
+                    error: ex.Error,
+                    logLevel: ex.MessageLevel,
+                    message: ex.Message,
+                    exceptionMessage: ex.ExceptionMessage
+                );
+
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.AddMessage(
+                    message: "Error when executing GetRecords method",
+                    exceptionMessage: ex.Message
+                );
+            }
+            finally
+            {
+                _logger.SetLogEndDate();
+                await _logger.CommitAllChanges();
+                _linxPlanosServiceCache.AddList(_listSomenteNovos);
+            }
+
+            return true;
         }
     }
 }

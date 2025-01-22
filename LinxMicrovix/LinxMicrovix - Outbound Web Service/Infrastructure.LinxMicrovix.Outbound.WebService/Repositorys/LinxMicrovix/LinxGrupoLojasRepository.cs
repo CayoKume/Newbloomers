@@ -52,7 +52,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
                         identificadores += $"'{registros[i].empresa}', ";
                 }
 
-                string sql = $"SELECT empresa, TIMESTAMP FROM [linx_microvix_erp].[LinxGrupoLojas] WHERE empresa IN ({identificadores})";
+                string sql = $"SELECT empresa FROM [linx_microvix_erp].[LinxGrupoLojas] WHERE empresa IN ({identificadores})";
 
                 return await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
             }

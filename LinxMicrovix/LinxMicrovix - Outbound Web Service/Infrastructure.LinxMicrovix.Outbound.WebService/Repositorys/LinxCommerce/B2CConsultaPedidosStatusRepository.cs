@@ -52,7 +52,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                         identificadores += $"'{registros[i].id_pedido}', ";
                 }
 
-                string sql = $"SELECT ID_PEDIDO, TIMESTAMP FROM [linx_microvix_commerce].[B2CCONSULTAPEDIDOSSTATUS] WHERE ID_PEDIDO IN ({identificadores})";
+                string sql = $"SELECT ID, ID_PEDIDO, TIMESTAMP FROM [linx_microvix_commerce].[B2CCONSULTAPEDIDOSSTATUS] WHERE ID_PEDIDO IN ({identificadores})";
 
                 return await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
             }
@@ -74,7 +74,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 
         public async Task<bool> InsertRecord(LinxAPIParam jobParameter, B2CConsultaPedidosStatus? record)
         {
-            string? sql = $"INSERT INTO {jobParameter.tableName} " +
+            string? sql = $"INSERT INTO [untreated].{jobParameter.tableName} " +
                           "([lastupdateon], [id], [id_status], [id_pedido], [data_hora], [anotacao], [timestamp], [portal]) " +
                           "Values " +
                           "(@lastupdateon, @id, @id_status, @id_pedido, @data_hora, @anotacao, @timestamp, @portal)";

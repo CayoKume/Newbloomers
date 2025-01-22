@@ -55,7 +55,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                         identificadores += $"'{registros[i].id_pedido}', ";
                 }
 
-                string sql = $"SELECT ID_PEDIDO, TIMESTAMP FROM B2CCONSULTAPEDIDOS WHERE ID_PEDIDO IN ({identificadores})";
+                string sql = $"SELECT ID_PEDIDO, COD_CLIENTE_ERP, COD_CLIENTE_B2C, ORDER_ID, TIMESTAMP FROM [linx_microvix_commerce].B2CCONSULTAPEDIDOS WHERE ID_PEDIDO IN ({identificadores})";
 
                 return await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
             }
@@ -77,7 +77,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 
         public async Task<bool> InsertRecord(LinxAPIParam jobParameter, B2CConsultaPedidos? record)
         {
-            string? sql = $"INSERT INTO {jobParameter.tableName} " +
+            string? sql = $"INSERT INTO [untreated].{jobParameter.tableName} " +
                           "([lastupdateon], [id_pedido], [dt_pedido], [cod_cliente_erp], [cod_cliente_b2c], [vl_frete], [forma_pgto], [plano_pagamento], [anotacao], [taxa_impressao], [finalizado], [valor_frete_gratis], [tipo_frete], " +
                           "[id_status], [cod_transportador], [tipo_cobranca_frete], [ativo], [empresa], [id_tabela_preco], [valor_credito], [cod_vendedor], [timestamp], [dt_insert], [dt_disponivel_faturamento], [portal], " +
                           "[mensagem_falha_faturamento], [id_tipo_b2c], [ecommerce_origem], [order_id]) " +

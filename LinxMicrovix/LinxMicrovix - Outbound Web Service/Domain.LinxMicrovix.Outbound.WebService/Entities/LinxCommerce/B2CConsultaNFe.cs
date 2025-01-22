@@ -37,7 +37,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         public string? xml { get; private set; }
 
         [Column(TypeName = "bit")]
-        public Int32? excluido { get; private set; }
+        public bool? excluido { get; private set; }
 
         [Column(TypeName = "uniqueidentifier")]
         public Guid? identificador_microvix { get; private set; }
@@ -129,9 +129,9 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                 0;
 
             this.excluido =
-                ConvertToInt32Validation.IsValid(excluido, "excluido", listValidations) ?
-                Convert.ToInt32(excluido) :
-                0;
+                ConvertToBooleanValidation.IsValid(excluido, "excluido", listValidations) ?
+                Convert.ToBoolean(excluido) :
+                false;
 
             this.identificador_microvix =
                 String.IsNullOrEmpty(identificador_microvix) ? null

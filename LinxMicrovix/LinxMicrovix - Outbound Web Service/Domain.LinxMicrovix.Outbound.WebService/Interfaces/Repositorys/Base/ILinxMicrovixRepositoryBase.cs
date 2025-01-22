@@ -9,8 +9,10 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base
         public Task<string?> GetParameters(LinxAPIParam jobParameter);
         public Task<IEnumerable<Company>> GetB2CCompanys(LinxAPIParam jobParameter);
         public Task<IEnumerable<Company>> GetMicrovixCompanys(LinxAPIParam jobParameter);
+        public Task<IEnumerable<Company>> GetMicrovixGroupCompanys(LinxAPIParam jobParameter);
         public Task<List<TEntity>> GetRegistersExists(LinxAPIParam jobParameter, string sql);
         public Task<string?> GetLast7DaysMinTimestamp(LinxAPIParam jobParameter, string? columnDate);
+        public Task<string?> GetLast7DaysMinTimestamp(LinxAPIParam jobParameter, string? columnDate, string? columnCompany, string? companyValue);
         public Task<bool> InsertRecord(LinxAPIParam jobParameter, string? sql, object record);
         public Task<bool> ExecuteQueryCommand(LinxAPIParam jobParameter, string? sql);
         public bool BulkInsertIntoTableRaw(LinxAPIParam jobParameter, DataTable dataTable, int dataTableRowsNumber);

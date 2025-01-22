@@ -101,8 +101,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [Column(TypeName = "bit")]
         public bool? centro_distribuicao { get; private set; }
 
-        [Column(TypeName = "varchar(10)")]
-        [LengthValidation(length: 10, propertyName: "inscricao_municipal_emp")]
+        [Column(TypeName = "varchar(14)")]
+        [LengthValidation(length: 14, propertyName: "inscricao_municipal_emp")]
         public string? inscricao_municipal_emp { get; private set; }
 
         [Column(TypeName = "varchar(7)")]

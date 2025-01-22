@@ -5,6 +5,7 @@ using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxMicrovix;
 using Application.LinxMicrovix.Outbound.WebService.Services.Cache.LinxMicrovix;
 using Domain.IntegrationsCore.Entities.Enums;
 using Domain.IntegrationsCore.Exceptions;
+using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Api;
@@ -21,7 +22,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
         private readonly ILinxMicrovixRepositoryBase<LinxLojas> _linxMicrovixRepositoryBase;
         private readonly ILinxLojasRepository _linxLojasRepository;
-        private static ILinxLojasServiceCache linxLojasServiceCache { get; set; } = new LinxLojasServiceCache();
+        private static ILinxLojasServiceCache _linxLojasServiceCache { get; set; } = new LinxLojasServiceCache();
 
         public LinxLojasService(
             IAPICall apiCall,
@@ -115,12 +116,112 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
             return list;
         }
 
-        public async Task<bool> GetRecord(LinxAPIParam jobParameter, string? identificador, string? cnpj_emp)
+        public async Task<bool> GetRecords(LinxAPIParam jobParameter)
         {
-            throw new NotImplementedException();
+            IList<LinxLojas> _listSomenteNovos = new List<LinxLojas>();
+
+            try
+            {
+                _logger
+                   .Clear()
+                   .AddLog(EnumJob.LinxLojas);
+
+                string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter);
+                var cnpjs_emp = await _linxMicrovixRepositoryBase.GetMicrovixGroupCompanys(jobParameter);
+
+                foreach (var cnpj_emp in cnpjs_emp)
+                {
+                    var body = _linxMicrovixServiceBase.BuildBodyRequest(
+                                parametersList: parameters.Replace("[0]", "0"),
+                                jobParameter: jobParameter,
+                                cnpj_emp: cnpj_emp.doc_company
+                            );
+
+                    string? response = await _apiCall.PostAsync(jobParameter: jobParameter, body: body);
+                    var xmls = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response, _linxLojasServiceCache);
+
+                    if (xmls.Count() > 0)
+                    {
+                        var listRecords = DeserializeXMLToObject(jobParameter, xmls);
+
+                        if (_linxLojasServiceCache.GetList().Count == 0)
+                        {
+                            var list_existentes = await _linxLojasRepository.GetRegistersExists(jobParameter: jobParameter, registros: listRecords);
+                            _linxLojasServiceCache.AddList(list_existentes);
+                        }
+
+                        _listSomenteNovos = _linxLojasServiceCache.FiltrarList(listRecords);
+                        if (_listSomenteNovos.Count() > 0)
+                        {
+                            _linxLojasRepository.InsertRecord(record: _listSomenteNovos[0], jobParameter: jobParameter);
+                            for (int i = 0; i < _listSomenteNovos.Count; i++)
+                            {
+                                var key = _linxLojasServiceCache.GetKey(_listSomenteNovos[i]);
+                                if (_linxLojasServiceCache.GetDictionaryXml().ContainsKey(key))
+                                {
+                                    var xml = _linxLojasServiceCache.GetDictionaryXml()[key];
+                                    _logger.AddRecord(key, xml);
+                                }
+                            }
+
+                            await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter: jobParameter);
+
+                            _logger.AddMessage(
+                                $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"
+                            );
+                        }
+                        else
+                            _logger.AddMessage(
+                                $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"
+                            );
+                    }
+
+                    await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter: jobParameter);
+                }
+            }
+            catch (SQLCommandException ex)
+            {
+                _logger.AddMessage(
+                    stage: ex.Stage,
+                    error: ex.Error,
+                    logLevel: ex.MessageLevel,
+                    message: ex.Message,
+                    exceptionMessage: ex.ExceptionMessage,
+                    commandSQL: ex.CommandSQL
+                );
+
+                throw;
+            }
+            catch (InternalException ex)
+            {
+                _logger.AddMessage(
+                    stage: ex.stage,
+                    error: ex.Error,
+                    logLevel: ex.MessageLevel,
+                    message: ex.Message,
+                    exceptionMessage: ex.ExceptionMessage
+                );
+
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.AddMessage(
+                    message: "Error when executing GetRecords method",
+                    exceptionMessage: ex.Message
+                );
+            }
+            finally
+            {
+                _logger.SetLogEndDate();
+                await _logger.CommitAllChanges();
+                _linxLojasServiceCache.AddList(_listSomenteNovos);
+            }
+
+            return true;
         }
 
-        public async Task<bool> GetRecords(LinxAPIParam jobParameter)
+        public Task<bool> GetRecord(LinxAPIParam jobParameter, string? cnpj_emp)
         {
             throw new NotImplementedException();
         }

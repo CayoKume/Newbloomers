@@ -18,9 +18,11 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [Column(TypeName = "datetime")]
         public DateTime dt_pedido { get; private set; }
 
+        [Key]
         [Column(TypeName = "int")]
         public Int32 cod_cliente_erp { get; private set; }
 
+        [Key]
         [Column(TypeName = "int")]
         public Int32 cod_cliente_b2c { get; private set; }
 
@@ -61,6 +63,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [Column(TypeName = "bit")]
         public bool ativo { get; private set; }
 
+        [Key]
         [Column(TypeName = "int")]
         public Int32 empresa { get; private set; }
 
@@ -99,6 +102,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [LengthValidation(length: 60, propertyName: "marketplace_loja")]
         public string marketplace_loja { get; private set; }
 
+        [Key]
         [Column(TypeName = "varchar(40)")]
         [LengthValidation(length: 40, propertyName: "order_id")]
         public string order_id { get; private set; }
@@ -251,6 +255,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
                 0;
 
             this.order_id = order_id;
+            this.anotacao = anotacao;
             this.ecommerce_origem = ecommerce_origem;
             this.marketplace_loja = marketplace_loja;
             this.mensagem_falha_faturamento = mensagem_falha_faturamento;

@@ -23,7 +23,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
                 {
                     table.Rows.Add(records[i].lastupdateon, records[i].portal, records[i].cod_cliente, records[i].razao_cliente, records[i].nome_cliente, records[i].doc_cliente,
                         records[i].tipo_cliente, records[i].endereco_cliente, records[i].numero_rua_cliente, records[i].complement_end_cli, records[i].bairro_cliente, records[i].cep_cliente,
-                        records[i].cidade_cliente, records[i].uf_cliente, records[i].pais, records[i].ativo, records[i].fone_cliente, records[i].email_cliente, records[i].sexo, records[i].data_cadastro,
+                        records[i].cidade_cliente, records[i].uf_cliente, records[i].pais, records[i].fone_cliente, records[i].email_cliente, records[i].sexo, records[i].data_cadastro,
                         records[i].data_nascimento, records[i].cel_cliente, records[i].ativo, records[i].dt_update, records[i].inscricao_estadual, records[i].incricao_municipal, records[i].identidade_cliente, 
                         records[i].cartao_fidelidade, records[i].cod_ibge_municipio, records[i].classe_cliente, records[i].matricula_conveniado, records[i].tipo_cadastro, records[i].empresa_cadastro, records[i].id_estado_civil, 
                         records[i].fax_cliente, records[i].site_cliente, records[i].timestamp, records[i].cliente_anonimo, records[i].limite_compras, records[i].codigo_ws, records[i].limite_credito_compra, records[i].id_classe_fiscal, 
@@ -57,7 +57,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
                         identificadores += $"'{registros[i].doc_cliente}', ";
                 }
 
-                string sql = $"SELECT DOC_CLIENTE, TIMESTAMP FROM [linx_microvix_erp].[LinxClientesFornec] WHERE DOC_CLIENTE IN ({identificadores})";
+                string sql = $"SELECT cod_cliente, DOC_CLIENTE, TIMESTAMP FROM [linx_microvix_erp].[LinxClientesFornec] WHERE DOC_CLIENTE IN ({identificadores})";
 
                 return await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
             }

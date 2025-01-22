@@ -17,6 +17,7 @@ namespace Domain.DatabaseInit.Entites.LinxMicrovix.LinxMicrovix
         [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
+        [Key]
         [Column(TypeName = "varchar(14)")]
         [LengthValidation(length: 14, propertyName: "cnpj_emp")]
         public string? cnpj_emp { get; private set; }
@@ -32,6 +33,7 @@ namespace Domain.DatabaseInit.Entites.LinxMicrovix.LinxMicrovix
         [Column(TypeName = "int")]
         public Int64? timestamp { get; private set; }
 
+        [Key]
         [Column(TypeName = "char(1)")]
         [LengthValidation(length: 1, propertyName: "tipo_tabela")]
         public string? tipo_tabela { get; private set; }

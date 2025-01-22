@@ -160,54 +160,50 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                    .AddLog(EnumJob.B2CConsultaPedidos);
 
                 string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter);
-                var cnpjs_emp = await _linxMicrovixRepositoryBase.GetB2CCompanys(jobParameter);
 
-                foreach (var cnpj_emp in cnpjs_emp)
+                var body = _linxMicrovixServiceBase.BuildBodyRequest(
+                            parametersList: parameters.Replace("[0]", "0").Replace("[data_origem_inicial]", $"{DateTime.Today.AddDays(-7).ToString("yyyy-MM-dd")}").Replace("[data_origem_fim]", $"{DateTime.Today.ToString("yyyy-MM-dd")}"),
+                            jobParameter: jobParameter,
+                            cnpj_emp: jobParameter.docMainCompany
+                        );
+
+                string? response = await _apiCall.PostAsync(jobParameter: jobParameter, body: body);
+                var xmls = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response);
+
+                if (xmls.Count() > 0)
                 {
-                    var body = _linxMicrovixServiceBase.BuildBodyRequest(
-                                parametersList: parameters.Replace("[0]", "0"),
-                                jobParameter: jobParameter,
-                                cnpj_emp: cnpj_emp.doc_company
-                            );
+                    var listRecords = DeserializeXMLToObject(jobParameter, xmls);
 
-                    string? response = await _apiCall.PostAsync(jobParameter: jobParameter, body: body);
-                    var xmls = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response);
-
-                    if (xmls.Count() > 0)
+                    if (_b2cConsultaPedidosCache.GetList().Count == 0)
                     {
-                        var listRecords = DeserializeXMLToObject(jobParameter, xmls);
-
-                        if (_b2cConsultaPedidosCache.GetList().Count == 0)
-                        {
-                            var list_existentes = await _b2cConsultaPedidosRepository.GetRegistersExists(jobParameter: jobParameter, registros: listRecords);
-                            _b2cConsultaPedidosCache.AddList(list_existentes);
-                        }
-
-                        _listSomenteNovos = _b2cConsultaPedidosCache.FiltrarList(listRecords);
-                        if (_listSomenteNovos.Count() > 0)
-                        {
-                            _b2cConsultaPedidosRepository.BulkInsertIntoTableRaw(records: _listSomenteNovos, jobParameter: jobParameter);
-                            for (int i = 0; i < _listSomenteNovos.Count; i++)
-                            {
-                                var key = _b2cConsultaPedidosCache.GetKey(_listSomenteNovos[i]);
-                                if (_b2cConsultaPedidosCache.GetDictionaryXml().ContainsKey(key))
-                                {
-                                    var xml = _b2cConsultaPedidosCache.GetDictionaryXml()[key];
-                                    _logger.AddRecord(key, xml);
-                                }
-                            }
-
-                            await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter: jobParameter);
-
-                            _logger.AddMessage(
-                                $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"
-                            );
-                        }
-                        else
-                            _logger.AddMessage(
-                                $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"
-                            );
+                        var list_existentes = await _b2cConsultaPedidosRepository.GetRegistersExists(jobParameter: jobParameter, registros: listRecords);
+                        _b2cConsultaPedidosCache.AddList(list_existentes);
                     }
+
+                    _listSomenteNovos = _b2cConsultaPedidosCache.FiltrarList(listRecords);
+                    if (_listSomenteNovos.Count() > 0)
+                    {
+                        _b2cConsultaPedidosRepository.BulkInsertIntoTableRaw(records: _listSomenteNovos, jobParameter: jobParameter);
+                        for (int i = 0; i < _listSomenteNovos.Count; i++)
+                        {
+                            var key = _b2cConsultaPedidosCache.GetKey(_listSomenteNovos[i]);
+                            if (_b2cConsultaPedidosCache.GetDictionaryXml().ContainsKey(key))
+                            {
+                                var xml = _b2cConsultaPedidosCache.GetDictionaryXml()[key];
+                                _logger.AddRecord(key, xml);
+                            }
+                        }
+
+                        await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter: jobParameter);
+
+                        _logger.AddMessage(
+                            $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"
+                        );
+                    }
+                    else
+                        _logger.AddMessage(
+                            $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"
+                        );
                 }
 
                 await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter: jobParameter);

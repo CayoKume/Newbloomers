@@ -14,6 +14,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
+        [Key]
         [Column(TypeName = "varchar(14)")]
         [LengthValidation(length: 14, propertyName: "cnpj_emp")]
         public string? cnpj_emp { get; private set; }
@@ -35,9 +36,11 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [Column(TypeName = "int")]
         public Int32? usuario { get; private set; }
 
+        [Key]
         [Column(TypeName = "int")]
         public Int32? codigo_cliente { get; private set; }
 
+        [Key]
         [Column(TypeName = "bigint")]
         public Int64? cod_produto { get; private set; }
 
@@ -229,6 +232,11 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             this.codigo_cliente =
                 ConvertToInt32Validation.IsValid(codigo_cliente, "codigo_cliente", listValidations) ?
                 Convert.ToInt32(codigo_cliente) :
+                0;
+
+            this.cod_pedido =
+                ConvertToInt32Validation.IsValid(cod_pedido, "cod_pedido", listValidations) ?
+                Convert.ToInt32(cod_pedido) :
                 0;
 
             this.cod_vendedor =

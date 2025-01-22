@@ -46,12 +46,12 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
                 for (int i = 0; i < registros.Count(); i++)
                 {
                     if (i == registros.Count() - 1)
-                        identificadores += $"'{registros[i].cod_produto}'";
+                        identificadores += $"'{registros[i].cod_deposito}'";
                     else
-                        identificadores += $"'{registros[i].cod_produto}', ";
+                        identificadores += $"'{registros[i].cod_deposito}', ";
                 }
 
-                string sql = $"SELECT cod_produto, TIMESTAMP FROM [linx_microvix_erp].[LinxProdutosDepositos] WHERE cod_produto IN ({identificadores})";
+                string sql = $"SELECT cod_deposito, TIMESTAMP FROM [linx_microvix_erp].[LinxProdutosDepositos] WHERE cod_deposito IN ({identificadores})";
 
                 return await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
             }

@@ -11,7 +11,6 @@ using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Api;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxMicrovix;
 using System.ComponentModel.DataAnnotations;
-using System.Security.Permissions;
 
 namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
 {

@@ -14,9 +14,11 @@ namespace Domain.DatabaseInit.Entites.LinxMicrovix.LinxMicrovix
         [Column(TypeName = "int")]
         public Int32 id_pedido_item { get; private set; }
 
+        [Key]
         [Column(TypeName = "int")]
         public Int32 id_pedido { get; private set; }
 
+        [Key]
         [Column(TypeName = "bigint")]
         public Int64 codigoproduto { get; private set; }
 

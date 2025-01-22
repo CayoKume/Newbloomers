@@ -17,6 +17,7 @@
         BulkInsertIntoTableRaw = 12,
         GetRegistersExists = 13,
         DeserializeResponseToXML = 14,
-        DeserializeXMLToObject = 15
+        DeserializeXMLToObject = 15,
+        GetMicrovixGroupCompanys = 16
     }
 }

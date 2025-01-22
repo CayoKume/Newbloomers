@@ -18,9 +18,11 @@ namespace Domain.DatabaseInit.Entites.LinxMicrovix.LinxMicrovix
         [Column(TypeName = "datetime")]
         public DateTime dt_pedido { get; private set; }
 
+        [Key]
         [Column(TypeName = "int")]
         public Int32 cod_cliente_erp { get; private set; }
 
+        [Key]
         [Column(TypeName = "int")]
         public Int32 cod_cliente_b2c { get; private set; }
 
@@ -61,6 +63,7 @@ namespace Domain.DatabaseInit.Entites.LinxMicrovix.LinxMicrovix
         [Column(TypeName = "bit")]
         public bool ativo { get; private set; }
 
+        [Key]
         [Column(TypeName = "int")]
         public Int32 empresa { get; private set; }
 
@@ -98,6 +101,11 @@ namespace Domain.DatabaseInit.Entites.LinxMicrovix.LinxMicrovix
         [Column(TypeName = "varchar(60)")]
         [LengthValidation(length: 60, propertyName: "marketplace_loja")]
         public string marketplace_loja { get; private set; }
+
+        [Key]
+        [Column(TypeName = "varchar(40)")]
+        [LengthValidation(length: 40, propertyName: "order_id")]
+        public string order_id { get; private set; }
 
         public LinxB2CPedidos() { }
 

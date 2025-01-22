@@ -161,9 +161,65 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
             }
         }
 
+        public async Task<IEnumerable<Company>> GetMicrovixGroupCompanys(LinxAPIParam jobParameter)
+        {
+            string? sql = @"SELECT  
+                           EMPRESA AS COD_COMPANY,
+                           CNPJ AS DOC_COMPANY,
+                           NOME_EMPRESA AS REASON_COMPANY,
+                           NOME_EMPRESA AS NAME_COMPANY
+                           FROM 
+                           [LINX_MICROVIX_ERP].[LINXGRUPOLOJAS] (NOLOCK)
+                           WHERE CNPJ <> ''";
+
+            try
+            {
+                using (var conn = _sqlServerConnection.GetIDbConnection(jobParameter.databaseName))
+                {
+                    return await conn.QueryAsync<Company>(sql: sql);
+                }
+            }
+            catch (SqlException ex)
+            {
+                throw new SQLCommandException(
+                    stage: EnumStages.GetMicrovixCompanys,
+                    message: $"Error when trying to get companys from database",
+                    exceptionMessage: ex.Message,
+                    commandSQL: sql
+                );
+            }
+            catch (Exception ex)
+            {
+                throw new InternalException(
+                    stage: EnumStages.GetMicrovixGroupCompanys,
+                    error: EnumError.SQLCommand,
+                    level: EnumMessageLevel.Error,
+                    message: $"Error when trying to get companys from database",
+                    exceptionMessage: ex.Message
+                );
+            }
+        }
+
         public async Task<IEnumerable<Company>> GetMicrovixCompanys(LinxAPIParam jobParameter)
         {
-            string? sql = @"";
+            string? sql = @"SELECT  
+                           EMPRESA AS COD_COMPANY,
+                           CNPJ_EMP AS DOC_COMPANY,
+                           RAZAO_EMP AS REASON_COMPANY,
+                           NOME_EMP AS NAME_COMPANY,
+                           INSCRICAO_EMP AS STATE_REGISTRATION_COMPANY,
+                           EMAIL_EMP AS EMAIL_COMPANY,
+                           ENDERECO_EMP AS ADDRESS_COMPANY,
+                           NUM_EMP AS STREET_NUMBER_COMPANY,
+                           COMPLEMENT_EMP AS COMPLEMENT_ADDRESS_COMPANY,
+                           BAIRRO_EMP AS NEIGHBORHOOD_COMPANY,
+                           CIDADE_EMP AS CITY_COMPANY,
+                           ESTADO_EMP AS UF_COMPANY,
+                           CEP_EMP AS ZIP_CODE_COMPANY,
+                           FONE_EMP AS FONE_COMPANY,
+                           INSCRICAO_MUNICIPAL_EMP AS MUNICIPAL_REGISTRATION_COMPANY
+                           FROM 
+                           [LINX_MICROVIX_ERP].[LINXLOJAS] (NOLOCK)";
 
             try
             {
@@ -233,7 +289,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
             string? sql = "SELECT ISNULL(MIN(TIMESTAMP), 0) " +
                          $"FROM [{jobParameter.schema}].[{jobParameter.tableName}] (NOLOCK) " +
                           "WHERE " +
-                         $"{columnDate} > GETDATE() - 7";
+                         $"{columnDate} < GETDATE() - 7";
 
             try
             {
@@ -262,6 +318,42 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
                 );
             }
         }
+
+        public async Task<string?> GetLast7DaysMinTimestamp(LinxAPIParam jobParameter, string? columnDate, string? columnCompany, string? companyValue)
+        {
+            string? sql = "SELECT ISNULL(MIN(TIMESTAMP), 0) " +
+                         $"FROM [{jobParameter.schema}].[{jobParameter.tableName}] (NOLOCK) " +
+                          "WHERE " +
+                         $"{columnDate} < GETDATE() - 7 AND {columnCompany} = '{companyValue}'";
+
+            try
+            {
+                using (var conn = _sqlServerConnection.GetIDbConnection(jobParameter.databaseName))
+                {
+                    return await conn.QueryFirstOrDefaultAsync<string?>(sql: sql, commandTimeout: 360);
+                }
+            }
+            catch (SqlException ex)
+            {
+                throw new SQLCommandException(
+                    stage: EnumStages.GetLast7DaysMinTimestamp,
+                    message: $"Error when trying to get last timestamp from database",
+                    exceptionMessage: ex.Message,
+                    commandSQL: sql
+                );
+            }
+            catch (Exception ex)
+            {
+                throw new InternalException(
+                    stage: EnumStages.GetLast7DaysMinTimestamp,
+                    error: EnumError.SQLCommand,
+                    level: EnumMessageLevel.Error,
+                    message: $"Error when trying to get last timestamp from database",
+                    exceptionMessage: ex.Message
+                );
+            }
+        }
+
 
         public async Task<bool> InsertRecord(LinxAPIParam jobParameter, string? sql, object record)
         {

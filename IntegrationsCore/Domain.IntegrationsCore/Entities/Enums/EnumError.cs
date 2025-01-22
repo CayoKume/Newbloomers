@@ -2,23 +2,23 @@
 {
     public enum EnumError
     {
-        Undefined = 0,
+        Undefined = 1,
 
-        Exception = 3,
+        Exception = 2,
 
-        Validation = 22,
-        LegthValidation = 23,
-        ConvertValidation = 24,
+        Validation = 3,
+        LegthValidation = 4,
+        ConvertValidation = 5,
 
-        ArgumentConectionStringIsNull = 10,
-        ArgumentoInvalido = 21,
-        SQLCommand = 26,
+        ArgumentConectionStringIsNull = 6,
+        ArgumentoInvalido = 7,
+        SQLCommand = 8,
 
-        EndPointException = 30,
-        EndPointReturnEmpty = 31,
-        EndPointFailOnDeserialize = 32,
-        CreateClientException = 33,
+        EndPointException = 9,
+        EndPointReturnEmpty = 10,
+        EndPointFailOnDeserialize = 11,
+        CreateClientException = 12,
 
-        SqlInsert = 50,
+        SqlInsert = 13,
     }
 }
