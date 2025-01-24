@@ -155,7 +155,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
             this.valor_conta =
                 ConvertToDecimalValidation.IsValid(valor_conta, "valor_conta", listValidations) ?
-                Convert.ToDecimal(valor_conta) :
+                Convert.ToDecimal(valor_conta, new CultureInfo("en-US")) :
                 0;
 
             this.data_lanc =

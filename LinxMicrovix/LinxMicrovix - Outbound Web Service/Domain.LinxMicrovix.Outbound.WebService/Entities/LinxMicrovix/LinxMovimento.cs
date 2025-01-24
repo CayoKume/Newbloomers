@@ -14,6 +14,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
+        [Key]
         [Column(TypeName = "varchar(14)")]
         [LengthValidation(length: 14, propertyName: "cnpj_emp")]
         public string? cnpj_emp { get; private set; }
@@ -24,9 +25,11 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [Column(TypeName = "int")]
         public Int32? usuario { get; private set; }
 
+        [Key]
         [Column(TypeName = "int")]
         public Int32? documento { get; private set; }
 
+        [Key]
         [Column(TypeName = "varchar(44)")]
         [LengthValidation(length: 44, propertyName: "chave_nf")]
         public string? chave_nf { get; private set; }
@@ -41,12 +44,14 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [Column(TypeName = "int")]
         public Int32? modelo_nf { get; private set; }
 
+        [Key]
         [Column(TypeName = "datetime")]
         public DateTime? data_documento { get; private set; }
 
         [Column(TypeName = "datetime")]
         public DateTime? data_lancamento { get; private set; }
 
+        [Key]
         [Column(TypeName = "int")]
         public Int32? codigo_cliente { get; private set; }
 
@@ -142,31 +147,31 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         public decimal? valor_total { get; private set; }
 
         [Column(TypeName = "bit")]
-        public bool? forma_dinheiro { get; private set; }
+        public Int32? forma_dinheiro { get; private set; }
 
         [Column(TypeName = "decimal(10,2)")]
         public decimal? total_dinheiro { get; private set; }
 
         [Column(TypeName = "bit")]
-        public bool? forma_cheque { get; private set; }
+        public Int32? forma_cheque { get; private set; }
 
         [Column(TypeName = "decimal(10,2)")]
         public decimal? total_cheque { get; private set; }
 
         [Column(TypeName = "bit")]
-        public bool? forma_cartao { get; private set; }
+        public Int32? forma_cartao { get; private set; }
 
         [Column(TypeName = "decimal(10,2)")]
         public decimal? total_cartao { get; private set; }
 
         [Column(TypeName = "bit")]
-        public bool? forma_crediario { get; private set; }
+        public Int32? forma_crediario { get; private set; }
 
         [Column(TypeName = "decimal(10,2)")]
         public decimal? total_crediario { get; private set; }
 
         [Column(TypeName = "bit")]
-        public bool? forma_convenio { get; private set; }
+        public Int32? forma_convenio { get; private set; }
 
         [Column(TypeName = "decimal(10,2)")]
         public decimal? total_convenio { get; private set; }
@@ -182,6 +187,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [LengthValidation(length: 1, propertyName: "tipo_transacao")]
         public string? tipo_transacao { get; private set; }
 
+        [Key]
         [Column(TypeName = "bigint")]
         public Int64? cod_produto { get; private set; }
 
@@ -189,10 +195,12 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [LengthValidation(length: 20, propertyName: "cod_barra")]
         public string? cod_barra { get; private set; }
 
+        [Key]
         [Column(TypeName = "char(1)")]
         [LengthValidation(length: 1, propertyName: "cancelado")]
         public string? cancelado { get; private set; }
 
+        [Key]
         [Column(TypeName = "char(1)")]
         [LengthValidation(length: 1, propertyName: "excluido")]
         public string? excluido { get; private set; }
@@ -244,7 +252,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         public DateTime? dt_update { get; private set; }
 
         [Column(TypeName = "bit")]
-        public bool? forma_cheque_prazo { get; private set; }
+        public Int32? forma_cheque_prazo { get; private set; }
 
         [Column(TypeName = "decimal(10,2)")]
         public decimal? total_cheque_prazo { get; private set; }
@@ -263,6 +271,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [LengthValidation(length: 1, propertyName: "conferido")]
         public string? conferido { get; private set; }
 
+        [Key]
         [Column(TypeName = "int")]
         public Int32? transacao_pedido_venda { get; private set; }
 
@@ -282,6 +291,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [Column(TypeName = "decimal(10,2)")]
         public decimal? base_iss { get; private set; }
 
+        [Key]
         [Column(TypeName = "int")]
         public Int32? ordem { get; private set; }
 
@@ -328,13 +338,13 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         public decimal? despesas_total_item { get; private set; }
 
         [Column(TypeName = "bit")]
-        public bool? forma_pix { get; private set; }
+        public Int32? forma_pix { get; private set; }
 
         [Column(TypeName = "decimal(10,2)")]
         public decimal? total_pix { get; private set; }
 
         [Column(TypeName = "bit")]
-        public bool? forma_deposito_bancario { get; private set; }
+        public Int32? forma_deposito_bancario { get; private set; }
 
         [Column(TypeName = "decimal(10,2)")]
         public decimal? total_deposito_bancario { get; private set; }
@@ -346,7 +356,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         public bool? item_promocional { get; private set; }
 
         [Column(TypeName = "bit")]
-        public bool? acrescimo_item { get; private set; }
+        public decimal? acrescimo_item { get; private set; }
 
         [Column(TypeName = "decimal(10,2)")]
         public decimal? icms_st_antecipado_aliquota { get; private set; }
@@ -703,283 +713,283 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
             this.quantidade =
                 ConvertToDecimalValidation.IsValid(quantidade, "quantidade", listValidations) ?
-                Convert.ToDecimal(quantidade) :
+                Convert.ToDecimal(quantidade, new CultureInfo("en-US")) :
                 0;
 
             this.preco_custo =
                 ConvertToDecimalValidation.IsValid(preco_custo, "preco_custo", listValidations) ?
-                Convert.ToDecimal(preco_custo) :
+                Convert.ToDecimal(preco_custo, new CultureInfo("en-US")) :
                 0;
 
             this.valor_liquido =
                 ConvertToDecimalValidation.IsValid(valor_liquido, "valor_liquido", listValidations) ?
-                Convert.ToDecimal(valor_liquido) :
+                Convert.ToDecimal(valor_liquido, new CultureInfo("en-US")) :
                 0;
 
             this.desconto =
                 ConvertToDecimalValidation.IsValid(desconto, "desconto", listValidations) ?
-                Convert.ToDecimal(desconto) :
+                Convert.ToDecimal(desconto, new CultureInfo("en-US")) :
                 0;
 
             this.valor_icms =
                 ConvertToDecimalValidation.IsValid(valor_icms, "valor_icms", listValidations) ?
-                Convert.ToDecimal(valor_icms) :
+                Convert.ToDecimal(valor_icms, new CultureInfo("en-US")) :
                 0;
 
             this.aliquota_icms =
                 ConvertToDecimalValidation.IsValid(aliquota_icms, "aliquota_icms", listValidations) ?
-                Convert.ToDecimal(aliquota_icms) :
+                Convert.ToDecimal(aliquota_icms, new CultureInfo("en-US")) :
                 0;
 
             this.base_icms =
                 ConvertToDecimalValidation.IsValid(base_icms, "base_icms", listValidations) ?
-                Convert.ToDecimal(base_icms) :
+                Convert.ToDecimal(base_icms, new CultureInfo("en-US")) :
                 0;
 
             this.valor_pis =
                 ConvertToDecimalValidation.IsValid(valor_pis, "valor_pis", listValidations) ?
-                Convert.ToDecimal(valor_pis) :
+                Convert.ToDecimal(valor_pis, new CultureInfo("en-US")) :
                 0;
 
             this.aliquota_pis =
                 ConvertToDecimalValidation.IsValid(aliquota_pis, "aliquota_pis", listValidations) ?
-                Convert.ToDecimal(aliquota_pis) :
+                Convert.ToDecimal(aliquota_pis, new CultureInfo("en-US")) :
                 0;
 
             this.base_pis =
                 ConvertToDecimalValidation.IsValid(base_pis, "base_pis", listValidations) ?
-                Convert.ToDecimal(base_pis) :
+                Convert.ToDecimal(base_pis, new CultureInfo("en-US")) :
                 0;
 
             this.valor_cofins =
                 ConvertToDecimalValidation.IsValid(valor_cofins, "valor_cofins", listValidations) ?
-                Convert.ToDecimal(valor_cofins) :
+                Convert.ToDecimal(valor_cofins, new CultureInfo("en-US")) :
                 0;
 
             this.aliquota_cofins =
                 ConvertToDecimalValidation.IsValid(aliquota_cofins, "aliquota_cofins", listValidations) ?
-                Convert.ToDecimal(aliquota_cofins) :
+                Convert.ToDecimal(aliquota_cofins, new CultureInfo("en-US")) :
                 0;
 
             this.base_cofins =
                 ConvertToDecimalValidation.IsValid(base_cofins, "base_cofins", listValidations) ?
-                Convert.ToDecimal(base_cofins) :
+                Convert.ToDecimal(base_cofins, new CultureInfo("en-US")) :
                 0;
 
             this.valor_icms_st =
                 ConvertToDecimalValidation.IsValid(valor_icms_st, "valor_icms_st", listValidations) ?
-                Convert.ToDecimal(valor_icms_st) :
+                Convert.ToDecimal(valor_icms_st, new CultureInfo("en-US")) :
                 0;
 
             this.base_icms_st =
                 ConvertToDecimalValidation.IsValid(base_icms_st, "base_icms_st", listValidations) ?
-                Convert.ToDecimal(base_icms_st) :
+                Convert.ToDecimal(base_icms_st, new CultureInfo("en-US")) :
                 0;
 
             this.aliquota_icms_st =
                 ConvertToDecimalValidation.IsValid(aliquota_icms_st, "aliquota_icms_st", listValidations) ?
-                Convert.ToDecimal(aliquota_icms_st) :
+                Convert.ToDecimal(aliquota_icms_st, new CultureInfo("en-US")) :
                 0;
 
             this.valor_ipi =
                 ConvertToDecimalValidation.IsValid(valor_ipi, "valor_ipi", listValidations) ?
-                Convert.ToDecimal(valor_ipi) :
+                Convert.ToDecimal(valor_ipi, new CultureInfo("en-US")) :
                 0;
 
             this.aliquota_ipi =
                 ConvertToDecimalValidation.IsValid(aliquota_ipi, "aliquota_ipi", listValidations) ?
-                Convert.ToDecimal(aliquota_ipi) :
+                Convert.ToDecimal(aliquota_ipi, new CultureInfo("en-US")) :
                 0;
 
             this.base_ipi =
                 ConvertToDecimalValidation.IsValid(base_ipi, "base_ipi", listValidations) ?
-                Convert.ToDecimal(base_ipi) :
+                Convert.ToDecimal(base_ipi, new CultureInfo("en-US")) :
                 0;
 
             this.valor_total =
                 ConvertToDecimalValidation.IsValid(valor_total, "valor_total", listValidations) ?
-                Convert.ToDecimal(valor_total) :
+                Convert.ToDecimal(valor_total, new CultureInfo("en-US")) :
                 0;
 
             this.total_dinheiro =
                 ConvertToDecimalValidation.IsValid(total_dinheiro, "total_dinheiro", listValidations) ?
-                Convert.ToDecimal(total_dinheiro) :
+                Convert.ToDecimal(total_dinheiro, new CultureInfo("en-US")) :
                 0;
 
             this.total_cheque =
                 ConvertToDecimalValidation.IsValid(total_cheque, "total_cheque", listValidations) ?
-                Convert.ToDecimal(total_cheque) :
+                Convert.ToDecimal(total_cheque, new CultureInfo("en-US")) :
                 0;
 
             this.total_cartao =
                 ConvertToDecimalValidation.IsValid(total_cartao, "total_cartao", listValidations) ?
-                Convert.ToDecimal(total_cartao) :
+                Convert.ToDecimal(total_cartao, new CultureInfo("en-US")) :
                 0;
 
             this.total_crediario =
                 ConvertToDecimalValidation.IsValid(total_crediario, "total_crediario", listValidations) ?
-                Convert.ToDecimal(total_crediario) :
+                Convert.ToDecimal(total_crediario, new CultureInfo("en-US")) :
                 0;
 
             this.total_convenio =
                 ConvertToDecimalValidation.IsValid(total_convenio, "total_convenio", listValidations) ?
-                Convert.ToDecimal(total_convenio) :
+                Convert.ToDecimal(total_convenio, new CultureInfo("en-US")) :
                 0;
 
             this.frete =
                 ConvertToDecimalValidation.IsValid(frete, "frete", listValidations) ?
-                Convert.ToDecimal(frete) :
+                Convert.ToDecimal(frete, new CultureInfo("en-US")) :
                 0;
 
             this.preco_unitario =
                 ConvertToDecimalValidation.IsValid(preco_unitario, "preco_unitario", listValidations) ?
-                Convert.ToDecimal(preco_unitario) :
+                Convert.ToDecimal(preco_unitario, new CultureInfo("en-US")) :
                 0;
 
             this.total_cheque_prazo =
                 ConvertToDecimalValidation.IsValid(total_cheque_prazo, "total_cheque_prazo", listValidations) ?
-                Convert.ToDecimal(total_cheque_prazo) :
+                Convert.ToDecimal(total_cheque_prazo, new CultureInfo("en-US")) :
                 0;
 
             this.preco_tabela_epoca =
                 ConvertToDecimalValidation.IsValid(preco_tabela_epoca, "preco_tabela_epoca", listValidations) ?
-                Convert.ToDecimal(preco_tabela_epoca) :
+                Convert.ToDecimal(preco_tabela_epoca, new CultureInfo("en-US")) :
                 0;
 
             this.desconto_total_item =
                 ConvertToDecimalValidation.IsValid(desconto_total_item, "desconto_total_item", listValidations) ?
-                Convert.ToDecimal(desconto_total_item) :
+                Convert.ToDecimal(desconto_total_item, new CultureInfo("en-US")) :
                 0;
 
             this.acrescimo =
                 ConvertToDecimalValidation.IsValid(acrescimo, "acrescimo", listValidations) ?
-                Convert.ToDecimal(acrescimo) :
+                Convert.ToDecimal(acrescimo, new CultureInfo("en-US")) :
                 0;
 
             this.aliquota_iss =
                 ConvertToDecimalValidation.IsValid(aliquota_iss, "aliquota_iss", listValidations) ?
-                Convert.ToDecimal(aliquota_iss) :
+                Convert.ToDecimal(aliquota_iss, new CultureInfo("en-US")) :
                 0;
 
             this.base_iss =
                 ConvertToDecimalValidation.IsValid(base_iss, "base_iss", listValidations) ?
-                Convert.ToDecimal(base_iss) :
+                Convert.ToDecimal(base_iss, new CultureInfo("en-US")) :
                 0;
 
             this.troco =
                 ConvertToDecimalValidation.IsValid(troco, "troco", listValidations) ?
-                Convert.ToDecimal(troco) :
+                Convert.ToDecimal(troco, new CultureInfo("en-US")) :
                 0;
 
             this.icms_aliquota_desonerado =
                 ConvertToDecimalValidation.IsValid(icms_aliquota_desonerado, "icms_aliquota_desonerado", listValidations) ?
-                Convert.ToDecimal(icms_aliquota_desonerado) :
+                Convert.ToDecimal(icms_aliquota_desonerado, new CultureInfo("en-US")) :
                 0;
 
             this.icms_valor_desonerado_item =
                 ConvertToDecimalValidation.IsValid(icms_valor_desonerado_item, "icms_valor_desonerado_item", listValidations) ?
-                Convert.ToDecimal(icms_valor_desonerado_item) :
+                Convert.ToDecimal(icms_valor_desonerado_item, new CultureInfo("en-US")) :
                 0;
 
             this.desconto_item =
                 ConvertToDecimalValidation.IsValid(desconto_item, "desconto_item", listValidations) ?
-                Convert.ToDecimal(desconto_item) :
+                Convert.ToDecimal(desconto_item, new CultureInfo("en-US")) :
                 0;
 
             this.aliq_iss =
                 ConvertToDecimalValidation.IsValid(aliq_iss, "aliq_iss", listValidations) ?
-                Convert.ToDecimal(aliq_iss) :
+                Convert.ToDecimal(aliq_iss, new CultureInfo("en-US")) :
                 0;
 
             this.iss_base_item =
                 ConvertToDecimalValidation.IsValid(iss_base_item, "iss_base_item", listValidations) ?
-                Convert.ToDecimal(iss_base_item) :
+                Convert.ToDecimal(iss_base_item, new CultureInfo("en-US")) :
                 0;
 
             this.despesas =
                 ConvertToDecimalValidation.IsValid(despesas, "despesas", listValidations) ?
-                Convert.ToDecimal(despesas) :
+                Convert.ToDecimal(despesas, new CultureInfo("en-US")) :
                 0;
 
             this.seguro_total_item =
                 ConvertToDecimalValidation.IsValid(seguro_total_item, "seguro_total_item", listValidations) ?
-                Convert.ToDecimal(seguro_total_item) :
+                Convert.ToDecimal(seguro_total_item, new CultureInfo("en-US")) :
                 0;
 
             this.acrescimo_total_item =
                 ConvertToDecimalValidation.IsValid(acrescimo_total_item, "acrescimo_total_item", listValidations) ?
-                Convert.ToDecimal(acrescimo_total_item) :
+                Convert.ToDecimal(acrescimo_total_item, new CultureInfo("en-US")) :
                 0;
 
             this.despesas_total_item =
                 ConvertToDecimalValidation.IsValid(despesas_total_item, "despesas_total_item", listValidations) ?
-                Convert.ToDecimal(despesas_total_item) :
+                Convert.ToDecimal(despesas_total_item, new CultureInfo("en-US")) :
                 0;
 
             this.total_pix =
                 ConvertToDecimalValidation.IsValid(total_pix, "total_pix", listValidations) ?
-                Convert.ToDecimal(total_pix) :
+                Convert.ToDecimal(total_pix, new CultureInfo("en-US")) :
                 0;
 
             this.total_deposito_bancario =
                 ConvertToDecimalValidation.IsValid(total_deposito_bancario, "total_deposito_bancario", listValidations) ?
-                Convert.ToDecimal(total_deposito_bancario) :
+                Convert.ToDecimal(total_deposito_bancario, new CultureInfo("en-US")) :
                 0;
 
             this.icms_st_antecipado_aliquota =
                 ConvertToDecimalValidation.IsValid(icms_st_antecipado_aliquota, "icms_st_antecipado_aliquota", listValidations) ?
-                Convert.ToDecimal(icms_st_antecipado_aliquota) :
+                Convert.ToDecimal(icms_st_antecipado_aliquota, new CultureInfo("en-US")) :
                 0;
 
             this.icms_st_antecipado_margem =
                 ConvertToDecimalValidation.IsValid(icms_st_antecipado_margem, "icms_st_antecipado_margem", listValidations) ?
-                Convert.ToDecimal(icms_st_antecipado_margem) :
+                Convert.ToDecimal(icms_st_antecipado_margem, new CultureInfo("en-US")) :
                 0;
 
             this.icms_st_antecipado_percentual_reducao =
                 ConvertToDecimalValidation.IsValid(icms_st_antecipado_percentual_reducao, "icms_st_antecipado_percentual_reducao", listValidations) ?
-                Convert.ToDecimal(icms_st_antecipado_percentual_reducao) :
+                Convert.ToDecimal(icms_st_antecipado_percentual_reducao, new CultureInfo("en-US")) :
                 0;
 
             this.icms_st_antecipado_valor_item =
                 ConvertToDecimalValidation.IsValid(icms_st_antecipado_valor_item, "icms_st_antecipado_valor_item", listValidations) ?
-                Convert.ToDecimal(icms_st_antecipado_valor_item) :
+                Convert.ToDecimal(icms_st_antecipado_valor_item, new CultureInfo("en-US")) :
                 0;
 
             this.icms_base_desonerado_item =
                 ConvertToDecimalValidation.IsValid(icms_base_desonerado_item, "icms_base_desonerado_item", listValidations) ?
-                Convert.ToDecimal(icms_base_desonerado_item) :
+                Convert.ToDecimal(icms_base_desonerado_item, new CultureInfo("en-US")) :
                 0;
 
             this.forma_dinheiro =
-                ConvertToBooleanValidation.IsValid(forma_dinheiro, "forma_dinheiro", listValidations) ?
-                Convert.ToBoolean(forma_dinheiro) :
-                false;
+                ConvertToInt32Validation.IsValid(forma_dinheiro, "forma_dinheiro", listValidations) ?
+                Convert.ToInt32(forma_dinheiro) :
+                0;
 
             this.forma_cheque =
-                ConvertToBooleanValidation.IsValid(forma_cheque, "forma_cheque", listValidations) ?
-                Convert.ToBoolean(forma_cheque) :
-                false;
+                ConvertToInt32Validation.IsValid(forma_cheque, "forma_cheque", listValidations) ?
+                Convert.ToInt32(forma_cheque) :
+                0;
 
             this.forma_cartao =
-                ConvertToBooleanValidation.IsValid(forma_cartao, "forma_cartao", listValidations) ?
-                Convert.ToBoolean(forma_cartao) :
-                false;
+                ConvertToInt32Validation.IsValid(forma_cartao, "forma_cartao", listValidations) ?
+                Convert.ToInt32(forma_cartao) :
+                0;
 
             this.forma_crediario =
-                ConvertToBooleanValidation.IsValid(forma_crediario, "forma_crediario", listValidations) ?
-                Convert.ToBoolean(forma_crediario) :
-                false;
+                ConvertToInt32Validation.IsValid(forma_crediario, "forma_crediario", listValidations) ?
+                Convert.ToInt32(forma_crediario) :
+                0;
 
             this.forma_convenio =
-                ConvertToBooleanValidation.IsValid(forma_convenio, "forma_convenio", listValidations) ?
-                Convert.ToBoolean(forma_convenio) :
-                false;
+                ConvertToInt32Validation.IsValid(forma_convenio, "forma_convenio", listValidations) ?
+                Convert.ToInt32(forma_convenio) :
+                0;
 
             this.forma_cheque_prazo =
-                ConvertToBooleanValidation.IsValid(forma_cheque_prazo, "forma_cheque_prazo", listValidations) ?
-                Convert.ToBoolean(forma_cheque_prazo) :
-                false;
+                ConvertToInt32Validation.IsValid(forma_cheque_prazo, "forma_cheque_prazo", listValidations) ?
+                Convert.ToInt32(forma_cheque_prazo) :
+                0;
 
             this.mob_checkout =
                 ConvertToBooleanValidation.IsValid(mob_checkout, "mob_checkout", listValidations) ?
@@ -987,14 +997,14 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
                 false;
 
             this.forma_pix =
-                ConvertToBooleanValidation.IsValid(forma_pix, "forma_pix", listValidations) ?
-                Convert.ToBoolean(forma_pix) :
-                false;
+                ConvertToInt32Validation.IsValid(forma_pix, "forma_pix", listValidations) ?
+                Convert.ToInt32(forma_pix) :
+                0;
 
             this.forma_deposito_bancario =
-                ConvertToBooleanValidation.IsValid(forma_deposito_bancario, "forma_deposito_bancario", listValidations) ?
-                Convert.ToBoolean(forma_deposito_bancario) :
-                false;
+                ConvertToInt32Validation.IsValid(forma_deposito_bancario, "forma_deposito_bancario", listValidations) ?
+                Convert.ToInt32(forma_deposito_bancario) :
+                0;
 
             this.item_promocional =
                 ConvertToBooleanValidation.IsValid(item_promocional, "item_promocional", listValidations) ?
@@ -1002,9 +1012,9 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
                 false;
 
             this.acrescimo_item =
-                ConvertToBooleanValidation.IsValid(acrescimo_item, "acrescimo_item", listValidations) ?
-                Convert.ToBoolean(acrescimo_item) :
-                false;
+                ConvertToDecimalValidation.IsValid(acrescimo_item, "acrescimo_item", listValidations) ?
+                Convert.ToDecimal(acrescimo_item, new CultureInfo("en-US")) :
+                0;
 
             this.identificador =
                 String.IsNullOrEmpty(identificador) ? null

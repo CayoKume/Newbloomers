@@ -469,277 +469,277 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
             this.lng_esferico_od =
                 ConvertToDecimalValidation.IsValid(lng_esferico_od, "lng_esferico_od", listValidations) ?
-                Convert.ToDecimal(lng_esferico_od) :
+                Convert.ToDecimal(lng_esferico_od, new CultureInfo("en-US")) :
                 0;
 
             this.lng_cilindrico_od =
                 ConvertToDecimalValidation.IsValid(lng_cilindrico_od, "lng_cilindrico_od", listValidations) ?
-                Convert.ToDecimal(lng_cilindrico_od) :
+                Convert.ToDecimal(lng_cilindrico_od, new CultureInfo("en-US")) :
                 0;
 
             this.lng_eixo_od =
                 ConvertToDecimalValidation.IsValid(lng_eixo_od, "lng_eixo_od", listValidations) ?
-                Convert.ToDecimal(lng_eixo_od) :
+                Convert.ToDecimal(lng_eixo_od, new CultureInfo("en-US")) :
                 0;
 
             this.lng_dpdpn_od =
                 ConvertToDecimalValidation.IsValid(lng_dpdpn_od, "lng_dpdpn_od", listValidations) ?
-                Convert.ToDecimal(lng_dpdpn_od) :
+                Convert.ToDecimal(lng_dpdpn_od, new CultureInfo("en-US")) :
                 0;
 
             this.lng_altura_od =
                 ConvertToDecimalValidation.IsValid(lng_altura_od, "lng_altura_od", listValidations) ?
-                Convert.ToDecimal(lng_altura_od) :
+                Convert.ToDecimal(lng_altura_od, new CultureInfo("en-US")) :
                 0;
 
             this.prt_esferico_od =
                 ConvertToDecimalValidation.IsValid(prt_esferico_od, "prt_esferico_od", listValidations) ?
-                Convert.ToDecimal(prt_esferico_od) :
+                Convert.ToDecimal(prt_esferico_od, new CultureInfo("en-US")) :
                 0;
 
             this.prt_cilindrico_od =
                 ConvertToDecimalValidation.IsValid(prt_cilindrico_od, "prt_cilindrico_od", listValidations) ?
-                Convert.ToDecimal(prt_cilindrico_od) :
+                Convert.ToDecimal(prt_cilindrico_od, new CultureInfo("en-US")) :
                 0;
 
             this.prt_eixo_od =
                 ConvertToDecimalValidation.IsValid(prt_eixo_od, "prt_eixo_od", listValidations) ?
-                Convert.ToDecimal(prt_eixo_od) :
+                Convert.ToDecimal(prt_eixo_od, new CultureInfo("en-US")) :
                 0;
 
             this.prt_dpdpn_od =
                 ConvertToDecimalValidation.IsValid(prt_dpdpn_od, "prt_dpdpn_od", listValidations) ?
-                Convert.ToDecimal(prt_dpdpn_od) :
+                Convert.ToDecimal(prt_dpdpn_od, new CultureInfo("en-US")) :
                 0;
 
             this.lng_esferico_oe =
                 ConvertToDecimalValidation.IsValid(lng_esferico_oe, "lng_esferico_oe", listValidations) ?
-                Convert.ToDecimal(lng_esferico_oe) :
+                Convert.ToDecimal(lng_esferico_oe, new CultureInfo("en-US")) :
                 0;
 
             this.lng_cilindrico_oe =
                 ConvertToDecimalValidation.IsValid(lng_cilindrico_oe, "lng_cilindrico_oe", listValidations) ?
-                Convert.ToDecimal(lng_cilindrico_oe) :
+                Convert.ToDecimal(lng_cilindrico_oe, new CultureInfo("en-US")) :
                 0;
 
             this.lng_eixo_oe =
                 ConvertToDecimalValidation.IsValid(lng_eixo_oe, "lng_eixo_oe", listValidations) ?
-                Convert.ToDecimal(lng_eixo_oe) :
+                Convert.ToDecimal(lng_eixo_oe, new CultureInfo("en-US")) :
                 0;
 
             this.lng_dpdpn_oe =
                 ConvertToDecimalValidation.IsValid(lng_dpdpn_oe, "lng_dpdpn_oe", listValidations) ?
-                Convert.ToDecimal(lng_dpdpn_oe) :
+                Convert.ToDecimal(lng_dpdpn_oe, new CultureInfo("en-US")) :
                 0;
 
             this.lng_altura_oe =
                 ConvertToDecimalValidation.IsValid(lng_altura_oe, "lng_altura_oe", listValidations) ?
-                Convert.ToDecimal(lng_altura_oe) :
+                Convert.ToDecimal(lng_altura_oe, new CultureInfo("en-US")) :
                 0;
 
             this.prt_esferico_oe =
                 ConvertToDecimalValidation.IsValid(prt_esferico_oe, "prt_esferico_oe", listValidations) ?
-                Convert.ToDecimal(prt_esferico_oe) :
+                Convert.ToDecimal(prt_esferico_oe, new CultureInfo("en-US")) :
                 0;
 
             this.prt_cilindrico_oe =
                 ConvertToDecimalValidation.IsValid(prt_cilindrico_oe, "prt_cilindrico_oe", listValidations) ?
-                Convert.ToDecimal(prt_cilindrico_oe) :
+                Convert.ToDecimal(prt_cilindrico_oe, new CultureInfo("en-US")) :
                 0;
 
             this.prt_eixo_oe =
                 ConvertToDecimalValidation.IsValid(prt_eixo_oe, "prt_eixo_oe", listValidations) ?
-                Convert.ToDecimal(prt_eixo_oe) :
+                Convert.ToDecimal(prt_eixo_oe, new CultureInfo("en-US")) :
                 0;
 
             this.prt_dpdpn_oe =
                 ConvertToDecimalValidation.IsValid(prt_dpdpn_oe, "prt_dpdpn_oe", listValidations) ?
-                Convert.ToDecimal(prt_dpdpn_oe) :
+                Convert.ToDecimal(prt_dpdpn_oe, new CultureInfo("en-US")) :
                 0;
 
             this.lng_adicao_od =
                 ConvertToDecimalValidation.IsValid(lng_adicao_od, "lng_adicao_od", listValidations) ?
-                Convert.ToDecimal(lng_adicao_od) :
+                Convert.ToDecimal(lng_adicao_od, new CultureInfo("en-US")) :
                 0;
 
             this.lng_adicao_oe =
                 ConvertToDecimalValidation.IsValid(lng_adicao_oe, "lng_adicao_oe", listValidations) ?
-                Convert.ToDecimal(lng_adicao_oe) :
+                Convert.ToDecimal(lng_adicao_oe, new CultureInfo("en-US")) :
                 0;
 
             this.diametro_od =
                 ConvertToDecimalValidation.IsValid(diametro_od, "diametro_od", listValidations) ?
-                Convert.ToDecimal(diametro_od) :
+                Convert.ToDecimal(diametro_od, new CultureInfo("en-US")) :
                 0;
 
             this.diametro_oe =
                 ConvertToDecimalValidation.IsValid(diametro_oe, "diametro_oe", listValidations) ?
-                Convert.ToDecimal(diametro_oe) :
+                Convert.ToDecimal(diametro_oe, new CultureInfo("en-US")) :
                 0;
 
             this.ponte =
                 ConvertToDecimalValidation.IsValid(ponte, "ponte", listValidations) ?
-                Convert.ToDecimal(ponte) :
+                Convert.ToDecimal(ponte, new CultureInfo("en-US")) :
                 0;
 
             this.aro =
                 ConvertToDecimalValidation.IsValid(aro, "aro", listValidations) ?
-                Convert.ToDecimal(aro) :
+                Convert.ToDecimal(aro, new CultureInfo("en-US")) :
                 0;
 
             this.diag_maior =
                 ConvertToDecimalValidation.IsValid(diag_maior, "diag_maior", listValidations) ?
-                Convert.ToDecimal(diag_maior) :
+                Convert.ToDecimal(diag_maior, new CultureInfo("en-US")) :
                 0;
 
             this.cmpl_add_od =
                 ConvertToDecimalValidation.IsValid(cmpl_add_od, "cmpl_add_od", listValidations) ?
-                Convert.ToDecimal(cmpl_add_od) :
+                Convert.ToDecimal(cmpl_add_od, new CultureInfo("en-US")) :
                 0;
 
             this.cmpl_add_oe =
                 ConvertToDecimalValidation.IsValid(cmpl_add_oe, "cmpl_add_oe", listValidations) ?
-                Convert.ToDecimal(cmpl_add_oe) :
+                Convert.ToDecimal(cmpl_add_oe, new CultureInfo("en-US")) :
                 0;
 
             this.base_od =
                 ConvertToDecimalValidation.IsValid(base_od, "base_od", listValidations) ?
-                Convert.ToDecimal(base_od) :
+                Convert.ToDecimal(base_od, new CultureInfo("en-US")) :
                 0;
 
             this.base_oe =
                 ConvertToDecimalValidation.IsValid(base_oe, "base_oe", listValidations) ?
-                Convert.ToDecimal(base_oe) :
+                Convert.ToDecimal(base_oe, new CultureInfo("en-US")) :
                 0;
 
             this.dist_haste =
                 ConvertToDecimalValidation.IsValid(dist_haste, "dist_haste", listValidations) ?
-                Convert.ToDecimal(dist_haste) :
+                Convert.ToDecimal(dist_haste, new CultureInfo("en-US")) :
                 0;
 
             this.dist_front =
                 ConvertToDecimalValidation.IsValid(dist_front, "dist_front", listValidations) ?
-                Convert.ToDecimal(dist_front) :
+                Convert.ToDecimal(dist_front, new CultureInfo("en-US")) :
                 0;
 
             this.curvatura =
                 ConvertToDecimalValidation.IsValid(curvatura, "curvatura", listValidations) ?
-                Convert.ToDecimal(curvatura) :
+                Convert.ToDecimal(curvatura, new CultureInfo("en-US")) :
                 0;
 
             this.lng_pris1_od =
                 ConvertToDecimalValidation.IsValid(lng_pris1_od, "lng_pris1_od", listValidations) ?
-                Convert.ToDecimal(lng_pris1_od) :
+                Convert.ToDecimal(lng_pris1_od, new CultureInfo("en-US")) :
                 0;
 
             this.lng_pris1_oe =
                 ConvertToDecimalValidation.IsValid(lng_pris1_oe, "lng_pris1_oe", listValidations) ?
-                Convert.ToDecimal(lng_pris1_oe) :
+                Convert.ToDecimal(lng_pris1_oe, new CultureInfo("en-US")) :
                 0;
 
             this.prt_pris1_od =
                 ConvertToDecimalValidation.IsValid(prt_pris1_od, "prt_pris1_od", listValidations) ?
-                Convert.ToDecimal(prt_pris1_od) :
+                Convert.ToDecimal(prt_pris1_od, new CultureInfo("en-US")) :
                 0;
 
             this.prt_pris1_oe =
                 ConvertToDecimalValidation.IsValid(prt_pris1_oe, "prt_pris1_oe", listValidations) ?
-                Convert.ToDecimal(prt_pris1_oe) :
+                Convert.ToDecimal(prt_pris1_oe, new CultureInfo("en-US")) :
                 0;
 
             this.lng_pris2_od =
                 ConvertToDecimalValidation.IsValid(lng_pris2_od, "lng_pris2_od", listValidations) ?
-                Convert.ToDecimal(lng_pris2_od) :
+                Convert.ToDecimal(lng_pris2_od, new CultureInfo("en-US")) :
                 0;
 
             this.lng_pris2_oe =
                 ConvertToDecimalValidation.IsValid(lng_pris2_oe, "lng_pris2_oe", listValidations) ?
-                Convert.ToDecimal(lng_pris2_oe) :
+                Convert.ToDecimal(lng_pris2_oe, new CultureInfo("en-US")) :
                 0;
 
             this.prt_pris2_od =
                 ConvertToDecimalValidation.IsValid(prt_pris2_od, "prt_pris2_od", listValidations) ?
-                Convert.ToDecimal(prt_pris2_od) :
+                Convert.ToDecimal(prt_pris2_od, new CultureInfo("en-US")) :
                 0;
 
             this.prt_pris2_oe =
                 ConvertToDecimalValidation.IsValid(prt_pris2_oe, "prt_pris2_oe", listValidations) ?
-                Convert.ToDecimal(prt_pris2_oe) :
+                Convert.ToDecimal(prt_pris2_oe, new CultureInfo("en-US")) :
                 0;
 
             this.dist_vertice =
                 ConvertToDecimalValidation.IsValid(dist_vertice, "dist_vertice", listValidations) ?
-                Convert.ToDecimal(dist_vertice) :
+                Convert.ToDecimal(dist_vertice, new CultureInfo("en-US")) :
                 0;
 
             this.inc_planto =
                 ConvertToDecimalValidation.IsValid(inc_planto, "inc_planto", listValidations) ?
-                Convert.ToDecimal(inc_planto) :
+                Convert.ToDecimal(inc_planto, new CultureInfo("en-US")) :
                 0;
 
             this.dist_visao =
                 ConvertToDecimalValidation.IsValid(dist_visao, "dist_visao", listValidations) ?
-                Convert.ToDecimal(dist_visao) :
+                Convert.ToDecimal(dist_visao, new CultureInfo("en-US")) :
                 0;
 
             this.pris_od =
                 ConvertToDecimalValidation.IsValid(pris_od, "pris_od", listValidations) ?
-                Convert.ToDecimal(pris_od) :
+                Convert.ToDecimal(pris_od, new CultureInfo("en-US")) :
                 0;
 
             this.pris_oe =
                 ConvertToDecimalValidation.IsValid(pris_oe, "pris_oe", listValidations) ?
-                Convert.ToDecimal(pris_oe) :
+                Convert.ToDecimal(pris_oe, new CultureInfo("en-US")) :
                 0;
 
             this.eixo_od =
                 ConvertToDecimalValidation.IsValid(eixo_od, "eixo_od", listValidations) ?
-                Convert.ToDecimal(eixo_od) :
+                Convert.ToDecimal(eixo_od, new CultureInfo("en-US")) :
                 0;
 
             this.eixo_oe =
                 ConvertToDecimalValidation.IsValid(eixo_oe, "eixo_oe", listValidations) ?
-                Convert.ToDecimal(eixo_oe) :
+                Convert.ToDecimal(eixo_oe, new CultureInfo("en-US")) :
                 0;
 
             this.borda_od =
                 ConvertToDecimalValidation.IsValid(borda_od, "borda_od", listValidations) ?
-                Convert.ToDecimal(borda_od) :
+                Convert.ToDecimal(borda_od, new CultureInfo("en-US")) :
                 0;
 
             this.borda_oe =
                 ConvertToDecimalValidation.IsValid(borda_oe, "borda_oe", listValidations) ?
-                Convert.ToDecimal(borda_oe) :
+                Convert.ToDecimal(borda_oe, new CultureInfo("en-US")) :
                 0;
 
             this.centro_od =
                 ConvertToDecimalValidation.IsValid(centro_od, "centro_od", listValidations) ?
-                Convert.ToDecimal(centro_od) :
+                Convert.ToDecimal(centro_od, new CultureInfo("en-US")) :
                 0;
 
             this.centro_oe =
                 ConvertToDecimalValidation.IsValid(centro_oe, "centro_oe", listValidations) ?
-                Convert.ToDecimal(centro_oe) :
+                Convert.ToDecimal(centro_oe, new CultureInfo("en-US")) :
                 0;
 
             this.furo_od =
                 ConvertToDecimalValidation.IsValid(furo_od, "furo_od", listValidations) ?
-                Convert.ToDecimal(furo_od) :
+                Convert.ToDecimal(furo_od, new CultureInfo("en-US")) :
                 0;
 
             this.furo_oe =
                 ConvertToDecimalValidation.IsValid(furo_oe, "furo_oe", listValidations) ?
-                Convert.ToDecimal(furo_oe) :
+                Convert.ToDecimal(furo_oe, new CultureInfo("en-US")) :
                 0;
 
             this.dp_montagem =
                 ConvertToDecimalValidation.IsValid(dp_montagem, "dp_montagem", listValidations) ?
-                Convert.ToDecimal(dp_montagem) :
+                Convert.ToDecimal(dp_montagem, new CultureInfo("en-US")) :
                 0;
 
             this.altura =
                 ConvertToDecimalValidation.IsValid(altura, "altura", listValidations) ?
-                Convert.ToDecimal(altura) :
+                Convert.ToDecimal(altura, new CultureInfo("en-US")) :
                 0;
 
             this.otico_lado_lente = otico_lado_lente;

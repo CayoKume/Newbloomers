@@ -101,7 +101,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
             this.percentual_desconto =
                 ConvertToDecimalValidation.IsValid(percentual_desconto, "percentual_desconto", listValidations) ?
-                Convert.ToDecimal(percentual_desconto) :
+                Convert.ToDecimal(percentual_desconto, new CultureInfo("en-US")) :
                 0;
 
             this.data_inicial_vigencia =

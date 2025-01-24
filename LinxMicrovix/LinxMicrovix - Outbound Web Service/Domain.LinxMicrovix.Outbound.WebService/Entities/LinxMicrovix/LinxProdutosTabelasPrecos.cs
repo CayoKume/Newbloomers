@@ -1,6 +1,7 @@
 ﻿using Domain.IntegrationsCore.CustomValidations;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Globalization;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 {
@@ -17,10 +18,12 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
+        [Key]
         [Column(TypeName = "varchar(14)")]
         [LengthValidation(length: 14, propertyName: "cnpj_emp")]
         public string? cnpj_emp { get; private set; }
 
+        [Key]
         [Column(TypeName = "int")]
         public Int32? id_tabela { get; private set; }
 
@@ -66,7 +69,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
             this.precovenda =
                 ConvertToDecimalValidation.IsValid(precovenda, "precovenda", listValidations) ?
-                Convert.ToDecimal(precovenda) :
+                Convert.ToDecimal(precovenda, new CultureInfo("en-US")) :
                 0;
 
             this.cnpj_emp = cnpj_emp;

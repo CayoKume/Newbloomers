@@ -1,6 +1,7 @@
 ﻿using Domain.IntegrationsCore.CustomValidations;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Globalization;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 {
@@ -76,7 +77,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
             this.valor_vale =
                 ConvertToDecimalValidation.IsValid(valor_vale, "valor_vale", listValidations) ?
-                Convert.ToDecimal(valor_vale) :
+                Convert.ToDecimal(valor_vale, new CultureInfo("en-US")) :
                 0;
 
             this.identificador =

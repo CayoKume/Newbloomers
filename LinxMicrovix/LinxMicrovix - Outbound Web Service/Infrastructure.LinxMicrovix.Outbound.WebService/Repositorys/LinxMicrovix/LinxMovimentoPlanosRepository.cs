@@ -53,7 +53,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
                         identificadores += $"'{registros[i].identificador}', ";
                 }
 
-                string sql = $"SELECT identificador, TIMESTAMP FROM [linx_microvix_erp].[LinxMovimentoPlanos] WHERE identificador IN ({identificadores})";
+                string sql = $"SELECT cnpj_emp, identificador, plano, TIMESTAMP FROM [linx_microvix_erp].[LinxMovimentoPlanos] WHERE identificador IN ({identificadores})";
 
                 return await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
             }

@@ -1,6 +1,7 @@
 ﻿using Domain.IntegrationsCore.CustomValidations;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Globalization;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 {
@@ -72,22 +73,22 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
             this.valor_unitario =
                ConvertToDecimalValidation.IsValid(valor_unitario, "valor_unitario", listValidations) ?
-               Convert.ToDecimal(valor_unitario) :
+               Convert.ToDecimal(valor_unitario, new CultureInfo("en-US")) :
                0;
 
             this.valor_desconto_item =
                ConvertToDecimalValidation.IsValid(valor_desconto_item, "valor_desconto_item", listValidations) ?
-               Convert.ToDecimal(valor_desconto_item) :
+               Convert.ToDecimal(valor_desconto_item, new CultureInfo("en-US")) :
                0;
 
             this.quantidade =
                ConvertToDecimalValidation.IsValid(quantidade, "quantidade", listValidations) ?
-               Convert.ToDecimal(quantidade) :
+               Convert.ToDecimal(quantidade, new CultureInfo("en-US")) :
                0;
 
             this.valor_original =
                ConvertToDecimalValidation.IsValid(valor_original, "valor_original", listValidations) ?
-               Convert.ToDecimal(valor_original) :
+               Convert.ToDecimal(valor_original, new CultureInfo("en-US")) :
                0;
 
             this.timestamp =

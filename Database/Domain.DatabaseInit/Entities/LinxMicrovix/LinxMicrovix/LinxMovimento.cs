@@ -14,6 +14,7 @@ namespace Domain.DatabaseInit.Entites.LinxMicrovix.LinxMicrovix
         [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
+        [Key]
         [Column(TypeName = "varchar(14)")]
         [LengthValidation(length: 14, propertyName: "cnpj_emp")]
         public string? cnpj_emp { get; private set; }
@@ -24,9 +25,11 @@ namespace Domain.DatabaseInit.Entites.LinxMicrovix.LinxMicrovix
         [Column(TypeName = "int")]
         public Int32? usuario { get; private set; }
 
+        [Key]
         [Column(TypeName = "int")]
         public Int32? documento { get; private set; }
 
+        [Key]
         [Column(TypeName = "varchar(44)")]
         [LengthValidation(length: 44, propertyName: "chave_nf")]
         public string? chave_nf { get; private set; }
@@ -41,12 +44,14 @@ namespace Domain.DatabaseInit.Entites.LinxMicrovix.LinxMicrovix
         [Column(TypeName = "int")]
         public Int32? modelo_nf { get; private set; }
 
+        [Key]
         [Column(TypeName = "datetime")]
         public DateTime? data_documento { get; private set; }
 
         [Column(TypeName = "datetime")]
         public DateTime? data_lancamento { get; private set; }
 
+        [Key]
         [Column(TypeName = "int")]
         public Int32? codigo_cliente { get; private set; }
 
@@ -182,6 +187,7 @@ namespace Domain.DatabaseInit.Entites.LinxMicrovix.LinxMicrovix
         [LengthValidation(length: 1, propertyName: "tipo_transacao")]
         public string? tipo_transacao { get; private set; }
 
+        [Key]
         [Column(TypeName = "bigint")]
         public Int64? cod_produto { get; private set; }
 
@@ -189,10 +195,12 @@ namespace Domain.DatabaseInit.Entites.LinxMicrovix.LinxMicrovix
         [LengthValidation(length: 20, propertyName: "cod_barra")]
         public string? cod_barra { get; private set; }
 
+        [Key]
         [Column(TypeName = "char(1)")]
         [LengthValidation(length: 1, propertyName: "cancelado")]
         public string? cancelado { get; private set; }
 
+        [Key]
         [Column(TypeName = "char(1)")]
         [LengthValidation(length: 1, propertyName: "excluido")]
         public string? excluido { get; private set; }
@@ -263,6 +271,7 @@ namespace Domain.DatabaseInit.Entites.LinxMicrovix.LinxMicrovix
         [LengthValidation(length: 1, propertyName: "conferido")]
         public string? conferido { get; private set; }
 
+        [Key]
         [Column(TypeName = "int")]
         public Int32? transacao_pedido_venda { get; private set; }
 
@@ -282,6 +291,7 @@ namespace Domain.DatabaseInit.Entites.LinxMicrovix.LinxMicrovix
         [Column(TypeName = "decimal(10,2)")]
         public decimal? base_iss { get; private set; }
 
+        [Key]
         [Column(TypeName = "int")]
         public Int32? ordem { get; private set; }
 

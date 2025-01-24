@@ -135,30 +135,103 @@ namespace LinxMicrovix.Outbound.Web.Service.Application.Services.LinxMicrovix
                    .AddLog(EnumJob.LinxProdutosCodBar);
 
                 string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter);
+                var ids_setor = await _linxProdutosCodBarRepository.GetProductsSetorIds(jobParameter);
 
-                var body = _linxMicrovixServiceBase.BuildBodyRequest(
-                    parametersList: parameters.Replace("[0]", "0"),
-                    jobParameter: jobParameter,
-                    cnpj_emp: jobParameter.docMainCompany
+                foreach (var id_setor in ids_setor)
+                {
+                    string? timestamp = await _linxMicrovixRepositoryBase.GetLast7DaysMinTimestamp(
+                        jobParameter: jobParameter,
+                        columnDate: "lastupdateon"
+                    );
+
+                    var body = _linxMicrovixServiceBase.BuildBodyRequest(
+                            parametersList: parameters.Replace("[0]", timestamp).Replace("[id_setor]", id_setor),
+                            jobParameter: jobParameter,
+                            cnpj_emp: jobParameter.docMainCompany
+                        );
+
+                    string? response = await _apiCall.PostAsync(jobParameter: jobParameter, body: body);
+                    var xmls = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response, _linxProdutosCodBarServiceCache);
+
+                    if (xmls.Count() > 0)
+                    {
+                        var listRecords = DeserializeXMLToObject(jobParameter, xmls);
+
+                        if (_linxProdutosCodBarServiceCache.GetList().Count == 0)
+                        {
+                            var list_existentes = await _linxProdutosCodBarRepository.GetRegistersExists(jobParameter: jobParameter, registros: listRecords);
+                            _linxProdutosCodBarServiceCache.AddList(list_existentes);
+                        }
+
+                        _listSomenteNovos = _linxProdutosCodBarServiceCache.FiltrarList(listRecords);
+                        if (_listSomenteNovos.Count() > 0)
+                        {
+                            _linxProdutosCodBarRepository.BulkInsertIntoTableRaw(records: _listSomenteNovos, jobParameter: jobParameter);
+                            for (int i = 0; i < _listSomenteNovos.Count; i++)
+                            {
+                                var key = _linxProdutosCodBarServiceCache.GetKey(_listSomenteNovos[i]);
+                                if (_linxProdutosCodBarServiceCache.GetDictionaryXml().ContainsKey(key))
+                                {
+                                    var xml = _linxProdutosCodBarServiceCache.GetDictionaryXml()[key];
+                                    _logger.AddRecord(key, xml);
+                                }
+                            }
+
+                            await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter: jobParameter);
+
+                            _logger.AddMessage(
+                                $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"
+                            );
+                        }
+                        else
+                            _logger.AddMessage(
+                                $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"
+                            );
+                    }
+
+                    await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter: jobParameter);
+                }
+            }
+            catch (SQLCommandException ex)
+            {
+                _logger.AddMessage(
+                    stage: ex.Stage,
+                    error: ex.Error,
+                    logLevel: ex.MessageLevel,
+                    message: ex.Message,
+                    exceptionMessage: ex.ExceptionMessage,
+                    commandSQL: ex.CommandSQL
                 );
 
-                string? response = await _apiCall.PostAsync(jobParameter: jobParameter, body: body);
-                var xmls = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response);
-
-                if (xmls.Count() > 0)
-                {
-                    var listRecords = DeserializeXMLToObject(jobParameter, xmls);
-                    _linxProdutosCodBarRepository.BulkInsertIntoTableRaw(records: listRecords, jobParameter: jobParameter);
-                }
-
-                await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter: jobParameter);
-
-                return true;
-            }
-            catch
-            {
                 throw;
             }
+            catch (InternalException ex)
+            {
+                _logger.AddMessage(
+                    stage: ex.stage,
+                    error: ex.Error,
+                    logLevel: ex.MessageLevel,
+                    message: ex.Message,
+                    exceptionMessage: ex.ExceptionMessage
+                );
+
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.AddMessage(
+                    message: "Error when executing GetRecords method",
+                    exceptionMessage: ex.Message
+                );
+            }
+            finally
+            {
+                _logger.SetLogEndDate();
+                await _logger.CommitAllChanges();
+                _linxProdutosCodBarServiceCache.AddList(_listSomenteNovos);
+            }
+
+            return true;
         }
     }
 }

@@ -144,12 +144,12 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
 
             this.valor_nota =
                 ConvertToDecimalValidation.IsValid(valor_nota, "valor_nota", listValidations) ?
-                Convert.ToDecimal(valor_nota) :
+                Convert.ToDecimal(valor_nota, new CultureInfo("en-US")) :
                 0;
 
             this.frete =
                 ConvertToDecimalValidation.IsValid(frete, "frete", listValidations) ?
-                Convert.ToDecimal(frete) :
+                Convert.ToDecimal(frete, new CultureInfo("en-US")) :
                 0;
 
             this.tpAmb =

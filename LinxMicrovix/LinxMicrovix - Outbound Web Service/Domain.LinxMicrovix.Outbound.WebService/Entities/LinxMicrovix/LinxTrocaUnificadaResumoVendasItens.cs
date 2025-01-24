@@ -92,12 +92,12 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
             this.valor_liquido =
                 ConvertToDecimalValidation.IsValid(valor_liquido, "valor_liquido", listValidations) ?
-                Convert.ToDecimal(valor_liquido) :
+                Convert.ToDecimal(valor_liquido, new CultureInfo("en-US")) :
                 0;
 
             this.quantidade =
                 ConvertToDecimalValidation.IsValid(quantidade, "quantidade", listValidations) ?
-                Convert.ToDecimal(quantidade) :
+                Convert.ToDecimal(quantidade, new CultureInfo("en-US")) :
                 0;
 
             this.venda_referenciada =

@@ -235,7 +235,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
 
             this.renda =
                 ConvertToDecimalValidation.IsValid(renda, "renda", listValidations) ?
-                Convert.ToDecimal(renda) :
+                Convert.ToDecimal(renda, new CultureInfo("en-US")) :
                 0;
 
             this.receber_email =

@@ -195,7 +195,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
             this.area_empresa =
                 ConvertToDecimalValidation.IsValid(area_empresa, "area_empresa", listValidations) ?
-                Convert.ToDecimal(area_empresa) :
+                Convert.ToDecimal(area_empresa, new CultureInfo("en-US")) :
                 0;
 
             this.centro_distribuicao =

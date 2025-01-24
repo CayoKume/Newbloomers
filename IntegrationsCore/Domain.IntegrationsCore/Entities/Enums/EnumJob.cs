@@ -93,5 +93,6 @@
         LinxProdutosTabelasPrecos = 723,
         LinxVendedores = 724,
         LinxXMLDocumentos = 725,
+        LinxSetores = 726,
     }
 }

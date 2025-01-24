@@ -146,17 +146,17 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
             this.vl_frete =
                 ConvertToDecimalValidation.IsValid(vl_frete, "vl_frete", listValidations) ?
-                Convert.ToDecimal(vl_frete) :
+                Convert.ToDecimal(vl_frete, new CultureInfo("en-US")) :
                 0;
 
             this.taxa_impressao =
                 ConvertToDecimalValidation.IsValid(taxa_impressao, "taxa_impressao", listValidations) ?
-                Convert.ToDecimal(taxa_impressao) :
+                Convert.ToDecimal(taxa_impressao, new CultureInfo("en-US")) :
                 0;
 
             this.valor_frete_gratis =
                 ConvertToDecimalValidation.IsValid(valor_frete_gratis, "valor_frete_gratis", listValidations) ?
-                Convert.ToDecimal(valor_frete_gratis) :
+                Convert.ToDecimal(valor_frete_gratis, new CultureInfo("en-US")) :
                 0;
 
             this.id_tipo_b2c =

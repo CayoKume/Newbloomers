@@ -40,7 +40,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
                         records[i].icms_st_antecipado_percentual_reducao, records[i].icms_st_antecipado_valor_item, records[i].icms_base_desonerado_item, records[i].codigo_status_nfe);
                 }
 
-                _linxMicrovixRepositoryBase.BulkInsertIntoTableRaw(
+               _linxMicrovixRepositoryBase.BulkInsertIntoTableRaw(
                     jobParameter: jobParameter,
                     dataTable: table,
                     dataTableRowsNumber: table.Rows.Count
@@ -58,18 +58,53 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         {
             try
             {
-                var identificadores = String.Empty;
-                for (int i = 0; i < registros.Count(); i++)
+                int indice = registros.Count() / 1000;
+
+                if (indice > 1)
                 {
-                    if (i == registros.Count() - 1)
-                        identificadores += $"'{registros[i].documento}'";
-                    else
-                        identificadores += $"'{registros[i].documento}', ";
+                    var list = new List<LinxMovimento>();
+
+                    for (int i = 0; i <= indice; i++)
+                    {
+                        string identificadores = String.Empty;
+                        var top1000List = registros.Skip(i * 1000).Take(1000).ToList();
+
+                        for (int j = 0; j < top1000List.Count(); j++)
+                        {
+
+                            if (j == top1000List.Count() - 1)
+                                identificadores += $"'{top1000List[j].documento}'";
+                            else
+                                identificadores += $"'{top1000List[j].documento}', ";
+                        }
+
+                        string sql = $"SELECT cnpj_emp, documento, codigo_cliente, cod_produto, TIMESTAMP FROM [linx_microvix_erp].[LinxMovimento] WHERE documento IN ({identificadores})";
+                        var result = await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
+                        list.AddRange(result);
+                    }
+
+                    return list;
                 }
+                else
+                {
+                    var list = new List<LinxMovimento>();
+                    string identificadores = String.Empty;
 
-                string sql = $"SELECT documento, TIMESTAMP FROM [linx_microvix_erp].[LinxMovimento] WHERE documento IN ({identificadores})";
+                    for (int i = 0; i < registros.Count(); i++)
+                    {
 
-                return await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
+                        if (i == registros.Count() - 1)
+                            identificadores += $"'{registros[i].documento}'";
+                        else
+                            identificadores += $"'{registros[i].documento}', ";
+                    }
+
+                    string sql = $"SELECT cnpj_emp, documento, codigo_cliente, cod_produto, TIMESTAMP FROM [linx_microvix_erp].[LinxMovimento] WHERE documento IN ({identificadores})";
+                    var result = await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
+                    list.AddRange(result);
+
+                    return list;
+                }
             }
             catch (Exception ex) when (ex is not InternalException && ex is not SQLCommandException)
             {
@@ -89,7 +124,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
         public async Task<bool> InsertRecord(LinxAPIParam jobParameter, LinxMovimento? record)
         {
-            string? sql = @$"INSERT INTO {jobParameter.tableName} 
+            string? sql = @$"INSERT INTO [untreated].{jobParameter.tableName} 
                             ([lastupdateon],[portal],[cnpj_emp],[transacao],[usuario],[documento],[chave_nf],[ecf],[numero_serie_ecf],[modelo_nf],[data_documento],[data_lancamento],
                              [codigo_cliente],[serie],[desc_cfop],[id_cfop],[cod_vendedor],[quantidade],[preco_custo],[valor_liquido],[desconto],[cst_icms],[cst_pis],[cst_cofins],
                              [cst_ipi],[valor_icms],[aliquota_icms],[base_icms],[valor_pis],[aliquota_pis],[base_pis],[valor_cofins],[aliquota_cofins],[base_cofins],[valor_icms_st],

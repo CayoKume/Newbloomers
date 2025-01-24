@@ -7,6 +7,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base
     public interface ILinxMicrovixRepositoryBase<TEntity> where TEntity : class
     {
         public Task<string?> GetParameters(LinxAPIParam jobParameter);
+        public Task<IEnumerable<string?>> GetParameters(LinxAPIParam jobParameter, string sql);
         public Task<IEnumerable<Company>> GetB2CCompanys(LinxAPIParam jobParameter);
         public Task<IEnumerable<Company>> GetMicrovixCompanys(LinxAPIParam jobParameter);
         public Task<IEnumerable<Company>> GetMicrovixGroupCompanys(LinxAPIParam jobParameter);

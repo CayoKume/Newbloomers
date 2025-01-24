@@ -106,27 +106,27 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
 
             this.custoicms1 =
                 ConvertToDecimalValidation.IsValid(custoicms1, "custoicms1", listValidations) ?
-                Convert.ToDecimal(custoicms1) :
+                Convert.ToDecimal(custoicms1, new CultureInfo("en-US")) :
                 0;
 
             this.ipi1 =
                 ConvertToDecimalValidation.IsValid(ipi1, "ipi1", listValidations) ?
-                Convert.ToDecimal(ipi1) :
+                Convert.ToDecimal(ipi1, new CultureInfo("en-US")) :
                 0;
 
             this.markup =
                 ConvertToDecimalValidation.IsValid(markup, "markup", listValidations) ?
-                Convert.ToDecimal(markup) :
+                Convert.ToDecimal(markup, new CultureInfo("en-US")) :
                 0;
 
             this.customedio =
                 ConvertToDecimalValidation.IsValid(customedio, "customedio", listValidations) ?
-                Convert.ToDecimal(customedio) :
+                Convert.ToDecimal(customedio, new CultureInfo("en-US")) :
                 0;
 
             this.frete1 =
                 ConvertToDecimalValidation.IsValid(frete1, "frete1", listValidations) ?
-                Convert.ToDecimal(frete1) :
+                Convert.ToDecimal(frete1, new CultureInfo("en-US")) :
                 0;
 
             this.precisao =
@@ -136,7 +136,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
 
             this.precominimo =
                 ConvertToDecimalValidation.IsValid(precominimo, "precominimo", listValidations) ?
-                Convert.ToDecimal(precominimo) :
+                Convert.ToDecimal(precominimo, new CultureInfo("en-US")) :
                 0;
 
             this.dt_update =
@@ -146,22 +146,22 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
 
             this.custoliquido =
                 ConvertToDecimalValidation.IsValid(custoliquido, "custoliquido", listValidations) ?
-                Convert.ToDecimal(custoliquido) :
+                Convert.ToDecimal(custoliquido, new CultureInfo("en-US")) :
                 0;
 
             this.precovenda =
                 ConvertToDecimalValidation.IsValid(precovenda, "precovenda", listValidations) ?
-                Convert.ToDecimal(precovenda) :
+                Convert.ToDecimal(precovenda, new CultureInfo("en-US")) :
                 0;
 
             this.custototal =
                 ConvertToDecimalValidation.IsValid(custototal, "custototal", listValidations) ?
-                Convert.ToDecimal(custototal) :
+                Convert.ToDecimal(custototal, new CultureInfo("en-US")) :
                 0;
 
             this.precocompra =
                 ConvertToDecimalValidation.IsValid(precocompra, "precocompra", listValidations) ?
-                Convert.ToDecimal(precocompra) :
+                Convert.ToDecimal(precocompra, new CultureInfo("en-US")) :
                 0;
 
             this.portal =

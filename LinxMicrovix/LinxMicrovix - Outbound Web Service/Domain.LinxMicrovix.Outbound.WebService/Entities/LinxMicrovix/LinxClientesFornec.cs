@@ -274,12 +274,12 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
             this.limite_compras =
                 ConvertToDecimalValidation.IsValid(limite_compras, "limite_compras", listValidations) ?
-                Convert.ToDecimal(limite_compras) :
+                Convert.ToDecimal(limite_compras, new CultureInfo("en-US")) :
                 0;
 
             this.limite_credito_compra =
                 ConvertToDecimalValidation.IsValid(limite_credito_compra, "limite_credito_compra", listValidations) ?
-                Convert.ToDecimal(limite_credito_compra) :
+                Convert.ToDecimal(limite_credito_compra, new CultureInfo("en-US")) :
                 0;
 
             this.razao_cliente = razao_cliente;

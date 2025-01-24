@@ -284,6 +284,36 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
             }
         }
 
+        public async Task<IEnumerable<string?>> GetParameters(LinxAPIParam jobParameter, string sql)
+        {
+            try
+            {
+                using (var conn = _sqlServerConnection.GetIDbConnection(jobParameter.databaseName))
+                {
+                    return await conn.QueryAsync<string?>(sql: sql, commandTimeout: 360);
+                }
+            }
+            catch (SqlException ex)
+            {
+                throw new SQLCommandException(
+                    stage: EnumStages.GetParameters,
+                    message: $"Error when trying to get parameters from database",
+                    exceptionMessage: ex.Message,
+                    commandSQL: sql
+                );
+            }
+            catch (Exception ex)
+            {
+                throw new InternalException(
+                    stage: EnumStages.GetParameters,
+                    error: EnumError.SQLCommand,
+                    level: EnumMessageLevel.Error,
+                    message: $"Error when trying to get parameters from database",
+                    exceptionMessage: ex.Message
+                );
+            }
+        }
+
         public async Task<string?> GetLast7DaysMinTimestamp(LinxAPIParam jobParameter, string? columnDate)
         {
             string? sql = "SELECT ISNULL(MIN(TIMESTAMP), 0) " +

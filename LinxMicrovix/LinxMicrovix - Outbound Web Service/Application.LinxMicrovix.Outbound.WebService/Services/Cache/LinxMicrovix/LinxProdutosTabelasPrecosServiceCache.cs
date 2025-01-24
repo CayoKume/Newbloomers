@@ -9,12 +9,12 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.Cache.LinxMicrov
     {
         public override string GetKey(LinxProdutosTabelasPrecos entity)
         {
-            return $"[{entity.cod_produto}]|[{entity.timestamp}]";
+            return $"[{entity.cod_produto}]|[{entity.cnpj_emp}]|[{entity.id_tabela}]|[{entity.timestamp}]";
         }
 
         public override string GetKeyInDictionary(IDictionary<string, string> dictionaryFields)
         {
-            return $"[{dictionaryFields["cod_produto"]}]|[{dictionaryFields["timestamp"]}]";
+            return $"[{dictionaryFields["cod_produto"]}]|[{dictionaryFields["cnpj_emp"]}]|[{dictionaryFields["id_tabela"]}]|[{dictionaryFields["timestamp"]}]";
         }
     }
 }

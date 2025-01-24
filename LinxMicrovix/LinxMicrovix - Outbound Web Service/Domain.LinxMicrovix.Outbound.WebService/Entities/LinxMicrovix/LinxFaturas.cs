@@ -316,42 +316,42 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
             this.valor_fatura =
                 ConvertToDecimalValidation.IsValid(valor_fatura, "valor_fatura", listValidations) ?
-                Convert.ToDecimal(valor_fatura) :
+                Convert.ToDecimal(valor_fatura, new CultureInfo("en-US")) :
                 0;
 
             this.valor_pago =
                 ConvertToDecimalValidation.IsValid(valor_pago, "valor_pago", listValidations) ?
-                Convert.ToDecimal(valor_pago) :
+                Convert.ToDecimal(valor_pago, new CultureInfo("en-US")) :
                 0;
 
             this.valor_desconto =
                 ConvertToDecimalValidation.IsValid(valor_desconto, "valor_desconto", listValidations) ?
-                Convert.ToDecimal(valor_desconto) :
+                Convert.ToDecimal(valor_desconto, new CultureInfo("en-US")) :
                 0;
 
             this.valor_juros =
                 ConvertToDecimalValidation.IsValid(valor_juros, "valor_juros", listValidations) ?
-                Convert.ToDecimal(valor_juros) :
+                Convert.ToDecimal(valor_juros, new CultureInfo("en-US")) :
                 0;
 
             this.taxa_financeira =
                 ConvertToDecimalValidation.IsValid(taxa_financeira, "taxa_financeira", listValidations) ?
-                Convert.ToDecimal(taxa_financeira) :
+                Convert.ToDecimal(taxa_financeira, new CultureInfo("en-US")) :
                 0;
 
             this.valor_abatimento =
                 ConvertToDecimalValidation.IsValid(valor_abatimento, "valor_abatimento", listValidations) ?
-                Convert.ToDecimal(valor_abatimento) :
+                Convert.ToDecimal(valor_abatimento, new CultureInfo("en-US")) :
                 0;
 
             this.valor_multa =
                 ConvertToDecimalValidation.IsValid(valor_multa, "valor_multa", listValidations) ?
-                Convert.ToDecimal(valor_multa) :
+                Convert.ToDecimal(valor_multa, new CultureInfo("en-US")) :
                 0;
 
             this.perc_taxa_adquirente =
                 ConvertToDecimalValidation.IsValid(perc_taxa_adquirente, "perc_taxa_adquirente", listValidations) ?
-                Convert.ToDecimal(perc_taxa_adquirente) :
+                Convert.ToDecimal(perc_taxa_adquirente, new CultureInfo("en-US")) :
                 0;
 
             this.data_emissao =

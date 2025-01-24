@@ -1,6 +1,7 @@
 ﻿using Domain.IntegrationsCore.CustomValidations;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Globalization;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 {
@@ -113,42 +114,42 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
             this.quantidade =
                 ConvertToDecimalValidation.IsValid(quantidade, "quantidade", listValidations) ?
-                Convert.ToDecimal(quantidade) :
+                Convert.ToDecimal(quantidade, new CultureInfo("en-US")) :
                 0;
 
             this.preco_custo =
                 ConvertToDecimalValidation.IsValid(preco_custo, "preco_custo", listValidations) ?
-                Convert.ToDecimal(preco_custo) :
+                Convert.ToDecimal(preco_custo, new CultureInfo("en-US")) :
                 0;
 
             this.preco_venda =
                 ConvertToDecimalValidation.IsValid(preco_venda, "preco_venda", listValidations) ?
-                Convert.ToDecimal(preco_venda) :
+                Convert.ToDecimal(preco_venda, new CultureInfo("en-US")) :
                 0;
 
             this.custo_medio =
                 ConvertToDecimalValidation.IsValid(custo_medio, "custo_medio", listValidations) ?
-                Convert.ToDecimal(custo_medio) :
+                Convert.ToDecimal(custo_medio, new CultureInfo("en-US")) :
                 0;
 
             this.despesas1 =
                 ConvertToDecimalValidation.IsValid(despesas1, "despesas1", listValidations) ?
-                Convert.ToDecimal(despesas1) :
+                Convert.ToDecimal(despesas1, new CultureInfo("en-US")) :
                 0;
 
             this.qtde_minima =
                 ConvertToDecimalValidation.IsValid(qtde_minima, "qtde_minima", listValidations) ?
-                Convert.ToDecimal(qtde_minima) :
+                Convert.ToDecimal(qtde_minima, new CultureInfo("en-US")) :
                 0;
 
             this.qtde_maxima =
                 ConvertToDecimalValidation.IsValid(qtde_maxima, "qtde_maxima", listValidations) ?
-                Convert.ToDecimal(qtde_maxima) :
+                Convert.ToDecimal(qtde_maxima, new CultureInfo("en-US")) :
                 0;
 
             this.ipi =
                 ConvertToDecimalValidation.IsValid(ipi, "ipi", listValidations) ?
-                Convert.ToDecimal(ipi) :
+                Convert.ToDecimal(ipi, new CultureInfo("en-US")) :
                 0;
 
             this.cnpj_emp = cnpj_emp;

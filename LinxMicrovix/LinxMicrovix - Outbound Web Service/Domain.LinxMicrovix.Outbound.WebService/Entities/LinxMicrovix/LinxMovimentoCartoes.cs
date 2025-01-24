@@ -18,6 +18,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
+        [Key]
         [Column(TypeName = "varchar(14)")]
         [LengthValidation(length: 14, propertyName: "cnpj_emp")]
         public string? cnpj_emp { get; private set; }
@@ -29,6 +30,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [Column(TypeName = "datetime")]
         public DateTime? data_lancamento { get; private set; }
 
+        [Key]
         [Column(TypeName = "varchar(20)")]
         [LengthValidation(length: 20, propertyName: "cupomfiscal")]
         public string? cupomfiscal { get; private set; }
@@ -58,6 +60,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [LengthValidation(length: 50, propertyName: "nsu_sitef")]
         public string? nsu_sitef { get; private set; }
 
+        [Key]
         [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "cod_autorizacao")]
         public string? cod_autorizacao { get; private set; }
@@ -165,7 +168,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
             this.valor =
                 ConvertToDecimalValidation.IsValid(valor, "valor", listValidations) ?
-                Convert.ToDecimal(valor) :
+                Convert.ToDecimal(valor, new CultureInfo("en-US")) :
                 0;
 
             this.transacao_servico_terceiro =

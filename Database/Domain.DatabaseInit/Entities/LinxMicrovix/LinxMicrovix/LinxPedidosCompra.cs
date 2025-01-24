@@ -14,6 +14,7 @@ namespace Domain.DatabaseInit.Entites.LinxMicrovix.LinxMicrovix
         [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
+        [Key]
         [Column(TypeName = "varchar(14)")]
         [LengthValidation(length: 14, propertyName: "cnpj_emp")]
         public string? cnpj_emp { get; private set; }
@@ -31,9 +32,11 @@ namespace Domain.DatabaseInit.Entites.LinxMicrovix.LinxMicrovix
         [Column(TypeName = "int")]
         public Int32? usuario { get; private set; }
 
+        [Key]
         [Column(TypeName = "int")]
         public Int32? codigo_fornecedor { get; private set; }
 
+        [Key]
         [Column(TypeName = "bigint")]
         public Int64? cod_produto { get; private set; }
 
@@ -264,6 +267,8 @@ namespace Domain.DatabaseInit.Entites.LinxMicrovix.LinxMicrovix
                 Convert.ToBoolean(integrado_linx) :
                 false;
 
+            this.status_pedido = status_pedido;
+            this.tipo_frete = tipo_frete;
             this.nf_origem_ws = nf_origem_ws;
             this.descricao_frete = descricao_frete;
             this.numero_projeto_officina = numero_projeto_officina;

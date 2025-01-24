@@ -160,7 +160,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
 
             this.vl_frete =
                 ConvertToDecimalValidation.IsValid(vl_frete, "vl_frete", listValidations) ?
-                Convert.ToDecimal(vl_frete) :
+                Convert.ToDecimal(vl_frete, new CultureInfo("en-US")) :
                 0;
 
             this.forma_pgto =
@@ -175,7 +175,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
 
             this.taxa_impressao =
                 String.IsNullOrEmpty(taxa_impressao) ? 0
-                : Convert.ToDecimal(taxa_impressao);
+                : Convert.ToDecimal(taxa_impressao, new CultureInfo("en-US"));
 
             this.finalizado =
                 ConvertToInt32Validation.IsValid(finalizado, "finalizado", listValidations) ?
@@ -184,7 +184,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
 
             this.valor_frete_gratis =
                 ConvertToDecimalValidation.IsValid(valor_frete_gratis, "valor_frete_gratis", listValidations) ?
-                Convert.ToDecimal(valor_frete_gratis) :
+                Convert.ToDecimal(valor_frete_gratis, new CultureInfo("en-US")) :
                 0;
 
             this.tipo_frete =
@@ -224,7 +224,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
 
             this.valor_credito =
                 ConvertToDecimalValidation.IsValid(valor_credito, "valor_credito", listValidations) ?
-                Convert.ToDecimal(valor_credito) :
+                Convert.ToDecimal(valor_credito, new CultureInfo("en-US")) :
                 0;
 
             this.cod_vendedor =

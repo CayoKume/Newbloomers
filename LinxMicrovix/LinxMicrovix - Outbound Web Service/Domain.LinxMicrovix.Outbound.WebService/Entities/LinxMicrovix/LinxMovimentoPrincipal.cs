@@ -1,6 +1,7 @@
 ﻿using Domain.IntegrationsCore.CustomValidations;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Globalization;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 {
@@ -70,12 +71,12 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
             this.total_fidelidade_cashback =
                 ConvertToDecimalValidation.IsValid(total_fidelidade_cashback, "total_fidelidade_cashback", listValidations) ?
-                Convert.ToDecimal(total_fidelidade_cashback) :
+                Convert.ToDecimal(total_fidelidade_cashback, new CultureInfo("en-US")) :
                 0;
 
             this.valor_nota =
                 ConvertToDecimalValidation.IsValid(valor_nota, "valor_nota", listValidations) ?
-                Convert.ToDecimal(valor_nota) :
+                Convert.ToDecimal(valor_nota, new CultureInfo("en-US")) :
                 0;
 
             this.id_movimento_principal =

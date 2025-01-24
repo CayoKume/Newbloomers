@@ -64,12 +64,12 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
             this.valor_base =
                 ConvertToDecimalValidation.IsValid(valor_base, "valor_base", listValidations) ?
-                Convert.ToDecimal(valor_base) :
+                Convert.ToDecimal(valor_base, new CultureInfo("en-US")) :
                 0;
 
             this.valor_comissao =
                 ConvertToDecimalValidation.IsValid(valor_comissao, "valor_comissao", listValidations) ?
-                Convert.ToDecimal(valor_comissao) :
+                Convert.ToDecimal(valor_comissao, new CultureInfo("en-US")) :
                 0;
 
             this.data_origem =

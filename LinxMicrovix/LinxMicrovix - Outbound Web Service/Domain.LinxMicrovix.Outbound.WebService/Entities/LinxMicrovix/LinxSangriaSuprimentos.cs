@@ -94,7 +94,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
             this.valor =
                 ConvertToDecimalValidation.IsValid(valor, "valor", listValidations) ?
-                Convert.ToDecimal(valor) :
+                Convert.ToDecimal(valor, new CultureInfo("en-US")) :
                 0;
 
             this.conferido =

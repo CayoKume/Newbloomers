@@ -1,6 +1,7 @@
 ﻿using Domain.IntegrationsCore.CustomValidations;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Globalization;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 {
@@ -13,6 +14,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
+        [Key]
         [Column(TypeName = "varchar(14)")]
         [LengthValidation(length: 14, propertyName: "cnpj_emp")]
         public string? cnpj_emp { get; private set; }
@@ -31,6 +33,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [LengthValidation(length: 50, propertyName: "motivo")]
         public string? motivo { get; private set; }
 
+        [Key]
         [Column(TypeName = "int")]
         public Int32? doc_origem { get; private set; }
 
@@ -38,6 +41,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [LengthValidation(length: 10, propertyName: "serie_origem")]
         public string? serie_origem { get; private set; }
 
+        [Key]
         [Column(TypeName = "int")]
         public Int32? doc_venda { get; private set; }
 
@@ -52,7 +56,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         public Int64? timestamp { get; private set; }
 
         [Column(TypeName = "bit")]
-        public bool? desfazimento { get; private set; }
+        public Int32? desfazimento { get; private set; }
 
         [Column(TypeName = "int")]
         public Int32? empresa { get; private set; }
@@ -66,6 +70,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [Column(TypeName = "int")]
         public Int32? id_vale_ordem_servico_externa { get; private set; }
 
+        [Key]
         [Column(TypeName = "int")]
         public Int32? doc_venda_origem { get; private set; }
 
@@ -73,6 +78,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [LengthValidation(length: 10, propertyName: "serie_venda_origem")]
         public string? serie_venda_origem { get; private set; }
 
+        [Key]
         [Column(TypeName = "int")]
         public Int32? cod_cliente { get; private set; }
 
@@ -161,7 +167,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
             this.valor_vale =
                 ConvertToDecimalValidation.IsValid(valor_vale, "valor_vale", listValidations) ?
-                Convert.ToDecimal(valor_vale) :
+                Convert.ToDecimal(valor_vale, new CultureInfo("en-US")) :
                 0;
 
             this.excluido =
@@ -170,12 +176,12 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
                 false;
 
             this.desfazimento =
-                ConvertToBooleanValidation.IsValid(desfazimento, "desfazimento", listValidations) ?
-                Convert.ToBoolean(desfazimento) :
-                false;
+                ConvertToInt32Validation.IsValid(desfazimento, "desfazimento", listValidations) ?
+                Convert.ToInt32(desfazimento) :
+                0;
 
             this.identificador =
-                String.IsNullOrEmpty(identificador) ? null
+                String.IsNullOrEmpty(identificador) ? new Guid()
                 : Guid.Parse(identificador);
 
             this.cnpj_emp = cnpj_emp;

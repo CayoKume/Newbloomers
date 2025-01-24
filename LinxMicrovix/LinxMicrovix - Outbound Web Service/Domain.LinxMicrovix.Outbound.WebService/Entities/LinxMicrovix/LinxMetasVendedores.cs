@@ -90,7 +90,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
             this.valor_meta_loja =
                 ConvertToDecimalValidation.IsValid(valor_meta_loja, "valor_meta_loja", listValidations) ?
-                Convert.ToDecimal(valor_meta_loja) :
+                Convert.ToDecimal(valor_meta_loja, new CultureInfo("en-US")) :
                 0;
 
             this.data_final_meta =
@@ -100,7 +100,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
             this.valor_meta_vendedor =
                 ConvertToDecimalValidation.IsValid(valor_meta_vendedor, "valor_meta_vendedor", listValidations) ?
-                Convert.ToDecimal(valor_meta_vendedor) :
+                Convert.ToDecimal(valor_meta_vendedor, new CultureInfo("en-US")) :
                 0;
 
             this.cnpj_emp = cnpj_emp;

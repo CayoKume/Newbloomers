@@ -1,6 +1,7 @@
 ﻿using Domain.IntegrationsCore.CustomValidations;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Globalization;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
 {
@@ -42,7 +43,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
 
             this.saldo =
                 ConvertToDecimalValidation.IsValid(saldo, "saldo", listValidations) ?
-                Convert.ToDecimal(saldo) :
+                Convert.ToDecimal(saldo, new CultureInfo("en-US")) :
                 0;
 
             this.cod_cliente_erp =

@@ -1,6 +1,7 @@
 ﻿using Domain.IntegrationsCore.CustomValidations;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Globalization;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 {
@@ -65,7 +66,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
             this.saldo_disponivel =
                 ConvertToDecimalValidation.IsValid(saldo_disponivel, "saldo_disponivel", listValidations) ?
-                Convert.ToDecimal(saldo_disponivel) :
+                Convert.ToDecimal(saldo_disponivel, new CultureInfo("en-US")) :
                 0;
 
             this.codigoproduto =

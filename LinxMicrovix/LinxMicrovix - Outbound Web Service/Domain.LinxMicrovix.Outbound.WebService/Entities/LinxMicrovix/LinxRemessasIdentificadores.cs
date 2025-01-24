@@ -1,6 +1,7 @@
 ﻿using Domain.IntegrationsCore.CustomValidations;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Globalization;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 {
@@ -94,7 +95,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
             this.qtde_total_acerto =
                 ConvertToDecimalValidation.IsValid(qtde_total_acerto, "qtde_total_acerto", listValidations) ?
-                Convert.ToDecimal(qtde_total_acerto) :
+                Convert.ToDecimal(qtde_total_acerto, new CultureInfo("en-US")) :
                 0;
         }
     }

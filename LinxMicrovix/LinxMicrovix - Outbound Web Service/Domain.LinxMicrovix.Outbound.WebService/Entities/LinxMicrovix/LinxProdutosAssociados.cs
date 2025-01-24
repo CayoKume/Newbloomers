@@ -1,6 +1,7 @@
 ﻿using Domain.IntegrationsCore.CustomValidations;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Globalization;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 {
@@ -49,12 +50,12 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
             this.coeficiente_desconto =
                 ConvertToDecimalValidation.IsValid(coeficiente_desconto, "coeficiente_desconto", listValidations) ?
-                Convert.ToDecimal(coeficiente_desconto) :
+                Convert.ToDecimal(coeficiente_desconto, new CultureInfo("en-US")) :
                 0;
 
             this.qtde_item =
                 ConvertToDecimalValidation.IsValid(qtde_item, "qtde_item", listValidations) ?
-                Convert.ToDecimal(qtde_item) :
+                Convert.ToDecimal(qtde_item, new CultureInfo("en-US")) :
                 0;
 
             this.item_obrigatorio =

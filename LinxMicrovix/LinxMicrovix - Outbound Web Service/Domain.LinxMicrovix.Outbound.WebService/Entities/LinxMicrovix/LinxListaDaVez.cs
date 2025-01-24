@@ -83,7 +83,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
             this.valor_produto_neg =
                 ConvertToDecimalValidation.IsValid(valor_produto_neg, "valor_produto_neg", listValidations) ?
-                Convert.ToDecimal(valor_produto_neg) :
+                Convert.ToDecimal(valor_produto_neg, new CultureInfo("en-US")) :
                 0;
 
             this.data =

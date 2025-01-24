@@ -13,6 +13,7 @@ namespace Domain.DatabaseInit.Entites.LinxMicrovix.LinxMicrovix
         [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
+        [Key]
         [Column(TypeName = "varchar(14)")]
         [LengthValidation(length: 14, propertyName: "cnpj_emp")]
         public string? cnpj_emp { get; private set; }
@@ -31,6 +32,7 @@ namespace Domain.DatabaseInit.Entites.LinxMicrovix.LinxMicrovix
         [LengthValidation(length: 50, propertyName: "motivo")]
         public string? motivo { get; private set; }
 
+        [Key]
         [Column(TypeName = "int")]
         public Int32? doc_origem { get; private set; }
 
@@ -38,6 +40,7 @@ namespace Domain.DatabaseInit.Entites.LinxMicrovix.LinxMicrovix
         [LengthValidation(length: 10, propertyName: "serie_origem")]
         public string? serie_origem { get; private set; }
 
+        [Key]
         [Column(TypeName = "int")]
         public Int32? doc_venda { get; private set; }
 
@@ -52,7 +55,7 @@ namespace Domain.DatabaseInit.Entites.LinxMicrovix.LinxMicrovix
         public Int64? timestamp { get; private set; }
 
         [Column(TypeName = "bit")]
-        public bool? desfazimento { get; private set; }
+        public Int32? desfazimento { get; private set; }
 
         [Column(TypeName = "int")]
         public Int32? empresa { get; private set; }
@@ -60,12 +63,14 @@ namespace Domain.DatabaseInit.Entites.LinxMicrovix.LinxMicrovix
         [Column(TypeName = "int")]
         public Int32? vale_cod_cliente { get; private set; }
 
+        [Key]
         [Column(TypeName = "bigint")]
         public Int64? vale_codigoproduto { get; private set; }
 
         [Column(TypeName = "int")]
         public Int32? id_vale_ordem_servico_externa { get; private set; }
 
+        [Key]
         [Column(TypeName = "int")]
         public Int32? doc_venda_origem { get; private set; }
 
@@ -73,6 +78,7 @@ namespace Domain.DatabaseInit.Entites.LinxMicrovix.LinxMicrovix
         [LengthValidation(length: 10, propertyName: "serie_venda_origem")]
         public string? serie_venda_origem { get; private set; }
 
+        [Key]
         [Column(TypeName = "int")]
         public Int32? cod_cliente { get; private set; }
 
@@ -170,9 +176,9 @@ namespace Domain.DatabaseInit.Entites.LinxMicrovix.LinxMicrovix
                 false;
 
             this.desfazimento =
-                ConvertToBooleanValidation.IsValid(desfazimento, "desfazimento", listValidations) ?
-                Convert.ToBoolean(desfazimento) :
-                false;
+                ConvertToInt32Validation.IsValid(desfazimento, "desfazimento", listValidations) ?
+                Convert.ToInt32(desfazimento) :
+                0;
 
             this.identificador =
                 String.IsNullOrEmpty(identificador) ? null

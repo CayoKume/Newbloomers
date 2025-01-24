@@ -6,8 +6,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxMic
     public interface ILinxProdutosCodBarRepository
     {
         public Task<bool> InsertRecord(LinxAPIParam jobParameter, LinxProdutosCodBar? record);
-        public bool BulkInsertIntoTableRaw(LinxAPIParam jobParameter, List<LinxProdutosCodBar> records);
+        public bool BulkInsertIntoTableRaw(LinxAPIParam jobParameter, IList<LinxProdutosCodBar> records);
         public Task<List<LinxProdutosCodBar>> GetRegistersExists(LinxAPIParam jobParameter, List<LinxProdutosCodBar> registros);
-
+        public Task<IEnumerable<string?>> GetProductsSetorIds(LinxAPIParam jobParameter);
     }
 }

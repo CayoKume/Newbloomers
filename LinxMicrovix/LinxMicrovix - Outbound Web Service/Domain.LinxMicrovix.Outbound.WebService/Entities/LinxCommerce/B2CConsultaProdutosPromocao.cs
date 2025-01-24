@@ -91,7 +91,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
 
             this.preco =
                 ConvertToDecimalValidation.IsValid(preco, "preco", listValidations) ?
-                Convert.ToDecimal(preco) :
+                Convert.ToDecimal(preco, new CultureInfo("en-US")) :
                 0;
 
             this.data_inicio =

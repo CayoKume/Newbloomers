@@ -1,6 +1,7 @@
 ﻿using Domain.IntegrationsCore.CustomValidations;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Globalization;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 {
@@ -559,152 +560,152 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
             this.aliq_icms =
                 ConvertToDecimalValidation.IsValid(aliq_icms, "aliq_icms", listValidations) ?
-                Convert.ToDecimal(aliq_icms) :
+                Convert.ToDecimal(aliq_icms, new CultureInfo("en-US")) :
                 0;
 
             this.valor_tributado_icms =
                 ConvertToDecimalValidation.IsValid(valor_tributado_icms, "valor_tributado_icms", listValidations) ?
-                Convert.ToDecimal(valor_tributado_icms) :
+                Convert.ToDecimal(valor_tributado_icms, new CultureInfo("en-US")) :
                 0;
 
             this.aliq_pis =
                 ConvertToDecimalValidation.IsValid(aliq_pis, "aliq_pis", listValidations) ?
-                Convert.ToDecimal(aliq_pis) :
+                Convert.ToDecimal(aliq_pis, new CultureInfo("en-US")) :
                 0;
 
             this.aliq_cofins =
                 ConvertToDecimalValidation.IsValid(aliq_cofins, "aliq_cofins", listValidations) ?
-                Convert.ToDecimal(aliq_cofins) :
+                Convert.ToDecimal(aliq_cofins, new CultureInfo("en-US")) :
                 0;
 
             this.perc_reducao_icms =
                 ConvertToDecimalValidation.IsValid(perc_reducao_icms, "perc_reducao_icms", listValidations) ?
-                Convert.ToDecimal(perc_reducao_icms) :
+                Convert.ToDecimal(perc_reducao_icms, new CultureInfo("en-US")) :
                 0;
 
             this.perc_reducao_icms_st =
                 ConvertToDecimalValidation.IsValid(perc_reducao_icms_st, "perc_reducao_icms_st", listValidations) ?
-                Convert.ToDecimal(perc_reducao_icms_st) :
+                Convert.ToDecimal(perc_reducao_icms_st, new CultureInfo("en-US")) :
                 0;
 
             this.margem_st =
                 ConvertToDecimalValidation.IsValid(margem_st, "margem_st", listValidations) ?
-                Convert.ToDecimal(margem_st) :
+                Convert.ToDecimal(margem_st, new CultureInfo("en-US")) :
                 0;
 
             this.aliquota_st =
                 ConvertToDecimalValidation.IsValid(aliquota_st, "aliquota_st", listValidations) ?
-                Convert.ToDecimal(aliquota_st) :
+                Convert.ToDecimal(aliquota_st, new CultureInfo("en-US")) :
                 0;
 
             this.margem_st_simulador =
                 ConvertToDecimalValidation.IsValid(margem_st_simulador, "margem_st_simulador", listValidations) ?
-                Convert.ToDecimal(margem_st_simulador) :
+                Convert.ToDecimal(margem_st_simulador, new CultureInfo("en-US")) :
                 0;
 
             this.aliquota_st_simulador =
                 ConvertToDecimalValidation.IsValid(aliquota_st_simulador, "aliquota_st_simulador", listValidations) ?
-                Convert.ToDecimal(aliquota_st_simulador) :
+                Convert.ToDecimal(aliquota_st_simulador, new CultureInfo("en-US")) :
                 0;
 
             this.desconto_icms =
                 ConvertToDecimalValidation.IsValid(desconto_icms, "desconto_icms", listValidations) ?
-                Convert.ToDecimal(desconto_icms) :
+                Convert.ToDecimal(desconto_icms, new CultureInfo("en-US")) :
                 0;
 
             this.perc_aliquota_interna_uf_destinatario =
                 ConvertToDecimalValidation.IsValid(perc_aliquota_interna_uf_destinatario, "perc_aliquota_interna_uf_destinatario", listValidations) ?
-                Convert.ToDecimal(perc_aliquota_interna_uf_destinatario) :
+                Convert.ToDecimal(perc_aliquota_interna_uf_destinatario, new CultureInfo("en-US")) :
                 0;
 
             this.perc_aliquota_interestadual_uf_envolvidas =
                 ConvertToDecimalValidation.IsValid(perc_aliquota_interestadual_uf_envolvidas, "perc_aliquota_interestadual_uf_envolvidas", listValidations) ?
-                Convert.ToDecimal(perc_aliquota_interestadual_uf_envolvidas) :
+                Convert.ToDecimal(perc_aliquota_interestadual_uf_envolvidas, new CultureInfo("en-US")) :
                 0;
 
             this.aliq_pis_servico =
                 ConvertToDecimalValidation.IsValid(aliq_pis_servico, "aliq_pis_servico", listValidations) ?
-                Convert.ToDecimal(aliq_pis_servico) :
+                Convert.ToDecimal(aliq_pis_servico, new CultureInfo("en-US")) :
                 0;
 
             this.aliq_cofins_servico =
                 ConvertToDecimalValidation.IsValid(aliq_cofins_servico, "aliq_cofins_servico", listValidations) ?
-                Convert.ToDecimal(aliq_cofins_servico) :
+                Convert.ToDecimal(aliq_cofins_servico, new CultureInfo("en-US")) :
                 0;
 
             this.aliq_pis_csrf =
                 ConvertToDecimalValidation.IsValid(aliq_pis_csrf, "aliq_pis_csrf", listValidations) ?
-                Convert.ToDecimal(aliq_pis_csrf) :
+                Convert.ToDecimal(aliq_pis_csrf, new CultureInfo("en-US")) :
                 0;
 
             this.aliq_cofins_csrf =
                 ConvertToDecimalValidation.IsValid(aliq_cofins_csrf, "aliq_cofins_csrf", listValidations) ?
-                Convert.ToDecimal(aliq_cofins_csrf) :
+                Convert.ToDecimal(aliq_cofins_csrf, new CultureInfo("en-US")) :
                 0;
 
             this.aliq_csll_csrf =
                 ConvertToDecimalValidation.IsValid(aliq_csll_csrf, "aliq_csll_csrf", listValidations) ?
-                Convert.ToDecimal(aliq_csll_csrf) :
+                Convert.ToDecimal(aliq_csll_csrf, new CultureInfo("en-US")) :
                 0;
 
             this.icms_st_antecipado_margem =
                 ConvertToDecimalValidation.IsValid(icms_st_antecipado_margem, "icms_st_antecipado_margem", listValidations) ?
-                Convert.ToDecimal(icms_st_antecipado_margem) :
+                Convert.ToDecimal(icms_st_antecipado_margem, new CultureInfo("en-US")) :
                 0;
 
             this.icms_st_antecipado_aliquota =
                 ConvertToDecimalValidation.IsValid(icms_st_antecipado_aliquota, "icms_st_antecipado_aliquota", listValidations) ?
-                Convert.ToDecimal(icms_st_antecipado_aliquota) :
+                Convert.ToDecimal(icms_st_antecipado_aliquota, new CultureInfo("en-US")) :
                 0;
 
             this.icms_st_antecipado_percentual_reducao =
                 ConvertToDecimalValidation.IsValid(icms_st_antecipado_percentual_reducao, "icms_st_antecipado_percentual_reducao", listValidations) ?
-                Convert.ToDecimal(icms_st_antecipado_percentual_reducao) :
+                Convert.ToDecimal(icms_st_antecipado_percentual_reducao, new CultureInfo("en-US")) :
                 0;
 
             this.aliq_carga_tributaria_media =
                 ConvertToDecimalValidation.IsValid(aliq_carga_tributaria_media, "aliq_carga_tributaria_media", listValidations) ?
-                Convert.ToDecimal(aliq_carga_tributaria_media) :
+                Convert.ToDecimal(aliq_carga_tributaria_media, new CultureInfo("en-US")) :
                 0;
 
             this.aliq_fcp =
                 ConvertToDecimalValidation.IsValid(aliq_fcp, "aliq_fcp", listValidations) ?
-                Convert.ToDecimal(aliq_fcp) :
+                Convert.ToDecimal(aliq_fcp, new CultureInfo("en-US")) :
                 0;
 
             this.aliq_icms_efetivo =
                 ConvertToDecimalValidation.IsValid(aliq_icms_efetivo, "aliq_icms_efetivo", listValidations) ?
-                Convert.ToDecimal(aliq_icms_efetivo) :
+                Convert.ToDecimal(aliq_icms_efetivo, new CultureInfo("en-US")) :
                 0;
 
             this.perc_reducao_icms_efetivo =
                 ConvertToDecimalValidation.IsValid(perc_reducao_icms_efetivo, "perc_reducao_icms_efetivo", listValidations) ?
-                Convert.ToDecimal(perc_reducao_icms_efetivo) :
+                Convert.ToDecimal(perc_reducao_icms_efetivo, new CultureInfo("en-US")) :
                 0;
 
             this.icms_fcp_st_antecipado_aliquota =
                 ConvertToDecimalValidation.IsValid(icms_fcp_st_antecipado_aliquota, "icms_fcp_st_antecipado_aliquota", listValidations) ?
-                Convert.ToDecimal(icms_fcp_st_antecipado_aliquota) :
+                Convert.ToDecimal(icms_fcp_st_antecipado_aliquota, new CultureInfo("en-US")) :
                 0;
 
             this.aliq_desoneracao_icms =
                 ConvertToDecimalValidation.IsValid(aliq_desoneracao_icms, "aliq_desoneracao_icms", listValidations) ?
-                Convert.ToDecimal(aliq_desoneracao_icms) :
+                Convert.ToDecimal(aliq_desoneracao_icms, new CultureInfo("en-US")) :
                 0;
 
             this.aliq_desoneracao_fcp =
                 ConvertToDecimalValidation.IsValid(aliq_desoneracao_fcp, "aliq_desoneracao_fcp", listValidations) ?
-                Convert.ToDecimal(aliq_desoneracao_fcp) :
+                Convert.ToDecimal(aliq_desoneracao_fcp, new CultureInfo("en-US")) :
                 0;
 
             this.aliquota_diferimento_icms =
                 ConvertToDecimalValidation.IsValid(aliquota_diferimento_icms, "aliquota_diferimento_icms", listValidations) ?
-                Convert.ToDecimal(aliquota_diferimento_icms) :
+                Convert.ToDecimal(aliquota_diferimento_icms, new CultureInfo("en-US")) :
                 0;
 
             this.aliquota_diferimento_fcp =
                 ConvertToDecimalValidation.IsValid(aliquota_diferimento_fcp, "aliquota_diferimento_fcp", listValidations) ?
-                Convert.ToDecimal(aliquota_diferimento_fcp) :
+                Convert.ToDecimal(aliquota_diferimento_fcp, new CultureInfo("en-US")) :
                 0;
 
             this.timestamp =

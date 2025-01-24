@@ -159,17 +159,17 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
             this.quantidade =
                 ConvertToDecimalValidation.IsValid(quantidade, "quantidade", listValidations) ?
-                Convert.ToDecimal(quantidade) :
+                Convert.ToDecimal(quantidade, new CultureInfo("en-US")) :
                 0;
 
             this.preco_unitario_produto =
                 ConvertToDecimalValidation.IsValid(preco_unitario_produto, "preco_unitario_produto", listValidations) ?
-                Convert.ToDecimal(preco_unitario_produto) :
+                Convert.ToDecimal(preco_unitario_produto, new CultureInfo("en-US")) :
                 0;
 
             this.valor_pago_antecipacao =
                 ConvertToDecimalValidation.IsValid(valor_pago_antecipacao, "valor_pago_antecipacao", listValidations) ?
-                Convert.ToDecimal(valor_pago_antecipacao) :
+                Convert.ToDecimal(valor_pago_antecipacao, new CultureInfo("en-US")) :
                 0;
 
             this.identificador =

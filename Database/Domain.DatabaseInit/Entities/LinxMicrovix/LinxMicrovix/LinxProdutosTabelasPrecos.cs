@@ -17,10 +17,12 @@ namespace Domain.DatabaseInit.Entites.LinxMicrovix.LinxMicrovix
         [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
+        [Key]
         [Column(TypeName = "varchar(14)")]
         [LengthValidation(length: 14, propertyName: "cnpj_emp")]
         public string? cnpj_emp { get; private set; }
 
+        [Key]
         [Column(TypeName = "int")]
         public Int32? id_tabela { get; private set; }
 

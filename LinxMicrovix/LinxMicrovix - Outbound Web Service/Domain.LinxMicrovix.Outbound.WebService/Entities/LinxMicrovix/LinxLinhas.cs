@@ -2,6 +2,7 @@
 using Domain.IntegrationsCore.CustomValidations;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Globalization;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 {
@@ -63,7 +64,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
             this.coeficiente_comissao =
                 ConvertToDecimalValidation.IsValid(coeficiente_comissao, "coeficiente_comissao", listValidations) ?
-                Convert.ToDecimal(coeficiente_comissao) :
+                Convert.ToDecimal(coeficiente_comissao, new CultureInfo("en-US")) :
                 0;
 
             this.desc_linha = desc_linha;

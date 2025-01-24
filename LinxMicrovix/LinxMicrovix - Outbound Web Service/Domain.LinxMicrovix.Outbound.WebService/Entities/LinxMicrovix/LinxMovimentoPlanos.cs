@@ -1,6 +1,7 @@
 ﻿using Domain.IntegrationsCore.CustomValidations;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Globalization;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 {
@@ -13,6 +14,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
+        [Key]
         [Column(TypeName = "varchar(14)")]
         [LengthValidation(length: 14, propertyName: "cnpj_emp")]
         public string? cnpj_emp { get; private set; }
@@ -21,6 +23,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [Column(TypeName = "uniqueidentifier")]
         public Guid? identificador { get; private set; }
 
+        [Key]
         [Column(TypeName = "int")]
         public Int32? plano { get; private set; }
 
@@ -120,23 +123,24 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
             this.total =
                 ConvertToDecimalValidation.IsValid(total, "total", listValidations) ?
-                Convert.ToDecimal(total) :
+                Convert.ToDecimal(total, new CultureInfo("en-US")) :
                 0;
 
             this.indice_plano =
                 ConvertToDecimalValidation.IsValid(indice_plano, "indice_plano", listValidations) ?
-                Convert.ToDecimal(indice_plano) :
+                Convert.ToDecimal(indice_plano, new CultureInfo("en-US")) :
                 0;
 
             this.taxa_financeira =
                 ConvertToDecimalValidation.IsValid(taxa_financeira, "taxa_financeira", listValidations) ?
-                Convert.ToDecimal(taxa_financeira) :
+                Convert.ToDecimal(taxa_financeira, new CultureInfo("en-US")) :
                 0;
 
             this.identificador =
                 String.IsNullOrEmpty(identificador) ? null
                 : Guid.Parse(identificador);
 
+            this.forma_pgto = forma_pgto;
             this.tipo_transacao = tipo_transacao;
             this.desc_plano = desc_plano;
             this.cnpj_emp = cnpj_emp;

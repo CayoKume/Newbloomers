@@ -14,6 +14,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
+        [Key]
         [Column(TypeName = "varchar(14)")]
         [LengthValidation(length: 14, propertyName: "cnpj_emp")]
         public string? cnpj_emp { get; private set; }
@@ -31,9 +32,11 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [Column(TypeName = "int")]
         public Int32? usuario { get; private set; }
 
+        [Key]
         [Column(TypeName = "int")]
         public Int32? codigo_fornecedor { get; private set; }
 
+        [Key]
         [Column(TypeName = "bigint")]
         public Int64? cod_produto { get; private set; }
 
@@ -108,7 +111,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         public string? descricao_frete { get; private set; }
 
         [Column(TypeName = "bit")]
-        public bool? integrado_linx { get; private set; }
+        public Int32? integrado_linx { get; private set; }
 
         [Column(TypeName = "int")]
         public Int32? nf_gerada { get; private set; }
@@ -236,34 +239,36 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
             this.quantidade =
                 ConvertToDecimalValidation.IsValid(quantidade, "quantidade", listValidations) ?
-                Convert.ToDecimal(quantidade) :
+                Convert.ToDecimal(quantidade, new CultureInfo("en-US")) :
                 0;
 
             this.valor_unitario =
                 ConvertToDecimalValidation.IsValid(valor_unitario, "valor_unitario", listValidations) ?
-                Convert.ToDecimal(valor_unitario) :
+                Convert.ToDecimal(valor_unitario, new CultureInfo("en-US")) :
                 0;
 
             this.valor_frete =
                 ConvertToDecimalValidation.IsValid(valor_frete, "valor_frete", listValidations) ?
-                Convert.ToDecimal(valor_frete) :
+                Convert.ToDecimal(valor_frete, new CultureInfo("en-US")) :
                 0;
 
             this.valor_total =
                 ConvertToDecimalValidation.IsValid(valor_total, "valor_total", listValidations) ?
-                Convert.ToDecimal(valor_total) :
+                Convert.ToDecimal(valor_total, new CultureInfo("en-US")) :
                 0;
 
             this.qtde_entregue =
                 ConvertToDecimalValidation.IsValid(qtde_entregue, "qtde_entregue", listValidations) ?
-                Convert.ToDecimal(qtde_entregue) :
+                Convert.ToDecimal(qtde_entregue, new CultureInfo("en-US")) :
                 0;
 
             this.integrado_linx =
-                ConvertToBooleanValidation.IsValid(integrado_linx, "integrado_linx", listValidations) ?
-                Convert.ToBoolean(integrado_linx) :
-                false;
+                ConvertToInt32Validation.IsValid(integrado_linx, "integrado_linx", listValidations) ?
+                Convert.ToInt32(integrado_linx) :
+                0;
 
+            this.status_pedido = status_pedido;
+            this.tipo_frete = tipo_frete;
             this.nf_origem_ws = nf_origem_ws;
             this.descricao_frete = descricao_frete;
             this.numero_projeto_officina = numero_projeto_officina;

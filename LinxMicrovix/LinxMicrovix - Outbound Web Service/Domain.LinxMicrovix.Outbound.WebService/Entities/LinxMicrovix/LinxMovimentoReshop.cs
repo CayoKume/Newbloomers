@@ -1,6 +1,7 @@
 ﻿using Domain.IntegrationsCore.CustomValidations;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Globalization;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 {
@@ -74,12 +75,12 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
             this.valor_desconto_subtotal =
                 ConvertToDecimalValidation.IsValid(valor_desconto_subtotal, "valor_desconto_subtotal", listValidations) ?
-                Convert.ToDecimal(valor_desconto_subtotal) :
+                Convert.ToDecimal(valor_desconto_subtotal, new CultureInfo("en-US")) :
                 0;
 
             this.valor_desconto_completo =
                 ConvertToDecimalValidation.IsValid(valor_desconto_completo, "valor_desconto_completo", listValidations) ?
-                Convert.ToDecimal(valor_desconto_completo) :
+                Convert.ToDecimal(valor_desconto_completo, new CultureInfo("en-US")) :
                 0;
 
             this.aplicar_desconto_venda =

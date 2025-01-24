@@ -50,7 +50,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                     var entity = new LinxPedidosCompra(
                         listValidations: validations,
                         cnpj_emp: records[i].Where(pair => pair.Key == "cnpj_emp").Select(pair => pair.Value).FirstOrDefault(),
-                        cod_pedido: records[i].Where(pair => pair.Key == "cod_pedido").Select(pair => pair.Value).FirstOrDefault(),
+                        cod_pedido: records[i].Where(pair => pair.Key == "cod_pedido").Select(pair => pair.Value).FirstOrDefault().Replace("-", ""),
                         data_pedido: records[i].Where(pair => pair.Key == "data_pedido").Select(pair => pair.Value).FirstOrDefault(),
                         transacao: records[i].Where(pair => pair.Key == "transacao").Select(pair => pair.Value).FirstOrDefault(),
                         usuario: records[i].Where(pair => pair.Key == "usuario").Select(pair => pair.Value).FirstOrDefault(),
@@ -126,7 +126,107 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
 
         public async Task<bool> GetRecords(LinxAPIParam jobParameter)
         {
-            throw new NotImplementedException();
+            IList<LinxPedidosCompra> _listSomenteNovos = new List<LinxPedidosCompra>();
+
+            try
+            {
+                _logger
+                   .Clear()
+                   .AddLog(EnumJob.LinxPedidosCompra);
+
+                string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter);
+                var cnpjs_emp = await _linxMicrovixRepositoryBase.GetMicrovixCompanys(jobParameter);
+
+                foreach (var cnpj_emp in cnpjs_emp)
+                {
+                    var body = _linxMicrovixServiceBase.BuildBodyRequest(
+                                parametersList: parameters.Replace("[0]", "0").Replace("[data_inicial]", $"{DateTime.Today.AddDays(-14).ToString("yyyy-MM-dd")}").Replace("[data_fim]", $"{DateTime.Today.ToString("yyyy-MM-dd")}").Replace("[data_alt_inicial]", $"{DateTime.Today.AddDays(-14).ToString("yyyy-MM-dd")}").Replace("[data_alt_fim]", $"{DateTime.Today.ToString("yyyy-MM-dd")}"),
+                                jobParameter: jobParameter,
+                                cnpj_emp: cnpj_emp.doc_company
+                            );
+
+                    string? response = await _apiCall.PostAsync(jobParameter: jobParameter, body: body);
+                    var xmls = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response, _linxPedidosCompraServiceCache);
+
+                    if (xmls.Count() > 0)
+                    {
+                        var listRecords = DeserializeXMLToObject(jobParameter, xmls);
+
+                        if (_linxPedidosCompraServiceCache.GetList().Count == 0)
+                        {
+                            var list_existentes = await _linxPedidosCompraRepository.GetRegistersExists(jobParameter: jobParameter, registros: listRecords);
+                            _linxPedidosCompraServiceCache.AddList(list_existentes);
+                        }
+
+                        _listSomenteNovos = _linxPedidosCompraServiceCache.FiltrarList(listRecords);
+                        if (_listSomenteNovos.Count() > 0)
+                        {
+                            _linxPedidosCompraRepository.BulkInsertIntoTableRaw(records: _listSomenteNovos, jobParameter: jobParameter);
+                            for (int i = 0; i < _listSomenteNovos.Count; i++)
+                            {
+                                var key = _linxPedidosCompraServiceCache.GetKey(_listSomenteNovos[i]);
+                                if (_linxPedidosCompraServiceCache.GetDictionaryXml().ContainsKey(key))
+                                {
+                                    var xml = _linxPedidosCompraServiceCache.GetDictionaryXml()[key];
+                                    _logger.AddRecord(key, xml);
+                                }
+                            }
+
+                            await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter: jobParameter);
+
+                            _logger.AddMessage(
+                                $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"
+                            );
+                        }
+                        else
+                            _logger.AddMessage(
+                                $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"
+                            );
+                    }
+
+                    await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter: jobParameter);
+                }
+            }
+            catch (SQLCommandException ex)
+            {
+                _logger.AddMessage(
+                    stage: ex.Stage,
+                    error: ex.Error,
+                    logLevel: ex.MessageLevel,
+                    message: ex.Message,
+                    exceptionMessage: ex.ExceptionMessage,
+                    commandSQL: ex.CommandSQL
+                );
+
+                throw;
+            }
+            catch (InternalException ex)
+            {
+                _logger.AddMessage(
+                    stage: ex.stage,
+                    error: ex.Error,
+                    logLevel: ex.MessageLevel,
+                    message: ex.Message,
+                    exceptionMessage: ex.ExceptionMessage
+                );
+
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.AddMessage(
+                    message: "Error when executing GetRecords method",
+                    exceptionMessage: ex.Message
+                );
+            }
+            finally
+            {
+                _logger.SetLogEndDate();
+                await _logger.CommitAllChanges();
+                _linxPedidosCompraServiceCache.AddList(_listSomenteNovos);
+            }
+
+            return true;
         }
     }
 }

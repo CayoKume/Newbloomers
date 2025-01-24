@@ -173,22 +173,22 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
 
             this.altura_para_frete =
                 ConvertToDecimalValidation.IsValid(altura_para_frete, "altura_para_frete", listValidations) ?
-                Convert.ToDecimal(altura_para_frete) :
+                Convert.ToDecimal(altura_para_frete, new CultureInfo("en-US")) :
                 0;
 
             this.largura_para_frete =
                 ConvertToDecimalValidation.IsValid(largura_para_frete, "largura_para_frete", listValidations) ?
-                Convert.ToDecimal(largura_para_frete) :
+                Convert.ToDecimal(largura_para_frete, new CultureInfo("en-US")) :
                 0;
 
             this.comprimento_para_frete =
                 ConvertToDecimalValidation.IsValid(comprimento_para_frete, "comprimento_para_frete", listValidations) ?
-                Convert.ToDecimal(comprimento_para_frete) :
+                Convert.ToDecimal(comprimento_para_frete, new CultureInfo("en-US")) :
                 0;
 
             this.peso_bruto =
                 ConvertToDecimalValidation.IsValid(peso_bruto, "peso_bruto", listValidations) ?
-                Convert.ToDecimal(peso_bruto) :
+                Convert.ToDecimal(peso_bruto, new CultureInfo("en-US")) :
                 0;
 
             this.dt_update =
@@ -203,7 +203,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
 
             this.peso_liquido =
                 ConvertToDecimalValidation.IsValid(peso_liquido, "peso_liquido", listValidations) ?
-                Convert.ToDecimal(peso_liquido) :
+                Convert.ToDecimal(peso_liquido, new CultureInfo("en-US")) :
                 0;
 
             this.codigo_setor =

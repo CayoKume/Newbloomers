@@ -231,6 +231,18 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.DependencyInjection
             services.AddScoped<ILinxClientesFornecService, LinxClientesFornecService>();
             services.AddScoped<ILinxClientesFornecRepository, LinxClientesFornecRepository>();
 
+            services.AddScoped<ILinxMovimentoService, LinxMovimentoService>();
+            services.AddScoped<ILinxMovimentoRepository, LinxMovimentoRepository>();
+
+            services.AddScoped<ILinxMovimentoCartoesService, LinxMovimentoCartoesService>();
+            services.AddScoped<ILinxMovimentoCartoesRepository, LinxMovimentoCartoesRepository>();
+
+            services.AddScoped<ILinxMovimentoPlanosService, LinxMovimentoPlanosService>();
+            services.AddScoped<ILinxMovimentoPlanosRepository, LinxMovimentoPlanosRepository>();
+
+            services.AddScoped<ILinxMovimentoTrocasService, LinxMovimentoTrocasService>();
+            services.AddScoped<ILinxMovimentoTrocasRepository, LinxMovimentoTrocasRepository>();
+
             services.AddScoped<ILinxPlanosService, LinxPlanosService>();
             services.AddScoped<ILinxPlanosRepository, LinxPlanosRepository>();
 
@@ -242,6 +254,9 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.DependencyInjection
 
             services.AddScoped<ILinxProdutosTabelasService, LinxProdutosTabelasService>();
             services.AddScoped<ILinxProdutosTabelasRepository, LinxProdutosTabelasRepository>();
+
+            services.AddScoped<ILinxProdutosTabelasPrecosService, LinxProdutosTabelasPrecosService>();
+            services.AddScoped<ILinxProdutosTabelasPrecosRepository, LinxProdutosTabelasPrecosRepository>();
 
             services.AddScoped<ILinxProdutosDepositosService, LinxProdutosDepositosService>();
             services.AddScoped<ILinxProdutosDepositosRepository, LinxProdutosDepositosRepository>();
@@ -261,11 +276,17 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.DependencyInjection
             services.AddScoped<ILinxPedidosVendaService, LinxPedidosVendaService>();
             services.AddScoped<ILinxPedidosVendaRepository, LinxPedidosVendaRepository>();
 
+            services.AddScoped<ILinxPedidosCompraService, LinxPedidosCompraService>();
+            services.AddScoped<ILinxPedidosCompraRepository, LinxPedidosCompraRepository>();
+
             services.AddScoped<ILinxGrupoLojasService, LinxGrupoLojasService>();
             services.AddScoped<ILinxGrupoLojasRepository, LinxGrupoLojasRepository>();
 
             services.AddScoped<ILinxLojasService, LinxLojasService>();
             services.AddScoped<ILinxLojasRepository, LinxLojasRepository>();
+
+            services.AddScoped<ILinxSetoresService, LinxSetoresService>();
+            services.AddScoped<ILinxSetoresRepository, LinxSetoresRepository>();
 
             services.AddScoped<ILinxVendedoresService, LinxVendedoresService>();
             services.AddScoped<ILinxVendedoresRepository, LinxVendedoresRepository>();

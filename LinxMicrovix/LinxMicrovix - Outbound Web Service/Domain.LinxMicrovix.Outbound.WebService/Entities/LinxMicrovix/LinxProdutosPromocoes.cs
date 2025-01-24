@@ -103,12 +103,12 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
             this.preco_promocao =
                 ConvertToDecimalValidation.IsValid(preco_promocao, "preco_promocao", listValidations) ?
-                Convert.ToDecimal(preco_promocao) :
+                Convert.ToDecimal(preco_promocao, new CultureInfo("en-US")) :
                 0;
 
             this.custo_total_campanha =
                 ConvertToDecimalValidation.IsValid(custo_total_campanha, "custo_total_campanha", listValidations) ?
-                Convert.ToDecimal(custo_total_campanha) :
+                Convert.ToDecimal(custo_total_campanha, new CultureInfo("en-US")) :
                 0;
 
             this.promocao_opcional =

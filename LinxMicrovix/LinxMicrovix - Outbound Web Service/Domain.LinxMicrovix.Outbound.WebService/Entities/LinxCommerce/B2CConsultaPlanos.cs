@@ -1,6 +1,7 @@
 ﻿using Domain.IntegrationsCore.CustomValidations;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Globalization;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
 {
@@ -79,12 +80,12 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
 
             this.valor_minimo_parcela =
                 ConvertToDecimalValidation.IsValid(valor_minimo_parcela, "valor_minimo_parcela", listValidations) ?
-                Convert.ToDecimal(valor_minimo_parcela) :
+                Convert.ToDecimal(valor_minimo_parcela, new CultureInfo("en-US")) :
                 0;
 
             this.indice =
                 ConvertToDecimalValidation.IsValid(indice, "indice", listValidations) ?
-                Convert.ToDecimal(indice) :
+                Convert.ToDecimal(indice, new CultureInfo("en-US")) :
                 0;
 
             this.portal =

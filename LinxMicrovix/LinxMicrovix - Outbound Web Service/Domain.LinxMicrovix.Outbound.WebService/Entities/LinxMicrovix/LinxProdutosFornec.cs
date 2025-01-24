@@ -1,6 +1,7 @@
 ﻿using Domain.IntegrationsCore.CustomValidations;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Globalization;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 {
@@ -152,67 +153,67 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
             this.custo =
                 ConvertToDecimalValidation.IsValid(custo, "custo", listValidations) ?
-                Convert.ToDecimal(custo) :
+                Convert.ToDecimal(custo, new CultureInfo("en-US")) :
                 0;
 
             this.fator_conversao_compra =
                 ConvertToDecimalValidation.IsValid(fator_conversao_compra, "fator_conversao_compra", listValidations) ?
-                Convert.ToDecimal(fator_conversao_compra) :
+                Convert.ToDecimal(fator_conversao_compra, new CultureInfo("en-US")) :
                 0;
 
             this.qtde_embalagem =
                 ConvertToDecimalValidation.IsValid(qtde_embalagem, "qtde_embalagem", listValidations) ?
-                Convert.ToDecimal(qtde_embalagem) :
+                Convert.ToDecimal(qtde_embalagem, new CultureInfo("en-US")) :
                 0;
 
             this.desconto1 =
                 ConvertToDecimalValidation.IsValid(desconto1, "desconto1", listValidations) ?
-                Convert.ToDecimal(desconto1) :
+                Convert.ToDecimal(desconto1, new CultureInfo("en-US")) :
                 0;
 
             this.desconto2 =
                 ConvertToDecimalValidation.IsValid(desconto2, "desconto2", listValidations) ?
-                Convert.ToDecimal(desconto2) :
+                Convert.ToDecimal(desconto2, new CultureInfo("en-US")) :
                 0;
 
             this.desconto3 =
                 ConvertToDecimalValidation.IsValid(desconto3, "desconto3", listValidations) ?
-                Convert.ToDecimal(desconto3) :
+                Convert.ToDecimal(desconto3, new CultureInfo("en-US")) :
                 0;
 
             this.desconto =
                 ConvertToDecimalValidation.IsValid(desconto, "desconto", listValidations) ?
-                Convert.ToDecimal(desconto) :
+                Convert.ToDecimal(desconto, new CultureInfo("en-US")) :
                 0;
 
             this.ipi1 =
                 ConvertToDecimalValidation.IsValid(ipi1, "ipi1", listValidations) ?
-                Convert.ToDecimal(ipi1) :
+                Convert.ToDecimal(ipi1, new CultureInfo("en-US")) :
                 0;
 
             this.diferencial_icms =
                 ConvertToDecimalValidation.IsValid(diferencial_icms, "diferencial_icms", listValidations) ?
-                Convert.ToDecimal(diferencial_icms) :
+                Convert.ToDecimal(diferencial_icms, new CultureInfo("en-US")) :
                 0;
 
             this.despesas1 =
                 ConvertToDecimalValidation.IsValid(despesas1, "despesas1", listValidations) ?
-                Convert.ToDecimal(despesas1) :
+                Convert.ToDecimal(despesas1, new CultureInfo("en-US")) :
                 0;
 
             this.acrescimo =
                 ConvertToDecimalValidation.IsValid(acrescimo, "acrescimo", listValidations) ?
-                Convert.ToDecimal(acrescimo) :
+                Convert.ToDecimal(acrescimo, new CultureInfo("en-US")) :
                 0;
 
             this.valor_custo_substituicao =
                 ConvertToDecimalValidation.IsValid(valor_custo_substituicao, "valor_custo_substituicao", listValidations) ?
-                Convert.ToDecimal(valor_custo_substituicao) :
+                Convert.ToDecimal(valor_custo_substituicao, new CultureInfo("en-US")) :
                 0;
 
             this.frete1 =
                 ConvertToDecimalValidation.IsValid(frete1, "frete1", listValidations) ?
-                Convert.ToDecimal(frete1) :
+                Convert.ToDecimal(frete1, new CultureInfo("en-US")) :
                 0;
 
             this.moeda = moeda;

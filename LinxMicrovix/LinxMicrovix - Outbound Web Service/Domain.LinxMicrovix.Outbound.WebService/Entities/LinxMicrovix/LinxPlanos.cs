@@ -132,12 +132,12 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
             this.indice_plano =
                 ConvertToDecimalValidation.IsValid(indice_plano, "indice_plano", listValidations) ?
-                Convert.ToDecimal(indice_plano) :
+                Convert.ToDecimal(indice_plano, new CultureInfo("en-US")) :
                 0;
 
             this.taxa_financeira =
                 ConvertToDecimalValidation.IsValid(taxa_financeira, "taxa_financeira", listValidations) ?
-                Convert.ToDecimal(taxa_financeira) :
+                Convert.ToDecimal(taxa_financeira, new CultureInfo("en-US")) :
                 0;
 
             this.desc_plano = desc_plano;

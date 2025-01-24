@@ -341,37 +341,37 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
             this.quantidade =
                 ConvertToDecimalValidation.IsValid(quantidade, "quantidade", listValidations) ?
-                Convert.ToDecimal(quantidade) :
+                Convert.ToDecimal(quantidade, new CultureInfo("en-US")) :
                 0;
 
             this.valor_unitario =
                 ConvertToDecimalValidation.IsValid(valor_unitario, "valor_unitario", listValidations) ?
-                Convert.ToDecimal(valor_unitario) :
+                Convert.ToDecimal(valor_unitario, new CultureInfo("en-US")) :
                 0;
 
             this.valor_frete =
                 ConvertToDecimalValidation.IsValid(valor_frete, "valor_frete", listValidations) ?
-                Convert.ToDecimal(valor_frete) :
+                Convert.ToDecimal(valor_frete, new CultureInfo("en-US")) :
                 0;
 
             this.valor_total =
                 ConvertToDecimalValidation.IsValid(valor_total, "valor_total", listValidations) ?
-                Convert.ToDecimal(valor_total) :
+                Convert.ToDecimal(valor_total, new CultureInfo("en-US")) :
                 0;
 
             this.desconto_item =
                 ConvertToDecimalValidation.IsValid(desconto_item, "desconto_item", listValidations) ?
-                Convert.ToDecimal(desconto_item) :
+                Convert.ToDecimal(desconto_item, new CultureInfo("en-US")) :
                 0;
 
             this.margem_contribuicao =
                 ConvertToDecimalValidation.IsValid(margem_contribuicao, "margem_contribuicao", listValidations) ?
-                Convert.ToDecimal(margem_contribuicao) :
+                Convert.ToDecimal(margem_contribuicao, new CultureInfo("en-US")) :
                 0;
 
             this.desconto =
                 ConvertToDecimalValidation.IsValid(desconto, "desconto", listValidations) ?
-                Convert.ToDecimal(desconto) :
+                Convert.ToDecimal(desconto, new CultureInfo("en-US")) :
                 0;
 
             this.cod_natureza_operacao = cod_natureza_operacao;

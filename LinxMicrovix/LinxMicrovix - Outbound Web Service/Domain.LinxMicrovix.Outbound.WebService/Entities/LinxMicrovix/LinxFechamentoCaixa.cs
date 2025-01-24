@@ -266,92 +266,92 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
             this.sangria =
                 ConvertToDecimalValidation.IsValid(sangria, "sangria", listValidations) ?
-                Convert.ToDecimal(sangria) :
+                Convert.ToDecimal(sangria, new CultureInfo("en-US")) :
                 0;
 
             this.suprimentos =
                 ConvertToDecimalValidation.IsValid(suprimentos, "suprimentos", listValidations) ?
-                Convert.ToDecimal(suprimentos) :
+                Convert.ToDecimal(suprimentos, new CultureInfo("en-US")) :
                 0;
 
             this.total_c_prazo =
                 ConvertToDecimalValidation.IsValid(total_c_prazo, "total_c_prazo", listValidations) ?
-                Convert.ToDecimal(total_c_prazo) :
+                Convert.ToDecimal(total_c_prazo, new CultureInfo("en-US")) :
                 0;
 
             this.total_c_vista =
                 ConvertToDecimalValidation.IsValid(total_c_vista, "total_c_vista", listValidations) ?
-                Convert.ToDecimal(total_c_vista) :
+                Convert.ToDecimal(total_c_vista, new CultureInfo("en-US")) :
                 0;
 
             this.total_cartao =
                 ConvertToDecimalValidation.IsValid(total_cartao, "total_cartao", listValidations) ?
-                Convert.ToDecimal(total_cartao) :
+                Convert.ToDecimal(total_cartao, new CultureInfo("en-US")) :
                 0;
 
             this.total_cartao_credito =
                 ConvertToDecimalValidation.IsValid(total_cartao_credito, "total_cartao_credito", listValidations) ?
-                Convert.ToDecimal(total_cartao_credito) :
+                Convert.ToDecimal(total_cartao_credito, new CultureInfo("en-US")) :
                 0;
 
             this.total_cartao_debito =
                 ConvertToDecimalValidation.IsValid(total_cartao_debito, "total_cartao_debito", listValidations) ?
-                Convert.ToDecimal(total_cartao_debito) :
+                Convert.ToDecimal(total_cartao_debito, new CultureInfo("en-US")) :
                 0;
 
             this.total_convenio =
                 ConvertToDecimalValidation.IsValid(total_convenio, "total_convenio", listValidations) ?
-                Convert.ToDecimal(total_convenio) :
+                Convert.ToDecimal(total_convenio, new CultureInfo("en-US")) :
                 0;
 
             this.total_crediario =
                 ConvertToDecimalValidation.IsValid(total_crediario, "total_crediario", listValidations) ?
-                Convert.ToDecimal(total_crediario) :
+                Convert.ToDecimal(total_crediario, new CultureInfo("en-US")) :
                 0;
 
             this.total_geral =
                 ConvertToDecimalValidation.IsValid(total_geral, "total_geral", listValidations) ?
-                Convert.ToDecimal(total_geral) :
+                Convert.ToDecimal(total_geral, new CultureInfo("en-US")) :
                 0;
 
             this.total_giftcard =
                 ConvertToDecimalValidation.IsValid(total_giftcard, "total_giftcard", listValidations) ?
-                Convert.ToDecimal(total_giftcard) :
+                Convert.ToDecimal(total_giftcard, new CultureInfo("en-US")) :
                 0;
 
             this.total_link_pagamento =
                 ConvertToDecimalValidation.IsValid(total_link_pagamento, "total_link_pagamento", listValidations) ?
-                Convert.ToDecimal(total_link_pagamento) :
+                Convert.ToDecimal(total_link_pagamento, new CultureInfo("en-US")) :
                 0;
 
             this.total_link_pagamento_credito =
                 ConvertToDecimalValidation.IsValid(total_link_pagamento_credito, "total_link_pagamento_credito", listValidations) ?
-                Convert.ToDecimal(total_link_pagamento_credito) :
+                Convert.ToDecimal(total_link_pagamento_credito, new CultureInfo("en-US")) :
                 0;
 
             this.total_link_pagamento_debito =
                 ConvertToDecimalValidation.IsValid(total_link_pagamento_debito, "total_link_pagamento_debito", listValidations) ?
-                Convert.ToDecimal(total_link_pagamento_debito) :
+                Convert.ToDecimal(total_link_pagamento_debito, new CultureInfo("en-US")) :
                 0;
 
             this.total_pix =
                 ConvertToDecimalValidation.IsValid(total_pix, "total_pix", listValidations) ?
-                Convert.ToDecimal(total_pix) :
+                Convert.ToDecimal(total_pix, new CultureInfo("en-US")) :
                 0;
 
             this.total_qr_linx =
                 ConvertToDecimalValidation.IsValid(total_qr_linx, "total_qr_linx", listValidations) ?
-                Convert.ToDecimal(total_qr_linx) :
+                Convert.ToDecimal(total_qr_linx, new CultureInfo("en-US")) :
                 0;
 
             this.total_vale_compra =
                 ConvertToDecimalValidation.IsValid(total_vale_compra, "total_vale_compra", listValidations) ?
-                Convert.ToDecimal(total_vale_compra) :
+                Convert.ToDecimal(total_vale_compra, new CultureInfo("en-US")) :
                 0;
 
             this.vale_compras_dev =
                 ConvertToDecimalValidation.IsValid(vale_compras_dev, "vale_compras_dev", listValidations) ?
-                Convert.ToDecimal(vale_compras_dev) :
+                Convert.ToDecimal(vale_compras_dev, new CultureInfo("en-US")) :
                 0;
 
             this.obs = obs;

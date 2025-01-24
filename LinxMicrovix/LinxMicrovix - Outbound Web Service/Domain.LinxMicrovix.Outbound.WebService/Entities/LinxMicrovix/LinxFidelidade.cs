@@ -86,7 +86,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
             this.valor_monetario =
                 ConvertToDecimalValidation.IsValid(valor_monetario, "valor_monetario", listValidations) ?
-                Convert.ToDecimal(valor_monetario) :
+                Convert.ToDecimal(valor_monetario, new CultureInfo("en-US")) :
                 0;
 
             this.identificador_movimento =

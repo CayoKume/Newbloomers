@@ -1,6 +1,7 @@
 ﻿using Domain.IntegrationsCore.CustomValidations;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Globalization;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 {
@@ -102,12 +103,12 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
             this.valor =
                 ConvertToDecimalValidation.IsValid(valor, "valor", listValidations) ?
-                Convert.ToDecimal(valor) :
+                Convert.ToDecimal(valor, new CultureInfo("en-US")) :
                 0;
 
             this.ajuste_valor_desc_acresc_plano =
                 ConvertToDecimalValidation.IsValid(ajuste_valor_desc_acresc_plano, "ajuste_valor_desc_acresc_plano", listValidations) ?
-                Convert.ToDecimal(ajuste_valor_desc_acresc_plano) :
+                Convert.ToDecimal(ajuste_valor_desc_acresc_plano, new CultureInfo("en-US")) :
                 0;
 
             this.forma_pgto = forma_pgto;

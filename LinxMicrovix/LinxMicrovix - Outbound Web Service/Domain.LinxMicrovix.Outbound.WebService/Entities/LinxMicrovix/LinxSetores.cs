@@ -26,7 +26,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         public string? codigo_integracao_ws { get; private set; }
 
         [Column(TypeName = "bit")]
-        public bool? ativo { get; private set; }
+        public Int32? ativo { get; private set; }
 
         public LinxSetores() { }
 
@@ -52,9 +52,9 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
                 0;
 
             this.ativo =
-                ConvertToBooleanValidation.IsValid(ativo, "ativo", listValidations) ?
-                Convert.ToBoolean(ativo) :
-                false;
+                ConvertToInt32Validation.IsValid(ativo, "ativo", listValidations) ?
+                Convert.ToInt32(ativo) :
+                0;
 
             this.desc_setor = desc_setor;
             this.codigo_integracao_ws = codigo_integracao_ws;

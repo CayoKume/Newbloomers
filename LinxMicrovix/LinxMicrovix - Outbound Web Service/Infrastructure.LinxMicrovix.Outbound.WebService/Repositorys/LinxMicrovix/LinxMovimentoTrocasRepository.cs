@@ -54,7 +54,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
                         identificadores += $"'{registros[i].num_vale}', ";
                 }
 
-                string sql = $"SELECT num_vale, TIMESTAMP FROM [linx_microvix_erp].[LinxMovimentoTrocas] WHERE num_vale IN ({identificadores})";
+                string sql = $"SELECT cnpj_emp, num_vale, cod_cliente, TIMESTAMP FROM [linx_microvix_erp].[LinxMovimentoTrocas] WHERE num_vale IN ({identificadores})";
 
                 return await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
             }

@@ -1,6 +1,7 @@
 ﻿using Domain.IntegrationsCore.CustomValidations;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Globalization;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 {
@@ -112,22 +113,22 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
             this.aliq_icms =
                 ConvertToDecimalValidation.IsValid(aliq_icms, "aliq_icms", listValidations) ?
-                Convert.ToDecimal(aliq_icms) :
+                Convert.ToDecimal(aliq_icms, new CultureInfo("en-US")) :
                 0;
 
             this.perc_reducao_icms =
                 ConvertToDecimalValidation.IsValid(perc_reducao_icms, "perc_reducao_icms", listValidations) ?
-                Convert.ToDecimal(perc_reducao_icms) :
+                Convert.ToDecimal(perc_reducao_icms, new CultureInfo("en-US")) :
                 0;
 
             this.aliquota_st =
                 ConvertToDecimalValidation.IsValid(aliquota_st, "aliquota_st", listValidations) ?
-                Convert.ToDecimal(aliquota_st) :
+                Convert.ToDecimal(aliquota_st, new CultureInfo("en-US")) :
                 0;
 
             this.margem_st =
                 ConvertToDecimalValidation.IsValid(margem_st, "margem_st", listValidations) ?
-                Convert.ToDecimal(margem_st) :
+                Convert.ToDecimal(margem_st, new CultureInfo("en-US")) :
                 0;
 
             this.icms_credito =

@@ -1,6 +1,7 @@
 ﻿using Domain.IntegrationsCore.CustomValidations;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Globalization;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
 {
@@ -64,12 +65,12 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
 
             this.comissao_produtos =
                 ConvertToDecimalValidation.IsValid(comissao_produtos, "comissao_produtos", listValidations) ?
-                Convert.ToDecimal(comissao_produtos) :
+                Convert.ToDecimal(comissao_produtos, new CultureInfo("en-US")) :
                 0;
 
             this.comissao_servicos =
                 ConvertToDecimalValidation.IsValid(comissao_servicos, "comissao_servicos", listValidations) ?
-                Convert.ToDecimal(comissao_servicos) :
+                Convert.ToDecimal(comissao_servicos, new CultureInfo("en-US")) :
                 0;
 
             this.ativo =

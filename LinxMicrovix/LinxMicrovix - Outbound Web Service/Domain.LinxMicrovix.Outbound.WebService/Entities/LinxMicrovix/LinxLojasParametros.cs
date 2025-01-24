@@ -1,6 +1,7 @@
 ﻿using Domain.IntegrationsCore.CustomValidations;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Globalization;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 {
@@ -47,7 +48,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
             this.percentual_minimo_antecipacao =
                 ConvertToDecimalValidation.IsValid(percentual_minimo_antecipacao, "percentual_minimo_antecipacao", listValidations) ?
-                Convert.ToDecimal(percentual_minimo_antecipacao) :
+                Convert.ToDecimal(percentual_minimo_antecipacao, new CultureInfo("en-US")) :
                 0;
 
             this.timestamp =

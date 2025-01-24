@@ -112,7 +112,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
             this.valor_pago_franqueadora =
                 ConvertToDecimalValidation.IsValid(valor_pago_franqueadora, "valor_pago_franqueadora", listValidations) ?
-                Convert.ToDecimal(valor_pago_franqueadora) :
+                Convert.ToDecimal(valor_pago_franqueadora, new CultureInfo("en-US")) :
                 0;
 
             this.cnpj_emp = cnpj_emp;

@@ -330,12 +330,12 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
             this.limite_compras =
                 ConvertToDecimalValidation.IsValid(limite_compras, "limite_compras", listValidations) ?
-                Convert.ToDecimal(limite_compras) :
+                Convert.ToDecimal(limite_compras, new CultureInfo("en-US")) :
                 0;
 
             this.renda_titular =
                 ConvertToDecimalValidation.IsValid(renda_titular, "renda_titular", listValidations) ?
-                Convert.ToDecimal(renda_titular) :
+                Convert.ToDecimal(renda_titular, new CultureInfo("en-US")) :
                 0;
 
             this.timestamp =

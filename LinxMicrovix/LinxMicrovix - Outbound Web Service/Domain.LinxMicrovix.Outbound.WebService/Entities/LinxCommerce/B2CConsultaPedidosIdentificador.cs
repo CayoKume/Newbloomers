@@ -82,7 +82,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
 
             this.valor_frete =
                 ConvertToDecimalValidation.IsValid(valor_frete, "valor_frete", listValidations) ?
-                Convert.ToDecimal(valor_frete) :
+                Convert.ToDecimal(valor_frete, new CultureInfo("en-US")) :
                 0;
 
             this.identificador =

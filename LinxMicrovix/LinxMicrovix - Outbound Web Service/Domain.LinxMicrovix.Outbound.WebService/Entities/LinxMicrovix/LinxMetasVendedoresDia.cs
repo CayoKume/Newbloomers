@@ -75,7 +75,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
             this.valor_meta_diaria =
                 ConvertToDecimalValidation.IsValid(valor_meta_diaria, "valor_meta_diaria", listValidations) ?
-                Convert.ToDecimal(valor_meta_diaria) :
+                Convert.ToDecimal(valor_meta_diaria, new CultureInfo("en-US")) :
                 0;
 
             this.data_inicial_meta =
