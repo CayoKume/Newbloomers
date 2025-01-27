@@ -14,10 +14,12 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
+        [Key]
         [Column(TypeName = "varchar(14)")]
         [LengthValidation(length: 14, propertyName: "cnpj_emp")]
         public string? cnpj_emp { get; private set; }
 
+        [Key]
         [Column(TypeName = "bigint")]
         public Int64? cod_produto { get; private set; }
 
@@ -28,6 +30,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [Column(TypeName = "decimal(10,2)")]
         public decimal? quantidade { get; private set; }
 
+        [Key]
         [Column(TypeName = "int")]
         public Int32? cod_deposito { get; private set; }
 

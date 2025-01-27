@@ -249,6 +249,9 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.DependencyInjection
             services.AddScoped<ILinxNaturezaOperacaoService, LinxNaturezaOperacaoService>();
             services.AddScoped<ILinxNaturezaOperacaoRepository, LinxNaturezaOperacaoRepository>();
 
+            services.AddScoped<ILinxProdutosService, LinxProdutosService>();
+            services.AddScoped<ILinxProdutosRepository, LinxProdutosRepository>();
+
             services.AddScoped<ILinxProdutosCodBarService, LinxProdutosCodBarService>();
             services.AddScoped<ILinxProdutosCodBarRepository, LinxProdutosCodBarRepository>();
 
@@ -258,8 +261,20 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.DependencyInjection
             services.AddScoped<ILinxProdutosTabelasPrecosService, LinxProdutosTabelasPrecosService>();
             services.AddScoped<ILinxProdutosTabelasPrecosRepository, LinxProdutosTabelasPrecosRepository>();
 
+            services.AddScoped<ILinxProdutosInventarioService, LinxProdutosInventarioService>();
+            services.AddScoped<ILinxProdutosInventarioRepository, LinxProdutosInventarioRepository>();
+
+            services.AddScoped<ILinxProdutosDetalhesService, LinxProdutosDetalhesService>();
+            services.AddScoped<ILinxProdutosDetalhesRepository, LinxProdutosDetalhesRepository>();
+
             services.AddScoped<ILinxProdutosDepositosService, LinxProdutosDepositosService>();
             services.AddScoped<ILinxProdutosDepositosRepository, LinxProdutosDepositosRepository>();
+
+            services.AddScoped<ILinxProdutosPromocoesService, LinxProdutosPromocoesService>();
+            services.AddScoped<ILinxProdutosPromocoesRepository, LinxProdutosPromocoesRepository>();
+
+            services.AddScoped<ILinxProdutosCamposAdicionaisService, LinxProdutosCamposAdicionaisService>();
+            services.AddScoped<ILinxProdutosCamposAdicionaisRepository, LinxProdutosCamposAdicionaisRepository>();
 
             services.AddScoped<ILinxB2CPedidosService, LinxB2CPedidosService>();
             services.AddScoped<ILinxB2CPedidosRepository, LinxB2CPedidosRepository>();

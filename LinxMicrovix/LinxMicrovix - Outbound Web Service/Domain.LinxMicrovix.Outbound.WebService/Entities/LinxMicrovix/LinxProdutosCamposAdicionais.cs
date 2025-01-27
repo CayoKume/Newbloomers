@@ -17,6 +17,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [Column(TypeName = "bigint")]
         public Int64? cod_produto { get; private set; }
 
+        [Key]
         [Column(TypeName = "varchar(30)")]
         [LengthValidation(length: 30, propertyName: "campo")]
         public string? campo { get; private set; }

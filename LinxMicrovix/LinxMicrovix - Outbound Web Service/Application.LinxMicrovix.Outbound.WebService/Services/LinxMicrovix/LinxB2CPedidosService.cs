@@ -115,11 +115,6 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
             return list;
         }
 
-        public async Task<bool> GetRecord(LinxAPIParam jobParameter, string? identificador, string? cnpj_emp)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<bool> GetRecords(LinxAPIParam jobParameter)
         {
             IList<LinxB2CPedidos> _listSomenteNovos = new List<LinxB2CPedidos>();
@@ -135,7 +130,12 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
 
                 foreach (var cnpj_emp in cnpjs_emp)
                 {
-                    var timestamp = await _linxMicrovixRepositoryBase.GetLast7DaysMinTimestamp(jobParameter: jobParameter, columnDate: "dt_pedido");
+                    var timestamp = await _linxMicrovixRepositoryBase.GetLast7DaysMinTimestamp(
+                        jobParameter: jobParameter, 
+                        columnDate: "dt_pedido",
+                        columnCompany: "empresa",
+                        companyValue: cnpj_emp.cod_company
+                    );
 
                     var body = _linxMicrovixServiceBase.BuildBodyRequest(
                                 parametersList: parameters.Replace("[0]", timestamp),

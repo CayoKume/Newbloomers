@@ -4,12 +4,16 @@ using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxCommerce;
+using System.Collections.Generic;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerce
 {
     public class B2CConsultaPedidosItensRepository : IB2CConsultaPedidosItensRepository
     {
         private readonly ILinxMicrovixRepositoryBase<B2CConsultaPedidosItens> _linxMicrovixRepositoryBase;
+
+        public B2CConsultaPedidosItensRepository(ILinxMicrovixRepositoryBase<B2CConsultaPedidosItens> linxMicrovixRepositoryBase) =>
+            _linxMicrovixRepositoryBase = linxMicrovixRepositoryBase;
 
         public bool BulkInsertIntoTableRaw(LinxAPIParam jobParameter, IList<B2CConsultaPedidosItens> records)
         {
@@ -40,18 +44,53 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
         {
             try
             {
-                var identificadores = String.Empty;
-                for (int i = 0; i < registros.Count(); i++)
+                int indice = registros.Count() / 1000;
+
+                if (indice > 1)
                 {
-                    if (i == registros.Count() - 1)
-                        identificadores += $"'{registros[i].id_pedido}'";
-                    else
-                        identificadores += $"'{registros[i].id_pedido}', ";
+                    var list = new List<B2CConsultaPedidosItens>();
+
+                    for (int i = 0; i <= indice; i++)
+                    {
+                        string identificadores = String.Empty;
+                        var top1000List = registros.Skip(i * 1000).Take(1000).ToList();
+
+                        for (int j = 0; j < top1000List.Count(); j++)
+                        {
+
+                            if (j == top1000List.Count() - 1)
+                                identificadores += $"'{top1000List[j].id_pedido_item}'";
+                            else
+                                identificadores += $"'{top1000List[j].id_pedido_item}', ";
+                        }
+
+                        string sql = $"SELECT ID_PEDIDO_ITEM, ID_PEDIDO, CODIGOPRODUTO FROM [linx_microvix_commerce].[B2CCONSULTAPEDIDOSITENS] WHERE ID_PEDIDO_ITEM IN ({identificadores})";
+                        var result = await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
+                        list.AddRange(result);
+                    }
+
+                    return list;
                 }
+                else
+                {
+                    var list = new List<B2CConsultaPedidosItens>();
+                    string identificadores = String.Empty;
 
-                string sql = $"SELECT ID_PEDIDO, TIMESTAMP FROM B2CCONSULTAPEDIDOS WHERE ID_PEDIDO IN ({identificadores})";
+                    for (int i = 0; i < registros.Count(); i++)
+                    {
 
-                return await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
+                        if (i == registros.Count() - 1)
+                            identificadores += $"'{registros[i].id_pedido_item}'";
+                        else
+                            identificadores += $"'{registros[i].id_pedido_item}', ";
+                    }
+
+                    string sql = $"SELECT ID_PEDIDO_ITEM, ID_PEDIDO, CODIGOPRODUTO FROM [linx_microvix_commerce].[B2CCONSULTAPEDIDOSITENS] WHERE ID_PEDIDO_ITEM IN ({identificadores})";
+                    var result = await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
+                    list.AddRange(result);
+
+                    return list;
+                }
             }
             catch (Exception ex) when (ex is not InternalException && ex is not SQLCommandException)
             {
@@ -71,7 +110,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 
         public async Task<bool> InsertRecord(LinxAPIParam jobParameter, B2CConsultaPedidosItens? record)
         {
-            string? sql = $"INSERT INTO {jobParameter.tableName} " +
+            string? sql = $"INSERT INTO [untreated].{jobParameter.tableName} " +
                           "([lastupdateon], [id_pedido_item], [id_pedido], [codigoproduto], [quantidade], [vl_unitario], [timestamp], [portal]) " +
                           "Values " +
                           "(@lastupdateon, @id_pedido_item, @id_pedido, @codigoproduto, @quantidade, @vl_unitario, @timestamp, @portal)";

@@ -4,6 +4,7 @@ using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxCommerce;
+using System.Collections.Generic;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerce
 {
@@ -55,7 +56,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 
         public async Task<bool> InsertRecord(LinxAPIParam jobParameter, B2CConsultaClientes? record)
         {
-            string? sql = $"INSERT INTO {jobParameter.tableName} " +
+            string? sql = $"INSERT INTO [untreated].{jobParameter.tableName} " +
                           "([lastupdateon], [cod_cliente_b2c], [cod_cliente_erp], [doc_cliente], [nm_cliente], [nm_mae], [nm_pai], [nm_conjuge], [dt_cadastro], " +
                           "[dt_nasc_cliente], [end_cliente], [complemento_end_cliente], [nr_rua_cliente], [bairro_cliente], [cep_cliente], [cidade_cliente], " +
                           "[uf_cliente], [fone_cliente], [fone_comercial], [cel_cliente], [email_cliente], [rg_cliente], [rg_orgao_emissor], [estado_civil_cliente], " +
@@ -82,18 +83,53 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
         {
             try
             {
-                var identificadores = String.Empty;
-                for (int i = 0; i < registros.Count(); i++)
+                int indice = registros.Count() / 1000;
+
+                if (indice > 1)
                 {
-                    if (i == registros.Count() - 1)
-                        identificadores += $"'{registros[i].doc_cliente}'";
-                    else
-                        identificadores += $"'{registros[i].doc_cliente}', ";
+                    var list = new List<B2CConsultaClientes>();
+
+                    for (int i = 0; i <= indice; i++)
+                    {
+                        string identificadores = String.Empty;
+                        var top1000List = registros.Skip(i * 1000).Take(1000).ToList();
+
+                        for (int j = 0; j < top1000List.Count(); j++)
+                        {
+
+                            if (j == top1000List.Count() - 1)
+                                identificadores += $"'{top1000List[j].doc_cliente}'";
+                            else
+                                identificadores += $"'{top1000List[j].doc_cliente}', ";
+                        }
+
+                        string sql = $"SELECT cod_cliente_b2c, cod_cliente_erp, DOC_CLIENTE, TIMESTAMP FROM [linx_microvix_commerce].[B2CCONSULTACLIENTES] WHERE DOC_CLIENTE IN ({identificadores})";
+                        var result = await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
+                        list.AddRange(result);
+                    }
+
+                    return list;
                 }
+                else
+                {
+                    var list = new List<B2CConsultaClientes>();
+                    string identificadores = String.Empty;
 
-                string sql = $"SELECT DOC_CLIENTE, TIMESTAMP FROM B2CCONSULTACLIENTES WHERE DOC_CLIENTE IN ({identificadores})";
+                    for (int i = 0; i < registros.Count(); i++)
+                    {
 
-                return await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
+                        if (i == registros.Count() - 1)
+                            identificadores += $"'{registros[i].doc_cliente}'";
+                        else
+                            identificadores += $"'{registros[i].doc_cliente}', ";
+                    }
+
+                    string sql = $"SELECT cod_cliente_b2c, cod_cliente_erp, DOC_CLIENTE, TIMESTAMP FROM [linx_microvix_commerce].[B2CCONSULTACLIENTES] WHERE DOC_CLIENTE IN ({identificadores})";
+                    var result = await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
+                    list.AddRange(result);
+
+                    return list;
+                }
             }
             catch (Exception ex) when (ex is not InternalException && ex is not SQLCommandException)
             {

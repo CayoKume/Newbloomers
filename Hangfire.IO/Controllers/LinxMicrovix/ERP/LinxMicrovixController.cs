@@ -2,7 +2,7 @@
 using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Hangfire.IO.Controllers.LinxMicrovix
+namespace Hangfire.IO.Controllers.LinxMicrovix.ERP
 {
     public class LinxMicrovixController : Controller
     {
@@ -24,8 +24,13 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
         private readonly ILinxPlanosService _linxPlanosService;
         private readonly ILinxPedidosVendaService _linxPedidosVendaService;
         private readonly ILinxPedidosCompraService _linxPedidosCompraService;
+        private readonly ILinxProdutosService _linxProdutosService;
+        private readonly ILinxProdutosInventarioService _linxProdutosInventarioService;
+        private readonly ILinxProdutosDetalhesService _linxProdutosDetalhesService;
         private readonly ILinxProdutosDepositosService _linxProdutosDepositosService;
         private readonly ILinxProdutosTabelasService _linxProdutosTabelasService;
+        private readonly ILinxProdutosPromocoesService _linxProdutosPromocoesService;
+        private readonly ILinxProdutosCamposAdicionaisService _linxProdutosCamposAdicionaisService;
         private readonly ILinxGrupoLojasService _linxGrupoLojasService;
         private readonly ILinxLojasService _linxLojasService;
         private readonly ILinxSetoresService _linxSetoresService;
@@ -47,8 +52,13 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
             ILinxB2CPedidosItensService linxB2CPedidosItensService,
             ILinxB2CPedidosStatusService linxB2CPedidosStatusService,
             ILinxB2CStatusService linxB2CStatusService,
+            ILinxProdutosService linxProdutosService,
+            ILinxProdutosInventarioService linxProdutosInventarioService,
+            ILinxProdutosDetalhesService linxProdutosDetalhesService,
             ILinxProdutosDepositosService linxProdutosDepositosService,
             ILinxProdutosTabelasService linxProdutosTabelasService,
+            ILinxProdutosPromocoesService linxProdutosPromocoesService,
+            ILinxProdutosCamposAdicionaisService linxProdutosCamposAdicionaisService,
             ILinxPedidosVendaService linxPedidosVendaService,
             ILinxPedidosCompraService linxPedidosCompraService,
             ILinxLojasService linxLojasService,
@@ -72,8 +82,13 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
             _linxB2CPedidosItensService = linxB2CPedidosItensService;
             _linxB2CPedidosStatusService = linxB2CPedidosStatusService;
             _linxB2CStatusService = linxB2CStatusService;
+            _linxProdutosService = linxProdutosService;
+            _linxProdutosInventarioService = linxProdutosInventarioService;
+            _linxProdutosDetalhesService = linxProdutosDetalhesService;
             _linxProdutosDepositosService = linxProdutosDepositosService;
             _linxProdutosTabelasService = linxProdutosTabelasService;
+            _linxProdutosPromocoesService = linxProdutosPromocoesService;
+            _linxProdutosCamposAdicionaisService = linxProdutosCamposAdicionaisService;
             _linxPedidosVendaService = linxPedidosVendaService;
             _linxPedidosCompraService = linxPedidosCompraService;
             _linxGrupoLojasService = linxGrupoLojasService;
@@ -593,6 +608,146 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .FirstOrDefault();
 
                 var result = await _linxProdutosDepositosService.GetRecords(
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
+                );
+
+                if (result != true)
+                    return BadRequest($"Unable to find records on endpoint.");
+                else
+                    return Ok($"Records integrated successfully.");
+            }
+            catch (Exception ex)
+            {
+                Response.StatusCode = 400;
+                return Content($"Unable to integrate the records.\nError: {ex.Message}");
+            }
+        }
+
+        [HttpPost("LinxProdutosInventario")]
+        public async Task<ActionResult> LinxProdutosInventario()
+        {
+            try
+            {
+                var method = _methods
+                    .Where(m => m.MethodName == "LinxProdutosInventario")
+                    .FirstOrDefault();
+
+                var result = await _linxProdutosInventarioService.GetRecords(
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
+                );
+
+                if (result != true)
+                    return BadRequest($"Unable to find records on endpoint.");
+                else
+                    return Ok($"Records integrated successfully.");
+            }
+            catch (Exception ex)
+            {
+                Response.StatusCode = 400;
+                return Content($"Unable to integrate the records.\nError: {ex.Message}");
+            }
+        }
+
+        [HttpPost("LinxProdutosDetalhes")]
+        public async Task<ActionResult> LinxProdutosDetalhes()
+        {
+            try
+            {
+                var method = _methods
+                    .Where(m => m.MethodName == "LinxProdutosDetalhes")
+                    .FirstOrDefault();
+
+                var result = await _linxProdutosDetalhesService.GetRecords(
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
+                );
+
+                if (result != true)
+                    return BadRequest($"Unable to find records on endpoint.");
+                else
+                    return Ok($"Records integrated successfully.");
+            }
+            catch (Exception ex)
+            {
+                Response.StatusCode = 400;
+                return Content($"Unable to integrate the records.\nError: {ex.Message}");
+            }
+        }
+
+        [HttpPost("LinxProdutosPromocoes")]
+        public async Task<ActionResult> LinxProdutosPromocoes()
+        {
+            try
+            {
+                var method = _methods
+                    .Where(m => m.MethodName == "LinxProdutosPromocoes")
+                    .FirstOrDefault();
+
+                var result = await _linxProdutosPromocoesService.GetRecords(
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
+                );
+
+                if (result != true)
+                    return BadRequest($"Unable to find records on endpoint.");
+                else
+                    return Ok($"Records integrated successfully.");
+            }
+            catch (Exception ex)
+            {
+                Response.StatusCode = 400;
+                return Content($"Unable to integrate the records.\nError: {ex.Message}");
+            }
+        }
+
+        [HttpPost("LinxProdutosCamposAdicionais")]
+        public async Task<ActionResult> LinxProdutosCamposAdicionais()
+        {
+            try
+            {
+                var method = _methods
+                    .Where(m => m.MethodName == "LinxProdutosCamposAdicionais")
+                    .FirstOrDefault();
+
+                var result = await _linxProdutosCamposAdicionaisService.GetRecords(
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
+                );
+
+                if (result != true)
+                    return BadRequest($"Unable to find records on endpoint.");
+                else
+                    return Ok($"Records integrated successfully.");
+            }
+            catch (Exception ex)
+            {
+                Response.StatusCode = 400;
+                return Content($"Unable to integrate the records.\nError: {ex.Message}");
+            }
+        }
+
+        [HttpPost("LinxProdutos")]
+        public async Task<ActionResult> LinxProdutos()
+        {
+            try
+            {
+                var method = _methods
+                    .Where(m => m.MethodName == "LinxProdutos")
+                    .FirstOrDefault();
+
+                var result = await _linxProdutosService.GetRecords(
                     _linxMicrovixJobParameter.SetParameters(
                         jobName: method.MethodName,
                         tableName: method.MethodName

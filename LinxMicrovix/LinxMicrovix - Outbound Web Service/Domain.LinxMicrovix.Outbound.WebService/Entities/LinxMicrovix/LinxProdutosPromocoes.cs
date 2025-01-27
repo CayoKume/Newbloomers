@@ -14,6 +14,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
+        [Key]
         [Column(TypeName = "varchar(14)")]
         [LengthValidation(length: 14, propertyName: "cnpj_emp")]
         public string? cnpj_emp { get; private set; }
@@ -31,6 +32,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [Column(TypeName = "datetime")]
         public DateTime? data_termino_promocao { get; private set; }
 
+        [Key]
         [Column(TypeName = "datetime")]
         public DateTime? data_cadastro_promocao { get; private set; }
 
@@ -38,6 +40,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [LengthValidation(length: 1, propertyName: "promocao_ativa")]
         public string? promocao_ativa { get; private set; }
 
+        [Key]
         [Column(TypeName = "bigint")]
         public Int64? id_campanha { get; private set; }
 

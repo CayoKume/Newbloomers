@@ -39,6 +39,30 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             }
         }
 
+        public async Task<IEnumerable<string?>> GetProductsDepositsIds(LinxAPIParam jobParameter)
+        {
+            try
+            {
+                string sql = $"SELECT distinct cod_deposito FROM [linx_microvix_erp].[LinxProdutosDepositos]";
+
+                return await _linxMicrovixRepositoryBase.GetParameters(jobParameter, sql);
+            }
+            catch (Exception ex) when (ex is not InternalException && ex is not SQLCommandException)
+            {
+                throw new InternalException(
+                    stage: EnumStages.GetRegistersExists,
+                    error: EnumError.Exception,
+                    level: EnumMessageLevel.Error,
+                    message: "Error when filling identifiers to sql command",
+                    exceptionMessage: ex.Message
+                );
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
         public async Task<List<LinxProdutosInventario>> GetRegistersExists(LinxAPIParam jobParameter, List<LinxProdutosInventario> registros)
         {
             try
@@ -52,7 +76,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
                         identificadores += $"'{registros[i].cod_produto}', ";
                 }
 
-                string sql = $"SELECT cod_produto, TIMESTAMP FROM [linx_microvix_erp].[LinxProdutosInventario] WHERE cod_produto IN ({identificadores})";
+                string sql = $"SELECT cnpj_emp, cod_produto, cod_deposito, quantidade FROM [linx_microvix_erp].[LinxProdutosInventario] WHERE cod_produto IN ({identificadores})";
 
                 return await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
             }

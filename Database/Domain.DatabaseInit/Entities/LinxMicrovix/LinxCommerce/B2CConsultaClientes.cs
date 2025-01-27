@@ -24,8 +24,8 @@ namespace Domain.DatabaseInit.Entites.LinxMicrovix.LinxCommerce
         [LengthValidation(length: 14, propertyName: "doc_cliente")]
         public string? doc_cliente { get; private set; }
 
-        [Column(TypeName = "varchar(50)")]
-        [LengthValidation(length: 50, propertyName: "nm_cliente")]
+        [Column(TypeName = "varchar(60)")]
+        [LengthValidation(length: 60, propertyName: "nm_cliente")]
         public string? nm_cliente { get; private set; }
 
         [Column(TypeName = "varchar(50)")]

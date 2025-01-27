@@ -13,6 +13,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
+        [Key]
         [Column(TypeName = "int")]
         public Int32? cod_deposito { get; private set; }
 

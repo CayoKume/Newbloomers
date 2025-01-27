@@ -3,6 +3,7 @@ using Domain.IntegrationsCore.Exceptions;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxMicrovix;
+using System.Collections.Generic;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 {
@@ -44,18 +45,53 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         {
             try
             {
-                var identificadores = String.Empty;
-                for (int i = 0; i < registros.Count(); i++)
+                int indice = registros.Count() / 1000;
+
+                if (indice > 1)
                 {
-                    if (i == registros.Count() - 1)
-                        identificadores += $"'{registros[i].cod_produto}'";
-                    else
-                        identificadores += $"'{registros[i].cod_produto}', ";
+                    var list = new List<LinxProdutosPromocoes>();
+
+                    for (int i = 0; i <= indice; i++)
+                    {
+                        string identificadores = String.Empty;
+                        var top1000List = registros.Skip(i * 1000).Take(1000).ToList();
+
+                        for (int j = 0; j < top1000List.Count(); j++)
+                        {
+
+                            if (j == top1000List.Count() - 1)
+                                identificadores += $"'{top1000List[j].cod_produto}'";
+                            else
+                                identificadores += $"'{top1000List[j].cod_produto}', ";
+                        }
+
+                        string sql = $"SELECT cnpj_emp, cod_produto, id_campanha FROM [linx_microvix_erp].[LinxProdutosPromocoes] WHERE cod_produto IN ({identificadores})";
+                        var result = await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
+                        list.AddRange(result);
+                    }
+
+                    return list;
                 }
+                else
+                {
+                    var list = new List<LinxProdutosPromocoes>();
+                    string identificadores = String.Empty;
 
-                string sql = $"SELECT cod_produto, TIMESTAMP FROM [linx_microvix_erp].[LinxProdutosPromocoes] WHERE cod_produto IN ({identificadores})";
+                    for (int i = 0; i < registros.Count(); i++)
+                    {
 
-                return await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
+                        if (i == registros.Count() - 1)
+                            identificadores += $"'{registros[i].cod_produto}'";
+                        else
+                            identificadores += $"'{registros[i].cod_produto}', ";
+                    }
+
+                    string sql = $"SELECT cnpj_emp, cod_produto, id_campanha FROM [linx_microvix_erp].[LinxProdutosPromocoes] WHERE cod_produto IN ({identificadores})";
+                    var result = await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
+                    list.AddRange(result);
+
+                    return list;
+                }
             }
             catch (Exception ex) when (ex is not InternalException && ex is not SQLCommandException)
             {

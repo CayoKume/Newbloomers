@@ -311,6 +311,11 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
                 Convert.ToDateTime(dt_update) :
                 new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar);
 
+            this.dt_inclusao =
+                ConvertToDateTimeValidation.IsValid(dt_inclusao, "dt_inclusao", listValidations) ?
+                Convert.ToDateTime(dt_inclusao) :
+                new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar);
+
             this.peso_liquido =
                 ConvertToDecimalValidation.IsValid(peso_liquido, "peso_liquido", listValidations) ?
                 Convert.ToDecimal(peso_liquido, new CultureInfo("en-US")) :

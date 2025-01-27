@@ -13,6 +13,7 @@ namespace Domain.DatabaseInit.Entites.LinxMicrovix.LinxMicrovix
         [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
+        [Key]
         [Column(TypeName = "int")]
         public Int32? cod_deposito { get; private set; }
 

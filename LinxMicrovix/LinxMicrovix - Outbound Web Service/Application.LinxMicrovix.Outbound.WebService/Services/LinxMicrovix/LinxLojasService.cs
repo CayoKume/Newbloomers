@@ -220,10 +220,5 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
 
             return true;
         }
-
-        public Task<bool> GetRecord(LinxAPIParam jobParameter, string? cnpj_emp)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

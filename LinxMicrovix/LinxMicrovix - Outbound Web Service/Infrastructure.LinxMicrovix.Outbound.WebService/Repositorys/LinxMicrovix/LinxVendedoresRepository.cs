@@ -14,7 +14,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.LinxMicrov
         public LinxVendedoresRepository(ILinxMicrovixRepositoryBase<LinxVendedores> linxMicrovixRepositoryBase) =>
             (_linxMicrovixRepositoryBase) = (linxMicrovixRepositoryBase);
 
-        public bool BulkInsertIntoTableRaw(LinxAPIParam jobParameter, List<LinxVendedores> records)
+        public bool BulkInsertIntoTableRaw(LinxAPIParam jobParameter, IList<LinxVendedores> records)
         {
             try
             {
@@ -55,7 +55,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.LinxMicrov
                         identificadores += $"'{registros[i].cod_vendedor}', ";
                 }
 
-                string sql = $"SELECT cod_vendedor, TIMESTAMP FROM [linx_microvix_erp].[LinxVendedores] WHERE cod_vendedor IN ({identificadores})";
+                string sql = $"SELECT cod_vendedor, cpf_vendedor, TIMESTAMP FROM [linx_microvix_erp].[LinxVendedores] WHERE cod_vendedor IN ({identificadores})";
 
                 return await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
             }
