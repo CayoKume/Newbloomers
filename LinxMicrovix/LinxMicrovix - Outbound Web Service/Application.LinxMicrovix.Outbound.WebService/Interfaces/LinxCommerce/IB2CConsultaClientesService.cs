@@ -7,6 +7,6 @@ namespace Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxCommerce
     {
         public List<B2CConsultaClientes?> DeserializeXMLToObject(LinxAPIParam jobParameter, List<Dictionary<string?, string?>> records);
         public Task<bool> GetRecords(LinxAPIParam jobParameter);
-        public Task<bool> GetRecord(LinxAPIParam jobParameter, string? identificador, string? cnpj_emp);
+        public Task<bool> GetRecord(LinxAPIParam jobParameter, string? identificador);
     }
 }

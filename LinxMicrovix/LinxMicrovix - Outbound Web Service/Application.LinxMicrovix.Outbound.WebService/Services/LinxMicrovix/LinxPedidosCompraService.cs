@@ -119,11 +119,6 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
             return list;
         }
 
-        public async Task<bool> GetRecord(LinxAPIParam jobParameter, string? identificador, string? cnpj_emp)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<bool> GetRecords(LinxAPIParam jobParameter)
         {
             IList<LinxPedidosCompra> _listSomenteNovos = new List<LinxPedidosCompra>();

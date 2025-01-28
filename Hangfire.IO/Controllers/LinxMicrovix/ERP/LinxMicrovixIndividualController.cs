@@ -182,7 +182,7 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                         jobName: method.MethodName,
                         tableName: method.MethodName
                     ),
-                    identificador: identificador,
+                    identificador: documento,
                     cnpj_emp: cnpj_emp
                 );
 
@@ -259,7 +259,7 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
         }
 
         [HttpPost("LinxMovimentoTrocasIndividual")]
-        public async Task<ActionResult> LinxMovimentoTrocasIndividual()
+        public async Task<ActionResult> LinxMovimentoTrocasIndividual([Required][FromQuery] string? doc_origem, [Required][FromQuery] string? cnpj_emp)
         {
             try
             {
@@ -267,11 +267,13 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .Where(m => m.MethodName == "LinxMovimentoTrocas")
                     .FirstOrDefault();
 
-                var result = await _linxMovimentoTrocasService.GetRecords(
+                var result = await _linxMovimentoTrocasService.GetRecord(
                     _linxMicrovixJobParameter.SetParameters(
                         jobName: method.MethodName,
                         tableName: method.MethodName
-                    )
+                    ),
+                    identificador: doc_origem,
+                    cnpj_emp: cnpj_emp
                 );
 
                 if (result != true)
@@ -287,7 +289,7 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
         }
 
         [HttpPost("LinxPlanosIndividual")]
-        public async Task<ActionResult> LinxPlanosIndividual()
+        public async Task<ActionResult> LinxPlanosIndividual([Required][FromQuery] string? plano)
         {
             try
             {
@@ -295,11 +297,12 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .Where(m => m.MethodName == "LinxPlanos")
                     .FirstOrDefault();
 
-                var result = await _linxPlanosService.GetRecords(
+                var result = await _linxPlanosService.GetRecord(
                     _linxMicrovixJobParameter.SetParameters(
                         jobName: method.MethodName,
                         tableName: method.MethodName
-                    )
+                    ),
+                    identificador: plano
                 );
 
                 if (result != true)
@@ -315,7 +318,7 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
         }
 
         [HttpPost("LinxNaturezaOperacaoIndividual")]
-        public async Task<ActionResult> LinxNaturezaOperacaoIndividual()
+        public async Task<ActionResult> LinxNaturezaOperacaoIndividual([Required][FromQuery] string? cod_natureza_operacao)
         {
             try
             {
@@ -323,11 +326,12 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .Where(m => m.MethodName == "LinxNaturezaOperacao")
                     .FirstOrDefault();
 
-                var result = await _linxNaturezaOperacaoService.GetRecords(
+                var result = await _linxNaturezaOperacaoService.GetRecord(
                     _linxMicrovixJobParameter.SetParameters(
                         jobName: method.MethodName,
                         tableName: method.MethodName
-                    )
+                    ),
+                    identificador: cod_natureza_operacao
                 );
 
                 if (result != true)
@@ -343,7 +347,7 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
         }
 
         [HttpPost("LinxProdutosCodBarIndividual")]
-        public async Task<ActionResult> LinxProdutosCodBarIndividual()
+        public async Task<ActionResult> LinxProdutosCodBarIndividual([Required][FromQuery] string? cod_produto)
         {
             try
             {
@@ -351,11 +355,12 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .Where(m => m.MethodName == "LinxProdutosCodBar")
                     .FirstOrDefault();
 
-                var result = await _linxProdutosCodBarService.GetRecords(
+                var result = await _linxProdutosCodBarService.GetRecord(
                     _linxMicrovixJobParameter.SetParameters(
                         jobName: method.MethodName,
                         tableName: method.MethodName
-                    )
+                    ),
+                    identificador: cod_produto
                 );
 
                 if (result != true)
@@ -371,7 +376,7 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
         }
 
         [HttpPost("LinxProdutosTabelasIndividual")]
-        public async Task<ActionResult> LinxProdutosTabelasIndividual()
+        public async Task<ActionResult> LinxProdutosTabelasIndividual([Required][FromQuery] string? id_tabela, [Required][FromQuery] string? cnpj_emp)
         {
             try
             {
@@ -379,11 +384,13 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .Where(m => m.MethodName == "LinxProdutosTabelas")
                     .FirstOrDefault();
 
-                var result = await _linxProdutosTabelasService.GetRecords(
+                var result = await _linxProdutosTabelasService.GetRecord(
                     _linxMicrovixJobParameter.SetParameters(
                         jobName: method.MethodName,
                         tableName: method.MethodName
-                    )
+                    ),
+                    identificador: id_tabela,
+                    cnpj_emp: cnpj_emp
                 );
 
                 if (result != true)
@@ -399,7 +406,7 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
         }
 
         [HttpPost("LinxProdutosTabelasPrecosIndividual")]
-        public async Task<ActionResult> LinxProdutosTabelasPrecosIndividual()
+        public async Task<ActionResult> LinxProdutosTabelasPrecosIndividual([Required][FromQuery] string? id_tabela, [Required][FromQuery] string? cod_produto, [Required][FromQuery] string? cnpj_emp)
         {
             try
             {
@@ -407,11 +414,14 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .Where(m => m.MethodName == "LinxProdutosTabelasPrecos")
                     .FirstOrDefault();
 
-                var result = await _linxProdutosTabelasPrecosService.GetRecords(
+                var result = await _linxProdutosTabelasPrecosService.GetRecord(
                     _linxMicrovixJobParameter.SetParameters(
                         jobName: method.MethodName,
                         tableName: method.MethodName
-                    )
+                    ),
+                    identificador: cod_produto,
+                    identificador2: id_tabela,
+                    cnpj_emp: cnpj_emp
                 );
 
                 if (result != true)
@@ -427,7 +437,7 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
         }
 
         [HttpPost("LinxProdutosDepositosIndividual")]
-        public async Task<ActionResult> LinxProdutosDepositosIndividual()
+        public async Task<ActionResult> LinxProdutosDepositosIndividual([Required][FromQuery] string? cod_produto)
         {
             try
             {
@@ -435,11 +445,12 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .Where(m => m.MethodName == "LinxProdutosDepositos")
                     .FirstOrDefault();
 
-                var result = await _linxProdutosDepositosService.GetRecords(
+                var result = await _linxProdutosDepositosService.GetRecord(
                     _linxMicrovixJobParameter.SetParameters(
                         jobName: method.MethodName,
                         tableName: method.MethodName
-                    )
+                    ),
+                    identificador: cod_produto
                 );
 
                 if (result != true)
@@ -455,7 +466,7 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
         }
 
         [HttpPost("LinxProdutosInventarioIndividual")]
-        public async Task<ActionResult> LinxProdutosInventarioIndividual()
+        public async Task<ActionResult> LinxProdutosInventarioIndividual([Required][FromQuery] string? cod_produto, [Required][FromQuery] string? data_inventario, [Required][FromQuery] string? cod_deposito, [Required][FromQuery] string? cnpj_emp)
         {
             try
             {
@@ -463,11 +474,15 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .Where(m => m.MethodName == "LinxProdutosInventario")
                     .FirstOrDefault();
 
-                var result = await _linxProdutosInventarioService.GetRecords(
+                var result = await _linxProdutosInventarioService.GetRecord(
                     _linxMicrovixJobParameter.SetParameters(
                         jobName: method.MethodName,
                         tableName: method.MethodName
-                    )
+                    ),
+                    identificador: cod_produto,
+                    identificador2: data_inventario,
+                    identificador3: cod_deposito,
+                    cnpj_emp: cnpj_emp
                 );
 
                 if (result != true)
@@ -483,7 +498,7 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
         }
 
         [HttpPost("LinxProdutosDetalhesIndividual")]
-        public async Task<ActionResult> LinxProdutosDetalhesIndividual()
+        public async Task<ActionResult> LinxProdutosDetalhesIndividual([Required][FromQuery] string? cod_produto, [Required][FromQuery] string? cnpj_emp)
         {
             try
             {
@@ -491,39 +506,13 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .Where(m => m.MethodName == "LinxProdutosDetalhes")
                     .FirstOrDefault();
 
-                var result = await _linxProdutosDetalhesService.GetRecords(
+                var result = await _linxProdutosDetalhesService.GetRecord(
                     _linxMicrovixJobParameter.SetParameters(
                         jobName: method.MethodName,
                         tableName: method.MethodName
-                    )
-                );
-
-                if (result != true)
-                    return BadRequest($"Unable to find records on endpoint.");
-                else
-                    return Ok($"Records integrated successfully.");
-            }
-            catch (Exception ex)
-            {
-                Response.StatusCode = 400;
-                return Content($"Unable to integrate the records.\nError: {ex.Message}");
-            }
-        }
-
-        [HttpPost("LinxProdutosPromocoesIndividual")]
-        public async Task<ActionResult> LinxProdutosPromocoesIndividual()
-        {
-            try
-            {
-                var method = _methods
-                    .Where(m => m.MethodName == "LinxProdutosPromocoes")
-                    .FirstOrDefault();
-
-                var result = await _linxProdutosPromocoesService.GetRecords(
-                    _linxMicrovixJobParameter.SetParameters(
-                        jobName: method.MethodName,
-                        tableName: method.MethodName
-                    )
+                    ),
+                    identificador: cod_produto,
+                    cnpj_emp: cnpj_emp
                 );
 
                 if (result != true)
@@ -539,7 +528,7 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
         }
 
         [HttpPost("LinxProdutosCamposAdicionaisIndividual")]
-        public async Task<ActionResult> LinxProdutosCamposAdicionaisIndividual()
+        public async Task<ActionResult> LinxProdutosCamposAdicionaisIndividual([Required][FromQuery] string? cod_produto)
         {
             try
             {
@@ -547,11 +536,12 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .Where(m => m.MethodName == "LinxProdutosCamposAdicionais")
                     .FirstOrDefault();
 
-                var result = await _linxProdutosCamposAdicionaisService.GetRecords(
+                var result = await _linxProdutosCamposAdicionaisService.GetRecord(
                     _linxMicrovixJobParameter.SetParameters(
                         jobName: method.MethodName,
                         tableName: method.MethodName
-                    )
+                    ),
+                    identificador: cod_produto
                 );
 
                 if (result != true)
@@ -567,7 +557,7 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
         }
 
         [HttpPost("LinxProdutosIndividual")]
-        public async Task<ActionResult> LinxProdutosIndividual()
+        public async Task<ActionResult> LinxProdutosIndividual([Required][FromQuery] string? cod_produto)
         {
             try
             {
@@ -575,11 +565,12 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .Where(m => m.MethodName == "LinxProdutos")
                     .FirstOrDefault();
 
-                var result = await _linxProdutosService.GetRecords(
+                var result = await _linxProdutosService.GetRecord(
                     _linxMicrovixJobParameter.SetParameters(
                         jobName: method.MethodName,
                         tableName: method.MethodName
-                    )
+                    ),
+                    identificador: cod_produto
                 );
 
                 if (result != true)
@@ -595,7 +586,7 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
         }
 
         [HttpPost("LinxPedidosVendaIndividual")]
-        public async Task<ActionResult> LinxPedidosVenda()
+        public async Task<ActionResult> LinxPedidosVendaIndividual([Required][FromQuery] string? cod_pedido, [Required][FromQuery] string? cnpj_emp)
         {
             try
             {
@@ -603,39 +594,13 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .Where(m => m.MethodName == "LinxPedidosVendaIndividual")
                     .FirstOrDefault();
 
-                var result = await _linxPedidosVendaService.GetRecords(
+                var result = await _linxPedidosVendaService.GetRecord(
                     _linxMicrovixJobParameter.SetParameters(
                         jobName: method.MethodName,
                         tableName: method.MethodName
-                    )
-                );
-
-                if (result != true)
-                    return BadRequest($"Unable to find records on endpoint.");
-                else
-                    return Ok($"Records integrated successfully.");
-            }
-            catch (Exception ex)
-            {
-                Response.StatusCode = 400;
-                return Content($"Unable to integrate the records.\nError: {ex.Message}");
-            }
-        }
-
-        [HttpPost("LinxPedidosCompraIndividual")]
-        public async Task<ActionResult> LinxPedidosCompraIndividual()
-        {
-            try
-            {
-                var method = _methods
-                    .Where(m => m.MethodName == "LinxPedidosCompra")
-                    .FirstOrDefault();
-
-                var result = await _linxPedidosCompraService.GetRecords(
-                    _linxMicrovixJobParameter.SetParameters(
-                        jobName: method.MethodName,
-                        tableName: method.MethodName
-                    )
+                    ),
+                    identificador: cod_pedido,
+                    cnpj_emp: cnpj_emp
                 );
 
                 if (result != true)
@@ -651,7 +616,7 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
         }
 
         [HttpPost("LinxSetoresIndividual")]
-        public async Task<ActionResult> LinxSetoresIndividual()
+        public async Task<ActionResult> LinxSetoresIndividual([Required][FromQuery] string? id_setor)
         {
             try
             {
@@ -659,11 +624,12 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .Where(m => m.MethodName == "LinxSetores")
                     .FirstOrDefault();
 
-                var result = await _linxSetoresService.GetRecords(
+                var result = await _linxSetoresService.GetRecord(
                     _linxMicrovixJobParameter.SetParameters(
                         jobName: method.MethodName,
                         tableName: method.MethodName
-                    )
+                    ), 
+                    identificador: id_setor
                 );
 
                 if (result != true)
@@ -679,7 +645,7 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
         }
 
         [HttpPost("LinxXMLDocumentosIndividual")]
-        public async Task<ActionResult> LinxXMLDocumentosIndividual()
+        public async Task<ActionResult> LinxXMLDocumentosIndividual([Required][FromQuery] string? documento, [Required][FromQuery] string? cnpj_emp)
         {
             try
             {
@@ -687,11 +653,13 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     .Where(m => m.MethodName == "LinxXMLDocumentos")
                     .FirstOrDefault();
 
-                var result = await _linxXMLDocumentosService.GetRecords(
+                var result = await _linxXMLDocumentosService.GetRecord(
                     _linxMicrovixJobParameter.SetParameters(
                         jobName: method.MethodName,
                         tableName: method.MethodName
-                    )
+                    ),
+                    identificador: documento,
+                    cnpj_emp: cnpj_emp
                 );
 
                 if (result != true)

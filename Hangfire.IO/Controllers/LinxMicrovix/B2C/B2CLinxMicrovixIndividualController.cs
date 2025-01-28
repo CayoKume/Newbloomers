@@ -15,6 +15,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
 
         private readonly IB2CConsultaClassificacaoService _b2cConsultaClassificacaoService;
         private readonly IB2CConsultaClientesService _b2cConsultaClientesService;
+        private readonly IB2CConsultaPedidosService _b2cConsultaPedidosService;
+        private readonly IB2CConsultaNFeService _b2cConsultaNFeService;
+        private readonly IB2CConsultaPedidosItensService _b2cConsultaPedidosItensService;
+        private readonly IB2CConsultaPedidosStatusService _b2cConsultaPedidosStatusService;
         private readonly IB2CConsultaClientesContatosService _b2cConsultaClientesContatosService;
         private readonly IB2CConsultaClientesContatosParentescoService _b2cConsultaClientesContatosParentescoService;
         private readonly IB2CConsultaImagensService _b2cConsultaImagensService;
@@ -22,6 +26,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
         public B2CLinxMicrovixIndividualController
         (
             IConfiguration configuration,
+            IB2CConsultaPedidosService b2cConsultaPedidosService,
+            IB2CConsultaNFeService b2cConsultaNFeService,
+            IB2CConsultaPedidosItensService b2cConsultaPedidosItensService,
+            IB2CConsultaPedidosStatusService b2cConsultaPedidosStatusService,
             IB2CConsultaClassificacaoService b2cConsultaClassificacaoService,
             IB2CConsultaClientesService b2cConsultaClientesService,
             IB2CConsultaClientesContatosService b2cConsultaClientesContatosService,
@@ -30,6 +38,10 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
         )
         {
             _configuration = configuration;
+            _b2cConsultaPedidosService = b2cConsultaPedidosService;
+            _b2cConsultaNFeService = b2cConsultaNFeService;
+            _b2cConsultaPedidosItensService = b2cConsultaPedidosItensService;
+            _b2cConsultaPedidosStatusService = b2cConsultaPedidosStatusService;
             _b2cConsultaClassificacaoService = b2cConsultaClassificacaoService;
             _b2cConsultaClientesService = b2cConsultaClientesService;
             _b2cConsultaClientesContatosService = b2cConsultaClientesContatosService;
@@ -62,7 +74,7 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
 
                 parametersInterval: _configuration
                                 .GetSection("B2CLinxMicrovix")
-                                .GetSection("ParametersDateInterval")
+                                .GetSection("ParametersIndividual")
                                 .Value,
 
                 parametersTableName: _configuration
@@ -118,7 +130,7 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
         }
 
         [HttpPost("B2CConsultaClientesIndividual")]
-        public async Task<ActionResult> B2CConsultaClientesIndividual([Required][FromQuery] string? doc_cliente, [Required][FromQuery] string? cnpj_emp)
+        public async Task<ActionResult> B2CConsultaClientesIndividual([Required][FromQuery] string? doc_cliente)
         {
             try
             {
@@ -131,7 +143,6 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                         jobName: method.MethodName,
                         tableName: method.MethodName
                     ),
-                    cnpj_emp: cnpj_emp,
                     identificador: doc_cliente
                 );
 
@@ -144,6 +155,123 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
             {
                 Response.StatusCode = 400;
                 return Content($"Unable to integrate the record: {doc_cliente}.\nError: {ex.Message}");
+            }
+        }
+
+        [HttpPost("B2CConsultaNFeIndividual")]
+        public async Task<ActionResult> B2CConsultaNFeIndividual([Required][FromQuery] string? id_pedido)
+        {
+            try
+            {
+                var method = _methods
+                    .Where(m => m.MethodName == "B2CConsultaNFe")
+                    .FirstOrDefault();
+
+                var result = await _b2cConsultaNFeService.GetRecord(
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    ),
+                    identificador: id_pedido
+                );
+
+                if (result != true)
+                    return BadRequest($"Unable to find record: {id_pedido} on endpoint.");
+                else
+                    return Ok();
+            }
+            catch (Exception ex)
+            {
+                Response.StatusCode = 400;
+                return Content($"Unable to integrate the record: {id_pedido}.\nError: {ex.Message}");
+            }
+        }
+
+
+        [HttpPost("B2CConsultaPedidosIndividual")]
+        public async Task<ActionResult> B2CConsultaPedidosIndividual([Required][FromQuery] string? id_pedido)
+        {
+            try
+            {
+                var method = _methods
+                    .Where(m => m.MethodName == "B2CConsultaPedidos")
+                    .FirstOrDefault();
+
+                var result = await _b2cConsultaClientesService.GetRecord(
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    ),
+                    identificador: id_pedido
+                );
+
+                if (result != true)
+                    return BadRequest($"Unable to find record: {id_pedido} on endpoint.");
+                else
+                    return Ok();
+            }
+            catch (Exception ex)
+            {
+                Response.StatusCode = 400;
+                return Content($"Unable to integrate the record: {id_pedido}.\nError: {ex.Message}");
+            }
+        }
+
+        [HttpPost("B2CConsultaPedidosItensIndividual")]
+        public async Task<ActionResult> B2CConsultaPedidosItensIndividual([Required][FromQuery] string? id_pedido, [Required][FromQuery] string? cnpj_emp)
+        {
+            try
+            {
+                var method = _methods
+                    .Where(m => m.MethodName == "B2CConsultaPedidosItens")
+                    .FirstOrDefault();
+
+                var result = await _b2cConsultaPedidosItensService.GetRecord(
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    ),
+                    identificador: id_pedido
+                );
+
+                if (result != true)
+                    return BadRequest($"Unable to find record: {id_pedido} on endpoint.");
+                else
+                    return Ok();
+            }
+            catch (Exception ex)
+            {
+                Response.StatusCode = 400;
+                return Content($"Unable to integrate the record: {id_pedido}.\nError: {ex.Message}");
+            }
+        }
+
+        [HttpPost("B2CConsultaPedidosStatusIndividual")]
+        public async Task<ActionResult> B2CConsultaPedidosStatusIndividual([Required][FromQuery] string? id_pedido, [Required][FromQuery] string? cnpj_emp)
+        {
+            try
+            {
+                var method = _methods
+                    .Where(m => m.MethodName == "B2CConsultaPedidosStatus")
+                    .FirstOrDefault();
+
+                var result = await _b2cConsultaPedidosStatusService.GetRecord(
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    ),
+                    identificador: id_pedido
+                );
+
+                if (result != true)
+                    return BadRequest($"Unable to find record: {id_pedido} on endpoint.");
+                else
+                    return Ok();
+            }
+            catch (Exception ex)
+            {
+                Response.StatusCode = 400;
+                return Content($"Unable to integrate the record: {id_pedido}.\nError: {ex.Message}");
             }
         }
 

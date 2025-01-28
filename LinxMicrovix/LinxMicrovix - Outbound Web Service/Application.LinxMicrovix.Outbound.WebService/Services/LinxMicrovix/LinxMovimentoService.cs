@@ -202,7 +202,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
             {
                 _logger
                    .Clear()
-                   .AddLog(EnumJob.LinxVendedores);
+                   .AddLog(EnumJob.LinxMovimento);
 
                 string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter);
 

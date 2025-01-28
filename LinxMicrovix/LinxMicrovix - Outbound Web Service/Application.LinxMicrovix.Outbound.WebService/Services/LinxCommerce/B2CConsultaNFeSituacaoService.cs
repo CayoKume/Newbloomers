@@ -195,6 +195,5 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
 
             return true;
         }
-
     }
 }

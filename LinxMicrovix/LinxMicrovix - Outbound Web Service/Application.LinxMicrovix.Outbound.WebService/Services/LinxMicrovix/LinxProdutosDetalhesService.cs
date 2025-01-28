@@ -104,7 +104,77 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
 
         public async Task<bool> GetRecord(LinxAPIParam jobParameter, string? identificador, string? cnpj_emp)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _logger
+                   .Clear()
+                   .AddLog(EnumJob.LinxProdutosDetalhes);
+
+                string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter);
+
+                var body = _linxMicrovixServiceBase.BuildBodyRequest(
+                    parametersList: parameters
+                    .Replace("[0]", "0")
+                    .Replace("[data_mov_ini]", "2000-01-01")
+                    .Replace("[data_mov_fim]", $"{DateTime.Today.ToString("yyyy-MM-dd")}")
+                    .Replace("[cod_produto]", identificador),
+                    jobParameter: jobParameter,
+                    cnpj_emp: cnpj_emp);
+
+                string? response = await _apiCall.PostAsync(jobParameter: jobParameter, body: body);
+                var xmls = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response);
+
+                if (xmls.Count() > 0)
+                {
+                    var listRecords = DeserializeXMLToObject(jobParameter, xmls);
+
+                    foreach (var record in listRecords)
+                    {
+                        await _linxProdutosDetalhesRepository.InsertRecord(record: record, jobParameter: jobParameter);
+                    }
+
+                    await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter: jobParameter);
+                }
+            }
+            catch (SQLCommandException ex)
+            {
+                _logger.AddMessage(
+                    stage: ex.Stage,
+                    error: ex.Error,
+                    logLevel: ex.MessageLevel,
+                    message: ex.Message,
+                    exceptionMessage: ex.ExceptionMessage,
+                    commandSQL: ex.CommandSQL
+                );
+
+                throw;
+            }
+            catch (InternalException ex)
+            {
+                _logger.AddMessage(
+                    stage: ex.stage,
+                    error: ex.Error,
+                    logLevel: ex.MessageLevel,
+                    message: ex.Message,
+                    exceptionMessage: ex.ExceptionMessage
+                );
+
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.AddMessage(
+                    message: "Error when executing GetRecords method",
+                    exceptionMessage: ex.Message
+                );
+            }
+            finally
+            {
+                _logger.SetLogEndDate();
+                await _logger.CommitAllChanges();
+            }
+
+            return true;
         }
 
         public async Task<bool> GetRecords(LinxAPIParam jobParameter)
