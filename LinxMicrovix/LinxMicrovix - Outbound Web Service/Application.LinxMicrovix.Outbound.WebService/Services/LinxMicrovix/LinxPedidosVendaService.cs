@@ -155,7 +155,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
 
                     foreach (var record in listRecords)
                     {
-                        await _linxPedidosCompraRepository.InsertRecord(record: record, jobParameter: jobParameter);
+                        await _linxPedidosVendaRepository.InsertRecord(record: record, jobParameter: jobParameter);
                     }
 
                     await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter: jobParameter);

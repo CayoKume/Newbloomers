@@ -1,4 +1,4 @@
-﻿using Application.LinxCommerce.Interfaces.Catolog;
+﻿using Application.LinxCommerce.Interfaces;
 using Domain.LinxCommerce.Entities.Parameters;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
 using Microsoft.AspNetCore.Mvc;
@@ -10,12 +10,7 @@ namespace HangfireDashboard.UI.Controllers.LinxCommerce
     [Route("LinxCommerceJobs/LinxCommerceIndividual")]
     public class LinxCommerceIndividualController : Controller
     {
-        private readonly string? _projectName;
-        private readonly string? _parametersTableName;
-        private readonly string? _parametersLogTableName;
-        private readonly string? _key;
-        private readonly string? _authentication;
-        private readonly string? _databaseName;
+        private readonly LinxCommerceJobParameter _linxCommerceJobParameter;
         private readonly List<LinxMethods>? _methods;
 
         private readonly IConfiguration _configuration;
@@ -29,35 +24,51 @@ namespace HangfireDashboard.UI.Controllers.LinxCommerce
             _configuration = configuration;
             _skuService = skuService;
 
-            _projectName = _configuration
-                .GetSection("LinxCommerce")
-                .GetSection("ProjectName")
-                .Value;
+            _linxCommerceJobParameter = new LinxCommerceJobParameter(
+                docMainCompany: _configuration
+                                .GetSection("LinxCommerce")
+                                .GetSection("DocMainCompany")
+                                .Value,
 
-            _parametersLogTableName = _configuration
-                .GetSection("LinxCommerce")
-                .GetSection("ProjectParametersLogTableName")
-                .Value;
+                schema: "linx_commerce",
 
-            _parametersTableName = _configuration
-                .GetSection("LinxCommerce")
-                .GetSection("ProjectParametersTableName")
-                .Value;
+                databaseName: _configuration
+                                .GetSection("ConfigureServer")
+                                .GetSection("Databases")
+                                .GetSection("LinxCommerce")
+                                .Value,
 
-            _key = _configuration
-                .GetSection("LinxCommerce")
-                .GetSection("Key")
-                .Value;
+                untreatedDatabaseName: _configuration
+                                .GetSection("ConfigureServer")
+                                .GetSection("Databases")
+                                .GetSection("Untreated")
+                                .Value,
 
-            _authentication = _configuration
-                .GetSection("LinxCommerce")
-                .GetSection("Authentication")
-                .Value;
+                projectName: _configuration
+                                .GetSection("LinxCommerce")
+                                .GetSection("ProjectName")
+                                .Value,
 
-            _databaseName = _configuration
-                 .GetSection("ConfigureServer")
-                 .GetSection("LinxCommerceDatabaseName")
-                 .Value;
+                parametersInterval: _configuration
+                                .GetSection("LinxMicrovix")
+                                .GetSection("ParametersDateInterval")
+                                .Value,
+
+                parametersTableName: _configuration
+                                .GetSection("LinxCommerce")
+                                .GetSection("ParametersTableName")
+                                .Value,
+
+                keyAuthorization: _configuration
+                                .GetSection("LinxCommerce")
+                                .GetSection("Key")
+                                .Value,
+
+                userAuthentication: _configuration
+                                .GetSection("LinxCommerce")
+                                .GetSection("Authentication")
+                                .Value
+            );
 
             _methods = _configuration
                             .GetSection("LinxCommerce")
@@ -117,17 +128,10 @@ namespace HangfireDashboard.UI.Controllers.LinxCommerce
                     .FirstOrDefault();
 
                 var result = await _skuService.GetSKU(
-                    new LinxCommerceJobParameter
-                    {
-                        projectName = _projectName,
-                        databaseName = _databaseName,
-                        keyAuthorization = _key,
-                        userAuthentication = _authentication,
-                        parametersTableName = _parametersTableName,
-                        parametersLogTableName = _parametersLogTableName,
-                        jobName = method.MethodName,
-                        tableName = method.MethodName,
-                    },
+                    _linxCommerceJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    ),
                     productID: productId
                 );
 

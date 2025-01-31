@@ -1,4 +1,7 @@
 ﻿using Dapper;
+using Domain.IntegrationsCore.Entities.Enums;
+using Domain.IntegrationsCore.Exceptions;
+using Domain.IntegrationsCore.Extensions;
 using Domain.LinxCommerce.Entities.Parameters;
 using Domain.LinxCommerce.Interfaces.Repositorys.Base;
 using Infrastructure.IntegrationsCore.Connections.MySQL;
@@ -8,10 +11,11 @@ using Microsoft.Extensions.Configuration;
 using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
+using System.Reflection;
 
 namespace Infrastructure.LinxCommerce.Repository.Base
 {
-    public class LinxCommerceRepositoryBase<TEntity> : ILinxCommerceRepositoryBase<TEntity> where TEntity : class, new()
+    public class LinxCommerceRepositoryBase : ILinxCommerceRepositoryBase
     {
         private readonly string? _parametersTableName;
 
@@ -66,7 +70,7 @@ namespace Infrastructure.LinxCommerce.Repository.Base
                 using (var conn = _sqlServerConnection.GetDbConnection(jobParameter.databaseName))
                 {
                     using var bulkCopy = new SqlBulkCopy(conn);
-                    bulkCopy.DestinationTableName = $"[{jobParameter.tableName}_raw]";
+                    bulkCopy.DestinationTableName = $"[linx_commerce].[{jobParameter.tableName}]";
                     bulkCopy.BatchSize = dataTableRowsNumber;
                     bulkCopy.BulkCopyTimeout = 360;
                     bulkCopy.WriteToServer(dataTable);
@@ -124,67 +128,39 @@ namespace Infrastructure.LinxCommerce.Repository.Base
             throw new NotImplementedException();
         }
 
-        public DataTable CreateSystemDataTable(LinxCommerceJobParameter jobParameter, TEntity entity)
-        {
-            try
-            {
-                var properties = TypeDescriptor.GetProperties(typeof(TEntity));
-                var dataTable = new DataTable(jobParameter.tableName);
-                foreach (PropertyDescriptor prop in properties)
-                {
-                    dataTable.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
-                }
-                return dataTable;
-            }
-            catch (Exception ex)
-            {
-                throw;
-                //throw new InternalErrorException()
-                //{
-                //    project = jobParameter.projectName,
-                //    job = jobParameter.jobName,
-                //    method = "CreateSystemDataTable",
-                //    message = $"Error when convert system datatable to bulkinsert",
-                //    record = $" - ",
-                //    propertie = " - ",
-                //    exception = ex.Message
-                //};
-            }
-        }
+        //public async Task<bool> DeleteLogResponse(LinxCommerceJobParameter jobParameter)
+        //{
+        //    string? sql = $"DELETE FROM [{jobParameter.parametersLogTableName}] " +
+        //                  $"WHERE METHOD = '{jobParameter.jobName}' " +
+        //                  $"AND ID NOT IN (SELECT TOP 15 ID FROM [{jobParameter.parametersLogTableName}] ORDER BY ID DESC)";
 
-        public async Task<bool> DeleteLogResponse(LinxCommerceJobParameter jobParameter)
-        {
-            string? sql = $"DELETE FROM [{jobParameter.parametersLogTableName}] " +
-                          $"WHERE METHOD = '{jobParameter.jobName}' " +
-                          $"AND ID NOT IN (SELECT TOP 15 ID FROM [{jobParameter.parametersLogTableName}] ORDER BY ID DESC)";
+        //    try
+        //    {
+        //        using (var conn = _sqlServerConnection.GetDbConnection(jobParameter.databaseName))
+        //        {
+        //            var result = await conn.ExecuteAsync(sql: sql, commandTimeout: 360);
 
-            try
-            {
-                using (var conn = _sqlServerConnection.GetDbConnection(jobParameter.databaseName))
-                {
-                    var result = await conn.ExecuteAsync(sql: sql, commandTimeout: 360);
+        //            if (result > 0)
+        //                return true;
 
-                    if (result > 0)
-                        return true;
-
-                    return false;
-                }
-            }
-            catch (Exception ex)
-            {
-                throw;
-                //throw new ExecuteCommandException()
-                //{
-                //    project = $"{jobParameter.projectName} - IntegrationsCore",
-                //    job = jobParameter.jobName,
-                //    method = $"DeleteLogResponse",
-                //    message = $"Error when trying to clear parameters log table",
-                //    schema = $"[{jobParameter.tableName}]",
-                //    command = sql,
-                //    exception = ex.Message
-                //};
-            }
-        }
+        //            return false;
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw;
+        //        //throw new ExecuteCommandException()
+        //        //{
+        //        //    project = $"{jobParameter.projectName} - IntegrationsCore",
+        //        //    job = jobParameter.jobName,
+        //        //    method = $"DeleteLogResponse",
+        //        //    message = $"Error when trying to clear parameters log table",
+        //        //    schema = $"[{jobParameter.tableName}]",
+        //        //    command = sql,
+        //        //    exception = ex.Message
+        //        //};
+        //    }
+        //}
 
         public async Task<bool> ExecuteQueryCommand(LinxCommerceJobParameter jobParameter, string? sql)
         {
@@ -306,40 +282,40 @@ namespace Infrastructure.LinxCommerce.Repository.Base
             }
         }
 
-        public async Task<bool> InsertLogResponse(LinxCommerceJobParameter jobParameter, string? response, object record)
-        {
-            string? sql = $"INSERT INTO {jobParameter.parametersLogTableName} " +
-              "([method], [execution_date], [parameters_interval], [response]) " +
-              "Values " +
-              "(@method, GETDATE(), @parameters_interval, @response)";
+        //public async Task<bool> InsertLogResponse(LinxCommerceJobParameter jobParameter, string? response, object record)
+        //{
+        //    string? sql = $"INSERT INTO {jobParameter.parametersLogTableName} " +
+        //      "([method], [execution_date], [parameters_interval], [response]) " +
+        //      "Values " +
+        //      "(@method, GETDATE(), @parameters_interval, @response)";
 
-            try
-            {
-                using (var conn = _sqlServerConnection.GetDbConnection(jobParameter.databaseName))
-                {
-                    var result = await conn.ExecuteAsync(sql: sql, param: record, commandTimeout: 360);
+        //    try
+        //    {
+        //        using (var conn = _sqlServerConnection.GetDbConnection(jobParameter.databaseName))
+        //        {
+        //            var result = await conn.ExecuteAsync(sql: sql, param: record, commandTimeout: 360);
 
-                    if (result > 0)
-                        return true;
+        //            if (result > 0)
+        //                return true;
 
-                    return false;
-                }
-            }
-            catch (Exception ex)
-            {
-                throw;
-                //throw new ExecuteCommandException()
-                //{
-                //    project = $"{jobParameter.projectName} - IntegrationsCore",
-                //    job = jobParameter.jobName,
-                //    method = $"InsertRecord",
-                //    message = $"Error when trying to insert record in database table: {jobParameter.tableName}",
-                //    schema = $"[{jobParameter.tableName}]",
-                //    command = sql,
-                //    exception = ex.Message
-                //};
-            }
-        }
+        //            return false;
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw;
+        //        //throw new ExecuteCommandException()
+        //        //{
+        //        //    project = $"{jobParameter.projectName} - IntegrationsCore",
+        //        //    job = jobParameter.jobName,
+        //        //    method = $"InsertRecord",
+        //        //    message = $"Error when trying to insert record in database table: {jobParameter.tableName}",
+        //        //    schema = $"[{jobParameter.tableName}]",
+        //        //    command = sql,
+        //        //    exception = ex.Message
+        //        //};
+        //    }
+        //}
 
         public async Task<bool> InsertParametersIfNotExists(LinxCommerceJobParameter jobParameter, object parameter)
         {
@@ -405,39 +381,63 @@ namespace Infrastructure.LinxCommerce.Repository.Base
             }
         }
 
-        public async Task<bool> UpdateLogParameters(LinxCommerceJobParameter jobParameter, string? lastResponse)
-        {
-            string? sql = $"UPDATE {jobParameter.parametersTableName} " +
-                          "SET LAST_EXECUTION = GETDATE(), " +
-                          $"LAST_RESPONSE = '{lastResponse}' " +
-                           "WHERE " +
-                          $"METHOD = '{jobParameter.jobName}'";
+        //public async Task<bool> UpdateLogParameters(LinxCommerceJobParameter jobParameter, string? lastResponse)
+        //{
+        //    string? sql = $"UPDATE {jobParameter.parametersTableName} " +
+        //                  "SET LAST_EXECUTION = GETDATE(), " +
+        //                  $"LAST_RESPONSE = '{lastResponse}' " +
+        //                   "WHERE " +
+        //                  $"METHOD = '{jobParameter.jobName}'";
 
+        //    try
+        //    {
+        //        using (var conn = _sqlServerConnection.GetDbConnection(jobParameter.databaseName))
+        //        {
+        //            var result = await conn.ExecuteAsync(sql: sql, commandTimeout: 360);
+
+        //            if (result > 0)
+        //                return true;
+
+        //            return false;
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw;
+        //        //throw new ExecuteCommandException()
+        //        //{
+        //        //    project = $"{jobParameter.projectName} - IntegrationsCore",
+        //        //    job = jobParameter.jobName,
+        //        //    method = $"UpdateLogParameters",
+        //        //    message = $"Error when trying to update date of last execution date in database table: {jobParameter.parametersLogTableName}",
+        //        //    schema = $"[{jobParameter.parametersLogTableName}]",
+        //        //    command = sql,
+        //        //    exception = ex.Message
+        //        //};
+        //    }
+        //}
+
+        public DataTable CreateSystemDataTable<TEntity>(LinxCommerceJobParameter jobParameter, TEntity entity)
+        {
             try
             {
-                using (var conn = _sqlServerConnection.GetDbConnection(jobParameter.databaseName))
+                var properties = entity.GetType().GetFilteredProperties();
+                var dataTable = new DataTable(jobParameter.tableName);
+                foreach (PropertyInfo prop in properties)
                 {
-                    var result = await conn.ExecuteAsync(sql: sql, commandTimeout: 360);
-
-                    if (result > 0)
-                        return true;
-
-                    return false;
+                    dataTable.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
                 }
+                return dataTable;
             }
             catch (Exception ex)
             {
-                throw;
-                //throw new ExecuteCommandException()
-                //{
-                //    project = $"{jobParameter.projectName} - IntegrationsCore",
-                //    job = jobParameter.jobName,
-                //    method = $"UpdateLogParameters",
-                //    message = $"Error when trying to update date of last execution date in database table: {jobParameter.parametersLogTableName}",
-                //    schema = $"[{jobParameter.parametersLogTableName}]",
-                //    command = sql,
-                //    exception = ex.Message
-                //};
+                throw new InternalException(
+                    stage: EnumStages.CreateSystemDataTable,
+                    error: EnumError.SQLCommand,
+                    level: EnumMessageLevel.Error,
+                    message: $"Error when convert system datatable to bulkinsert",
+                    exceptionMessage: ex.Message
+                );
             }
         }
     }

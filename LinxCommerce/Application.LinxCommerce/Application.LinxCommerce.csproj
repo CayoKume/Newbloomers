@@ -7,33 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Interfaces\Configuration\" />
-    <Folder Include="Interfaces\Default\" />
-    <Folder Include="Interfaces\Fulfillment\" />
-    <Folder Include="Interfaces\Inventory\" />
-    <Folder Include="Interfaces\LGPD\" />
-    <Folder Include="Interfaces\Mashup\" />
-    <Folder Include="Interfaces\Multisite\" />
-    <Folder Include="Interfaces\Payment\" />
-    <Folder Include="Interfaces\Pricing\" />
-    <Folder Include="Interfaces\Profile\" />
-    <Folder Include="Interfaces\Promotion\" />
-    <Folder Include="Interfaces\Queue\" />
-    <Folder Include="Services\Configuration\" />
-    <Folder Include="Services\Default\" />
-    <Folder Include="Services\Fulfillment\" />
-    <Folder Include="Services\Inventory\" />
-    <Folder Include="Services\LGPD\" />
-    <Folder Include="Services\Mashup\" />
-    <Folder Include="Services\Multisite\" />
-    <Folder Include="Services\Payment\" />
-    <Folder Include="Services\Pricing\" />
-    <Folder Include="Services\Profile\" />
-    <Folder Include="Services\Promotion\" />
-    <Folder Include="Services\Queue\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 

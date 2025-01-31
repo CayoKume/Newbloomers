@@ -2,7 +2,6 @@
 using Application.IntegrationsCore.Services;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Cache.LinxMicrovix;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
-using static Dapper.SqlMapper;
 
 namespace Application.LinxMicrovix.Outbound.WebService.Services.Cache.LinxMicrovix
 {

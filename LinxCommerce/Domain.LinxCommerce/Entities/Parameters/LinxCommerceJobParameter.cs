@@ -1,18 +1,64 @@
-﻿namespace Domain.LinxCommerce.Entities.Parameters
+﻿using Domain.IntegrationsCore.Entities.Bases;
+
+namespace Domain.LinxCommerce.Entities.Parameters
 {
-    public class LinxCommerceJobParameter
+    public class LinxCommerceJobParameter : ParameterBase
     {
-        public string? docMainCompany { get; set; }
-        public string? databaseName { get; set; }
+        public string? schema { get; private set; }
+        public string? databaseName { get; private set; }
+        public string? untreatedDatabaseName { get; private set; }
+        public string? jobName { get; private set; }
+        public string? tableName { get; private set; }
+        public string? parametersInterval { get; private set; }
 
-        public string? jobName { get; set; }
-        public string? projectName { get; set; }
-        public string? tableName { get; set; }
+        /// <summary>
+        /// Set parameters for any job
+        /// </summary>
+        /// <param name="docMainCompany"></param>
+        /// <param name="schema"></param>
+        /// <param name="databaseName"></param>
+        /// <param name="untreatedDatabaseName"></param>
+        /// <param name="projectName"></param>
+        /// <param name="keyAuthorization"></param>
+        /// <param name="userAuthentication"></param>
+        /// <param name="parametersInterval"></param>
+        /// <param name="parametersTableName"></param>
+        public LinxCommerceJobParameter(
+            string? docMainCompany,
+            string? schema,
+            string? databaseName,
+            string? untreatedDatabaseName,
+            string? projectName,
+            string? keyAuthorization,
+            string? userAuthentication,
+            string? parametersInterval,
+            string? parametersTableName
+        ) : base(
+            docMainCompany: docMainCompany,
+            projectName: projectName,
+            keyAuthorization: keyAuthorization,
+            userAuthentication: userAuthentication,
+            parametersTableName: parametersTableName
+        )
+        {
+            this.schema = schema;
+            this.databaseName = databaseName;
+            this.untreatedDatabaseName = untreatedDatabaseName;
+            this.parametersInterval = parametersInterval;
+        }
 
-        public string? keyAuthorization { get; set; }
-        public string? userAuthentication { get; set; }
+        /// <summary>
+        /// Set parameters for an specific job
+        /// </summary>
+        /// <param name="jobName"></param>
+        /// <param name="tableName"></param>
+        /// <returns></returns>
+        public LinxCommerceJobParameter SetParameters(string? jobName, string? tableName)
+        {
+            this.jobName = jobName;
+            this.tableName = tableName;
 
-        public string? parametersTableName { get; set; }
-        public string? parametersLogTableName { get; set; }
+            return this;
+        }
     }
 }
