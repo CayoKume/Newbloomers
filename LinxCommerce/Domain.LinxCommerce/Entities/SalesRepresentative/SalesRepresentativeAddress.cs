@@ -1,9 +1,10 @@
-﻿namespace Domain.LinxCommerce.Entities.SalesRepresentative
+﻿using Domain.IntegrationsCore.Extensions;
+
+namespace Domain.LinxCommerce.Entities.SalesRepresentative
 {
     public class SalesRepresentativeAddress
     {
         public int? SalesRepresentativeID { get; set; }
-        public int? SalesRepresentativeAddressID { get; set; }
         public bool? IsMainAddress { get; set; }
         public string? Name { get; set; }
         public string? AddressLine { get; set; }

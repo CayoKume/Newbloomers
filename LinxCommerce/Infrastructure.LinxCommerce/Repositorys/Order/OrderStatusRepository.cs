@@ -25,11 +25,11 @@ namespace Infrastructure.LinxCommerce.Repositorys.Order
                     table.Rows.Add(records.Result[i].OrderStatusID, records.Result[i].Status, records.Result[i].Color, records.Result[i].IsDefault, records.Result[i].IntegrationID);
                 }
 
-                _linxCommerceRepositoryBase.BulkInsertIntoTableRaw(
-                    jobParameter: jobParameter,
-                    dataTable: table,
-                    dataTableRowsNumber: table.Rows.Count
-                );
+                //_linxCommerceRepositoryBase.BulkInsertIntoTableRaw(
+                //    jobParameter: jobParameter,
+                //    dataTable: table,
+                //    dataTableRowsNumber: table.Rows.Count
+                //);
 
                 return true;
             }

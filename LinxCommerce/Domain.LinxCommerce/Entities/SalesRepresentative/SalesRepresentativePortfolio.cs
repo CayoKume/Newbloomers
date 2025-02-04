@@ -1,9 +1,14 @@
-﻿namespace Domain.LinxCommerce.Entities.SalesRepresentative
+﻿using Domain.IntegrationsCore.Extensions;
+
+namespace Domain.LinxCommerce.Entities.SalesRepresentative
 {
     public class SalesRepresentativePortfolio
     {
+        public int? SalesRepresentativeID { get; set; }
         public bool? HasPortfolio { get; set; }
         public string? PortfolioAssociationType { get; set; }
-        public List<SalesRepresentativeCustomerRelation>? Customers { get; set; } //list obj
+
+        [SkipProperty]
+        public List<SalesRepresentativeCustomerRelation>? Customers { get; set; }
     }
 }

@@ -57,24 +57,25 @@ namespace Infrastructure.LinxCommerce.Repositorys.SKU
 
         public async Task<bool> InsertParametersIfNotExists(LinxCommerceJobParameter jobParameter)
         {
-            try
-            {
-                return await _linxCommerceRepositoryBase.InsertParametersIfNotExists(
-                    jobParameter: jobParameter,
-                    parameter: new
-                    {
-                        method = jobParameter.jobName,
-                        timestamp = @"",
-                        dateinterval = @"",
-                        individual = @"",
-                        ativo = 1
-                    }
-                );
-            }
-            catch
-            {
-                throw;
-            }
+            throw new NotImplementedException();
+            //try
+            //{
+            //    return await _linxCommerceRepositoryBase.InsertParametersIfNotExists(
+            //        jobParameter: jobParameter,
+            //        parameter: new
+            //        {
+            //            method = jobParameter.jobName,
+            //            timestamp = @"",
+            //            dateinterval = @"",
+            //            individual = @"",
+            //            ativo = 1
+            //        }
+            //    );
+            //}
+            //catch
+            //{
+            //    throw;
+            //}
         }
 
         public async Task<bool> InsertRecord(LinxCommerceJobParameter jobParameter, SKUs? record)

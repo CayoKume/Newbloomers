@@ -384,7 +384,6 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
             }
         }
 
-
         public async Task<bool> InsertRecord(LinxAPIParam jobParameter, string? sql, object record)
         {
             try
@@ -465,6 +464,10 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
                     bulkCopy.DestinationTableName = $"[untreated].[{jobParameter.tableName}]";
                     bulkCopy.BatchSize = dataTableRowsNumber;
                     bulkCopy.BulkCopyTimeout = 360;
+                    foreach (DataColumn c in dataTable.Columns)
+                    {
+                        bulkCopy.ColumnMappings.Add(c.ColumnName, c.ColumnName);
+                    }
                     bulkCopy.WriteToServer(dataTable);
                 }
 

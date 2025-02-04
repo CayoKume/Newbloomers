@@ -30,11 +30,11 @@ namespace Infrastructure.LinxCommerce.Repositorys.Order
                     //    records[i].obs, records[i].mae);
                 }
 
-                _linxCommerceRepositoryBase.BulkInsertIntoTableRaw(
-                    jobParameter: jobParameter,
-                    dataTable: table,
-                    dataTableRowsNumber: table.Rows.Count
-                );
+                //_linxCommerceRepositoryBase.BulkInsertIntoTableRaw(
+                //    jobParameter: jobParameter,
+                //    dataTable: table,
+                //    dataTableRowsNumber: table.Rows.Count
+                //);
 
                 return true;
             }
