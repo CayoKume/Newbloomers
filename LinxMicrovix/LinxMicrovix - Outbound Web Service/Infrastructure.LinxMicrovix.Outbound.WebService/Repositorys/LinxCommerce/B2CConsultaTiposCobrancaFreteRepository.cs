@@ -9,16 +9,16 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 {
     public class B2CConsultaTiposCobrancaFreteRepository : IB2CConsultaTiposCobrancaFreteRepository
     {
-        private readonly ILinxMicrovixRepositoryBase<B2CConsultaTiposCobrancaFrete> _linxMicrovixRepositoryBase;
+        private readonly ILinxMicrovixAzureSQLRepositoryBase<B2CConsultaTiposCobrancaFrete> _linxMicrovixRepositoryBase;
 
-        public B2CConsultaTiposCobrancaFreteRepository(ILinxMicrovixRepositoryBase<B2CConsultaTiposCobrancaFrete> linxMicrovixRepositoryBase) =>
+        public B2CConsultaTiposCobrancaFreteRepository(ILinxMicrovixAzureSQLRepositoryBase<B2CConsultaTiposCobrancaFrete> linxMicrovixRepositoryBase) =>
             (_linxMicrovixRepositoryBase) = (linxMicrovixRepositoryBase);
 
         public bool BulkInsertIntoTableRaw(LinxAPIParam jobParameter, IList<B2CConsultaTiposCobrancaFrete> records)
         {
             try
             {
-                var table = _linxMicrovixRepositoryBase.CreateSystemDataTable(jobParameter, new B2CConsultaTiposCobrancaFrete());
+                var table = _linxMicrovixRepositoryBase.CreateSystemDataTable(jobParameter.tableName, new B2CConsultaTiposCobrancaFrete());
 
                 for (int i = 0; i < records.Count(); i++)
                 {
@@ -26,7 +26,6 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                 }
 
                 _linxMicrovixRepositoryBase.BulkInsertIntoTableRaw(
-                    jobParameter: jobParameter,
                     dataTable: table,
                     dataTableRowsNumber: table.Rows.Count
                 );
@@ -54,7 +53,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 
                 string sql = $"SELECT CODIGO_TIPO_COBRANCA_FRETE, TIMESTAMP FROM B2CCONSULTATIPOSCOBRANCAFRETE WHERE CODIGO_TIPO_COBRANCA_FRETE IN ({identificadores})";
 
-                return await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
+                return await _linxMicrovixRepositoryBase.GetRegistersExists(sql);
             }
             catch (Exception ex) when (ex is not InternalException && ex is not SQLCommandException)
             {

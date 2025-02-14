@@ -9,16 +9,16 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 {
     public class B2CConsultaEmpresasRepository : IB2CConsultaEmpresasRepository
     {
-        private readonly ILinxMicrovixRepositoryBase<B2CConsultaEmpresas> _linxMicrovixRepositoryBase;
+        private readonly ILinxMicrovixAzureSQLRepositoryBase<B2CConsultaEmpresas> _linxMicrovixRepositoryBase;
 
-        public B2CConsultaEmpresasRepository(ILinxMicrovixRepositoryBase<B2CConsultaEmpresas> linxMicrovixRepositoryBase) =>
+        public B2CConsultaEmpresasRepository(ILinxMicrovixAzureSQLRepositoryBase<B2CConsultaEmpresas> linxMicrovixRepositoryBase) =>
             (_linxMicrovixRepositoryBase) = (linxMicrovixRepositoryBase);
 
         public bool BulkInsertIntoTableRaw(LinxAPIParam jobParameter, IList<B2CConsultaEmpresas> records)
         {
             try
             {
-                var table = _linxMicrovixRepositoryBase.CreateSystemDataTable(jobParameter, new B2CConsultaEmpresas());
+                var table = _linxMicrovixRepositoryBase.CreateSystemDataTable(jobParameter.tableName, new B2CConsultaEmpresas());
 
                 for (int i = 0; i < records.Count(); i++)
                 {
@@ -28,7 +28,6 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                 }
 
                 _linxMicrovixRepositoryBase.BulkInsertIntoTableRaw(
-                    jobParameter: jobParameter,
                     dataTable: table,
                     dataTableRowsNumber: table.Rows.Count
                 );
@@ -56,7 +55,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 
                 string sql = $"SELECT CNPJ_EMP, TIMESTAMP FROM [LINX_MICROVIX_COMMERCE].[B2CCONSULTAEMPRESAS] WHERE CNPJ_EMP IN ({identificadores})";
 
-                return await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
+                return await _linxMicrovixRepositoryBase.GetRegistersExists(sql);
             }
             catch (Exception ex) when (ex is not InternalException && ex is not SQLCommandException)
             {

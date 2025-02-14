@@ -9,16 +9,16 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 {
     public class B2CConsultaVendedoresRepository : IB2CConsultaVendedoresRepository
     {
-        private readonly ILinxMicrovixRepositoryBase<B2CConsultaVendedores> _linxMicrovixRepositoryBase;
+        private readonly ILinxMicrovixAzureSQLRepositoryBase<B2CConsultaVendedores> _linxMicrovixRepositoryBase;
 
-        public B2CConsultaVendedoresRepository(ILinxMicrovixRepositoryBase<B2CConsultaVendedores> linxMicrovixRepositoryBase) =>
+        public B2CConsultaVendedoresRepository(ILinxMicrovixAzureSQLRepositoryBase<B2CConsultaVendedores> linxMicrovixRepositoryBase) =>
             (_linxMicrovixRepositoryBase) = (linxMicrovixRepositoryBase);
 
         public bool BulkInsertIntoTableRaw(LinxAPIParam jobParameter, IList<B2CConsultaVendedores> records)
         {
             try
             {
-                var table = _linxMicrovixRepositoryBase.CreateSystemDataTable(jobParameter, new B2CConsultaVendedores());
+                var table = _linxMicrovixRepositoryBase.CreateSystemDataTable(jobParameter.tableName, new B2CConsultaVendedores());
 
                 for (int i = 0; i < records.Count(); i++)
                 {
@@ -26,7 +26,6 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                 }
 
                 _linxMicrovixRepositoryBase.BulkInsertIntoTableRaw(
-                    jobParameter: jobParameter,
                     dataTable: table,
                     dataTableRowsNumber: table.Rows.Count
                 );
@@ -54,7 +53,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 
                 string sql = $"SELECT COD_VENDEDOR, TIMESTAMP FROM B2CCONSULTAVENDEDORES WHERE COD_VENDEDOR IN ({identificadores})";
 
-                return await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
+                return await _linxMicrovixRepositoryBase.GetRegistersExists(sql);
             }
             catch (Exception ex) when (ex is not InternalException && ex is not SQLCommandException)
             {
@@ -74,14 +73,14 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 
         public async Task<bool> InsertRecord(LinxAPIParam jobParameter, B2CConsultaVendedores? record)
         {
-            string? sql = $"INSERT INTO {jobParameter.tableName} " +
+            string? sql = $"INSERT INTO [untreated].[{jobParameter.tableName}]" +
                           "([lastupdateon], [cod_vendedor], [nome_vendedor], [comissao_produtos], [comissao_servicos], [tipo], [ativo], [comissionado], [timestamp], [portal]) " +
                           "Values " +
                           "(@lastupdateon, @cod_vendedor, @nome_vendedor, @comissao_produtos, @comissao_servicos, @tipo, @ativo, @comissionado, @timestamp, @portal)";
 
             try
             {
-                return await _linxMicrovixRepositoryBase.InsertRecord(jobParameter: jobParameter, sql: sql, record: record);
+                return await _linxMicrovixRepositoryBase.InsertRecord(jobParameter.tableName, sql: sql, record: record);
             }
             catch
             {

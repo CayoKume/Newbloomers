@@ -9,16 +9,16 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 {
     public class B2CConsultaPedidosItensRepository : IB2CConsultaPedidosItensRepository
     {
-        private readonly ILinxMicrovixRepositoryBase<B2CConsultaPedidosItens> _linxMicrovixRepositoryBase;
+        private readonly ILinxMicrovixAzureSQLRepositoryBase<B2CConsultaPedidosItens> _linxMicrovixRepositoryBase;
 
-        public B2CConsultaPedidosItensRepository(ILinxMicrovixRepositoryBase<B2CConsultaPedidosItens> linxMicrovixRepositoryBase) =>
+        public B2CConsultaPedidosItensRepository(ILinxMicrovixAzureSQLRepositoryBase<B2CConsultaPedidosItens> linxMicrovixRepositoryBase) =>
             _linxMicrovixRepositoryBase = linxMicrovixRepositoryBase;
 
         public bool BulkInsertIntoTableRaw(LinxAPIParam jobParameter, IList<B2CConsultaPedidosItens> records)
         {
             try
             {
-                var table = _linxMicrovixRepositoryBase.CreateSystemDataTable(jobParameter, new B2CConsultaPedidosItens());
+                var table = _linxMicrovixRepositoryBase.CreateSystemDataTable(jobParameter.tableName, new B2CConsultaPedidosItens());
 
                 for (int i = 0; i < records.Count(); i++)
                 {
@@ -26,7 +26,6 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                 }
 
                 _linxMicrovixRepositoryBase.BulkInsertIntoTableRaw(
-                    jobParameter: jobParameter,
                     dataTable: table,
                     dataTableRowsNumber: table.Rows.Count
                 );
@@ -64,7 +63,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                         }
 
                         string sql = $"SELECT ID_PEDIDO_ITEM, ID_PEDIDO, CODIGOPRODUTO FROM [linx_microvix_commerce].[B2CCONSULTAPEDIDOSITENS] WHERE ID_PEDIDO_ITEM IN ({identificadores})";
-                        var result = await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
+                        var result = await _linxMicrovixRepositoryBase.GetRegistersExists(sql);
                         list.AddRange(result);
                     }
 
@@ -85,7 +84,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                     }
 
                     string sql = $"SELECT ID_PEDIDO_ITEM, ID_PEDIDO, CODIGOPRODUTO FROM [linx_microvix_commerce].[B2CCONSULTAPEDIDOSITENS] WHERE ID_PEDIDO_ITEM IN ({identificadores})";
-                    var result = await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
+                    var result = await _linxMicrovixRepositoryBase.GetRegistersExists(sql);
                     list.AddRange(result);
 
                     return list;
@@ -116,7 +115,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 
             try
             {
-                return await _linxMicrovixRepositoryBase.InsertRecord(jobParameter: jobParameter, sql: sql, record: record);
+                return await _linxMicrovixRepositoryBase.InsertRecord(jobParameter.tableName, sql: sql, record: record);
             }
             catch
             {

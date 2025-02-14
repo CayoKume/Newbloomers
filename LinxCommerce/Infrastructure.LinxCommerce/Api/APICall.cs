@@ -1,4 +1,6 @@
-﻿using Domain.LinxCommerce.Entities.Parameters;
+﻿using Domain.IntegrationsCore.Entities.Enums;
+using Domain.IntegrationsCore.Exceptions;
+using Domain.LinxCommerce.Entities.Parameters;
 using Domain.LinxCommerce.Interfaces.Api;
 using System.Net;
 using System.Text;
@@ -32,22 +34,15 @@ namespace Infrastructure.LinxCommerce.Api
                 else
                     throw new Exception($"{response.StatusCode}");
             }
-            //catch (APICallErrorException)
-            //{
-            //    throw;
-            //}
             catch (Exception ex)
             {
-                throw;
-                //throw new APICallErrorException()
-                //{
-                //    project = jobParameter.projectName,
-                //    job = jobParameter.jobName,
-                //    method = "CallAPIAsync",
-                //    endpoint = jobParameter.jobName,
-                //    message = $"Error when querying endpoint: {jobParameter.jobName} on linxcommerce webservice",
-                //    exception = ex.Message
-                //};
+                throw new InternalException(
+                    stage: EnumStages.PostAsync,
+                    error: EnumError.Exception,
+                    level: EnumMessageLevel.Error,
+                    message: $"Error when querying endpoint: {jobParameter.jobName} on microvix webservice\n" +
+                                $"Request: {Newtonsoft.Json.JsonConvert.SerializeObject(objRequest)}"
+                );
             }
         }
 
@@ -71,22 +66,15 @@ namespace Infrastructure.LinxCommerce.Api
                 else
                     throw new Exception($"{response.StatusCode}");
             }
-            //catch (APICallErrorException)
-            //{
-            //    throw;
-            //}
             catch (Exception ex)
             {
-                throw;
-                //throw new APICallErrorException()
-                //{
-                //    project = jobParameter.projectName,
-                //    job = jobParameter.jobName,
-                //    method = "CallAPIAsync",
-                //    endpoint = jobParameter.jobName,
-                //    message = $"Error when querying endpoint: {jobParameter.jobName} on linxcommerce webservice",
-                //    exception = ex.Message
-                //};
+                throw new InternalException(
+                    stage: EnumStages.PostAsync,
+                    error: EnumError.Exception,
+                    level: EnumMessageLevel.Error,
+                    message: $"Error when querying endpoint: {jobParameter.jobName} on microvix webservice\n" +
+                                $"Request: {identifier}"
+                );
             }
         }
 
@@ -110,49 +98,26 @@ namespace Infrastructure.LinxCommerce.Api
                 else
                     throw new Exception($"{response.StatusCode}");
             }
-            //catch (APICallErrorException)
-            //{
-            //    throw;
-            //}
             catch (Exception ex)
             {
-                throw;
-                //throw new APICallErrorException()
-                //{
-                //    project = jobParameter.projectName,
-                //    job = jobParameter.jobName,
-                //    method = "CallAPIAsync",
-                //    endpoint = jobParameter.jobName,
-                //    message = $"Error when querying endpoint: {jobParameter.jobName} on linxcommerce webservice",
-                //    exception = ex.Message
-                //};
+                throw new InternalException(
+                    stage: EnumStages.PostAsync,
+                    error: EnumError.Exception,
+                    level: EnumMessageLevel.Error,
+                    message: $"Error when querying endpoint: {jobParameter.jobName} on microvix webservice\n" +
+                                $"Request: {identifier}"
+                );
             }
         }
 
         private HttpClient CreateClient(LinxCommerceJobParameter? jobParameter, string? route)
         {
-            try
-            {
-                var plainTextBytes = System.Text.Encoding.UTF8.GetBytes($"{jobParameter.userAuthentication}:{jobParameter.keyAuthorization}");
-                var client = _httpClientFactory.CreateClient("LinxCommerceAPI");
-                client.DefaultRequestHeaders.Add("ContentType", "application/json");
-                client.DefaultRequestHeaders.Add("Authorization", "Basic " + System.Convert.ToBase64String(plainTextBytes));
+            var plainTextBytes = System.Text.Encoding.UTF8.GetBytes($"{jobParameter.userAuthentication}:{jobParameter.keyAuthorization}");
+            var client = _httpClientFactory.CreateClient("LinxCommerceAPI");
+            client.DefaultRequestHeaders.Add("ContentType", "application/json");
+            client.DefaultRequestHeaders.Add("Authorization", "Basic " + System.Convert.ToBase64String(plainTextBytes));
 
-                return client;
-            }
-            catch (Exception ex)
-            {
-                throw;
-                //throw new APICallErrorException()
-                //{
-                //    project = jobParameter.projectName,
-                //    job = jobParameter.jobName,
-                //    method = "CreateClient",
-                //    endpoint = jobParameter.jobName,
-                //    message = $"Error when creating request to query the endpoint: {route} on linxcommerce webservice",
-                //    exception = ex.Message
-                //};
-            }
+            return client;
         }
     }
 }

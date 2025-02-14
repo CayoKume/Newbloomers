@@ -94,5 +94,8 @@
         LinxVendedores = 724,
         LinxXMLDocumentos = 725,
         LinxSetores = 726,
+
+        LinxCommerceSalesRepresentative = 912,
+        LinxCommerceCustomers = 916
     }
 }

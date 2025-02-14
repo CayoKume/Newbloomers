@@ -8,16 +8,16 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 {
     public class LinxB2CPedidosRepository : ILinxB2CPedidosRepository
     {
-        private readonly ILinxMicrovixRepositoryBase<LinxB2CPedidos> _linxMicrovixRepositoryBase;
+        private readonly ILinxMicrovixAzureSQLRepositoryBase<LinxB2CPedidos> _linxMicrovixRepositoryBase;
 
-        public LinxB2CPedidosRepository(ILinxMicrovixRepositoryBase<LinxB2CPedidos> linxMicrovixRepositoryBase) =>
+        public LinxB2CPedidosRepository(ILinxMicrovixAzureSQLRepositoryBase<LinxB2CPedidos> linxMicrovixRepositoryBase) =>
             (_linxMicrovixRepositoryBase) = (linxMicrovixRepositoryBase);
 
         public bool BulkInsertIntoTableRaw(LinxAPIParam jobParameter, IList<LinxB2CPedidos> records)
         {
             try
             {
-                var table = _linxMicrovixRepositoryBase.CreateSystemDataTable(jobParameter, new LinxB2CPedidos());
+                var table = _linxMicrovixRepositoryBase.CreateSystemDataTable(jobParameter.tableName, new LinxB2CPedidos());
 
                 for (int i = 0; i < records.Count(); i++)
                 {
@@ -29,7 +29,6 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
                 }
 
                 _linxMicrovixRepositoryBase.BulkInsertIntoTableRaw(
-                    jobParameter: jobParameter,
                     dataTable: table,
                     dataTableRowsNumber: table.Rows.Count
                 );
@@ -67,7 +66,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
                         }
 
                         string sql = $"SELECT id_pedido, cod_cliente_erp, cod_cliente_b2c, order_id, TIMESTAMP FROM [linx_microvix_erp].[LinxB2CPedidos] WHERE id_pedido IN ({identificadores})";
-                        var result = await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
+                        var result = await _linxMicrovixRepositoryBase.GetRegistersExists(sql);
                         list.AddRange(result);
                     }
 
@@ -88,7 +87,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
                     }
 
                     string sql = $"SELECT id_pedido, cod_cliente_erp, cod_cliente_b2c, order_id, TIMESTAMP FROM [linx_microvix_erp].[LinxB2CPedidos] WHERE id_pedido IN ({identificadores})";
-                    var result = await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
+                    var result = await _linxMicrovixRepositoryBase.GetRegistersExists(sql);
                     list.AddRange(result);
 
                     return list;
@@ -112,7 +111,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
         public async Task<bool> InsertRecord(LinxAPIParam jobParameter, LinxB2CPedidos? record)
         {
-            string? sql = @$"INSERT INTO {jobParameter.tableName} 
+            string? sql = @$"INSERT INTO [untreated].[{jobParameter.tableName}]
                             ([lastupdateon],[id_pedido],[dt_pedido],[cod_cliente_erp],[cod_cliente_b2c],[vl_frete],[forma_pgto],[plano_pagamento],[anotacao],[taxa_impressao],[finalizado],
                              [valor_frete_gratis],[tipo_frete],[id_status],[cod_transportador],[tipo_cobranca_frete],[ativo],[empresa],[id_tabela_preco],[valor_credito],[cod_vendedor],
                              [timestamp],[dt_insert],[dt_disponivel_faturamento],[mensagem_falha_faturamento],[portal],[id_tipo_b2c],[ecommerce_origem],[marketplace_loja],[order_id])
@@ -123,7 +122,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
             try
             {
-                return await _linxMicrovixRepositoryBase.InsertRecord(jobParameter: jobParameter, sql: sql, record: record);
+                return await _linxMicrovixRepositoryBase.InsertRecord(jobParameter.tableName, sql: sql, record: record);
             }
             catch
             {

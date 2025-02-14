@@ -19,7 +19,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
         private readonly IAPICall _apiCall;
         private readonly ILoggerService _logger;
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
-        private readonly ILinxMicrovixRepositoryBase<B2CConsultaPedidosItens> _linxMicrovixRepositoryBase;
+        private readonly ILinxMicrovixAzureSQLRepositoryBase<B2CConsultaPedidosItens> _linxMicrovixRepositoryBase;
         private readonly IB2CConsultaPedidosItensRepository _b2cConsultaPedidosItensRepository;
         private static IB2CConsultaPedidosItensServiceCache _b2cConsultaPedidosItensCache { get; set; } = new B2CConsultaPedidosItensServiceCache();
 
@@ -27,7 +27,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
             IAPICall apiCall,
             ILoggerService logger,
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
-            ILinxMicrovixRepositoryBase<B2CConsultaPedidosItens> linxMicrovixRepositoryBase,
+            ILinxMicrovixAzureSQLRepositoryBase<B2CConsultaPedidosItens> linxMicrovixRepositoryBase,
             IB2CConsultaPedidosItensRepository b2cConsultaPedidosItensRepository
         )
         {
@@ -102,7 +102,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                    .Clear()
                    .AddLog(EnumJob.B2CConsultaPedidosItens);
 
-                string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter);
+                string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter.parametersInterval, jobParameter.tableName, jobParameter.jobName);
 
                 var body = _linxMicrovixServiceBase.BuildBodyRequest(
                     parametersList: parameters.Replace("[0]", "0").Replace("[id_pedido]", identificador),
@@ -121,7 +121,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                         await _b2cConsultaPedidosItensRepository.InsertRecord(record: record, jobParameter: jobParameter);
                     }
 
-                    await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter: jobParameter);
+                    await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
                 }
             }
             catch (SQLCommandException ex)
@@ -175,10 +175,11 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                    .Clear()
                    .AddLog(EnumJob.B2CConsultaPedidosItens);
 
-                string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter);
+                string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter.parametersInterval, jobParameter.tableName, jobParameter.jobName);
 
                 string? timestamp = await _linxMicrovixRepositoryBase.GetLast7DaysMinTimestamp(
-                    jobParameter: jobParameter,
+                    jobParameter.schema,
+                    jobParameter.tableName,
                     columnDate: "lastupdateon"
                 );
 
@@ -215,7 +216,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                             }
                         }
 
-                        await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter: jobParameter);
+                        await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
 
                         _logger.AddMessage(
                             $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"
@@ -227,7 +228,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                         );
                 }
 
-                await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter: jobParameter);
+                await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
             }
             catch (SQLCommandException ex)
             {

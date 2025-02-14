@@ -1,8 +1,10 @@
-﻿namespace Domain.LinxCommerce.Entities.Order
+﻿using Domain.IntegrationsCore.Extensions;
+
+namespace Domain.LinxCommerce.Entities.Order
 {
     public class Order
     {
-        class Root
+        public class Root
         {
             public string? OrderID { get; set; }
             public string? OrderNumber { get; set; }
@@ -23,47 +25,66 @@
             public decimal? TotalDue { get; set; }
             public decimal? TotalPaid { get; set; }
             public decimal? TotalRefunded { get; set; }
-            public string? PaymentDate { get; set; }
+            public DateTime? PaymentDate { get; set; }
             public string? PaymentStatus { get; set; }
-            public string? ShipmentDate { get; set; }
+            public DateTime? ShipmentDate { get; set; }
             public string? ShipmentStatus { get; set; }
             public string? GlobalStatus { get; set; }
             public string? DeliveryPostalCode { get; set; }
             public string? CreatedChannel { get; set; }
             public int? TrafficSourceID { get; set; }
             public int? OrderStatusID { get; set; }
-            public List<OrderItem> Items { get; set; }
-            public List<OrderTag> Tags { get; set; }
-            public List<OrderAddress> Addresses { get; set; }
-            public List<OrderPaymentMethod> PaymentMethods { get; set; }
-            public List<OrderDeliveryMethod> DeliveryMethods { get; set; }
-            public List<OrderDiscount> Discounts { get; set; }
-            public List<OrderShipment> Shipments { get; set; }
-            public string? CreatedDate { get; set; }
+            public DateTime? CreatedDate { get; set; }
             public string? CreatedBy { get; set; }
-            public string? ModifiedDate { get; set; }
+            public DateTime? ModifiedDate { get; set; }
             public string? ModifiedBy { get; set; }
             public string? Remarks { get; set; }
             public decimal? SellerCommissionAmount { get; set; }
             public decimal? CommissionAmount { get; set; }
-            public OrderInvoice OrderInvoice { get; set; }
             public string? OrderGroupID { get; set; }
             public string? OrderGroupNumber { get; set; }
             public bool? HasConflicts { get; set; }
-            public string? AcquiredDate { get; set; }
+            public DateTime? AcquiredDate { get; set; }
             public bool? HasHubOrderWithoutShipmentConflict { get; set; }
             public string? CustomerType { get; set; }
-            public string? CancelledDate { get; set; }
+            public DateTime? CancelledDate { get; set; }
             public string? WebSiteName { get; set; }
             public string? CustomerName { get; set; }
             public string? CustomerEmail { get; set; }
             public string? CustomerGender { get; set; }
-            public string? CustomerBirthDate { get; set; }
+            public DateTime? CustomerBirthDate { get; set; }
             public string? CustomerPhone { get; set; }
             public string? CustomerCPF { get; set; }
             public string? CustomerCNPJ { get; set; }
             public string? CustomerTradingName { get; set; }
             public string? CustomerSiteTaxPayer { get; set; }
+
+            [SkipProperty]
+            public List<OrderItem> Items { get; set; }
+
+            [SkipProperty]
+            public List<OrderTag> Tags { get; set; }
+            
+            [SkipProperty]
+            public List<OrderAddress> Addresses { get; set; }
+            
+            [SkipProperty]
+            public List<OrderPaymentMethod> PaymentMethods { get; set; }
+            
+            [SkipProperty]
+            public List<OrderDeliveryMethod> DeliveryMethods { get; set; }
+            
+            [SkipProperty]
+            public List<OrderDiscount> Discounts { get; set; }
+            
+            [SkipProperty]
+            public List<OrderShipment> Shipments { get; set; }
+            
+            [SkipProperty]
+            public OrderInvoice OrderInvoice { get; set; }
+
+            [SkipProperty]
+            public Dictionary<int, string> Responses { get; set; } = new Dictionary<int, string>();
         }
     }
 }

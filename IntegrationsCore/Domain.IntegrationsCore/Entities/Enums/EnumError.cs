@@ -20,5 +20,7 @@
         CreateClientException = 12,
 
         SqlInsert = 13,
+
+        Compare = 14,
     }
 }

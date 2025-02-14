@@ -2,6 +2,7 @@
 using Domain.LinxCommerce.Entities.Order;
 using Domain.LinxCommerce.Entities.Parameters;
 using Domain.LinxCommerce.Entities.Responses;
+using Domain.LinxCommerce.Entities.SalesRepresentative;
 using Domain.LinxCommerce.Interfaces.Api;
 using Domain.LinxCommerce.Interfaces.Repositorys.Order;
 
@@ -11,10 +12,12 @@ namespace Application.LinxCommerce.Services
     {
         private readonly IAPICall _apiCall;
         private readonly IOrderStatusRepository _orderStatusRepository;
-        //private readonly IOrderRepository
+        private readonly IOrderRepository _orderRepository;
+        private static String _orderStatusCache = String.Empty;
+        private static List<Order.Root> _ordersDboList = new List<Order.Root>();
 
-        public OrderService(IAPICall apiCall, IOrderStatusRepository orderStatusRepository) =>
-            (_apiCall, _orderStatusRepository) = (apiCall, orderStatusRepository);
+        public OrderService(IAPICall apiCall, IOrderRepository orderRepository, IOrderStatusRepository orderStatusRepository) =>
+            (_apiCall, _orderRepository, _orderStatusRepository) = (apiCall, orderRepository, orderStatusRepository);
 
         public async Task<bool?> GetOrder(LinxCommerceJobParameter jobParameter, string? orderId)
         {
@@ -118,7 +121,8 @@ namespace Application.LinxCommerce.Services
                 var objectRequest = new
                 {
                     Page = new { PageIndex = 0, PageSize = 0 },
-                    Where = $"(ModifiedDate>=\"{DateTime.Now.AddDays(-7).Date:yyyy-MM-dd}T00:00:00\" && ModifiedDate<=\"{DateTime.Now.Date:yyyy-MM-dd}T23:59:59\")",
+                    //Where = $"(ModifiedDate>=\"{DateTime.Now.AddDays(-1).Date:yyyy-MM-dd}T00:00:00\" && ModifiedDate<=\"{DateTime.Now.Date:yyyy-MM-dd}T23:59:59\")",
+                    Where = $"(ModifiedDate>=\"{DateTime.Now.Date:yyyy-MM-dd}T00:00:00\" && ModifiedDate<=\"{DateTime.Now.Date:yyyy-MM-dd}T23:59:59\")",
                     WhereMetadata = "",
                     OrderBy = "",
                 };
@@ -129,7 +133,23 @@ namespace Application.LinxCommerce.Services
                     route: "/v1/Sales/API.svc/web/SearchOrders"
                 );
 
-                var order = Newtonsoft.Json.JsonConvert.DeserializeObject<Order>(response);
+                var ordersAPIList = new List<Order.Root>();
+                var ordersIDs = Newtonsoft.Json.JsonConvert.DeserializeObject<SearchOrder.Root>(response); 
+                
+                foreach (var orderID in ordersIDs.Result)
+                {
+                    var getSaleRepresentativeResponse = await _apiCall.PostRequest(
+                        jobParameter: jobParameter,
+                        stringIdentifier: orderID.OrderID,
+                        route: "/v1/Sales/API.svc/web/GetOrder"
+                    );
+
+                    var order = Newtonsoft.Json.JsonConvert.DeserializeObject<Order.Root>(getSaleRepresentativeResponse);
+
+                    ordersAPIList.Add(order);
+                }
+
+                _orderRepository.BulkInsertIntoTableRaw(jobParameter, ordersAPIList);
 
                 return "true";
             }
@@ -158,7 +178,7 @@ namespace Application.LinxCommerce.Services
                     Page = new { PageIndex = 0, PageSize = 0 },
                     Where = $"",
                     WhereMetadata = "",
-                    OrderBy = "",
+                    OrderBy = "OrderStatusID",
                 };
 
                 var response = await _apiCall.PostRequest(
@@ -167,9 +187,14 @@ namespace Application.LinxCommerce.Services
                     route: "/v1/Sales/API.svc/web/SearchOrderStatus"
                 );
 
-                var orderStatus = Newtonsoft.Json.JsonConvert.DeserializeObject<SearchOrderStatus.Root>(response);
+                if (_orderStatusCache != response)
+                {
+                    _orderStatusCache = response;
 
-                _orderStatusRepository.BulkInsertIntoTableRaw(jobParameter: jobParameter, registros: orderStatus);
+                    var orderStatus = Newtonsoft.Json.JsonConvert.DeserializeObject<SearchOrderStatus.Root>(response);
+
+                    _orderStatusRepository.BulkInsertIntoTableRaw(jobParameter: jobParameter, registros: orderStatus);
+                }
 
                 return "true";
             }

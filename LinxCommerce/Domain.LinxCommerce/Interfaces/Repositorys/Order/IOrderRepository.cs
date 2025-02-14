@@ -5,8 +5,7 @@ namespace Domain.LinxCommerce.Interfaces.Repositorys.Order
 {
     public interface IOrderRepository
     {
-        public bool BulkInsertIntoTableRaw(LinxCommerceJobParameter jobParameter, List<Domain.LinxCommerce.Entities.Order.Order> registros, string? database);
-        public Task<List<Domain.LinxCommerce.Entities.Order.Order>> GetRegistersExists(List<string> ordersIds);
-        public DataTable CreateSystemDataTable<TEntity>(LinxCommerceJobParameter jobParameter, TEntity entity);
+        public bool BulkInsertIntoTableRaw(LinxCommerceJobParameter jobParameter, List<Domain.LinxCommerce.Entities.Order.Order.Root> registros);
+        public Task<List<Domain.LinxCommerce.Entities.Order.Order.Root>> GetRegistersExists(List<string> guids);
     }
 }

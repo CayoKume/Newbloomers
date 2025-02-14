@@ -1,4 +1,6 @@
-﻿namespace Domain.LinxCommerce.Entities.Order
+﻿using Domain.IntegrationsCore.Extensions;
+
+namespace Domain.LinxCommerce.Entities.Order
 {
     public class OrderPaymentMethod
     {
@@ -18,10 +20,12 @@
         public string? Installments { get; set; }
         public string? InstallmentAmount { get; set; }
         public string? TaxAmount { get; set; }
-        public string? PaymentDate { get; set; }
+        public DateTime? PaymentDate { get; set; }
+        public DateTime? CaptureDate { get; set; }
+        public DateTime? AcquiredDate { get; set; }
+        public DateTime? PaymentCancelledDate { get; set; }
+
+        [SkipProperty]
         public OrderPaymentInfo PaymentInfo { get; set; } = new OrderPaymentInfo();
-        public string? CaptureDate { get; set; }
-        public string? AcquiredDate { get; set; }
-        public string? PaymentCancelledDate { get; set; }
     }
 }

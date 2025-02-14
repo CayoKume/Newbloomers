@@ -139,6 +139,11 @@ namespace Application.IntegrationsCore.Services
         {
             await _logRepository.LogInsert(this.log);
         }
+
+        public Guid? GetExecutionGuid()
+        {
+            return this.log.Execution;
+        }
     }
 }
 

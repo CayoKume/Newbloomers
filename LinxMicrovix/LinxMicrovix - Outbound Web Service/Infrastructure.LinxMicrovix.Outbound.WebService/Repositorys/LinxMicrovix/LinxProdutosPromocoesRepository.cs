@@ -8,16 +8,16 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 {
     public class LinxProdutosPromocoesRepository : ILinxProdutosPromocoesRepository
     {
-        private readonly ILinxMicrovixRepositoryBase<LinxProdutosPromocoes> _linxMicrovixRepositoryBase;
+        private readonly ILinxMicrovixAzureSQLRepositoryBase<LinxProdutosPromocoes> _linxMicrovixRepositoryBase;
 
-        public LinxProdutosPromocoesRepository(ILinxMicrovixRepositoryBase<LinxProdutosPromocoes> linxMicrovixRepositoryBase) =>
+        public LinxProdutosPromocoesRepository(ILinxMicrovixAzureSQLRepositoryBase<LinxProdutosPromocoes> linxMicrovixRepositoryBase) =>
             (_linxMicrovixRepositoryBase) = (linxMicrovixRepositoryBase);
 
         public bool BulkInsertIntoTableRaw(LinxAPIParam jobParameter, IList<LinxProdutosPromocoes> records)
         {
             try
             {
-                var table = _linxMicrovixRepositoryBase.CreateSystemDataTable(jobParameter, new LinxProdutosPromocoes());
+                var table = _linxMicrovixRepositoryBase.CreateSystemDataTable(jobParameter.tableName, new LinxProdutosPromocoes());
 
                 for (int i = 0; i < records.Count(); i++)
                 {
@@ -27,7 +27,6 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
                 }
 
                 _linxMicrovixRepositoryBase.BulkInsertIntoTableRaw(
-                    jobParameter: jobParameter,
                     dataTable: table,
                     dataTableRowsNumber: table.Rows.Count
                 );
@@ -65,7 +64,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
                         }
 
                         string sql = $"SELECT cnpj_emp, cod_produto, id_campanha FROM [linx_microvix_erp].[LinxProdutosPromocoes] WHERE cod_produto IN ({identificadores})";
-                        var result = await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
+                        var result = await _linxMicrovixRepositoryBase.GetRegistersExists(sql);
                         list.AddRange(result);
                     }
 
@@ -86,7 +85,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
                     }
 
                     string sql = $"SELECT cnpj_emp, cod_produto, id_campanha FROM [linx_microvix_erp].[LinxProdutosPromocoes] WHERE cod_produto IN ({identificadores})";
-                    var result = await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
+                    var result = await _linxMicrovixRepositoryBase.GetRegistersExists(sql);
                     list.AddRange(result);
 
                     return list;
@@ -110,7 +109,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
         public async Task<bool> InsertRecord(LinxAPIParam jobParameter, LinxProdutosPromocoes? record)
         {
-            string? sql = @$"INSERT INTO {jobParameter.tableName} 
+            string? sql = @$"INSERT INTO [untreated].[{jobParameter.tableName}]
                             ([lastupdateon],[portal],[cnpj_emp],[cod_produto],[preco_promocao],[data_inicio_promocao],[data_termino_promocao],[data_cadastro_promocao],[promocao_ativa],
                              [id_campanha],[nome_campanha],[promocao_opcional],[custo_total_campanha])
                             Values
@@ -119,7 +118,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
             try
             {
-                return await _linxMicrovixRepositoryBase.InsertRecord(jobParameter: jobParameter, sql: sql, record: record);
+                return await _linxMicrovixRepositoryBase.InsertRecord(jobParameter.tableName, sql: sql, record: record);
             }
             catch
             {

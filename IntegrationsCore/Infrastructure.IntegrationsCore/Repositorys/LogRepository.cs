@@ -29,9 +29,11 @@ namespace Infrastructure.IntegrationsCore.Repositorys
 
                     foreach (var record in log.Records)
                     {
+                        var text = record.RegText.Length > 8000 ? record.RegText.Substring(0, 8000) : record.RegText;
+
                         await conn.ExecuteAsync(
                             sql: @$"INSERT INTO [auditing].[Records] ([FieldKeyValue], [RecordText], [Execution])
-                                   VALUES ('{record.FieldKeyValue}', '{record.RegText}', '{log.Execution}')",
+                                   VALUES ('{record.FieldKeyValue}', '{text}', '{log.Execution}')",
                             commandTimeout: 360
                         );
                     }

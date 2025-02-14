@@ -66,10 +66,11 @@ namespace Infrastructure.LinxCommerce.Repository.Base
         {
             try
             {
-                using (var conn = _sqlServerConnection.GetDbConnection(databaseName))
+                using (var conn = _sqlServerConnection.GetDbConnection())
                 {
                     using var bulkCopy = new SqlBulkCopy(conn);
                     bulkCopy.DestinationTableName = $"[untreated].[{dataTableName}]";
+                    //bulkCopy.DestinationTableName = $"[linx_commerce].[{dataTableName}]";
                     bulkCopy.BatchSize = dataTableRowsNumber;
                     bulkCopy.BulkCopyTimeout = 360;
                     foreach (DataColumn c in dataTable.Columns)
@@ -97,7 +98,7 @@ namespace Infrastructure.LinxCommerce.Repository.Base
         {
             try
             {
-                using (var conn = _sqlServerConnection.GetDbConnection(jobParameter.databaseName))
+                using (var conn = _sqlServerConnection.GetDbConnection())
                 {
                     var result = await conn.ExecuteAsync($"P_{jobParameter.tableName}_Sync", commandType: CommandType.StoredProcedure, commandTimeout: 2700);
 
@@ -123,7 +124,7 @@ namespace Infrastructure.LinxCommerce.Repository.Base
         {
             try
             {
-                using (var conn = _sqlServerConnection.GetDbConnection(jobParameter.databaseName))
+                using (var conn = _sqlServerConnection.GetDbConnection())
                 {
                     var result = await conn.ExecuteAsync(sql: sql, commandTimeout: 360);
 
@@ -160,7 +161,7 @@ namespace Infrastructure.LinxCommerce.Repository.Base
 
             try
             {
-                using (var conn = _sqlServerConnection.GetDbConnection(jobParameter.databaseName))
+                using (var conn = _sqlServerConnection.GetDbConnection())
                 {
                     return await conn.QueryFirstAsync<string>(sql: sql, commandTimeout: 360);
                 }
@@ -190,7 +191,7 @@ namespace Infrastructure.LinxCommerce.Repository.Base
         {
             try
             {
-                using (var conn = _sqlServerConnection.GetDbConnection(jobParameter.databaseName))
+                using (var conn = _sqlServerConnection.GetDbConnection())
                 {
                     var result = await conn.ExecuteAsync(sql: sql, param: record, commandTimeout: 360);
 

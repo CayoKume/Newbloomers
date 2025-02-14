@@ -4,9 +4,9 @@ namespace Application.LinxCommerce.Interfaces
 {
     public interface ISalesRepresentativeService
     {
-        public Task<string?> DeleteSalesRepresentative(int salesRepresentativeId);
-        public Task<string?> GetSalesRepresentative(LinxCommerceJobParameter jobParameter, int? salesRepresentativeId);
-        public Task<string?> SaveSalesRepresentative();
-        public Task<string?> SearchSalesRepresentative(LinxCommerceJobParameter jobParameter);
+        public Task<bool?> DeleteSalesRepresentative(int salesRepresentativeId);
+        public Task<bool?> GetSalesRepresentative(LinxCommerceJobParameter jobParameter, int? salesRepresentativeId);
+        public Task<bool?> SaveSalesRepresentative();
+        public Task<bool?> SearchSalesRepresentative(LinxCommerceJobParameter jobParameter);
     }
 }

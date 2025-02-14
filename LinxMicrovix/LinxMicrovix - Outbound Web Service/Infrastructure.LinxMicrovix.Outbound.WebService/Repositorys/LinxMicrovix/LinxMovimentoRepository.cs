@@ -8,16 +8,16 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 {
     public class LinxMovimentoRepository : ILinxMovimentoRepository
     {
-        private readonly ILinxMicrovixRepositoryBase<LinxMovimento> _linxMicrovixRepositoryBase;
+        private readonly ILinxMicrovixAzureSQLRepositoryBase<LinxMovimento> _linxMicrovixRepositoryBase;
 
-        public LinxMovimentoRepository(ILinxMicrovixRepositoryBase<LinxMovimento> linxMicrovixRepositoryBase) =>
+        public LinxMovimentoRepository(ILinxMicrovixAzureSQLRepositoryBase<LinxMovimento> linxMicrovixRepositoryBase) =>
             (_linxMicrovixRepositoryBase) = (linxMicrovixRepositoryBase);
 
         public bool BulkInsertIntoTableRaw(LinxAPIParam jobParameter, IList<LinxMovimento> records)
         {
             try
             {
-                var table = _linxMicrovixRepositoryBase.CreateSystemDataTable(jobParameter, new LinxMovimento());
+                var table = _linxMicrovixRepositoryBase.CreateSystemDataTable(jobParameter.tableName, new LinxMovimento());
 
                 for (int i = 0; i < records.Count(); i++)
                 {
@@ -41,7 +41,6 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
                 }
 
                _linxMicrovixRepositoryBase.BulkInsertIntoTableRaw(
-                    jobParameter: jobParameter,
                     dataTable: table,
                     dataTableRowsNumber: table.Rows.Count
                 );
@@ -79,7 +78,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
                         }
 
                         string sql = $"SELECT cnpj_emp, documento, codigo_cliente, cod_produto, TIMESTAMP FROM [linx_microvix_erp].[LinxMovimento] WHERE documento IN ({identificadores})";
-                        var result = await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
+                        var result = await _linxMicrovixRepositoryBase.GetRegistersExists(sql);
                         list.AddRange(result);
                     }
 
@@ -100,7 +99,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
                     }
 
                     string sql = $"SELECT cnpj_emp, documento, codigo_cliente, cod_produto, TIMESTAMP FROM [linx_microvix_erp].[LinxMovimento] WHERE documento IN ({identificadores})";
-                    var result = await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
+                    var result = await _linxMicrovixRepositoryBase.GetRegistersExists(sql);
                     list.AddRange(result);
 
                     return list;
@@ -151,7 +150,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
             try
             {
-                return await _linxMicrovixRepositoryBase.InsertRecord(jobParameter: jobParameter, sql: sql, record: record);
+                return await _linxMicrovixRepositoryBase.InsertRecord(jobParameter.tableName, sql: sql, record: record);
             }
             catch
             {

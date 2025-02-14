@@ -13,18 +13,21 @@ namespace HangfireDashboard.UI.Controllers.LinxCommerce
         private readonly List<LinxMethods>? _methods;
 
         private readonly IConfiguration _configuration;
+        private readonly ICustomerService _customerService;
         private readonly ISalesRepresentativeService _salesRepresentativeService;
         private readonly IOrderService _orderService;
         private readonly ISKUService _skuService;
 
         public LinxCommerceController(
             IConfiguration configuration,
+            ICustomerService customerService,
             IOrderService orderService,
             ISalesRepresentativeService salesRepresentativeService,
             ISKUService skuService
         )
         {
             _configuration = configuration;
+            _customerService = customerService;
             _skuService = skuService;
             _orderService = orderService;
             _salesRepresentativeService = salesRepresentativeService;
@@ -153,7 +156,35 @@ namespace HangfireDashboard.UI.Controllers.LinxCommerce
                     )
                 );
 
-                if (result == "true")
+                if (result == true)
+                    return BadRequest($"Unable to find records on endpoint.");
+                else
+                    return Ok($"Records integrated successfully.");
+            }
+            catch (Exception ex)
+            {
+                Response.StatusCode = 400;
+                return Content($"Unable to integrate the records.\nError: {ex.Message}");
+            }
+        }
+
+        [HttpPost("SearchCustomer")]
+        public async Task<ActionResult> SearchCustomer()
+        {
+            try
+            {
+                var method = _methods
+                    .Where(m => m.MethodName == "SearchCustomer")
+                    .FirstOrDefault();
+
+                var result = await _customerService.SearchCustomer(
+                    _linxCommerceJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: "Customer"
+                    )
+                );
+
+                if (result == true)
                     return BadRequest($"Unable to find records on endpoint.");
                 else
                     return Ok($"Records integrated successfully.");

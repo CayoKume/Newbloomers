@@ -1,11 +1,13 @@
 ﻿using Application.LinxCommerce.Interfaces;
 using Application.LinxCommerce.Services;
 using Domain.LinxCommerce.Interfaces.Api;
+using Domain.LinxCommerce.Interfaces.Repositorys;
 using Domain.LinxCommerce.Interfaces.Repositorys.Base;
 using Domain.LinxCommerce.Interfaces.Repositorys.Order;
 using Domain.LinxCommerce.Interfaces.Repositorys.SalesRepresentative;
 using Domain.LinxCommerce.Interfaces.Repositorys.SKU;
 using Infrastructure.LinxCommerce.Api;
+using Infrastructure.LinxCommerce.Repository;
 using Infrastructure.LinxCommerce.Repository.Base;
 using Infrastructure.LinxCommerce.Repositorys.Order;
 using Infrastructure.LinxCommerce.Repositorys.SalesRepresentative;
@@ -27,6 +29,7 @@ namespace Infrastructure.LinxCommerce.DependencyInjection
             });
 
             services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IOrderStatusRepository, OrderStatusRepository>();
 
             //services.AddScoped<IProductService<SearchProductResponse.Root>, ProductService<SearchProductResponse.Root>>();
@@ -37,6 +40,9 @@ namespace Infrastructure.LinxCommerce.DependencyInjection
 
             services.AddScoped<ISalesRepresentativeService, SalesRepresentativeService>();
             services.AddScoped<ISalesRepresentativeRepository, SalesRepresentativeRepository>();
+
+            services.AddScoped<ICustomerService, CustomerService>();
+            services.AddScoped<ICustomerRepository, CustomerRepository>();
 
             return services;
         }

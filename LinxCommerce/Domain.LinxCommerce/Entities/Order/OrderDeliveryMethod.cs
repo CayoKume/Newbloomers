@@ -17,8 +17,6 @@
         public string ScheduleShiftID { get; set; }
         public string ScheduleDisplayName { get; set; }
         public string ScheduleTax { get; set; }
-        //public ScheduleStartTime ScheduleStartTime { get; set; }
-        //public ScheduleEndTime ScheduleEndTime { get; set; }
         public string ScheduleDate { get; set; }
         public string DeliveryMethodAlias { get; set; }
         public string PointOfSaleID { get; set; }
@@ -29,7 +27,6 @@
         public string WarehouseID { get; set; }
         public string WarehouseIntegrationID { get; set; }
         public string DockID { get; set; }
-        //public List<ExtendedProperty> ExtendedProperties { get; set; }
         public string CarrierName { get; set; }
         public string DeliveryEstimatedDate { get; set; }
     }

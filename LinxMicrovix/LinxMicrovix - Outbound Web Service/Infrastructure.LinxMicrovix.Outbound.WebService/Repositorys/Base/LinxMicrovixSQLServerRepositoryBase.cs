@@ -2,7 +2,6 @@
 using Domain.IntegrationsCore.Entities.Enums;
 using Domain.IntegrationsCore.Exceptions;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.Base;
-using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
 using Infrastructure.IntegrationsCore.Connections.MySQL;
 using Infrastructure.IntegrationsCore.Connections.PostgreSQL;
@@ -10,11 +9,12 @@ using Infrastructure.IntegrationsCore.Connections.SQLServer;
 using Microsoft.Extensions.Configuration;
 using System.ComponentModel;
 using System.Data;
+using System.Data.Common;
 using System.Data.SqlClient;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
 {
-    public class LinxMicrovixRepositoryBase<TEntity> : ILinxMicrovixRepositoryBase<TEntity> where TEntity : class, new()
+    public class LinxMicrovixSQLServerRepositoryBase<TEntity> : ILinxMicrovixSQLServerRepositoryBase<TEntity> where TEntity : class, new()
     {
         private readonly string? _parametersTableName;
 
@@ -23,7 +23,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
         private readonly IMySQLConnection? _mySQLConnection;
         private readonly IPostgreSQLConnection? _postgreSQLConnection;
 
-        public LinxMicrovixRepositoryBase(
+        public LinxMicrovixSQLServerRepositoryBase(
             ISQLServerConnection sqlServerConnection,
             IConfiguration configuration
         )
@@ -36,7 +36,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
                                     .Value;
         }
 
-        public LinxMicrovixRepositoryBase(
+        public LinxMicrovixSQLServerRepositoryBase(
             IMySQLConnection mySQLConnection,
             IConfiguration configuration
         )
@@ -49,7 +49,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
                                     .Value;
         }
 
-        public LinxMicrovixRepositoryBase(
+        public LinxMicrovixSQLServerRepositoryBase(
             IPostgreSQLConnection postgreSQLConnection,
             IConfiguration configuration
         )
@@ -62,13 +62,20 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
                                     .Value;
         }
 
-        public async Task<bool> CallDbProcMerge(LinxAPIParam jobParameter)
+        /// <summary>
+        /// Call Procedure from SQL Server Database
+        /// </summary>
+        /// <param name="databaseName"></param>
+        /// <param name="tableName"></param>
+        /// <returns></returns>
+        /// <exception cref="InternalException"></exception>
+        public async Task<bool> CallDbProcMerge(string databaseName, string? tableName)
         {
             try
             {
-                using (var conn = _sqlServerConnection.GetIDbConnection(jobParameter.databaseName))
+                using (var conn = _sqlServerConnection.GetIDbConnection(databaseName))
                 {
-                    var result = await conn.ExecuteAsync($"[{jobParameter.schema}].[P_{jobParameter.tableName}_Sincronizacao]", commandType: CommandType.StoredProcedure, commandTimeout: 2700);
+                    var result = await conn.ExecuteAsync($"[{databaseName}]..[P_{tableName}_Sincronizacao]", commandType: CommandType.StoredProcedure, commandTimeout: 2700);
 
                     if (result > 0)
                         return true;
@@ -82,39 +89,21 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
                     stage: EnumStages.CallDbProcMerge,
                     error: EnumError.SQLCommand,
                     level: EnumMessageLevel.Error,
-                    message: $"Error when trying to run the merge procedure: P_{jobParameter.tableName}_Sync",
+                    message: $"Error when trying to run the merge procedure: P_{tableName}_Sincronizacao",
                     exceptionMessage: ex.Message
                 );
             }
         }
 
-        public DataTable CreateSystemDataTable(LinxAPIParam jobParameter, TEntity entity)
+        /// <summary>
+        /// Get Companys from SQL Server Database B2CConsultaEmpresas Table
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="SQLCommandException"></exception>
+        /// <exception cref="InternalException"></exception>
+        public async Task<IEnumerable<Company>> GetB2CCompanys(string databaseName)
         {
-            try
-            {
-                var properties = TypeDescriptor.GetProperties(typeof(TEntity));
-                var dataTable = new DataTable(jobParameter.tableName);
-                foreach (PropertyDescriptor prop in properties)
-                {
-                    dataTable.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
-                }
-                return dataTable;
-            }
-            catch (Exception ex)
-            {
-                throw new InternalException(
-                    stage: EnumStages.CreateSystemDataTable,
-                    error: EnumError.SQLCommand,
-                    level: EnumMessageLevel.Error,
-                    message: $"Error when convert system datatable to bulkinsert",
-                    exceptionMessage: ex.Message
-                );
-            }
-        }
-
-        public async Task<IEnumerable<Company>> GetB2CCompanys(LinxAPIParam jobParameter)
-        {
-            string? sql = @"SELECT  
+            string? sql = $@"SELECT  
                            EMPRESA AS COD_COMPANY,
                            CNPJ_EMP AS DOC_COMPANY,
                            NOME_EMP AS REASON_COMPANY,
@@ -131,11 +120,11 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
                            '' AS STATE_REGISTRATION_COMPANY,
                            '' AS MUNICIPAL_REGISTRATION_COMPANY
                            FROM 
-                           [LINX_MICROVIX_COMMERCE].[B2CCONSULTAEMPRESAS] (NOLOCK)";
+                           [{databaseName}]..[B2CCONSULTAEMPRESAS] (NOLOCK)";
 
             try
             {
-                using (var conn = _sqlServerConnection.GetIDbConnection(jobParameter.databaseName))
+                using (var conn = _sqlServerConnection.GetIDbConnection(databaseName))
                 {
                     return await conn.QueryAsync<Company>(sql: sql);
                 }
@@ -161,20 +150,81 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
             }
         }
 
-        public async Task<IEnumerable<Company>> GetMicrovixGroupCompanys(LinxAPIParam jobParameter)
+        /// <summary>
+        /// Get Companys from SQL Server Database LinxLojas Table
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="SQLCommandException"></exception>
+        /// <exception cref="InternalException"></exception>
+        public async Task<IEnumerable<Company>> GetMicrovixCompanys(string databaseName)
         {
-            string? sql = @"SELECT  
+            string? sql = $@"SELECT  
+                           EMPRESA AS COD_COMPANY,
+                           CNPJ_EMP AS DOC_COMPANY,
+                           RAZAO_EMP AS REASON_COMPANY,
+                           NOME_EMP AS NAME_COMPANY,
+                           INSCRICAO_EMP AS STATE_REGISTRATION_COMPANY,
+                           EMAIL_EMP AS EMAIL_COMPANY,
+                           ENDERECO_EMP AS ADDRESS_COMPANY,
+                           NUM_EMP AS STREET_NUMBER_COMPANY,
+                           COMPLEMENT_EMP AS COMPLEMENT_ADDRESS_COMPANY,
+                           BAIRRO_EMP AS NEIGHBORHOOD_COMPANY,
+                           CIDADE_EMP AS CITY_COMPANY,
+                           ESTADO_EMP AS UF_COMPANY,
+                           CEP_EMP AS ZIP_CODE_COMPANY,
+                           FONE_EMP AS FONE_COMPANY,
+                           INSCRICAO_MUNICIPAL_EMP AS MUNICIPAL_REGISTRATION_COMPANY
+                           FROM 
+                           [{databaseName}]..[LINXLOJAS] (NOLOCK)";
+
+            try
+            {
+                using (var conn = _sqlServerConnection.GetIDbConnection(databaseName))
+                {
+                    return await conn.QueryAsync<Company>(sql: sql);
+                }
+            }
+            catch (SqlException ex)
+            {
+                throw new SQLCommandException(
+                    stage: EnumStages.GetMicrovixCompanys,
+                    message: $"Error when trying to get companys from database",
+                    exceptionMessage: ex.Message,
+                    commandSQL: sql
+                );
+            }
+            catch (Exception ex)
+            {
+                throw new InternalException(
+                    stage: EnumStages.GetMicrovixCompanys,
+                    error: EnumError.SQLCommand,
+                    level: EnumMessageLevel.Error,
+                    message: $"Error when trying to get companys from database",
+                    exceptionMessage: ex.Message
+                );
+            }
+        }
+
+        /// <summary>
+        /// Get Companys from SQL Server Database LinxGrupoLojas Table
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="SQLCommandException"></exception>
+        /// <exception cref="InternalException"></exception>
+        public async Task<IEnumerable<Company>> GetMicrovixGroupCompanys(string databaseName)
+        {
+            string? sql = $@"SELECT  
                            EMPRESA AS COD_COMPANY,
                            CNPJ AS DOC_COMPANY,
                            NOME_EMPRESA AS REASON_COMPANY,
                            NOME_EMPRESA AS NAME_COMPANY
                            FROM 
-                           [LINX_MICROVIX_ERP].[LINXGRUPOLOJAS] (NOLOCK)
+                           [{databaseName}].[LINXGRUPOLOJAS] (NOLOCK)
                            WHERE CNPJ <> ''";
 
             try
             {
-                using (var conn = _sqlServerConnection.GetIDbConnection(jobParameter.databaseName))
+                using (var conn = _sqlServerConnection.GetIDbConnection(databaseName))
                 {
                     return await conn.QueryAsync<Company>(sql: sql);
                 }
@@ -200,39 +250,35 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
             }
         }
 
-        public async Task<IEnumerable<Company>> GetMicrovixCompanys(LinxAPIParam jobParameter)
+        /// <summary>
+        /// Insert Record to SQL Server Database
+        /// </summary>
+        /// <param name="tableName"></param>
+        /// <param name="sql"></param>
+        /// <param name="databaseName"></param>
+        /// <param name="record"></param>
+        /// <returns></returns>
+        /// <exception cref="SQLCommandException"></exception>
+        /// <exception cref="InternalException"></exception>
+        public async Task<bool> InsertRecord(string? tableName, string? sql, string databaseName, object record)
         {
-            string? sql = @"SELECT  
-                           EMPRESA AS COD_COMPANY,
-                           CNPJ_EMP AS DOC_COMPANY,
-                           RAZAO_EMP AS REASON_COMPANY,
-                           NOME_EMP AS NAME_COMPANY,
-                           INSCRICAO_EMP AS STATE_REGISTRATION_COMPANY,
-                           EMAIL_EMP AS EMAIL_COMPANY,
-                           ENDERECO_EMP AS ADDRESS_COMPANY,
-                           NUM_EMP AS STREET_NUMBER_COMPANY,
-                           COMPLEMENT_EMP AS COMPLEMENT_ADDRESS_COMPANY,
-                           BAIRRO_EMP AS NEIGHBORHOOD_COMPANY,
-                           CIDADE_EMP AS CITY_COMPANY,
-                           ESTADO_EMP AS UF_COMPANY,
-                           CEP_EMP AS ZIP_CODE_COMPANY,
-                           FONE_EMP AS FONE_COMPANY,
-                           INSCRICAO_MUNICIPAL_EMP AS MUNICIPAL_REGISTRATION_COMPANY
-                           FROM 
-                           [LINX_MICROVIX_ERP].[LINXLOJAS] (NOLOCK)";
-
             try
             {
-                using (var conn = _sqlServerConnection.GetIDbConnection(jobParameter.databaseName))
+                using (var conn = _sqlServerConnection.GetIDbConnection(databaseName))
                 {
-                    return await conn.QueryAsync<Company>(sql: sql);
+                    var result = await conn.ExecuteAsync(sql: sql, param: record, commandTimeout: 360);
+
+                    if (result > 0)
+                        return true;
+
+                    return false;
                 }
             }
             catch (SqlException ex)
             {
                 throw new SQLCommandException(
-                    stage: EnumStages.GetMicrovixCompanys,
-                    message: $"Error when trying to get companys from database",
+                    stage: EnumStages.InsertRecord,
+                    message: $"Error when trying to insert record in database table: {tableName}",
                     exceptionMessage: ex.Message,
                     commandSQL: sql
                 );
@@ -240,25 +286,34 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
             catch (Exception ex)
             {
                 throw new InternalException(
-                    stage: EnumStages.GetMicrovixCompanys,
+                    stage: EnumStages.InsertRecord,
                     error: EnumError.SQLCommand,
                     level: EnumMessageLevel.Error,
-                    message: $"Error when trying to get companys from database",
+                    message: $"Error when trying to insert record in database table: {tableName}",
                     exceptionMessage: ex.Message
                 );
             }
         }
 
-        public async Task<string?> GetParameters(LinxAPIParam jobParameter)
+        /// <summary>
+        /// Get Parameters from SQL Server Database LinxAPIParam Table
+        /// </summary>
+        /// <param name="parametersInterval"></param>
+        /// <param name="parametersTableName"></param>
+        /// <param name="jobName"></param>
+        /// <param name="databaseName"></param>
+        /// <exception cref="SQLCommandException"></exception>
+        /// <exception cref="InternalException"></exception>
+        public async Task<string?> GetParameters(string? parametersInterval, string? parametersTableName, string? jobName, string databaseName)
         {
-            string? sql = $"SELECT {jobParameter.parametersInterval} " +
-                          $"FROM [LINX_MICROVIX].[{jobParameter.parametersTableName}] (NOLOCK) " +
+            string? sql = $"SELECT {parametersInterval} " +
+                          $"FROM [{databaseName}]..[{parametersTableName}] (NOLOCK) " +
                            "WHERE " +
-                          $"METHOD = '{jobParameter.jobName}'";
+                          $"METHOD = '{jobName}'";
 
             try
             {
-                using (var conn = _sqlServerConnection.GetIDbConnection(jobParameter.databaseName))
+                using (var conn = _sqlServerConnection.GetIDbConnection(databaseName))
                 {
                     return await conn.QueryFirstOrDefaultAsync<string?>(sql: sql, commandTimeout: 360);
                 }
@@ -284,11 +339,18 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
             }
         }
 
-        public async Task<IEnumerable<string?>> GetParameters(LinxAPIParam jobParameter, string sql)
+        /// <summary>
+        /// Get Parameters from SQL Server Database Tables (ex: LinxProdutosDepositos, LinxProdutosTabelas, LinxSetores)
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <param name="databaseName"></param>
+        /// <exception cref="SQLCommandException"></exception>
+        /// <exception cref="InternalException"></exception>
+        public async Task<IEnumerable<string?>> GetParameters(string sql, string databaseName)
         {
             try
             {
-                using (var conn = _sqlServerConnection.GetIDbConnection(jobParameter.databaseName))
+                using (var conn = _sqlServerConnection.GetIDbConnection(databaseName))
                 {
                     return await conn.QueryAsync<string?>(sql: sql, commandTimeout: 360);
                 }
@@ -314,16 +376,55 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
             }
         }
 
-        public async Task<string?> GetLast7DaysMinTimestamp(LinxAPIParam jobParameter, string? columnDate)
+        /// <summary>
+        /// Create a System DATA .NET DataTable
+        /// </summary>
+        /// <param name="tableName"></param>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        /// <exception cref="InternalException"></exception>
+        public DataTable CreateSystemDataTable(string? tableName, TEntity entity)
+        {
+            try
+            {
+                var properties = TypeDescriptor.GetProperties(typeof(TEntity));
+                var dataTable = new DataTable(tableName);
+                foreach (PropertyDescriptor prop in properties)
+                {
+                    dataTable.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
+                }
+                return dataTable;
+            }
+            catch (Exception ex)
+            {
+                throw new InternalException(
+                    stage: EnumStages.CreateSystemDataTable,
+                    error: EnumError.SQLCommand,
+                    level: EnumMessageLevel.Error,
+                    message: $"Error when convert system datatable to bulkinsert",
+                    exceptionMessage: ex.Message
+                );
+            }
+        }
+
+        /// <summary>
+        /// Get the last timestamp value from SQL Server DataTable
+        /// </summary>
+        /// <param name="schema"></param>
+        /// <param name="tableName"></param>
+        /// <param name="columnDate"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public async Task<string?> GetLast7DaysMinTimestamp(string? schema, string? tableName, string? columnDate, string? databaseName)
         {
             string? sql = "SELECT ISNULL(MIN(TIMESTAMP), 0) " +
-                         $"FROM [{jobParameter.schema}].[{jobParameter.tableName}] (NOLOCK) " +
-                          "WHERE " +
-                         $"{columnDate} < GETDATE() - 7";
+                                     $"FROM [{schema}].[{tableName}] (NOLOCK) " +
+                                      "WHERE " +
+                                     $"{columnDate} < GETDATE() - 7";
 
             try
             {
-                using (var conn = _sqlServerConnection.GetIDbConnection(jobParameter.databaseName))
+                using (var conn = _sqlServerConnection.GetIDbConnection(databaseName))
                 {
                     return await conn.QueryFirstOrDefaultAsync<string?>(sql: sql, commandTimeout: 360);
                 }
@@ -349,16 +450,26 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
             }
         }
 
-        public async Task<string?> GetLast7DaysMinTimestamp(LinxAPIParam jobParameter, string? columnDate, string? columnCompany, string? companyValue)
+        /// <summary>
+        /// Get the last timestamp value from SQL Server DataTable
+        /// </summary>
+        /// <param name="schema"></param>
+        /// <param name="tableName"></param>
+        /// <param name="columnDate"></param>
+        /// <param name="columnCompany"></param>
+        /// <param name="companyValue"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public async Task<string?> GetLast7DaysMinTimestamp(string? schema, string? tableName, string? columnDate, string? columnCompany, string? companyValue, string? databaseName)
         {
             string? sql = "SELECT ISNULL(MIN(TIMESTAMP), 0) " +
-                         $"FROM [{jobParameter.schema}].[{jobParameter.tableName}] (NOLOCK) " +
-                          "WHERE " +
-                         $"{columnDate} < GETDATE() - 7 AND {columnCompany} = '{companyValue}'";
+                                     $"FROM [{schema}].[{tableName}] (NOLOCK) " +
+                                      "WHERE " +
+                                     $"{columnDate} < GETDATE() - 7 AND {columnCompany} = '{companyValue}'";
 
             try
             {
-                using (var conn = _sqlServerConnection.GetIDbConnection(jobParameter.databaseName))
+                using (var conn = _sqlServerConnection.GetIDbConnection(databaseName))
                 {
                     return await conn.QueryFirstOrDefaultAsync<string?>(sql: sql, commandTimeout: 360);
                 }
@@ -384,25 +495,27 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
             }
         }
 
-        public async Task<bool> InsertRecord(LinxAPIParam jobParameter, string? sql, object record)
+        /// <summary>
+        /// Get registers that already existis from SQL Server Database
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public async Task<List<TEntity>> GetRegistersExists(string sql, string? databaseName)
         {
             try
             {
-                using (var conn = _sqlServerConnection.GetIDbConnection(jobParameter.databaseName))
+                using (var conn = _sqlServerConnection.GetDbConnection(databaseName))
                 {
-                    var result = await conn.ExecuteAsync(sql: sql, param: record, commandTimeout: 360);
-
-                    if (result > 0)
-                        return true;
-
-                    return false;
+                    var result = await conn.QueryAsync<TEntity>(sql: sql, commandTimeout: 360);
+                    return result.ToList();
                 }
             }
             catch (SqlException ex)
             {
                 throw new SQLCommandException(
-                    stage: EnumStages.InsertRecord,
-                    message: $"Error when trying to insert record in database table: {jobParameter.tableName}",
+                    stage: EnumStages.GetRegistersExists,
+                    message: $"Error when trying to get records that already exist in trusted table",
                     exceptionMessage: ex.Message,
                     commandSQL: sql
                 );
@@ -410,20 +523,26 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
             catch (Exception ex)
             {
                 throw new InternalException(
-                    stage: EnumStages.InsertRecord,
+                    stage: EnumStages.GetRegistersExists,
                     error: EnumError.SQLCommand,
                     level: EnumMessageLevel.Error,
-                    message: $"Error when trying to insert record in database table: {jobParameter.tableName}",
+                    message: $"Error when trying to get records that already exist in trusted table",
                     exceptionMessage: ex.Message
                 );
             }
         }
 
-        public async Task<bool> ExecuteQueryCommand(LinxAPIParam jobParameter, string? sql)
+        /// <summary>
+        /// Execute SQL Command on SQL Server Database
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public async Task<bool> ExecuteQueryCommand(string? sql, string? databaseName)
         {
             try
             {
-                using (var conn = _sqlServerConnection.GetIDbConnection(jobParameter.databaseName))
+                using (var conn = _sqlServerConnection.GetIDbConnection(databaseName))
                 {
                     var result = await conn.ExecuteAsync(sql: sql, commandTimeout: 360);
 
@@ -454,14 +573,21 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
             }
         }
 
-        public bool BulkInsertIntoTableRaw(LinxAPIParam jobParameter, DataTable dataTable, int dataTableRowsNumber)
+        /// <summary>
+        /// Execute bulk insert on SQL Server Database
+        /// </summary>
+        /// <param name="dataTable"></param>
+        /// <param name="dataTableRowsNumber"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public bool BulkInsertIntoTableRaw(DataTable dataTable, int dataTableRowsNumber, string? databaseName)
         {
             try
             {
-                using (var conn = _sqlServerConnection.GetDbConnection(jobParameter.untreatedDatabaseName))
+                using (var conn = _sqlServerConnection.GetDbConnection(databaseName))
                 {
                     using var bulkCopy = new SqlBulkCopy(conn);
-                    bulkCopy.DestinationTableName = $"[untreated].[{jobParameter.tableName}]";
+                    bulkCopy.DestinationTableName = $"[untreated].[{dataTable.TableName}]";
                     bulkCopy.BatchSize = dataTableRowsNumber;
                     bulkCopy.BulkCopyTimeout = 360;
                     foreach (DataColumn c in dataTable.Columns)
@@ -484,72 +610,5 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
                 );
             }
         }
-
-        public async Task<List<TEntity>> GetRegistersExists(LinxAPIParam jobParameter, string sql)
-        {
-            try
-            {
-                using (var conn = _sqlServerConnection.GetDbConnection(jobParameter.databaseName))
-                {
-                    var result = await conn.QueryAsync<TEntity>(sql: sql, commandTimeout: 360);
-                    return result.ToList();
-                }
-            }
-            catch (SqlException ex)
-            {
-                throw new SQLCommandException(
-                    stage: EnumStages.GetRegistersExists,
-                    message: $"Error when trying to get records that already exist in trusted table",
-                    exceptionMessage: ex.Message,
-                    commandSQL: sql
-                );
-            }
-            catch (Exception ex)
-            {
-                throw new InternalException(
-                    stage: EnumStages.GetRegistersExists,
-                    error: EnumError.SQLCommand,
-                    level: EnumMessageLevel.Error,
-                    message: $"Error when trying to get records that already exist in trusted table",
-                    exceptionMessage: ex.Message
-                );
-            }
-        }
-
-        #region MOVER PARA PROJETO DATABASE INITIALIZATION
-        public async Task<bool> InsertParametersIfNotExists(LinxAPIParam jobParameter, object parameter)
-        {
-            string? sql = $"IF NOT EXISTS (SELECT * FROM [{jobParameter.parametersTableName}] WHERE [method] = '{jobParameter.jobName}') " +
-                         $"INSERT INTO [{jobParameter.parametersTableName}] ([method], [timestamp], [dateinterval], [individual], [ativo]) " +
-                          "VALUES (@method, @timestamp, @dateinterval, @individual, @ativo)";
-
-            try
-            {
-                using (var conn = _sqlServerConnection.GetIDbConnection(jobParameter.databaseName))
-                {
-                    var result = await conn.ExecuteAsync(sql: sql, param: parameter, commandTimeout: 360);
-
-                    if (result > 0)
-                        return true;
-
-                    return false;
-                }
-            }
-            catch (Exception ex)
-            {
-                throw;
-                //throw new ExecuteCommandException()
-                //{
-                //    project = $"{jobParameter.projectName} - IntegrationsCore",
-                //    job = jobParameter.jobName,
-                //    method = $"InsertRecord",
-                //    message = $"Error when trying to insert record in database table: {jobParameter.tableName}",
-                //    schema = $"[{jobParameter.tableName}]",
-                //    command = sql,
-                //    exception = ex.Message
-                //};
-            }
-        }
-        #endregion
     }
 }

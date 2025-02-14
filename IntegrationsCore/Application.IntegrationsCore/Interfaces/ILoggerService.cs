@@ -102,6 +102,12 @@ namespace Application.IntegrationsCore.Interfaces
         /// </summary>
         /// <returns>ILoggerService</returns>
         public ILoggerService Clear();
+
+        /// <summary>
+        /// Return the Parent Execution GUID
+        /// </summary>
+        /// <returns></returns>
+        public Guid? GetExecutionGuid();
     }
 }
 

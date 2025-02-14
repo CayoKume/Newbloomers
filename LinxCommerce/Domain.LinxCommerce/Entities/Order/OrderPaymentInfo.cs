@@ -21,7 +21,6 @@
         public string? ProviderDocumentNumber { get; set; }
         public string? PixQRCode { get; set; }
         public string? PixKey { get; set; }
-
         public string? OrderID { get; set; }
         public string? OrderPaymentMethodID { get; set; }
         public string? PaymentMethodID { get; set; }

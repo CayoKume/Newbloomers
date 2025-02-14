@@ -1,15 +1,22 @@
-﻿using Domain.LinxCommerce.Entities.Parameters;
+﻿using Dapper;
+using Domain.IntegrationsCore.Entities.Enums;
+using Domain.IntegrationsCore.Exceptions;
+using Domain.LinxCommerce.Entities.Parameters;
+using Domain.LinxCommerce.Entities.SalesRepresentative;
 using Domain.LinxCommerce.Interfaces.Repositorys.Base;
 using Domain.LinxCommerce.Interfaces.Repositorys.SalesRepresentative;
+using Infrastructure.IntegrationsCore.Connections.SQLServer;
+using System.Data.SqlClient;
 
 namespace Infrastructure.LinxCommerce.Repositorys.SalesRepresentative
 {
     public class SalesRepresentativeRepository : ISalesRepresentativeRepository
     {
         private readonly ILinxCommerceRepositoryBase _linxCommerceRepositoryBase;
+        private readonly ISQLServerConnection? _sqlServerConnection;
 
-        public SalesRepresentativeRepository(ILinxCommerceRepositoryBase linxCommerceRepositoryBase) =>
-            _linxCommerceRepositoryBase = linxCommerceRepositoryBase;
+        public SalesRepresentativeRepository(ILinxCommerceRepositoryBase linxCommerceRepositoryBase, ISQLServerConnection? sqlServerConnection) =>
+            (_linxCommerceRepositoryBase, _sqlServerConnection) = (linxCommerceRepositoryBase, sqlServerConnection);
 
         public bool BulkInsertIntoTableRaw(LinxCommerceJobParameter jobParameter, List<Domain.LinxCommerce.Entities.SalesRepresentative.SalesRepresentative> records)
         {
@@ -36,10 +43,9 @@ namespace Infrastructure.LinxCommerce.Repositorys.SalesRepresentative
                         for (int j = 0; j < records[i].Addresses.Count(); j++)
                         {
                             salesRepresentativeAddressesTable.Rows.Add(records[i].SalesRepresentativeID, records[i].Addresses[j].IsMainAddress, records[i].Addresses[j].Name,
-                                records[i].Addresses[j].Name, records[i].Addresses[j].AddressLine, records[i].Addresses[j].City, records[i].Addresses[j].Neighbourhood,
-                                records[i].Addresses[j].Number, records[i].Addresses[j].State, records[i].Addresses[j].AddressNotes, records[i].Addresses[j].Landmark,
-                                records[i].Addresses[j].ContactName, records[i].Addresses[j].Latitude, records[i].Addresses[j].Longitude, records[i].Addresses[j].PostalCode);
-
+                                records[i].Addresses[j].AddressLine, records[i].Addresses[j].City, records[i].Addresses[j].Neighbourhood, records[i].Addresses[j].Number, 
+                                records[i].Addresses[j].State, records[i].Addresses[j].AddressNotes, records[i].Addresses[j].Landmark, records[i].Addresses[j].ContactName, 
+                                records[i].Addresses[j].Latitude, records[i].Addresses[j].Longitude, records[i].Addresses[j].PostalCode);
                         } 
                     }
 
@@ -199,9 +205,185 @@ namespace Infrastructure.LinxCommerce.Repositorys.SalesRepresentative
             }
         }
 
-        public Task<List<Domain.LinxCommerce.Entities.SalesRepresentative.SalesRepresentative>> GetRegistersExists(List<string> ordersIds)
+        public async Task<List<Domain.LinxCommerce.Entities.SalesRepresentative.SalesRepresentative>> GetRegistersExists(IEnumerable<int> ordersIds)
         {
-            throw new NotImplementedException();
+            string? identifiers = String.Empty;
+
+            for (int i = 0; i < ordersIds.Count(); i++)
+            {
+
+                if (i == ordersIds.Count() - 1)
+                    identifiers += $"{ordersIds.ElementAt(i)}";
+                else
+                    identifiers += $"{ordersIds.ElementAt(i)}, ";
+            }
+
+            string? sql = $@"SELECT DISTINCT 
+                             A.SalesRepresentativeID,
+                             A.[Name],
+                             A.FriendlyCode,
+				             A.ImageUrl,
+                             A.IntegrationID,
+				             A.AllowQuoteDeletion,
+				             A.BusinessContractID,
+                             A.SalesRepresentativeType,
+                             A.[Status],
+                             
+                             B.[Type],
+                             B.DocumentNumber,
+                             
+                             C.TotalCommission,
+                             C.DeliveryCommission,
+                             
+                             D.Email,
+                             D.Phone,
+                             D.CellPhone,
+                             
+                             E.SelectedMode,
+                             E.ShippingRegionID,
+                             E.PointOfSalesList As PointOfSales,
+                             
+                             G.[Type],
+                             G.Amount,
+                             
+                             I.WebSiteFilter,
+				             I.WebSiteGroups As WebSiteGroup,
+                             I.WebSites As WebSite
+                             
+                             FROM [linx_commerce].[SalesRepresentative] A (NOLOCK)
+                             LEFT JOIN [linx_commerce].[SalesRepresentativeIdentification] B (NOLOCK) ON A.SalesRepresentativeID = B.SalesRepresentativeID
+                             LEFT JOIN [linx_commerce].[SalesRepresentativeComission] C (NOLOCK) ON A.SalesRepresentativeID = C.SalesRepresentativeID
+				             LEFT JOIN [linx_commerce].[SalesRepresentativeContactData] D (NOLOCK) ON A.SalesRepresentativeID = D.SalesRepresentativeID
+				             LEFT JOIN [linx_commerce].[SalesRepresentativeShippingRegion] E (NOLOCK) ON A.SalesRepresentativeID = E.SalesRepresentativeID
+				             LEFT JOIN [linx_commerce].[SalesRepresentativeMaxDiscount] G (NOLOCK) ON A.SalesRepresentativeID = G.SalesRepresentativeID
+				             LEFT JOIN [linx_commerce].[SalesRepresentativeWebSiteSettings] I (NOLOCK) ON A.SalesRepresentativeID = I.SalesRepresentativeID
+                             
+                             WHERE
+                             A.SalesRepresentativeID IN ({identifiers})";
+
+            string? _sql = $@"SELECT DISTINCT
+                              A.SalesRepresentativeID,
+
+                              B.HasPortfolio,
+                              B.SalesRepresentativeID,
+                              B.PortfolioAssociationType,
+        
+                              TRIM(C.CustomerID) As CustomerID,
+                              C.SalesRepresentativeID,
+                              TRIM(C.Status) As Status,
+                              TRIM(C.IsMaxDiscountEnabled) As IsMaxDiscountEnabled
+
+                              FROM [linx_commerce].[SalesRepresentative] A (NOLOCK)
+                              LEFT JOIN [linx_commerce].[SalesRepresentativePortfolio] B (NOLOCK) ON A.SalesRepresentativeID = B.SalesRepresentativeID
+                              LEFT JOIN [linx_commerce].[SalesRepresentativeCustomerRelation] C (NOLOCK) ON A.SalesRepresentativeID = C.SalesRepresentativeID
+
+                              WHERE
+                              A.SalesRepresentativeID IN ({identifiers})";
+
+            string? __sql = $@"SELECT DISTINCT
+                              D.IsMainAddress,
+                              D.Name,
+                              D.AddressLine,
+                              D.City,
+                              D.Neighbourhood,
+                              D.Number,
+                              D.State,
+                              D.AddressNotes,
+                              D.Landmark,
+                              D.ContactName,
+                              D.SalesRepresentativeID,
+                              D.Latitude,
+                              D.Longitude,
+                              TRIM(D.PostalCode) As PostalCode
+
+                              FROM [linx_commerce].[SalesRepresentativeAddress] D (NOLOCK)
+
+                              WHERE
+                              D.SalesRepresentativeID IN ({identifiers})";
+
+            try
+            {
+                using (var conn = _sqlServerConnection.GetIDbConnection())
+                {
+                    var result = await conn.QueryAsync<
+                        Domain.LinxCommerce.Entities.SalesRepresentative.SalesRepresentative,
+                        SalesRepresentativeIdentification,
+                        SalesRepresentativeComission,
+                        SalesRepresentativeContactData,
+                        SalesRepresentativeShippingRegion,
+                        SalesRepresentativeMaxDiscount,
+                        SalesRepresentativeWebSiteSettings,
+                        Domain.LinxCommerce.Entities.SalesRepresentative.SalesRepresentative
+                    >(sql, (salesRepresentative, salesRepresentativeIdentification, salesRepresentativeComission, salesRepresentativeContactData, salesRepresentativeShippingRegion, salesRepresentativeMaxDiscount, salesRepresentativeWebSiteSettings) =>
+                    {
+                        salesRepresentative.Identification = salesRepresentativeIdentification;
+                        salesRepresentative.Commission = salesRepresentativeComission;
+                        salesRepresentative.Contact = salesRepresentativeContactData;
+                        salesRepresentative.ShippingRegion = salesRepresentativeShippingRegion;
+                        salesRepresentative.MaxDiscount = salesRepresentativeMaxDiscount;
+                        salesRepresentative.WebSiteSettings = salesRepresentativeWebSiteSettings;
+
+                        return salesRepresentative;
+                    }, splitOn: "Type, TotalCommission, Email, SelectedMode, Type, WebSiteFilter", commandTimeout: 360);
+
+                    var _result = await conn.QueryAsync<
+                        Domain.LinxCommerce.Entities.SalesRepresentative.SalesRepresentative,
+                        SalesRepresentativePortfolio,
+                        SalesRepresentativeCustomerRelation,
+                        Domain.LinxCommerce.Entities.SalesRepresentative.SalesRepresentative
+                    >(_sql, (_salesRepresentative, salesRepresentativePortfolio, salesRepresentativeCustomerRelation) =>
+                    {
+                        _salesRepresentative.Portfolio = salesRepresentativePortfolio;
+                        _salesRepresentative.Portfolio.Customers.Add(salesRepresentativeCustomerRelation);
+
+                        return _salesRepresentative;
+                    }, splitOn: "HasPortfolio, CustomerID", commandTimeout: 360);
+
+                    var _resultGroupedByCustomers = _result
+                        .GroupBy(p => p.SalesRepresentativeID)
+                        .Select(g =>
+                        {
+                            var groupedResult = g.First();
+                            groupedResult.Portfolio.Customers = g.Select(p => p.Portfolio.Customers.Single()).ToList();
+
+                            return groupedResult;
+                        })
+                        .ToList();
+
+                    var __result = await conn.QueryAsync<SalesRepresentativeAddress>(__sql);
+
+                    foreach (var salesRepresentative in result)
+                    {
+                        salesRepresentative.Portfolio = _resultGroupedByCustomers
+                                                            .Select(s => s.Portfolio)
+                                                            .Where(h => h.SalesRepresentativeID == salesRepresentative.SalesRepresentativeID)
+                                                            .FirstOrDefault();
+
+                        salesRepresentative.Addresses = __result.Where(p => p.SalesRepresentativeID == salesRepresentative.SalesRepresentativeID).ToList();
+                    }
+
+                    return result.ToList();
+                }
+            }
+            catch (SqlException ex)
+            {
+                throw new SQLCommandException(
+                    stage: EnumStages.GetRegistersExists,
+                    message: $"Error when trying to get records that already exist in trusted table",
+                    exceptionMessage: ex.Message,
+                    commandSQL: sql
+                );
+            }
+            catch (Exception ex)
+            {
+                throw new InternalException(
+                    stage: EnumStages.GetRegistersExists,
+                    error: EnumError.SQLCommand,
+                    level: EnumMessageLevel.Error,
+                    message: $"Error when trying to get records that already exist in trusted table",
+                    exceptionMessage: ex.Message
+                );
+            }
         }
     }
 }

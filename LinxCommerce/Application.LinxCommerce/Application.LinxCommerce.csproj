@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\IntegrationsCore\Application.IntegrationsCore\Application.IntegrationsCore.csproj" />
     <ProjectReference Include="..\Domain.LinxCommerce\Domain.LinxCommerce.csproj" />
   </ItemGroup>
 

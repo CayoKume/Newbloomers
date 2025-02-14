@@ -1,7 +1,24 @@
-using AzureWebJobs;
+using AzureJobs.Extensions;
 
-var builder = Host.CreateApplicationBuilder(args);
-builder.Services.AddHostedService<Worker>();
+var configuration = new ConfigurationBuilder()
+                .AddJsonFile($"appsettings.json")
+                .Build();
+
+var builder = Host.CreateDefaultBuilder();
+
+builder
+    .ConfigureWebJobs(b =>
+    {
+        b
+        .AddAzureStorageCoreServices()
+        .AddTimers();
+    })
+    .AddServices()
+    .UseConsoleLifetime();
 
 var host = builder.Build();
-host.Run();
+
+using (host)
+{
+    await host.RunAsync();
+}

@@ -19,7 +19,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
         private readonly IAPICall _apiCall;
         private readonly ILoggerService _logger;
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
-        private readonly ILinxMicrovixRepositoryBase<LinxProdutosTabelasPrecos> _linxMicrovixRepositoryBase;
+        private readonly ILinxMicrovixAzureSQLRepositoryBase<LinxProdutosTabelasPrecos> _linxMicrovixRepositoryBase;
         private readonly ILinxProdutosTabelasPrecosRepository _linxProdutosTabelasPrecosRepository;
         private static ILinxProdutosTabelasPrecosServiceCache _linxProdutosTabelasPrecosServiceCache { get; set; } = new LinxProdutosTabelasPrecosServiceCache();
 
@@ -27,7 +27,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
             IAPICall apiCall,
             ILoggerService logger,
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
-            ILinxMicrovixRepositoryBase<LinxProdutosTabelasPrecos> linxMicrovixRepositoryBase,
+            ILinxMicrovixAzureSQLRepositoryBase<LinxProdutosTabelasPrecos> linxMicrovixRepositoryBase,
             ILinxProdutosTabelasPrecosRepository linxProdutosTabelasPrecosRepository
         )
         {
@@ -100,7 +100,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                    .Clear()
                    .AddLog(EnumJob.LinxProdutosTabelasPrecos);
 
-                string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter);
+                string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter.parametersInterval, jobParameter.parametersTableName, jobParameter.jobName);
 
                 var body = _linxMicrovixServiceBase.BuildBodyRequest(
                     parametersList: parameters
@@ -122,7 +122,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                         await _linxProdutosTabelasPrecosRepository.InsertRecord(record: record, jobParameter: jobParameter);
                     }
 
-                    await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter: jobParameter);
+                    await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
                 }
             }
             catch (SQLCommandException ex)
@@ -176,8 +176,8 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                    .Clear()
                    .AddLog(EnumJob.LinxProdutosTabelasPrecos);
 
-                string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter);
-                var cnpjs_emp = await _linxMicrovixRepositoryBase.GetMicrovixCompanys(jobParameter);
+                string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter.parametersInterval, jobParameter.parametersTableName, jobParameter.jobName);
+                var cnpjs_emp = await _linxMicrovixRepositoryBase.GetMicrovixCompanys();
                 var tables_ids = await _linxProdutosTabelasPrecosRepository.GetProductsTablesIds(jobParameter);
 
                 foreach (var id_tabela in tables_ids)
@@ -185,7 +185,8 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                     foreach (var cnpj_emp in cnpjs_emp)
                     {
                         string? timestamp = await _linxMicrovixRepositoryBase.GetLast7DaysMinTimestamp(
-                            jobParameter: jobParameter,
+                            jobParameter.schema,
+                            jobParameter.tableName,
                             columnDate: "lastupdateon",
                             columnCompany: "cnpj_emp",
                             companyValue: cnpj_emp.doc_company
@@ -224,7 +225,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                                     }
                                 }
 
-                                await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter: jobParameter);
+                                await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
 
                                 _logger.AddMessage(
                                     $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"
@@ -236,7 +237,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                                 );
                         }
 
-                        await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter: jobParameter);
+                        await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
                     } 
                 }
             }

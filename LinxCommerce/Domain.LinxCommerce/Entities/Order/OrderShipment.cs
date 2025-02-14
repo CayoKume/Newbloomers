@@ -1,4 +1,6 @@
-﻿namespace Domain.LinxCommerce.Entities.Order
+﻿using Domain.IntegrationsCore.Extensions;
+
+namespace Domain.LinxCommerce.Entities.Order
 {
     public class OrderShipment
     {
@@ -10,6 +12,8 @@
         public string AssignUserId { get; set; }
         public string AssignUserName { get; set; }
         public string DockID { get; set; }
+
+        [SkipProperty]
         public List<OrderPackage> Packages { get; set; }
     }
 }
