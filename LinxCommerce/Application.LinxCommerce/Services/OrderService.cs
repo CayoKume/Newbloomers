@@ -121,8 +121,8 @@ namespace Application.LinxCommerce.Services
                 var objectRequest = new
                 {
                     Page = new { PageIndex = 0, PageSize = 0 },
-                    //Where = $"(ModifiedDate>=\"{DateTime.Now.AddDays(-1).Date:yyyy-MM-dd}T00:00:00\" && ModifiedDate<=\"{DateTime.Now.Date:yyyy-MM-dd}T23:59:59\")",
-                    Where = $"(ModifiedDate>=\"{DateTime.Now.Date:yyyy-MM-dd}T00:00:00\" && ModifiedDate<=\"{DateTime.Now.Date:yyyy-MM-dd}T23:59:59\")",
+                    Where = $"(ModifiedDate>=\"{DateTime.Now.AddDays(-1).Date:yyyy-MM-dd}T00:00:00\" && ModifiedDate<=\"{DateTime.Now.Date:yyyy-MM-dd}T23:59:59\")",
+                    //Where = $"(ModifiedDate>=\"{DateTime.Now.Date:yyyy-MM-dd}T00:00:00\" && ModifiedDate<=\"{DateTime.Now.Date:yyyy-MM-dd}T23:59:59\")",
                     WhereMetadata = "",
                     OrderBy = "",
                 };
@@ -134,8 +134,11 @@ namespace Application.LinxCommerce.Services
                 );
 
                 var ordersAPIList = new List<Order.Root>();
-                var ordersIDs = Newtonsoft.Json.JsonConvert.DeserializeObject<SearchOrder.Root>(response); 
-                
+                var ordersIDs = Newtonsoft.Json.JsonConvert.DeserializeObject<SearchOrder.Root>(response);
+
+                if (_ordersDboList.Count() == 0)
+                    _ordersDboList = await _orderRepository.GetRegistersExists(ordersIDs.Result.Select(o => o.OrderID));
+
                 foreach (var orderID in ordersIDs.Result)
                 {
                     var getSaleRepresentativeResponse = await _apiCall.PostRequest(
@@ -153,7 +156,7 @@ namespace Application.LinxCommerce.Services
 
                 return "true";
             }
-            catch
+            catch (Exception ex)
             {
                 throw;
             }

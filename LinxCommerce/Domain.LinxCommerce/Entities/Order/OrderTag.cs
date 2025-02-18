@@ -2,10 +2,11 @@
 {
     public class OrderTag
     {
-        public string? TagID { get; set; }
+        public Int32? TagID { get; set; }
         public string? Alias { get; set; }
         public string? Name { get; set; }
-        public string? IsSystem { get; set; }
-        public string? IsDeleted { get; set; }
+        public bool? IsSystem { get; set; }
+        public bool? IsDeleted { get; set; }
+        public Guid? OrderID { get; set; }
     }
 }

@@ -2,21 +2,21 @@
 {
     public class OrderPackage
     {
-        public string OrderPackageID { get; set; }
-        public string OrderShipmentID { get; set; }
-        public string DeliveryMethodID { get; set; }
-        public string PackageNumber { get; set; }
-        public string TrackingNumber { get; set; }
-        public string TrackingNumberUrl { get; set; }
-        public string ShippedDate { get; set; }
-        public string ShippedBy { get; set; }
-        public string IsDeleted { get; set; }
-        public string PackageType { get; set; }
-        public string Source { get; set; }
-        public string InsuranceAmount { get; set; }
-        public string Height { get; set; }
-        public string Width { get; set; }
-        public string Length { get; set; }
-        public string Weight { get; set; }
+        public Guid? OrderPackageID { get; set; }
+        public Guid? OrderShipmentID { get; set; }
+        public Int32? DeliveryMethodID { get; set; }
+        public string? PackageNumber { get; set; }
+        public string? TrackingNumber { get; set; }
+        public string? TrackingNumberUrl { get; set; }
+        public DateTime? ShippedDate { get; set; }
+        public string? ShippedBy { get; set; }
+        public bool? IsDeleted { get; set; }
+        public string? PackageType { get; set; }
+        public string? Source { get; set; }
+        public decimal? InsuranceAmount { get; set; }
+        public decimal? Height { get; set; }
+        public decimal? Width { get; set; }
+        public decimal? Length { get; set; }
+        public decimal? Weight { get; set; }
     }
 }
