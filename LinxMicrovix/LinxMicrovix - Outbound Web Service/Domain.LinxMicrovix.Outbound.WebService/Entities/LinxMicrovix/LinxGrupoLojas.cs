@@ -1,4 +1,5 @@
 ﻿using Domain.IntegrationsCore.CustomValidations;
+using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -40,6 +41,14 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [LengthValidation(length: 50, propertyName: "classificacao_portal")]
         public string? classificacao_portal { get; private set; }
 
+        [NotMapped]
+        [SkipProperty]
+        public string? recordKey { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordXml { get; private set; }
+
         public LinxGrupoLojas() { }
 
         public LinxGrupoLojas(
@@ -51,7 +60,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             string? portal,
             string? nome_portal,
             string? empresa,
-            string? classificacao_portal
+            string? classificacao_portal,
+            string? recordXml
         )
         {
             lastupdateon = DateTime.Now;
@@ -76,6 +86,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             this.nome_empresa = nome_empresa;
             this.nome_portal = nome_portal;
             this.classificacao_portal = classificacao_portal;
+            this.recordKey = $"[]";
+            this.recordXml = recordXml;
         }
     }
 }

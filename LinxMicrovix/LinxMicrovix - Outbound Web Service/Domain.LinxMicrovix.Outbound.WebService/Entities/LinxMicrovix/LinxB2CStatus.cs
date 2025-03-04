@@ -1,4 +1,5 @@
 ﻿using Domain.IntegrationsCore.CustomValidations;
+using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -24,6 +25,14 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
+        [NotMapped]
+        [SkipProperty]
+        public string? recordKey { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordXml { get; private set; }
+
         public LinxB2CStatus() { }
 
         public LinxB2CStatus(
@@ -31,7 +40,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             string? id_status,
             string? descricao_status,
             string? timestamp,
-            string? portal
+            string? portal,
+            string? recordXml
         )
         {
             lastupdateon = DateTime.Now;
@@ -52,6 +62,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
                 0;
 
             this.descricao_status = descricao_status;
+            this.recordKey = $"[{id_status}]|[{timestamp}]";
+            this.recordXml = recordXml;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Domain.IntegrationsCore.CustomValidations;
+using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
@@ -101,8 +102,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [Column(TypeName = "bit")]
         public bool? centro_distribuicao { get; private set; }
 
-        [Column(TypeName = "varchar(14)")]
-        [LengthValidation(length: 14, propertyName: "inscricao_municipal_emp")]
+        [Column(TypeName = "varchar(30)")]
+        [LengthValidation(length: 30, propertyName: "inscricao_municipal_emp")]
         public string? inscricao_municipal_emp { get; private set; }
 
         [Column(TypeName = "varchar(7)")]
@@ -115,6 +116,14 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
         [Column(TypeName = "int")]
         public Int32? tabela_preco_preferencial { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordKey { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordXml { get; private set; }
 
         public LinxLojas() { }
 
@@ -148,7 +157,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             string? inscricao_municipal_emp,
             string? cnae_emp,
             string? cod_cliente_linx,
-            string? tabela_preco_preferencial
+            string? tabela_preco_preferencial,
+            string? recordXml
         )
         {
             lastupdateon = DateTime.Now;
@@ -231,6 +241,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             this.nome_emp = nome_emp;
             this.cnpj_emp = cnpj_emp;
             this.cod_cliente_linx = cod_cliente_linx;
+            this.recordKey = $"[{empresa}]|[{cnpj_emp}]|[{timestamp}]";
+            this.recordXml = recordXml;
         }
     }
 }

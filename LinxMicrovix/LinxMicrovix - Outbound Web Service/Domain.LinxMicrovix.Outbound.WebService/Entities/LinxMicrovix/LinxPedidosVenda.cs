@@ -1,4 +1,5 @@
 ﻿using Domain.IntegrationsCore.CustomValidations;
+using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
@@ -161,6 +162,14 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [Column(TypeName = "int")]
         public Int32? deposito { get; private set; }
 
+        [NotMapped]
+        [SkipProperty]
+        public string? recordKey { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordXml { get; private set; }
+
         public LinxPedidosVenda() { }
 
         public LinxPedidosVenda(
@@ -209,7 +218,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             string? transacao_ws,
             string? empresa,
             string? transportador,
-            string? deposito
+            string? deposito,
+            string? recordXml
         )
         {
             lastupdateon = DateTime.Now;
@@ -387,6 +397,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             this.plano_pagamento = plano_pagamento;
             this.hora_lancamento = hora_lancamento;
             this.cnpj_emp = cnpj_emp;
+            this.recordKey = $"[{cnpj_emp}]|[{cod_pedido}]|[{codigo_cliente}]|[{cod_produto}]|[{timestamp}]";
+            this.recordXml = recordXml;
         }
     }
 }

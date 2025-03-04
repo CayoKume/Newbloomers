@@ -4,7 +4,12 @@ using Domain.IntegrationsCore.Entities.Errors;
 using Domain.IntegrationsCore.Exceptions;
 using Domain.IntegrationsCore.Interfaces;
 using Infrastructure.IntegrationsCore.Connections.SQLServer;
+using System.Data;
 using System.Data.SqlClient;
+using static Dapper.SqlMapper;
+using System.Reflection;
+using Domain.IntegrationsCore.Extensions;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Infrastructure.IntegrationsCore.Repositorys
 {
@@ -19,7 +24,22 @@ namespace Infrastructure.IntegrationsCore.Repositorys
         {
             try
             {
-                using (var conn = _conn.GetIDbConnection("NEWBLOOMERS"))
+                var recordsTable = CreateSystemDataTable("Records", new Record());
+                var messagesTable = CreateSystemDataTable("Messages", new Message());
+
+                foreach (var record in log.Records)
+                {
+                    var text = record.RecordText.Length > 8000 ? record.RecordText.Substring(0, 8000) : record.RecordText;
+
+                    recordsTable.Rows.Add(record.FieldKeyValue, text, log.Execution);
+                }
+
+                foreach (var message in log.Messages)
+                {
+                    messagesTable.Rows.Add(message.IdStage, message.IdLogLevel, message.IsError, message.IdError, message.Execution, message.Msg, message.ExceptionMessage, message.CommandSQL);
+                }
+
+                using (var conn = _conn.GetDbConnection())
                 {
                     await conn.ExecuteAsync(
                             sql: @$"INSERT INTO [auditing].[Logs] ([IdJob], [StartDate], [EndDate], [Execution])
@@ -27,27 +47,26 @@ namespace Infrastructure.IntegrationsCore.Repositorys
                             commandTimeout: 360
                         );
 
-                    foreach (var record in log.Records)
+                    using var bulkCopy = new SqlBulkCopy(conn);
+                    bulkCopy.DestinationTableName = $"[auditing].[{recordsTable.TableName}]";
+                    bulkCopy.BatchSize = recordsTable.Rows.Count;
+                    bulkCopy.BulkCopyTimeout = 360;
+                    foreach (DataColumn c in recordsTable.Columns)
                     {
-                        var text = record.RegText.Length > 8000 ? record.RegText.Substring(0, 8000) : record.RegText;
-
-                        await conn.ExecuteAsync(
-                            sql: @$"INSERT INTO [auditing].[Records] ([FieldKeyValue], [RecordText], [Execution])
-                                   VALUES ('{record.FieldKeyValue}', '{text}', '{log.Execution}')",
-                            commandTimeout: 360
-                        );
+                        bulkCopy.ColumnMappings.Add(c.ColumnName, c.ColumnName);
                     }
+                    bulkCopy.WriteToServer(recordsTable);
 
-                    foreach (var message in log.Messages)
+                    bulkCopy.ColumnMappings.Clear();
+                    bulkCopy.DestinationTableName = $"[auditing].[{messagesTable.TableName}]";
+                    bulkCopy.BatchSize = messagesTable.Rows.Count;
+                    bulkCopy.BulkCopyTimeout = 360;
+                    foreach (DataColumn c in messagesTable.Columns)
                     {
-                        await conn.ExecuteAsync(
-                            sql: @"INSERT INTO [auditing].[Messages] ([IdStage], [IdLogLevel], [IsError], [IdError], [Execution], [Message], [ExceptionMessage], [CommandSQL])
-                                   VALUES (@IdStage, @IdLogLevel, @IsError, @IdError, @Execution, @Msg, @ExceptionMessage, @CommandSQL)",
-                            param: message,
-                            commandTimeout: 360
-                        );
+                        bulkCopy.ColumnMappings.Add(c.ColumnName, c.ColumnName);
                     }
-                    
+                    bulkCopy.WriteToServer(messagesTable);
+
                     return true;
                 }
             }
@@ -67,6 +86,30 @@ namespace Infrastructure.IntegrationsCore.Repositorys
                 error: EnumError.SQLCommand,
                     level: EnumMessageLevel.Error,
                     message: $"Error when trying to insert record in database table: [auditing].[Messages]",
+                    exceptionMessage: ex.Message
+                );
+            }
+        }
+
+        private DataTable CreateSystemDataTable<TEntity>(string? tableName, TEntity entity)
+        {
+            try
+            {
+                var properties = entity.GetType().GetFilteredProperties();
+                var dataTable = new DataTable(tableName);
+                foreach (PropertyInfo prop in properties)
+                {
+                    dataTable.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
+                }
+                return dataTable;
+            }
+            catch (Exception ex)
+            {
+                throw new InternalException(
+                    stage: EnumStages.CreateSystemDataTable,
+                    error: EnumError.SQLCommand,
+                    level: EnumMessageLevel.Error,
+                    message: $"Error when convert system datatable to bulkinsert",
                     exceptionMessage: ex.Message
                 );
             }

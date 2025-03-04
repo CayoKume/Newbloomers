@@ -1,4 +1,5 @@
 ﻿using Domain.IntegrationsCore.CustomValidations;
+using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
@@ -41,6 +42,14 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
+        [NotMapped]
+        [SkipProperty]
+        public string? recordKey { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordXml { get; private set; }
+
         public B2CConsultaVendedores() { }
 
         public B2CConsultaVendedores(
@@ -53,7 +62,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             string? ativo,
             string? comissionado,
             string? timestamp,
-            string? portal
+            string? portal,
+            string? recordXml
         )
         {
             lastupdateon = DateTime.Now;
@@ -95,6 +105,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
 
             this.nome_vendedor = nome_vendedor;
             this.tipo = tipo;
+            this.recordXml = recordXml;
         }
     }
 }

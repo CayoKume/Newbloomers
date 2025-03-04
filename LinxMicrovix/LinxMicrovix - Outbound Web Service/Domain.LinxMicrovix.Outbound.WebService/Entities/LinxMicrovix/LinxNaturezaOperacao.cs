@@ -1,4 +1,5 @@
 ﻿using Domain.IntegrationsCore.CustomValidations;
+using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -127,6 +128,14 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [LengthValidation(length: 50, propertyName: "codigo_ws")]
         public string? codigo_ws { get; private set; }
 
+        [NotMapped]
+        [SkipProperty]
+        public string? recordKey { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordXml { get; private set; }
+
         public LinxNaturezaOperacao() { }
 
         public LinxNaturezaOperacao(
@@ -166,7 +175,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             string? insere_obs_pis_cofins,
             string? diferencial_ativo_consumo,
             string? recusa_de,
-            string? codigo_ws
+            string? codigo_ws,
+            string? recordXml
         )
         {
             lastupdateon = DateTime.Now;
@@ -319,6 +329,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             this.soma_relatorios = soma_relatorios;
             this.descricao = descricao;
             this.cod_natureza_operacao = cod_natureza_operacao;
+            this.recordKey = $"[{cod_natureza_operacao.Trim()}]|[{timestamp}]";
+            this.recordXml = recordXml;
         }
     }
 }

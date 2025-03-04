@@ -1,4 +1,5 @@
 ﻿using Domain.IntegrationsCore.CustomValidations;
+using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
@@ -102,6 +103,14 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         [LengthValidation(length: 40, propertyName: "order_id")]
         public string? order_id { get; private set; }
 
+        [NotMapped]
+        [SkipProperty]
+        public string? recordKey { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordXml { get; private set; }
+
         public B2CConsultaPedidos() { }
 
         public B2CConsultaPedidos(
@@ -133,7 +142,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             string? mensagem_falha_faturamento,
             string? id_tipo_b2c,
             string? ecommerce_origem,
-            string? order_id
+            string? order_id,
+            string? recordXml
         )
         {
             lastupdateon = DateTime.Now;
@@ -261,6 +271,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             this.ecommerce_origem = ecommerce_origem;
             this.order_id = order_id;
             this.mensagem_falha_faturamento = mensagem_falha_faturamento;
+            this.recordKey = $"[{empresa}]|[{id_pedido}]|[{cod_cliente_b2c}]|[{cod_cliente_erp}]|[{order_id}]|[{timestamp}]";
+            this.recordXml = recordXml;
         }
     }
 }

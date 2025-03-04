@@ -1,4 +1,5 @@
 ﻿using Domain.IntegrationsCore.CustomValidations;
+using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
@@ -167,6 +168,14 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [LengthValidation(length: 60, propertyName: "mae")]
         public string? mae { get; private set; }
 
+        [NotMapped]
+        [SkipProperty]
+        public string? recordKey { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordXml { get; private set; }
+
         public LinxClientesFornec() { }
 
         public LinxClientesFornec(
@@ -212,7 +221,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             string? limite_credito_compra,
             string? id_classe_fiscal,
             string? obs,
-            string? mae
+            string? mae,
+            string? recordXml
         )
         {
             lastupdateon = DateTime.Now;
@@ -311,6 +321,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             this.codigo_ws = codigo_ws;
             this.obs = obs;
             this.mae = mae;
+            this.recordKey = $"[{cod_cliente}]|[{doc_cliente}]|[{timestamp}]";
+            this.recordXml = recordXml;
         }
     }
 }

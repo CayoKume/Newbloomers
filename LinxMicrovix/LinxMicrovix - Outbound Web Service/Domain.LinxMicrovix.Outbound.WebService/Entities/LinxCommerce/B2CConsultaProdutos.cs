@@ -1,4 +1,5 @@
 ﻿using Domain.IntegrationsCore.CustomValidations;
+using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
@@ -112,6 +113,14 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         [LengthValidation(length: 50, propertyName: "codigo_integracao_oms")]
         public string? codigo_integracao_oms { get; private set; }
 
+        [NotMapped]
+        [SkipProperty]
+        public string? recordKey { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordXml { get; private set; }
+
         public B2CConsultaProdutos() { }
 
         public B2CConsultaProdutos(
@@ -146,7 +155,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             string? canais_ecommerce_publicados,
             string? inicio_publicacao_produto,
             string? fim_publicacao_produto,
-            string? codigo_integracao_oms
+            string? codigo_integracao_oms,
+            string? recordXml
         )
         {
             lastupdateon = DateTime.Now;
@@ -274,6 +284,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             this.nome_produto = nome_produto;
             this.descricao_completa_commerce = descricao_completa_commerce;
             this.codigo_integracao_oms = codigo_integracao_oms;
+            this.recordXml = recordXml;
         }
     }
 }

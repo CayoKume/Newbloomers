@@ -66,7 +66,8 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                         custototal: records[i].Where(pair => pair.Key == "custototal").Select(pair => pair.Value).FirstOrDefault(),
                         precocompra: records[i].Where(pair => pair.Key == "precocompra").Select(pair => pair.Value).FirstOrDefault(),
                         timestamp: records[i].Where(pair => pair.Key == "timestamp").Select(pair => pair.Value).FirstOrDefault(),
-                        portal: records[i].Where(pair => pair.Key == "portal").Select(pair => pair.Value).FirstOrDefault()
+                        portal: records[i].Where(pair => pair.Key == "portal").Select(pair => pair.Value).FirstOrDefault(),
+                        recordXml: records[i].Where(pair => pair.Key == "recordXml").Select(pair => pair.Value).FirstOrDefault()
                     );
 
                     var contexto = new ValidationContext(entity, null, null);

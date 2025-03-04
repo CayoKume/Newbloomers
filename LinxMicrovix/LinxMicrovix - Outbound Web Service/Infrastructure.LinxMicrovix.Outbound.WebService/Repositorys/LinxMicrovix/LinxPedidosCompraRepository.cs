@@ -3,6 +3,7 @@ using Domain.IntegrationsCore.Exceptions;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxMicrovix;
+using System.Collections.Generic;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 {
@@ -41,22 +42,57 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             }
         }
 
-        public async Task<List<LinxPedidosCompra>> GetRegistersExists(LinxAPIParam jobParameter, List<LinxPedidosCompra> registros)
+        public async Task<List<LinxPedidosCompra>> GetRegistersExists(LinxAPIParam jobParameter, List<int?> registros)
         {
             try
             {
-                var identificadores = String.Empty;
-                for (int i = 0; i < registros.Count(); i++)
+                int indice = registros.Count() / 1000;
+
+                if (indice > 0)
                 {
-                    if (i == registros.Count() - 1)
-                        identificadores += $"'{registros[i].cod_pedido}'";
-                    else
-                        identificadores += $"'{registros[i].cod_pedido}', ";
+                    var list = new List<LinxPedidosCompra>();
+
+                    for (int i = 0; i <= indice; i++)
+                    {
+                        string identificadores = String.Empty;
+                        var top1000List = registros.Skip(i * 1000).Take(1000).ToList();
+
+                        for (int j = 0; j < top1000List.Count(); j++)
+                        {
+                            if (j == top1000List.Count() - 1)
+                                identificadores += $"'{top1000List[j]}'";
+                            else
+                                identificadores += $"'{top1000List[j]}', ";
+
+                        }
+
+                        string sql = $"SELECT cnpj_emp, cod_pedido, cod_produto, TIMESTAMP FROM [linx_microvix_erp].[LinxPedidosCompra] WHERE cod_pedido IN ({identificadores})";
+                        var result = await _linxMicrovixRepositoryBase.GetRegistersExists(sql);
+                        list.AddRange(result);
+                    }
+
+                    return list;
                 }
+                else
+                {
+                    var list = new List<LinxPedidosCompra>();
+                    string identificadores = String.Empty;
 
-                string sql = $"SELECT cnpj_emp, cod_pedido, codigo_fornecedor, cod_produto, TIMESTAMP FROM [linx_microvix_erp].[LinxPedidosCompra] WHERE cod_pedido IN ({identificadores})";
+                    for (int i = 0; i < registros.Count(); i++)
+                    {
 
-                return await _linxMicrovixRepositoryBase.GetRegistersExists(sql);
+                        if (i == registros.Count() - 1)
+                            identificadores += $"'{registros[i]}'";
+                        else
+                            identificadores += $"'{registros[i]}', ";
+                    }
+
+                    string sql = $"SELECT cnpj_emp, cod_pedido, cod_produto, TIMESTAMP FROM [linx_microvix_erp].[LinxPedidosCompra] WHERE cod_pedido IN ({identificadores})";
+                    var result = await _linxMicrovixRepositoryBase.GetRegistersExists(sql);
+                    list.AddRange(result);
+
+                    return list;
+                }
             }
             catch (Exception ex) when (ex is not InternalException && ex is not SQLCommandException)
             {

@@ -1,4 +1,5 @@
 ﻿using Domain.IntegrationsCore.CustomValidations;
+using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -67,6 +68,14 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
+        [NotMapped]
+        [SkipProperty]
+        public string? recordKey { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordXml { get; private set; }
+
         public B2CConsultaClientesEnderecosEntrega() { }
 
         public B2CConsultaClientesEnderecosEntrega(
@@ -85,7 +94,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             string? principal,
             string? id_cidade,
             string? timestamp,
-            string? portal
+            string? portal,
+            string? recordXml
         )
         {
             lastupdateon = DateTime.Now;
@@ -133,6 +143,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             this.cidade_cliente = cep_cliente;
             this.uf_cliente = uf_cliente;
             this.descricao = descricao;
+            this.recordXml = recordXml;
         }
     }
 }

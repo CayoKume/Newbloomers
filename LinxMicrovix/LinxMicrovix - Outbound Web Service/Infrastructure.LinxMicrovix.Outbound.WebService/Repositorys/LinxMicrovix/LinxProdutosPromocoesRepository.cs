@@ -39,7 +39,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             }
         }
 
-        public async Task<List<LinxProdutosPromocoes>> GetRegistersExists(LinxAPIParam jobParameter, List<LinxProdutosPromocoes> registros)
+        public async Task<List<LinxProdutosPromocoes>> GetRegistersExists(LinxAPIParam jobParameter, List<Int64?> registros)
         {
             try
             {
@@ -58,9 +58,9 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
                         {
 
                             if (j == top1000List.Count() - 1)
-                                identificadores += $"'{top1000List[j].cod_produto}'";
+                                identificadores += $"'{top1000List[j]}'";
                             else
-                                identificadores += $"'{top1000List[j].cod_produto}', ";
+                                identificadores += $"'{top1000List[j]}', ";
                         }
 
                         string sql = $"SELECT cnpj_emp, cod_produto, id_campanha FROM [linx_microvix_erp].[LinxProdutosPromocoes] WHERE cod_produto IN ({identificadores})";
@@ -79,9 +79,9 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
                     {
 
                         if (i == registros.Count() - 1)
-                            identificadores += $"'{registros[i].cod_produto}'";
+                            identificadores += $"'{registros[i]}'";
                         else
-                            identificadores += $"'{registros[i].cod_produto}', ";
+                            identificadores += $"'{registros[i]}', ";
                     }
 
                     string sql = $"SELECT cnpj_emp, cod_produto, id_campanha FROM [linx_microvix_erp].[LinxProdutosPromocoes] WHERE cod_produto IN ({identificadores})";

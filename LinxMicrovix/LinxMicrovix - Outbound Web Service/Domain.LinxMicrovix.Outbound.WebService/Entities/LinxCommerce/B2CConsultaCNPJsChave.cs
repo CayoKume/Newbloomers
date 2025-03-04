@@ -1,4 +1,5 @@
 ﻿using Domain.IntegrationsCore.CustomValidations;
+using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -48,6 +49,14 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         [Column(TypeName = "bit")]
         public bool? oms { get; private set; }
 
+        [NotMapped]
+        [SkipProperty]
+        public string? recordKey { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordXml { get; private set; }
+
         public B2CConsultaCNPJsChave() { }
 
         public B2CConsultaCNPJsChave(
@@ -61,7 +70,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             string? empresa,
             string? classificacao_portal,
             string? b2c,
-            string? oms
+            string? oms,
+            string? recordXml
         )
         {
             lastupdateon = DateTime.Now;
@@ -96,6 +106,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             this.classificacao_portal = classificacao_portal;
             this.rede = rede;
             this.nome_portal = nome_portal;
+            this.recordXml = recordXml;
         }
     }
 }

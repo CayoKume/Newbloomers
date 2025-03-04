@@ -1,4 +1,5 @@
 ﻿using Domain.IntegrationsCore.CustomValidations;
+using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
@@ -107,6 +108,14 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [LengthValidation(length: 40, propertyName: "order_id")]
         public string order_id { get; private set; }
 
+        [NotMapped]
+        [SkipProperty]
+        public string? recordKey { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordXml { get; private set; }
+
         public LinxB2CPedidos() { }
 
         public LinxB2CPedidos(
@@ -139,7 +148,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             string? id_tipo_b2c,
             string? ecommerce_origem,
             string? marketplace_loja,
-            string? order_id
+            string? order_id,
+            string? recordXml
         )
         {
             this.lastupdateon = DateTime.Now;
@@ -254,6 +264,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
                 Convert.ToInt64(timestamp) :
                 0;
 
+            this.recordKey = $"[{empresa}]|[{id_pedido}]|[{cod_cliente_b2c}]|[{cod_cliente_erp}]|[{order_id}]|[{timestamp}]";
+            this.recordXml = recordXml;
             this.order_id = order_id;
             this.anotacao = anotacao;
             this.ecommerce_origem = ecommerce_origem;

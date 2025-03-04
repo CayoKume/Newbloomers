@@ -1,4 +1,5 @@
 ﻿using Domain.IntegrationsCore.CustomValidations;
+using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
@@ -66,6 +67,14 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [Column(TypeName = "int")]
         public Int64? timestamp { get; private set; }
 
+        [NotMapped]
+        [SkipProperty]
+        public string? recordKey { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordXml { get; private set; }
+
         public LinxPlanos() { }
 
         public LinxPlanos(
@@ -85,7 +94,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             string? dt_upd,
             string? desativado,
             string? usa_tef,
-            string? timestamp
+            string? timestamp,
+            string? recordXml
         )
         {
             lastupdateon = DateTime.Now;
@@ -146,6 +156,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             this.tipo_transacao = tipo_transacao;
             this.desativado = desativado;
             this.usa_tef = usa_tef;
+            this.recordKey = $"[{plano}]|[{timestamp}]";
+            this.recordXml = recordXml;
         }
     }
 }

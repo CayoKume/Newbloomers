@@ -1,4 +1,5 @@
 ﻿using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxCommerce;
+using Application.LinxMicrovix.Outbound.WebService.Services;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
 using Microsoft.Azure.WebJobs;
 
@@ -258,6 +259,111 @@ namespace AzureJobs.RecurringJobs
                             .GetSection("Methods")
                             .Get<List<LinxMethods>>();
         }
+
+        //public async Task B2CConsultaClientes([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    try
+        //    {
+        //        var method = _methods
+        //            .Where(m => m.MethodName == "B2CConsultaClientes")
+        //        .FirstOrDefault();
+
+        //        var result = await _b2cConsultaClientesService.GetRecords(
+        //            _linxMicrovixJobParameter.SetParameters(
+        //                jobName: method.MethodName,
+        //                tableName: method.MethodName
+        //            )
+        //        );
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw;
+        //    }
+        //}
+
+        //public async Task B2CConsultaEmpresas([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    try
+        //    {
+        //        var method = _methods
+        //            .Where(m => m.MethodName == "B2CConsultaEmpresas")
+        //        .FirstOrDefault();
+
+        //        var result = await _b2cConsultaEmpresasService.GetRecords(
+        //            _linxMicrovixJobParameter.SetParameters(
+        //                jobName: method.MethodName,
+        //                tableName: method.MethodName
+        //            )
+        //        );
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw;
+        //    }
+        //}
+
+        //public async Task B2CConsultaNFe([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    try
+        //    {
+        //        var method = _methods
+        //            .Where(m => m.MethodName == "B2CConsultaNFe")
+        //        .FirstOrDefault();
+
+        //        var result = await _b2cConsultaNFeService.GetRecords(
+        //            _linxMicrovixJobParameter.SetParameters(
+        //                jobName: method.MethodName,
+        //                tableName: method.MethodName
+        //            )
+        //        );
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw;
+        //    }
+        //}
+
+        //public async Task B2CConsultaNFeSituacao([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    try
+        //    {
+        //        var method = _methods
+        //            .Where(m => m.MethodName == "B2CConsultaNFeSituacao")
+        //        .FirstOrDefault();
+
+        //        var result = await _b2cConsultaNFeSituacaoService.GetRecords(
+        //            _linxMicrovixJobParameter.SetParameters(
+        //                jobName: method.MethodName,
+        //                tableName: method.MethodName
+        //            )
+        //        );
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw;
+        //    }
+        //}
+
+        //public async Task B2CConsultaStatus([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    try
+        //    {
+        //        var method = _methods
+        //            .Where(m => m.MethodName == "B2CConsultaStatus")
+        //            .FirstOrDefault();
+
+        //        var result = await _b2cConsultaStatusService.GetRecords(
+        //            _linxMicrovixJobParameter.SetParameters(
+        //                jobName: method.MethodName,
+        //                tableName: method.MethodName
+        //            )
+        //        );
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw;
+        //    }
+        //}
 
         //public async Task B2CConsultaClassificacao([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
         //{

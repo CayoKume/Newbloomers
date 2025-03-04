@@ -59,7 +59,8 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                         legenda_grade2: records[i].Where(pair => pair.Key == "legenda_grade2").Select(pair => pair.Value).FirstOrDefault(),
                         legenda_espessura: records[i].Where(pair => pair.Key == "legenda_espessura").Select(pair => pair.Value).FirstOrDefault(),
                         legenda_classificacao: records[i].Where(pair => pair.Key == "legenda_classificacao").Select(pair => pair.Value).FirstOrDefault(),
-                        timestamp: records[i].Where(pair => pair.Key == "timestamp").Select(pair => pair.Value).FirstOrDefault()
+                        timestamp: records[i].Where(pair => pair.Key == "timestamp").Select(pair => pair.Value).FirstOrDefault(),
+                        recordXml: records[i].Where(pair => pair.Key == "recordXml").Select(pair => pair.Value).FirstOrDefault()
                     );
 
                     var contexto = new ValidationContext(entity, null, null);

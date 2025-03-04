@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using Domain.IntegrationsCore.Entities.Enums;
 using Domain.IntegrationsCore.Exceptions;
+using Domain.IntegrationsCore.Extensions;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.Base;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
 using Infrastructure.IntegrationsCore.Connections.MySQL;
@@ -10,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
+using System.Reflection;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
 {
@@ -386,9 +388,9 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
         {
             try
             {
-                var properties = TypeDescriptor.GetProperties(typeof(TEntity));
+                var properties = entity.GetType().GetFilteredProperties();
                 var dataTable = new DataTable(tableName);
-                foreach (PropertyDescriptor prop in properties)
+                foreach (PropertyInfo prop in properties)
                 {
                     dataTable.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
                 }
@@ -407,6 +409,49 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
         }
 
         /// <summary>
+        /// Get the last timestamp value without column date from Azure SQL DataTable
+        /// </summary>
+        /// <param name="schema"></param>
+        /// <param name="tableName"></param>
+        /// <param name="columnDate"></param>
+        /// <returns></returns>
+        /// <exception cref="SQLCommandException"></exception>
+        /// <exception cref="InternalException"></exception>
+        public async Task<string?> GetLast7DaysMaxTimestamp(string? schema, string? tableName)
+        {
+            string? sql = "SELECT ISNULL(MAX(TIMESTAMP), 0) " +
+                         $"FROM [{schema}].[{tableName}] (NOLOCK)";
+
+            try
+            {
+                using (var conn = _sqlServerConnection.GetIDbConnection())
+                {
+                    return await conn.QueryFirstOrDefaultAsync<string?>(sql: sql, commandTimeout: 360);
+                }
+            }
+            catch (SqlException ex)
+            {
+                throw new SQLCommandException(
+                    stage: EnumStages.GetLast7DaysMinTimestamp,
+                    message: $"Error when trying to get last timestamp from database",
+                    exceptionMessage: ex.Message,
+                    commandSQL: sql
+                );
+            }
+            catch (Exception ex)
+            {
+                throw new InternalException(
+                    stage: EnumStages.GetLast7DaysMinTimestamp,
+                    error: EnumError.SQLCommand,
+                    level: EnumMessageLevel.Error,
+                    message: $"Error when trying to get last timestamp from database",
+                    exceptionMessage: ex.Message
+                );
+            }
+        }
+
+
+        /// <summary>
         /// Get the last timestamp value from Azure SQL DataTable
         /// </summary>
         /// <param name="schema"></param>
@@ -420,7 +465,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
             string? sql = "SELECT ISNULL(MIN(TIMESTAMP), 0) " +
                          $"FROM [{schema}].[{tableName}] (NOLOCK) " +
                           "WHERE " +
-                         $"{columnDate} < GETDATE() - 7";
+                         $"{columnDate} > GETDATE() - 7";
 
             try
             {
@@ -466,7 +511,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
             string? sql = "SELECT ISNULL(MIN(TIMESTAMP), 0) " +
                          $"FROM [{schema}].[{tableName}] (NOLOCK) " +
                           "WHERE " +
-                         $"{columnDate} < GETDATE() - 7 AND {columnCompany} = '{companyValue}'";
+                         $"{columnDate} > GETDATE() - 7 AND {columnCompany} = '{companyValue}'";
 
             try
             {
@@ -590,6 +635,44 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
                 using (var conn = _sqlServerConnection.GetDbConnection())
                 {
                     var result = await conn.QueryAsync<TEntity>(sql: sql, commandTimeout: 360);
+                    return result.ToList();
+                }
+            }
+            catch (SqlException ex)
+            {
+                throw new SQLCommandException(
+                    stage: EnumStages.GetRegistersExists,
+                    message: $"Error when trying to get records that already exist in trusted table",
+                    exceptionMessage: ex.Message,
+                    commandSQL: sql
+                );
+            }
+            catch (Exception ex)
+            {
+                throw new InternalException(
+                    stage: EnumStages.GetRegistersExists,
+                    error: EnumError.SQLCommand,
+                    level: EnumMessageLevel.Error,
+                    message: $"Error when trying to get records that already exist in trusted table",
+                    exceptionMessage: ex.Message
+                );
+            }
+        }
+
+        /// <summary>
+        /// Get key registers that already existis from Azure SQL Database
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <returns></returns>
+        /// <exception cref="SQLCommandException"></exception>
+        /// <exception cref="InternalException"></exception>
+        public async Task<List<string>> GetKeyRegistersAlreadyExists(string sql)
+        {
+            try
+            {
+                using (var conn = _sqlServerConnection.GetDbConnection())
+                {
+                    var result = await conn.QueryAsync<string>(sql: sql, commandTimeout: 360);
                     return result.ToList();
                 }
             }

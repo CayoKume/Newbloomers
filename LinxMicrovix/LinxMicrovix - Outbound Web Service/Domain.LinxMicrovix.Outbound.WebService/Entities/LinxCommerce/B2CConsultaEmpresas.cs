@@ -1,4 +1,5 @@
 ﻿using Domain.IntegrationsCore.CustomValidations;
+using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
@@ -68,6 +69,14 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
+        [NotMapped]
+        [SkipProperty]
+        public string? recordKey { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordXml { get; private set; }
+
         public B2CConsultaEmpresas() { }
 
         public B2CConsultaEmpresas(
@@ -86,7 +95,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             string? timestamp,
             string? data_criacao,
             string? centro_distribuicao,
-            string? portal
+            string? portal,
+            string? recordXml
         )
         {
             lastupdateon = DateTime.Now;
@@ -126,6 +136,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             this.cidade_unidade = cidade_unidade;
             this.uf_unidade = uf_unidade;
             this.email_unidade = end_unidade;
+            this.recordKey = $"[{empresa}]|[{cnpj_emp}]|[{timestamp}]";
+            this.recordXml = recordXml;
         }
     }
 }

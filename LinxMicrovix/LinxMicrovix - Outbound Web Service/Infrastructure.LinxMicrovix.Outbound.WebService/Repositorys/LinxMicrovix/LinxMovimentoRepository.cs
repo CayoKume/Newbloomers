@@ -72,12 +72,12 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
                         {
 
                             if (j == top1000List.Count() - 1)
-                                identificadores += $"'{top1000List[j].documento}'";
+                                identificadores += $"'{top1000List[j].identificador}'";
                             else
-                                identificadores += $"'{top1000List[j].documento}', ";
+                                identificadores += $"'{top1000List[j].identificador}', ";
                         }
 
-                        string sql = $"SELECT cnpj_emp, documento, codigo_cliente, cod_produto, TIMESTAMP FROM [linx_microvix_erp].[LinxMovimento] WHERE documento IN ({identificadores})";
+                        string sql = $"SELECT cnpj_emp, documento, codigo_cliente, cod_produto, TIMESTAMP FROM [linx_microvix_erp].[LinxMovimento] WHERE identificador IN ({identificadores})";
                         var result = await _linxMicrovixRepositoryBase.GetRegistersExists(sql);
                         list.AddRange(result);
                     }
@@ -93,12 +93,12 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
                     {
 
                         if (i == registros.Count() - 1)
-                            identificadores += $"'{registros[i].documento}'";
+                            identificadores += $"'{registros[i].identificador}'";
                         else
-                            identificadores += $"'{registros[i].documento}', ";
+                            identificadores += $"'{registros[i].identificador}', ";
                     }
 
-                    string sql = $"SELECT cnpj_emp, documento, codigo_cliente, cod_produto, TIMESTAMP FROM [linx_microvix_erp].[LinxMovimento] WHERE documento IN ({identificadores})";
+                    string sql = $"SELECT cnpj_emp, documento, codigo_cliente, cod_produto, TIMESTAMP FROM [linx_microvix_erp].[LinxMovimento] WHERE identificador IN ({identificadores})";
                     var result = await _linxMicrovixRepositoryBase.GetRegistersExists(sql);
                     list.AddRange(result);
 

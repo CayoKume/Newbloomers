@@ -1,4 +1,5 @@
 ﻿using Domain.IntegrationsCore.CustomValidations;
+using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -45,6 +46,14 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
+        [NotMapped]
+        [SkipProperty]
+        public string? recordKey { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordXml { get; private set; }
+
         public B2CConsultaPedidosPlanos() { }
 
         public B2CConsultaPedidosPlanos(
@@ -58,7 +67,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             string? texto_comprovante,
             string? cod_loja_sitef,
             string? timestamp,
-            string? portal
+            string? portal,
+            string? recordXml
         )
         {
             lastupdateon = DateTime.Now;
@@ -97,6 +107,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             this.cod_autorizacao = cod_autorizacao;
             this.texto_comprovante = texto_comprovante;
             this.cod_loja_sitef = cod_loja_sitef;
+            this.recordXml = recordXml;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Domain.IntegrationsCore.CustomValidations;
+using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
@@ -152,6 +153,14 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         [Column(TypeName = "bit")]
         public bool? aceita_programa_fidelidade { get; private set; }
 
+        [NotMapped]
+        [SkipProperty]
+        public string? recordKey { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordXml { get; private set; }
+
         public B2CConsultaClientes() { }
 
         public B2CConsultaClientes(
@@ -193,7 +202,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             string? timestamp,
             string? tipo_pessoa,
             string? portal,
-            string? aceita_programa_fidelidade
+            string? aceita_programa_fidelidade,
+            string? recordXml
         )
         {
             lastupdateon = DateTime.Now;
@@ -292,6 +302,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             this.naturalidade = naturalidade;
             this.numero_compl_rua_cliente = numero_compl_rua_cliente;
             this.tipo_pessoa = tipo_pessoa;
+            this.recordKey = $"[{cod_cliente_b2c}]|[{cod_cliente_erp}]|[{doc_cliente}]|[{timestamp}]";
+            this.recordXml = recordXml;
         }
     }
 }

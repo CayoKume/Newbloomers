@@ -14,6 +14,8 @@ namespace Domain.IntegrationsCore.Entities.Errors
         public List<Record> Records { get; private set; } = new List<Record>();
         public List<Message> Messages { get; private set; } = new List<Message> { };
 
+        public Log(){ }
+
         /// <summary>
         /// Create a new log
         /// </summary>

@@ -1,4 +1,5 @@
 ﻿using Domain.IntegrationsCore.CustomValidations;
+using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
@@ -92,6 +93,14 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [LengthValidation(length: 1, propertyName: "cartao_prepago")]
         public string? cartao_prepago { get; private set; }
 
+        [NotMapped]
+        [SkipProperty]
+        public string? recordKey { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordXml { get; private set; }
+
         public LinxMovimentoCartoes() { }
 
         public LinxMovimentoCartoes(
@@ -117,7 +126,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             string? descricao_maquineta,
             string? serie_maquineta,
             string? timestamp,
-            string? cartao_prepago
+            string? cartao_prepago,
+            string? recordXml
         )
         {
             lastupdateon = DateTime.Now;
@@ -188,6 +198,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             this.descricao_maquineta = descricao_maquineta;
             this.serie_maquineta = serie_maquineta;
             this.cartao_prepago = cartao_prepago;
+            this.recordKey = $"[{cnpj_emp}]|[{cupomfiscal}]|[{cod_autorizacao}]|[{identificador}]|[{timestamp}]";
+            this.recordXml = recordXml;
         }
     }
 }

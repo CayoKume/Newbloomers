@@ -1,6 +1,8 @@
 ﻿using Domain.IntegrationsCore.CustomValidations;
+using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 {
@@ -28,6 +30,14 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [Column(TypeName = "bit")]
         public Int32? ativo { get; private set; }
 
+        [NotMapped]
+        [SkipProperty]
+        public string? recordKey { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordXml { get; private set; }
+
         public LinxSetores() { }
 
         public LinxSetores(
@@ -36,7 +46,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             string? desc_setor,
             string? timestamp,
             string? codigo_integracao_ws,
-            string? ativo
+            string? ativo,
+            string? recordXml
         )
         {
             lastupdateon = DateTime.Now;
@@ -57,6 +68,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
                 0;
 
             this.desc_setor = desc_setor;
+            this.recordKey = $"[{id_setor}]|[{timestamp}]";
+            this.recordXml = recordXml;
             this.codigo_integracao_ws = codigo_integracao_ws;
         }
     }

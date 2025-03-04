@@ -9,6 +9,8 @@ using Infrastructure.IntegrationsCore.Repositorys;
 using Infrastructure.LinxCommerce.DependencyInjection;
 using Infrastructure.LinxMicrovix.Outbound.WebService.DependencyInjection;
 using Infrastructure.TotalExpress.DependencyInjection;
+using Infrastructure.AfterSale.DependencyInjection;
+
 namespace Hangfire.IO.Extensions
 {
     public static class ServicesExtensions
@@ -27,6 +29,7 @@ namespace Hangfire.IO.Extensions
             builder.Services.AddScopedB2CLinxMicrovixServices();
             builder.Services.AddScopedFlashCourierServices();
             builder.Services.AddScopedTotalExpressServices();
+            builder.Services.AddScopedAfterSaleServices();
 
             builder.Services.AddScopedDatabaseIniService();
             builder.Services.AddScopedB2CLinxMicrovixDatabaseInitServices();
@@ -39,9 +42,6 @@ namespace Hangfire.IO.Extensions
 
         public static IServiceCollection AddAuditServices(this IServiceCollection services)
         {
-            //services.AddSingleton<ILoggerConfig, LoggerConfig>();
-            //services.AddScoped<ILogMsgsRepository, LogMsgsRepository>();
-            //services.AddScoped<ILogDetailsRepository, LogDetailsRepository>();
             services.AddScoped<ILogRepository, LogRepository>();
             services.AddScoped<ILoggerService, LoggerService>();
 

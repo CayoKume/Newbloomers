@@ -38,20 +38,11 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             }
         }
 
-        public async Task<List<LinxGrupoLojas>> GetRegistersExists(LinxAPIParam jobParameter, List<LinxGrupoLojas> registros)
+        public async Task<List<LinxGrupoLojas>> GetRegistersExists()
         {
             try
             {
-                var identificadores = String.Empty;
-                for (int i = 0; i < registros.Count(); i++)
-                {
-                    if (i == registros.Count() - 1)
-                        identificadores += $"'{registros[i].empresa}'";
-                    else
-                        identificadores += $"'{registros[i].empresa}', ";
-                }
-
-                string sql = $"SELECT empresa FROM [linx_microvix_erp].[LinxGrupoLojas] WHERE empresa IN ({identificadores})";
+                string sql = $"SELECT cnpj, nome_empresa, id_empresas_rede, rede, portal, nome_portal, empresa, classificacao_portal FROM [linx_microvix_erp].[LinxGrupoLojas]";
 
                 return await _linxMicrovixRepositoryBase.GetRegistersExists(sql);
             }

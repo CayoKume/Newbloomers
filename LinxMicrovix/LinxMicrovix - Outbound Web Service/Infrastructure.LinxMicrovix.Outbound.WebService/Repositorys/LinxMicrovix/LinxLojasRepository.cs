@@ -42,22 +42,13 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             }
         }
 
-        public async Task<List<LinxLojas>> GetRegistersExists(LinxAPIParam jobParameter, List<LinxLojas> registros)
+        public async Task<List<string>> GetRegistersExists()
         {
             try
             {
-                var identificadores = String.Empty;
-                for (int i = 0; i < registros.Count(); i++)
-                {
-                    if (i == registros.Count() - 1)
-                        identificadores += $"'{registros[i].cnpj_emp}'";
-                    else
-                        identificadores += $"'{registros[i].cnpj_emp}', ";
-                }
+                string sql = $"SELECT CONCAT('[', EMPRESA, ']', '|', '[', CNPJ_EMP, ']', '|', '[', [TIMESTAMP], ']') FROM [linx_microvix_erp].[LinxLojas]";
 
-                string sql = $"SELECT cnpj_emp, TIMESTAMP FROM [linx_microvix_erp].[LinxLojas] WHERE cnpj_emp IN ({identificadores})";
-
-                return await _linxMicrovixRepositoryBase.GetRegistersExists(sql);
+                return await _linxMicrovixRepositoryBase.GetKeyRegistersAlreadyExists(sql);
             }
             catch (Exception ex) when (ex is not InternalException && ex is not SQLCommandException)
             {

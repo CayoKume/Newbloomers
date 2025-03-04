@@ -1,4 +1,5 @@
 ﻿using Domain.IntegrationsCore.CustomValidations;
+using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
@@ -176,6 +177,14 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [LengthValidation(length: 1, propertyName: "curva")]
         public string? curva { get; private set; }
 
+        [NotMapped]
+        [SkipProperty]
+        public string? recordKey { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordXml { get; private set; }
+
         public LinxProdutos() { }
 
         public LinxProdutos(
@@ -226,7 +235,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             string? cod_comprador,
             string? obrigatorio_identificacao_cliente,
             string? descricao_basica,
-            string? curva
+            string? curva,
+            string? recordXml
         )
         {
             lastupdateon = DateTime.Now;
@@ -374,6 +384,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             this.ncm = ncm;
             this.nome = nome;
             this.cod_barra = cod_barra;
+            this.recordKey = $"[{cod_produto}]|[{timestamp}]";
+            this.recordXml = recordXml;
         }
     }
 }

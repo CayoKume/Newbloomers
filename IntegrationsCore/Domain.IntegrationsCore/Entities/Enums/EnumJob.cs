@@ -96,6 +96,7 @@
         LinxSetores = 726,
 
         LinxCommerceSalesRepresentative = 912,
-        LinxCommerceCustomers = 916
+        LinxCommerceCustomers = 916,
+        LinxCommerceOrders = 900
     }
 }

@@ -3,7 +3,10 @@
     public class Record
     {
         public string FieldKeyValue { get; private set; } = String.Empty;
-        public string? RegText { get; private set; }
+        public string? RecordText { get; private set; }
+        public Guid Execution { get; private set; }
+
+        public Record() { }
 
         /// <summary>
         /// Create a new record
@@ -16,7 +19,7 @@
         )
         {
             this.FieldKeyValue = key;
-            this.RegText = regXML;
+            this.RecordText = regXML;
         }
     }
 }

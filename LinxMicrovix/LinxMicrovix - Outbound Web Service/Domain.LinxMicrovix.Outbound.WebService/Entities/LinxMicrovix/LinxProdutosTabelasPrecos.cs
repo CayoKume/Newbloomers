@@ -1,4 +1,5 @@
 ﻿using Domain.IntegrationsCore.CustomValidations;
+using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
@@ -33,6 +34,14 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
+        [NotMapped]
+        [SkipProperty]
+        public string? recordKey { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordXml { get; private set; }
+
         public LinxProdutosTabelasPrecos() { }
 
         public LinxProdutosTabelasPrecos(
@@ -42,7 +51,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             string? cnpj_emp,
             string? id_tabela,
             string? precovenda,
-            string? timestamp
+            string? timestamp,
+            string? recordXml
         )
         {
             lastupdateon = DateTime.Now;
@@ -73,6 +83,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
                 0;
 
             this.cnpj_emp = cnpj_emp;
+            this.recordKey = $"[{cnpj_emp}]|[{cod_produto}]|[{id_tabela}]|[{timestamp}]";
+            this.recordXml = recordXml;
         }
     }
 }

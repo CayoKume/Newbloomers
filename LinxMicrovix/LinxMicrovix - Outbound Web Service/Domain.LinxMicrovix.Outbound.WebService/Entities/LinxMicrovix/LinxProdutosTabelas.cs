@@ -1,4 +1,5 @@
 ﻿using Domain.IntegrationsCore.CustomValidations;
+using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -42,6 +43,14 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [LengthValidation(length: 50, propertyName: "codigo_integracao_ws")]
         public string? codigo_integracao_ws { get; private set; }
 
+        [NotMapped]
+        [SkipProperty]
+        public string? recordKey { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordXml { get; private set; }
+
         public LinxProdutosTabelas() { }
 
         public LinxProdutosTabelas(
@@ -53,7 +62,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             string? ativa,
             string? timestamp,
             string? tipo_tabela,
-            string? codigo_integracao_ws
+            string? codigo_integracao_ws,
+            string? recordXml
         )
         {
             lastupdateon = DateTime.Now;
@@ -78,6 +88,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             this.tipo_tabela = tipo_tabela;
             this.ativa = ativa;
             this.codigo_integracao_ws = codigo_integracao_ws;
+            this.recordKey = $"[{cnpj_emp}]|[{id_tabela}]|[{tipo_tabela}]|[{timestamp}]";
+            this.recordXml = recordXml;
         }
     }
 }

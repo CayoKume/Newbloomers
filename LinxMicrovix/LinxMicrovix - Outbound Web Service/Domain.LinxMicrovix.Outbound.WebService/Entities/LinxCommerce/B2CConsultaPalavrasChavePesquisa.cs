@@ -1,4 +1,5 @@
 ﻿using Domain.IntegrationsCore.CustomValidations;
+using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -24,6 +25,14 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
+        [NotMapped]
+        [SkipProperty]
+        public string? recordKey { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordXml { get; private set; }
+
         public B2CConsultaPalavrasChavePesquisa() { }
 
         public B2CConsultaPalavrasChavePesquisa(
@@ -31,7 +40,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             string? portal,
             string? id_b2c_palavras_chave_pesquisa,
             string? nome_colecao,
-            string? timestamp
+            string? timestamp,
+            string? recordXml
         )
         {
             lastupdateon = DateTime.Now;
@@ -52,6 +62,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                 0;
 
             this.nome_colecao = nome_colecao;
+            this.recordXml = recordXml;
         }
     }
 }

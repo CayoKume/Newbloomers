@@ -80,7 +80,8 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                         inicio_publicacao_produto: records[i].Where(pair => pair.Key == "inicio_publicacao_produto").Select(pair => pair.Value).FirstOrDefault(),
                         fim_publicacao_produto: records[i].Where(pair => pair.Key == "fim_publicacao_produto").Select(pair => pair.Value).FirstOrDefault(),
                         timestamp: records[i].Where(pair => pair.Key == "timestamp").Select(pair => pair.Value).FirstOrDefault(),
-                        portal: records[i].Where(pair => pair.Key == "portal").Select(pair => pair.Value).FirstOrDefault()
+                        portal: records[i].Where(pair => pair.Key == "portal").Select(pair => pair.Value).FirstOrDefault(),
+                        recordXml: records[i].Where(pair => pair.Key == "recordXml").Select(pair => pair.Value).FirstOrDefault()
                     );
 
                     var contexto = new ValidationContext(entity, null, null);

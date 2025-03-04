@@ -6,6 +6,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base
 {
     public interface ILinxMicrovixAzureSQLRepositoryBase<TEntity> where TEntity : class
     {
+        public Task<string?> GetLast7DaysMaxTimestamp(string? schema, string? tableName);
         public Task<string?> GetLast7DaysMinTimestamp(string? schema, string? tableName, string? columnDate);
         public Task<string?> GetLast7DaysMinTimestamp(string? schema, string? tableName, string? columnDate, string? columnCompany, string? companyValue);
 
@@ -17,6 +18,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base
         public Task<IEnumerable<Company>> GetMicrovixGroupCompanys();
 
         public Task<bool> CallDbProcMerge(string schemaName, string tableName, Guid? parentExecutionGUID);
+        public Task<List<string>> GetKeyRegistersAlreadyExists(string sql);
         public Task<List<TEntity>> GetRegistersExists(string sql);
         public Task<bool> InsertRecord(string tableName, string? sql, object record);
         public Task<bool> ExecuteQueryCommand(string? sql);

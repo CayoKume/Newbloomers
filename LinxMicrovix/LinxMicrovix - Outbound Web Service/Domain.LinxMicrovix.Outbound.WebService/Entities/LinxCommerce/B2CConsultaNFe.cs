@@ -1,4 +1,5 @@
 ﻿using Domain.IntegrationsCore.CustomValidations;
+using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
@@ -76,6 +77,14 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         [Column(TypeName = "int")]
         public Int32? tpAmb { get; private set; }
 
+        [NotMapped]
+        [SkipProperty]
+        public string? recordKey { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordXml { get; private set; }
+
         public B2CConsultaNFe() { }
 
         public B2CConsultaNFe(
@@ -98,7 +107,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             string? nProt,
             string? codigo_modelo_nf,
             string? justificativa,
-            string? tpAmb
+            string? tpAmb,
+            string? recordXml
         )
         {
             lastupdateon = DateTime.Now;
@@ -173,6 +183,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             this.codigo_modelo_nf = codigo_modelo_nf;
             this.justificativa = justificativa;
             this.serie = serie;
+            this.recordKey = $"[{id_nfe}]|[{id_pedido}]|[{chave_nfe}]|[{timestamp}]";
+            this.recordXml = recordXml;
         }
     }
 }

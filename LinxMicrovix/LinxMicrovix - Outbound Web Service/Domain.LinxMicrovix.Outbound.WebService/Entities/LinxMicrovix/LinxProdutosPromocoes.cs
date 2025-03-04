@@ -1,4 +1,5 @@
 ﻿using Domain.IntegrationsCore.CustomValidations;
+using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
@@ -54,6 +55,14 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [Column(TypeName = "decimal(10,2)")]
         public decimal? custo_total_campanha { get; private set; }
 
+        [NotMapped]
+        [SkipProperty]
+        public string? recordKey { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordXml { get; private set; }
+
         public LinxProdutosPromocoes() { }
 
         public LinxProdutosPromocoes(
@@ -69,7 +78,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             string? id_campanha,
             string? nome_campanha,
             string? promocao_opcional,
-            string? custo_total_campanha
+            string? custo_total_campanha,
+            string? recordXml
         )
         {
             lastupdateon = DateTime.Now;
@@ -122,6 +132,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             this.promocao_ativa = promocao_ativa;
             this.cnpj_emp = cnpj_emp;
             this.nome_campanha = nome_campanha;
+            this.recordKey = $"[{cnpj_emp}]|[{cod_produto}]|[{id_campanha}]|[{data_cadastro_promocao}]";
+            this.recordXml = recordXml;
         }
     }
 }

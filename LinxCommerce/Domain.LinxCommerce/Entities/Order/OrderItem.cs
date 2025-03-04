@@ -1,9 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using Domain.IntegrationsCore.Entities.Enums;
+using Domain.IntegrationsCore.Exceptions;
 
 namespace Domain.LinxCommerce.Entities.Order
 {
-    public class OrderItem
+    public class OrderItem : IEquatable<OrderItem>
     {
         public Int64? OrderItemID { get; set; }
         public Guid? OrderID { get; set; }
@@ -48,5 +48,87 @@ namespace Domain.LinxCommerce.Entities.Order
         public decimal? Width { get; set; }
         public Guid? FulfillmentID { get; set; }
         public string? UPC { get; set; }
+
+        public static List<OrderItem?> Compare(List<OrderItem?> orderItemsAPIList, List<OrderItem> orderItemsDboList)
+        {
+            try
+            {
+                foreach (var oItemDbo in orderItemsDboList)
+                {
+                    orderItemsAPIList.Remove(
+                        orderItemsAPIList
+                            .Where(oItemAPI =>
+                                oItemAPI.CatalogID == oItemDbo.CatalogID &&
+                                oItemAPI.CatalogItemType == oItemDbo.CatalogItemType &&
+                                oItemAPI.DiscountAmount == oItemDbo.DiscountAmount &&
+                                oItemAPI.InStockHandlingDays == oItemDbo.InStockHandlingDays &&
+                                oItemAPI.IsDeleted == oItemDbo.IsDeleted &&
+                                oItemAPI.IsDeliverable == oItemDbo.IsDeliverable &&
+                                oItemAPI.IsFreeOffer == oItemDbo.IsFreeOffer &&
+                                oItemAPI.IsFreeShipping == oItemDbo.IsFreeShipping &&
+                                oItemAPI.IsGiftWrapping == oItemDbo.IsGiftWrapping &&
+                                oItemAPI.IsService == oItemDbo.IsService &&
+                                oItemAPI.OrderID == oItemDbo.OrderID &&
+                                oItemAPI.OrderItemID == oItemDbo.OrderItemID &&
+                                oItemAPI.OutStockHandlingDays == oItemDbo.OutStockHandlingDays &&
+                                oItemAPI.Price == oItemDbo.Price &&
+                                oItemAPI.PriceListID == oItemDbo.PriceListID &&
+                                oItemAPI.ProductID == oItemDbo.ProductID &&
+                                oItemAPI.Qty == oItemDbo.Qty &&
+                                oItemAPI.SkuID == oItemDbo.SkuID &&
+                                oItemAPI.SpecialType == oItemDbo.SpecialType &&
+                                oItemAPI.Subtotal == oItemDbo.Subtotal &&
+                                oItemAPI.SubtotalAdjustment == oItemDbo.SubtotalAdjustment &&
+                                oItemAPI.TaxationAmount == oItemDbo.TaxationAmount &&
+                                oItemAPI.Total == oItemDbo.Total &&
+                                oItemAPI.WareHouseID == oItemDbo.WareHouseID &&
+                                oItemAPI.WebSiteID == oItemDbo.WebSiteID
+                            ).FirstOrDefault()
+                    );
+                }
+
+                return orderItemsAPIList;
+            }
+            catch (Exception ex)
+            {
+                throw new InternalException(
+                    stage: EnumStages.Compare,
+                    error: EnumError.Compare,
+                    level: EnumMessageLevel.Error,
+                    message: $"Error when comparing two lists of records",
+                    exceptionMessage: ex.Message
+                );
+            }
+        }
+
+        public bool Equals(OrderItem? other)
+        {
+            return
+                this.CatalogID == other.CatalogID &&
+                this.CatalogItemType == other.CatalogItemType &&
+                this.DiscountAmount == other.DiscountAmount &&
+                this.InStockHandlingDays == other.InStockHandlingDays &&
+                this.IsDeleted == other.IsDeleted &&
+                this.IsDeliverable == other.IsDeliverable &&
+                this.IsFreeOffer == other.IsFreeOffer &&
+                this.IsFreeShipping == other.IsFreeShipping &&
+                this.IsGiftWrapping == other.IsGiftWrapping &&
+                this.IsService == other.IsService &&
+                this.OrderID == other.OrderID &&
+                this.OrderItemID == other.OrderItemID &&
+                this.OutStockHandlingDays == other.OutStockHandlingDays &&
+                this.Price == other.Price &&
+                this.PriceListID == other.PriceListID &&
+                this.ProductID == other.ProductID &&
+                this.Qty == other.Qty &&
+                this.SkuID == other.SkuID &&
+                this.SpecialType == other.SpecialType &&
+                this.Subtotal == other.Subtotal &&
+                this.SubtotalAdjustment == other.SubtotalAdjustment &&
+                this.TaxationAmount == other.TaxationAmount &&
+                this.Total == other.Total &&
+                this.WareHouseID == other.WareHouseID &&
+                this.WebSiteID == other.WebSiteID;
+        }
     }
 }

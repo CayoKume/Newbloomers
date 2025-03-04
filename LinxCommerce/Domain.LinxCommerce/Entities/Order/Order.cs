@@ -1,7 +1,9 @@
 ﻿using Domain.IntegrationsCore.Entities.Enums;
 using Domain.IntegrationsCore.Exceptions;
 using Domain.IntegrationsCore.Extensions;
+using Domain.LinxCommerce.Entities.Responses;
 using Domain.LinxCommerce.Entities.SalesRepresentative;
+using System.Collections.Generic;
 
 namespace Domain.LinxCommerce.Entities.Order
 {
@@ -87,9 +89,9 @@ namespace Domain.LinxCommerce.Entities.Order
             public OrderInvoice OrderInvoice { get; set; }
 
             [SkipProperty]
-            public Dictionary<int, string> Responses { get; set; } = new Dictionary<int, string>();
+            public Dictionary<string, string> Responses { get; set; } = new Dictionary<string, string>();
 
-            public static void Compare(List<Order.Root?> ordersAPIList, List<Order.Root> ordersDboList)
+            public static void Compare(List<SearchOrder.Result?> ordersAPIList, List<Domain.LinxCommerce.Entities.Order.Order.Root> ordersDboList)
             {
                 if (ordersDboList.Count() > 0)
                 {
@@ -108,17 +110,13 @@ namespace Domain.LinxCommerce.Entities.Order
                                         oAPI.OrderID == oDbo.OrderID &&
                                         oAPI.OrderNumber == oDbo.OrderNumber &&
                                         oAPI.MarketPlaceBrand == oDbo.MarketPlaceBrand &&
-                                        oAPI.OriginalOrderID == oDbo.OriginalOrderID &&
                                         oAPI.WebSiteID == oDbo.WebSiteID &&
-                                        oAPI.WebSiteIntegrationID == oDbo.WebSiteIntegrationID &&
                                         oAPI.CustomerID == oDbo.CustomerID &&
-                                        oAPI.ShopperTicketID == oDbo.ShopperTicketID &&
                                         oAPI.ItemsQty == oDbo.ItemsQty &&
                                         oAPI.ItemsCount == oDbo.ItemsCount &&
                                         oAPI.TaxAmount == oDbo.TaxAmount &&
                                         oAPI.DeliveryAmount == oDbo.DeliveryAmount &&
                                         oAPI.DiscountAmount == oDbo.DiscountAmount &&
-                                        oAPI.PaymentTaxAmount == oDbo.PaymentTaxAmount &&
                                         oAPI.SubTotal == oDbo.SubTotal &&
                                         oAPI.Total == oDbo.Total &&
                                         oAPI.TotalDue == oDbo.TotalDue &&
@@ -129,50 +127,38 @@ namespace Domain.LinxCommerce.Entities.Order
                                         oAPI.ShipmentDate == oDbo.ShipmentDate &&
                                         oAPI.ShipmentStatus == oDbo.ShipmentStatus &&
                                         oAPI.GlobalStatus == oDbo.GlobalStatus &&
-                                        oAPI.DeliveryPostalCode == oDbo.DeliveryPostalCode &&
-                                        oAPI.CreatedChannel == oDbo.CreatedChannel &&
                                         oAPI.TrafficSourceID == oDbo.TrafficSourceID &&
                                         oAPI.OrderStatusID == oDbo.OrderStatusID &&
                                         oAPI.CreatedDate == oDbo.CreatedDate &&
-                                        oAPI.CreatedBy == oDbo.CreatedBy &&
-                                        oAPI.ModifiedDate == oDbo.ModifiedDate &&
-                                        oAPI.ModifiedBy == oDbo.ModifiedBy &&
-                                        oAPI.Remarks == oDbo.Remarks &&
-                                        oAPI.SellerCommissionAmount == oDbo.SellerCommissionAmount &&
-                                        oAPI.CommissionAmount == oDbo.CommissionAmount &&
-                                        oAPI.OrderGroupID == oDbo.OrderGroupID &&
-                                        oAPI.OrderGroupNumber == oDbo.OrderGroupNumber &&
                                         oAPI.HasConflicts == oDbo.HasConflicts &&
                                         oAPI.AcquiredDate == oDbo.AcquiredDate &&
-                                        oAPI.HasHubOrderWithoutShipmentConflict == oDbo.HasHubOrderWithoutShipmentConflict &&
-                                        oAPI.CustomerType == oDbo.CustomerType &&
                                         oAPI.CancelledDate == oDbo.CancelledDate &&
-                                        oAPI.WebSiteName == oDbo.WebSiteName &&
-                                        oAPI.CustomerName == oDbo.CustomerName &&
-                                        oAPI.CustomerEmail == oDbo.CustomerEmail &&
-                                        oAPI.CustomerGender == oDbo.CustomerGender &&
-                                        oAPI.CustomerBirthDate == oDbo.CustomerBirthDate &&
-                                        oAPI.CustomerPhone == oDbo.CustomerPhone &&
-                                        oAPI.CustomerPhone == oDbo.CustomerPhone &&
-                                        oAPI.CustomerCPF == oDbo.CustomerCPF &&
-                                        oAPI.CustomerCNPJ == oDbo.CustomerCNPJ &&
-                                        oAPI.CustomerTradingName == oDbo.CustomerTradingName &&
-                                        oAPI.CustomerSiteTaxPayer == oDbo.CustomerSiteTaxPayer &&
-
                                         oAPI.OrderInvoice == oDbo.OrderInvoice &&
 
+                                        oAPI.Items.All(x => oDbo.Items.Contains(x)) &&
                                         oAPI.Addresses.All(x => oDbo.Addresses.Contains(x)) &&
+                                        oAPI.DeliveryMethods.All(x => oDbo.DeliveryMethods.Contains(x)) &&
+                                        oAPI.PaymentMethods.All(x => oDbo.PaymentMethods.Contains(x))
+
                                     ).FirstOrDefault()
                             );
 
-                            if (sAPI.Addresses.Count() > 0 && sDbo.Addresses.Count() > 0)
-                                sAPI.Addresses = SalesRepresentativeAddress.Compare(sAPI.Addresses, sDbo.Addresses);
+                            if (oAPI.Items.Count() > 0 && oDbo.Items.Count() > 0)
+                                oAPI.Items = OrderItem.Compare(oAPI.Items, oDbo.Items);
 
-                            if (sAPI.Portfolio != null && sDbo.Portfolio != null)
-                                sAPI.Portfolio.Customers = SalesRepresentativeCustomerRelation.Compare(sAPI.Portfolio.Customers, sDbo.Portfolio.Customers);
+                            if (oAPI.Addresses.Count() > 0 && oDbo.Addresses.Count() > 0)
+                                oAPI.Addresses = OrderAddress.Compare(oAPI.Addresses, oDbo.Addresses);
 
-                            sDbo.Addresses.AddRange(sAPI.Addresses);
-                            sDbo.Portfolio.Customers.AddRange(sAPI.Portfolio.Customers);
+                            if (oAPI.DeliveryMethods.Count() > 0 && oDbo.DeliveryMethods.Count() > 0)
+                                oAPI.DeliveryMethods = OrderDeliveryMethod.Compare(oAPI.DeliveryMethods, oDbo.DeliveryMethods);
+
+                            if (oAPI.PaymentMethods.Count() > 0 && oDbo.PaymentMethods.Count() > 0)
+                                oAPI.PaymentMethods = OrderPaymentMethod.Compare(oAPI.PaymentMethods, oDbo.PaymentMethods);
+
+                            oDbo.Items.AddRange(oAPI.Items);
+                            oDbo.Addresses.AddRange(oAPI.Addresses);
+                            oDbo.DeliveryMethods.AddRange(oAPI.DeliveryMethods);
+                            oDbo.PaymentMethods.AddRange(oAPI.PaymentMethods);
                         }
                         catch (Exception ex)
                         {

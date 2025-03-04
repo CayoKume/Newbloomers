@@ -61,7 +61,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             }
         }
 
-        public async Task<List<LinxProdutosTabelasPrecos>> GetRegistersExists(LinxAPIParam jobParameter, List<LinxProdutosTabelasPrecos> registros)
+        public async Task<List<LinxProdutosTabelasPrecos>> GetRegistersExists(LinxAPIParam jobParameter, List<Int64?> registros)
         {
             try
             {
@@ -69,9 +69,9 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
                 for (int i = 0; i < registros.Count(); i++)
                 {
                     if (i == registros.Count() - 1)
-                        identificadores += $"'{registros[i].cod_produto}'";
+                        identificadores += $"'{registros[i]}'";
                     else
-                        identificadores += $"'{registros[i].cod_produto}', ";
+                        identificadores += $"'{registros[i]}', ";
                 }
 
                 string sql = $"SELECT cod_produto, cnpj_emp, id_tabela, TIMESTAMP FROM [linx_microvix_erp].[LinxProdutosTabelasPrecos] WHERE cod_produto IN ({identificadores})";

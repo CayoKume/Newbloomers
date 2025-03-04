@@ -3,6 +3,7 @@ using Domain.IntegrationsCore.Exceptions;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxMicrovix;
+using System.Collections.Generic;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 {
@@ -43,22 +44,56 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             }
         }
 
-        public async Task<List<LinxClientesFornec>> GetRegistersExists(LinxAPIParam jobParameter, List<LinxClientesFornec> registros)
+        public async Task<List<string?>> GetRegistersExists(LinxAPIParam jobParameter, List<string?> registros)
         {
             try
             {
-                var identificadores = String.Empty;
-                for (int i = 0; i < registros.Count(); i++)
+                int indice = registros.Count() / 1000;
+
+                if (indice > 1)
                 {
-                    if (i == registros.Count() - 1)
-                        identificadores += $"'{registros[i].doc_cliente}'";
-                    else
-                        identificadores += $"'{registros[i].doc_cliente}', ";
+                    var list = new List<string>();
+
+                    for (int i = 0; i <= indice; i++)
+                    {
+                        string identificadores = String.Empty;
+                        var top1000List = registros.Skip(i * 1000).Take(1000).ToList();
+
+                        for (int j = 0; j < top1000List.Count(); j++)
+                        {
+
+                            if (j == top1000List.Count() - 1)
+                                identificadores += $"'{top1000List[j]}'";
+                            else
+                                identificadores += $"'{top1000List[j]}', ";
+                        }
+
+                        string sql = $"SELECT CONCAT('[', COD_CLIENTE, ']', '|', '[', DOC_CLIENTE, ']', '|', '[', [TIMESTAMP], ']') FROM [linx_microvix_erp].[LinxClientesFornec] WHERE DOC_CLIENTE IN ({identificadores})";
+                        var result = await _linxMicrovixRepositoryBase.GetKeyRegistersAlreadyExists(sql);
+                        list.AddRange(result);
+                    }
+
+                    return list;
                 }
+                else
+                {
+                    var list = new List<string>();
+                    string identificadores = String.Empty;
 
-                string sql = $"SELECT cod_cliente, DOC_CLIENTE, TIMESTAMP FROM [linx_microvix_erp].[LinxClientesFornec] WHERE DOC_CLIENTE IN ({identificadores})";
+                    for (int i = 0; i < registros.Count(); i++)
+                    {
+                        if (i == registros.Count() - 1)
+                            identificadores += $"'{registros[i]}'";
+                        else
+                            identificadores += $"'{registros[i]}', ";
+                    }
 
-                return await _linxMicrovixRepositoryBase.GetRegistersExists(sql);
+                    string sql = $"SELECT CONCAT('[', COD_CLIENTE, ']', '|', '[', DOC_CLIENTE, ']', '|', '[', [TIMESTAMP], ']') FROM [linx_microvix_erp].[LinxClientesFornec] WHERE DOC_CLIENTE IN ({identificadores})";
+                    var result = await _linxMicrovixRepositoryBase.GetKeyRegistersAlreadyExists(sql);
+                    list.AddRange(result);
+
+                    return list;
+                }
             }
             catch (Exception ex) when (ex is not InternalException && ex is not SQLCommandException)
             {

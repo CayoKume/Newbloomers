@@ -1,4 +1,5 @@
 ﻿using Domain.IntegrationsCore.CustomValidations;
+using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
@@ -377,6 +378,14 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [LengthValidation(length: 5, propertyName: "codigo_status_nfe")]
         public string? codigo_status_nfe { get; private set; }
 
+        [NotMapped]
+        [SkipProperty]
+        public string? recordKey { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordXml { get; private set; }
+
         public LinxMovimento() { }
 
         /// <param name="listValidations"></param>
@@ -601,7 +610,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             string? icms_st_antecipado_percentual_reducao,
             string? icms_st_antecipado_valor_item,
             string? icms_base_desonerado_item,
-            string? codigo_status_nfe
+            string? codigo_status_nfe,
+            string? recordXml
         )
         {
             lastupdateon = DateTime.Now;
@@ -1047,6 +1057,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             this.conferido = conferido;
             this.codigo_modelo_nf = codigo_modelo_nf;
             this.codigo_status_nfe = codigo_status_nfe;
+            this.recordKey = $"[{cnpj_emp}]|[{documento}]|[{chave_nf}]|[{data_documento}]|[{codigo_cliente}]|[{cod_produto}]|[{cancelado}]|[{excluido}]|[{transacao_pedido_venda}]|[{ordem}]|[{timestamp}]";
+            this.recordXml = recordXml;
         }
     }
 }

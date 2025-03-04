@@ -21,7 +21,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
                 for (int i = 0; i < records.Count(); i++)
                 {
-                    table.Rows.Add(records[i].lastupdateon, records[i].id_status, records[i].descricao_status, records[i].portal, records[i].timestamp);
+                    table.Rows.Add(records[i].lastupdateon, records[i].id_status, records[i].descricao_status, records[i].timestamp, records[i].portal);
                 }
 
                 _linxMicrovixRepositoryBase.BulkInsertIntoTableRaw(
@@ -37,22 +37,13 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             }
         }
 
-        public async Task<List<LinxB2CStatus>> GetRegistersExists(LinxAPIParam jobParameter, List<LinxB2CStatus> registros)
+        public async Task<List<string?>> GetRegistersExists()
         {
             try
             {
-                var identificadores = String.Empty;
-                for (int i = 0; i < registros.Count(); i++)
-                {
-                    if (i == registros.Count() - 1)
-                        identificadores += $"'{registros[i].id_status}'";
-                    else
-                        identificadores += $"'{registros[i].id_status}', ";
-                }
+                string sql = $"SELECT CONCAT('[', ID_STATUS, ']', '|',  '[', [TIMESTAMP], ']') FROM [linx_microvix_erp].[LinxB2CStatus]";
 
-                string sql = $"SELECT id_status, TIMESTAMP FROM [linx_microvix_erp].[LinxB2CStatus] WHERE id_status IN ({identificadores})";
-
-                return await _linxMicrovixRepositoryBase.GetRegistersExists(sql);
+                return await _linxMicrovixRepositoryBase.GetKeyRegistersAlreadyExists(sql);
             }
             catch (Exception ex) when (ex is not InternalException && ex is not SQLCommandException)
             {

@@ -1,8 +1,6 @@
 ﻿using Application.IntegrationsCore.Interfaces;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
-using Application.LinxMicrovix.Outbound.WebService.Interfaces.Cache.LinxMicrovix;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxMicrovix;
-using Application.LinxMicrovix.Outbound.WebService.Services.Cache.LinxMicrovix;
 using Domain.IntegrationsCore.Entities.Enums;
 using Domain.IntegrationsCore.Exceptions;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
@@ -21,7 +19,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
         private readonly ILinxMicrovixAzureSQLRepositoryBase<LinxPlanos> _linxMicrovixRepositoryBase;
         private readonly ILinxPlanosRepository _linxPlanosRepository;
-        private static ILinxPlanosServiceCache _linxPlanosServiceCache { get; set; } = new LinxPlanosServiceCache();
+        private static List<string?> _linxPlanosCache { get; set; } = new List<string?>();
 
         public LinxPlanosService(
             IAPICall apiCall,
@@ -64,7 +62,8 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                         desativado: records[i].Where(pair => pair.Key == "desativado").Select(pair => pair.Value).FirstOrDefault(),
                         usa_tef: records[i].Where(pair => pair.Key == "usa_tef").Select(pair => pair.Value).FirstOrDefault(),
                         timestamp: records[i].Where(pair => pair.Key == "timestamp").Select(pair => pair.Value).FirstOrDefault(),
-                        portal: records[i].Where(pair => pair.Key == "portal").Select(pair => pair.Value).FirstOrDefault()
+                        portal: records[i].Where(pair => pair.Key == "portal").Select(pair => pair.Value).FirstOrDefault(),
+                        recordXml: records[i].Where(pair => pair.Key == "recordXml").Select(pair => pair.Value).FirstOrDefault()
                     );
 
                     var contexto = new ValidationContext(entity, null, null);
@@ -180,8 +179,6 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
 
         public async Task<bool> GetRecords(LinxAPIParam jobParameter)
         {
-            IList<LinxPlanos> _listSomenteNovos = new List<LinxPlanos>();
-
             try
             {
                 _logger
@@ -197,33 +194,35 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                         );
 
                 string? response = await _apiCall.PostAsync(jobParameter: jobParameter, body: body);
-                var xmls = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response, _linxPlanosServiceCache);
+                var xmls = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response);
 
                 if (xmls.Count() > 0)
                 {
                     var listRecords = DeserializeXMLToObject(jobParameter, xmls);
 
-                    if (_linxPlanosServiceCache.GetList().Count == 0)
-                    {
-                        var list_existentes = await _linxPlanosRepository.GetRegistersExists(jobParameter: jobParameter, registros: listRecords);
-                        _linxPlanosServiceCache.AddList(list_existentes);
-                    }
+                    if (_linxPlanosCache.Count == 0)
+                        _linxPlanosCache = await _linxPlanosRepository.GetRegistersExists(
+                            jobParameter: jobParameter, 
+                            registros: listRecords
+                                        .Select(x => x.plano)
+                                        .ToList()
+                        );
 
-                    _listSomenteNovos = _linxPlanosServiceCache.FiltrarList(listRecords);
+                    var _listSomenteNovos = listRecords.Where(x => !_linxPlanosCache.Any(y => 
+                        y == x.recordKey
+                    )).ToList();
+
                     if (_listSomenteNovos.Count() > 0)
                     {
                         _linxPlanosRepository.BulkInsertIntoTableRaw(records: _listSomenteNovos, jobParameter: jobParameter);
+                        await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
+
                         for (int i = 0; i < _listSomenteNovos.Count; i++)
                         {
-                            var key = _linxPlanosServiceCache.GetKey(_listSomenteNovos[i]);
-                            if (_linxPlanosServiceCache.GetDictionaryXml().ContainsKey(key))
-                            {
-                                var xml = _linxPlanosServiceCache.GetDictionaryXml()[key];
-                                _logger.AddRecord(key, xml);
-                            }
+                            _logger.AddRecord(_listSomenteNovos[i].recordKey, _listSomenteNovos[i].recordXml);
                         }
 
-                        await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
+                        _linxPlanosCache.AddRange(_listSomenteNovos.Select(x => x.recordKey));
 
                         _logger.AddMessage(
                             $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"
@@ -234,8 +233,6 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                             $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"
                         );
                 }
-
-                await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
             }
             catch (SQLCommandException ex)
             {
@@ -273,7 +270,6 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
             {
                 _logger.SetLogEndDate();
                 await _logger.CommitAllChanges();
-                _linxPlanosServiceCache.AddList(_listSomenteNovos);
             }
 
             return true;

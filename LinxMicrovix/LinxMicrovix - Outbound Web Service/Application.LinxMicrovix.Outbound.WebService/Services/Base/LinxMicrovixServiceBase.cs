@@ -69,6 +69,8 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.Base
                             var registro = new Dictionary<string?, string?>();
                             var c0 = xml.GetElementsByTagName("C")[0];
                             var rrow = xml.GetElementsByTagName("R")[row];
+                            registro.Add("recordXml", rrow.InnerXml);
+
                             for (int col = 0; col < c0.ChildNodes.Count; col++)
                             {
                                 string? key = c0.ChildNodes[col].InnerText;
@@ -98,6 +100,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.Base
             }
         }
 
+        //remover
         public List<Dictionary<string?, string?>> DeserializeResponseToXML(LinxAPIParam jobParameter, string? response, ICacheBase entityCache)
         {
             try

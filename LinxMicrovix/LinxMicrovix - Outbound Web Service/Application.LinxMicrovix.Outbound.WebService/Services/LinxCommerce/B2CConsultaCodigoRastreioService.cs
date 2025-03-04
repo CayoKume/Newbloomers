@@ -56,7 +56,8 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                         codigo_rastreio: records[i].Where(pair => pair.Key == "codigo_rastreio").Select(pair => pair.Value).FirstOrDefault(),
                         sequencia_volume: records[i].Where(pair => pair.Key == "sequencia_volume").Select(pair => pair.Value).FirstOrDefault(),
                         timestamp: records[i].Where(pair => pair.Key == "timestamp").Select(pair => pair.Value).FirstOrDefault(),
-                        portal: records[i].Where(pair => pair.Key == "portal").Select(pair => pair.Value).FirstOrDefault()
+                        portal: records[i].Where(pair => pair.Key == "portal").Select(pair => pair.Value).FirstOrDefault(),
+                        recordXml: records[i].Where(pair => pair.Key == "recordXml").Select(pair => pair.Value).FirstOrDefault()
                     );
 
                     var contexto = new ValidationContext(entity, null, null);

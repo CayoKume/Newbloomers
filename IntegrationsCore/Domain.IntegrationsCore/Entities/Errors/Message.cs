@@ -5,12 +5,14 @@ namespace Domain.IntegrationsCore.Entities.Errors
     {
         public EnumStages? IdStage { get; private set; }
         public EnumMessageLevel? IdLogLevel { get; private set; }
-        public EnumError? IdError { get; private set; }
         public bool? IsError { get; private set; }
+        public EnumError? IdError { get; private set; }
+        public Guid Execution { get; private set; }
         public string? Msg { get; private set; }
         public string? ExceptionMessage { get; private set; }
         public string? CommandSQL { get; private set; }
-        public Guid Execution { get; private set; }
+
+        public Message() { }
 
         /// <summary>
         /// Build an information message

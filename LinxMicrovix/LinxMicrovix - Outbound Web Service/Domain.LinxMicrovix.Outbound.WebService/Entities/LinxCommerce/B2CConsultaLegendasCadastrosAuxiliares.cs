@@ -1,4 +1,5 @@
 ﻿using Domain.IntegrationsCore.CustomValidations;
+using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -49,6 +50,14 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
+        [NotMapped]
+        [SkipProperty]
+        public string? recordKey { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordXml { get; private set; }
+
         public B2CConsultaLegendasCadastrosAuxiliares() { }
 
         public B2CConsultaLegendasCadastrosAuxiliares(
@@ -62,7 +71,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             string? legenda_grade2,
             string? legenda_espessura,
             string? legenda_classificacao,
-            string? timestamp
+            string? timestamp,
+            string? recordXml
         )
         {
             lastupdateon = DateTime.Now;
@@ -85,6 +95,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             this.legenda_grade2 = legenda_grade2;
             this.legenda_espessura = legenda_espessura;
             this.legenda_classificacao = legenda_classificacao;
+            this.recordXml = recordXml;
         }
     }
 }

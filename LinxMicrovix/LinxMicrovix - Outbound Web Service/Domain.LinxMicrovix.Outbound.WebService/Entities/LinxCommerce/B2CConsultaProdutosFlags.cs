@@ -1,4 +1,5 @@
 ﻿using Domain.IntegrationsCore.CustomValidations;
+using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -30,6 +31,14 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         [LengthValidation(length: 300, propertyName: "descricao_b2c_flags")]
         public string? descricao_b2c_flags { get; private set; }
 
+        [NotMapped]
+        [SkipProperty]
+        public string? recordKey { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordXml { get; private set; }
+
         public B2CConsultaProdutosFlags() { }
 
         public B2CConsultaProdutosFlags(
@@ -39,7 +48,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             string? id_b2c_flags,
             string? codigoproduto,
             string? timestamp,
-            string? descricao_b2c_flags
+            string? descricao_b2c_flags,
+            string? recordXml
         )
         {
             lastupdateon = DateTime.Now;
@@ -70,6 +80,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                 0;
 
             this.descricao_b2c_flags = descricao_b2c_flags;
+            this.recordXml = recordXml;
         }
     }
 }

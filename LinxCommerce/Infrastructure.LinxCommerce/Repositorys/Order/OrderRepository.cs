@@ -109,7 +109,7 @@ namespace Infrastructure.LinxCommerce.Repositorys.Order
                             orderDeliveryMethodTable.Rows.Add(
                                 records[i].DeliveryMethods[j].LogisticOptionId, records[i].DeliveryMethods[j].LogisticOptionName, records[i].DeliveryMethods[j].LogisticContractId, records[i].DeliveryMethods[j].LogisticContractName, records[i].DeliveryMethods[j].OrderDeliveryMethodID,
                                 records[i].DeliveryMethods[j].OrderID, records[i].DeliveryMethods[j].DeliveryMethodID, records[i].DeliveryMethods[j].DeliveryGroupID, records[i].DeliveryMethods[j].Amount, records[i].DeliveryMethods[j].ETA, records[i].DeliveryMethods[j].ETADays,
-                                records[i].DeliveryMethods[j].IntegrationID, records[i].DeliveryMethods[j].ScheduleShiftID, records[i].DeliveryMethods[j].ScheduleDisplayName, records[i].DeliveryMethods[j].ScheduleTax, records[i].DeliveryMethods[j].ScheduleStartTime, records[i].DeliveryMethods[j].ScheduleEndTime, 
+                                records[i].DeliveryMethods[j].IntegrationID, records[i].DeliveryMethods[j].ScheduleShiftID, records[i].DeliveryMethods[j].ScheduleDisplayName, records[i].DeliveryMethods[j].ScheduleTax,/* records[i].DeliveryMethods[j].ScheduleStartTime, records[i].DeliveryMethods[j].ScheduleEndTime,*/ 
                                 records[i].DeliveryMethods[j].ScheduleDate, records[i].DeliveryMethods[j].DeliveryMethodAlias, records[i].DeliveryMethods[j].PointOfSaleID, records[i].DeliveryMethods[j].PointOfSaleIntegrationID, records[i].DeliveryMethods[j].PointOfSaleName, records[i].DeliveryMethods[j].DeliveryMethodType, 
                                 records[i].DeliveryMethods[j].DeliveryLogisticType, records[i].DeliveryMethods[j].ExternalID, records[i].DeliveryMethods[j].WarehouseID, records[i].DeliveryMethods[j].WarehouseIntegrationID, records[i].DeliveryMethods[j].DockID, records[i].DeliveryMethods[j].CarrierName, 
                                 records[i].DeliveryMethods[j].DeliveryEstimatedDate
@@ -279,7 +279,7 @@ namespace Infrastructure.LinxCommerce.Repositorys.Order
             }
         }
 
-        public async Task<List<Domain.LinxCommerce.Entities.Order.Order.Root>> GetRegistersExists(IEnumerable<string> guids)
+        public async Task<List<Domain.LinxCommerce.Entities.Order.Order.Root>> GetRegistersExists(IEnumerable<Guid?> guids)
         {
             string? identifiers = String.Empty;
 
@@ -293,355 +293,141 @@ namespace Infrastructure.LinxCommerce.Repositorys.Order
             }
 
             string? sql = $@"SELECT DISTINCT
-							 A.[OrderID],
-							 A.[OrderNumber],
-							 A.[MarketPlaceBrand],
-							 A.[OriginalOrderID],
-							 A.[WebSiteID],
-							 A.[WebSiteIntegrationID],
+							 A.[AcquiredDate],
+							 A.[CancelledDate],
+							 A.[CreatedDate],
 							 A.[CustomerID],
-							 A.[ShopperTicketID],
-							 A.[ItemsQty],
-							 A.[ItemsCount],
-							 A.[TaxAmount],
 							 A.[DeliveryAmount],
 							 A.[DiscountAmount],
-							 A.[PaymentTaxAmount],
-							 A.[SubTotal],
-							 A.[Total],
-							 A.[TotalDue],
-							 A.[TotalPaid],
-							 A.[TotalRefunded],
+							 A.[GlobalStatus],
+							 A.[HasConflicts],
+							 A.[ItemsCount],
+							 A.[ItemsQty],
+							 A.[MarketPlaceBrand],
+							 A.[ModifiedDate],
+							 A.[OrderID],
+							 A.[OrderNumber],
+							 A.[OrderStatusID],
 							 A.[PaymentDate],
 							 A.[PaymentStatus],
 							 A.[ShipmentDate],
 							 A.[ShipmentStatus],
-							 A.[GlobalStatus],
-							 A.[DeliveryPostalCode],
-							 A.[CreatedChannel],
+							 A.[SubTotal],
+							 A.[TaxAmount],
+							 A.[Total],
+							 A.[TotalDue],
+							 A.[TotalPaid],
+							 A.[TotalRefunded],
 							 A.[TrafficSourceID],
-							 A.[OrderStatusID],
-							 A.[CreatedDate],
-							 A.[CreatedBy],
-							 A.[ModifiedDate],
-							 A.[ModifiedBy],
-							 A.[Remarks],
-							 A.[SellerCommissionAmount],
-							 A.[CommissionAmount],
-							 A.[OrderGroupID],
-							 A.[OrderGroupNumber],
-							 A.[HasConflicts],
-							 A.[AcquiredDate],
-							 A.[HasHubOrderWithoutShipmentConflict],
-							 A.[CustomerType],
-							 A.[CancelledDate],
-							 A.[WebSiteName],
-							 A.[CustomerName],
-							 A.[CustomerEmail],
-							 A.[CustomerGender],
-							 A.[CustomerBirthDate],
-							 A.[CustomerPhone],
-							 A.[CustomerCPF],
-							 A.[CustomerCNPJ],
-							 A.[CustomerTradingName],
-							 A.[CustomerSiteTaxPayer],
-							 A.[SalesRepresentativeID],
-							 A.[SellerEMail],
-							 A.[SellerIntegrationID],
-							 A.[SellerName],
-							 A.[SellerPhone],
-							 A.[SellerID],
-							 A.[MultiSiteTenantBrandId],
-							 A.[MultiSiteTenantBrandType],
-							 A.[MultiSiteTenantCompanyId],
-							 A.[MultiSiteTenantDeviceType],
-							 A.[OrderTypeID],
-							 A.[OrderTypeAllowMultiPayment],
-							 A.[OrderTypeIntegrationID],
-							 A.[OrderTypeEmitFiscalTicket],
-							 A.[OrderTypeName],
-							 A.[OrderTypeRequirePayment],
-							 A.[OrderTypeRequireInventory],
+							 A.[WebSiteID],
 
-                             B.[OrderInvoiceID],
+							 B.[CFOP],
 							 B.[Code],
-							 B.[Url],
+							 B.[CreatedAt],
 							 B.[FulfillmentID],
 							 B.[IsIssued],
-							 B.[Series],
+							 B.[IssuedAt],
 							 B.[Number],
-							 B.[CFOP],
-							 B.[XML],
-							 B.[InvoicePdf],
 							 B.[Observation],
 							 B.[Operation],
+                             B.[OrderInvoiceID],
 							 B.[ProcessedAt],
-							 B.[UpdatedAt],
-							 B.[IssuedAt],
-							 B.[CreatedAt],
-							 B.[OrderID],
+							 TRIM(B.[Series]) As Series,
+							 B.[Url],
+							 B.[XML],
+                             B.[OrderID],
 
-	                         C.[OrderItemID],
-							 C.[OrderID],
-							 C.[ParentItemID],
-							 C.[ProductID],
-							 C.[SkuID],
-							 C.[SKU],
-							 C.[SellerSKU],
-							 C.[WebSiteID],
 							 C.[CatalogID],
-							 C.[PriceListID],
-							 C.[WareHouseID],
-							 C.[WarehouseIntegrationID],
-							 C.[Qty],
-							 C.[Price],
-							 C.[DiscountAmount],
-							 C.[TaxationAmount],
-							 C.[SubtotalAdjustment],
-							 C.[Subtotal],
-							 C.[Total],
-							 C.[IsFreeShipping],
-							 C.[IsDeleted],
-							 C.[Status],
-							 C.[ProductIntegrationID],
-							 C.[SKUIntegrationID],
 							 C.[CatalogItemType],
+							 C.[DiscountAmount],
+							 C.[InStockHandlingDays],
+							 C.[IsDeleted],
+							 C.[IsDeliverable],
 							 C.[IsFreeOffer],
+							 C.[IsFreeShipping],
 							 C.[IsGiftWrapping],
 							 C.[IsService],
-							 C.[SpecialType],
-							 C.[BundlePriceType],
-							 C.[BundleKitDiscount],
-							 C.[BundleKitDiscountValue],
-							 C.[InStockHandlingDays],
+							 C.[OrderID],
+	                         C.[OrderItemID],
 							 C.[OutStockHandlingDays],
-							 C.[ProductName],
-							 C.[SkuName],
-							 C.[IsDeliverable],
-							 C.[Weight],
-							 C.[Depth],
-							 C.[Height],
-							 C.[Width],
-							 C.[FulfillmentID],
-							 C.[UPC],
+							 C.[Price],
+							 C.[PriceListID],
+							 C.[ProductID],
+							 C.[Qty],
+							 C.[SkuID],
+							 C.[SpecialType],
+							 C.[Subtotal],
+							 C.[SubtotalAdjustment],
+							 C.[TaxationAmount],
+							 C.[Total],
+							 C.[WareHouseID],
+							 C.[WebSiteID],
 
-                             D.[TagID],
-							 D.[Alias],
-							 D.[Name],
-							 D.[IsSystem],
-							 D.[IsDeleted],
-							 D.[OrderID],
-							 D.[OrderTagID],
-
-							 E.[OrderAddressID],
-							 E.[OrderID],
-							 E.[Name],
 							 E.[AddressLine],
+							 E.[AddressNotes],
+							 E.[AddressType],
 							 E.[City],
+							 E.[ContactName],
+							 E.[ContactPhone],
+							 E.[Landmark],
+							 E.[Name],
 							 E.[Neighbourhood],
 							 E.[Number],
-							 E.[State],
+							 E.[OrderAddressID],
+							 E.[OrderID],
 							 E.[PostalCode],
-							 E.[AddressNotes],
-							 E.[Landmark],
-							 E.[ContactName],
-							 E.[ContactDocumentNumber],
-							 E.[AddressType],
-							 E.[PointOfSaleID],
-							 E.[ContactPhone],
+							 E.[State],
 
-							 F.[LogisticOptionId],
-							 F.[LogisticOptionName],
+							 F.[Amount],
+							 F.[CarrierName],
+							 F.[DeliveryMethodID],
 							 F.[LogisticContractId],
 							 F.[LogisticContractName],
-							 F.[OrderDeliveryMethodID],
+							 F.[LogisticOptionId],
+							 F.[LogisticOptionName],
 							 F.[OrderID],
-							 F.[DeliveryMethodID],
-							 F.[DeliveryGroupID],
-							 F.[Amount],
-							 F.[ETA],
-							 F.[ETADays],
-							 F.[IntegrationID],
-							 F.[ScheduleShiftID],
-							 F.[ScheduleDisplayName],
-							 F.[ScheduleTax],
-							 F.[ScheduleStartTime],
-							 F.[ScheduleEndTime],
-							 F.[ScheduleDate],
-							 F.[DeliveryMethodAlias],
-							 F.[PointOfSaleID],
-							 F.[PointOfSaleIntegrationID],
-							 F.[PointOfSaleName],
-							 F.[DeliveryMethodType],
-							 F.[DeliveryLogisticType],
-							 F.[ExternalID],
-							 F.[WarehouseID],
-							 F.[WarehouseIntegrationID],
-							 F.[DockID],
-							 F.[CarrierName],
-							 F.[DeliveryEstimatedDate],
 
-							 G.[Amount],
-							 G.[DiscountID],
-							 G.[Message],
-							 G.[Reference],
-							 G.[Type],
-							 G.[OrderID]
+                             D.[OrderPaymentMethodID],
+                             D.[AcquiredDate],
+							 D.[Amount],
+							 D.[AmountNoInterest],
+							 D.[CaptureDate],
+							 D.[InstallmentAmount],
+							 D.[Installments],
+							 D.[IntegrationID],
+							 D.[InterestValue],
+							 D.[OrderID],
+							 D.[PaidAmount],
+							 D.[PaymentDate],
+							 D.[PaymentMethodID],
+							 D.[PaymentNumber],
+							 D.[RefundAmount],
+							 D.[Status],
+							 D.[TaxAmount],
+							 D.[TransactionID],
+
+							 G.[Alias],
+							 G.[ExpirationDate],
+							 G.[Holder],
+							 G.[Identifier],
+							 G.[Month],
+							 G.[NumberHint],
+							 G.[PaymentDate],
+							 G.[PaymentType],
+							 G.[Provider],
+							 G.[ReconciliationNumber],
+							 G.[SecurityCodeHint],
+							 G.[TransactionNumber],
+							 G.[Year],
+							 G.[OrderPaymentMethodID]
 
                              FROM [linx_commerce].[Order] A (NOLOCK)
                              LEFT JOIN [linx_commerce].[OrderInvoice] B (NOLOCK) ON A.OrderID = B.OrderID
                              LEFT JOIN [linx_commerce].[OrderItem] C (NOLOCK) ON A.OrderID = C.OrderID
-                             LEFT JOIN [linx_commerce].[OrderTag] D (NOLOCK) ON A.OrderID = D.OrderID
 							 LEFT JOIN [linx_commerce].[OrderAddress] E (NOLOCK) ON A.OrderID = E.OrderID
 							 LEFT JOIN [linx_commerce].[OrderDeliveryMethod] F (NOLOCK) ON A.OrderID = F.OrderID
-							 LEFT JOIN [linx_commerce].[OrderDiscount] G (NOLOCK) ON A.OrderID = G.OrderID
-                             WHERE
-                             A.OrderID IN ({identifiers})";
-
-            string? _sql = $@"SELECT DISTINCT
-							 A.[OrderID],
-							 A.[OrderNumber],
-							 A.[MarketPlaceBrand],
-							 A.[OriginalOrderID],
-							 A.[WebSiteID],
-							 A.[WebSiteIntegrationID],
-							 A.[CustomerID],
-							 A.[ShopperTicketID],
-							 A.[ItemsQty],
-							 A.[ItemsCount],
-							 A.[TaxAmount],
-							 A.[DeliveryAmount],
-							 A.[DiscountAmount],
-							 A.[PaymentTaxAmount],
-							 A.[SubTotal],
-							 A.[Total],
-							 A.[TotalDue],
-							 A.[TotalPaid],
-							 A.[TotalRefunded],
-							 A.[PaymentDate],
-							 A.[PaymentStatus],
-							 A.[ShipmentDate],
-							 A.[ShipmentStatus],
-							 A.[GlobalStatus],
-							 A.[DeliveryPostalCode],
-							 A.[CreatedChannel],
-							 A.[TrafficSourceID],
-							 A.[OrderStatusID],
-							 A.[CreatedDate],
-							 A.[CreatedBy],
-							 A.[ModifiedDate],
-							 A.[ModifiedBy],
-							 A.[Remarks],
-							 A.[SellerCommissionAmount],
-							 A.[CommissionAmount],
-							 A.[OrderGroupID],
-							 A.[OrderGroupNumber],
-							 A.[HasConflicts],
-							 A.[AcquiredDate],
-							 A.[HasHubOrderWithoutShipmentConflict],
-							 A.[CustomerType],
-							 A.[CancelledDate],
-							 A.[WebSiteName],
-							 A.[CustomerName],
-							 A.[CustomerEmail],
-							 A.[CustomerGender],
-							 A.[CustomerBirthDate],
-							 A.[CustomerPhone],
-							 A.[CustomerCPF],
-							 A.[CustomerCNPJ],
-							 A.[CustomerTradingName],
-							 A.[CustomerSiteTaxPayer],
-							 A.[SalesRepresentativeID],
-							 A.[SellerEMail],
-							 A.[SellerIntegrationID],
-							 A.[SellerName],
-							 A.[SellerPhone],
-							 A.[SellerID],
-							 A.[MultiSiteTenantBrandId],
-							 A.[MultiSiteTenantBrandType],
-							 A.[MultiSiteTenantCompanyId],
-							 A.[MultiSiteTenantDeviceType],
-							 A.[OrderTypeID],
-							 A.[OrderTypeAllowMultiPayment],
-							 A.[OrderTypeIntegrationID],
-							 A.[OrderTypeEmitFiscalTicket],
-							 A.[OrderTypeName],
-							 A.[OrderTypeRequirePayment],
-							 A.[OrderTypeRequireInventory],
-
-							 B.[OrderShipmentID],
-							 B.[OrderID],
-							 B.[DeliveryMethodID],
-							 B.[ShipmentNumber],
-							 B.[ShipmentStatus],
-							 B.[AssignUserId],
-							 B.[AssignUserName],
-							 B.[DockID],
-
-	                         C.[OrderPackageID],
-							 C.[OrderShipmentID],
-							 C.[DeliveryMethodID],
-							 C.[PackageNumber],
-							 C.[TrackingNumber],
-							 C.[TrackingNumberUrl],
-							 C.[ShippedDate],
-							 C.[ShippedBy],
-							 C.[IsDeleted],
-							 C.[PackageType],
-							 C.[Source],
-							 C.[InsuranceAmount],
-							 C.[Height],
-							 C.[Width],
-							 C.[Length],
-							 C.[Weight],
-
-                             D.[OrderPaymentMethodID],
-							 D.[OrderID],
-							 D.[PaymentNumber],
-							 D.[PaymentMethodID],
-							 D.[TransactionID],
-							 D.[ReconciliationNumber],
-							 D.[Status],
-							 D.[IntegrationID],
-							 D.[Amount],
-							 D.[AmountNoInterest],
-							 D.[InterestValue],
-							 D.[PaidAmount],
-							 D.[RefundAmount],
-							 D.[Installments],
-							 D.[InstallmentAmount],
-							 D.[TaxAmount],
-							 D.[PaymentDate],
-							 D.[CaptureDate],
-							 D.[AcquiredDate],
-							 D.[PaymentCancelledDate],
-
-							 E.[Identifier],
-							 E.[Alias],
-							 E.[PaymentDate],
-							 E.[ExpirationDate],
-							 E.[Month],
-							 E.[Year],
-							 E.[Holder],
-							 E.[NumberHint],
-							 E.[SecurityCodeHint],
-							 E.[TransactionNumber],
-							 E.[AuthorizationCode],
-							 E.[ReceiptCode],
-							 E.[ReconciliationNumber],
-							 E.[ConfirmationNumber],
-							 E.[PaymentType],
-							 E.[Provider],
-							 E.[ProviderDocumentNumber],
-							 E.[PixQRCode],
-							 E.[PixKey],
-							 E.[OrderPaymentMethodID]
-
-                             FROM [linx_commerce].[Order] A (NOLOCK)
-                             LEFT JOIN [linx_commerce].[OrderShipment] B (NOLOCK) ON A.OrderID = B.OrderID
-                             LEFT JOIN [linx_commerce].[OrderPackage] C (NOLOCK) ON B.OrderShipmentID = C.OrderShipmentID
                              LEFT JOIN [linx_commerce].[OrderPaymentMethod] D (NOLOCK) ON A.OrderID = D.OrderID
-							 LEFT JOIN [linx_commerce].[OrderPaymentInfo] E (NOLOCK) ON D.OrderPaymentMethodID = E.OrderPaymentMethodID
+							 LEFT JOIN [linx_commerce].[OrderPaymentInfo] G (NOLOCK) ON D.OrderPaymentMethodID = G.OrderPaymentMethodID
                              WHERE
                              A.OrderID IN ({identifiers})";
 
@@ -653,43 +439,17 @@ namespace Infrastructure.LinxCommerce.Repositorys.Order
                         Domain.LinxCommerce.Entities.Order.Order.Root,
                         Domain.LinxCommerce.Entities.Order.OrderInvoice,
                         Domain.LinxCommerce.Entities.Order.OrderItem,
-                        Domain.LinxCommerce.Entities.Order.OrderTag,
                         Domain.LinxCommerce.Entities.Order.OrderAddress,
                         Domain.LinxCommerce.Entities.Order.OrderDeliveryMethod,
-                        Domain.LinxCommerce.Entities.Order.OrderDiscount,
-                        Domain.LinxCommerce.Entities.Order.Order.Root
-                    >(sql, (order, invoice, item, tag, address, deliveryMethod, discount) =>
-                    {
-                        order.OrderInvoice = invoice;
-                        order.Items.Add(item);
-                        order.Tags.Add(tag);
-                        order.Addresses.Add(address);
-                        order.DeliveryMethods.Add(deliveryMethod);
-                        order.Discounts.Add(discount);
-
-                        return order;
-                    }, splitOn: "OrderInvoiceID, OrderItemID, TagID, OrderAddressID, LogisticOptionId, Amount", commandTimeout: 360);
-
-                    var _result = await conn.QueryAsync<
-                        Domain.LinxCommerce.Entities.Order.Order.Root,
-                        Domain.LinxCommerce.Entities.Order.OrderShipment,
-                        Domain.LinxCommerce.Entities.Order.OrderPackage,
                         Domain.LinxCommerce.Entities.Order.OrderPaymentMethod,
                         Domain.LinxCommerce.Entities.Order.OrderPaymentInfo,
                         Domain.LinxCommerce.Entities.Order.Order.Root
-                    >(_sql, (order, shipment, package, paymentMethod, paymentInfo) =>
+                    >(sql, (order, invoice, item, address, deliveryMethod, paymentMethod, paymentInfo) =>
                     {
-                        order.Shipments.Add(shipment);
-
-                        if (package != null)
-                        {
-                            var packages = order.Shipments
-                                                .Where(x => x.OrderShipmentID == package.OrderShipmentID)
-                                                .Select(y => y.Packages)
-                                                .FirstOrDefault();
-                            packages.Add(package); 
-                        }
-
+                        order.OrderInvoice = invoice;
+                        order.Items.Add(item);
+                        order.Addresses.Add(address);
+                        order.DeliveryMethods.Add(deliveryMethod);
                         order.PaymentMethods.Add(paymentMethod);
 
                         if (paymentInfo != null)
@@ -721,7 +481,7 @@ namespace Infrastructure.LinxCommerce.Repositorys.Order
                         }
 
                         return order;
-                    }, splitOn: "OrderShipmentID, OrderPackageID, OrderPaymentMethodID, Identifier", commandTimeout: 360);
+                    }, splitOn: "CFOP, CatalogID, AddressLine, Amount, OrderPaymentMethodID, Alias", commandTimeout: 360);
 
                     var resultGroupedByOrder = result
                         .GroupBy(p => p.OrderID)
@@ -729,62 +489,50 @@ namespace Infrastructure.LinxCommerce.Repositorys.Order
                         {
                             var groupedResult = g.First();
 
-                            if (!groupedResult.Items.Contains(null))
+                            if (!groupedResult.Items.Exists(x => x == null))
                             {
                                 groupedResult.Items.AddRange(
                                     g
                                     .Select(p => p.Items.Single())
                                     .GroupBy(r => r.ProductID)
                                     .Select(a => a.First())
-                                    .Where(x => !groupedResult.Items.Contains(x))
+                                    .Where(x => !groupedResult.Items.Exists(y => y == x))
                                     .ToList()
                                 );
                             }
 
-                            if (!groupedResult.Tags.Contains(null))
-                            {
-                                groupedResult.Tags.AddRange(
-                                    g
-                                    .Select(p => p.Tags.Single())
-                                    .GroupBy(r => r.TagID)
-                                    .Select(a => a.First())
-                                    .Where(x => !groupedResult.Tags.Contains(x))
-                                    .ToList()
-                                );
-                            }
-
-                            if (!groupedResult.Addresses.Contains(null))
+                            if (!groupedResult.Addresses.Exists(x => x == null))
                             {
                                 groupedResult.Addresses.AddRange(
                                     g
                                     .Select(p => p.Addresses.Single())
                                     .GroupBy(r => r.OrderAddressID)
                                     .Select(a => a.First())
-                                    .Where(x => !groupedResult.Addresses.Contains(x))
+                                    .Where(x => !groupedResult.Addresses.Exists(y => y == x))
                                     .ToList()
                                 );
                             }
 
-                            if (!groupedResult.DeliveryMethods.Contains(null))
+                            if (!groupedResult.DeliveryMethods.Exists(x => x == null))
                             {
                                 groupedResult.DeliveryMethods.AddRange(
                                     g
                                     .Select(p => p.DeliveryMethods.Single())
                                     .GroupBy(r => r.OrderDeliveryMethodID)
                                     .Select(a => a.First())
-                                    .Where(x => !groupedResult.DeliveryMethods.Contains(x))
+                                    .Where(x => !groupedResult.DeliveryMethods.Exists(y => y == x))
                                     .ToList()
                                 );
                             }
 
-                            if (!groupedResult.Discounts.Contains(null))
+                            if (!groupedResult.PaymentMethods.Exists(x => x == null))
                             {
-                                groupedResult.Discounts.AddRange(
+                                groupedResult.PaymentMethods.AddRange(
                                     g
-                                    .Select(p => p.Discounts.Single())
-                                    .GroupBy(r => r.DiscountID)
+                                    .Select(p => p.PaymentMethods.Single())
+                                    .GroupBy(r => r.OrderPaymentMethodID)
                                     .Select(a => a.First())
-                                    .Where(x => !groupedResult.Discounts.Contains(x))
+                                    .Where(x => !groupedResult.PaymentMethods.Exists(y => y == x))
                                     .ToList()
                                 );
                             }
@@ -792,19 +540,6 @@ namespace Infrastructure.LinxCommerce.Repositorys.Order
                             return groupedResult;
                         })
                         .ToList();
-
-                    resultGroupedByOrder.ForEach(h =>
-                    {
-                        h.Shipments = _result
-                                        .Where(x => x.OrderID == h.OrderID)
-                                        .Select(y => y.Shipments)
-                                        .First();
-
-                        h.PaymentMethods = _result
-                                            .Where(w => w.OrderID == h.OrderID)
-                                            .Select(z => z.PaymentMethods)
-                                            .First();
-                    });
 
                     return resultGroupedByOrder;
                 }

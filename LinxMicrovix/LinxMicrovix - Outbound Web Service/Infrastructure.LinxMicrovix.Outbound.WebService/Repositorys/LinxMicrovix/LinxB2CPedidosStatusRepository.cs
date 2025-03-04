@@ -22,7 +22,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
                 for (int i = 0; i < records.Count(); i++)
                 {
                     table.Rows.Add(records[i].lastupdateon, records[i].id, records[i].id_status, records[i].id_pedido, records[i].data_hora, records[i].anotacao,
-                        records[i].portal, records[i].timestamp);
+                        records[i].timestamp, records[i].portal);
                 }
 
                 _linxMicrovixRepositoryBase.BulkInsertIntoTableRaw(
@@ -42,18 +42,51 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         {
             try
             {
-                var identificadores = String.Empty;
-                for (int i = 0; i < registros.Count(); i++)
+                int indice = registros.Count() / 1000;
+
+                if (indice > 1)
                 {
-                    if (i == registros.Count() - 1)
-                        identificadores += $"'{registros[i].id_pedido}'";
-                    else
-                        identificadores += $"'{registros[i].id_pedido}', ";
+                    var list = new List<LinxB2CPedidosStatus>();
+                    for (int i = 0; i <= indice; i++)
+                    {
+                        string identificadores = String.Empty;
+                        var top1000List = registros.Skip(i * 1000).Take(1000).ToList();
+
+                        for (int j = 0; j < top1000List.Count(); j++)
+                        {
+
+                            if (j == top1000List.Count() - 1)
+                                identificadores += $"'{top1000List[j].id}'";
+                            else
+                                identificadores += $"'{top1000List[j].id}', ";
+                        }
+
+                        string sql = $"SELECT id, id_pedido, id_status, TIMESTAMP FROM [linx_microvix_erp].[LinxB2CPedidosStatus] WHERE id IN ({identificadores})";
+                        var result = await _linxMicrovixRepositoryBase.GetRegistersExists(sql);
+                        list.AddRange(result);
+                    }
+
+                    return list;
                 }
+                else
+                {
+                    var identificadores = String.Empty;
+                    var list = new List<LinxB2CPedidosStatus>();
 
-                string sql = $"SELECT id_pedido, TIMESTAMP FROM [linx_microvix_erp].[LinxB2CPedidosStatus] WHERE id_pedido IN ({identificadores})";
+                    for (int i = 0; i < registros.Count(); i++)
+                    {
+                        if (i == registros.Count() - 1)
+                            identificadores += $"'{registros[i].id}'";
+                        else
+                            identificadores += $"'{registros[i].id}', ";
+                    }
 
-                return await _linxMicrovixRepositoryBase.GetRegistersExists(sql);
+                    string sql = $"SELECT id, id_pedido, id_status, TIMESTAMP FROM [linx_microvix_erp].[LinxB2CPedidosStatus] WHERE id IN ({identificadores})";
+                    var result = await _linxMicrovixRepositoryBase.GetRegistersExists(sql);
+                    list.AddRange(result);
+
+                    return list;
+                }
             }
             catch (Exception ex) when (ex is not InternalException && ex is not SQLCommandException)
             {

@@ -1,4 +1,5 @@
 ﻿using Domain.IntegrationsCore.CustomValidations;
+using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -28,6 +29,14 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         [LengthValidation(length: 4000, propertyName: "url_imagem_blob")]
         public string? url_imagem_blob { get; private set; }
 
+        [NotMapped]
+        [SkipProperty]
+        public string? recordKey { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordXml { get; private set; }
+
         public B2CConsultaImagens() { }
 
         public B2CConsultaImagens(
@@ -36,7 +45,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             string? md5,
             string? timestamp,
             string? portal,
-            string? url_imagem_blob
+            string? url_imagem_blob,
+            string? recordXml
         )
         {
             lastupdateon = DateTime.Now;
@@ -58,6 +68,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
 
             this.md5 = md5;
             this.url_imagem_blob = url_imagem_blob;
+            this.recordXml = recordXml;
         }
     }
 }

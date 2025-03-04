@@ -56,7 +56,8 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                         disponivel: records[i].Where(pair => pair.Key == "disponivel").Select(pair => pair.Value).FirstOrDefault(),
                         disponivel_transferencia: records[i].Where(pair => pair.Key == "disponivel_transferencia").Select(pair => pair.Value).FirstOrDefault(),
                         disponivel_franquias: records[i].Where(pair => pair.Key == "disponivel_franquias").Select(pair => pair.Value).FirstOrDefault(),
-                        portal: records[i].Where(pair => pair.Key == "portal").Select(pair => pair.Value).FirstOrDefault()
+                        portal: records[i].Where(pair => pair.Key == "portal").Select(pair => pair.Value).FirstOrDefault(),
+                        recordXml: records[i].Where(pair => pair.Key == "recordXml").Select(pair => pair.Value).FirstOrDefault()
                     );
 
                     var contexto = new ValidationContext(entity, null, null);

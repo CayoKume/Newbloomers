@@ -1,4 +1,5 @@
 ﻿using Domain.IntegrationsCore.CustomValidations;
+using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
@@ -126,6 +127,14 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [LengthValidation(length: 30, propertyName: "nf_origem_ws")]
         public string? nf_origem_ws { get; private set; }
 
+        [NotMapped]
+        [SkipProperty]
+        public string? recordKey { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordXml { get; private set; }
+
         public LinxPedidosCompra() { }
 
         public LinxPedidosCompra(
@@ -162,7 +171,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             string? nf_gerada,
             string? timestamp,
             string? empresa,
-            string? nf_origem_ws
+            string? nf_origem_ws,
+            string? recordXml
         )
         {
             lastupdateon = DateTime.Now;
@@ -280,6 +290,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             this.obs = obs;
             this.plano_pagamento = plano_pagamento;
             this.cnpj_emp = cnpj_emp;
+            this.recordKey = $"[{cnpj_emp}]|[{cod_pedido}]|[{codigo_fornecedor}]|[{cod_produto}]|[{timestamp}]";
+            this.recordXml = recordXml;
         }
     }
 }

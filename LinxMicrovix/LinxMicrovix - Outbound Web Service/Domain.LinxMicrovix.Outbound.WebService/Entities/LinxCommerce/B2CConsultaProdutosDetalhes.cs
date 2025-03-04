@@ -1,4 +1,5 @@
 ﻿using Domain.IntegrationsCore.CustomValidations;
+using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
@@ -48,6 +49,14 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         [Column(TypeName = "smallint")]
         public Int32? tempo_preparacao_estoque { get; private set; }
 
+        [NotMapped]
+        [SkipProperty]
+        public string? recordKey { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordXml { get; private set; }
+
         public B2CConsultaProdutosDetalhes() { }
 
         public B2CConsultaProdutosDetalhes(
@@ -62,7 +71,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             string? referencia,
             string? localizacao,
             string? portal,
-            string? tempo_preparacao_estoque
+            string? tempo_preparacao_estoque,
+            string? recordXml
         )
         {
             lastupdateon = DateTime.Now;
@@ -110,6 +120,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             this.nomeproduto_alternativo = nomeproduto_alternativo;
             this.referencia = referencia;
             this.localizacao = localizacao;
+            this.recordXml = recordXml;
         }
     }
 }

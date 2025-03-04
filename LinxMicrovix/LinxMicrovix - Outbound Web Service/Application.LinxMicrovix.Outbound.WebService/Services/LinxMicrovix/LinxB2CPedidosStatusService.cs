@@ -1,8 +1,6 @@
 ﻿using Application.IntegrationsCore.Interfaces;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
-using Application.LinxMicrovix.Outbound.WebService.Interfaces.Cache.LinxMicrovix;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxMicrovix;
-using Application.LinxMicrovix.Outbound.WebService.Services.Cache.LinxMicrovix;
 using Domain.IntegrationsCore.Entities.Enums;
 using Domain.IntegrationsCore.Exceptions;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
@@ -21,7 +19,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
         private readonly ILinxMicrovixAzureSQLRepositoryBase<LinxB2CPedidosStatus> _linxMicrovixRepositoryBase;
         private readonly ILinxB2CPedidosStatusRepository _linxB2CPedidosStatusRepository;
-        private static ILinxB2CPedidosStatusServiceCache _linxB2CPedidosStatusServiceCache { get; set; } = new LinxB2CPedidosStatusServiceCache();
+        private static List<LinxB2CPedidosStatus> _linxB2CPedidosStatusCache { get; set; } = new List<LinxB2CPedidosStatus>();
 
         public LinxB2CPedidosStatusService(
             IAPICall apiCall,
@@ -55,7 +53,8 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                         data_hora: records[i].Where(pair => pair.Key == "data_hora").Select(pair => pair.Value).FirstOrDefault(),
                         anotacao: records[i].Where(pair => pair.Key == "anotacao").Select(pair => pair.Value).FirstOrDefault(),
                         timestamp: records[i].Where(pair => pair.Key == "timestamp").Select(pair => pair.Value).FirstOrDefault(),
-                        portal: records[i].Where(pair => pair.Key == "portal").Select(pair => pair.Value).FirstOrDefault()
+                        portal: records[i].Where(pair => pair.Key == "portal").Select(pair => pair.Value).FirstOrDefault(),
+                        recordXml: records[i].Where(pair => pair.Key == "recordXml").Select(pair => pair.Value).FirstOrDefault()
                     );
 
                     var contexto = new ValidationContext(entity, null, null);
@@ -95,8 +94,6 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
 
         public async Task<bool> GetRecords(LinxAPIParam jobParameter)
         {
-            IList<LinxB2CPedidosStatus> _listSomenteNovos = new List<LinxB2CPedidosStatus>();
-
             try
             {
                 _logger
@@ -105,10 +102,9 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
 
                 string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter.parametersInterval, jobParameter.parametersTableName, jobParameter.jobName);
 
-                var timestamp = await _linxMicrovixRepositoryBase.GetLast7DaysMinTimestamp(
+                var timestamp = await _linxMicrovixRepositoryBase.GetLast7DaysMaxTimestamp(
                     jobParameter.schema, 
-                    jobParameter.tableName,
-                    columnDate: "lastupdateon"
+                    jobParameter.tableName
                 );
 
                 var body = _linxMicrovixServiceBase.BuildBodyRequest(
@@ -118,33 +114,36 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                         );
 
                 string? response = await _apiCall.PostAsync(jobParameter: jobParameter, body: body);
-                var xmls = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response, _linxB2CPedidosStatusServiceCache);
+                var xmls = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response);
 
                 if (xmls.Count() > 0)
                 {
                     var listRecords = DeserializeXMLToObject(jobParameter, xmls);
 
-                    if (_linxB2CPedidosStatusServiceCache.GetList().Count == 0)
-                    {
-                        var list_existentes = await _linxB2CPedidosStatusRepository.GetRegistersExists(jobParameter: jobParameter, registros: listRecords);
-                        _linxB2CPedidosStatusServiceCache.AddList(list_existentes);
-                    }
+                    if (_linxB2CPedidosStatusCache.Count == 0)
+                        _linxB2CPedidosStatusCache = await _linxB2CPedidosStatusRepository.GetRegistersExists(
+                            jobParameter: jobParameter, 
+                            registros: listRecords
+                        );
 
-                    _listSomenteNovos = _linxB2CPedidosStatusServiceCache.FiltrarList(listRecords);
+                    var _listSomenteNovos = listRecords.Where(x => !_linxB2CPedidosStatusCache.Any(y => 
+                        y.id == x.id && 
+                        y.id_pedido == x.id_pedido && 
+                        y.id_status == x.id_status && 
+                        y.timestamp == x.timestamp
+                    )).ToList();
+
                     if (_listSomenteNovos.Count() > 0)
                     {
                         _linxB2CPedidosStatusRepository.BulkInsertIntoTableRaw(records: _listSomenteNovos, jobParameter: jobParameter);
+                        await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
+
                         for (int i = 0; i < _listSomenteNovos.Count; i++)
                         {
-                            var key = _linxB2CPedidosStatusServiceCache.GetKey(_listSomenteNovos[i]);
-                            if (_linxB2CPedidosStatusServiceCache.GetDictionaryXml().ContainsKey(key))
-                            {
-                                var xml = _linxB2CPedidosStatusServiceCache.GetDictionaryXml()[key];
-                                _logger.AddRecord(key, xml);
-                            }
+                            _logger.AddRecord(_listSomenteNovos[i].recordKey, _listSomenteNovos[i].recordXml);
                         }
 
-                        await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
+                        _linxB2CPedidosStatusCache.AddRange(_listSomenteNovos);
 
                         _logger.AddMessage(
                             $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"
@@ -155,8 +154,6 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                             $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"
                         );
                 }
-
-                await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
             }
             catch (SQLCommandException ex)
             {
@@ -194,7 +191,6 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
             {
                 _logger.SetLogEndDate();
                 await _logger.CommitAllChanges();
-                _linxB2CPedidosStatusServiceCache.AddList(_listSomenteNovos);
             }
 
             return true;

@@ -1,4 +1,5 @@
 ﻿using Domain.IntegrationsCore.CustomValidations;
+using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
@@ -78,6 +79,14 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         [Column(TypeName = "int")]
         public Int32? cod_cliente { get; private set; }
 
+        [NotMapped]
+        [SkipProperty]
+        public string? recordKey { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordXml { get; private set; }
+
         public LinxXMLDocumentos() { }
 
         public LinxXMLDocumentos(
@@ -100,7 +109,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             string? nProtDeneg,
             string? cStat,
             string? id_nfe,
-            string? cod_cliente
+            string? cod_cliente,
+            string? recordXml
         )
         {
             lastupdateon = DateTime.Now;
@@ -163,6 +173,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             this.chave_nfe = chave_nfe;
             this.serie = serie;
             this.cnpj_emp = cnpj_emp;
+            this.recordKey = $"[{cnpj_emp}]|[{documento}]|[{chave_nfe}]|[{timestamp}]";
+            this.recordXml = recordXml;
         }
     }
 }
