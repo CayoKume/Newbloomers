@@ -1,6 +1,5 @@
 ﻿using Dapper;
 using Domain.DatabaseInit.Interfaces.LinxMicrovix.LinxMicrovix;
-using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
 using Infrastructure.IntegrationsCore.Connections.SQLServer;
 using Z.Dapper.Plus;
 
@@ -24,7 +23,7 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxMicrovix
                     var result = conn.Query(sql: sql);
 
                     if (result.Count() == 0)
-                        conn.CreateTable<LinxB2CPedidosStatus>();
+                        conn.CreateTable<Domain.DatabaseInit.Entities.LinxMicrovix.Trusted.LinxMicrovix.LinxB2CPedidosStatus>();
                 }
             }
             catch (Exception ex)
@@ -41,7 +40,7 @@ namespace Infrastructure.DatabaseInit.Repositorys.LinxMicrovix.LinxMicrovix
                     var result = conn.Query(sql: sql);
 
                     if (result.Count() == 0)
-                        conn.CreateTable<Domain.DatabaseInit.Entites.LinxMicrovix.LinxMicrovix.LinxB2CPedidosStatus>();
+                        conn.CreateTable<Domain.DatabaseInit.Entities.LinxMicrovix.Untreated.LinxMicrovix.LinxB2CPedidosStatus>();
                 }
             }
             catch (Exception ex)

@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.CustomValidations;
+﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -8,123 +8,85 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
     [Table("LinxNaturezaOperacao", Schema = "linx_microvix_erp")]
     public class LinxNaturezaOperacao
     {
-        [Column(TypeName = "datetime")]
         public DateTime? lastupdateon { get; private set; }
 
-        [Column(TypeName = "int")]
         public int? portal { get; private set; }
 
-        [Key]
-        [Column(TypeName = "char(10)")]
         [LengthValidation(length: 10, propertyName: "cod_natureza_operacao")]
         public string? cod_natureza_operacao { get; private set; }
 
-        [Column(TypeName = "varchar(60)")]
         [LengthValidation(length: 60, propertyName: "descricao")]
         public string? descricao { get; private set; }
 
-        [Column(TypeName = "char(1)")]
         [LengthValidation(length: 1, propertyName: "soma_relatorios")]
         public string? soma_relatorios { get; private set; }
 
-        [Column(TypeName = "char(2)")]
         [LengthValidation(length: 2, propertyName: "operacao")]
         public string? operacao { get; private set; }
 
-        [Column(TypeName = "char(1)")]
         [LengthValidation(length: 1, propertyName: "inativa")]
         public string? inativa { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
-        [Column(TypeName = "bit")]
         public Int32? calcula_ipi { get; private set; }
 
-        [Column(TypeName = "bit")]
         public Int32? calcula_iss { get; private set; }
 
-        [Column(TypeName = "bit")]
         public Int32? calcula_irrf { get; private set; }
 
-        [Column(TypeName = "char(2)")]
         [LengthValidation(length: 2, propertyName: "tipo_preco")]
         public string? tipo_preco { get; private set; }
 
-        [Column(TypeName = "char(1)")]
         [LengthValidation(length: 1, propertyName: "atualiza_custo")]
         public string? atualiza_custo { get; private set; }
 
-        [Column(TypeName = "bit")]
         public Int32? transferencia { get; private set; }
 
-        [Column(TypeName = "bit")]
         public Int32? baixar_estoque { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? consumo_proprio { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? contabiliza_cmv { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? despesa { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? atualiza_custo_medio { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? exige_nf_origem { get; private set; }
 
-        [Column(TypeName = "bit")]
         public Int32? integra_contabilidade { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_obs { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? venda_futura { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? base_icms_considera_ipi { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? permite_escolha_historico { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? import_produtos { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? deposito_reserva_venda { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? exibe_nfe { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? faturamento_antecipado { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? exibir_informacoes_imposto { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? gera_garantia_nacional { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? transferencia_deposito { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? venda_diferencial_aliquota { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? insere_obs_pis_cofins { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? diferencial_ativo_consumo { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? recusa_de { get; private set; }
 
-        [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "codigo_ws")]
         public string? codigo_ws { get; private set; }
 

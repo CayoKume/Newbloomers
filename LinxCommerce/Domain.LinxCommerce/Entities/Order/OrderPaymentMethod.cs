@@ -1,10 +1,8 @@
-﻿using Domain.IntegrationsCore.Entities.Enums;
-using Domain.IntegrationsCore.Exceptions;
-using Domain.IntegrationsCore.Extensions;
+﻿using Domain.IntegrationsCore.Extensions;
 
 namespace Domain.LinxCommerce.Entities.Order
 {
-    public class OrderPaymentMethod : IEquatable<OrderPaymentMethod>
+    public class OrderPaymentMethod
     {
         public Int32? OrderPaymentMethodID { get; set; }
         public Guid? OrderID { get; set; }
@@ -30,74 +28,32 @@ namespace Domain.LinxCommerce.Entities.Order
         [SkipProperty]
         public OrderPaymentInfo PaymentInfo { get; set; } = new OrderPaymentInfo();
 
-        public static List<OrderPaymentMethod?> Compare(List<OrderPaymentMethod?> orderPaymentMethodAPIList, List<OrderPaymentMethod> orderPaymentMethodDboList)
-        {
-            try
-            {
-                foreach (var oPaymentMethodDbo in orderPaymentMethodDboList)
-                {
-                    orderPaymentMethodAPIList.Remove(
-                        orderPaymentMethodAPIList
-                            .Where(oPaymentMethodAPI =>
-                                oPaymentMethodAPI.AcquiredDate == oPaymentMethodDbo.AcquiredDate &&
-                                oPaymentMethodAPI.Amount == oPaymentMethodDbo.Amount &&
-                                oPaymentMethodAPI.AmountNoInterest == oPaymentMethodDbo.AmountNoInterest &&
-                                oPaymentMethodAPI.CaptureDate == oPaymentMethodDbo.CaptureDate &&
-                                oPaymentMethodAPI.InstallmentAmount == oPaymentMethodDbo.InstallmentAmount &&
-                                oPaymentMethodAPI.Installments == oPaymentMethodDbo.Installments &&
-                                oPaymentMethodAPI.IntegrationID == oPaymentMethodDbo.IntegrationID &&
-                                oPaymentMethodAPI.InterestValue == oPaymentMethodDbo.InterestValue &&
-                                oPaymentMethodAPI.OrderID == oPaymentMethodDbo.OrderID &&
-                                oPaymentMethodAPI.OrderPaymentMethodID == oPaymentMethodDbo.OrderPaymentMethodID &&
-                                oPaymentMethodAPI.PaidAmount == oPaymentMethodDbo.PaidAmount &&
-                                oPaymentMethodAPI.PaymentDate == oPaymentMethodDbo.PaymentDate &&
-                                oPaymentMethodAPI.PaymentMethodID == oPaymentMethodDbo.PaymentMethodID &&
-                                oPaymentMethodAPI.PaymentNumber == oPaymentMethodDbo.PaymentNumber &&
-                                oPaymentMethodAPI.RefundAmount == oPaymentMethodDbo.RefundAmount &&
-                                oPaymentMethodAPI.Status.Substring(0, 1).ToUpper() == oPaymentMethodDbo.Status &&
-                                oPaymentMethodAPI.TaxAmount == oPaymentMethodDbo.TaxAmount &&
-                                oPaymentMethodAPI.TransactionID == oPaymentMethodDbo.TransactionID &&
-                                oPaymentMethodAPI.PaymentInfo == oPaymentMethodDbo.PaymentInfo
-                            ).FirstOrDefault()
-                    );
-                }
+        public OrderPaymentMethod() { }
 
-                return orderPaymentMethodAPIList;
-            }
-            catch (Exception ex)
-            {
-                throw new InternalException(
-                    stage: EnumStages.Compare,
-                    error: EnumError.Compare,
-                    level: EnumMessageLevel.Error,
-                    message: $"Error when comparing two lists of records",
-                    exceptionMessage: ex.Message
-                );
-            }
-        }
-
-        public bool Equals(OrderPaymentMethod? other)
+        public OrderPaymentMethod(OrderPaymentMethod orderPaymentMethod)
         {
-            return
-                this.AcquiredDate == other.AcquiredDate &&
-                this.Amount == other.Amount &&
-                this.AmountNoInterest == other.AmountNoInterest &&
-                this.CaptureDate == other.CaptureDate &&
-                this.InstallmentAmount == other.InstallmentAmount &&
-                this.Installments == other.Installments &&
-                this.IntegrationID == other.IntegrationID &&
-                this.InterestValue == other.InterestValue &&
-                this.OrderID == other.OrderID &&
-                this.OrderPaymentMethodID == other.OrderPaymentMethodID &&
-                this.PaidAmount == other.PaidAmount &&
-                this.PaymentDate == other.PaymentDate &&
-                this.PaymentMethodID == other.PaymentMethodID &&
-                this.PaymentNumber == other.PaymentNumber &&
-                this.RefundAmount == other.RefundAmount &&
-                this.Status.Substring(0, 1).ToUpper() == other.Status.Substring(0, 1).ToUpper() &&
-                this.TaxAmount == other.TaxAmount &&
-                this.TransactionID == other.TransactionID &&
-                this.PaymentInfo == other.PaymentInfo;
+            this.OrderPaymentMethodID = orderPaymentMethod.OrderPaymentMethodID;
+            this.OrderID = orderPaymentMethod.OrderID;
+            this.PaymentNumber = orderPaymentMethod.PaymentNumber;
+            this.PaymentMethodID = orderPaymentMethod.PaymentMethodID;
+            this.TransactionID = orderPaymentMethod.TransactionID;
+            this.ReconciliationNumber = orderPaymentMethod.ReconciliationNumber;
+            this.Status = orderPaymentMethod.Status;
+            this.IntegrationID = orderPaymentMethod.IntegrationID;
+            this.Amount = orderPaymentMethod.Amount;
+            this.AmountNoInterest = orderPaymentMethod.AmountNoInterest;
+            this.InterestValue = orderPaymentMethod.InterestValue;
+            this.PaidAmount = orderPaymentMethod.PaidAmount;
+            this.RefundAmount = orderPaymentMethod.RefundAmount;
+            this.Installments = orderPaymentMethod.Installments;
+            this.InstallmentAmount = orderPaymentMethod.InstallmentAmount;
+            this.TaxAmount = orderPaymentMethod.TaxAmount;
+            this.PaymentDate = orderPaymentMethod.PaymentDate;
+            this.CaptureDate = orderPaymentMethod.CaptureDate;
+            this.AcquiredDate = orderPaymentMethod.AcquiredDate;
+            this.PaymentCancelledDate = orderPaymentMethod.PaymentCancelledDate;
+
+            this.PaymentInfo = new OrderPaymentInfo(orderPaymentMethod.PaymentInfo, orderPaymentMethod.OrderPaymentMethodID);
         }
     }
 }

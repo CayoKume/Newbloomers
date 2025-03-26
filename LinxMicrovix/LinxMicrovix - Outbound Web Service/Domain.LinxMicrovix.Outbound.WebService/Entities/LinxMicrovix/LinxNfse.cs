@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.CustomValidations;
+﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,33 +9,23 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
     [Table("LinxNfse", Schema = "linx_microvix_erp")]
     public class LinxNfse
     {
-        [Column(TypeName = "datetime")]
         public DateTime? lastupdateon { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? id_nfse { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? documento { get; private set; }
 
-        [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "codigo_verificacao")]
         public string? codigo_verificacao { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_nfse_situacao { get; private set; }
 
-        [Column(TypeName = "uniqueidentifier")]
         public Guid? identificador { get; private set; }
 
-        [Column(TypeName = "datetime")]
         public DateTime? dt_insert { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
         [NotMapped]

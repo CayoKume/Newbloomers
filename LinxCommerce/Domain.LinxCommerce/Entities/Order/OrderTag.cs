@@ -1,9 +1,6 @@
-﻿using Domain.IntegrationsCore.Entities.Enums;
-using Domain.IntegrationsCore.Exceptions;
-
-namespace Domain.LinxCommerce.Entities.Order
+﻿namespace Domain.LinxCommerce.Entities.Order
 {
-    public class OrderTag : IEquatable<OrderTag>
+    public class OrderTag
     {
         public Int32? TagID { get; set; }
         public string? Alias { get; set; }
@@ -12,46 +9,16 @@ namespace Domain.LinxCommerce.Entities.Order
         public bool? IsDeleted { get; set; }
         public Guid? OrderID { get; set; }
 
-        public static List<OrderTag?> Compare(List<OrderTag?> orderTagsAPIList, List<OrderTag> orderTagsDboList)
-        {
-            try
-            {
-                foreach (var oTagsDbo in orderTagsDboList)
-                {
-                    orderTagsAPIList.Remove(
-                        orderTagsAPIList
-                            .Where(oTagAPI =>
-                                oTagAPI.TagID == oTagsDbo.TagID &&
-                                oTagAPI.Alias == oTagsDbo.Alias &&
-                                oTagAPI.Name == oTagsDbo.Name &&
-                                oTagAPI.IsSystem == oTagsDbo.IsSystem &&
-                                oTagAPI.IsDeleted == oTagsDbo.IsDeleted
-                            ).FirstOrDefault()
-                    );
-                }
+        public OrderTag() { }
 
-                return orderTagsAPIList;
-            }
-            catch (Exception ex)
-            {
-                throw new InternalException(
-                    stage: EnumStages.Compare,
-                    error: EnumError.Compare,
-                    level: EnumMessageLevel.Error,
-                    message: $"Error when comparing two lists of records",
-                    exceptionMessage: ex.Message
-                );
-            }
-        }
-
-        public bool Equals(OrderTag? other)
+        public OrderTag(OrderTag orderTag, Guid? orderID)
         {
-            return
-                this.TagID.Equals(other.TagID) &&
-                this.Alias == other.Alias &&
-                this.Name == other.Name &&
-                this.IsSystem.Equals(other.IsSystem) &&
-                this.IsDeleted.Equals(other.IsDeleted);
+            this.OrderID = orderID;
+            this.IsDeleted = orderTag.IsDeleted;
+            this.IsSystem = orderTag.IsSystem;
+            this.Name = orderTag.Name;
+            this.Alias = orderTag.Alias;
+            this.TagID = orderTag.TagID;
         }
     }
 }

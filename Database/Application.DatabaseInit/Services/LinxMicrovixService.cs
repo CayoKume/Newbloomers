@@ -30,6 +30,7 @@ namespace Application.DatabaseInit.Services
         private readonly ILinxClientesFornecContatosRepository _linxClientesFornecContatosRepository;
         private readonly ILinxClientesFornecCreditoAvulsoRepository _linxClientesFornecCreditoAvulsoRepository;
         private readonly ILinxClientesFornecRepository _linxClientesFornecRepository;
+        private readonly ILinxClientesEnderecosEntregaRepository _linxClientesEnderecosEntregaRepository;
         private readonly ILinxClientesRedeRepository _linxClientesRedeRepository;
         private readonly ILinxColecoesRepository _linxColecoesRepository;
         private readonly ILinxComissoesVendedoresRepository _linxComissoesVendedoresRepository;
@@ -164,6 +165,7 @@ namespace Application.DatabaseInit.Services
         private readonly ILinxValeOrdemServicoExternaRepository _linxValeOrdemServicoExternaRepository;
         private readonly ILinxValesComprasEnviadosAPIRepository _linxValesComprasEnviadosAPIRepository;
         private readonly ILinxVendedoresRepository _linxVendedoresRepository;
+        private readonly ILinxUsuariosRepository _linxUsuariosRepository;
         private readonly ILinxXMLDocumentosRepository _linxXMLDocumentosRepository;
 
         public LinxMicrovixService(
@@ -188,6 +190,7 @@ namespace Application.DatabaseInit.Services
             ILinxClientesFornecContatosParentescoRepository linxClientesFornecContatosParentescoRepository,
             ILinxClientesFornecContatosRepository linxClientesFornecContatosRepository,
             ILinxClientesFornecCreditoAvulsoRepository linxClientesFornecCreditoAvulsoRepository,
+            ILinxClientesEnderecosEntregaRepository linxClientesEnderecosEntregaRepository,
             ILinxClientesFornecRepository linxClientesFornecRepository,
             ILinxClientesRedeRepository linxClientesRedeRepository,
             ILinxColecoesRepository linxColecoesRepository,
@@ -323,6 +326,7 @@ namespace Application.DatabaseInit.Services
             ILinxValeOrdemServicoExternaRepository linxValeOrdemServicoExternaRepository,
             ILinxValesComprasEnviadosAPIRepository linxValesComprasEnviadosAPIRepository,
             ILinxVendedoresRepository linxVendedoresRepository,
+            ILinxUsuariosRepository linxUsuariosRepository,
             ILinxXMLDocumentosRepository linxXMLDocumentosRepository
         )
         {
@@ -347,6 +351,7 @@ namespace Application.DatabaseInit.Services
             _linxClientesFornecContatosParentescoRepository = linxClientesFornecContatosParentescoRepository;
             _linxClientesFornecContatosRepository = linxClientesFornecContatosRepository;
             _linxClientesFornecCreditoAvulsoRepository = linxClientesFornecCreditoAvulsoRepository;
+            _linxClientesEnderecosEntregaRepository = linxClientesEnderecosEntregaRepository;
             _linxClientesFornecRepository = linxClientesFornecRepository;
             _linxClientesRedeRepository = linxClientesRedeRepository;
             _linxColecoesRepository = linxColecoesRepository;
@@ -482,6 +487,7 @@ namespace Application.DatabaseInit.Services
             _linxValeOrdemServicoExternaRepository = linxValeOrdemServicoExternaRepository;
             _linxValesComprasEnviadosAPIRepository = linxValesComprasEnviadosAPIRepository;
             _linxVendedoresRepository = linxVendedoresRepository;
+            _linxUsuariosRepository = linxUsuariosRepository;
             _linxXMLDocumentosRepository = linxXMLDocumentosRepository;
         }
 
@@ -714,6 +720,20 @@ namespace Application.DatabaseInit.Services
                                 databaseName: parameters.databaseName,
                                 jobName: listMethods
                                         .Where(m => m.MethodName == "LinxClientesFornecCamposAdicionais")
+                                        .First()
+                                        .MethodName,
+                                untreatedDatabaseName: parameters.untreatedDatabaseName
+                            );
+                if (
+                   listMethods
+                       .Where(m => m.MethodName == "LinxClientesEnderecosEntrega")
+                       .First()
+                       .IsActive
+                   )
+                    _linxClientesEnderecosEntregaRepository.CreateTableIfNotExists(
+                                databaseName: parameters.databaseName,
+                                jobName: listMethods
+                                        .Where(m => m.MethodName == "LinxClientesEnderecosEntrega")
                                         .First()
                                         .MethodName,
                                 untreatedDatabaseName: parameters.untreatedDatabaseName
@@ -2680,6 +2700,20 @@ namespace Application.DatabaseInit.Services
                             );
                 if (
                    listMethods
+                       .Where(m => m.MethodName == "LinxUsuarios")
+                       .First()
+                       .IsActive
+                   )
+                    _linxUsuariosRepository.CreateTableIfNotExists(
+                                databaseName: parameters.databaseName,
+                                jobName: listMethods
+                                        .Where(m => m.MethodName == "LinxUsuarios")
+                                        .First()
+                                        .MethodName,
+                                untreatedDatabaseName: parameters.untreatedDatabaseName
+                            );
+                if (
+                   listMethods
                        .Where(m => m.MethodName == "LinxXMLDocumentos")
                        .First()
                        .IsActive
@@ -3000,6 +3034,20 @@ namespace Application.DatabaseInit.Services
                                 databaseName: parameters.databaseName,
                                 jobName: listMethods
                                         .Where(m => m.MethodName == "LinxClientesFornec")
+                                        .First()
+                                        .MethodName,
+                                parametersTableName: parameters.parametersTableName
+                            );
+                if (
+                   listMethods
+                       .Where(m => m.MethodName == "LinxClientesEnderecosEntrega")
+                       .First()
+                       .IsActive
+                   )
+                    _linxClientesEnderecosEntregaRepository.InsertParametersIfNotExists(
+                                databaseName: parameters.databaseName,
+                                jobName: listMethods
+                                        .Where(m => m.MethodName == "LinxClientesEnderecosEntrega")
                                         .First()
                                         .MethodName,
                                 parametersTableName: parameters.parametersTableName
@@ -4890,6 +4938,20 @@ namespace Application.DatabaseInit.Services
                                 databaseName: parameters.databaseName,
                                 jobName: listMethods
                                         .Where(m => m.MethodName == "LinxVendedores")
+                                        .First()
+                                        .MethodName,
+                                parametersTableName: parameters.parametersTableName
+                            );
+                if (
+                   listMethods
+                       .Where(m => m.MethodName == "LinxUsuarios")
+                       .First()
+                       .IsActive
+                   )
+                    _linxUsuariosRepository.InsertParametersIfNotExists(
+                                databaseName: parameters.databaseName,
+                                jobName: listMethods
+                                        .Where(m => m.MethodName == "LinxUsuarios")
                                         .First()
                                         .MethodName,
                                 parametersTableName: parameters.parametersTableName

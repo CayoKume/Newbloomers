@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.CustomValidations;
+﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,97 +9,64 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
     [Table("B2CConsultaPedidos", Schema = "linx_microvix_commerce")]
     public class B2CConsultaPedidos
     {
-        [Column(TypeName = "datetime")]
         public DateTime? lastupdateon { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? id_pedido { get; private set; }
 
-        [Column(TypeName = "smalldatetime")]
         public DateTime? dt_pedido { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? cod_cliente_erp { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? cod_cliente_b2c { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? vl_frete { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? forma_pgto { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? plano_pagamento { get; private set; }
 
-        [Column(TypeName = "varchar(400)")]
         [LengthValidation(length: 400, propertyName: "anotacao")]
         public string? anotacao { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? taxa_impressao { get; private set; }
 
-        [Column(TypeName = "bit")]
         public Int32? finalizado { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? valor_frete_gratis { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? tipo_frete { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_status { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? cod_transportador { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? tipo_cobranca_frete { get; private set; }
 
-        [Column(TypeName = "bit")]
         public Int32? ativo { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? empresa { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_tabela_preco { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? valor_credito { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? cod_vendedor { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
-        [Column(TypeName = "smalldatetime")]
         public DateTime? dt_insert { get; private set; }
 
-        [Column(TypeName = "smalldatetime")]
         public DateTime? dt_disponivel_faturamento { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
-        [Column(TypeName = "varchar(MAX)")]
         public string? mensagem_falha_faturamento { get; private set; }
 
-        [Column(TypeName = "tinyint")]
         public Int32? id_tipo_b2c { get; private set; }
 
-        [Column(TypeName = "varchar(200)")]
         [LengthValidation(length: 200, propertyName: "ecommerce_origem")]
         public string? ecommerce_origem { get; private set; }
 
-        [Key]
-        [Column(TypeName = "varchar(40)")]
         [LengthValidation(length: 40, propertyName: "order_id")]
         public string? order_id { get; private set; }
 

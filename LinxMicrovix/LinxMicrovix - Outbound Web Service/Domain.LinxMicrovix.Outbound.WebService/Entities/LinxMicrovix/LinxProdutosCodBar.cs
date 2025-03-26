@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.CustomValidations;
+﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -8,21 +8,15 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
     [Table("LinxProdutosCodBar", Schema = "linx_microvix_erp")]
     public class LinxProdutosCodBar
     {
-        [Column(TypeName = "datetime")]
         public DateTime? lastupdateon { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; set; }
 
-        [Key]
-        [Column(TypeName = "bigint")]
         public Int64? cod_produto { get; set; }
 
-        [Column(TypeName = "varchar(20)")]
         [LengthValidation(length: 20, propertyName: "cod_barra")]
         public string? cod_barra { get; set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; set; }
 
         [NotMapped]
@@ -62,7 +56,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
                 0;
 
             this.cod_barra = cod_barra;
-            this.recordKey = $"[{cod_produto}]|[{timestamp}]";
+            this.recordKey = $"[{cod_produto}]|[{cod_barra}]|[{timestamp}]";
             this.recordXml = recordXml;
         }
     }

@@ -1,7 +1,5 @@
 ﻿using Application.IntegrationsCore.Interfaces;
-using Application.LinxMicrovix.Outbound.WebService.Entities.Cache.LinxCommerce;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
-using Application.LinxMicrovix.Outbound.WebService.Interfaces.Cache.LinxCommerce;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxCommerce;
 using Domain.IntegrationsCore.Entities.Enums;
 using Domain.IntegrationsCore.Exceptions;
@@ -26,7 +24,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
         private readonly ILinxMicrovixAzureSQLRepositoryBase<B2CConsultaClassificacao> _linxMicrovixRepositoryBase;
         private readonly IB2CConsultaClassificacaoRepository _b2cConsultaClassificacaoRepository;
-        private static IB2CConsultaClassificacaoServiceCache _b2cConsultaClassificacaoCache { get; set; } = new B2CConsultaClassificacaoServiceCache();
+        private static List<string?> _b2cConsultaClassificacaoCache { get; set; } = new List<string?>();
 
         public B2CConsultaClassificacaoService(
             IAPICall apiCall,
@@ -62,31 +60,33 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                 );
 
                 string? response = await _apiCall.PostAsync(jobParameter: jobParameter, body: body);
-                var xmls = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response, _b2cConsultaClassificacaoCache);
+                var xmls = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response);
 
                 if (xmls.Count() > 0)
                 {
                     var listRecords = DeserializeXMLToObject(jobParameter, xmls);
 
-                    if (_b2cConsultaClassificacaoCache.GetList().Count == 0)
-                    {
-                        var list_existentes = await _b2cConsultaClassificacaoRepository.GetRegistersExists(jobParameter: jobParameter, registros: listRecords);
-                        _b2cConsultaClassificacaoCache.AddList(list_existentes);
-                    }
+                    //if (_b2cConsultaClassificacaoCache.Count == 0)
+                    //{
+                    //    var list_existentes = await _b2cConsultaClassificacaoRepository.GetRegistersExists(jobParameter: jobParameter, registros: listRecords);
+                    //    _b2cConsultaClassificacaoCache.AddList(list_existentes);
+                    //}
 
-                    _listSomenteNovos = _b2cConsultaClassificacaoCache.FiltrarList(listRecords);
+                    //_listSomenteNovos = _b2cConsultaClassificacaoCache.FiltrarList(listRecords);
+
                     if (_listSomenteNovos.Count() > 0)
                     {
                         _b2cConsultaClassificacaoRepository.BulkInsertIntoTableRaw(records: _listSomenteNovos, jobParameter: jobParameter);
-                        for (int i = 0; i < _listSomenteNovos.Count; i++)
-                        {
-                            var key = _b2cConsultaClassificacaoCache.GetKey(_listSomenteNovos[i]);
-                            if (_b2cConsultaClassificacaoCache.GetDictionaryXml().ContainsKey(key))
-                            {
-                                var xml = _b2cConsultaClassificacaoCache.GetDictionaryXml()[key];
-                                _logger.AddRecord(key, xml);
-                            }
-                        }
+                        
+                        //for (int i = 0; i < _listSomenteNovos.Count; i++)
+                        //{
+                        //    var key = _b2cConsultaClassificacaoCache.GetKey(_listSomenteNovos[i]);
+                        //    if (_b2cConsultaClassificacaoCache.GetDictionaryXml().ContainsKey(key))
+                        //    {
+                        //        var xml = _b2cConsultaClassificacaoCache.GetDictionaryXml()[key];
+                        //        _logger.AddRecord(key, xml);
+                        //    }
+                        //}
 
                         await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
 
@@ -136,7 +136,6 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
             {
                 _logger.SetLogEndDate();
                 await _logger.CommitAllChanges();
-                _b2cConsultaClassificacaoCache.AddList(_listSomenteNovos);
             }
 
             return true;

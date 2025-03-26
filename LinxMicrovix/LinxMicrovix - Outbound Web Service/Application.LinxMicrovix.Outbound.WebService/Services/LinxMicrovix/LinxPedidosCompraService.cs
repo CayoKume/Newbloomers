@@ -1,8 +1,6 @@
 ﻿using Application.IntegrationsCore.Interfaces;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
-using Application.LinxMicrovix.Outbound.WebService.Interfaces.Cache.LinxMicrovix;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxMicrovix;
-using Application.LinxMicrovix.Outbound.WebService.Services.Cache.LinxMicrovix;
 using Domain.IntegrationsCore.Entities.Enums;
 using Domain.IntegrationsCore.Exceptions;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
@@ -21,7 +19,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
         private readonly ILinxMicrovixAzureSQLRepositoryBase<LinxPedidosCompra> _linxMicrovixRepositoryBase;
         private readonly ILinxPedidosCompraRepository _linxPedidosCompraRepository;
-        private static List<LinxPedidosCompra> _linxPedidosCompraCache { get; set; } = new List<LinxPedidosCompra>();
+        private static List<string?> _linxPedidosCompraCache { get; set; } = new List<string?>();
 
         public LinxPedidosCompraService(
             IAPICall apiCall,
@@ -160,10 +158,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                         );
 
                     var _listSomenteNovos = listRecords.Where(x => !_linxPedidosCompraCache.Any(y => 
-                        y.cod_pedido == x.cod_pedido &&
-                        y.cnpj_emp == x.cnpj_emp &&
-                        y.cod_produto == x.cod_produto &&
-                        y.timestamp == x.timestamp
+                        y == x.recordKey
                     )).ToList();
 
                     if (_listSomenteNovos.Count() > 0)
@@ -176,7 +171,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                             _logger.AddRecord(_listSomenteNovos[i].recordKey, _listSomenteNovos[i].recordXml);
                         }
 
-                        _linxPedidosCompraCache.AddRange(_listSomenteNovos);
+                        _linxPedidosCompraCache.AddRange(_listSomenteNovos.Select(x => x.recordKey));
 
                         _logger.AddMessage(
                             $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"

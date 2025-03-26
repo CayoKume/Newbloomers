@@ -40,7 +40,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             }
         }
 
-        public async Task<List<LinxMovimentoTrocas>> GetRegistersExists(LinxAPIParam jobParameter, List<LinxMovimentoTrocas> registros)
+        public async Task<List<string?>> GetRegistersExists(LinxAPIParam jobParameter, List<LinxMovimentoTrocas?> registros)
         {
             try
             {
@@ -53,9 +53,9 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
                         identificadores += $"'{registros[i].num_vale}', ";
                 }
 
-                string sql = $"SELECT cnpj_emp, num_vale, cod_cliente, TIMESTAMP FROM [linx_microvix_erp].[LinxMovimentoTrocas] WHERE num_vale IN ({identificadores})";
+                string sql = $"SELECT CONCAT('[', CNPJ_EMP, ']', '|', '[', NUM_VALE, ']', '|', '[', DOC_ORIGEM, ']', '|', '[', DOC_VENDA, ']', '|', '[', DOC_VENDA_ORIGEM, ']', '|', '[', COD_CLIENTE, ']', '|', '[', [TIMESTAMP], ']') FROM [linx_microvix_erp].[LinxMovimentoTrocas] WHERE num_vale IN ({identificadores})";
 
-                return await _linxMicrovixRepositoryBase.GetRegistersExists(sql);
+                return await _linxMicrovixRepositoryBase.GetKeyRegistersAlreadyExists(sql);
             }
             catch (Exception ex) when (ex is not InternalException && ex is not SQLCommandException)
             {

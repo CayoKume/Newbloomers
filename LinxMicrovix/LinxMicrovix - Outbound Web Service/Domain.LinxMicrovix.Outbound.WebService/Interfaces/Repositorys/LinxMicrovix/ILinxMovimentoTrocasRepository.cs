@@ -7,6 +7,6 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxMic
     {
         public Task<bool> InsertRecord(LinxAPIParam jobParameter, LinxMovimentoTrocas? record);
         public bool BulkInsertIntoTableRaw(LinxAPIParam jobParameter, IList<LinxMovimentoTrocas> records);
-        public Task<List<LinxMovimentoTrocas>> GetRegistersExists(LinxAPIParam jobParameter, List<LinxMovimentoTrocas> registros);
+        public Task<List<string?>> GetRegistersExists(LinxAPIParam jobParameter, List<LinxMovimentoTrocas?> registros);
     }
 }

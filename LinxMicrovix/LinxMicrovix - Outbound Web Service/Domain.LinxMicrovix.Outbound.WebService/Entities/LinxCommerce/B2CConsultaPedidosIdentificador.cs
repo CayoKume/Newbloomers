@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.CustomValidations;
+﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,39 +9,25 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
     [Table("B2CConsultaPedidosIdentificador", Schema = "linx_microvix_commerce")]
     public class B2CConsultaPedidosIdentificador
     {
-        [Column(TypeName = "datetime")]
         public DateTime? lastupdateon { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? empresa { get; private set; }
 
-        [Key]
-        [Column(TypeName = "uniqueidentifier")]
         public Guid? identificador { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? id_venda { get; private set; }
 
-        [Key]
-        [Column(TypeName = "varchar(40)")]
         [LengthValidation(length: 40, propertyName: "order_id")]
         public string? order_id { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? id_cliente { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? valor_frete { get; private set; }
 
-        [Column(TypeName = "datetime")]
         public DateTime? data_origem { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
         [NotMapped]
@@ -110,6 +96,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
                 0;
 
             this.order_id = order_id;
+            this.recordKey = $"[{identificador}]|[{timestamp}]";
             this.recordXml = recordXml;
         }
     }

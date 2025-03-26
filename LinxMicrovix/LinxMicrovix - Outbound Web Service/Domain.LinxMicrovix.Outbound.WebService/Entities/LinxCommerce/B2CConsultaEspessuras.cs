@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.CustomValidations;
+﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -8,21 +8,15 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
     [Table("B2CConsultaEspessuras", Schema = "linx_microvix_commerce")]
     public class B2CConsultaEspessuras
     {
-        [Column(TypeName = "datetime")]
         public DateTime? lastupdateon { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? codigo_espessura { get; private set; }
 
-        [Column(TypeName = "varchar(100)")]
         [LengthValidation(length: 100, propertyName: "nome_espessura")]
         public string? nome_espessura { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
         [NotMapped]

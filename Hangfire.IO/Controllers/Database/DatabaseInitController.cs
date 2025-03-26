@@ -73,12 +73,12 @@ namespace Hangfire.IO.Controllers.Database
                         .Get<List<string>>();
         }
 
-        [HttpPost("CreateDatabasesIfNotExists")]
-        public async Task<ActionResult> CreateDatabasesIfNotExists()
-        {
-            await _databaseInitService.CreateDatabasesIfNotExists(databases: _databases);
+        //[HttpPost("CreateDatabasesIfNotExists")]
+        //public async Task<ActionResult> CreateDatabasesIfNotExists()
+        //{
+        //    await _databaseInitService.CreateDatabasesIfNotExists(databases: _databases);
 
-            return Ok($"Tables created successfully.");
-        }
+        //    return Ok($"Tables created successfully.");
+        //}
     }
 }

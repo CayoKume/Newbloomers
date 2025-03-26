@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.CustomValidations;
+﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -8,35 +8,24 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
     [Table("B2CConsultaProdutosCodebar", Schema = "linx_microvix_commerce")]
     public class B2CConsultaProdutosCodebar
     {
-        [Column(TypeName = "datetime")]
         public DateTime? lastupdateon { get; private set; }
 
-        [Key]
-        [Column(TypeName = "bigint")]
         public Int64? codigoproduto { get; private set; }
 
-        [Column(TypeName = "varchar(20)")]
         [LengthValidation(length: 20, propertyName: "codebar")]
         public string? codebar { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? id_produtos_codebar { get; private set; }
 
-        [Column(TypeName = "bit")]
         public Int32? principal { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? empresa { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
-        [Column(TypeName = "varchar(20)")]
         [LengthValidation(length: 20, propertyName: "tipo_codebar")]
         public string? tipo_codebar { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
         [NotMapped]

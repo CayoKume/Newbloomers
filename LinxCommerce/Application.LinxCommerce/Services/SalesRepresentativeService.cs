@@ -6,7 +6,8 @@ using Domain.LinxCommerce.Entities.Parameters;
 using Domain.LinxCommerce.Entities.Responses;
 using Domain.LinxCommerce.Entities.SalesRepresentative;
 using Domain.LinxCommerce.Interfaces.Api;
-using Domain.LinxCommerce.Interfaces.Repositorys.SalesRepresentative;
+using Domain.LinxCommerce.Interfaces.Repositorys;
+using FluentValidation;
 
 namespace Application.LinxCommerce.Services
 {
@@ -15,10 +16,10 @@ namespace Application.LinxCommerce.Services
         private readonly IAPICall _apiCall;
         private readonly ILoggerService _logger;
         private readonly ISalesRepresentativeRepository _salesRepresentativeRepository;
-        private static List<SalesRepresentative> _salesRepresentativeDboList { get; set; } = new List<SalesRepresentative>();
+        private readonly IValidator<SalesRepresentative> _validator;
 
-        public SalesRepresentativeService(IAPICall apiCall, ILoggerService logger, ISalesRepresentativeRepository salesRepresentativeRepository) =>
-            (_apiCall, _logger, _salesRepresentativeRepository) = (apiCall, logger, salesRepresentativeRepository);
+        public SalesRepresentativeService(IAPICall apiCall, ILoggerService logger, ISalesRepresentativeRepository salesRepresentativeRepository, IValidator<SalesRepresentative> validator) =>
+            (_apiCall, _logger, _salesRepresentativeRepository, _validator) = (apiCall, logger, salesRepresentativeRepository, validator);
 
         public Task<bool?> DeleteSalesRepresentative(int salesRepresentativeId)
         {
@@ -40,7 +41,7 @@ namespace Application.LinxCommerce.Services
                 var saleRepresentative = Newtonsoft.Json.JsonConvert.DeserializeObject<GetSalesRepresentative.Root>(getSaleRepresentativeResponse);
                 salesRepresentativeList.Add(saleRepresentative.SalesRepresentative);
 
-                _salesRepresentativeRepository.BulkInsertIntoTableRaw(jobParameter: jobParameter, registros: salesRepresentativeList);
+                //_salesRepresentativeRepository.BulkInsertIntoTableRaw(jobParameter: jobParameter, registros: salesRepresentativeList);
 
                 return true;
             }
@@ -80,9 +81,6 @@ namespace Application.LinxCommerce.Services
                 var salesRepresentativeAPIList = new List<SalesRepresentative>();
                 var salesRepresentativeIDs = Newtonsoft.Json.JsonConvert.DeserializeObject<SearchSalesRepresentative.Root>(response);
                 
-                if (_salesRepresentativeDboList.Count() == 0 )
-                    _salesRepresentativeDboList = await _salesRepresentativeRepository.GetRegistersExists(salesRepresentativeIDs.Result.Select(s => s.SalesRepresentativeID));
-
                 foreach (var salesRepresentativeID in salesRepresentativeIDs.Result)
                 {
                     var getSaleRepresentativeObjectRequest = new
@@ -99,10 +97,25 @@ namespace Application.LinxCommerce.Services
                     var saleRepresentative = Newtonsoft.Json.JsonConvert.DeserializeObject<GetSalesRepresentative.Root>(getSaleRepresentativeResponse);
                     saleRepresentative.SalesRepresentative.Responses.Add(salesRepresentativeID.SalesRepresentativeID, getSaleRepresentativeResponse);
 
+                    var validations = _validator.Validate(saleRepresentative.SalesRepresentative);
+
+                    if (validations.Errors.Count() > 0)
+                    {
+                        for (int j = 0; j < validations.Errors.Count(); j++)
+                        {
+                            _logger.AddMessage(
+                                stage: EnumStages.DeserializeXMLToObject,
+                                error: EnumError.Validation,
+                                logLevel: EnumMessageLevel.Warning,
+                                message: $"Error when convert record - SalesRepresentativeID: {saleRepresentative.SalesRepresentative.SalesRepresentativeID} | Name: {saleRepresentative.SalesRepresentative.Name}\n" +
+                                         $"{validations.Errors[j]}"
+                            );
+                        }
+                        continue;
+                    }
+
                     salesRepresentativeAPIList.Add(saleRepresentative.SalesRepresentative);
                 }
-
-                SalesRepresentative.Compare(salesRepresentativeAPIList, _salesRepresentativeDboList);
 
                 if (salesRepresentativeAPIList.Count() > 0)
                 {
@@ -116,7 +129,7 @@ namespace Application.LinxCommerce.Services
                         )
                     );
 
-                    _salesRepresentativeRepository.BulkInsertIntoTableRaw(jobParameter: jobParameter, registros: salesRepresentativeAPIList);
+                    _salesRepresentativeRepository.BulkInsertIntoTableRaw(jobParameter: jobParameter, registros: salesRepresentativeAPIList, _logger.GetExecutionGuid());
                     
                     _logger.AddMessage(
                             $"Concluída com sucesso: {salesRepresentativeAPIList.Count()} registro(s) novo(s) inserido(s)!"

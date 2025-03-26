@@ -1,28 +1,26 @@
-﻿using Domain.LinxCommerce.Entities.SalesRepresentative;
-
-namespace Domain.LinxCommerce.Entities.Customer
+﻿namespace Domain.LinxCommerce.Entities.Customer
 {
     public class Contact
     {
         public string? Phone { get; set; }
+
         public string? Phone2 { get; set; }
+
         public string? CellPhone { get; set; }
+
         public string? Fax { get; set; }
+
         public Int32? CustomerID { get; set; }
 
-        public static bool operator ==(Contact a, Contact b)
-        {
-            if (a is not null && b is not null)
-                return a.Phone == b.Phone && a.Phone2 == b.Phone2 && a.CellPhone == b.CellPhone && a.Fax == b.Fax;
-            if (a is null && b is null)
-                return true;
+        public Contact() { }
 
-            return false;
-        }
-
-        public static bool operator !=(Contact a, Contact b)
+        public Contact(Contact contact, Int32? customerID)
         {
-            return !(a == b);
+            this.Phone = contact.Phone;
+            this.Phone2 = contact.Phone2;
+            this.CellPhone = contact.CellPhone;
+            this.Fax = contact.Fax;
+            this.CustomerID = customerID;
         }
     }
 }

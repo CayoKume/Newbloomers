@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.CustomValidations;
+﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -8,18 +8,13 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
     [Table("LinxMovimentoObservacaoCF", Schema = "linx_microvix_erp")]
     public class LinxMovimentoObservacaoCF
     {
-        [Column(TypeName = "datetime")]
         public DateTime? lastupdateon { get; private set; }
 
-        [Key]
-        [Column(TypeName = "uniqueidentifier")]
         public Guid? identificador { get; private set; }
 
-        [Column(TypeName = "varchar(14)")]
         [LengthValidation(length: 14, propertyName: "documento_cliente")]
         public string? documento_cliente { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
         [NotMapped]

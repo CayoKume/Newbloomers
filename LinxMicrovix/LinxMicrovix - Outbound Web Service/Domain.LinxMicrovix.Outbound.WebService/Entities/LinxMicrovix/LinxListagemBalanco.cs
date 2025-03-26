@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.CustomValidations;
+﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,34 +9,24 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
     [Table("LinxListagemBalanco", Schema = "linx_microvix_erp")]
     public class LinxListagemBalanco
     {
-        [Column(TypeName = "datetime")]
         public DateTime? lastupdateon { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? id_balanco { get; private set; }
 
-        [Column(TypeName = "datetime")]
         public DateTime? data { get; private set; }
 
-        [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "nome_arquivo")]
         public string? nome_arquivo { get; private set; }
 
-        [Column(TypeName = "varchar(1)")]
         [LengthValidation(length: 1, propertyName: "processado")]
         public string? processado { get; private set; }
 
-        [Column(TypeName = "datetime")]
         public DateTime? data_ultimo_processamento { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32 qtde_produtos { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? qtde_itens { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
         [NotMapped]

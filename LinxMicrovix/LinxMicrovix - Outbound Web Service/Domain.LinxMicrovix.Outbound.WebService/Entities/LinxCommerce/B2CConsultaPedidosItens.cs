@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.CustomValidations;
+﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,31 +9,20 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
     [Table("B2CConsultaPedidosItens", Schema = "linx_microvix_commerce")]
     public class B2CConsultaPedidosItens
     {
-        [Column(TypeName = "datetime")]
         public DateTime? lastupdateon { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
-        public Int32? id_pedido_item { get; private set; }
+        public Int64? id_pedido_item { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
-        public Int32? id_pedido { get; private set; }
+        public Int64? id_pedido { get; private set; }
 
-        [Key]
-        [Column(TypeName = "bigint")]
         public Int64? codigoproduto { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? quantidade { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? vl_unitario { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
         [NotMapped]
@@ -62,12 +51,12 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
 
             this.id_pedido_item =
                 ConvertToInt32Validation.IsValid(id_pedido_item, "id_pedido_item", listValidations) ?
-                Convert.ToInt32(id_pedido_item) :
+                Convert.ToInt64(id_pedido_item) :
                 0;
 
             this.id_pedido =
                 ConvertToInt32Validation.IsValid(id_pedido, "id_pedido", listValidations) ?
-                Convert.ToInt32(id_pedido) :
+                Convert.ToInt64(id_pedido) :
                 0;
 
             this.codigoproduto =

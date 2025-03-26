@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.CustomValidations;
+﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,42 +9,29 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
     [Table("LinxTrocaUnificadaResumoVendasItens", Schema = "linx_microvix_erp")]
     public class LinxTrocaUnificadaResumoVendasItens
     {
-        [Column(TypeName = "datetime")]
         public DateTime? lastupdateon { get; private set; }
 
-        [Key]
-        [Column(TypeName = "bigint")]
         public Int64? id_troca_unificada_resumo_vendas_itens { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? id_troca_unificada_resumo_vendas { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? codigoproduto { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? transacao { get; private set; }
 
-        [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "serial")]
         public string? serial { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? valor_liquido { get; private set; }
 
-        [Column(TypeName = "datetime")]
         public DateTime? data_validade { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? venda_referenciada { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? token_utilizado { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? quantidade { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
         [NotMapped]

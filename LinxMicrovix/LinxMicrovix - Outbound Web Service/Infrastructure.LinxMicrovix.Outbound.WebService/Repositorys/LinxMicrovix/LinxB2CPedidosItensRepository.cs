@@ -38,7 +38,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             }
         }
 
-        public async Task<List<LinxB2CPedidosItens>> GetRegistersExists(LinxAPIParam jobParameter, List<LinxB2CPedidosItens> registros)
+        public async Task<List<string?>> GetRegistersExists(LinxAPIParam jobParameter, List<int?> registros)
         {
             try
             {
@@ -46,7 +46,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
                 if (indice > 1)
                 {
-                    var list = new List<LinxB2CPedidosItens>();
+                    var list = new List<string?>();
 
                     for (int i = 0; i <= indice; i++)
                     {
@@ -57,13 +57,13 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
                         {
 
                             if (j == top1000List.Count() - 1)
-                                identificadores += $"'{top1000List[j].id_pedido_item}'";
+                                identificadores += $"{top1000List[j]}";
                             else
-                                identificadores += $"'{top1000List[j].id_pedido_item}', ";
+                                identificadores += $"{top1000List[j]}, ";
                         }
 
-                        string sql = $"SELECT ID_PEDIDO_ITEM, TIMESTAMP FROM [linx_microvix_erp].[LinxB2CPedidosItens] WHERE ID_PEDIDO_ITEM IN ({identificadores})";
-                        var result = await _linxMicrovixRepositoryBase.GetRegistersExists(sql);
+                        string sql = $"SELECT CONCAT('[', ID_PEDIDO_ITEM, ']', '|', '[', ID_PEDIDO, ']', '|', '[', CODIGOPRODUTO, ']', '|', '[', [TIMESTAMP], ']') FROM [linx_microvix_erp].[LinxB2CPedidosItens] WHERE ID_PEDIDO_ITEM IN ({identificadores})";
+                        var result = await _linxMicrovixRepositoryBase.GetKeyRegistersAlreadyExists(sql);
                         list.AddRange(result);
                     }
 
@@ -71,19 +71,19 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
                 }
                 else
                 {
-                    var list = new List<LinxB2CPedidosItens>();
+                    var list = new List<string?>();
                     string identificadores = String.Empty;
 
                     for (int i = 0; i < registros.Count(); i++)
                     {
                         if (i == registros.Count() - 1)
-                            identificadores += $"'{registros[i].id_pedido_item}'";
+                            identificadores += $"{registros[i]}";
                         else
-                            identificadores += $"'{registros[i].id_pedido_item}', ";
+                            identificadores += $"{registros[i]}, ";
                     }
 
-                    string sql = $"SELECT ID_PEDIDO_ITEM, TIMESTAMP FROM [linx_microvix_erp].[LinxB2CPedidosItens] WHERE ID_PEDIDO_ITEM IN ({identificadores})";
-                    var result = await _linxMicrovixRepositoryBase.GetRegistersExists(sql);
+                    string sql = $"SELECT CONCAT('[', ID_PEDIDO_ITEM, ']', '|', '[', ID_PEDIDO, ']', '|', '[', CODIGOPRODUTO, ']', '|', '[', [TIMESTAMP], ']') FROM [linx_microvix_erp].[LinxB2CPedidosItens] WHERE ID_PEDIDO_ITEM IN ({identificadores})";
+                    var result = await _linxMicrovixRepositoryBase.GetKeyRegistersAlreadyExists(sql);
                     list.AddRange(result);
 
                     return list;

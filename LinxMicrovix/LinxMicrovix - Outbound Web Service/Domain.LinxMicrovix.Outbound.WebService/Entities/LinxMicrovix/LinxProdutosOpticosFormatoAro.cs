@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.CustomValidations;
+﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -8,22 +8,16 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
     [Table("LinxProdutosOpticosFormatoAro", Schema = "linx_microvix_erp")]
     public class LinxProdutosOpticosFormatoAro
     {
-        [Column(TypeName = "datetime")]
         public DateTime? lastupdateon { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? id_formato_aro { get; private set; }
 
-        [Column(TypeName = "varchar(16)")]
         [LengthValidation(length: 16, propertyName: "codigo")]
         public string? codigo { get; private set; }
 
-        [Column(TypeName = "varchar(60)")]
         [LengthValidation(length: 60, propertyName: "descricao")]
         public string? descricao { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
         [NotMapped]

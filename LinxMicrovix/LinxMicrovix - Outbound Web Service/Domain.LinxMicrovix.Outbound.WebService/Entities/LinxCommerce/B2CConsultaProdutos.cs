@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.CustomValidations;
+﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,107 +9,74 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
     [Table("B2CConsultaProdutos", Schema = "linx_microvix_commerce")]
     public class B2CConsultaProdutos
     {
-        [Column(TypeName = "datetime")]
         public DateTime? lastupdateon { get; private set; }
 
-        [Key]
-        [Column(TypeName = "bigint")]
         public Int64? codigoproduto { get; private set; }
 
-        [Column(TypeName = "varchar(20)")]
         [LengthValidation(length: 20, propertyName: "referencia")]
         public string? referencia { get; private set; }
 
-        [Column(TypeName = "varchar(40)")]
         [LengthValidation(length: 40, propertyName: "codauxiliar1")]
         public string? codauxiliar1 { get; private set; }
 
-        [Column(TypeName = "varchar(100)")]
         [LengthValidation(length: 100, propertyName: "descricao_basica")]
         public string? descricao_basica { get; private set; }
 
-        [Column(TypeName = "varchar(250)")]
         [LengthValidation(length: 250, propertyName: "nome_produto")]
         public string? nome_produto { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? peso_liquido { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? codigo_setor { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? codigo_linha { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? codigo_marca { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? codigo_colecao { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? codigo_espessura { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? codigo_grade1 { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? codigo_grade2 { get; private set; }
 
-        [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "unidade")]
         public string? unidade { get; private set; }
 
-        [Column(TypeName = "bit")]
         public Int32? ativo { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? codigo_classificacao { get; private set; }
 
-        [Column(TypeName = "smalldatetime")]
         public DateTime? dt_cadastro { get; private set; }
 
-        [Column(TypeName = "varchar(MAX)")]
         public string? observacao { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? cod_fornecedor { get; private set; }
 
-        [Column(TypeName = "smalldatetime")]
         public DateTime? dt_update { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? altura_para_frete { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? largura_para_frete { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? comprimento_para_frete { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? peso_bruto { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
-        [Column(TypeName = "varchar(8000)")]
         [LengthValidation(length: 8000, propertyName: "descricao_completa_commerce")]
         public string? descricao_completa_commerce { get; private set; }
 
-        [Column(TypeName = "tinyint")]
         public Int32? canais_ecommerce_publicados { get; private set; }
 
-        [Column(TypeName = "date")]
         public DateTime? inicio_publicacao_produto { get; private set; }
 
-        [Column(TypeName = "date")]
         public DateTime? fim_publicacao_produto { get; private set; }
 
-        [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "codigo_integracao_oms")]
         public string? codigo_integracao_oms { get; private set; }
 

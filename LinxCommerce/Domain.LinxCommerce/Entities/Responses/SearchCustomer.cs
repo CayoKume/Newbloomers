@@ -1,4 +1,6 @@
-﻿namespace Domain.LinxCommerce.Entities.Responses
+﻿using Domain.LinxCommerce.Entities.Queue;
+
+namespace Domain.LinxCommerce.Entities.Responses
 {
     public class SearchCustomer
     {
@@ -11,6 +13,7 @@
         {
             public int CustomerID { get; set; }
             public string? CustomerType { get; set; }
+            public QueueItem? QueueItem { get; set; }
         }
     }
 }

@@ -1,8 +1,6 @@
 ﻿using Application.IntegrationsCore.Interfaces;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
-using Application.LinxMicrovix.Outbound.WebService.Interfaces.Cache.LinxMicrovix;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxMicrovix;
-using Application.LinxMicrovix.Outbound.WebService.Services.Cache.LinxMicrovix;
 using Domain.IntegrationsCore.Entities.Enums;
 using Domain.IntegrationsCore.Exceptions;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
@@ -21,7 +19,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
         private readonly ILinxMicrovixAzureSQLRepositoryBase<LinxProdutosPromocoes> _linxMicrovixRepositoryBase;
         private readonly ILinxProdutosPromocoesRepository _linxProdutosPromocoesRepository;
-        private static List<LinxProdutosPromocoes> _linxProdutosPromocoesCache { get; set; } = new List<LinxProdutosPromocoes>();
+        private static List<string?> _linxProdutosPromocoesCache { get; set; } = new List<string?>();
 
         public LinxProdutosPromocoesService(
             IAPICall apiCall,
@@ -115,11 +113,9 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                 {
                     var body = _linxMicrovixServiceBase.BuildBodyRequest(
                                 parametersList: parameters
-                                                .Replace("[data_cad_inicial]", $"2000-01-01")
-                                                //.Replace("[data_cad_inicial]", $"{DateTime.Today.AddDays(-14).ToString("yyyy-MM-dd")}")
+                                                .Replace("[data_cad_inicial]", $"{DateTime.Today.AddDays(-7).ToString("yyyy-MM-dd")}")
                                                 .Replace("[data_cad_fim]", $"{DateTime.Today.ToString("yyyy-MM-dd")}")
-                                                //.Replace("[data_vig_inicial]", $"{DateTime.Today.AddDays(-14).ToString("yyyy-MM-dd")}")
-                                                .Replace("[data_vig_inicial]", $"2000-01-01")
+                                                .Replace("[data_vig_inicial]", $"{DateTime.Today.AddDays(-7).ToString("yyyy-MM-dd")}")
                                                 .Replace("[data_vig_fim]", $"{DateTime.Today.ToString("yyyy-MM-dd")}")
                                                 .Replace("[promocao_ativa]", "N"),
                                 jobParameter: jobParameter,
@@ -142,7 +138,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                         );
 
                     var _listSomenteNovos = listRecords.Where(x => !_linxProdutosPromocoesCache.Any(y => 
-                        y.cod_produto == x.cod_produto
+                        y == x.recordKey
                     )).ToList();
 
                     if (_listSomenteNovos.Count() > 0)
@@ -158,7 +154,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                             );
                         }
 
-                        _linxProdutosPromocoesCache.AddRange(_listSomenteNovos);
+                        _linxProdutosPromocoesCache.AddRange(_listSomenteNovos.Select(x => x.recordKey));
 
                         _logger.AddMessage(
                             $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"

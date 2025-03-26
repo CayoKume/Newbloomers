@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.CustomValidations;
+﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,72 +9,49 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
     [Table("B2CConsultaNFe", Schema = "linx_microvix_commerce")]
     public class B2CConsultaNFe
     {
-        [Column(TypeName = "datetime")]
         public DateTime? lastupdateon { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? id_nfe { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? id_pedido { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? documento { get; private set; }
 
-        [Column(TypeName = "smalldatetime")]
         public DateTime? data_emissao { get; private set; }
 
-        [Key]
-        [Column(TypeName = "char(44)")]
         [LengthValidation(length: 44, propertyName: "chave_nfe")]
         public string? chave_nfe { get; private set; }
 
-        [Column(TypeName = "tinyint")]
         public Int32? situacao { get; private set; }
 
-        [Column(TypeName = "varchar(MAX)")]
         public string? xml { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? excluido { get; private set; }
 
-        [Column(TypeName = "uniqueidentifier")]
         public Guid? identificador_microvix { get; private set; }
 
-        [Column(TypeName = "smalldatetime")]
         public DateTime? dt_insert { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? valor_nota { get; private set; }
 
-        [Column(TypeName = "varchar(10)")]
         [LengthValidation(length: 10, propertyName: "serie")]
         public string? serie { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? frete { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
-        [Column(TypeName = "varchar(15)")]
         [LengthValidation(length: 15, propertyName: "nProt")]
         public string? nProt { get; private set; }
 
-        [Column(TypeName = "varchar(3)")]
         [LengthValidation(length: 3, propertyName: "codigo_modelo_nf")]
         public string? codigo_modelo_nf { get; private set; }
 
-        [Column(TypeName = "varchar(255)")]
         [LengthValidation(length: 255, propertyName: "justificativa")]
         public string? justificativa { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? tpAmb { get; private set; }
 
         [NotMapped]

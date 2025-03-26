@@ -39,22 +39,56 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
             }
         }
 
-        public async Task<List<B2CConsultaClientesEnderecosEntrega>> GetRegistersExists(LinxAPIParam jobParameter, List<B2CConsultaClientesEnderecosEntrega> registros)
+        public async Task<List<string?>> GetRegistersExists(LinxAPIParam jobParameter, List<int?> registros)
         {
             try
             {
-                var identificadores = String.Empty;
-                for (int i = 0; i < registros.Count(); i++)
+                int indice = registros.Count() / 1000;
+
+                if (indice > 1)
                 {
-                    if (i == registros.Count() - 1)
-                        identificadores += $"'{registros[i].id_endereco_entrega}'";
-                    else
-                        identificadores += $"'{registros[i].id_endereco_entrega}', ";
+                    var list = new List<string>();
+
+                    for (int i = 0; i <= indice; i++)
+                    {
+                        string identificadores = String.Empty;
+                        var top1000List = registros.Skip(i * 1000).Take(1000).ToList();
+
+                        for (int j = 0; j < top1000List.Count(); j++)
+                        {
+
+                            if (j == top1000List.Count() - 1)
+                                identificadores += $"'{top1000List[j]}'";
+                            else
+                                identificadores += $"'{top1000List[j]}', ";
+                        }
+
+                        string sql = $"SELECT CONCAT('[', ID_ENDERECO_ENTREGA, ']', '|', '[', COD_CLIENTE_B2C, ']', '|', '[', [TIMESTAMP], ']') FROM linx_microvix_commerce.B2CCONSULTACLIENTESENDERECOSENTREGA WHERE ID_ENDERECO_ENTREGA IN ({identificadores})";
+                        var result = await _linxMicrovixRepositoryBase.GetKeyRegistersAlreadyExists(sql);
+                        list.AddRange(result);
+                    }
+
+                    return list;
                 }
+                else
+                {
+                    var list = new List<string>();
+                    string identificadores = String.Empty;
 
-                string sql = $"SELECT ID_ENDERECO_ENTREGA, TIMESTAMP FROM B2CCONSULTACLIENTESENDERECOSENTREGA WHERE ID_ENDERECO_ENTREGA IN ({identificadores})";
+                    for (int i = 0; i < registros.Count(); i++)
+                    {
+                        if (i == registros.Count() - 1)
+                            identificadores += $"'{registros[i]}'";
+                        else
+                            identificadores += $"'{registros[i]}', ";
+                    }
 
-                return await _linxMicrovixRepositoryBase.GetRegistersExists(sql);
+                    string sql = $"SELECT CONCAT('[', ID_ENDERECO_ENTREGA, ']', '|', '[', COD_CLIENTE_B2C, ']', '|', '[', [TIMESTAMP], ']') FROM linx_microvix_commerce.B2CCONSULTACLIENTESENDERECOSENTREGA WHERE ID_ENDERECO_ENTREGA IN ({identificadores})";
+                    var result = await _linxMicrovixRepositoryBase.GetKeyRegistersAlreadyExists(sql);
+                    list.AddRange(result);
+
+                    return list;
+                }
             }
             catch (Exception ex) when (ex is not InternalException && ex is not SQLCommandException)
             {

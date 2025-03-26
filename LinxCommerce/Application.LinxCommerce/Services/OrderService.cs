@@ -2,12 +2,13 @@
 using Application.LinxCommerce.Interfaces;
 using Domain.IntegrationsCore.Entities.Enums;
 using Domain.IntegrationsCore.Exceptions;
+using Domain.LinxCommerce.Entities.Customer;
 using Domain.LinxCommerce.Entities.Order;
 using Domain.LinxCommerce.Entities.Parameters;
 using Domain.LinxCommerce.Entities.Responses;
-using Domain.LinxCommerce.Entities.SalesRepresentative;
 using Domain.LinxCommerce.Interfaces.Api;
-using Domain.LinxCommerce.Interfaces.Repositorys.Order;
+using Domain.LinxCommerce.Interfaces.Repositorys;
+using FluentValidation;
 
 namespace Application.LinxCommerce.Services
 {
@@ -17,11 +18,10 @@ namespace Application.LinxCommerce.Services
         private readonly ILoggerService _logger;
         private readonly IOrderStatusRepository _orderStatusRepository;
         private readonly IOrderRepository _orderRepository;
-        private static String _orderStatusCache = String.Empty;
-        private static List<Domain.LinxCommerce.Entities.Order.Order.Root> _ordersDboList = new List<Domain.LinxCommerce.Entities.Order.Order.Root>();
+        private readonly IValidator<Order.Root> _validator;
 
-        public OrderService(IAPICall apiCall, ILoggerService logger, IOrderRepository orderRepository, IOrderStatusRepository orderStatusRepository) =>
-            (_apiCall, _logger, _orderRepository, _orderStatusRepository) = (apiCall, logger, orderRepository, orderStatusRepository);
+        public OrderService(IAPICall apiCall, ILoggerService logger, IOrderRepository orderRepository, IOrderStatusRepository orderStatusRepository, IValidator<Order.Root> validator) =>
+            (_apiCall, _logger, _orderRepository, _orderStatusRepository, _validator) = (apiCall, logger, orderRepository, orderStatusRepository, validator);
 
         public async Task<bool?> GetOrder(LinxCommerceJobParameter jobParameter, string? orderId)
         {
@@ -118,7 +118,7 @@ namespace Application.LinxCommerce.Services
             throw new NotImplementedException();
         }
 
-        public async Task<string?> SearchOrders(LinxCommerceJobParameter jobParameter)
+        public async Task<bool?> SearchOrdersByDateInterval(LinxCommerceJobParameter jobParameter)
         {
             try
             {
@@ -128,10 +128,11 @@ namespace Application.LinxCommerce.Services
 
                 var objectRequest = new
                 {
-                    Page = new { PageIndex = 0, PageSize = 0 },
+                    Page = new { PageIndex = 0, PageSize = 3000 },
                     Where = $"(ModifiedDate>=\"{DateTime.Now.Date:yyyy-MM-dd}T00:00:00\" && ModifiedDate<=\"{DateTime.Now.Date:yyyy-MM-dd}T23:59:59\")",
+                    //Where = $"",
                     WhereMetadata = "",
-                    OrderBy = "",
+                    OrderBy = "OrderNumber",
                 };
 
                 var response = await _apiCall.PostRequest(
@@ -140,42 +141,50 @@ namespace Application.LinxCommerce.Services
                     route: "/v1/Sales/API.svc/web/SearchOrders"
                 );
 
+                var ordersAPIList = new List<Order.Root>();
                 var ordersResults = Newtonsoft.Json.JsonConvert.DeserializeObject<SearchOrder.Root>(response);
 
-                if (_ordersDboList.Count() == 0)
-                    _ordersDboList = await _orderRepository.GetRegistersExists(ordersResults.Result.Select(o => o.OrderID));
-
-                Order.Root.Compare(ordersResults.Result, _ordersDboList);
-
-                if (ordersResults.Result.Count() > 0)
+                foreach (var orderID in ordersResults.Result)
                 {
-                    var ordersAPIList = new List<Order.Root>();
+                    var getOrderResponse = await _apiCall.PostRequest(
+                        jobParameter: jobParameter,
+                        stringIdentifier: orderID.OrderID.ToString(),
+                        route: "/v1/Sales/API.svc/web/GetOrder"
+                    );
 
-                    foreach (var orderID in ordersResults.Result)
+                    var order = Newtonsoft.Json.JsonConvert.DeserializeObject<Order.Root>(getOrderResponse);
+                    var validations = _validator.Validate(order);
+
+                    if (validations.Errors.Count() > 0)
                     {
-                        var getOrderResponse = await _apiCall.PostRequest(
-                            jobParameter: jobParameter,
-                            stringIdentifier: orderID.OrderID.ToString(),
-                            route: "/v1/Sales/API.svc/web/GetOrder"
-                        );
-
-                        var order = Newtonsoft.Json.JsonConvert.DeserializeObject<Order.Root>(getOrderResponse);
-                        order.Responses.Add(order.OrderID.ToString(), getOrderResponse);
-
-                        ordersAPIList.Add(order);
+                        for (int j = 0; j < validations.Errors.Count(); j++)
+                        {
+                            _logger.AddMessage(
+                                stage: EnumStages.DeserializeXMLToObject,
+                                error: EnumError.Validation,
+                                logLevel: EnumMessageLevel.Warning,
+                                message: $"Error when convert record - order: {order.OrderNumber} | order_id: {order.OrderID}\n" +
+                                         $"{validations.Errors[j]}"
+                            );
+                        }
                     }
+
+                    ordersAPIList.Add(new Order.Root(order, getOrderResponse));
+                }
+
+                if (ordersAPIList.Count() > 0)
+                {
+                    _orderRepository.BulkInsertIntoTableRaw(jobParameter, ordersAPIList, _logger.GetExecutionGuid());
 
                     ordersAPIList.ForEach(s =>
                         _logger.AddRecord(
                             s.OrderID.ToString(),
                             s.Responses
-                                .Where(pair => pair.Key == s.OrderID.ToString())
+                                .Where(pair => pair.Key == s.OrderID)
                                 .Select(pair => pair.Value)
                                 .FirstOrDefault()
                         )
                     );
-
-                    _orderRepository.BulkInsertIntoTableRaw(jobParameter, ordersAPIList);
 
                     _logger.AddMessage(
                                 $"Concluída com sucesso: {ordersAPIList.Count()} registro(s) novo(s) inserido(s)!"
@@ -186,7 +195,7 @@ namespace Application.LinxCommerce.Services
                         $"Concluída com sucesso: {ordersResults.Result.Count()} registro(s) novo(s) inserido(s)!"
                     );
 
-                return "true";
+                return true;
             }
             catch (SQLCommandException ex)
             {
@@ -226,7 +235,149 @@ namespace Application.LinxCommerce.Services
                 await _logger.CommitAllChanges();
             }
 
-            return "true";
+            return true;
+        }
+
+        public async Task<bool?> SearchOrdersByQueue(LinxCommerceJobParameter jobParameter)
+        {
+            try
+            {
+                _logger
+                   .Clear()
+                   .AddLog(EnumJob.LinxCommerceOrders);
+
+                var objectRequest = new
+                {
+                    QueueID = 21,
+                    Page = new { PageIndex = 0, PageSize = 1000 },
+                    Where = "EntityKeyName==\"OrderID\"",
+                    WhereMetadata = "",
+                    OrderBy = "QueueItemID",
+                };
+
+                var response = await _apiCall.PostRequest(
+                    jobParameter: jobParameter,
+                    objRequest: objectRequest,
+                    route: "/v1/Sales/API.svc/web/GetQueueOrders"
+                );
+
+                var ordersAPIList = new List<Order.Root>();
+                var enqueuedItens = Newtonsoft.Json.JsonConvert.DeserializeObject<SearchQueuedOrder.Root>(response);
+                var enqueuedOrders = enqueuedItens
+                                    .Result
+                                    .Where(x => x.QueueItem.EntityKeyName == "OrderID")
+                                    .GroupBy(y => y.QueueItem.EntityKeyValue)
+                                    .Select(g => g.First())
+                                    .ToList();
+
+                foreach (var enqueuedOrder in enqueuedOrders)
+                {
+                    var getOrderResponse = await _apiCall.PostRequest(
+                        jobParameter: jobParameter,
+                        stringIdentifier: enqueuedOrder.Order.OrderID.ToString(),
+                        route: "/v1/Sales/API.svc/web/GetOrder"
+                    );
+
+                    var order = Newtonsoft.Json.JsonConvert.DeserializeObject<Order.Root>(getOrderResponse);
+                    var validations = _validator.Validate(order);
+
+                    if (validations.Errors.Count() > 0)
+                    {
+                        for (int j = 0; j < validations.Errors.Count(); j++)
+                        {
+                            _logger.AddMessage(
+                                stage: EnumStages.DeserializeXMLToObject,
+                                error: EnumError.Validation,
+                                logLevel: EnumMessageLevel.Warning,
+                                message: $"Error when convert record - order: {order.OrderNumber} | order_id: {order.OrderID}\n" +
+                                         $"{validations.Errors[j]}"
+                            );
+                        }
+                    }
+
+                    ordersAPIList.Add(new Order.Root(order, getOrderResponse));
+                }
+
+                if (ordersAPIList.Count() > 0)
+                {
+                    _orderRepository.BulkInsertIntoTableRaw(jobParameter, ordersAPIList, _logger.GetExecutionGuid());
+
+                    ordersAPIList.ForEach(s =>
+                        _logger.AddRecord(
+                            s.OrderID.ToString(),
+                            s.Responses
+                                .Where(pair => pair.Key == s.OrderID)
+                                .Select(pair => pair.Value)
+                                .FirstOrDefault()
+                        )
+                    );
+
+                    _logger.AddMessage(
+                        $"Concluída com sucesso: {ordersAPIList.Count()} registro(s) novo(s) inserido(s)!"
+                    );
+
+                    //remover da fila de integração apenas se o registro for inserido no banco de dados
+                    var listQueueItemID = new List<string>();
+
+                    foreach (var order in enqueuedOrders)
+                    {
+                        listQueueItemID.Add(order.QueueItem.QueueItemID);
+                    }
+
+                    var dequeueObjectRequest = new { QueueItems = listQueueItemID };
+
+                    var dequeueResponse = await _apiCall.PostRequest(
+                        jobParameter: jobParameter,
+                        objRequest: dequeueObjectRequest,
+                        route: "/v1/Queue/API.svc/web/DequeueQueueItems"
+                    );
+                }
+                else
+                    _logger.AddMessage(
+                        $"Concluída com sucesso: {ordersAPIList.Count()} registro(s) novo(s) inserido(s)!"
+                    );
+
+                return true;
+            }
+            catch (SQLCommandException ex)
+            {
+                _logger.AddMessage(
+                    stage: ex.Stage,
+                    error: ex.Error,
+                    logLevel: ex.MessageLevel,
+                    message: ex.Message,
+                    exceptionMessage: ex.ExceptionMessage,
+                    commandSQL: ex.CommandSQL
+                );
+
+                throw;
+            }
+            catch (InternalException ex)
+            {
+                _logger.AddMessage(
+                    stage: ex.stage,
+                    error: ex.Error,
+                    logLevel: ex.MessageLevel,
+                    message: ex.Message,
+                    exceptionMessage: ex.ExceptionMessage
+                );
+
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.AddMessage(
+                    message: "Error when executing GetRecords method",
+                    exceptionMessage: ex.Message
+                );
+            }
+            finally
+            {
+                _logger.SetLogEndDate();
+                await _logger.CommitAllChanges();
+            }
+
+            return true;
         }
 
         public Task<string?> SearchOrdersBySeller()
@@ -257,14 +408,9 @@ namespace Application.LinxCommerce.Services
                     route: "/v1/Sales/API.svc/web/SearchOrderStatus"
                 );
 
-                if (_orderStatusCache != response)
-                {
-                    _orderStatusCache = response;
+                var orderStatus = Newtonsoft.Json.JsonConvert.DeserializeObject<SearchOrderStatus.Root>(response);
 
-                    var orderStatus = Newtonsoft.Json.JsonConvert.DeserializeObject<SearchOrderStatus.Root>(response);
-
-                    _orderStatusRepository.BulkInsertIntoTableRaw(jobParameter: jobParameter, registros: orderStatus);
-                }
+                _orderStatusRepository.BulkInsertIntoTableRaw(jobParameter: jobParameter, registros: orderStatus);
 
                 return "true";
             }

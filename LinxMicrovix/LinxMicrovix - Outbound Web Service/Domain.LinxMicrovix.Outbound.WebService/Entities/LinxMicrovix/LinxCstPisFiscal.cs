@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.CustomValidations;
+﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,34 +9,24 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
     [Table("LinxCstPisFiscal", Schema = "linx_microvix_erp")]
     public class LinxCstPisFiscal
     {
-        [Column(TypeName = "datetime")]
         public DateTime? lastupdateon { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? id_cst_pis_fiscal { get; private set; }
 
-        [Column(TypeName = "varchar(4)")]
         [LengthValidation(length: 4, propertyName: "cst_pis_fiscal")]
         public string? cst_pis_fiscal { get; private set; }
 
-        [Column(TypeName = "varchar(150)")]
         [LengthValidation(length: 150, propertyName: "descricao")]
         public string? descricao { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? excluido { get; private set; }
 
-        [Column(TypeName = "datetime")]
         public DateTime? inicio_vigencia { get; private set; }
 
-        [Column(TypeName = "datetime")]
         public DateTime? termino_vigencia { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
         [NotMapped]

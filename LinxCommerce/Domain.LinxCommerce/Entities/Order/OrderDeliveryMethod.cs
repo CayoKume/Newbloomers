@@ -3,7 +3,7 @@ using Domain.IntegrationsCore.Exceptions;
 
 namespace Domain.LinxCommerce.Entities.Order
 {
-    public class OrderDeliveryMethod : IEquatable<OrderDeliveryMethod>
+    public class OrderDeliveryMethod
     {
         public string? LogisticOptionId { get; set; }
         public string? LogisticOptionName { get; set; }
@@ -36,50 +36,38 @@ namespace Domain.LinxCommerce.Entities.Order
         public string? CarrierName { get; set; }
         public DateTime? DeliveryEstimatedDate { get; set; }
 
-        public static List<OrderDeliveryMethod?> Compare(List<OrderDeliveryMethod?> orderDeliveryAPIList, List<OrderDeliveryMethod> orderDeliveryDboList)
-        {
-            try
-            {
-                foreach (var oDeliveryDbo in orderDeliveryDboList)
-                {
-                    orderDeliveryAPIList.Remove(
-                        orderDeliveryAPIList
-                            .Where(oDeliveryAPI =>
-                                oDeliveryAPI.Amount == oDeliveryDbo.Amount &&
-                                oDeliveryAPI.CarrierName == oDeliveryDbo.CarrierName &&
-                                oDeliveryAPI.DeliveryMethodID == oDeliveryDbo.DeliveryMethodID &&
-                                oDeliveryAPI.LogisticContractId == oDeliveryDbo.LogisticContractId &&
-                                oDeliveryAPI.LogisticContractName == oDeliveryDbo.LogisticContractName &&
-                                oDeliveryAPI.LogisticOptionId == oDeliveryDbo.LogisticOptionId &&
-                                oDeliveryAPI.LogisticOptionName == oDeliveryDbo.LogisticOptionName
-                            ).FirstOrDefault()
-                    );
-                }
+        public OrderDeliveryMethod() { }
 
-                return orderDeliveryAPIList;
-            }
-            catch (Exception ex)
-            {
-                throw new InternalException(
-                    stage: EnumStages.Compare,
-                    error: EnumError.Compare,
-                    level: EnumMessageLevel.Error,
-                    message: $"Error when comparing two lists of records",
-                    exceptionMessage: ex.Message
-                );
-            }
-        }
-
-        public bool Equals(OrderDeliveryMethod? other)
+        public OrderDeliveryMethod(OrderDeliveryMethod orderDeliveryMethod)
         {
-            return
-                this.Amount == other.Amount &&
-                this.CarrierName == other.CarrierName &&
-                this.DeliveryMethodID == other.DeliveryMethodID &&
-                this.LogisticContractId == other.LogisticContractId &&
-                this.LogisticContractName == other.LogisticContractName &&
-                this.LogisticOptionId == other.LogisticOptionId &&
-                this.LogisticOptionName == other.LogisticOptionName;
+            this.LogisticOptionId = orderDeliveryMethod.LogisticOptionId;
+            this.LogisticOptionName = orderDeliveryMethod.LogisticOptionName;
+            this.LogisticContractId = orderDeliveryMethod.LogisticContractId;
+            this.LogisticContractName = orderDeliveryMethod.LogisticContractName;
+            this.OrderDeliveryMethodID = orderDeliveryMethod.OrderDeliveryMethodID;
+            this.OrderID = orderDeliveryMethod.OrderID;
+            this.DeliveryMethodID = orderDeliveryMethod.DeliveryMethodID;
+            this.DeliveryGroupID = orderDeliveryMethod.DeliveryGroupID;
+            this.Amount = orderDeliveryMethod.Amount;
+            this.ETA = orderDeliveryMethod.ETA;
+            this.ETADays = orderDeliveryMethod.ETADays;
+            this.IntegrationID = orderDeliveryMethod.IntegrationID;
+            this.ScheduleShiftID = orderDeliveryMethod.ScheduleShiftID;
+            this.ScheduleDisplayName = orderDeliveryMethod.ScheduleDisplayName;
+            this.ScheduleTax = orderDeliveryMethod.ScheduleTax;
+            this.ScheduleDate = orderDeliveryMethod.ScheduleDate;
+            this.DeliveryMethodAlias = orderDeliveryMethod.DeliveryMethodAlias;
+            this.PointOfSaleID = orderDeliveryMethod.PointOfSaleID;
+            this.PointOfSaleIntegrationID = orderDeliveryMethod.PointOfSaleIntegrationID;
+            this.PointOfSaleName = orderDeliveryMethod.PointOfSaleName;
+            this.DeliveryMethodType = orderDeliveryMethod.DeliveryMethodType;
+            this.DeliveryLogisticType = orderDeliveryMethod.DeliveryLogisticType;
+            this.ExternalID = orderDeliveryMethod.ExternalID;
+            this.WarehouseID = orderDeliveryMethod.WarehouseID;
+            this.WarehouseIntegrationID = orderDeliveryMethod.WarehouseIntegrationID;
+            this.DockID = orderDeliveryMethod.DockID;
+            this.CarrierName = orderDeliveryMethod.CarrierName;
+            this.DeliveryEstimatedDate = orderDeliveryMethod.DeliveryEstimatedDate;
         }
     }
 }

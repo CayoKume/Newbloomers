@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.CustomValidations;
+﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,37 +9,26 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
     [Table("LinxMetasVendedoresDia", Schema = "linx_microvix_erp")]
     public class LinxMetasVendedoresDia
     {
-        [Column(TypeName = "datetime")]
         public DateTime? lastupdateon { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
-        [Column(TypeName = "varchar(14)")]
         [LengthValidation(length: 14, propertyName: "cnpj_emp")]
         public string? cnpj_emp { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? id_meta { get; private set; }
 
-        [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "descricao_meta")]
         public string? descricao_meta { get; private set; }
 
-        [Column(TypeName = "datetime")]
         public DateTime? data_inicial_meta { get; private set; }
 
-        [Column(TypeName = "datetime")]
         public DateTime? data_final_meta { get; private set; }
 
-        [Column(TypeName = "datetime")]
         public DateTime? dia { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? valor_meta_diaria { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? cod_vendedor { get; private set; }
 
         [NotMapped]

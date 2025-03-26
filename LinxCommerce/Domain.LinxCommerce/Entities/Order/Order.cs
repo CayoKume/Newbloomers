@@ -1,9 +1,4 @@
-﻿using Domain.IntegrationsCore.Entities.Enums;
-using Domain.IntegrationsCore.Exceptions;
-using Domain.IntegrationsCore.Extensions;
-using Domain.LinxCommerce.Entities.Responses;
-using Domain.LinxCommerce.Entities.SalesRepresentative;
-using System.Collections.Generic;
+﻿using Domain.IntegrationsCore.Extensions;
 
 namespace Domain.LinxCommerce.Entities.Order
 {
@@ -89,88 +84,100 @@ namespace Domain.LinxCommerce.Entities.Order
             public OrderInvoice OrderInvoice { get; set; }
 
             [SkipProperty]
-            public Dictionary<string, string> Responses { get; set; } = new Dictionary<string, string>();
+            public Dictionary<Guid?, string> Responses { get; set; } = new Dictionary<Guid?, string>();
 
-            public static void Compare(List<SearchOrder.Result?> ordersAPIList, List<Domain.LinxCommerce.Entities.Order.Order.Root> ordersDboList)
+            public Root() { }
+
+            public Root(Order.Root order, string? getOrderResponse)
             {
-                if (ordersDboList.Count() > 0)
+                this.OrderID = order.OrderID;
+                this.OrderNumber = order.OrderNumber;
+                this.MarketPlaceBrand = order.MarketPlaceBrand;
+                this.OriginalOrderID = order.OriginalOrderID;
+                this.WebSiteID = order.WebSiteID;
+                this.WebSiteIntegrationID = order.WebSiteIntegrationID;
+                this.CustomerID = order.CustomerID;
+                this.ShopperTicketID = order.ShopperTicketID;
+                this.ItemsQty = order.ItemsQty;
+                this.ItemsCount = order.ItemsCount;
+                this.TaxAmount = order.TaxAmount;
+                this.DeliveryAmount = order.DeliveryAmount;
+                this.DiscountAmount = order.DiscountAmount;
+                this.PaymentTaxAmount = order.PaymentTaxAmount;
+                this.SubTotal = order.SubTotal;
+                this.Total = order.Total;
+                this.TotalDue = order.TotalDue;
+                this.TotalPaid = order.TotalPaid;
+                this.TotalRefunded = order.TotalRefunded;
+                this.PaymentDate = order.PaymentDate;
+                this.PaymentStatus = order.PaymentStatus;
+                this.ShipmentDate = order.ShipmentDate;
+                this.ShipmentStatus = order.ShipmentStatus;
+                this.GlobalStatus = order.GlobalStatus;
+                this.DeliveryPostalCode = order.DeliveryPostalCode;
+                this.CreatedChannel = order.CreatedChannel;
+                this.TrafficSourceID = order.TrafficSourceID;
+                this.OrderStatusID = order.OrderStatusID;
+                this.CreatedDate = order.CreatedDate;
+                this.CreatedBy = order.CreatedBy;
+                this.ModifiedDate = order.ModifiedDate;
+                this.ModifiedBy = order.ModifiedBy;
+                this.Remarks = order.Remarks;
+                this.SellerCommissionAmount = order.SellerCommissionAmount;
+                this.CommissionAmount = order.CommissionAmount;
+                this.OrderGroupID = order.OrderGroupID;
+                this.OrderGroupNumber = order.OrderGroupNumber;
+                this.HasConflicts = order.HasConflicts;
+                this.AcquiredDate = order.AcquiredDate;
+                this.HasHubOrderWithoutShipmentConflict = order.HasHubOrderWithoutShipmentConflict;
+                this.CustomerType = order.CustomerType;
+                this.CancelledDate = order.CancelledDate;
+                this.WebSiteName = order.WebSiteName;
+                this.CustomerName = order.CustomerName;
+                this.CustomerEmail = order.CustomerEmail;
+                this.CustomerGender = order.CustomerGender;
+                this.CustomerBirthDate = order.CustomerBirthDate;
+                this.CustomerPhone = order.CustomerPhone;
+                this.CustomerCPF = order.CustomerCPF;
+                this.CustomerCNPJ = order.CustomerCNPJ;
+                this.CustomerTradingName = order.CustomerTradingName;
+                this.CustomerSiteTaxPayer = order.CustomerSiteTaxPayer;
+                this.Responses.Add(order.OrderID, getOrderResponse);
+                this.OrderInvoice = new OrderInvoice(order.OrderInvoice, order.OrderID);
+
+                foreach (OrderItem item in order.Items)
                 {
-                    foreach (var oDbo in ordersDboList)
-                    {
-                        try
-                        {
-                            var oAPI = ordersAPIList
-                                        .Where(oAPI =>
-                                            oAPI.OrderID == oDbo.OrderID
-                                        ).FirstOrDefault();
+                    this.Items.Add(new OrderItem(item));
+                }
 
-                            ordersAPIList.Remove(
-                                ordersAPIList
-                                    .Where(oAPI =>
-                                        oAPI.OrderID == oDbo.OrderID &&
-                                        oAPI.OrderNumber == oDbo.OrderNumber &&
-                                        oAPI.MarketPlaceBrand == oDbo.MarketPlaceBrand &&
-                                        oAPI.WebSiteID == oDbo.WebSiteID &&
-                                        oAPI.CustomerID == oDbo.CustomerID &&
-                                        oAPI.ItemsQty == oDbo.ItemsQty &&
-                                        oAPI.ItemsCount == oDbo.ItemsCount &&
-                                        oAPI.TaxAmount == oDbo.TaxAmount &&
-                                        oAPI.DeliveryAmount == oDbo.DeliveryAmount &&
-                                        oAPI.DiscountAmount == oDbo.DiscountAmount &&
-                                        oAPI.SubTotal == oDbo.SubTotal &&
-                                        oAPI.Total == oDbo.Total &&
-                                        oAPI.TotalDue == oDbo.TotalDue &&
-                                        oAPI.TotalPaid == oDbo.TotalPaid &&
-                                        oAPI.TotalRefunded == oDbo.TotalRefunded &&
-                                        oAPI.PaymentDate == oDbo.PaymentDate &&
-                                        oAPI.PaymentStatus == oDbo.PaymentStatus &&
-                                        oAPI.ShipmentDate == oDbo.ShipmentDate &&
-                                        oAPI.ShipmentStatus == oDbo.ShipmentStatus &&
-                                        oAPI.GlobalStatus == oDbo.GlobalStatus &&
-                                        oAPI.TrafficSourceID == oDbo.TrafficSourceID &&
-                                        oAPI.OrderStatusID == oDbo.OrderStatusID &&
-                                        oAPI.CreatedDate == oDbo.CreatedDate &&
-                                        oAPI.HasConflicts == oDbo.HasConflicts &&
-                                        oAPI.AcquiredDate == oDbo.AcquiredDate &&
-                                        oAPI.CancelledDate == oDbo.CancelledDate &&
-                                        oAPI.OrderInvoice == oDbo.OrderInvoice &&
+                foreach (OrderTag tag in order.Tags)
+                {
+                    this.Tags.Add(new OrderTag(tag, order.OrderID));
+                }
 
-                                        oAPI.Items.All(x => oDbo.Items.Contains(x)) &&
-                                        oAPI.Addresses.All(x => oDbo.Addresses.Contains(x)) &&
-                                        oAPI.DeliveryMethods.All(x => oDbo.DeliveryMethods.Contains(x)) &&
-                                        oAPI.PaymentMethods.All(x => oDbo.PaymentMethods.Contains(x))
+                foreach (OrderAddress address in order.Addresses)
+                {
+                    this.Addresses.Add(new OrderAddress(address));
+                }
 
-                                    ).FirstOrDefault()
-                            );
+                foreach (OrderPaymentMethod paymentMethod in order.PaymentMethods)
+                {
+                    this.PaymentMethods.Add(new OrderPaymentMethod(paymentMethod));
+                }
 
-                            if (oAPI.Items.Count() > 0 && oDbo.Items.Count() > 0)
-                                oAPI.Items = OrderItem.Compare(oAPI.Items, oDbo.Items);
+                foreach (OrderDeliveryMethod deliveryMethod in order.DeliveryMethods)
+                {
+                    this.DeliveryMethods.Add(new OrderDeliveryMethod(deliveryMethod));
+                }
 
-                            if (oAPI.Addresses.Count() > 0 && oDbo.Addresses.Count() > 0)
-                                oAPI.Addresses = OrderAddress.Compare(oAPI.Addresses, oDbo.Addresses);
+                foreach (OrderDiscount orderDiscount in order.Discounts)
+                {
+                    this.Discounts.Add(new OrderDiscount(orderDiscount, order.OrderID));
+                }
 
-                            if (oAPI.DeliveryMethods.Count() > 0 && oDbo.DeliveryMethods.Count() > 0)
-                                oAPI.DeliveryMethods = OrderDeliveryMethod.Compare(oAPI.DeliveryMethods, oDbo.DeliveryMethods);
-
-                            if (oAPI.PaymentMethods.Count() > 0 && oDbo.PaymentMethods.Count() > 0)
-                                oAPI.PaymentMethods = OrderPaymentMethod.Compare(oAPI.PaymentMethods, oDbo.PaymentMethods);
-
-                            oDbo.Items.AddRange(oAPI.Items);
-                            oDbo.Addresses.AddRange(oAPI.Addresses);
-                            oDbo.DeliveryMethods.AddRange(oAPI.DeliveryMethods);
-                            oDbo.PaymentMethods.AddRange(oAPI.PaymentMethods);
-                        }
-                        catch (Exception ex)
-                        {
-                            throw new InternalException(
-                                stage: EnumStages.Compare,
-                                error: EnumError.Compare,
-                                level: EnumMessageLevel.Error,
-                                message: $"Error when comparing two lists of records",
-                                exceptionMessage: ex.Message
-                            );
-                        }
-                    }
+                foreach (OrderShipment orderShipment in order.Shipments)
+                {
+                    this.Shipments.Add(new OrderShipment(orderShipment));
                 }
             }
         }

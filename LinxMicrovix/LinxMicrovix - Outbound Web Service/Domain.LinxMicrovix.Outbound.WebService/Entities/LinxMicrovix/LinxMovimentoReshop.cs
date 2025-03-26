@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.CustomValidations;
+﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,37 +9,26 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
     [Table("LinxMovimentoReshop", Schema = "linx_microvix_erp")]
     public class LinxMovimentoReshop
     {
-        [Column(TypeName = "datetime")]
         public DateTime? lastupdateon { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_movimento_campanha_reshop { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_campanha { get; private set; }
 
-        [Key]
-        [Column(TypeName = "uniqueidentifier")]
         public Guid? identificador { get; private set; }
 
-        [Column(TypeName = "varchar(200)")]
         [LengthValidation(length: 200, propertyName: "")]
         public string? nome { get; private set; }
 
-        [Column(TypeName = "varchar(200)")]
         [LengthValidation(length: 200, propertyName: "")]
         public string? descricao { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? aplicar_desconto_venda { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? valor_desconto_subtotal { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? valor_desconto_completo { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
         [NotMapped]
@@ -62,7 +51,9 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             string? aplicar_desconto_venda,
             string? valor_desconto_subtotal,
             string? valor_desconto_completo,
-            string? timestamp
+            string? timestamp,
+            string? recordKey,
+            string? recordXml
         )
         {
             lastupdateon = DateTime.Now;
@@ -103,6 +94,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
             this.descricao = descricao;
             this.nome = nome;
+            this.recordXml = recordXml;
+            this.recordKey = $"[{identificador}]|[{id_movimento_campanha_reshop}]|[{id_campanha}]|[{timestamp}]";
         }
     }
 }

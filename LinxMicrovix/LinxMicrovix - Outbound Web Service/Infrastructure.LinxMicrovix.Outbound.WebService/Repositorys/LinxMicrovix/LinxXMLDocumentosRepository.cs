@@ -86,7 +86,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
                             identificadores += $"'{registros[i]}', ";
                     }
 
-                    string sql = $"SELECT chave_nfe, TIMESTAMP FROM [linx_microvix_erp].[LinxXMLDocumentos] WHERE chave_nfe IN ({identificadores})";
+                    string sql = $"SELECT CONCAT('[', CNPJ_EMP, ']', '|', '[', DOCUMENTO, ']', '|', '[', CHAVE_NFE, ']', '|', '[', [TIMESTAMP], ']') FROM [linx_microvix_erp].[LinxXMLDocumentos] WHERE CHAVE_NFE IN ({identificadores})";
                     var result = await _linxMicrovixRepositoryBase.GetKeyRegistersAlreadyExists(sql);
                     list.AddRange(result);
 

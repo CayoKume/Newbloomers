@@ -19,7 +19,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
         private readonly ILinxMicrovixAzureSQLRepositoryBase<LinxB2CPedidosStatus> _linxMicrovixRepositoryBase;
         private readonly ILinxB2CPedidosStatusRepository _linxB2CPedidosStatusRepository;
-        private static List<LinxB2CPedidosStatus> _linxB2CPedidosStatusCache { get; set; } = new List<LinxB2CPedidosStatus>();
+        private static List<string?> _linxB2CPedidosStatusCache { get; set; } = new List<string?>();
 
         public LinxB2CPedidosStatusService(
             IAPICall apiCall,
@@ -124,13 +124,12 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                         _linxB2CPedidosStatusCache = await _linxB2CPedidosStatusRepository.GetRegistersExists(
                             jobParameter: jobParameter, 
                             registros: listRecords
+                                        .Select(x => x.id)
+                                        .ToList()
                         );
 
                     var _listSomenteNovos = listRecords.Where(x => !_linxB2CPedidosStatusCache.Any(y => 
-                        y.id == x.id && 
-                        y.id_pedido == x.id_pedido && 
-                        y.id_status == x.id_status && 
-                        y.timestamp == x.timestamp
+                        y == x.recordKey
                     )).ToList();
 
                     if (_listSomenteNovos.Count() > 0)
@@ -143,7 +142,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                             _logger.AddRecord(_listSomenteNovos[i].recordKey, _listSomenteNovos[i].recordXml);
                         }
 
-                        _linxB2CPedidosStatusCache.AddRange(_listSomenteNovos);
+                        _linxB2CPedidosStatusCache.AddRange(_listSomenteNovos.Select(x => x.recordKey));
 
                         _logger.AddMessage(
                             $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"

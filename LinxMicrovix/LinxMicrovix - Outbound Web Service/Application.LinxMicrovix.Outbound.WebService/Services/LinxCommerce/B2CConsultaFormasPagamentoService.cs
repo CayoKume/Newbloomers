@@ -1,7 +1,5 @@
 ﻿using Application.IntegrationsCore.Interfaces;
-using Application.LinxMicrovix.Outbound.WebService.Entities.Cache.LinxCommerce;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
-using Application.LinxMicrovix.Outbound.WebService.Interfaces.Cache.LinxCommerce;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxCommerce;
 using Domain.IntegrationsCore.Entities.Enums;
 using Domain.IntegrationsCore.Exceptions;
@@ -21,7 +19,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
         private readonly ILinxMicrovixAzureSQLRepositoryBase<B2CConsultaFormasPagamento> _linxMicrovixRepositoryBase;
         private readonly IB2CConsultaFormasPagamentoRepository _b2cConsultaFormasPagamentoRepository;
-        private static IB2CConsultaFormasPagamentoServiceCache _b2cConsultaFormasPagamentoCache { get; set; } = new B2CConsultaFormasPagamentoServiceCache();
+        private static List<string?> _b2cConsultaFormasPagamentoCache { get; set; } = new List<string?>();
 
         public B2CConsultaFormasPagamentoService(
             IAPICall apiCall,
@@ -114,31 +112,33 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                     );
 
                     string? response = await _apiCall.PostAsync(jobParameter: jobParameter, body: body);
-                    var xmls = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response, _b2cConsultaFormasPagamentoCache);
+                    var xmls = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response);
 
                     if (xmls.Count() > 0)
                     {
                         var listRecords = DeserializeXMLToObject(jobParameter, xmls);
 
-                        if (_b2cConsultaFormasPagamentoCache.GetList().Count == 0)
-                        {
-                            var list_existentes = await _b2cConsultaFormasPagamentoRepository.GetRegistersExists(jobParameter: jobParameter, registros: listRecords);
-                            _b2cConsultaFormasPagamentoCache.AddList(list_existentes);
-                        }
+                        //if (_b2cConsultaFormasPagamentoCache.GetList().Count == 0)
+                        //{
+                        //    var list_existentes = await _b2cConsultaFormasPagamentoRepository.GetRegistersExists(jobParameter: jobParameter, registros: listRecords);
+                        //    _b2cConsultaFormasPagamentoCache.AddList(list_existentes);
+                        //}
 
-                        _listSomenteNovos = _b2cConsultaFormasPagamentoCache.FiltrarList(listRecords);
+                        //_listSomenteNovos = _b2cConsultaFormasPagamentoCache.FiltrarList(listRecords);
+
                         if (_listSomenteNovos.Count() > 0)
                         {
                             _b2cConsultaFormasPagamentoRepository.BulkInsertIntoTableRaw(records: _listSomenteNovos, jobParameter: jobParameter);
-                            for (int i = 0; i < _listSomenteNovos.Count; i++)
-                            {
-                                var key = _b2cConsultaFormasPagamentoCache.GetKey(_listSomenteNovos[i]);
-                                if (_b2cConsultaFormasPagamentoCache.GetDictionaryXml().ContainsKey(key))
-                                {
-                                    var xml = _b2cConsultaFormasPagamentoCache.GetDictionaryXml()[key];
-                                    _logger.AddRecord(key, xml);
-                                }
-                            }
+                            
+                            //for (int i = 0; i < _listSomenteNovos.Count; i++)
+                            //{
+                            //    var key = _b2cConsultaFormasPagamentoCache.GetKey(_listSomenteNovos[i]);
+                            //    if (_b2cConsultaFormasPagamentoCache.GetDictionaryXml().ContainsKey(key))
+                            //    {
+                            //        var xml = _b2cConsultaFormasPagamentoCache.GetDictionaryXml()[key];
+                            //        _logger.AddRecord(key, xml);
+                            //    }
+                            //}
 
                             await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
 
@@ -152,8 +152,6 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                             );
                     }
                 }
-
-                await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
             }
             catch (SQLCommandException ex)
             {
@@ -190,7 +188,6 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
             finally
             {
                 //await _logger.CommitAllChanges();
-                _b2cConsultaFormasPagamentoCache.AddList(_listSomenteNovos);
             }
 
             return true;

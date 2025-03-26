@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.CustomValidations;
+﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,46 +9,32 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
     [Table("LinxValesComprasEnviadosAPI", Schema = "linx_microvix_erp")]
     public class LinxValesComprasEnviadosAPI
     {
-        [Column(TypeName = "datetime")]
         public DateTime? lastupdateon { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? numero_controle { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? valor_vale { get; private set; }
 
-        [Column(TypeName = "varchar(14)")]
         [LengthValidation(length: 14, propertyName: "doc_cliente")]
         public string? doc_cliente { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? status_vale { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? codigo_portal_resgate { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? codigo_empresa_resgate { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? codigo_usuario_resgate { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? codigo_vale_empresa_resgate { get; private set; }
 
-        [Column(TypeName = "datetime")]
         public DateTime? data_criacao { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
-        [Column(TypeName = "varchar(14)")]
         [LengthValidation(length: 14, propertyName: "cnpj_empresa_resgate")]
         public string? cnpj_empresa_resgate { get; private set; }
 
-        [Column(TypeName = "datetime")]
         public DateTime? data_resgate { get; private set; }
 
         [NotMapped]

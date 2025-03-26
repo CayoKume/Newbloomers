@@ -113,6 +113,7 @@ namespace Infrastructure.DatabaseInit
             services.AddScoped<ILinxCfopFiscalRepository, LinxCfopFiscalRepository>();
             services.AddScoped<ILinxClasseFiscalRepository, LinxClasseFiscalRepository>();
             services.AddScoped<ILinxClassificacoesRepository, LinxClassificacoesRepository>();
+            services.AddScoped<ILinxClientesEnderecosEntregaRepository, LinxClientesEnderecosEntregaRepository>();
             services.AddScoped<ILinxClientesFornecCamposAdicionaisRepository, LinxClientesFornecCamposAdicionaisRepository>();
             services.AddScoped<ILinxClientesFornecClassesRepository, LinxClientesFornecClassesRepository>();
             services.AddScoped<ILinxClientesFornecContatosParentescoRepository, LinxClientesFornecContatosParentescoRepository>();
@@ -253,6 +254,7 @@ namespace Infrastructure.DatabaseInit
             services.AddScoped<ILinxValeOrdemServicoExternaRepository, LinxValeOrdemServicoExternaRepository>();
             services.AddScoped<ILinxValesComprasEnviadosAPIRepository, LinxValesComprasEnviadosAPIRepository>();
             services.AddScoped<ILinxVendedoresRepository, LinxVendedoresRepository>();
+            services.AddScoped<ILinxUsuariosRepository, LinxUsuariosRepository>();
             services.AddScoped<ILinxXMLDocumentosRepository, LinxXMLDocumentosRepository>();
 
             return services;

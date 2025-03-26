@@ -41,7 +41,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
             }
         }
 
-        public async Task<List<B2CConsultaPedidos>> GetRegistersExists(LinxAPIParam jobParameter, List<B2CConsultaPedidos> registros)
+        public async Task<List<string?>> GetRegistersExists(LinxAPIParam jobParameter, List<int?> registros)
         {
             try
             {
@@ -49,14 +49,14 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                 for (int i = 0; i < registros.Count(); i++)
                 {
                     if (i == registros.Count() - 1)
-                        identificadores += $"'{registros[i].id_pedido}'";
+                        identificadores += $"'{registros[i]}'";
                     else
-                        identificadores += $"'{registros[i].id_pedido}', ";
+                        identificadores += $"'{registros[i]}', ";
                 }
 
-                string sql = $"SELECT ID_PEDIDO, COD_CLIENTE_ERP, COD_CLIENTE_B2C, ORDER_ID, TIMESTAMP FROM [linx_microvix_commerce].B2CCONSULTAPEDIDOS WHERE ID_PEDIDO IN ({identificadores})";
+                string sql = $"SELECT CONCAT('[', EMPRESA, ']', '|', '[', ID_PEDIDO, ']', '|', '[', COD_CLIENTE_B2C, ']', '|', '[', COD_CLIENTE_ERP, ']', '|', '[', ORDER_ID, ']', '|', '[', [TIMESTAMP], ']') FROM [linx_microvix_commerce].[B2CCONSULTAPEDIDOS] WHERE ID_PEDIDO IN ({identificadores})";
 
-                return await _linxMicrovixRepositoryBase.GetRegistersExists(sql);
+                return await _linxMicrovixRepositoryBase.GetKeyRegistersAlreadyExists(sql);
             }
             catch (Exception ex) when (ex is not InternalException && ex is not SQLCommandException)
             {

@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.CustomValidations;
+﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -8,24 +8,17 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
     [Table("B2CConsultaImagens", Schema = "linx_microvix_commerce")]
     public class B2CConsultaImagens
     {
-        [Column(TypeName = "datetime")]
         public DateTime? lastupdateon { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? id_imagem { get; private set; }
 
-        [Column(TypeName = "char(32)")]
         [LengthValidation(length: 32, propertyName: "md5")]
         public string? md5 { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
-        [Column(TypeName = "varchar(4000)")]
         [LengthValidation(length: 4000, propertyName: "url_imagem_blob")]
         public string? url_imagem_blob { get; private set; }
 

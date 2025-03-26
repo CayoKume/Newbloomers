@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.CustomValidations;
+﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,50 +9,33 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
     [Table("LinxProdutosPromocoes", Schema = "linx_microvix_erp")]
     public class LinxProdutosPromocoes
     {
-        [Column(TypeName = "datetime")]
         public DateTime? lastupdateon { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
-        [Key]
-        [Column(TypeName = "varchar(14)")]
         [LengthValidation(length: 14, propertyName: "cnpj_emp")]
         public string? cnpj_emp { get; private set; }
 
-        [Key]
-        [Column(TypeName = "bigint")]
         public Int64? cod_produto { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? preco_promocao { get; private set; }
 
-        [Column(TypeName = "datetime")]
         public DateTime? data_inicio_promocao { get; private set; }
 
-        [Column(TypeName = "datetime")]
         public DateTime? data_termino_promocao { get; private set; }
 
-        [Key]
-        [Column(TypeName = "datetime")]
         public DateTime? data_cadastro_promocao { get; private set; }
 
-        [Column(TypeName = "char(1)")]
         [LengthValidation(length: 1, propertyName: "promocao_ativa")]
         public string? promocao_ativa { get; private set; }
 
-        [Key]
-        [Column(TypeName = "bigint")]
         public Int64? id_campanha { get; private set; }
 
-        [Column(TypeName = "varchar(60)")]
         [LengthValidation(length: 60, propertyName: "nome_campanha")]
         public string? nome_campanha { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? promocao_opcional { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? custo_total_campanha { get; private set; }
 
         [NotMapped]
@@ -132,7 +115,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             this.promocao_ativa = promocao_ativa;
             this.cnpj_emp = cnpj_emp;
             this.nome_campanha = nome_campanha;
-            this.recordKey = $"[{cnpj_emp}]|[{cod_produto}]|[{id_campanha}]|[{data_cadastro_promocao}]";
+            this.recordKey = $"[{portal}]|[{cnpj_emp}]|[{cod_produto}]|[{preco_promocao}]|[{data_inicio_promocao}]|[{data_termino_promocao}]|[{data_cadastro_promocao}]|[{promocao_ativa}]|[{id_campanha}]|[{nome_campanha}]|[{promocao_opcional}]|[{custo_total_campanha}]";
             this.recordXml = recordXml;
         }
     }

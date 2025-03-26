@@ -1,7 +1,5 @@
 ﻿using Application.IntegrationsCore.Interfaces;
-using Application.LinxMicrovix.Outbound.WebService.Entities.Cache.LinxCommerce;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
-using Application.LinxMicrovix.Outbound.WebService.Interfaces.Cache.LinxCommerce;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxCommerce;
 using Domain.IntegrationsCore.Entities.Enums;
 using Domain.IntegrationsCore.Exceptions;
@@ -21,7 +19,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
         private readonly ILinxMicrovixAzureSQLRepositoryBase<B2CConsultaPlanos> _linxMicrovixRepositoryBase;
         private readonly IB2CConsultaPlanosRepository _b2cConsultaPlanosRepository;
-        private static IB2CConsultaPlanosServiceCache _b2cConsultaPlanosCache { get; set; } = new B2CConsultaPlanosServiceCache();
+        private static List<string?> _b2cConsultaPlanosCache { get; set; } = new List<string?>();
 
         public B2CConsultaPlanosService(
             IAPICall apiCall,
@@ -110,7 +108,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                     cnpj_emp: cnpj_emp);
 
                 string? response = await _apiCall.PostAsync(jobParameter: jobParameter, body: body);
-                var xmls = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response, _b2cConsultaPlanosCache);
+                var xmls = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response);
 
                 if (xmls.Count() > 0)
                 {
@@ -160,25 +158,27 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                     {
                         var listRecords = DeserializeXMLToObject(jobParameter, xmls);
 
-                        if (_b2cConsultaPlanosCache.GetList().Count == 0)
-                        {
-                            var list_existentes = await _b2cConsultaPlanosRepository.GetRegistersExists(jobParameter: jobParameter, registros: listRecords);
-                            _b2cConsultaPlanosCache.AddList(list_existentes);
-                        }
+                        //if (_b2cConsultaPlanosCache.GetList().Count == 0)
+                        //{
+                        //    var list_existentes = await _b2cConsultaPlanosRepository.GetRegistersExists(jobParameter: jobParameter, registros: listRecords);
+                        //    _b2cConsultaPlanosCache.AddList(list_existentes);
+                        //}
 
-                        _listSomenteNovos = _b2cConsultaPlanosCache.FiltrarList(listRecords);
+                        //_listSomenteNovos = _b2cConsultaPlanosCache.FiltrarList(listRecords);
+
                         if (_listSomenteNovos.Count() > 0)
                         {
                             _b2cConsultaPlanosRepository.BulkInsertIntoTableRaw(records: _listSomenteNovos, jobParameter: jobParameter);
-                            for (int i = 0; i < _listSomenteNovos.Count; i++)
-                            {
-                                var key = _b2cConsultaPlanosCache.GetKey(_listSomenteNovos[i]);
-                                if (_b2cConsultaPlanosCache.GetDictionaryXml().ContainsKey(key))
-                                {
-                                    var xml = _b2cConsultaPlanosCache.GetDictionaryXml()[key];
-                                    _logger.AddRecord(key, xml);
-                                }
-                            }
+
+                            //for (int i = 0; i < _listSomenteNovos.Count; i++)
+                            //{
+                            //    var key = _b2cConsultaPlanosCache.GetKey(_listSomenteNovos[i]);
+                            //    if (_b2cConsultaPlanosCache.GetDictionaryXml().ContainsKey(key))
+                            //    {
+                            //        var xml = _b2cConsultaPlanosCache.GetDictionaryXml()[key];
+                            //        _logger.AddRecord(key, xml);
+                            //    }
+                            //}
 
                             await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
 
@@ -192,8 +192,6 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                             );
                     }
                 }
-
-                await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
             }
             catch (SQLCommandException ex)
             {
@@ -230,7 +228,6 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
             finally
             {
                 //await _logger.CommitAllChanges();
-                _b2cConsultaPlanosCache.AddList(_listSomenteNovos);
             }
 
             return true;

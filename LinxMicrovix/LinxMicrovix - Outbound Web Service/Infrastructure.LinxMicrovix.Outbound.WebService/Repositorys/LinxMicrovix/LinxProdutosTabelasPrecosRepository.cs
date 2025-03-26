@@ -41,7 +41,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
         {
             try
             {
-                string sql = $"SELECT distinct id_tabela FROM [linx_microvix_erp].[LinxProdutosTabelas]";
+                string sql = $"SELECT distinct id_tabela FROM [linx_microvix_erp].[LinxProdutosTabelas] where ativa = 'S'";
 
                 return await _linxMicrovixRepositoryBase.GetParameters(sql);
             }
@@ -61,7 +61,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             }
         }
 
-        public async Task<List<LinxProdutosTabelasPrecos>> GetRegistersExists(LinxAPIParam jobParameter, List<Int64?> registros)
+        public async Task<List<string?>> GetRegistersExists(LinxAPIParam jobParameter, List<Int64?> registros)
         {
             try
             {
@@ -74,9 +74,9 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
                         identificadores += $"'{registros[i]}', ";
                 }
 
-                string sql = $"SELECT cod_produto, cnpj_emp, id_tabela, TIMESTAMP FROM [linx_microvix_erp].[LinxProdutosTabelasPrecos] WHERE cod_produto IN ({identificadores})";
+                string sql = $"SELECT CONCAT('[', CNPJ_EMP, ']', '|', '[', COD_PRODUTO, ']', '|', '[', ID_TABELA, ']', '|', '[', [TIMESTAMP], ']') FROM [linx_microvix_erp].[LinxProdutosTabelasPrecos] WHERE cod_produto IN ({identificadores})";
 
-                return await _linxMicrovixRepositoryBase.GetRegistersExists(sql);
+                return await _linxMicrovixRepositoryBase.GetKeyRegistersAlreadyExists(sql);
             }
             catch (Exception ex) when (ex is not InternalException && ex is not SQLCommandException)
             {

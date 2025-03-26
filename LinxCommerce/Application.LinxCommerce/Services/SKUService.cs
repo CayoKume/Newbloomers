@@ -2,8 +2,7 @@
 using Domain.LinxCommerce.Entities.Parameters;
 using Domain.LinxCommerce.Entities.Sku;
 using Domain.LinxCommerce.Interfaces.Api;
-using Domain.LinxCommerce.Interfaces.Repositorys.Base;
-using Domain.LinxCommerce.Interfaces.Repositorys.SKU;
+using Domain.LinxCommerce.Interfaces.Repositorys;
 
 namespace Application.LinxCommerce.Services
 {

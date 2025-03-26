@@ -1,8 +1,6 @@
 ﻿using Application.IntegrationsCore.Interfaces;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
-using Application.LinxMicrovix.Outbound.WebService.Interfaces.Cache.LinxMicrovix;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxMicrovix;
-using Application.LinxMicrovix.Outbound.WebService.Services.Cache.LinxMicrovix;
 using Domain.IntegrationsCore.Entities.Enums;
 using Domain.IntegrationsCore.Exceptions;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
@@ -21,7 +19,7 @@ namespace LinxMicrovix.Outbound.Web.Service.Application.Services.LinxMicrovix
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
         private readonly ILinxMicrovixAzureSQLRepositoryBase<LinxProdutosCodBar> _linxMicrovixRepositoryBase;
         private readonly ILinxProdutosCodBarRepository _linxProdutosCodBarRepository;
-        private static List<LinxProdutosCodBar> _linxProdutosCodBarCache { get; set; } = new List<LinxProdutosCodBar>();
+        private static List<string?> _linxProdutosCodBarCache { get; set; } = new List<string?>();
 
         public LinxProdutosCodBarService(
             IAPICall apiCall,
@@ -201,11 +199,12 @@ namespace LinxMicrovix.Outbound.Web.Service.Application.Services.LinxMicrovix
                         _linxProdutosCodBarCache = await _linxProdutosCodBarRepository.GetRegistersExists(
                             jobParameter: jobParameter, 
                             registros: listRecords
+                                        .Select(x => x.cod_produto)
+                                        .ToList()
                         );
 
                     var _listSomenteNovos = listRecords.Where(x => !_linxProdutosCodBarCache.Any(y => 
-                        y.cod_produto == x.cod_produto && 
-                        y.timestamp == x.timestamp
+                        y == x.recordKey
                     )).ToList();
 
                     if (_listSomenteNovos.Count() > 0)
@@ -218,7 +217,7 @@ namespace LinxMicrovix.Outbound.Web.Service.Application.Services.LinxMicrovix
                             _logger.AddRecord(_listSomenteNovos[i].recordKey, _listSomenteNovos[i].recordXml);
                         }
 
-                        _linxProdutosCodBarCache.AddRange(_listSomenteNovos);
+                        _linxProdutosCodBarCache.AddRange(_listSomenteNovos.Select(x => x.recordKey));
 
                         _logger.AddMessage(
                             $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"

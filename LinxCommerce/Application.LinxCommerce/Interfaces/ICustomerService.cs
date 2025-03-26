@@ -13,7 +13,7 @@ namespace Application.LinxCommerce.Interfaces
         public Task<bool?> DeleteCustomerRelation(LinxCommerceJobParameter jobParameter);
         
         public Task<bool?> GetCompany(LinxCommerceJobParameter jobParameter);
-        public Task<bool?> GetCustomer(LinxCommerceJobParameter jobParameter);
+        public Task<bool?> GetCustomer(LinxCommerceJobParameter jobParameter, string Identifier);
         public Task<bool?> GetCustomerFile(LinxCommerceJobParameter jobParameter);
         public Task<bool?> GetCustomerGroup(LinxCommerceJobParameter jobParameter);
         public Task<bool?> GetCustomerStatus(LinxCommerceJobParameter jobParameter);
@@ -34,7 +34,8 @@ namespace Application.LinxCommerce.Interfaces
         public Task<bool?> SaveCustomerStatus(LinxCommerceJobParameter jobParameter);
         public Task<bool?> SavePerson(LinxCommerceJobParameter jobParameter);
         
-        public Task<bool?> SearchCustomer(LinxCommerceJobParameter jobParameter);
+        public Task<bool?> SearchCustomerByDateInterval(LinxCommerceJobParameter jobParameter);
+        public Task<bool?> SearchCustomerByQueue(LinxCommerceJobParameter jobParameter);
         public Task<bool?> SearchCustomerGroup(LinxCommerceJobParameter jobParameter);
 
         public Task<bool?> UpdateModerationCustomerToSellerMarketplace(LinxCommerceJobParameter jobParameter);

@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.CustomValidations;
+﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,37 +9,26 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
     [Table("LinxMovimentoOrigemDevolucoes", Schema = "linx_microvix_erp")]
     public class LinxMovimentoOrigemDevolucoes
     {
-        [Column(TypeName = "datetime")]
         public DateTime? lastupdateon { get; private set; }
 
-        [Key]
-        [Column(TypeName = "uniqueidentifier")]
         public Guid? identificador { get; private set; }
 
-        [Column(TypeName = "varchar(14)")]
         [LengthValidation(length: 14, propertyName: "cnpj_emp")]
         public string? cnpj_emp { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? nota_origem { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? ecf_origem { get; private set; }
 
-        [Column(TypeName = "datetime")]
         public DateTime? data_origem { get; private set; }
 
-        [Column(TypeName = "varchar(10)")]
         [LengthValidation(length: 10, propertyName: "serie_origem")]
         public string? serie_origem { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? empresa { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
         [NotMapped]

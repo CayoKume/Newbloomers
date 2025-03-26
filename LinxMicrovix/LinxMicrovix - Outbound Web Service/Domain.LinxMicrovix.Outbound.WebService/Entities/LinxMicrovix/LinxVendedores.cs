@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.CustomValidations;
+﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,93 +9,67 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
     [Table("LinxVendedores", Schema = "linx_microvix_erp")]
     public class LinxVendedores
     {
-        [Column(TypeName = "datetime")]
         public DateTime lastupdateon { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? cod_vendedor { get; private set; }
 
-        [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "nome_vendedor")]
         public string? nome_vendedor { get; private set; }
 
-        [Column(TypeName = "char(1)")]
         [LengthValidation(length: 1, propertyName: "tipo_vendedor")]
         public string? tipo_vendedor { get; private set; }
 
-        [Column(TypeName = "varchar(250)")]
         [LengthValidation(length: 250, propertyName: "end_vend_rua")]
         public string? end_vend_rua { get; private set; }
 
-        [Column(TypeName = "varchar(20)")]
         [LengthValidation(length: 20, propertyName: "end_vend_numero")]
         public string? end_vend_numero { get; private set; }
 
-        [Column(TypeName = "varchar(60)")]
         [LengthValidation(length: 60, propertyName: "end_vend_complemento")]
         public string? end_vend_complemento { get; private set; }
 
-        [Column(TypeName = "varchar(60)")]
         [LengthValidation(length: 60, propertyName: "end_vend_bairro")]
         public string? end_vend_bairro { get; private set; }
 
-        [Column(TypeName = "varchar(9)")]
         [LengthValidation(length: 9, propertyName: "end_vend_cep")]
         public string? end_vend_cep { get; private set; }
 
-        [Column(TypeName = "varchar(40)")]
         [LengthValidation(length: 40, propertyName: "end_vend_cidade")]
         public string? end_vend_cidade { get; private set; }
 
-        [Column(TypeName = "char(2)")]
         [LengthValidation(length: 2, propertyName: "end_vend_uf")]
         public string? end_vend_uf { get; private set; }
 
-        [Column(TypeName = "varchar(20)")]
         [LengthValidation(length: 20, propertyName: "fone_vendedor")]
         public string? fone_vendedor { get; private set; }
 
-        [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "mail_vendedor")]
         public string? mail_vendedor { get; private set; }
 
-        [Column(TypeName = "smalldatetime")]
         public DateTime? dt_upd { get; private set; }
 
-        [Key]
-        [Column(TypeName = "varchar(14)")]
         [LengthValidation(length: 14, propertyName: "cpf_vendedor")]
         public string? cpf_vendedor { get; private set; }
 
-        [Column(TypeName = "char(1)")]
         [LengthValidation(length: 1, propertyName: "ativo")]
         public string? ativo { get; private set; }
 
-        [Column(TypeName = "smalldatetime")]
         public DateTime? data_admissao { get; private set; }
 
-        [Column(TypeName = "smalldatetime")]
         public DateTime? data_saida { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
-        [Column(TypeName = "varchar(30)")]
         [LengthValidation(length: 30, propertyName: "matricula")]
         public string? matricula { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_tipo_venda { get; private set; }
 
-        [Column(TypeName = "varchar(100)")]
         [LengthValidation(length: 100, propertyName: "descricao_tipo_venda")]
         public string? descricao_tipo_venda { get; private set; }
 
-        [Column(TypeName = "varchar(20)")]
         [LengthValidation(length: 20, propertyName: "cargo")]
         public string? cargo { get; private set; }
 

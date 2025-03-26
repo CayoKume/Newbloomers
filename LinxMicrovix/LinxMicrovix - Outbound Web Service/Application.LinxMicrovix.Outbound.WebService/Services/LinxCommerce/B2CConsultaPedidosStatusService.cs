@@ -1,7 +1,5 @@
 ﻿using Application.IntegrationsCore.Interfaces;
-using Application.LinxMicrovix.Outbound.WebService.Entities.Cache.LinxCommerce;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
-using Application.LinxMicrovix.Outbound.WebService.Interfaces.Cache.LinxCommerce;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxCommerce;
 using Domain.IntegrationsCore.Entities.Enums;
 using Domain.IntegrationsCore.Exceptions;
@@ -21,7 +19,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
         private readonly ILinxMicrovixAzureSQLRepositoryBase<B2CConsultaPedidosStatus> _linxMicrovixRepositoryBase;
         private readonly IB2CConsultaPedidosStatusRepository _b2cConsultaPedidosStatusRepository;
-        private static List<B2CConsultaPedidosStatus> _b2cConsultaPedidosStatusCache { get; set; } = new List<B2CConsultaPedidosStatus>();
+        private static List<string?> _b2cConsultaPedidosStatusCache { get; set; } = new List<string?>();
 
         public B2CConsultaPedidosStatusService(
             IAPICall apiCall,
@@ -193,12 +191,13 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                         _b2cConsultaPedidosStatusCache = await _b2cConsultaPedidosStatusRepository.GetRegistersExists(
                             jobParameter: jobParameter, 
                             registros: listRecords
+                                        .Select(x => x.id)
+                                        .ToList()
                         );
 
 
                     var _listSomenteNovos = listRecords.Where(x => !_b2cConsultaPedidosStatusCache.Any(y => 
-                        y.id == x.id && 
-                        y.timestamp == x.timestamp
+                        y == x.recordKey
                     )).ToList();
 
                     if (_listSomenteNovos.Count() > 0)
@@ -211,7 +210,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                             _logger.AddRecord(_listSomenteNovos[i].recordKey, _listSomenteNovos[i].recordXml);
                         }
 
-                        _b2cConsultaPedidosStatusCache.AddRange(_listSomenteNovos);
+                        _b2cConsultaPedidosStatusCache.AddRange(_listSomenteNovos.Select(x => x.recordKey));
 
                         _logger.AddMessage(
                             $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"
@@ -222,8 +221,6 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                             $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"
                         );
                 }
-
-                await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
             }
             catch (SQLCommandException ex)
             {

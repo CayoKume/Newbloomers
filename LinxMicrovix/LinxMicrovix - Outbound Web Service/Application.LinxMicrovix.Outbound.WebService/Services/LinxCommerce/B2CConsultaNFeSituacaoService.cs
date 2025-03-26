@@ -1,7 +1,5 @@
 ﻿using Application.IntegrationsCore.Interfaces;
-using Application.LinxMicrovix.Outbound.WebService.Entities.Cache.LinxCommerce;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
-using Application.LinxMicrovix.Outbound.WebService.Interfaces.Cache.LinxCommerce;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxCommerce;
 using Domain.IntegrationsCore.Entities.Enums;
 using Domain.IntegrationsCore.Exceptions;
@@ -21,7 +19,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
         private readonly ILinxMicrovixAzureSQLRepositoryBase<B2CConsultaNFeSituacao> _linxMicrovixRepositoryBase;
         private readonly IB2CConsultaNFeSituacaoRepository _b2cConsultaNFeSituacaoRepository;
-        private static List<B2CConsultaNFeSituacao> _b2cConsultaNFeSituacaoCache { get; set; } = new List<B2CConsultaNFeSituacao>();
+        private static List<string?> _b2cConsultaNFeSituacaoCache { get; set; } = new List<string?>();
 
         public B2CConsultaNFeSituacaoService(
             IAPICall apiCall,
@@ -119,11 +117,12 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                         _b2cConsultaNFeSituacaoCache = await _b2cConsultaNFeSituacaoRepository.GetRegistersExists(
                             jobParameter: jobParameter, 
                             registros: listRecords
+                                        .Select(x => x.id_nfe_situacao)
+                                        .ToList()
                         );
 
                     var _listSomenteNovos = listRecords.Where(x => !_b2cConsultaNFeSituacaoCache.Any(y => 
-                        y.id_nfe_situacao == x.id_nfe_situacao && 
-                        y.timestamp == x.timestamp
+                        y == x.recordKey
                     )).ToList();
 
                     if (_listSomenteNovos.Count() > 0)
@@ -136,7 +135,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                             _logger.AddRecord(_listSomenteNovos[i].recordKey, _listSomenteNovos[i].recordXml);
                         }
 
-                        _b2cConsultaNFeSituacaoCache.AddRange(_listSomenteNovos);
+                        _b2cConsultaNFeSituacaoCache.AddRange(_listSomenteNovos.Select(x => x.recordKey));
 
                         _logger.AddMessage(
                             $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"

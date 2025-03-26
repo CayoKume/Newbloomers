@@ -1,9 +1,6 @@
-﻿using Domain.IntegrationsCore.Entities.Enums;
-using Domain.IntegrationsCore.Exceptions;
-
-namespace Domain.LinxCommerce.Entities.Order
+﻿namespace Domain.LinxCommerce.Entities.Order
 {
-    public class OrderDiscount : IEquatable<OrderDiscount>
+    public class OrderDiscount
     {
         public decimal? Amount { get; set; }
         public Int32? DiscountID { get; set; }
@@ -12,46 +9,16 @@ namespace Domain.LinxCommerce.Entities.Order
         public string? Type { get; set; }
         public Guid? OrderID { get; set; }
 
-        public static List<OrderDiscount?> Compare(List<OrderDiscount?> orderDiscountAPIList, List<OrderDiscount> orderDiscountDboList)
-        {
-            try
-            {
-                foreach (var oDiscountDbo in orderDiscountDboList)
-                {
-                    orderDiscountAPIList.Remove(
-                        orderDiscountAPIList
-                            .Where(oDiscountAPI =>
-                                oDiscountAPI.Amount == oDiscountAPI.Amount &&
-                                oDiscountAPI.DiscountID == oDiscountDbo.DiscountID &&
-                                oDiscountAPI.Message == oDiscountDbo.Message &&
-                                oDiscountAPI.Reference == oDiscountDbo.Reference &&
-                                oDiscountAPI.Type == oDiscountDbo.Type
-                            ).FirstOrDefault()
-                    );
-                }
+        public OrderDiscount() { }
 
-                return orderDiscountAPIList;
-            }
-            catch (Exception ex)
-            {
-                throw new InternalException(
-                    stage: EnumStages.Compare,
-                    error: EnumError.Compare,
-                    level: EnumMessageLevel.Error,
-                    message: $"Error when comparing two lists of records",
-                    exceptionMessage: ex.Message
-                );
-            }
-        }
-
-        public bool Equals(OrderDiscount? other)
+        public OrderDiscount(OrderDiscount orderDiscount, Guid? orderID)
         {
-            return
-                this.Amount == other.Amount &&
-                this.DiscountID.Equals(other.DiscountID) &&
-                this.Message == other.Message &&
-                this.Reference == other.Reference &&
-                this.Type == other.Type;
+            this.Amount = orderDiscount.Amount;
+            this.DiscountID = orderDiscount.DiscountID;
+            this.Message = orderDiscount.Message;
+            this.Reference = orderDiscount.Reference;
+            this.Type = orderDiscount.Type;
+            this.OrderID = orderID;
         }
     }
 }

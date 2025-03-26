@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.CustomValidations;
+﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,72 +9,52 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
     [Table("LinxServicos", Schema = "linx_microvix_erp")]
     public class LinxServicos
     {
-        [Column(TypeName = "datetime")]
         public DateTime? lastupdateon { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_setor { get; private set; }
 
-        [Key]
-        [Column(TypeName = "bigint")]
         public Int64? cod_servico { get; private set; }
 
-        [Column(TypeName = "varchar(250)")]
         [LengthValidation(length: 250, propertyName: "nome")]
         public string? nome { get; private set; }
 
-        [Column(TypeName = "varchar(30)")]
         [LengthValidation(length: 30, propertyName: "desc_setor")]
         public string? desc_setor { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_linha { get; private set; }
 
-        [Column(TypeName = "varchar(30)")]
         [LengthValidation(length: 30, propertyName: "desc_linha")]
         public string? desc_linha { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_marca { get; private set; }
 
-        [Column(TypeName = "varchar(30)")]
         [LengthValidation(length: 30, propertyName: "desc_marca")]
         public string? desc_marca { get; private set; }
 
-        [Column(TypeName = "datetime")]
         public DateTime? dt_update { get; private set; }
 
-        [Column(TypeName = "char(1)")]
         [LengthValidation(length: 1, propertyName: "operacao_servico")]
         public string? operacao_servico { get; private set; }
 
-        [Column(TypeName = "char(1)")]
         [LengthValidation(length: 1, propertyName: "servico_km")]
         public string? servico_km { get; private set; }
 
-        [Column(TypeName = "char(1)")]
         [LengthValidation(length: 1, propertyName: "desativado")]
         public string? desativado { get; private set; }
 
-        [Column(TypeName = "varchar(4)")]
         [LengthValidation(length: 4, propertyName: "cod_lc11603")]
         public string? cod_lc11603 { get; private set; }
 
-        [Column(TypeName = "varchar(20)")]
         [LengthValidation(length: 20, propertyName: "codigo_nbs")]
         public string? codigo_nbs { get; private set; }
 
-        [Column(TypeName = "datetime")]
         public DateTime? dt_inclusao { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
-        [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "codigo_ws")]
         public string? codigo_ws { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
         [NotMapped]

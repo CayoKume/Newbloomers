@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.CustomValidations;
+﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,287 +9,197 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
     [Table("LinxOticoReceitas", Schema = "linx_microvix_erp")]
     public class LinxOticoReceitas
     {
-        [Column(TypeName = "datetime")]
         public DateTime? lastupdateon { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? id_otico_receitas { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? cod_cliente { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? codigoproduto { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? lng_esferico_od { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? lng_cilindrico_od { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? lng_eixo_od { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? lng_dpdpn_od { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? lng_altura_od { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? prt_esferico_od { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? prt_cilindrico_od { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? prt_eixo_od { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? prt_dpdpn_od { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? lng_esferico_oe { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? lng_cilindrico_oe { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? lng_eixo_oe { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? lng_dpdpn_oe { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? lng_altura_oe { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? prt_esferico_oe { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? prt_cilindrico_oe { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? prt_eixo_oe { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? prt_dpdpn_oe { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? lng_adicao_od { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? lng_adicao_oe { get; private set; }
 
-        [Column(TypeName = "varchar(15)")]
         [LengthValidation(length: 15, propertyName: "otico_lado_lente")]
         public string? otico_lado_lente { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? diametro_od { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? diametro_oe { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? ponte { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? altura { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? aro { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? diag_maior { get; private set; }
 
-        [Column(TypeName = "varchar(100)")]
         [LengthValidation(length: 100, propertyName: "tipo_armacao")]
         public string? tipo_armacao { get; private set; }
 
-        [Column(TypeName = "varchar(100)")]
         [LengthValidation(length: 100, propertyName: "observacao")]
         public string? observacao { get; private set; }
 
-        [Column(TypeName = "varchar(100)")]
         [LengthValidation(length: 100, propertyName: "paciente")]
         public string? paciente { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? cmpl_add_od { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? cmpl_add_oe { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? base_od { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? base_oe { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? dist_haste { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? dist_front { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? curvatura { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? lng_pris1_od { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_lng_pris1_od_desc { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? lng_pris1_oe { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_lng_pris1_oe_desc { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? prt_pris1_od { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_prt_pris1_od_desc { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? prt_pris1_oe { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_prt_pris1_oe_desc { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? lng_pris2_od { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_lng_pris2_od_desc { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? lng_pris2_oe { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_lng_pris2_oe_desc { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? prt_pris2_od { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_prt_pris2_od_desc { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? prt_pris2_oe { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_prt_pris2_oe_desc { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? dist_vertice { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? inc_planto { get; private set; }
 
-        [Column(TypeName = "varchar(40)")]
         [LengthValidation(length: 40, propertyName: "ativ_princ")]
         public string? ativ_princ { get; private set; }
 
-        [Column(TypeName = "varchar(15)")]
         [LengthValidation(length: 15, propertyName: "otico_area_privilegiada")]
         public string? otico_area_privilegiada { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? dist_visao { get; private set; }
 
-        [Column(TypeName = "varchar(100)")]
         [LengthValidation(length: 100, propertyName: "personalizada")]
         public string? personalizada { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? pris_od { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? pris_oe { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? eixo_od { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? eixo_oe { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? borda_od { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? borda_oe { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? centro_od { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? centro_oe { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? furo_od { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? furo_oe { get; private set; }
 
-        [Column(TypeName = "varchar(40)")]
         [LengthValidation(length: 40, propertyName: "format_corte")]
         public string? format_corte { get; private set; }
 
-        [Column(TypeName = "varchar(40)")]
         [LengthValidation(length: 40, propertyName: "dist_leitura")]
         public string? dist_leitura { get; private set; }
 
-        [Column(TypeName = "varchar(100)")]
         [LengthValidation(length: 100, propertyName: "tipo_lente")]
         public string? tipo_lente { get; private set; }
 
-        [Column(TypeName = "varchar(100)")]
         [LengthValidation(length: 100, propertyName: "endereco_paciente")]
         public string? endereco_paciente { get; private set; }
 
-        [Column(TypeName = "varchar(100)")]
         [LengthValidation(length: 10, propertyName: "medico_especialista")]
         public string? medico_especialista { get; private set; }
 
-        [Column(TypeName = "varchar(100)")]
         [LengthValidation(length: 100, propertyName: "endereco_medico_especialista")]
         public string? endereco_medico_especialista { get; private set; }
 
-        [Column(TypeName = "varchar(100)")]
         [LengthValidation(length: 100, propertyName: "refracionista_optico")]
         public string? refracionista_optico { get; private set; }
 
-        [Column(TypeName = "datetime")]
         public DateTime? data_receita { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_produtos_opticos_tipo_aro { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? dp_montagem { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_produtos_opticos_formato_aro { get; private set; }
 
-        [Column(TypeName = "varchar(40)")]
         [LengthValidation(length: 40, propertyName: "codigo_gerencial")]
         public string? codigo_gerencial { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? migracao_dados { get; private set; }
 
-        [Column(TypeName = "varchar(max)")]
         public string? migracao_observacao { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
         [NotMapped]

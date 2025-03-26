@@ -1,10 +1,8 @@
-﻿using Domain.IntegrationsCore.Entities.Enums;
-using Domain.IntegrationsCore.Exceptions;
-using Domain.IntegrationsCore.Extensions;
+﻿using Domain.IntegrationsCore.Extensions;
 
 namespace Domain.LinxCommerce.Entities.Order
 {
-    public class OrderShipment : IEquatable<OrderShipment>
+    public class OrderShipment
     {
         public Guid? OrderShipmentID { get; set; }
         public Guid? OrderID { get; set; }
@@ -18,65 +16,23 @@ namespace Domain.LinxCommerce.Entities.Order
         [SkipProperty]
         public List<OrderPackage> Packages { get; set; } = new List<OrderPackage>();
 
-        public static List<OrderShipment?> Compare(List<OrderShipment?> orderShipmentAPIList, List<OrderShipment> orderShipmentDboList)
+        public OrderShipment() { }
+
+        public OrderShipment(OrderShipment orderShipment)
         {
-            try
+            this.OrderShipmentID = orderShipment.OrderShipmentID;
+            this.OrderID = orderShipment.OrderID;
+            this.DeliveryMethodID = orderShipment.DeliveryMethodID;
+            this.ShipmentNumber = orderShipment.ShipmentNumber;
+            this.ShipmentStatus = orderShipment.ShipmentStatus;
+            this.AssignUserId = orderShipment.AssignUserId;
+            this.AssignUserName = orderShipment.AssignUserName;
+            this.DockID = orderShipment.DockID;
+
+            foreach (OrderPackage package in orderShipment.Packages)
             {
-                foreach (var oShipmentDbo in orderShipmentDboList)
-                {
-                    orderShipmentAPIList.Remove(
-                        orderShipmentAPIList
-                            .Where(oShipmentAPI =>
-                                oShipmentAPI.OrderShipmentID == oShipmentDbo.OrderShipmentID &&
-                                oShipmentAPI.OrderID == oShipmentDbo.OrderID &&
-                                oShipmentAPI.DeliveryMethodID == oShipmentDbo.DeliveryMethodID &&
-                                oShipmentAPI.ShipmentNumber == oShipmentDbo.ShipmentNumber &&
-                                oShipmentAPI.ShipmentStatus == oShipmentDbo.ShipmentStatus &&
-                                oShipmentAPI.AssignUserId == oShipmentDbo.AssignUserId &&
-                                oShipmentAPI.AssignUserName == oShipmentDbo.AssignUserName &&
-                                oShipmentAPI.DockID == oShipmentDbo.DockID &&
-                                oShipmentAPI.Packages.All(x => oShipmentDbo.Packages.Contains(x))
-                            ).FirstOrDefault()
-                    );
-
-                    var orderPackageAPIList = orderShipmentAPIList
-                        .Where(X => X.OrderID == oShipmentDbo.OrderID)
-                        .First()
-                        .Packages;
-
-                    orderShipmentAPIList
-                        .Where(X => X.OrderID == oShipmentDbo.OrderID)
-                        .First()
-                        .Packages = OrderPackage.Compare(orderPackageAPIList, oShipmentDbo.Packages);
-                }
-
-                return orderShipmentAPIList;
+                this.Packages.Add(new OrderPackage(package));
             }
-            catch (Exception ex)
-            {
-                throw new InternalException(
-                    stage: EnumStages.Compare,
-                    error: EnumError.Compare,
-                    level: EnumMessageLevel.Error,
-                    message: $"Error when comparing two lists of records",
-                    exceptionMessage: ex.Message
-                );
-            }
-        }
-
-
-        public bool Equals(OrderShipment? other)
-        {
-            return
-                this.OrderShipmentID.Equals(other.OrderShipmentID) &&
-                this.OrderID.Equals(other.OrderID) &&
-                this.DeliveryMethodID.Equals(other.DeliveryMethodID) &&
-                this.ShipmentNumber == other.ShipmentNumber &&
-                this.ShipmentStatus == other.ShipmentStatus &&
-                this.AssignUserId.Equals(other.AssignUserId) &&
-                this.AssignUserName == other.AssignUserName &&
-                this.DockID.Equals(other.DockID) &&
-                this.Packages.All(x => other.Packages.Contains(x));
         }
     }
 }

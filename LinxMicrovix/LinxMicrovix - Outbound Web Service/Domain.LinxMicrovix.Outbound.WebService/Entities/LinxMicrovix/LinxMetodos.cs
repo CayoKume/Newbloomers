@@ -7,15 +7,10 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
     [Table("LinxMetodos", Schema = "linx_microvix_erp")]
     public class LinxMetodos
     {
-        [Column(TypeName = "datetime")]
         public DateTime? lastupdateon { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int? methodID { get; set; }
 
-        [Column(TypeName = "varchar(max)")]
         public string? Retorno { get; set; }
 
         [NotMapped]

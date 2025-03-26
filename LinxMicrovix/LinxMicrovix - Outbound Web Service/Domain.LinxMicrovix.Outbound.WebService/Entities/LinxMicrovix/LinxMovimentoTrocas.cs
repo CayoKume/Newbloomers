@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.CustomValidations;
+﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,78 +9,50 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
     [Table("LinxMovimentoTrocas", Schema = "linx_microvix_erp")]
     public class LinxMovimentoTrocas
     {
-        [Column(TypeName = "datetime")]
         public DateTime? lastupdateon { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
-        [Key]
-        [Column(TypeName = "varchar(14)")]
         [LengthValidation(length: 14, propertyName: "cnpj_emp")]
         public string? cnpj_emp { get; private set; }
 
-        [Column(TypeName = "uniqueidentifier")]
         public Guid? identificador { get; private set; }
 
-        [Key]
-        [Column(TypeName = "bigint")]
         public Int64? num_vale { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? valor_vale { get; private set; }
 
-        [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "motivo")]
         public string? motivo { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? doc_origem { get; private set; }
 
-        [Column(TypeName = "char(10)")]
         [LengthValidation(length: 10, propertyName: "serie_origem")]
         public string? serie_origem { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? doc_venda { get; private set; }
 
-        [Column(TypeName = "char(10)")]
         [LengthValidation(length: 10, propertyName: "serie_venda")]
         public string? serie_venda { get; private set; }
-
-        [Column(TypeName = "bit")]
         public bool? excluido { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
-        [Column(TypeName = "bit")]
         public Int32? desfazimento { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? empresa { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? vale_cod_cliente { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? vale_codigoproduto { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_vale_ordem_servico_externa { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? doc_venda_origem { get; private set; }
 
-        [Column(TypeName = "char(10)")]
         [LengthValidation(length: 10, propertyName: "serie_venda_origem")]
         public string? serie_venda_origem { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? cod_cliente { get; private set; }
 
         [NotMapped]

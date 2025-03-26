@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.CustomValidations;
+﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,168 +9,118 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
     [Table("LinxFaturas", Schema = "linx_microvix_erp")]
     public class LinxFaturas
     {
-        [Column(TypeName = "datetime")]
         public DateTime? lastupdateon { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
-        [Column(TypeName = "varchar(14)")]
         [LengthValidation(length: 14, propertyName: "cnpj_emp")]
         public string? cnpj_emp { get; private set; }
 
-        [Key]
-        [Column(TypeName = "bigint")]
         public Int64? codigo_fatura { get; private set; }
 
-        [Column(TypeName = "datetime")]
         public DateTime? data_emissao { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? cod_cliente { get; private set; }
 
-        [Column(TypeName = "varchar(60)")]
         [LengthValidation(length: 60, propertyName: "nome_cliente")]
         public string? nome_cliente { get; private set; }
 
-        [Column(TypeName = "datetime")]
         public DateTime? data_vencimento { get; private set; }
 
-        [Column(TypeName = "datetime")]
         public DateTime? data_baixa { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? valor_fatura { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? valor_pago { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? valor_desconto { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? valor_juros { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? documento { get; private set; }
 
-        [Column(TypeName = "varchar(10)")]
         [LengthValidation(length: 10, propertyName: "serie")]
         public string? serie { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? ecf { get; private set; }
 
-        [Column(TypeName = "text")]
         public string? observacao { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? qtde_parcelas { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? ordem_parcela { get; private set; }
 
-        [Column(TypeName = "char(1)")]
         [LengthValidation(length: 1, propertyName: "receber_pagar")]
         public string? receber_pagar { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? vendedor { get; private set; }
 
-        [Column(TypeName = "char(1)")]
         [LengthValidation(length: 1, propertyName: "excluido")]
         public string? excluido { get; private set; }
 
-        [Column(TypeName = "char(1)")]
         [LengthValidation(length: 1, propertyName: "cancelado")]
         public string? cancelado { get; private set; }
 
-        [Column(TypeName = "uniqueidentifier")]
         public Guid? identificador { get; private set; }
 
-        [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "nsu")]
         public string? nsu { get; private set; }
 
-        [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "cod_autorizacao")]
         public string? cod_autorizacao { get; private set; }
 
-        [Column(TypeName = "varchar(350)")]
         [LengthValidation(length: 350, propertyName: "documento_sem_tef")]
         public string? documento_sem_tef { get; private set; }
 
-        [Column(TypeName = "varchar(30)")]
         [LengthValidation(length: 30, propertyName: "autorizacao_sem_tef")]
         public string? autorizacao_sem_tef { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? plano { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? conta_credito { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? conta_debito { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? conta_fluxo { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? cod_historico { get; private set; }
 
-        [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "forma_pgto")]
         public string? forma_pgto { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? ordem_cartao { get; private set; }
 
-        [Column(TypeName = "varchar(10)")]
         [LengthValidation(length: 10, propertyName: "banco_codigo")]
         public string? banco_codigo { get; private set; }
 
-        [Column(TypeName = "varchar(30)")]
         [LengthValidation(length: 30, propertyName: "banco_agencia")]
         public string? banco_agencia { get; private set; }
 
-        [Column(TypeName = "varchar(30)")]
         [LengthValidation(length: 30, propertyName: "banco_conta")]
         public string? banco_conta { get; private set; }
 
-        [Column(TypeName = "varchar(30)")]
         [LengthValidation(length: 30, propertyName: "banco_autorizacao_garantidora")]
         public string? banco_autorizacao_garantidora { get; private set; }
 
-        [Column(TypeName = "varchar(30)")]
         [LengthValidation(length: 30, propertyName: "numero_bilhete_seguro")]
         public string? numero_bilhete_seguro { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? empresa { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_categorias_financeiras { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? taxa_financeira { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? valor_abatimento { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? valor_multa { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? centrocusto { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? perc_taxa_adquirente { get; private set; }
 
-        [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "fatura_origem_importacao_erp")]
         public string? fatura_origem_importacao_erp { get; private set; }
 

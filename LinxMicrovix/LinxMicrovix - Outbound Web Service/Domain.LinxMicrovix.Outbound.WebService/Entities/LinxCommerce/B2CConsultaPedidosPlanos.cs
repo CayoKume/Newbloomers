@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.CustomValidations;
+﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -8,42 +8,29 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
     [Table("B2CConsultaPedidosPlanos", Schema = "linx_microvix_commerce")]
     public class B2CConsultaPedidosPlanos
     {
-        [Column(TypeName = "datetime")]
         public DateTime? lastupdateon { get; private set; }
 
-        [Key]
-        [Column(TypeName = "bigint")]
         public Int64? id_pedido_planos { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? id_pedido { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? plano_pagamento { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? valor_plano { get; private set; }
 
-        [Column(TypeName = "varchar(20)")]
         [LengthValidation(length: 20, propertyName: "nsu_sitef")]
         public string? nsu_sitef { get; private set; }
 
-        [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "        public string? cod_autorizacao { get; private set; }\r\n")]
         public string? cod_autorizacao { get; private set; }
 
-        [Column(TypeName = "varchar(MAX)")]
         public string? texto_comprovante { get; private set; }
 
-        [Column(TypeName = "varchar(10)")]
         [LengthValidation(length: 10, propertyName: "cod_loja_sitef")]
         public string? cod_loja_sitef { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
         [NotMapped]

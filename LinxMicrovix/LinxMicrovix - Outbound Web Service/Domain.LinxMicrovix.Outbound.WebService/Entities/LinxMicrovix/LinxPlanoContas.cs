@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.CustomValidations;
+﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -8,54 +8,39 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
     [Table("LinxPlanoContas", Schema = "linx_microvix_erp")]
     public class LinxPlanoContas
     {
-        [Column(TypeName = "datetime")]
         public DateTime? lastupdateon { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? empresa { get; private set; }
 
-        [Column(TypeName = "varchar(14)")]
         [LengthValidation(length: 14, propertyName: "cnpj")]
         public string? cnpj { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? id_conta { get; private set; }
 
-        [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "nome_conta")]
         public string? nome_conta { get; private set; }
 
-        [Column(TypeName = "char(1)")]
         [LengthValidation(length: 1, propertyName: "sintetica")]
         public string? sintetica { get; private set; }
 
-        [Column(TypeName = "varchar(150)")]
         [LengthValidation(length: 150, propertyName: "indice")]
         public string? indice { get; private set; }
 
-        [Column(TypeName = "char(1)")]
         [LengthValidation(length: 1, propertyName: "ativa")]
         public string? ativa { get; private set; }
 
-        [Column(TypeName = "char(1)")]
         [LengthValidation(length: 1, propertyName: "fluxo_caixa")]
         public string? fluxo_caixa { get; private set; }
 
-        [Column(TypeName = "varchar(20)")]
         [LengthValidation(length: 20, propertyName: "conta_contabil")]
         public string? conta_contabil { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_natureza_conta { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? conta_bancaria { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
         [NotMapped]

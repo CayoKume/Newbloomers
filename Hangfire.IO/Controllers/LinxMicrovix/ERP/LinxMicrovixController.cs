@@ -11,6 +11,7 @@ namespace Hangfire.IO.Controllers.LinxMicrovix.ERP
         private readonly IConfiguration _configuration;
 
         private readonly ILinxProdutosTabelasPrecosService _linxProdutosTabelasPrecosService;
+        private readonly ILinxClientesEnderecosEntregaService _linxClientesEnderecosEntregaService;
         private readonly ILinxClientesFornecService _linxClientesFornecService;
         private readonly ILinxMovimentoService _linxMovimentoService;
         private readonly ILinxMovimentoTrocasService _linxMovimentoTrocasService;
@@ -41,6 +42,7 @@ namespace Hangfire.IO.Controllers.LinxMicrovix.ERP
         public LinxMicrovixController(
             IConfiguration configuration,
             ILinxProdutosTabelasPrecosService linxProdutosTabelasPrecosService,
+            ILinxClientesEnderecosEntregaService linxClientesEnderecosEntregaService,
             ILinxClientesFornecService linxClientesFornecService,
             ILinxMovimentoService linxMovimentoService,
             ILinxMovimentoTrocasService linxMovimentoTrocasService,
@@ -71,6 +73,7 @@ namespace Hangfire.IO.Controllers.LinxMicrovix.ERP
         {
             _configuration = configuration;
             _linxProdutosTabelasPrecosService = linxProdutosTabelasPrecosService;
+            _linxClientesEnderecosEntregaService = linxClientesEnderecosEntregaService;
             _linxClientesFornecService = linxClientesFornecService;
             _linxMovimentoService = linxMovimentoService;
             _linxMovimentoTrocasService = linxMovimentoTrocasService;
@@ -160,6 +163,34 @@ namespace Hangfire.IO.Controllers.LinxMicrovix.ERP
                     .FirstOrDefault();
 
                 var result = await _linxClientesFornecService.GetRecords(
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
+                );
+
+                if (result != true)
+                    return BadRequest($"Unable to find records on endpoint.");
+                else
+                    return Ok($"Records integrated successfully.");
+            }
+            catch (Exception ex)
+            {
+                Response.StatusCode = 400;
+                return Content($"Unable to integrate the records.\nError: {ex.Message}");
+            }
+        }
+
+        [HttpPost("LinxClientesEnderecosEntrega")]
+        public async Task<ActionResult> LinxClientesEnderecosEntrega()
+        {
+            try
+            {
+                var method = _methods
+                    .Where(m => m.MethodName == "LinxClientesEnderecosEntrega")
+                    .FirstOrDefault();
+
+                var result = await _linxClientesEnderecosEntregaService.GetRecords(
                     _linxMicrovixJobParameter.SetParameters(
                         jobName: method.MethodName,
                         tableName: method.MethodName

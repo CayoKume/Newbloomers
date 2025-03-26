@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.CustomValidations;
+﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -8,36 +8,26 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
     [Table("LinxGrupoLojas", Schema = "linx_microvix_erp")]
     public class LinxGrupoLojas
     {
-        [Column(TypeName = "datetime")]
         public DateTime? lastupdateon { get; private set; }
 
-        [Column(TypeName = "varchar(14)")]
         [LengthValidation(length: 14, propertyName: "cnpj")]
         public string? cnpj { get; private set; }
 
-        [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "nome_empresa")]
         public string? nome_empresa { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? id_empresas_rede { get; private set; }
 
-        [Column(TypeName = "varchar(100)")]
         [LengthValidation(length: 100, propertyName: "rede")]
         public string? rede { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
-        [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "nome_portal")]
         public string? nome_portal { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? empresa { get; private set; }
 
-        [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "classificacao_portal")]
         public string? classificacao_portal { get; private set; }
 
@@ -86,7 +76,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             this.nome_empresa = nome_empresa;
             this.nome_portal = nome_portal;
             this.classificacao_portal = classificacao_portal;
-            this.recordKey = $"[]";
+            this.recordKey = $"[{cnpj}]|[{nome_empresa}]|[{id_empresas_rede}]|[{rede}]|[{portal}]|[{nome_portal}]|[{empresa}]|[{classificacao_portal}]";
             this.recordXml = recordXml;
         }
     }

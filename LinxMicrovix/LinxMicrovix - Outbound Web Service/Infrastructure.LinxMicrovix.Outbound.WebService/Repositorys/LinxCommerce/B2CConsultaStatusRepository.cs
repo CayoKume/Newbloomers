@@ -38,7 +38,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
             }
         }
 
-        public async Task<List<B2CConsultaStatus>> GetRegistersExists(LinxAPIParam jobParameter, List<B2CConsultaStatus> registros)
+        public async Task<List<string?>> GetRegistersExists(LinxAPIParam jobParameter, List<int?> registros)
         {
             try
             {
@@ -46,14 +46,14 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                 for (int i = 0; i < registros.Count(); i++)
                 {
                     if (i == registros.Count() - 1)
-                        identificadores += $"'{registros[i].id_status}'";
+                        identificadores += $"'{registros[i]}'";
                     else
-                        identificadores += $"'{registros[i].id_status}', ";
+                        identificadores += $"'{registros[i]}', ";
                 }
 
-                string sql = $"SELECT ID_STATUS, TIMESTAMP FROM [linx_microvix_commerce].[B2CCONSULTASTATUS] WHERE ID_STATUS IN ({identificadores})";
+                string sql = $"SELECT CONCAT('[', ID_STATUS, ']', '|', '[', [TIMESTAMP], ']') FROM [linx_microvix_commerce].[B2CCONSULTASTATUS] WHERE ID_STATUS IN ({identificadores})";
 
-                return await _linxMicrovixRepositoryBase.GetRegistersExists(sql);
+                return await _linxMicrovixRepositoryBase.GetKeyRegistersAlreadyExists(sql);
             }
             catch (Exception ex) when (ex is not InternalException && ex is not SQLCommandException)
             {

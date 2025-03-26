@@ -1,8 +1,6 @@
 ﻿using Application.IntegrationsCore.Interfaces;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
-using Application.LinxMicrovix.Outbound.WebService.Interfaces.Cache.LinxMicrovix;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxMicrovix;
-using Application.LinxMicrovix.Outbound.WebService.Services.Cache.LinxMicrovix;
 using Domain.IntegrationsCore.Entities.Enums;
 using Domain.IntegrationsCore.Exceptions;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
@@ -21,7 +19,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
         private readonly ILinxMicrovixAzureSQLRepositoryBase<LinxB2CPedidos> _linxMicrovixRepositoryBase;
         private readonly ILinxB2CPedidosRepository _linxB2CPedidosRepository;
-        private static List<LinxB2CPedidos> _linxB2CPedidosCache { get; set; } = new List<LinxB2CPedidos>();
+        private static List<string?> _linxB2CPedidosCache { get; set; } = new List<string?>();
 
         public LinxB2CPedidosService(
             IAPICall apiCall,
@@ -126,10 +124,9 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
 
                 string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter.parametersInterval, jobParameter.parametersTableName, jobParameter.jobName);
 
-                var timestamp = await _linxMicrovixRepositoryBase.GetLast7DaysMinTimestamp(
+                var timestamp = await _linxMicrovixRepositoryBase.GetLast7DaysMaxTimestamp(
                     jobParameter.schema, 
-                    jobParameter.tableName,
-                    columnDate: "dt_pedido"
+                    jobParameter.tableName
                 );
 
                 var body = _linxMicrovixServiceBase.BuildBodyRequest(
@@ -149,11 +146,12 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                         _linxB2CPedidosCache = await _linxB2CPedidosRepository.GetRegistersExists(
                             jobParameter: jobParameter, 
                             registros: listRecords
+                                        .Select(x => x.id_pedido)
+                                        .ToList()
                         );
 
                     var _listSomenteNovos = listRecords.Where(x => !_linxB2CPedidosCache.Any(y => 
-                        y.id_pedido == x.id_pedido && 
-                        y.timestamp == x.timestamp
+                        y == x.recordKey
                     )).ToList();
 
                     if (_listSomenteNovos.Count() > 0)
@@ -166,7 +164,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                             _logger.AddRecord(_listSomenteNovos[i].recordKey, _listSomenteNovos[i].recordXml);
                         }
 
-                        _linxB2CPedidosCache.AddRange(_listSomenteNovos);
+                        _linxB2CPedidosCache.AddRange(_listSomenteNovos.Select(x => x.recordKey));
 
                         _logger.AddMessage(
                             $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"

@@ -1,8 +1,6 @@
 ﻿using Application.IntegrationsCore.Interfaces;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
-using Application.LinxMicrovix.Outbound.WebService.Interfaces.Cache.LinxMicrovix;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxMicrovix;
-using Application.LinxMicrovix.Outbound.WebService.Services.Cache.LinxMicrovix;
 using Domain.IntegrationsCore.Entities.Enums;
 using Domain.IntegrationsCore.Exceptions;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
@@ -21,7 +19,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
         private readonly ILinxMicrovixAzureSQLRepositoryBase<LinxB2CPedidosItens> _linxMicrovixRepositoryBase;
         private readonly ILinxB2CPedidosItensRepository _linxB2CPedidosItensRepository;
-        private static List<LinxB2CPedidosItens> _linxB2CPedidosItensCache { get; set; } = new List<LinxB2CPedidosItens>();
+        private static List<string?> _linxB2CPedidosItensCache { get; set; } = new List<string?>();
 
         public LinxB2CPedidosItensService(
             IAPICall apiCall,
@@ -122,11 +120,12 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                         _linxB2CPedidosItensCache = await _linxB2CPedidosItensRepository.GetRegistersExists(
                             jobParameter: jobParameter, 
                             registros: listRecords
+                                        .Select(x => x.id_pedido_item)
+                                        .ToList()
                         );
 
                     var _listSomenteNovos = listRecords.Where(x => !_linxB2CPedidosItensCache.Any(y => 
-                        y.id_pedido_item == x.id_pedido_item && 
-                        y.timestamp == x.timestamp
+                        y == x.recordKey
                     )).ToList();
 
                     if (_listSomenteNovos.Count() > 0)
@@ -139,7 +138,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                             _logger.AddRecord(_listSomenteNovos[i].recordKey, _listSomenteNovos[i].recordXml);
                         }
 
-                        _linxB2CPedidosItensCache.AddRange(_listSomenteNovos);
+                        _linxB2CPedidosItensCache.AddRange(_listSomenteNovos.Select(x => x.recordKey));
 
                         _logger.AddMessage(
                             $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"

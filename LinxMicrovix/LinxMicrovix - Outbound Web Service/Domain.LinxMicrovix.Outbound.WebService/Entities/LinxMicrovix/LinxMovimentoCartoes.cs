@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.CustomValidations;
+﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,87 +9,60 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
     [Table("LinxMovimentoCartoes", Schema = "linx_microvix_erp")]
     public class LinxMovimentoCartoes
     {
-        [Column(TypeName = "datetime")]
         public DateTime? lastupdateon { get; private set; }
 
-        [Key]
-        [Column(TypeName = "uniqueidentifier")]
         public Guid? identificador { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
-        [Key]
-        [Column(TypeName = "varchar(14)")]
         [LengthValidation(length: 14, propertyName: "cnpj_emp")]
         public string? cnpj_emp { get; private set; }
 
-        [Column(TypeName = "varchar(10)")]
         [LengthValidation(length: 10, propertyName: "codlojasitef")]
         public string? codlojasitef { get; private set; }
 
-        [Column(TypeName = "datetime")]
         public DateTime? data_lancamento { get; private set; }
 
-        [Key]
-        [Column(TypeName = "varchar(20)")]
         [LengthValidation(length: 20, propertyName: "cupomfiscal")]
         public string? cupomfiscal { get; private set; }
 
-        [Column(TypeName = "varchar(1)")]
         [LengthValidation(length: 1, propertyName: "credito_debito")]
         public string? credito_debito { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_cartao_bandeira { get; private set; }
 
-        [Column(TypeName = "varchar(100)")]
         [LengthValidation(length: 100, propertyName: "descricao_bandeira")]
         public string? descricao_bandeira { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? valor { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? ordem_cartao { get; private set; }
 
-        [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "nsu_host")]
         public string? nsu_host { get; private set; }
 
-        [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "nsu_sitef")]
         public string? nsu_sitef { get; private set; }
 
-        [Key]
-        [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "cod_autorizacao")]
         public string? cod_autorizacao { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_antecipacoes_financeiras { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? transacao_servico_terceiro { get; private set; }
 
-        [Column(TypeName = "varchar(max)")]
         public string? texto_comprovante { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_maquineta_pos { get; private set; }
 
-        [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "descricao_maquineta")]
         public string? descricao_maquineta { get; private set; }
 
-        [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "serie_maquineta")]
         public string? serie_maquineta { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
-        [Column(TypeName = "varchar(1)")]
         [LengthValidation(length: 1, propertyName: "cartao_prepago")]
         public string? cartao_prepago { get; private set; }
 

@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.CustomValidations;
+﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,43 +9,30 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
     [Table("LinxPlanosPedidoVenda", Schema = "linx_microvix_erp")]
     public class LinxPlanosPedidoVenda
     {
-        [Column(TypeName = "datetime")]
         public DateTime? lastupdateon { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
-        [Column(TypeName = "varchar(14)")]
         [LengthValidation(length: 14, propertyName: "cnpj_emp")]
         public string? cnpj_emp { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? cod_pedido { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? plano { get; private set; }
 
-        [Column(TypeName = "varchar(35)")]
         [LengthValidation(length: 35, propertyName: "desc_plano")]
         public string? desc_plano { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? total { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? qtde_parcelas { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? indice_plano { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? valor_desc_acresc_plano { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? cod_forma_pgto { get; private set; }
 
-        [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "forma_pgto")]
         public string? forma_pgto { get; private set; }
 

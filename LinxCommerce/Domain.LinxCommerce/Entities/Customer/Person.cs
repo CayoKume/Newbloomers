@@ -1,6 +1,4 @@
-﻿using Domain.IntegrationsCore.Entities.Enums;
-using Domain.IntegrationsCore.Exceptions;
-using Domain.IntegrationsCore.Extensions;
+﻿using Domain.IntegrationsCore.Extensions;
 
 namespace Domain.LinxCommerce.Entities.Customer
 {
@@ -25,7 +23,7 @@ namespace Domain.LinxCommerce.Entities.Customer
         public string? CustomerGroupID { get; set; }
 
         [SkipProperty]
-        public List<Groups> Groups { get; set; }
+        public List<Groups> Groups { get; set; } = new List<Groups>();
 
         [SkipProperty]
         public Contact Contact { get; set; }
@@ -39,60 +37,41 @@ namespace Domain.LinxCommerce.Entities.Customer
         [SkipProperty]
         public Dictionary<int, string> Responses { get; set; } = new Dictionary<int, string>();
 
-        public static void Compare(List<Person?> customersAPIList, List<Person?> customersDboList)
+        public Person() { }
+
+        public Person(Person customer, string getCustomerResponse)
         {
-            if (customersDboList.Count() > 0)
+            this.Surname = customer.Surname;
+            this.BirthDate = customer.BirthDate;
+            this.Gender = customer.Gender;
+            this.RG = customer.RG;
+            this.Cpf = customer.Cpf;
+            this.CreatedDate = customer.CreatedDate;
+            this.CustomerID = customer.CustomerID;
+            this.CustomerStatusID = customer.CustomerStatusID;
+            this.WebSiteID = customer.WebSiteID;
+            this.Name = customer.Name;
+            this.Email = customer.Email;
+            this.CustomerHash = customer.CustomerHash;
+            this.Password = customer.Password;
+            this.CustomerType = customer.CustomerType;
+            this.Cnpj = customer.Cnpj;
+            this.TradingName = customer.TradingName;
+            this.CustomerGroupID = customer.CustomerGroupID;
+            this.Responses.Add(customer.CustomerID, getCustomerResponse);
+
+            this.Contact = new Contact(customer.Contact, customer.CustomerID);
+
+            this.EmailConfirmation = new EmailConfirmation(customer.EmailConfirmation, customer.CustomerID);
+
+            foreach(var group in customer.Groups)
             {
-                foreach (var cDbo in customersDboList)
-                {
-                    try
-                    {
-                        var cAPI = customersAPIList
-                                    .Where(cAPI =>
-                                            cAPI.CustomerID == cDbo.CustomerID
-                                    ).FirstOrDefault();
+                this.Groups.Add(new Groups(group, customer.CustomerID));
+            }
 
-                        customersAPIList.Remove(
-                            customersAPIList
-                                .Where(cAPI =>
-                                    cAPI.Surname == cDbo.Surname &&
-                                    cAPI.BirthDate == cDbo.BirthDate &&
-                                    cAPI.Gender == cDbo.Gender &&
-                                    cAPI.RG == cDbo.RG &&
-                                    cAPI.Cpf == cDbo.Cpf &&
-                                    cAPI.CreatedDate == cDbo.CreatedDate &&
-                                    cAPI.CustomerStatusID == cDbo.CustomerStatusID &&
-                                    cAPI.WebSiteID == cDbo.WebSiteID &&
-                                    cAPI.Name == cDbo.Name &&
-                                    cAPI.Email == cDbo.Email &&
-                                    cAPI.CustomerHash == cDbo.CustomerHash &&
-                                    cAPI.Password == cDbo.Password &&
-                                    cAPI.CustomerType == cDbo.CustomerType &&
-                                    cAPI.Cnpj == cDbo.Cnpj &&
-                                    cAPI.TradingName == cDbo.TradingName &&
-                                    (cAPI.Groups.Count() > 0 ? String.Join(", ", cAPI.Groups.Select(x => x.CustomerGroupID)) : null) == cDbo.CustomerGroupID &&
-                                    cAPI.Contact == cDbo.Contact &&
-                                    cAPI.EmailConfirmation == cDbo.EmailConfirmation &&
-                                    cAPI.Address.SequenceEqual(cDbo.Address)
-                                ).FirstOrDefault()
-                        );
-
-                        if (cAPI.Address.Count() > 0 && cDbo.Address.Count() > 0)
-                            cAPI.Address = PersonAddress.Compare(cAPI.Address, cDbo.Address);
-
-                        cDbo.Address.AddRange(cAPI.Address);
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new InternalException(
-                            stage: EnumStages.Compare,
-                            error: EnumError.Compare,
-                            level: EnumMessageLevel.Error,
-                            message: $"Error when comparing two lists of records",
-                            exceptionMessage: ex.Message
-                        );
-                    }
-                }
+            foreach (var address in customer.Address)
+            {
+                this.Address.Add(new PersonAddress(address, customer.CustomerID));
             }
         }
     }

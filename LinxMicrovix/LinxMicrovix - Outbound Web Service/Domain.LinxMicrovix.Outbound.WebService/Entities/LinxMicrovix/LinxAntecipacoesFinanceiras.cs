@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.CustomValidations;
+﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,74 +9,51 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
     [Table("LinxAntecipacoesFinanceiras", Schema = "linx_microvix_erp")]
     public class LinxAntecipacoesFinanceiras
     {
-        [Column(TypeName = "datetime")]
         public DateTime lastupdateon { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
-        [Column(TypeName = "varchar(14)")]
         [LengthValidation(length: 14, propertyName: "cnpj_emp")]
         public string? cnpj_emp { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? empresa { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? cod_cliente { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? numero_antecipacao { get; private set; }
 
-        [Column(TypeName = "datetime")]
         public DateTime? data_antecipacao { get; private set; }
 
-        [Column(TypeName = "datetime")]
         public DateTime? previsao_entrega { get; private set; }
 
-        [Column(TypeName = "char(3)")]
         [LengthValidation(length: 3, propertyName: "dav_pv")]
         public string? dav_pv { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? numero_origem { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? dav_remessa { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? codigoproduto { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? quantidade { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? preco_unitario_produto { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? valor_pago_antecipacao { get; private set; }
 
-        [Column(TypeName = "char(1)")]
         [LengthValidation(length: 1, propertyName: "entregue")]
         public string? entregue { get; private set; }
 
-        [Column(TypeName = "uniqueidentifier")]
         public Guid? identificador { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? cancelado { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? id_antecipacoes_financeiras { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_antecipacoes_financeiras_detalhes { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_vendas_pos_produtos { get; private set; }
 
         [NotMapped]

@@ -1,7 +1,5 @@
 ﻿using Application.IntegrationsCore.Interfaces;
-using Application.LinxMicrovix.Outbound.WebService.Entities.Cache.LinxCommerce;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
-using Application.LinxMicrovix.Outbound.WebService.Interfaces.Cache.LinxCommerce;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxCommerce;
 using Domain.IntegrationsCore.Entities.Enums;
 using Domain.IntegrationsCore.Exceptions;
@@ -29,7 +27,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
         private readonly ILinxMicrovixAzureSQLRepositoryBase<B2CConsultaClientes> _linxMicrovixRepositoryBase;
         private readonly IB2CConsultaClientesRepository _b2cConsultaClientesRepository;
-        private static List<B2CConsultaClientes> _b2cConsultaClientesCache { get; set; } = new List<B2CConsultaClientes>();
+        private static List<string?> _b2cConsultaClientesCache { get; set; } = new List<string?>();
 
         public B2CConsultaClientesService(
             IAPICall apiCall,
@@ -233,13 +231,12 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                         _b2cConsultaClientesCache = await _b2cConsultaClientesRepository.GetRegistersExists(
                             jobParameter: jobParameter, 
                             registros: listRecords
+                                        .Select(x => x.doc_cliente)
+                                        .ToList()
                         );
 
                     var _listSomenteNovos = listRecords.Where(x => !_b2cConsultaClientesCache.Any(y => 
-                        y.cod_cliente_b2c == x.cod_cliente_b2c && 
-                        y.cod_cliente_erp == x.cod_cliente_erp && 
-                        y.doc_cliente == x.doc_cliente && 
-                        y.timestamp == x.timestamp
+                        y == x.recordKey
                     )).ToList();
 
                     if (_listSomenteNovos.Count() > 0)
@@ -252,7 +249,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                             _logger.AddRecord(_listSomenteNovos[i].recordKey, _listSomenteNovos[i].recordXml);
                         }
 
-                        _b2cConsultaClientesCache.AddRange(_listSomenteNovos);
+                        _b2cConsultaClientesCache.AddRange(_listSomenteNovos.Select(x => x.recordKey));
 
                         _logger.AddMessage(
                             $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"

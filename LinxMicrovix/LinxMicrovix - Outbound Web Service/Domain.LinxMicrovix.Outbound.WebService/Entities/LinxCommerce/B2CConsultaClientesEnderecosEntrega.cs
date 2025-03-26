@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.CustomValidations;
+﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -8,64 +8,44 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
     [Table("B2CConsultaClientesEnderecosEntrega", Schema = "linx_microvix_commerce")]
     public class B2CConsultaClientesEnderecosEntrega
     {
-        [Column(TypeName = "datetime")]
         public DateTime? lastupdateon { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? id_endereco_entrega { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? cod_cliente_erp { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? cod_cliente_b2c { get; private set; }
 
-        [Column(TypeName = "varchar(250)")]
         [LengthValidation(length: 250, propertyName: "endereco_cliente")]
         public string? endereco_cliente { get; private set; }
 
-        [Column(TypeName = "varchar(20)")]
         [LengthValidation(length: 20, propertyName: "numero_rua_cliente")]
         public string? numero_rua_cliente { get; private set; }
 
-        [Column(TypeName = "varchar(60)")]
         [LengthValidation(length: 60, propertyName: "complemento_end_cli")]
         public string? complemento_end_cli { get; private set; }
 
-        [Column(TypeName = "char(9)")]
         [LengthValidation(length: 9, propertyName: "cep_cliente")]
         public string? cep_cliente { get; private set; }
 
-        [Column(TypeName = "varchar(60)")]
         [LengthValidation(length: 60, propertyName: "bairro_cliente")]
         public string? bairro_cliente { get; private set; }
 
-        [Column(TypeName = "varchar(40)")]
         [LengthValidation(length: 40, propertyName: "cidade_cliente")]
         public string? cidade_cliente { get; private set; }
 
-        [Column(TypeName = "char(2)")]
         [LengthValidation(length: 2, propertyName: "uf_cliente")]
         public string? uf_cliente { get; private set; }
 
-        [Column(TypeName = "varchar(250)")]
         [LengthValidation(length: 250, propertyName: "descricao")]
         public string? descricao { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? principal { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? id_cidade { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
         [NotMapped]
@@ -143,6 +123,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
             this.cidade_cliente = cep_cliente;
             this.uf_cliente = uf_cliente;
             this.descricao = descricao;
+            this.recordKey = $"[{id_endereco_entrega}]|[{cod_cliente_b2c}]|[{timestamp}]";
             this.recordXml = recordXml;
         }
     }

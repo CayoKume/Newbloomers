@@ -38,7 +38,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
             }
         }
 
-        public async Task<List<B2CConsultaPedidosStatus>> GetRegistersExists(LinxAPIParam jobParameter, List<B2CConsultaPedidosStatus> registros)
+        public async Task<List<string?>> GetRegistersExists(LinxAPIParam jobParameter, List<Int32?> registros)
         {
             try
             {
@@ -46,14 +46,14 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                 for (int i = 0; i < registros.Count(); i++)
                 {
                     if (i == registros.Count() - 1)
-                        identificadores += $"'{registros[i].id_pedido}'";
+                        identificadores += $"{registros[i]}";
                     else
-                        identificadores += $"'{registros[i].id_pedido}', ";
+                        identificadores += $"{registros[i]}, ";
                 }
 
-                string sql = $"SELECT ID, ID_PEDIDO, TIMESTAMP FROM [linx_microvix_commerce].[B2CCONSULTAPEDIDOSSTATUS] WHERE ID_PEDIDO IN ({identificadores})";
+                string sql = $"SELECT CONCAT('[', ID, ']', '|', '[', ID_STATUS, ']', '|', '[', ID_PEDIDO, ']', '|', '[', [TIMESTAMP], ']') FROM [linx_microvix_commerce].[B2CConsultaPedidosStatus] WHERE ID IN ({identificadores})";
 
-                return await _linxMicrovixRepositoryBase.GetRegistersExists(sql);
+                return await _linxMicrovixRepositoryBase.GetKeyRegistersAlreadyExists(sql);
             }
             catch (Exception ex) when (ex is not InternalException && ex is not SQLCommandException)
             {

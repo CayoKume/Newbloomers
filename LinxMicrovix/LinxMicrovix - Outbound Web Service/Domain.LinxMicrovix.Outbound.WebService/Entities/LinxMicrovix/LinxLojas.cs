@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.CustomValidations;
+﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,112 +9,81 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
     [Table("LinxLojas", Schema = "linx_microvix_erp")]
     public class LinxLojas
     {
-        [Column(TypeName = "datetime")]
         public DateTime? lastupdateon { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? empresa { get; private set; }
 
-        [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "nome_emp")]
         public string? nome_emp { get; private set; }
 
-        [Column(TypeName = "varchar(200)")]
         [LengthValidation(length: 200, propertyName: "razao_emp")]
         public string? razao_emp { get; private set; }
 
-        [Column(TypeName = "varchar(14)")]
         [LengthValidation(length: 14, propertyName: "cnpj_emp")]
         public string? cnpj_emp { get; private set; }
 
-        [Column(TypeName = "varchar(20)")]
         [LengthValidation(length: 20, propertyName: "inscricao_emp")]
         public string? inscricao_emp { get; private set; }
 
-        [Column(TypeName = "varchar(250)")]
         [LengthValidation(length: 250, propertyName: "endereco_emp")]
         public string? endereco_emp { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? num_emp { get; private set; }
 
-        [Column(TypeName = "varchar(60)")]
         [LengthValidation(length: 60, propertyName: "complement_emp")]
         public string? complement_emp { get; private set; }
 
-        [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "bairro_emp")]
         public string? bairro_emp { get; private set; }
 
-        [Column(TypeName = "char(9)")]
         [LengthValidation(length: 9, propertyName: "cep_emp")]
         public string? cep_emp { get; private set; }
 
-        [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "cidade_emp")]
         public string? cidade_emp { get; private set; }
 
-        [Column(TypeName = "char(2)")]
         [LengthValidation(length: 2, propertyName: "estado_emp")]
         public string? estado_emp { get; private set; }
 
-        [Column(TypeName = "varchar(70)")]
         [LengthValidation(length: 70, propertyName: "fone_emp")]
         public string? fone_emp { get; private set; }
 
-        [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "email_emp")]
         public string? email_emp { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? cod_ibge_municipio { get; private set; }
 
-        [Column(TypeName = "datetime")]
         public DateTime? data_criacao_emp { get; private set; }
 
-        [Column(TypeName = "datetime")]
         public DateTime? data_criacao_portal { get; private set; }
 
-        [Column(TypeName = "char(1)")]
         [LengthValidation(length: 1, propertyName: "sistema_tributacao")]
         public string? sistema_tributacao { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? regime_tributario { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? area_empresa { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int64? timestamp { get; private set; }
 
-        [Column(TypeName = "varchar(10)")]
         [LengthValidation(length: 10, propertyName: "sigla_empresa")]
         public string? sigla_empresa { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_classe_fiscal { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? centro_distribuicao { get; private set; }
 
-        [Column(TypeName = "varchar(30)")]
         [LengthValidation(length: 30, propertyName: "inscricao_municipal_emp")]
         public string? inscricao_municipal_emp { get; private set; }
 
-        [Column(TypeName = "varchar(7)")]
         [LengthValidation(length: 7, propertyName: "cnae_emp")]
         public string? cnae_emp { get; private set; }
 
-        [Column(TypeName = "varchar(6)")]
         [LengthValidation(length: 6, propertyName: "cod_cliente_linx")]
         public string? cod_cliente_linx { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? tabela_preco_preferencial { get; private set; }
 
         [NotMapped]

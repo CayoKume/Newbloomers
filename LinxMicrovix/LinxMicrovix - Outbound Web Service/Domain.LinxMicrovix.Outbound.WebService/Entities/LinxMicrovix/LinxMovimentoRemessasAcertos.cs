@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.CustomValidations;
+﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,41 +9,28 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
     [Table("LinxMovimentoRemessasAcertos", Schema = "linx_microvix_erp")]
     public class LinxMovimentoRemessasAcertos
     {
-        [Column(TypeName = "datetime")]
         public DateTime? lastupdateon { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? id_remessas_acertos { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? empresa { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_remessas { get; private set; }
 
-        [Column(TypeName = "uniqueidentifier")]
         public Guid? identificador_venda { get; private set; }
 
-        [Column(TypeName = "uniqueidentifier")]
         public Guid? identificador_retorno { get; private set; }
 
-        [Column(TypeName = "uniqueidentifier")]
         public Guid? identificador_devolucao { get; private set; }
 
-        [Column(TypeName = "datetime")]
         public DateTime? data { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? id_vendas_pos { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? excluido { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
         [NotMapped]

@@ -1,8 +1,6 @@
 ﻿using Application.IntegrationsCore.Interfaces;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
-using Application.LinxMicrovix.Outbound.WebService.Interfaces.Cache.LinxMicrovix;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxMicrovix;
-using Application.LinxMicrovix.Outbound.WebService.Services.Cache.LinxMicrovix;
 using Domain.IntegrationsCore.Entities.Enums;
 using Domain.IntegrationsCore.Exceptions;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
@@ -21,7 +19,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
         private readonly ILinxMicrovixAzureSQLRepositoryBase<LinxProdutosDetalhes> _linxMicrovixRepositoryBase;
         private readonly ILinxProdutosDetalhesRepository _linxProdutosDetalhesRepository;
-        private static List<LinxProdutosDetalhes> _linxProdutosDetalhesCache { get; set; } = new List<LinxProdutosDetalhes>();
+        //NÃO ADICIONADO SISTEMA DE CACHE POR CONTA DE REGRA DE NEGOCIO, A PROC DE SINCRONIZAÇÃO PRECISA RECEBER TODOS OS DADOS DA API EM TODAS AS EXECUÇÕES DO JOB
 
         public LinxProdutosDetalhesService(
             IAPICall apiCall,
@@ -133,8 +131,6 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                     {
                         await _linxProdutosDetalhesRepository.InsertRecord(record: record, jobParameter: jobParameter);
                     }
-
-                    await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
                 }
             }
             catch (SQLCommandException ex)
@@ -207,36 +203,18 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                 {
                     var listRecords = DeserializeXMLToObject(jobParameter, xmls);
 
-                    if (_linxProdutosDetalhesCache.Count == 0)
-                        _linxProdutosDetalhesCache = await _linxProdutosDetalhesRepository.GetRegistersExists(
-                            jobParameter: jobParameter, 
-                            registros: listRecords
-                        );
-
-                    var _listSomenteNovos = listRecords.Where(x => !_linxProdutosDetalhesCache.Any(y => 
-                        y.cod_produto == x.cod_produto && 
-                        y.timestamp == x.timestamp
-                    )).ToList();
-
-                    if (_listSomenteNovos.Count() > 0)
+                    if (listRecords.Count() > 0)
                     {
-                        _linxProdutosDetalhesRepository.BulkInsertIntoTableRaw(records: _listSomenteNovos, jobParameter: jobParameter);
+                        _linxProdutosDetalhesRepository.BulkInsertIntoTableRaw(records: listRecords, jobParameter: jobParameter);
                         await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
 
-                        for (int i = 0; i < _listSomenteNovos.Count; i++)
-                        {
-                            _logger.AddRecord(_listSomenteNovos[i].recordKey, _listSomenteNovos[i].recordXml);
-                        }
-
-                        _linxProdutosDetalhesCache.AddRange(_listSomenteNovos);
-
                         _logger.AddMessage(
-                            $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"
+                            $"Concluída com sucesso: {listRecords.Count} registro(s) novo(s) inserido(s)!"
                         );
                     }
                     else
                         _logger.AddMessage(
-                            $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"
+                            $"Concluída com sucesso: {listRecords.Count} registro(s) novo(s) inserido(s)!"
                         );
                 }
             }

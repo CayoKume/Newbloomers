@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.CustomValidations;
+﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,79 +9,56 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
     [Table("LinxLancContabil", Schema = "linx_microvix_erp")]
     public class LinxLancContabil
     {
-        [Column(TypeName = "datetime")]
         public DateTime? lastupdateon { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
-        [Column(TypeName = "varchar(14)")]
         [LengthValidation(length: 14, propertyName: "cnpj_emp")]
         public string? cnpj_emp { get; private set; }
 
-        [Key]
-        [Column(TypeName = "bigint")]
         public Int64? cod_lanc { get; private set; }
 
-        [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "centro_custo")]
         public string? centro_custo { get; private set; }
 
-        [Column(TypeName = "varchar(150)")]
         [LengthValidation(length: 150, propertyName: "ind_conta")]
         public string? ind_conta { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? cod_conta { get; private set; }
 
-        [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "nome_conta")]
         public string? nome_conta { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? valor_conta { get; private set; }
 
-        [Column(TypeName = "varchar(1)")]
         [LengthValidation(length: 1, propertyName: "cred_deb")]
         public string? cred_deb { get; private set; }
 
-        [Column(TypeName = "datetime")]
         public DateTime? data_lanc { get; private set; }
 
-        [Column(TypeName = "varchar(500)")]
         [LengthValidation(length: 500, propertyName: "compl_conta")]
         public string? compl_conta { get; private set; }
 
-        [Column(TypeName = "uniqueidentifier")]
         public Guid? identificador { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? cod_historico { get; private set; }
 
-        [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "desc_historico")]
         public string? desc_historico { get; private set; }
 
-        [Column(TypeName = "datetime")]
         public DateTime? data_compensacao { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? fatura_origem { get; private set; }
 
-        [Column(TypeName = "varchar(1)")]
         [LengthValidation(length: 1, propertyName: "efetivado")]
         public string? efetivado { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? empresa { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? id_lanc { get; private set; }
 
-        [Column(TypeName = "varchar(1)")]
         [LengthValidation(length: 1, propertyName: "cancelado")]
         public string? cancelado { get; private set; }
 

@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.CustomValidations;
+﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,53 +9,35 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
     [Table("B2CConsultaClientesContatos", Schema = "linx_microvix_commerce")]
     public class B2CConsultaClientesContatos
     {
-        [Column(TypeName = "datetime")]
         public DateTime? lastupdateon { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? id_clientes_contatos { get; private set; }
 
-        [Key]
-        [ForeignKey("id_contato_b2c")]
-        [Column(TypeName = "int")]
         public Int32? id_contato_b2c { get; private set; }
 
-        [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "nome_contato")]
         public string? nome_contato { get; private set; }
 
-        [Column(TypeName = "datetime")]
         public DateTime? data_nasc_contato { get; private set; }
 
-        [Column(TypeName = "char(1)")]
         [LengthValidation(length: 1, propertyName: "sexo_contato")]
         public string? sexo_contato { get; private set; }
 
-        [Key]
-        [ForeignKey("id_parentesco")]
-        [Column(TypeName = "int")]
         public Int32? id_parentesco { get; private set; }
 
-        [Column(TypeName = "varchar(20)")]
         [LengthValidation(length: 20, propertyName: "fone_contato")]
         public string? fone_contato { get; private set; }
 
-        [Column(TypeName = "varchar(20)")]
         [LengthValidation(length: 20, propertyName: "celular_contato")]
         public string? celular_contato { get; private set; }
 
-        [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "email_contato")]
         public string? email_contato { get; private set; }
 
-        [Column(TypeName = "int")]
         public int? cod_cliente_erp { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
         [NotMapped]

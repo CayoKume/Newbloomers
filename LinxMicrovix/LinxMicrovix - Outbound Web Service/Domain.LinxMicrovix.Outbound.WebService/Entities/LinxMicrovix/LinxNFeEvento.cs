@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.CustomValidations;
+﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,37 +9,26 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
     [Table("LinxNFeEvento", Schema = "linx_microvix_erp")]
     public class LinxNFeEvento
     {
-        [Column(TypeName = "datetime")]
         public DateTime? lastupdateon { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
-        [Column(TypeName = "varchar(14)")]
         [LengthValidation(length: 14, propertyName: "cnpj_emp")]
         public string? cnpj_emp { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? id_nfe_evento { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_nfe { get; private set; }
 
-        [Column(TypeName = "varchar(6)")]
         [LengthValidation(length: 6, propertyName: "codigo_tipo")]
         public string? codigo_tipo { get; private set; }
 
-        [Column(TypeName = "varchar(max)")]
         public string? xml { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
-        [Column(TypeName = "datetime")]
         public DateTime? data_emissao { get; private set; }
 
-        [Column(TypeName = "char(5)")]
         [LengthValidation(length: 5, propertyName: "hora_emissao")]
         public string? hora_emissao { get; private set; }
 

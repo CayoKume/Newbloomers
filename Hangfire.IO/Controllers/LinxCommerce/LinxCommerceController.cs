@@ -84,8 +84,8 @@ namespace HangfireDashboard.UI.Controllers.LinxCommerce
                             .Get<List<LinxMethods>>();
         }
 
-        [HttpPost("SearchOrders")]
-        public async Task<ActionResult> SearchOrders()
+        [HttpPost("SearchOrdersByDateInterval")]
+        public async Task<ActionResult> SearchOrdersByDateInterval()
         {
             try
             {
@@ -93,14 +93,42 @@ namespace HangfireDashboard.UI.Controllers.LinxCommerce
                     .Where(m => m.MethodName == "SearchOrders")
                     .FirstOrDefault();
 
-                var result = await _orderService.SearchOrders(
+                var result = await _orderService.SearchOrdersByDateInterval(
                     _linxCommerceJobParameter.SetParameters(
                         jobName: method.MethodName,
                         tableName: method.MethodName
                     )
                 );
 
-                if (result == "true")
+                if (result != true)
+                    return BadRequest($"Unable to find records on endpoint.");
+                else
+                    return Ok($"Records integrated successfully.");
+            }
+            catch (Exception ex)
+            {
+                Response.StatusCode = 400;
+                return Content($"Unable to integrate the records.\nError: {ex.Message}");
+            }
+        }
+
+        [HttpPost("SearchOrdersByQueue")]
+        public async Task<ActionResult> SearchOrdersByQueue()
+        {
+            try
+            {
+                var method = _methods
+                    .Where(m => m.MethodName == "SearchOrders")
+                    .FirstOrDefault();
+
+                var result = await _orderService.SearchOrdersByQueue(
+                    _linxCommerceJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
+                );
+
+                if (result != true)
                     return BadRequest($"Unable to find records on endpoint.");
                 else
                     return Ok($"Records integrated successfully.");
@@ -168,8 +196,8 @@ namespace HangfireDashboard.UI.Controllers.LinxCommerce
             }
         }
 
-        [HttpPost("SearchCustomer")]
-        public async Task<ActionResult> SearchCustomer()
+        [HttpPost("SearchCustomerByDateInterval")]
+        public async Task<ActionResult> SearchCustomerByDateInterval()
         {
             try
             {
@@ -177,14 +205,42 @@ namespace HangfireDashboard.UI.Controllers.LinxCommerce
                     .Where(m => m.MethodName == "SearchCustomer")
                     .FirstOrDefault();
 
-                var result = await _customerService.SearchCustomer(
+                var result = await _customerService.SearchCustomerByDateInterval(
                     _linxCommerceJobParameter.SetParameters(
                         jobName: method.MethodName,
                         tableName: "Customer"
                     )
                 );
 
-                if (result == true)
+                if (result != true)
+                    return BadRequest($"Unable to find records on endpoint.");
+                else
+                    return Ok($"Records integrated successfully.");
+            }
+            catch (Exception ex)
+            {
+                Response.StatusCode = 400;
+                return Content($"Unable to integrate the records.\nError: {ex.Message}");
+            }
+        }
+
+        [HttpPost("SearchCustomerByQueue")]
+        public async Task<ActionResult> SearchCustomerByQueue()
+        {
+            try
+            {
+                var method = _methods
+                    .Where(m => m.MethodName == "SearchCustomer")
+                    .FirstOrDefault();
+
+                var result = await _customerService.SearchCustomerByQueue(
+                    _linxCommerceJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: "Customer"
+                    )
+                );
+
+                if (result != true)
                     return BadRequest($"Unable to find records on endpoint.");
                 else
                     return Ok($"Records integrated successfully.");

@@ -39,7 +39,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             }
         }
 
-        public async Task<List<LinxProdutosPromocoes>> GetRegistersExists(LinxAPIParam jobParameter, List<Int64?> registros)
+        public async Task<List<string?>> GetRegistersExists(LinxAPIParam jobParameter, List<Int64?> registros)
         {
             try
             {
@@ -47,7 +47,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
                 if (indice > 1)
                 {
-                    var list = new List<LinxProdutosPromocoes>();
+                    var list = new List<string?>();
 
                     for (int i = 0; i <= indice; i++)
                     {
@@ -63,8 +63,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
                                 identificadores += $"'{top1000List[j]}', ";
                         }
 
-                        string sql = $"SELECT cnpj_emp, cod_produto, id_campanha FROM [linx_microvix_erp].[LinxProdutosPromocoes] WHERE cod_produto IN ({identificadores})";
-                        var result = await _linxMicrovixRepositoryBase.GetRegistersExists(sql);
+                        string sql = $"SELECT CONCAT('[', PORTAL, ']', '|', '[', CNPJ_EMP, ']', '|', '[', COD_PRODUTO, ']', '|', '[', PRECO_PROMOCAO, ']', '|', '[', DATA_INICIO_PROMOCAO, ']', '|', '[', DATA_TERMINO_PROMOCAO, ']', '|', '[', DATA_CADASTRO_PROMOCAO , ']', '|', '[', PROMOCAO_ATIVA, ']', '|', '[', ID_CAMPANHA, ']', '|', '[', NOME_CAMPANHA, ']', '|', '[', PROMOCAO_OPCIONAL, ']', '|', '[', CUSTO_TOTAL_CAMPANHA, ']') FROM [linx_microvix_erp].[LinxProdutosPromocoes] WHERE cod_produto IN ({identificadores})";
+                        var result = await _linxMicrovixRepositoryBase.GetKeyRegistersAlreadyExists(sql);
                         list.AddRange(result);
                     }
 
@@ -72,7 +72,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
                 }
                 else
                 {
-                    var list = new List<LinxProdutosPromocoes>();
+                    var list = new List<string?>();
                     string identificadores = String.Empty;
 
                     for (int i = 0; i < registros.Count(); i++)
@@ -84,8 +84,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
                             identificadores += $"'{registros[i]}', ";
                     }
 
-                    string sql = $"SELECT cnpj_emp, cod_produto, id_campanha FROM [linx_microvix_erp].[LinxProdutosPromocoes] WHERE cod_produto IN ({identificadores})";
-                    var result = await _linxMicrovixRepositoryBase.GetRegistersExists(sql);
+                    string sql = $"SELECT CONCAT('[', PORTAL, ']', '|', '[', CNPJ_EMP, ']', '|', '[', COD_PRODUTO, ']', '|', '[', PRECO_PROMOCAO, ']', '|', '[', DATA_INICIO_PROMOCAO, ']', '|', '[', DATA_TERMINO_PROMOCAO, ']', '|', '[', DATA_CADASTRO_PROMOCAO , ']', '|', '[', PROMOCAO_ATIVA, ']', '|', '[', ID_CAMPANHA, ']', '|', '[', NOME_CAMPANHA, ']', '|', '[', PROMOCAO_OPCIONAL, ']', '|', '[', CUSTO_TOTAL_CAMPANHA, ']') FROM [linx_microvix_erp].[LinxProdutosPromocoes] WHERE cod_produto IN ({identificadores})";
+                    var result = await _linxMicrovixRepositoryBase.GetKeyRegistersAlreadyExists(sql);
                     list.AddRange(result);
 
                     return list;

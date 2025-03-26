@@ -450,6 +450,92 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
             }
         }
 
+        /// <summary>
+        /// Get the last timestamp value without column date from Azure SQL DataTable
+        /// </summary>
+        /// <param name="schema"></param>
+        /// <param name="tableName"></param>
+        /// <param name="columnDate"></param>
+        /// <returns></returns>
+        /// <exception cref="SQLCommandException"></exception>
+        /// <exception cref="InternalException"></exception>
+        public async Task<string?> GetLastMaxTimestamp(string? schema, string? tableName, string? columnCompany, string? companyValue)
+        {
+            string? sql = "SELECT ISNULL(MAX(TIMESTAMP), 0) " +
+                         $"FROM [{schema}].[{tableName}] (NOLOCK)" +
+                         $"WHERE [{columnCompany}] = '{companyValue}'";
+
+            try
+            {
+                using (var conn = _sqlServerConnection.GetIDbConnection())
+                {
+                    return await conn.QueryFirstOrDefaultAsync<string?>(sql: sql, commandTimeout: 360);
+                }
+            }
+            catch (SqlException ex)
+            {
+                throw new SQLCommandException(
+                    stage: EnumStages.GetLast7DaysMinTimestamp,
+                    message: $"Error when trying to get last timestamp from database",
+                    exceptionMessage: ex.Message,
+                    commandSQL: sql
+                );
+            }
+            catch (Exception ex)
+            {
+                throw new InternalException(
+                    stage: EnumStages.GetLast7DaysMinTimestamp,
+                    error: EnumError.SQLCommand,
+                    level: EnumMessageLevel.Error,
+                    message: $"Error when trying to get last timestamp from database",
+                    exceptionMessage: ex.Message
+                );
+            }
+        }
+
+        /// <summary>
+        /// Get the last timestamp value without column date from Azure SQL DataTable
+        /// </summary>
+        /// <param name="schema"></param>
+        /// <param name="tableName"></param>
+        /// <param name="columnDate"></param>
+        /// <returns></returns>
+        /// <exception cref="SQLCommandException"></exception>
+        /// <exception cref="InternalException"></exception>
+        public async Task<string?> GetLastMaxTimestampByCnpjAndIdentificador(string? schema, string? tableName, string? columnCompany, string? companyValue, string? columnIdentificador, string? columnIdentificadorValue)
+        {
+            string? sql = "SELECT ISNULL(MAX(TIMESTAMP), 0) " +
+                         $"FROM [{schema}].[{tableName}] (NOLOCK)" +
+                         $"WHERE [{columnCompany}] = '{companyValue}'" +
+                         $"AND [{columnIdentificador}] = '{columnIdentificadorValue}'";
+
+            try
+            {
+                using (var conn = _sqlServerConnection.GetIDbConnection())
+                {
+                    return await conn.QueryFirstOrDefaultAsync<string?>(sql: sql, commandTimeout: 360);
+                }
+            }
+            catch (SqlException ex)
+            {
+                throw new SQLCommandException(
+                    stage: EnumStages.GetLast7DaysMinTimestamp,
+                    message: $"Error when trying to get last timestamp from database",
+                    exceptionMessage: ex.Message,
+                    commandSQL: sql
+                );
+            }
+            catch (Exception ex)
+            {
+                throw new InternalException(
+                    stage: EnumStages.GetLast7DaysMinTimestamp,
+                    error: EnumError.SQLCommand,
+                    level: EnumMessageLevel.Error,
+                    message: $"Error when trying to get last timestamp from database",
+                    exceptionMessage: ex.Message
+                );
+            }
+        }
 
         /// <summary>
         /// Get the last timestamp value from Azure SQL DataTable

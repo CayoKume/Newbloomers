@@ -23,33 +23,30 @@
         public string? PixKey { get; set; }
         public Int32? OrderPaymentMethodID { get; set; }
 
-        public static bool operator ==(OrderPaymentInfo a, OrderPaymentInfo b)
+        public OrderPaymentInfo() { }
+
+        public OrderPaymentInfo(OrderPaymentInfo orderPaymentInfo, Int32? orderPaymentMethodID)
         {
-            if (a is not null && b is not null)
-                return
-                    a.Alias == b.Alias &&
-                    a.ExpirationDate == b.ExpirationDate &&
-                    a.Holder == b.Holder &&
-                    a.Identifier == b.Identifier &&
-                    a.Month == b.Month &&
-                    a.NumberHint == b.NumberHint &&
-                    a.PaymentDate == b.PaymentDate &&
-                    a.PaymentType == b.PaymentType &&
-                    a.Provider == b.Provider &&
-                    a.ReconciliationNumber == b.ReconciliationNumber &&
-                    a.SecurityCodeHint == b.SecurityCodeHint &&
-                    a.TransactionNumber == b.TransactionNumber &&
-                    a.Year == b.Year;
-
-            else if (a is null && b is null)
-                return true;
-
-            return false;
-        }
-
-        public static bool operator !=(OrderPaymentInfo a, OrderPaymentInfo b)
-        {
-            return !(a == b);
+            this.Identifier = orderPaymentInfo.Identifier;
+            this.Alias = orderPaymentInfo.Alias;
+            this.PaymentDate = orderPaymentInfo.PaymentDate;
+            this.ExpirationDate = orderPaymentInfo.ExpirationDate;
+            this.Month = orderPaymentInfo.Month;
+            this.Year = orderPaymentInfo.Year;
+            this.Holder = orderPaymentInfo.Holder;
+            this.NumberHint = orderPaymentInfo.NumberHint;
+            this.SecurityCodeHint = orderPaymentInfo.SecurityCodeHint;
+            this.TransactionNumber = orderPaymentInfo.TransactionNumber;
+            this.AuthorizationCode = orderPaymentInfo.AuthorizationCode;
+            this.ReceiptCode = orderPaymentInfo.ReceiptCode;
+            this.ReconciliationNumber = orderPaymentInfo.ReconciliationNumber;
+            this.ConfirmationNumber = orderPaymentInfo.ConfirmationNumber;
+            this.PaymentType = orderPaymentInfo.PaymentType;
+            this.Provider = orderPaymentInfo.Provider;
+            this.ProviderDocumentNumber = orderPaymentInfo.ProviderDocumentNumber;
+            this.PixQRCode = orderPaymentInfo.PixQRCode;
+            this.PixKey = orderPaymentInfo.PixKey;
+            this.OrderPaymentMethodID = orderPaymentMethodID;
         }
     }
 }

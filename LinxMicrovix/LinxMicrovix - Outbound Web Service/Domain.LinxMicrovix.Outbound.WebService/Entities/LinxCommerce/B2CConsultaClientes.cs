@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.CustomValidations;
+﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,85 +9,61 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
     [Table("B2CConsultaClientes", Schema = "linx_microvix_commerce")]
     public class B2CConsultaClientes
     {
-        [Column(TypeName = "datetime")]
         public DateTime? lastupdateon { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public int? cod_cliente_b2c { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public int? cod_cliente_erp { get; private set; }
 
-        [Key]
-        [Column(TypeName = "varchar(14)")]
         [LengthValidation(length: 14, propertyName: "doc_cliente")]
         public string? doc_cliente { get; private set; }
 
-        [Column(TypeName = "varchar(60)")]
         [LengthValidation(length: 60, propertyName: "nm_cliente")]
         public string? nm_cliente { get; private set; }
 
-        [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "nm_mae")]
         public string? nm_mae { get; private set; }
 
-        [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "nm_pai")]
         public string? nm_pai { get; private set; }
 
-        [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "nm_conjuge")]
         public string? nm_conjuge { get; private set; }
 
-        [Column(TypeName = "smalldatetime")]
         public DateTime? dt_cadastro { get; private set; }
 
-        [Column(TypeName = "smalldatetime")]
         public DateTime? dt_nasc_cliente { get; private set; }
 
-        [Column(TypeName = "varchar(250)")]
         [LengthValidation(length: 250, propertyName: "end_cliente")]
         public string? end_cliente { get; private set; }
 
-        [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "complemento_end_cliente")]
         public string? complemento_end_cliente { get; private set; }
 
-        [Column(TypeName = "varchar(20)")]
         [LengthValidation(length: 20, propertyName: "nr_rua_cliente")]
         public string? nr_rua_cliente { get; private set; }
 
-        [Column(TypeName = "varchar(60)")]
         [LengthValidation(length: 60, propertyName: "bairro_cliente")]
         public string? bairro_cliente { get; private set; }
 
-        [Column(TypeName = "varchar(9)")]
         [LengthValidation(length: 9, propertyName: "cep_cliente")]
         public string? cep_cliente { get; private set; }
 
-        [Column(TypeName = "varchar(40)")]
         [LengthValidation(length: 40, propertyName: "cidade_cliente")]
         public string? cidade_cliente { get; private set; }
 
-        [Column(TypeName = "char(2)")]
         [LengthValidation(length: 2, propertyName: "uf_cliente")]
         public string? uf_cliente { get; private set; }
 
-        [Column(TypeName = "varchar(20)")]
         [LengthValidation(length: 20, propertyName: "fone_cliente")]
         public string? fone_cliente { get; private set; }
 
-        [Column(TypeName = "varchar(20)")]
         [LengthValidation(length: 20, propertyName: "fone_comercial")]
         public string? fone_comercial { get; private set; }
 
-        [Column(TypeName = "varchar(20)")]
         [LengthValidation(length: 20, propertyName: "cel_cliente")]
         public string? cel_cliente { get; private set; }
 
-        [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "email_cliente")]
         public string? email_cliente { get; private set; }
 
@@ -95,62 +71,45 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
         [LengthValidation(length: 20, propertyName: "rg_cliente")]
         public string? rg_cliente { get; private set; }
 
-        [Column(TypeName = "varchar(7)")]
         [LengthValidation(length: 7, propertyName: "rg_orgao_emissor")]
         public string? rg_orgao_emissor { get; private set; }
 
-        [Column(TypeName = "tinyint")]
         public Int32? estado_civil_cliente { get; private set; }
 
-        [Column(TypeName = "varchar(30)")]
         [LengthValidation(length: 30, propertyName: "empresa_cliente")]
         public string? empresa_cliente { get; private set; }
 
-        [Column(TypeName = "varchar(30)")]
         [LengthValidation(length: 30, propertyName: "cargo_cliente")]
         public string? cargo_cliente { get; private set; }
 
-        [Column(TypeName = "char(1)")]
         [LengthValidation(length: 1, propertyName: "sexo_cliente")]
         public string? sexo_cliente { get; private set; }
 
-        [Column(TypeName = "smalldatetime")]
         public DateTime? dt_update { get; private set; }
 
-        [Column(TypeName = "bit")]
         public Int32? ativo { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? receber_email { get; private set; }
 
-        [Column(TypeName = "smalldatetime")]
         public DateTime? dt_expedicao_rg { get; private set; }
 
-        [Column(TypeName = "varchar(40)")]
         [LengthValidation(length: 40, propertyName: "naturalidade")]
         public string? naturalidade { get; private set; }
 
-        [Column(TypeName = "tinyint")]
         public Int32? tempo_residencia { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? renda { get; private set; }
 
-        [Column(TypeName = "varchar(10)")]
         [LengthValidation(length: 10, propertyName: "numero_compl_rua_cliente")]
         public string? numero_compl_rua_cliente { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
-        [Column(TypeName = "char(1)")]
         [LengthValidation(length: 1, propertyName: "tipo_pessoa")]
         public string? tipo_pessoa { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? aceita_programa_fidelidade { get; private set; }
 
         [NotMapped]

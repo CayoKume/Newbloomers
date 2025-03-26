@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.CustomValidations;
+﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,74 +9,51 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
     [Table("LinxXMLDocumentos", Schema = "linx_microvix_erp")]
     public class LinxXMLDocumentos
     {
-        [Column(TypeName = "datetime")]
         public DateTime? lastupdateon { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
-        [Key]
-        [Column(TypeName = "varchar(14)")]
         [LengthValidation(length: 14, propertyName: "cnpj_emp")]
         public string? cnpj_emp { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? documento { get; private set; }
 
-        [Column(TypeName = "varchar(10)")]
         [LengthValidation(length: 10, propertyName: "serie")]
         public string? serie { get; private set; }
 
-        [Column(TypeName = "datetime")]
         public DateTime? data_emissao { get; private set; }
 
-        [Key]
-        [Column(TypeName = "varchar(44)")]
         [LengthValidation(length: 44, propertyName: "chave_nfe")]
         public string? chave_nfe { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? situacao { get; private set; }
 
-        [Column(TypeName = "varchar(max)")]
         public string? xml { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? excluido { get; private set; }
 
-        [Column(TypeName = "uniqueidentifier")]
         public Guid? identificador_microvix { get; private set; }
 
-        [Column(TypeName = "datetime")]
         public DateTime? dt_insert { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
-        [Column(TypeName = "varchar(15)")]
         [LengthValidation(length: 15, propertyName: "nProtCanc")]
         public string? nProtCanc { get; private set; }
 
-        [Column(TypeName = "varchar(15)")]
         [LengthValidation(length: 15, propertyName: "nProtInut")]
         public string? nProtInut { get; private set; }
 
-        [Column(TypeName = "varchar(max)")]
         public string? xmlDistribuicao { get; private set; }
 
-        [Column(TypeName = "varchar(15)")]
         [LengthValidation(length: 15, propertyName: "nProtDeneg")]
         public string? nProtDeneg { get; private set; }
 
-        [Column(TypeName = "varchar(5)")]
         [LengthValidation(length: 5, propertyName: "cStat")]
         public string? cStat { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_nfe { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? cod_cliente { get; private set; }
 
         [NotMapped]

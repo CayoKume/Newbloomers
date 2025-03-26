@@ -15,14 +15,17 @@ namespace HangfireDashboard.UI.Controllers.LinxCommerce
 
         private readonly IConfiguration _configuration;
         private readonly ISKUService _skuService;
+        private readonly ICustomerService _customerService;
 
         public LinxCommerceIndividualController(
             IConfiguration configuration,
-            ISKUService skuService
+            ISKUService skuService,
+            ICustomerService customerService
         )
         {
             _configuration = configuration;
             _skuService = skuService;
+            _customerService = customerService;
 
             _linxCommerceJobParameter = new LinxCommerceJobParameter(
                 docMainCompany: _configuration
@@ -116,6 +119,35 @@ namespace HangfireDashboard.UI.Controllers.LinxCommerce
             //    Response.StatusCode = 400;
             //    return Content($"Unable to integrate the record: {orderId}.\nError: {ex.Message}");
             //}
+        }
+
+        [HttpPost("GetCustomer")]
+        public async Task<ActionResult> GetCustomer([Required][FromQuery] string? customerId)
+        {
+            try
+            {
+                var method = _methods
+                    .Where(m => m.MethodName == "SearchCustomer")
+                    .FirstOrDefault();
+
+                var result = await _customerService.GetCustomer(
+                    _linxCommerceJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: "Customer"
+                    ),
+                    Identifier: customerId
+                );
+
+                if (result != true)
+                    return BadRequest($"Unable to find record: {customerId} on endpoint.");
+                else
+                    return Ok($"Record: {customerId} integrated successfully.");
+            }
+            catch (Exception ex)
+            {
+                Response.StatusCode = 400;
+                return Content($"Unable to integrate the record: {customerId}.\nError: {ex.Message}");
+            }
         }
 
         [HttpPost("GetSKU")]

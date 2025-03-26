@@ -1,8 +1,6 @@
 ﻿using Application.IntegrationsCore.Interfaces;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
-using Application.LinxMicrovix.Outbound.WebService.Interfaces.Cache.LinxMicrovix;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxMicrovix;
-using Application.LinxMicrovix.Outbound.WebService.Services.Cache.LinxMicrovix;
 using Domain.IntegrationsCore.Entities.Enums;
 using Domain.IntegrationsCore.Exceptions;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
@@ -21,7 +19,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
         private readonly ILinxMicrovixAzureSQLRepositoryBase<LinxProdutosTabelasPrecos> _linxMicrovixRepositoryBase;
         private readonly ILinxProdutosTabelasPrecosRepository _linxProdutosTabelasPrecosRepository;
-        private static List<LinxProdutosTabelasPrecos> _linxProdutosTabelasPrecosCache { get; set; } = new List<LinxProdutosTabelasPrecos>();
+        private static List<string?> _linxProdutosTabelasPrecosCache { get; set; } = new List<string?>();
 
         public LinxProdutosTabelasPrecosService(
             IAPICall apiCall,
@@ -182,14 +180,15 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
 
                 foreach (var id_tabela in tables_ids)
                 {
-                    foreach (var cnpj_emp in cnpjs_emp)
+                    foreach (var cnpj_emp in cnpjs_emp.Where(x => x.name_company.ToUpper().Contains("MISHA") || x.name_company.ToUpper().Contains("OPEN")))
                     {
-                        string? timestamp = await _linxMicrovixRepositoryBase.GetLast7DaysMinTimestamp(
+                        string? timestamp = await _linxMicrovixRepositoryBase.GetLastMaxTimestampByCnpjAndIdentificador(
                             jobParameter.schema,
                             jobParameter.tableName,
-                            columnDate: "lastupdateon",
-                            columnCompany: "cnpj_emp",
-                            companyValue: cnpj_emp.doc_company
+                            "cnpj_emp",
+                            cnpj_emp.doc_company,
+                            "id_tabela",
+                            id_tabela
                         );
 
                         var body = _linxMicrovixServiceBase.BuildBodyRequest(
@@ -215,10 +214,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                         );
 
                     var _listSomenteNovos = listRecords.Where(x => !_linxProdutosTabelasPrecosCache.Any(y => 
-                        y.cod_produto == x.cod_produto &&
-                        y.cnpj_emp == x.cnpj_emp &&
-                        y.id_tabela == x.id_tabela &&
-                        y.timestamp == x.timestamp
+                        y == x.recordKey
                     )).ToList();
 
                     if (_listSomenteNovos.Count() > 0)
@@ -234,6 +230,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                             );
                         }
 
+                        _linxProdutosTabelasPrecosCache.AddRange(_listSomenteNovos.Select(x => x.recordKey));
 
                         _logger.AddMessage(
                             $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"

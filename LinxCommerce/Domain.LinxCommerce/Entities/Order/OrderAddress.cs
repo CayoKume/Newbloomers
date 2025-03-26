@@ -1,9 +1,6 @@
-﻿using Domain.IntegrationsCore.Entities.Enums;
-using Domain.IntegrationsCore.Exceptions;
-
-namespace Domain.LinxCommerce.Entities.Order
+﻿namespace Domain.LinxCommerce.Entities.Order
 {
-    public class OrderAddress : IEquatable<OrderAddress>
+    public class OrderAddress
     {
         public Int32? OrderAddressID { get; set; }
         public Guid? OrderID { get; set; }
@@ -22,64 +19,26 @@ namespace Domain.LinxCommerce.Entities.Order
         public Int32? PointOfSaleID { get; set; }
         public string? ContactPhone { get; set; }
 
-        public static List<OrderAddress?> Compare(List<OrderAddress?> orderAddressAPIList, List<OrderAddress> orderAddressDboList)
-        {
-            try
-            {
-                foreach (var oAddressDbo in orderAddressDboList)
-                {
-                    orderAddressAPIList.Remove(
-                        orderAddressAPIList
-                            .Where(oAddressAPI =>
-                                oAddressAPI.AddressLine == oAddressDbo.AddressLine &&
-                                oAddressAPI.AddressNotes == oAddressDbo.AddressNotes &&
-                                oAddressAPI.AddressType == oAddressDbo.AddressType &&
-                                oAddressAPI.City == oAddressDbo.City &&
-                                oAddressAPI.ContactName == oAddressDbo.ContactName &&
-                                oAddressAPI.ContactPhone == oAddressDbo.ContactPhone &&
-                                oAddressAPI.Landmark == oAddressDbo.Landmark &&
-                                oAddressAPI.Name == oAddressDbo.Name &&
-                                oAddressAPI.Neighbourhood == oAddressDbo.Neighbourhood &&
-                                oAddressAPI.Number == oAddressDbo.Number &&
-                                oAddressAPI.OrderAddressID == oAddressDbo.OrderAddressID &&
-                                oAddressAPI.OrderID == oAddressDbo.OrderID &&
-                                oAddressAPI.PostalCode == oAddressDbo.PostalCode.Trim() &&
-                                oAddressAPI.State == oAddressDbo.State
-                            ).FirstOrDefault()
-                    );
-                }
+        public OrderAddress() { }
 
-                return orderAddressAPIList;
-            }
-            catch (Exception ex)
-            {
-                throw new InternalException(
-                    stage: EnumStages.Compare,
-                    error: EnumError.Compare,
-                    level: EnumMessageLevel.Error,
-                    message: $"Error when comparing two lists of records",
-                    exceptionMessage: ex.Message
-                );
-            }
-        }
-
-        public bool Equals(OrderAddress? other)
+        public OrderAddress(OrderAddress orderAddress)
         {
-            return
-                this.AddressLine == other.AddressLine &&
-                this.AddressNotes == other.AddressNotes &&
-                this.AddressType == other.AddressType &&
-                this.City == other.City &&
-                this.ContactName == other.ContactName &&
-                this.ContactPhone == other.ContactPhone &&
-                this.Landmark == other.Landmark &&
-                this.Name == other.Name &&
-                this.Neighbourhood == other.Neighbourhood &&
-                this.Number == other.Number &&
-                this.OrderAddressID == other.OrderAddressID &&
-                this.OrderID == other.OrderID &&
-                this.PostalCode.Trim() == other.PostalCode &&
-                this.State == other.State;
+            this.OrderAddressID = orderAddress.OrderAddressID;
+            this.OrderID = orderAddress.OrderID;
+            this.Name = orderAddress.Name;
+            this.AddressLine = orderAddress.AddressLine;
+            this.City = orderAddress.City;
+            this.Neighbourhood = orderAddress.Neighbourhood;
+            this.Number = orderAddress.Number;
+            this.State = orderAddress.State;
+            this.PostalCode = orderAddress.PostalCode;
+            this.AddressNotes = orderAddress.AddressNotes;
+            this.Landmark = orderAddress.Landmark;
+            this.ContactName = orderAddress.ContactName;
+            this.ContactDocumentNumber = orderAddress.ContactDocumentNumber;
+            this.AddressType = orderAddress.AddressType;
+            this.PointOfSaleID = orderAddress.PointOfSaleID;
+            this.ContactPhone = orderAddress.ContactPhone;
         }
     }
 }

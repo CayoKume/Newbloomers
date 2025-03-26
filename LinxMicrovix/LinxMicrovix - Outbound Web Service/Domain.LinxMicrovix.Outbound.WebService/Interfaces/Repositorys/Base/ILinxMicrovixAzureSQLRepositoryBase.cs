@@ -6,6 +6,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base
 {
     public interface ILinxMicrovixAzureSQLRepositoryBase<TEntity> where TEntity : class
     {
+        public Task<string?> GetLastMaxTimestampByCnpjAndIdentificador(string? schema, string? tableName, string? columnCompany, string? companyValue, string? columnIdentificador, string? columnIdentificadorValue);
+        public Task<string?> GetLastMaxTimestamp(string? schema, string? tableName, string? columnCompany, string? companyValue);
         public Task<string?> GetLast7DaysMaxTimestamp(string? schema, string? tableName);
         public Task<string?> GetLast7DaysMinTimestamp(string? schema, string? tableName, string? columnDate);
         public Task<string?> GetLast7DaysMinTimestamp(string? schema, string? tableName, string? columnDate, string? columnCompany, string? companyValue);

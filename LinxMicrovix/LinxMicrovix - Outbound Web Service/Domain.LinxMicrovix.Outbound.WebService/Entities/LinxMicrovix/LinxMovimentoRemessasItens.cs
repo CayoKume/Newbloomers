@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.CustomValidations;
+﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,41 +9,28 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
     [Table("LinxMovimentoRemessasItens", Schema = "linx_microvix_erp")]
     public class LinxMovimentoRemessasItens
     {
-        [Column(TypeName = "datetime")]
         public DateTime? lastupdateon { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? id_remessas_itens { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? empresa { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_remessas { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? transacao { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? qtde_total { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? qtde_venda { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? qtde_devolvido { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? qtde_pendente { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? qtde_pendente_pagamento { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
         [NotMapped]

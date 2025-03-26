@@ -1,7 +1,5 @@
 ﻿using Application.IntegrationsCore.Interfaces;
-using Application.LinxMicrovix.Outbound.WebService.Entities.Cache.LinxCommerce;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
-using Application.LinxMicrovix.Outbound.WebService.Interfaces.Cache.LinxCommerce;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxCommerce;
 using Domain.IntegrationsCore.Entities.Enums;
 using Domain.IntegrationsCore.Exceptions;
@@ -21,7 +19,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
         private readonly ILinxMicrovixAzureSQLRepositoryBase<B2CConsultaTiposCobrancaFrete> _linxMicrovixRepositoryBase;
         private readonly IB2CConsultaTiposCobrancaFreteRepository _b2cConsultaTiposCobrancaFreteRepository;
-        private static IB2CConsultaTiposCobrancaFreteServiceCache _b2cConsultaTiposCobrancaFreteCache { get; set; } = new B2CConsultaTiposCobrancaFreteServiceCache();
+        private static List<string?> _b2cConsultaTiposCobrancaFreteCache { get; set; } = new List<string?>();
 
         public B2CConsultaTiposCobrancaFreteService(
             IAPICall apiCall,
@@ -114,31 +112,33 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                             );
 
                     string? response = await _apiCall.PostAsync(jobParameter: jobParameter, body: body);
-                    var xmls = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response, _b2cConsultaTiposCobrancaFreteCache);
+                    var xmls = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response);
 
                     if (xmls.Count() > 0)
                     {
                         var listRecords = DeserializeXMLToObject(jobParameter, xmls);
 
-                        if (_b2cConsultaTiposCobrancaFreteCache.GetList().Count == 0)
-                        {
-                            var list_existentes = await _b2cConsultaTiposCobrancaFreteRepository.GetRegistersExists(jobParameter: jobParameter, registros: listRecords);
-                            _b2cConsultaTiposCobrancaFreteCache.AddList(list_existentes);
-                        }
+                        //if (_b2cConsultaTiposCobrancaFreteCache.GetList().Count == 0)
+                        //{
+                        //    var list_existentes = await _b2cConsultaTiposCobrancaFreteRepository.GetRegistersExists(jobParameter: jobParameter, registros: listRecords);
+                        //    _b2cConsultaTiposCobrancaFreteCache.AddList(list_existentes);
+                        //}
 
-                        _listSomenteNovos = _b2cConsultaTiposCobrancaFreteCache.FiltrarList(listRecords);
+                        //_listSomenteNovos = _b2cConsultaTiposCobrancaFreteCache.FiltrarList(listRecords);
+
                         if (_listSomenteNovos.Count() > 0)
                         {
                             _b2cConsultaTiposCobrancaFreteRepository.BulkInsertIntoTableRaw(records: _listSomenteNovos, jobParameter: jobParameter);
-                            for (int i = 0; i < _listSomenteNovos.Count; i++)
-                            {
-                                var key = _b2cConsultaTiposCobrancaFreteCache.GetKey(_listSomenteNovos[i]);
-                                if (_b2cConsultaTiposCobrancaFreteCache.GetDictionaryXml().ContainsKey(key))
-                                {
-                                    var xml = _b2cConsultaTiposCobrancaFreteCache.GetDictionaryXml()[key];
-                                    _logger.AddRecord(key, xml);
-                                }
-                            }
+
+                            //for (int i = 0; i < _listSomenteNovos.Count; i++)
+                            //{
+                            //    var key = _b2cConsultaTiposCobrancaFreteCache.GetKey(_listSomenteNovos[i]);
+                            //    if (_b2cConsultaTiposCobrancaFreteCache.GetDictionaryXml().ContainsKey(key))
+                            //    {
+                            //        var xml = _b2cConsultaTiposCobrancaFreteCache.GetDictionaryXml()[key];
+                            //        _logger.AddRecord(key, xml);
+                            //    }
+                            //}
 
                             await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
 
@@ -152,8 +152,6 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                             );
                     }
                 }
-
-                await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
             }
             catch (SQLCommandException ex)
             {
@@ -190,7 +188,6 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
             finally
             {
                 //await _logger.CommitAllChanges();
-                _b2cConsultaTiposCobrancaFreteCache.AddList(_listSomenteNovos);
             }
 
             return true;

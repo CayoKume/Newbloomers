@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.CustomValidations;
+﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,69 +9,48 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
     [Table("LinxAntecipacoesFinanceirasPlanos", Schema = "linx_microvix_erp")]
     public class LinxAntecipacoesFinanceirasPlanos
     {
-        [Column(TypeName = "datetime")]
         public DateTime lastupdateon { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
-        [Column(TypeName = "varchar(14)")]
         [LengthValidation(length: 14, propertyName: "cnpj_emp")]
         public string? cnpj_emp { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_antecipacoes_financeiras { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? numero_antecipacao { get; private set; }
 
-        [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "forma_pgto")]
         public string? forma_pgto { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? plano { get; private set; }
 
-        [Column(TypeName = "varchar(35)")]
         [LengthValidation(length: 35, propertyName: "nome_plano")]
         public string? nome_plano { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? valor { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_ordservprod { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_vendas_pos_produtos_tmp { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_vendas_pos { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? cancelado { get; private set; }
 
-        [Column(TypeName = "datetime")]
         public DateTime? previsao_entrega { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? numero_ficha { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_vendas_pos_produtos_campos_adicionais_tmp { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_link_pagamento_linx_pay_hub { get; private set; }
 
-        [Column(TypeName = "varchar(20)")]
         [LengthValidation(length: 20, propertyName: "codigo_gerencial")]
         public string? codigo_gerencial { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? empresa { get; private set; }
 
         [NotMapped]

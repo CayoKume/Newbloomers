@@ -40,7 +40,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
             }
         }
 
-        public async Task<List<B2CConsultaEmpresas>> GetRegistersExists(LinxAPIParam jobParameter, List<B2CConsultaEmpresas> registros)
+        public async Task<List<string?>> GetRegistersExists(LinxAPIParam jobParameter, List<string?> registros)
         {
             try
             {
@@ -48,14 +48,14 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                 for (int i = 0; i < registros.Count(); i++)
                 {
                     if (i == registros.Count() - 1)
-                        identificadores += $"'{registros[i].cnpj_emp}'";
+                        identificadores += $"'{registros[i]}'";
                     else
-                        identificadores += $"'{registros[i].cnpj_emp}', ";
+                        identificadores += $"'{registros[i]}', ";
                 }
 
-                string sql = $"SELECT CNPJ_EMP, TIMESTAMP FROM [LINX_MICROVIX_COMMERCE].[B2CCONSULTAEMPRESAS] WHERE CNPJ_EMP IN ({identificadores})";
+                string sql = $"SELECT CONCAT('[', EMPRESA, ']', '|', '[', CNPJ_EMP, ']', '|', '[', [TIMESTAMP], ']') FROM [linx_microvix_commerce].[B2CCONSULTAEMPRESAS] WHERE CNPJ_EMP IN ({identificadores})";
 
-                return await _linxMicrovixRepositoryBase.GetRegistersExists(sql);
+                return await _linxMicrovixRepositoryBase.GetKeyRegistersAlreadyExists(sql);
             }
             catch (Exception ex) when (ex is not InternalException && ex is not SQLCommandException)
             {

@@ -1,8 +1,6 @@
 ﻿using Application.IntegrationsCore.Interfaces;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
-using Application.LinxMicrovix.Outbound.WebService.Interfaces.Cache.LinxMicrovix;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxMicrovix;
-using Application.LinxMicrovix.Outbound.WebService.Services.Cache.LinxMicrovix;
 using Domain.IntegrationsCore.Entities.Enums;
 using Domain.IntegrationsCore.Exceptions;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
@@ -21,7 +19,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
         private readonly ILinxMicrovixAzureSQLRepositoryBase<LinxGrupoLojas> _linxMicrovixRepositoryBase;
         private readonly ILinxGrupoLojasRepository _linxGrupoLojasRepository;
-        private static List<LinxGrupoLojas> _linxGrupoLojasCache { get; set; } = new List<LinxGrupoLojas>();
+        private static List<string?> _linxGrupoLojasCache { get; set; } = new List<string?>();
 
         public LinxGrupoLojasService(
             IAPICall apiCall,
@@ -120,14 +118,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                         _linxGrupoLojasCache = await _linxGrupoLojasRepository.GetRegistersExists();
 
                     var _listSomenteNovos = listRecords.Where(x => !_linxGrupoLojasCache.Any(y => 
-                        y.empresa == x.empresa &&
-                        y.cnpj != x.cnpj &&
-                        y.nome_empresa != x.nome_empresa &&
-                        y.id_empresas_rede != x.id_empresas_rede &&
-                        y.rede != x.rede &&
-                        y.portal != x.portal &&
-                        y.nome_portal != x.nome_portal &&
-                        y.classificacao_portal != x.classificacao_portal
+                        y == x.recordKey
                     )).ToList();
 
                     if (_listSomenteNovos.Count() > 0)
@@ -140,7 +131,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                             _logger.AddRecord(_listSomenteNovos[i].recordKey, _listSomenteNovos[i].recordXml);
                         }
 
-                        _linxGrupoLojasCache.AddRange(_listSomenteNovos);
+                        _linxGrupoLojasCache.AddRange(_listSomenteNovos.Select(x => x.recordKey));
 
                         _logger.AddMessage(
                             $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"

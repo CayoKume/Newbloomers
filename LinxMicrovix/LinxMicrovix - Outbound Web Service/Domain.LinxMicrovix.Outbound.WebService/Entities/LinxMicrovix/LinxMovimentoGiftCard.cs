@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.CustomValidations;
+﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,64 +9,45 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
     [Table("LinxMovimentoGiftCard", Schema = "linx_microvix_erp")]
     public class LinxMovimentoGiftCard
     {
-        [Column(TypeName = "datetime")]
         public DateTime? lastupdateon { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? empresa { get; private set; }
 
-        [Column(TypeName = "datetime")]
         public DateTime? data_transacao { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? operacao { get; private set; }
 
-        [Column(TypeName = "varchar(100)")]
         [LengthValidation(length: 100, propertyName: "nsu_cliente")]
         public string? nsu_cliente { get; private set; }
 
-        [Column(TypeName = "varchar(100)")]
         [LengthValidation(length: 100, propertyName: "nsu_host")]
         public string? nsu_host { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? valor { get; private set; }
 
-        [Column(TypeName = "varchar(max)")]
         public string? json_envio { get; private set; }
 
-        [Column(TypeName = "varchar(max)")]
         public string json_retorno { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? qtde_tentativa { get; private set; }
 
-        [Column(TypeName = "varchar(4)")]
         [LengthValidation(length: 4, propertyName: "aprovado_barramento")]
         public string? aprovado_barramento { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? estornada { get; private set; }
 
-        [Column(TypeName = "varchar(100)")]
         [LengthValidation(length: 100, propertyName: "codigo_loja")]
         public string? codigo_loja { get; private set; }
 
-        [Key]
-        [Column(TypeName = "uniqueidentifier")]
         public Guid? identificador_movimento { get; private set; }
 
-        [Column(TypeName = "varchar(100)")]
         [LengthValidation(length: 100, propertyName: "numero_cartao")]
         public string? numero_cartao { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? plano { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? ambiente_producao { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
         [NotMapped]

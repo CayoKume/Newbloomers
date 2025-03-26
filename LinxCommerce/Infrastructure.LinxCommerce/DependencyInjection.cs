@@ -1,17 +1,13 @@
 ﻿using Application.LinxCommerce.Interfaces;
 using Application.LinxCommerce.Services;
+using Domain.LinxCommerce.CustomValidations.Customer;
+using Domain.LinxCommerce.CustomValidations.Order;
 using Domain.LinxCommerce.Interfaces.Api;
 using Domain.LinxCommerce.Interfaces.Repositorys;
-using Domain.LinxCommerce.Interfaces.Repositorys.Base;
-using Domain.LinxCommerce.Interfaces.Repositorys.Order;
-using Domain.LinxCommerce.Interfaces.Repositorys.SalesRepresentative;
-using Domain.LinxCommerce.Interfaces.Repositorys.SKU;
+using FluentValidation;
 using Infrastructure.LinxCommerce.Api;
 using Infrastructure.LinxCommerce.Repository;
-using Infrastructure.LinxCommerce.Repository.Base;
-using Infrastructure.LinxCommerce.Repositorys.Order;
-using Infrastructure.LinxCommerce.Repositorys.SalesRepresentative;
-using Infrastructure.LinxCommerce.Repositorys.SKU;
+using Infrastructure.LinxCommerce.Repositorys;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Infrastructure.LinxCommerce.DependencyInjection
@@ -27,6 +23,23 @@ namespace Infrastructure.LinxCommerce.DependencyInjection
                 client.BaseAddress = new Uri("https://misha.layer.core.dcg.com.br");
                 client.Timeout = new TimeSpan(0, 20, 0);
             });
+
+            services.AddValidatorsFromAssemblyContaining<PersonValidator>();
+            services.AddValidatorsFromAssemblyContaining<ContactValidator>();
+            services.AddValidatorsFromAssemblyContaining<EmailConfirmationValidator>();
+            services.AddValidatorsFromAssemblyContaining<GroupsValidator>();
+            services.AddValidatorsFromAssemblyContaining<PersonAddressValidator>();
+
+            services.AddValidatorsFromAssemblyContaining<OrderValidator>();
+            services.AddValidatorsFromAssemblyContaining<OrderTagValidator>();
+            services.AddValidatorsFromAssemblyContaining<OrderShipmentValidator>();
+            services.AddValidatorsFromAssemblyContaining<OrderPaymentMethodValidator>();
+            services.AddValidatorsFromAssemblyContaining<OrderPaymentInfoValidator>();
+            services.AddValidatorsFromAssemblyContaining<OrderItemValidator>();
+            services.AddValidatorsFromAssemblyContaining<OrderInvoiceValidator>();
+            services.AddValidatorsFromAssemblyContaining<OrderDiscountValidator>();
+            services.AddValidatorsFromAssemblyContaining<OrderDeliveryMethodValidator>();
+            services.AddValidatorsFromAssemblyContaining<OrderAddressValidator>();
 
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IOrderRepository, OrderRepository>();

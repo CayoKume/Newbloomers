@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.CustomValidations;
+﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,54 +9,37 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
     [Table("LinxConfiguracoesTributariasDetalhesSimplificado", Schema = "linx_microvix_erp")]
     public class LinxConfiguracoesTributariasDetalhesSimplificado
     {
-        [Column(TypeName = "datetime")]
         public DateTime? lastupdateon { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? id_config_tributaria_detalhe { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_config_tributaria { get; private set; }
 
-        [Column(TypeName = "varchar(10)")]
         [LengthValidation(length: 10, propertyName: "cod_natureza_operacao")]
         public string? cod_natureza_operacao { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_classe_fiscal { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_cst_icms_fiscal { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_csosn_fiscal { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_cfop_fiscal { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? ipi_credito { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? icms_credito { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? aliq_icms { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? perc_reducao_icms { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? aliquota_st { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? margem_st { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
         [NotMapped]

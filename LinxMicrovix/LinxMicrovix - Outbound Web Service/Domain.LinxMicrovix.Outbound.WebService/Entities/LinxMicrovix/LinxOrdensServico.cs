@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.CustomValidations;
+﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,49 +9,34 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
     [Table("LinxOrdensServico", Schema = "linx_microvix_erp")]
     public class LinxOrdensServico
     {
-        [Column(TypeName = "datetime")]
         public DateTime? lastupdateon { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? numero_os { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? empresa { get; private set; }
 
-        [Column(TypeName = "datetime")]
         public DateTime? data_os { get; private set; }
 
-        [Column(TypeName = "datetime")]
         public DateTime? data_envio_laboratorio { get; private set; }
 
-        [Column(TypeName = "char(1)")]
         [LengthValidation(length: 1, propertyName: "cancelado")]
         public string? cancelado { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_laboratorio { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_posicao_os_ramo_optico { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? compartilhar_hub_laboratorios { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? cod_cliente_os { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? cod_vendedor { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? numero_sequencial_antecipacao_financeira { get; private set; }
 
-        [Column(TypeName = "varchar(44)")]
         [LengthValidation(length: 44, propertyName: "chave_nfe_laboratorio")]
         public string? chave_nfe_laboratorio { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
         [NotMapped]

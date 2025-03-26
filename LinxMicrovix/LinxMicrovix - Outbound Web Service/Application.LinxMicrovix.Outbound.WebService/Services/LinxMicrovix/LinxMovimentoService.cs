@@ -1,8 +1,6 @@
 ﻿using Application.IntegrationsCore.Interfaces;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
-using Application.LinxMicrovix.Outbound.WebService.Interfaces.Cache.LinxMicrovix;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxMicrovix;
-using Application.LinxMicrovix.Outbound.WebService.Services.Cache.LinxMicrovix;
 using Domain.IntegrationsCore.Entities.Enums;
 using Domain.IntegrationsCore.Exceptions;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
@@ -21,7 +19,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
         private readonly ILinxMicrovixAzureSQLRepositoryBase<LinxMovimento> _linxMicrovixRepositoryBase;
         private readonly ILinxMovimentoRepository _linxMovimentoRepository;
-        private static List<LinxMovimento> _linxMovimentoCache { get; set; } = new List<LinxMovimento>();
+        private static List<string?> _linxMovimentoCache { get; set; } = new List<string?>();
 
         public LinxMovimentoService(
             IAPICall apiCall,
@@ -303,19 +301,15 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
 
                     if (_linxMovimentoCache.Count == 0)
                         _linxMovimentoCache = await _linxMovimentoRepository.GetRegistersExists(
-                            jobParameter: jobParameter, 
+                            jobParameter: jobParameter,
                             registros: listRecords
                                             .GroupBy(y => y.identificador)
                                             .Select(x => x.First())
                                             .ToList()
                         );
 
-                    var _listSomenteNovos = listRecords.Where(x => !_linxMovimentoCache.Any(y => 
-                        y.cnpj_emp == x.cnpj_emp &&
-                        y.documento == x.documento &&
-                        y.codigo_cliente == x.codigo_cliente &&
-                        y.cod_produto == x.cod_produto &&
-                        y.timestamp == x.timestamp
+                    var _listSomenteNovos = listRecords.Where(x => !_linxMovimentoCache.Any(y =>
+                        y == x.recordKey
                     )).ToList();
 
                     if (_listSomenteNovos.Count() > 0)
@@ -328,7 +322,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                             _logger.AddRecord(_listSomenteNovos[i].recordKey, _listSomenteNovos[i].recordXml);
                         }
 
-                        _linxMovimentoCache.AddRange(_listSomenteNovos);
+                        _linxMovimentoCache.AddRange(_listSomenteNovos.Select(x => x.recordKey));
 
                         _logger.AddMessage(
                             $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"

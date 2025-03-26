@@ -4,7 +4,6 @@ using Domain.IntegrationsCore.Exceptions;
 using Domain.LinxCommerce.Entities.Customer;
 using Domain.LinxCommerce.Entities.Parameters;
 using Domain.LinxCommerce.Interfaces.Repositorys;
-using Domain.LinxCommerce.Interfaces.Repositorys.Base;
 using Infrastructure.IntegrationsCore.Connections.SQLServer;
 using System.Data.SqlClient;
 
@@ -18,7 +17,7 @@ namespace Infrastructure.LinxCommerce.Repository
         public CustomerRepository(ILinxCommerceRepositoryBase linxCommerceRepositoryBase, ISQLServerConnection? sqlServerConnection) =>
             (_linxCommerceRepositoryBase, _sqlServerConnection) = (linxCommerceRepositoryBase, sqlServerConnection);
 
-        public bool BulkInsertIntoTableRaw(LinxCommerceJobParameter jobParameter, List<Person> records)
+        public bool BulkInsertIntoTableRaw(LinxCommerceJobParameter jobParameter, List<Person> records, Guid? parentExecutionGUID)
         {
             try
             {
@@ -29,31 +28,38 @@ namespace Infrastructure.LinxCommerce.Repository
 
                 for (int i = 0; i < records.Count(); i++)
                 {
-                    customerTable.Rows.Add(records[i].Surname, records[i].BirthDate, records[i].Gender, records[i].RG, records[i].Cpf,
-                        records[i].CreatedDate, records[i].CustomerID, records[i].CustomerStatusID, records[i].WebSiteID, records[i].Name,
-                        records[i].Email, records[i].CustomerHash, records[i].Password, records[i].CustomerType, records[i].Cnpj, records[i].TradingName,
-                        records[i].Groups.Count() > 0 ? String.Join(", ", records[i].Groups.Select(x => x.CustomerGroupID)) : null);
-
-                    if (records[i].Contact != null)
+                    try
                     {
-                        customerContactTable.Rows.Add(records[i].Contact.Phone, records[i].Contact.Phone2,
-                            records[i].Contact.CellPhone, records[i].Contact.Fax, records[i].CustomerID);
-                    }
+                        customerTable.Rows.Add(records[i].Surname, records[i].BirthDate, records[i].Gender, records[i].RG, records[i].Cpf,
+                                        records[i].CreatedDate, records[i].CustomerID, records[i].CustomerStatusID, records[i].WebSiteID, records[i].Name,
+                                        records[i].Email, records[i].CustomerHash, records[i].Password, records[i].CustomerType, records[i].Cnpj, records[i].TradingName,
+                                        records[i].Groups.Count() > 0 ? String.Join(", ", records[i].Groups.Select(x => x.CustomerGroupID)) : null);
 
-                    if (records[i].Address.Count() > 0)
-                    {
-                        for (int j = 0; j < records[i].Address.Count(); j++)
+                        if (records[i].Contact != null)
                         {
-                            customerAddressTable.Rows.Add(records[i].Address[j].ID, records[i].Address[j].Name, records[i].Address[j].ContactName,
-                                records[i].Address[j].PostalCode, records[i].Address[j].AddressLine, records[i].Address[j].City, records[i].Address[j].Neighbourhood,
-                                records[i].Address[j].Number, records[i].Address[j].State, records[i].Address[j].AddressNotes, records[i].Address[j].Landmark,
-                                records[i].Address[j].MainAddress, records[i].CustomerID);
+                            customerContactTable.Rows.Add(records[i].Contact.Phone, records[i].Contact.Phone2,
+                                records[i].Contact.CellPhone, records[i].Contact.Fax, records[i].Contact.CustomerID);
+                        }
+
+                        if (records[i].Address.Count() > 0)
+                        {
+                            for (int j = 0; j < records[i].Address.Count(); j++)
+                            {
+                                customerAddressTable.Rows.Add(records[i].Address[j].ID, records[i].Address[j].Name, records[i].Address[j].ContactName,
+                                    records[i].Address[j].PostalCode, records[i].Address[j].AddressLine, records[i].Address[j].City, records[i].Address[j].Neighbourhood,
+                                    records[i].Address[j].Number, records[i].Address[j].State, records[i].Address[j].AddressNotes, records[i].Address[j].Landmark,
+                                    records[i].Address[j].MainAddress, records[i].Address[j].CustomerID);
+                            }
+                        }
+
+                        if (records[i].EmailConfirmation != null)
+                        {
+                            customerEmailConfirmationTable.Rows.Add(records[i].EmailConfirmation.CustomerID, records[i].EmailConfirmation.Status, records[i].EmailConfirmation.ConfirmationDate);
                         }
                     }
-
-                    if (records[i].EmailConfirmation != null)
+                    catch (Exception)
                     {
-                        customerEmailConfirmationTable.Rows.Add(records[i].CustomerID, records[i].EmailConfirmation.Status, records[i].EmailConfirmation.ConfirmationDate);
+                        continue;
                     }
                 }
 
@@ -63,9 +69,9 @@ namespace Infrastructure.LinxCommerce.Repository
                         dataTableName: "Customer",
                         dataTable: customerTable,
                         dataTableRowsNumber: customerTable.Rows.Count
-                    );
+                );
 
-                //_linxCommerceRepositoryBase.CallDbProcMerge();
+                _linxCommerceRepositoryBase.CallDbProcMerge(jobParameter.schema, "Customer", parentExecutionGUID);
 
                 _linxCommerceRepositoryBase.BulkInsertIntoTableRaw(
                     jobName: jobParameter.jobName,
@@ -75,7 +81,7 @@ namespace Infrastructure.LinxCommerce.Repository
                     dataTableRowsNumber: customerEmailConfirmationTable.Rows.Count
                 );
 
-                //_linxCommerceRepositoryBase.CallDbProcMerge();
+                _linxCommerceRepositoryBase.CallDbProcMerge(jobParameter.schema, "CustomerEmailConfirmation", parentExecutionGUID);
 
                 _linxCommerceRepositoryBase.BulkInsertIntoTableRaw(
                     jobName: jobParameter.jobName,
@@ -85,7 +91,7 @@ namespace Infrastructure.LinxCommerce.Repository
                     dataTableRowsNumber: customerAddressTable.Rows.Count
                 );
 
-                //_linxCommerceRepositoryBase.CallDbProcMerge();
+                _linxCommerceRepositoryBase.CallDbProcMerge(jobParameter.schema, "CustomerAddress", parentExecutionGUID);
 
                 _linxCommerceRepositoryBase.BulkInsertIntoTableRaw(
                     jobName: jobParameter.jobName,
@@ -95,11 +101,11 @@ namespace Infrastructure.LinxCommerce.Repository
                     dataTableRowsNumber: customerContactTable.Rows.Count
                 );
 
-                //_linxCommerceRepositoryBase.CallDbProcMerge();
+                _linxCommerceRepositoryBase.CallDbProcMerge(jobParameter.schema, "CustomerContact", parentExecutionGUID);
 
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
                 throw;
             }
@@ -217,6 +223,61 @@ namespace Infrastructure.LinxCommerce.Repository
                     message: $"Error when trying to get records that already exist in trusted table",
                     exceptionMessage: ex.Message
                 );
+            }
+        }
+
+        public async Task<bool> InsertRecord(LinxCommerceJobParameter jobParameter, Person registro, Guid? parentExecutionGUID)
+        {
+            try
+            {
+                string? sql = @$"INSERT INTO [untreated].[Customer]
+                            ([Surname],[BirthDate],[Gender],[RG],[Cpf],[CreatedDate],[CustomerID],[CustomerStatusID],[WebSiteID],[Name],[Email],[CustomerHash],[Password],
+                             [CustomerType],[Cnpj],[TradingName],[CustomerGroupID])
+                            Values
+                            (@Surname, @BirthDate, @Gender, @RG, @Cpf, @CreatedDate, @CustomerID,@CustomerStatusID,@WebSiteID,@Name,@Email,@CustomerHash,
+                             @Password,@CustomerType,@Cnpj,@TradingName,@CustomerGroupID)";
+
+                await _linxCommerceRepositoryBase.InsertRecord(jobParameter, sql: sql, record: registro);
+
+                string? _sql = @$"INSERT INTO [untreated].[CustomerEmailConfirmation]
+                            ([Status],[ConfirmationDate],[CustomerID])
+                            Values
+                            (@Status, @ConfirmationDate, @CustomerID)";
+
+                await _linxCommerceRepositoryBase.InsertRecord(jobParameter, sql: _sql, record: registro.EmailConfirmation);
+
+                foreach (var address in registro.Address)
+                {
+                    string? __sql = @$"INSERT INTO [untreated].[CustomerAddress]
+                            ([ID], [Name],[ContactName],[PostalCode],[AddressLine],[City],[Neighbourhood],[Number],[State],[AddressNotes],[Landmark],[MainAddress],[CustomerID])
+                            Values
+                            (@ID, @Name, @ContactName, @PostalCode, @AddressLine, @City, @Neighbourhood, @Number, @State, @AddressNotes, @Landmark, @MainAddress, @CustomerID)";
+
+                    await _linxCommerceRepositoryBase.InsertRecord(jobParameter, sql: __sql, record: address);
+                }
+
+                string? ___sql = @$"INSERT INTO [untreated].[CustomerContact]
+                            ([Phone],[Phone2],[CellPhone],[Fax],[CustomerID])
+                            Values
+                            (@Phone, @Phone2, @CellPhone, @Fax, @CustomerID)";
+
+                await _linxCommerceRepositoryBase.InsertRecord(jobParameter, sql: ___sql, record: registro.Contact);
+
+                foreach (var group in registro.Groups)
+                {
+                    string? __sql = @$"INSERT INTO [untreated].[CustomerGroup]
+                            ([CustomerGroupID],[Title])
+                            Values
+                            (@CustomerGroupID, @Title)";
+
+                    await _linxCommerceRepositoryBase.InsertRecord(jobParameter, sql: __sql, record: group);
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw;
             }
         }
     }

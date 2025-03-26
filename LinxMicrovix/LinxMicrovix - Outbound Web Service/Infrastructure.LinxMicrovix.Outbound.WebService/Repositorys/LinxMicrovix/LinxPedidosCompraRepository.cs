@@ -42,7 +42,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             }
         }
 
-        public async Task<List<LinxPedidosCompra>> GetRegistersExists(LinxAPIParam jobParameter, List<int?> registros)
+        public async Task<List<string?>> GetRegistersExists(LinxAPIParam jobParameter, List<int?> registros)
         {
             try
             {
@@ -50,7 +50,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
                 if (indice > 0)
                 {
-                    var list = new List<LinxPedidosCompra>();
+                    var list = new List<string>();
 
                     for (int i = 0; i <= indice; i++)
                     {
@@ -66,8 +66,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
                         }
 
-                        string sql = $"SELECT cnpj_emp, cod_pedido, cod_produto, TIMESTAMP FROM [linx_microvix_erp].[LinxPedidosCompra] WHERE cod_pedido IN ({identificadores})";
-                        var result = await _linxMicrovixRepositoryBase.GetRegistersExists(sql);
+                        string sql = $"SELECT CONCAT('[', CNPJ_EMP, ']', '|', '[', COD_PEDIDO, ']', '|', '[', CODIGO_FORNECEDOR, ']', '|', '[', COD_PRODUTO, ']', '|',  '[', [TIMESTAMP], ']') FROM [linx_microvix_erp].[LinxPedidosCompra] WHERE COD_PEDIDO IN ({identificadores})";
+                        var result = await _linxMicrovixRepositoryBase.GetKeyRegistersAlreadyExists(sql);
                         list.AddRange(result);
                     }
 
@@ -75,7 +75,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
                 }
                 else
                 {
-                    var list = new List<LinxPedidosCompra>();
+                    var list = new List<string>();
                     string identificadores = String.Empty;
 
                     for (int i = 0; i < registros.Count(); i++)
@@ -87,8 +87,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
                             identificadores += $"'{registros[i]}', ";
                     }
 
-                    string sql = $"SELECT cnpj_emp, cod_pedido, cod_produto, TIMESTAMP FROM [linx_microvix_erp].[LinxPedidosCompra] WHERE cod_pedido IN ({identificadores})";
-                    var result = await _linxMicrovixRepositoryBase.GetRegistersExists(sql);
+                    string sql = $"SELECT CONCAT('[', CNPJ_EMP, ']', '|', '[', COD_PEDIDO, ']', '|', '[', CODIGO_FORNECEDOR, ']', '|', '[', COD_PRODUTO, ']', '|',  '[', [TIMESTAMP], ']') FROM [linx_microvix_erp].[LinxPedidosCompra] WHERE COD_PEDIDO IN ({identificadores})";
+                    var result = await _linxMicrovixRepositoryBase.GetKeyRegistersAlreadyExists(sql);
                     list.AddRange(result);
 
                     return list;

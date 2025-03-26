@@ -1,8 +1,6 @@
 ﻿using Application.IntegrationsCore.Interfaces;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
-using Application.LinxMicrovix.Outbound.WebService.Interfaces.Cache.LinxMicrovix;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxMicrovix;
-using Application.LinxMicrovix.Outbound.WebService.Services.Cache.LinxMicrovix;
 using Domain.IntegrationsCore.Entities.Enums;
 using Domain.IntegrationsCore.Exceptions;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
@@ -21,7 +19,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
         private readonly ILinxMicrovixAzureSQLRepositoryBase<LinxMovimentoCartoes> _linxMicrovixRepositoryBase;
         private readonly ILinxMovimentoCartoesRepository _linxMovimentoCartoesRepository;
-        private static List<LinxMovimentoCartoes> _linxMovimentoCartoesCache { get; set; } = new List<LinxMovimentoCartoes>();
+        private static List<string?> _linxMovimentoCartoesCache { get; set; } = new List<string?>();
 
         public LinxMovimentoCartoesService(
             IAPICall apiCall,
@@ -203,7 +201,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                     );
 
                     var body = _linxMicrovixServiceBase.BuildBodyRequest(
-                        parametersList: parameters.Replace("[0]", timestamp).Replace("[data_inicial]", $"{DateTime.Today.AddDays(-14).ToString("yyyy-MM-dd")}").Replace("[data_fim]", $"{DateTime.Today.ToString("yyyy-MM-dd")}"),
+                        parametersList: parameters.Replace("[0]", timestamp).Replace("[data_inicial]", $"{DateTime.Today.AddDays(-2).ToString("yyyy-MM-dd")}").Replace("[data_fim]", $"{DateTime.Today.ToString("yyyy-MM-dd")}"),
                         jobParameter: jobParameter,
                         cnpj_emp: cnpj_emp.doc_company
                     );
@@ -221,11 +219,13 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                         _linxMovimentoCartoesCache = await _linxMovimentoCartoesRepository.GetRegistersExists(
                             jobParameter: jobParameter, 
                             registros: listRecords
+                                        .GroupBy(y => y.identificador)
+                                        .Select(x => x.First())
+                                        .ToList()
                         );
 
                     var _listSomenteNovos = listRecords.Where(x => !_linxMovimentoCartoesCache.Any(y => 
-                        y.identificador == x.identificador &&
-                        y.timestamp == x.timestamp
+                        y == x.recordKey
                     )).ToList();
 
                     if (_listSomenteNovos.Count() > 0)
@@ -238,7 +238,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                             _logger.AddRecord(_listSomenteNovos[i].recordKey, _listSomenteNovos[i].recordXml);
                         }
 
-                        _linxMovimentoCartoesCache.AddRange(_listSomenteNovos);
+                        _linxMovimentoCartoesCache.AddRange(_listSomenteNovos.Select(x => x.recordKey));
 
                         _logger.AddMessage(
                             $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"

@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.CustomValidations;
+﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,157 +9,107 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
     [Table("LinxPedidosVenda", Schema = "linx_microvix_erp")]
     public class LinxPedidosVenda
     {
-        [Column(TypeName = "datetime")]
         public DateTime? lastupdateon { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
-        [Key]
-        [Column(TypeName = "varchar(14)")]
         [LengthValidation(length: 14, propertyName: "cnpj_emp")]
         public string? cnpj_emp { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? cod_pedido { get; private set; }
 
-        [Column(TypeName = "datetime")]
         public DateTime? data_lancamento { get; private set; }
 
-        [Column(TypeName = "char(5)")]
         [LengthValidation(length: 5, propertyName: "hora_lancamento")]
         public string? hora_lancamento { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? transacao { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? usuario { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? codigo_cliente { get; private set; }
 
-        [Key]
-        [Column(TypeName = "bigint")]
         public Int64? cod_produto { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? quantidade { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? valor_unitario { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? cod_vendedor { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? valor_frete { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? valor_total { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? desconto_item { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? cod_plano_pagamento { get; private set; }
 
-        [Column(TypeName = "varchar(35)")]
         [LengthValidation(length: 35, propertyName: "plano_pagamento")]
         public string? plano_pagamento { get; private set; }
 
-        [Column(TypeName = "varchar(max)")]
         public string? obs { get; private set; }
 
-        [Column(TypeName = "char(1)")]
         [LengthValidation(length: 1, propertyName: "aprovado")]
         public string? aprovado { get; private set; }
 
-        [Column(TypeName = "char(1)")]
         [LengthValidation(length: 1, propertyName: "cancelado {")]
         public string? cancelado { get; private set; }
 
-        [Column(TypeName = "datetime")]
         public DateTime? data_aprovacao { get; private set; }
 
-        [Column(TypeName = "datetime")]
         public DateTime? data_alteracao { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? tipo_frete { get; private set; }
 
-        [Column(TypeName = "varchar(60)")]
         [LengthValidation(length: 60, propertyName: "natureza_operacao")]
         public string? natureza_operacao { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? tabela_preco { get; private set; }
 
-        [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "nome_tabela_preco")]
         public string? nome_tabela_preco { get; private set; }
 
-        [Column(TypeName = "datetime")]
         public DateTime? previsao_entrega { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? realizado_por { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? pontuacao_ser { get; private set; }
 
-        [Column(TypeName = "char(1)")]
         [LengthValidation(length: 1, propertyName: "venda_externa")]
         public string? venda_externa { get; private set; }
 
-        [Column(TypeName = "varchar(max)")]
         public string? nf_gerada { get; private set; }
 
-        [Column(TypeName = "char(1)")]
         [LengthValidation(length: 1, propertyName: "status")]
         public string? status { get; private set; }
 
-        [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "numero_projeto_officina")]
         public string? numero_projeto_officina { get; private set; }
 
-        [Column(TypeName = "char(10)")]
         [LengthValidation(length: 10, propertyName: "cod_natureza_operacao")]
         public string? cod_natureza_operacao { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? margem_contribuicao { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? doc_origem { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? posicao_item { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? orcamento_origem { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? transacao_origem { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? desconto { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? transacao_ws { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? empresa { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? transportador { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? deposito { get; private set; }
 
         [NotMapped]

@@ -1,7 +1,5 @@
 ﻿using Application.IntegrationsCore.Interfaces;
-using Application.LinxMicrovix.Outbound.WebService.Entities.Cache.LinxCommerce;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
-using Application.LinxMicrovix.Outbound.WebService.Interfaces.Cache.LinxCommerce;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxCommerce;
 using Dapper;
 using Domain.IntegrationsCore.Entities.Enums;
@@ -22,7 +20,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
         private readonly ILinxMicrovixAzureSQLRepositoryBase<B2CConsultaStatus> _linxMicrovixRepositoryBase;
         private readonly IB2CConsultaStatusRepository _b2cConsultaStatusRepository;
-        private static List<B2CConsultaStatus> _b2cConsultaStatusCache { get; set; } = new List<B2CConsultaStatus>();
+        private static List<string?> _b2cConsultaStatusCache { get; set; } = new List<string?>();
 
         public B2CConsultaStatusService(
             IAPICall apiCall,
@@ -126,11 +124,12 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                         _b2cConsultaStatusCache = await _b2cConsultaStatusRepository.GetRegistersExists(
                             jobParameter: jobParameter, 
                             registros: listRecords
+                                        .Select(x => x.id_status)
+                                        .ToList()
                         );
 
                     var _listSomenteNovos = listRecords.Where(x => !_b2cConsultaStatusCache.Any(y => 
-                        y.id_status == x.id_status && 
-                        y.timestamp == x.timestamp
+                        y == x.recordKey
                     )).ToList();
 
                     if (_listSomenteNovos.Count() > 0)
@@ -142,7 +141,8 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                         {
                             _logger.AddRecord(_listSomenteNovos[i].recordKey, _listSomenteNovos[i].recordXml);
                         }
-                        _b2cConsultaStatusCache.AddRange(_listSomenteNovos);
+
+                        _b2cConsultaStatusCache.AddRange(_listSomenteNovos.Select(x => x.recordKey));
 
                         _logger.AddMessage(
                             $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"

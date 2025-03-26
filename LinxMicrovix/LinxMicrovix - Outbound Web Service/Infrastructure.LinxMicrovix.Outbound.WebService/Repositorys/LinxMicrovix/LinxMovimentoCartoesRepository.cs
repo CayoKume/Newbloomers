@@ -40,7 +40,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             }
         }
 
-        public async Task<List<LinxMovimentoCartoes>> GetRegistersExists(LinxAPIParam jobParameter, List<LinxMovimentoCartoes> registros)
+        public async Task<List<string?>> GetRegistersExists(LinxAPIParam jobParameter, List<LinxMovimentoCartoes?> registros)
         {
             try
             {
@@ -53,9 +53,9 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
                         identificadores += $"'{registros[i].identificador}', ";
                 }
 
-                string sql = $"SELECT identificador, cnpj_emp, cupomfiscal, cod_autorizacao, TIMESTAMP FROM [linx_microvix_erp].[LinxMovimentoCartoes] WHERE identificador IN ({identificadores})";
+                string sql = $"SELECT CONCAT('[', CNPJ_EMP, ']', '|', '[', CUPOMFISCAL, ']', '|', '[', COD_AUTORIZACAO, ']', '|', '[', IDENTIFICADOR, ']', '|', '[', [TIMESTAMP], ']') FROM [linx_microvix_erp].[LinxMovimentoCartoes] WHERE identificador IN ({identificadores})";
 
-                return await _linxMicrovixRepositoryBase.GetRegistersExists(sql);
+                return await _linxMicrovixRepositoryBase.GetKeyRegistersAlreadyExists(sql);
             }
             catch (Exception ex) when (ex is not InternalException && ex is not SQLCommandException)
             {

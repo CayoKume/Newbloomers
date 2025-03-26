@@ -260,6 +260,90 @@ namespace AzureJobs.RecurringJobs
                             .Get<List<LinxMethods>>();
         }
 
+        //public async Task B2CConsultaPedidos([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    try
+        //    {
+        //        var method = _methods
+        //            .Where(m => m.MethodName == "B2CConsultaPedidos")
+        //        .FirstOrDefault();
+
+        //        var result = await _b2cConsultaPedidosService.GetRecords(
+        //            _linxMicrovixJobParameter.SetParameters(
+        //                jobName: method.MethodName,
+        //                tableName: method.MethodName
+        //            )
+        //        );
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw;
+        //    }
+        //}
+
+        //public async Task B2CConsultaPedidosIdentificador([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    try
+        //    {
+        //        var method = _methods
+        //            .Where(m => m.MethodName == "B2CConsultaPedidosIdentificador")
+        //        .FirstOrDefault();
+
+        //        var result = await _b2cConsultaPedidosIdentificadorService.GetRecords(
+        //            _linxMicrovixJobParameter.SetParameters(
+        //                jobName: method.MethodName,
+        //                tableName: method.MethodName
+        //            )
+        //        );
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw;
+        //    }
+        //}
+
+        //public async Task B2CConsultaPedidosItens([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    try
+        //    {
+        //        var method = _methods
+        //            .Where(m => m.MethodName == "B2CConsultaPedidosItens")
+        //        .FirstOrDefault();
+
+        //        var result = await _b2cConsultaPedidosItensService.GetRecords(
+        //            _linxMicrovixJobParameter.SetParameters(
+        //                jobName: method.MethodName,
+        //                tableName: method.MethodName
+        //            )
+        //        );
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw;
+        //    }
+        //}
+
+        //public async Task B2CConsultaPedidosStatus([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    try
+        //    {
+        //        var method = _methods
+        //            .Where(m => m.MethodName == "B2CConsultaPedidosStatus")
+        //        .FirstOrDefault();
+
+        //        var result = await _b2cConsultaPedidosStatusService.GetRecords(
+        //            _linxMicrovixJobParameter.SetParameters(
+        //                jobName: method.MethodName,
+        //                tableName: method.MethodName
+        //            )
+        //        );
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw;
+        //    }
+        //}
+
         //public async Task B2CConsultaClientes([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
         //{
         //    try
@@ -269,6 +353,27 @@ namespace AzureJobs.RecurringJobs
         //        .FirstOrDefault();
 
         //        var result = await _b2cConsultaClientesService.GetRecords(
+        //            _linxMicrovixJobParameter.SetParameters(
+        //                jobName: method.MethodName,
+        //                tableName: method.MethodName
+        //            )
+        //        );
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw;
+        //    }
+        //}
+
+        //public async Task B2CConsultaClientesEnderecosEntrega([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    try
+        //    {
+        //        var method = _methods
+        //            .Where(m => m.MethodName == "B2CConsultaClientesEnderecosEntrega")
+        //        .FirstOrDefault();
+
+        //        var result = await _b2cConsultaClientesEnderecosEntregaService.GetRecords(
         //            _linxMicrovixJobParameter.SetParameters(
         //                jobName: method.MethodName,
         //                tableName: method.MethodName

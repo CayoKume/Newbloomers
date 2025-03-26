@@ -1,5 +1,5 @@
 ﻿
-using Domain.IntegrationsCore.CustomValidations;
+using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -10,47 +10,34 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
     [Table("LinxClientesFornecContatos", Schema = "linx_microvix_erp")]
     public class LinxClientesFornecContatos
     {
-        [Column(TypeName = "datetime")]
         public DateTime? lastupdateon { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32 portal { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32 cod_cliente { get; private set; }
 
-        [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "nome_contato")]
         public string? nome_contato { get; private set; }
 
-        [Column(TypeName = "char(1)")]
         [LengthValidation(length: 1, propertyName: "sexo_contato")]
         public string? sexo_contato { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32 contatos_clientes_parentesco { get; private set; }
 
-        [Column(TypeName = "varchar(20)")]
         [LengthValidation(length: 20, propertyName: "fone1_contato")]
         public string? fone1_contato { get; private set; }
 
-        [Column(TypeName = "varchar(20)")]
         [LengthValidation(length: 20, propertyName: "fone2_contato")]
         public string? fone2_contato { get; private set; }
 
-        [Column(TypeName = "varchar(20)")]
         [LengthValidation(length: 20, propertyName: "celular_contato")]
         public string? celular_contato { get; private set; }
 
-        [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "email_contato")]
         public string? email_contato { get; private set; }
 
-        [Column(TypeName = "datetime")]
         public DateTime data_nasc_contato { get; private set; }
 
-        [Column(TypeName = "varchar(20)")]
         [LengthValidation(length: 20, propertyName: "tipo_contato")]
         public string? tipo_contato { get; private set; }
 

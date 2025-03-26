@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.CustomValidations;
+﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,335 +9,232 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
     [Table("LinxConfiguracoesTributariasDetalhes", Schema = "linx_microvix_erp")]
     public class LinxConfiguracoesTributariasDetalhes
     {
-        [Column(TypeName = "datetime")]
         public DateTime? lastupdateon { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
-        [Column(TypeName = "varchar(14)")]
         [LengthValidation(length: 14, propertyName: "cnpj_emp")]
         public string? cnpj_emp { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? id_config_tributaria { get; private set; }
 
-        [Column(TypeName = "varchar(150)")]
         [LengthValidation(length: 150, propertyName: "desc_classe_fiscal")]
         public string? desc_classe_fiscal { get; private set; }
 
-        [Column(TypeName = "char(10)")]
         [LengthValidation(length: 10, propertyName: "cod_natureza_operacao")]
         public string? cod_natureza_operacao { get; private set; }
 
-        [Column(TypeName = "varchar(60)")]
         [LengthValidation(length: 60, propertyName: "desc_natureza_operacao")]
         public string? desc_natureza_operacao { get; private set; }
 
-        [Column(TypeName = "varchar(5)")]
         [LengthValidation(length: 5, propertyName: "cfop_fiscal")]
         public string? cfop_fiscal { get; private set; }
 
-        [Column(TypeName = "varchar(300)")]
         [LengthValidation(length: 300, propertyName: "desc_cfop_fiscal")]
         public string? desc_cfop_fiscal { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? aliq_icms { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? valor_tributado_icms { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? aliq_pis { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? aliq_cofins { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? perc_reducao_icms { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? perc_reducao_icms_st { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? margem_st { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? aliquota_st { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? margem_st_simulador { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? aliquota_st_simulador { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? desconto_icms { get; private set; }
 
-        [Column(TypeName = "varchar(4)")]
         [LengthValidation(length: 4, propertyName: "cst_icms_fiscal")]
         public string? cst_icms_fiscal { get; private set; }
 
-        [Column(TypeName = "varchar(150)")]
         [LengthValidation(length: 150, propertyName: "desc_cst_icms_fiscal")]
         public string? desc_cst_icms_fiscal { get; private set; }
 
-        [Column(TypeName = "varchar(4)")]
         [LengthValidation(length: 4, propertyName: "cst_ipi_fiscal")]
         public string? cst_ipi_fiscal { get; private set; }
 
-        [Column(TypeName = "varchar(150)")]
         [LengthValidation(length: 150, propertyName: "desc_cst_ipi_fiscal")]
         public string? desc_cst_ipi_fiscal { get; private set; }
 
-        [Column(TypeName = "varchar(4)")]
         [LengthValidation(length: 4, propertyName: "cst_pis_fiscal")]
         public string? cst_pis_fiscal { get; private set; }
 
-        [Column(TypeName = "varchar(150)")]
         [LengthValidation(length: 150, propertyName: "desc_cst_pis_fiscal")]
         public string? desc_cst_pis_fiscal { get; private set; }
 
-        [Column(TypeName = "varchar(4)")]
         [LengthValidation(length: 4, propertyName: "cst_cofins_fiscal")]
         public string? cst_cofins_fiscal { get; private set; }
 
-        [Column(TypeName = "varchar(150)")]
         [LengthValidation(length: 150, propertyName: "desc_cst_cofins_fiscal")]
         public string? desc_cst_cofins_fiscal { get; private set; }
 
-        [Column(TypeName = "varchar(250)")]
         [LengthValidation(length: 250, propertyName: "desc_obs_padrao")]
         public string? desc_obs_padrao { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? icms_credito { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? ipi_credito { get; private set; }
 
-        [Column(TypeName = "char(3)")]
         [LengthValidation(length: 3, propertyName: "cod_enquadramento_ipi")]
         public string? cod_enquadramento_ipi { get; private set; }
 
-        [Column(TypeName = "varchar(600)")]
         [LengthValidation(length: 600, propertyName: "desc_enquadramento_ipi")]
         public string? desc_enquadramento_ipi { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? perc_aliquota_interna_uf_destinatario { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? perc_aliquota_interestadual_uf_envolvidas { get; private set; }
 
-        [Column(TypeName = "varchar(5)")]
         [LengthValidation(length: 5, propertyName: "csosn_fiscal")]
         public string? csosn_fiscal { get; private set; }
 
-        [Column(TypeName = "varchar(200)")]
         [LengthValidation(length: 200, propertyName: "desc_csosn_fiscal")]
         public string? desc_csosn_fiscal { get; private set; }
 
-        [Column(TypeName = "varchar(10)")]
         [LengthValidation(length: 10, propertyName: "forma_tributacao_pis")]
         public string? forma_tributacao_pis { get; private set; }
 
-        [Column(TypeName = "varchar(10)")]
         [LengthValidation(length: 10, propertyName: "forma_tributacao_cofins")]
         public string? forma_tributacao_cofins { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_ramo_atividade { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? empresa { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? usa_base_icms_para_calculo_st { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_classe_fiscal { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_cfop_fiscal { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_cst_icms_fiscal { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_cst_ipi_fiscal { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_cst_pis_fiscal { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_cst_cofins_fiscal { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_obs { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? tributado { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? retido { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? icms_base_naotributado { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? ipi_base_naotributado { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_csosn_fiscal { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? somar_icms_st { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_sped_tipo_base_credito { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? aliq_pis_servico { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? aliq_cofins_servico { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_cst_pis_fiscal_servico { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_cst_cofins_fiscal_servico { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? csrf { get; private set; }
 
-        [Column(TypeName = "varchar(4)")]
         [LengthValidation(length: 4, propertyName: "codigo_retencao_csrf")]
         public string? codigo_retencao_csrf { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? aliq_pis_csrf { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? aliq_cofins_csrf { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? aliq_csll_csrf { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_sped_tipo_base_credito_servico { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? receita { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? fci_informa_parcela_importada { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? fci_informa_numero { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? fci_informa_conteudo_importacao { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? fci_informa_valor_importacao { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? iss_tipo_tributacao { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? icms_st_antecipado_margem { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? icms_st_antecipado_aliquota { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? icms_st_antecipado_percentual_reducao { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? icms_st_antecipado_valor_integra_custo_medio { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_enquadramento_ipi { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? usa_regime_estimativa_simplifica { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? aliq_carga_tributaria_media { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? fcp_integra_custo_medio { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? aliq_fcp { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? fcp_credito { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? fcp_reducao_icms { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? aliq_icms_efetivo { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? perc_reducao_icms_efetivo { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? icms_fcp_st_antecipado_aliquota { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? difal_base_dupla { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? aliq_desoneracao_icms { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? aliq_desoneracao_fcp { get; private set; }
 
-        [Column(TypeName = "varchar(10)")]
         [LengthValidation(length: 10, propertyName: "cod_beneficio_fiscal")]
         public string? cod_beneficio_fiscal { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_motivo_desoneracao_icms { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? deduzir_icms_custo { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? deduzir_icms_desonerado { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? somar_ipi_base_difal_fcp { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? tipo_base_dupla { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? utiliza_lucro_base_icms { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? utiliza_lucro_base_pis { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? utiliza_lucro_base_cofins { get; private set; }
 
-        [Column(TypeName = "varchar(100)")]
         [LengthValidation(length: 100, propertyName: "codigo_ws")]
         public string? codigo_ws { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? aliquota_diferimento_icms { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? aliquota_diferimento_fcp { get; private set; }
 
         [NotMapped]

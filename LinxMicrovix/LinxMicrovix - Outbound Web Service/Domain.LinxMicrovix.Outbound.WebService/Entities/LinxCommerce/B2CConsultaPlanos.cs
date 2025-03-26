@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.CustomValidations;
+﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,41 +9,29 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
     [Table("B2CConsultaPlanos", Schema = "linx_microvix_commerce")]
     public class B2CConsultaPlanos
     {
-        [Column(TypeName = "datetime")]
         public DateTime? lastupdateon { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? plano { get; private set; }
 
-        [Column(TypeName = "varchar(30)")]
         [LengthValidation(length: 30, propertyName: "nome_plano")]
         public string? nome_plano { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? forma_pagamento { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? qtde_parcelas { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? valor_minimo_parcela { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? indice { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
-        [Column(TypeName = "char(1)")]
         [LengthValidation(length: 1, propertyName: "desativado")]
         public string? desativado { get; private set; }
 
-        [Column(TypeName = "char(1)")]
         [LengthValidation(length: 1, propertyName: "tipo_plano")]
         public string? tipo_plano { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
         [NotMapped]

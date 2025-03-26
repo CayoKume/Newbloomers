@@ -13,11 +13,13 @@ namespace AzureJobs.RecurringJobs
 
         private readonly ISalesRepresentativeService _salesRepresentativeService;
         private readonly IOrderService _orderService;
+        private readonly ICustomerService _customerService;
         private readonly ISKUService _skuService;
 
         public LinxCommerce(
             IConfiguration configuration,
             IOrderService orderService,
+            ICustomerService customerService,
             ISalesRepresentativeService salesRepresentativeService,
             ISKUService skuService
         )
@@ -25,6 +27,7 @@ namespace AzureJobs.RecurringJobs
             _configuration = configuration;
             _skuService = skuService;
             _orderService = orderService;
+            _customerService = customerService;
             _salesRepresentativeService = salesRepresentativeService;
 
             _linxCommerceJobParameter = new LinxCommerceJobParameter(
@@ -99,5 +102,26 @@ namespace AzureJobs.RecurringJobs
         //        throw;
         //    }
         //}
+
+        public async Task SearchCustomerByQueue([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        {
+            try
+            {
+                var method = _methods
+                    .Where(m => m.MethodName == "SearchCustomer")
+                    .FirstOrDefault();
+
+                var result = await _customerService.SearchCustomerByQueue(
+                    _linxCommerceJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
+                );
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
     }
 }

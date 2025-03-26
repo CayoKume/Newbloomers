@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.CustomValidations;
+﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,43 +9,31 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
     [Table("LinxListaDaVez", Schema = "linx_microvix_erp")]
     public class LinxListaDaVez
     {
-        [Column(TypeName = "datetime")]
         public DateTime? lastupdateon { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
-        [Column(TypeName = "varchar(14)")]
         [LengthValidation(length: 14, propertyName: "cnpj_emp")]
         public string? cnpj_emp { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? cod_vendedor { get; private set; }
 
-        [Column(TypeName = "datetime")]
         public DateTime? data { get; private set; }
 
-        [Column(TypeName = "varchar(103)")]
         [LengthValidation(length: 103, propertyName: "motivo_nao_venda")]
         public string? motivo_nao_venda { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? qtde_ocorrencias { get; private set; }
 
-        [Column(TypeName = "datetime")]
         public DateTime? data_hora_ini_atend { get; private set; }
 
-        [Column(TypeName = "datetime")]
         public DateTime? data_hora_fim_atend { get; private set; }
 
-        [Column(TypeName = "varchar(max)")]
         public string? obs { get; private set; }
 
-        [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "desc_produto_neg")]
         public string? desc_produto_neg { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? valor_produto_neg { get; private set; }
 
         [NotMapped]

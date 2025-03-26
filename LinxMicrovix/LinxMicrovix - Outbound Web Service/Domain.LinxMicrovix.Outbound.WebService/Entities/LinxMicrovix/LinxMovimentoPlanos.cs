@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.CustomValidations;
+﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,59 +9,40 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
     [Table("LinxMovimentoPlanos", Schema = "linx_microvix_erp")]
     public class LinxMovimentoPlanos
     {
-        [Column(TypeName = "datetime")]
         public DateTime? lastupdateon { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
-        [Key]
-        [Column(TypeName = "varchar(14)")]
         [LengthValidation(length: 14, propertyName: "cnpj_emp")]
         public string? cnpj_emp { get; private set; }
 
-        [Key]
-        [Column(TypeName = "uniqueidentifier")]
         public Guid? identificador { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? plano { get; private set; }
 
-        [Column(TypeName = "varchar(35)")]
         [LengthValidation(length: 35, propertyName: "desc_plano")]
         public string? desc_plano { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? total { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? qtde_parcelas { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? indice_plano { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? cod_forma_pgto { get; private set; }
 
-        [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "forma_pgto")]
         public string? forma_pgto { get; private set; }
 
-        [Column(TypeName = "char(1)")]
         [LengthValidation(length: 1, propertyName: "tipo_transacao")]
         public string? tipo_transacao { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? taxa_financeira { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? ordem_cartao { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? empresa { get; private set; }
 
         [NotMapped]

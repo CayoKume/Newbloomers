@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.CustomValidations;
+﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,42 +9,29 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
     [Table("LinxFidelidade", Schema = "linx_microvix_erp")]
     public class LinxFidelidade
     {
-        [Column(TypeName = "datetime")]
         public DateTime? lastupdateon { get; private set; }
 
-
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
-        [Column(TypeName = "varchar(14)")]
         [LengthValidation(length: 14, propertyName: "cnpj_emp")]
         public string? cnpj_emp { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? id_fidelidade_parceiro_log { get; private set; }
 
-        [Column(TypeName = "int")]
         public DateTime? data_transacao { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? operacao { get; private set; }
 
-        [Column(TypeName = "varchar(4)")]
         [LengthValidation(length: 4, propertyName: "aprovado_barramento")]
         public string? aprovado_barramento { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? valor_monetario { get; private set; }
 
-        [Column(TypeName = "varchar(100)")]
         [LengthValidation(length: 100, propertyName: "numero_cartao")]
         public string? numero_cartao { get; private set; }
 
-        [Column(TypeName = "uniqueidentifier")]
         public Guid? identificador_movimento { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
         [NotMapped]

@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.CustomValidations;
+﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -8,55 +8,39 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
     [Table("LinxConfiguracoesTributarias", Schema = "linx_microvix_erp")]
     public class LinxConfiguracoesTributarias
     {
-        [Column(TypeName = "datetime")]
         public DateTime? lastupdateon { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
-        [Column(TypeName = "varchar(14)")]
         [LengthValidation(length: 14, propertyName: "cnpj_emp")]
         public string? cnpj_emp { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_config_tributaria { get; private set; }
 
-        [Column(TypeName = "varchar(100)")]
         [LengthValidation(length: 100, propertyName: "desc_config_tributaria")]
         public string? desc_config_tributaria { get; private set; }
 
-        [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "sigla_config_tributaria")]
         public string? sigla_config_tributaria { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? ativa { get; private set; }
 
-        [Column(TypeName = "varchar(2)")]
         [LengthValidation(length: 2, propertyName: "uf")]
         public string? uf { get; private set; }
 
-        [Column(TypeName = "char(1)")]
         [LengthValidation(length: 1, propertyName: "sistema_tributacao")]
         public string? sistema_tributacao { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? tipo_atividade { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_origem_mercadoria { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? utiliza_uso_consumo { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_classificacao_cest_produto { get; private set; }
 
-        [Column(TypeName = "varchar(50)")]
         [LengthValidation(length: 50, propertyName: "codigo_ws")]
         public string? codigo_ws { get; private set; }
 

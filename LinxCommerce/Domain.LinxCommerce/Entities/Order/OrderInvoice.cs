@@ -20,34 +20,27 @@
         public DateTime? CreatedAt { get; set; }
         public Guid? OrderID { get; set; }
 
-        public static bool operator ==(OrderInvoice a, OrderInvoice b)
+        public OrderInvoice() { }
+
+        public OrderInvoice(OrderInvoice orderInvoice, Guid? orderID)
         {
-            if (a is not null && b is not null)
-                return 
-                    a.OrderInvoiceID == b.OrderInvoiceID && 
-                    a.Code == b.Code && 
-                    a.Url == b.Url && 
-                    a.FulfillmentID == b.FulfillmentID && 
-                    a.IsIssued == b.IsIssued && 
-                    a.Series == b.Series && 
-                    a.Number == b.Number && 
-                    a.CFOP == b.CFOP && 
-                    a.XML == b.XML && 
-                    a.Observation == b.Observation && 
-                    a.Operation == b.Operation && 
-                    a.ProcessedAt == b.ProcessedAt && 
-                    a.IssuedAt == b.IssuedAt && 
-                    a.CreatedAt == b.CreatedAt;
-
-            else if (a is null && b is null)
-                return true;
-
-            return false;
-        }
-
-        public static bool operator !=(OrderInvoice a, OrderInvoice b)
-        {
-            return !(a == b);
+            this.OrderInvoiceID = orderInvoice.OrderInvoiceID;
+            this.Code = orderInvoice.Code;
+            this.Url = orderInvoice.Url;
+            this.FulfillmentID = orderInvoice.FulfillmentID;
+            this.IsIssued = orderInvoice.IsIssued;
+            this.Series = orderInvoice.Series;
+            this.Number = orderInvoice.Number;
+            this.CFOP = orderInvoice.CFOP;
+            this.XML = orderInvoice.XML;
+            this.InvoicePdf = orderInvoice.InvoicePdf;
+            this.Observation = orderInvoice.Observation;
+            this.Operation = orderInvoice.Operation;
+            this.ProcessedAt = orderInvoice.ProcessedAt;
+            this.UpdatedAt = orderInvoice.UpdatedAt;
+            this.IssuedAt = orderInvoice.IssuedAt;
+            this.CreatedAt = orderInvoice.CreatedAt;
+            this.OrderID = orderID;
         }
     }
 }

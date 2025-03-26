@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.CustomValidations;
+﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,46 +9,32 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
     [Table("LinxAcoesPromocionais", Schema = "linx_microvix_erp")]
     public class LinxAcoesPromocionais
     {
-        [Column(TypeName = "datetime")]
         public DateTime lastupdateon { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
-        [Column(TypeName = "varchar(14)")]
         [LengthValidation(length: 14, propertyName: "cnpj_emp")]
         public string? cnpj_emp { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? id_acoes_promocionais { get; private set; }
 
-        [Column(TypeName = "varchar(100)")]
         [LengthValidation(length: 100, propertyName: "descricao")]
         public string? descricao { get; private set; }
 
-        [Column(TypeName = "datetime")]
         public DateTime? vigencia_inicio { get; private set; }
 
-        [Column(TypeName = "datetime")]
         public DateTime? vigencia_fim { get; private set; }
 
-        [Column(TypeName = "varchar(max)")]
         public string? observacao { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? ativa { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? excluida { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? integrada { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? qtde_integrada { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? valor_pago_franqueadora { get; private set; }
 
         [NotMapped]
