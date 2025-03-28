@@ -42,7 +42,10 @@ namespace Infrastructure.LinxCommerce.Repositorys
                         records[i].GlobalStatus, records[i].DeliveryPostalCode, records[i].CreatedChannel, records[i].TrafficSourceID, records[i].OrderStatusID, records[i].CreatedDate, records[i].CreatedBy, records[i].ModifiedDate,
                         records[i].ModifiedBy, records[i].Remarks, records[i].SellerCommissionAmount, records[i].CommissionAmount, records[i].OrderGroupID, records[i].OrderGroupNumber, records[i].HasConflicts, records[i].AcquiredDate,
                         records[i].HasHubOrderWithoutShipmentConflict, records[i].CustomerType, records[i].CancelledDate, records[i].WebSiteName, records[i].CustomerName, records[i].CustomerEmail, records[i].CustomerGender,
-                        records[i].CustomerBirthDate, records[i].CustomerPhone, records[i].CustomerCPF, records[i].CustomerCNPJ, records[i].CustomerTradingName, records[i].CustomerSiteTaxPayer
+                        records[i].CustomerBirthDate, records[i].CustomerPhone, records[i].CustomerCPF, records[i].CustomerCNPJ, records[i].CustomerTradingName, records[i].CustomerSiteTaxPayer, records[i].SalesRepresentativeID,
+                        records[i].SellerEMail, records[i].SellerIntegrationID, records[i].SellerName, records[i].SellerPhone, records[i].SellerID, records[i].MultiSiteTenantBrandId, records[i].MultiSiteTenantBrandType, 
+                        records[i].MultiSiteTenantCompanyId, records[i].MultiSiteTenantDeviceType, records[i].OrderTypeID, records[i].OrderTypeAllowMultiPayment, records[i].OrderTypeIntegrationID, records[i].OrderTypeName,
+                        records[i].OrderTypeEmitFiscalTicket, records[i].OrderTypeRequirePayment, records[i].OrderTypeRequireInventory
                     );
 
                     if (records[i].Items.Count() > 0)

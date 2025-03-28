@@ -16,5 +16,25 @@
         public decimal? Latitude { get; set; }
         public decimal? Longitude { get; set; }
         public string? PostalCode { get; set; }
+
+        public SalesRepresentativeAddress() { }
+
+        public SalesRepresentativeAddress(SalesRepresentativeAddress salesRepresentativeAddress)
+        {
+            this.SalesRepresentativeID = salesRepresentativeAddress.SalesRepresentativeID;
+            this.IsMainAddress = salesRepresentativeAddress.IsMainAddress;
+            this.Name = salesRepresentativeAddress.Name;
+            this.AddressLine = salesRepresentativeAddress.AddressLine;
+            this.City = salesRepresentativeAddress.City;
+            this.Neighbourhood = salesRepresentativeAddress.Neighbourhood;
+            this.Number = salesRepresentativeAddress.Number;
+            this.State = salesRepresentativeAddress.State;
+            this.AddressNotes = salesRepresentativeAddress.AddressNotes;
+            this.Landmark = salesRepresentativeAddress.Landmark;
+            this.ContactName = salesRepresentativeAddress.ContactName;
+            this.Latitude = salesRepresentativeAddress.Latitude;
+            this.Longitude = salesRepresentativeAddress.Longitude;
+            this.PostalCode = salesRepresentativeAddress.PostalCode;
+        }
     }
 }

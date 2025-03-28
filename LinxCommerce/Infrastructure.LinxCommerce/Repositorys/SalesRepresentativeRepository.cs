@@ -50,8 +50,7 @@ namespace Infrastructure.LinxCommerce.Repositorys
 
                     if (records[i].ShippingRegion != null)
                     {
-                        salesRepresentativeShippingRegionTable.Rows.Add(records[i].SalesRepresentativeID, records[i].ShippingRegion.SelectedMode, records[i].ShippingRegion.ShippingRegionID,
-                            records[i].ShippingRegion.PointOfSalesList.Count() > 0 ? string.Join(", ", records[i].ShippingRegion.PointOfSalesList) : null);
+                        salesRepresentativeShippingRegionTable.Rows.Add(records[i].SalesRepresentativeID, records[i].ShippingRegion.SelectedMode, records[i].ShippingRegion.ShippingRegionID, records[i].ShippingRegion.PointOfSales);
                     }
 
                     if (records[i].Contact != null)
@@ -71,9 +70,7 @@ namespace Infrastructure.LinxCommerce.Repositorys
 
                     if (records[i].WebSiteSettings != null)
                     {
-                        salesRepresentativeWebSiteSettingsTable.Rows.Add(records[i].SalesRepresentativeID, records[i].WebSiteSettings.WebSiteFilter,
-                            records[i].WebSiteSettings.WebSiteGroups.Count() > 0 ? string.Join(", ", records[i].WebSiteSettings.WebSiteGroups) : null,
-                            records[i].WebSiteSettings.WebSites.Count() > 0 ? string.Join(", ", records[i].WebSiteSettings.WebSites) : null);
+                        salesRepresentativeWebSiteSettingsTable.Rows.Add(records[i].SalesRepresentativeID, records[i].WebSiteSettings.WebSiteFilter, records[i].WebSiteSettings.WebSiteGroup, records[i].WebSiteSettings.WebSite);
                     }
 
                     if (records[i].Portfolio != null)

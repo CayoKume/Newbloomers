@@ -239,12 +239,16 @@ namespace Infrastructure.LinxCommerce.Repository
 
                 await _linxCommerceRepositoryBase.InsertRecord(jobParameter, sql: sql, record: registro);
 
+                _linxCommerceRepositoryBase.CallDbProcMerge(jobParameter.schema, "Customer", parentExecutionGUID);
+
                 string? _sql = @$"INSERT INTO [untreated].[CustomerEmailConfirmation]
                             ([Status],[ConfirmationDate],[CustomerID])
                             Values
                             (@Status, @ConfirmationDate, @CustomerID)";
 
                 await _linxCommerceRepositoryBase.InsertRecord(jobParameter, sql: _sql, record: registro.EmailConfirmation);
+
+                _linxCommerceRepositoryBase.CallDbProcMerge(jobParameter.schema, "CustomerEmailConfirmation", parentExecutionGUID);
 
                 foreach (var address in registro.Address)
                 {
@@ -256,6 +260,8 @@ namespace Infrastructure.LinxCommerce.Repository
                     await _linxCommerceRepositoryBase.InsertRecord(jobParameter, sql: __sql, record: address);
                 }
 
+                _linxCommerceRepositoryBase.CallDbProcMerge(jobParameter.schema, "CustomerAddress", parentExecutionGUID);
+
                 string? ___sql = @$"INSERT INTO [untreated].[CustomerContact]
                             ([Phone],[Phone2],[CellPhone],[Fax],[CustomerID])
                             Values
@@ -263,15 +269,7 @@ namespace Infrastructure.LinxCommerce.Repository
 
                 await _linxCommerceRepositoryBase.InsertRecord(jobParameter, sql: ___sql, record: registro.Contact);
 
-                foreach (var group in registro.Groups)
-                {
-                    string? __sql = @$"INSERT INTO [untreated].[CustomerGroup]
-                            ([CustomerGroupID],[Title])
-                            Values
-                            (@CustomerGroupID, @Title)";
-
-                    await _linxCommerceRepositoryBase.InsertRecord(jobParameter, sql: __sql, record: group);
-                }
+                _linxCommerceRepositoryBase.CallDbProcMerge(jobParameter.schema, "CustomerContact", parentExecutionGUID);
 
                 return true;
             }

@@ -2,6 +2,7 @@
 using Application.LinxCommerce.Services;
 using Domain.LinxCommerce.CustomValidations.Customer;
 using Domain.LinxCommerce.CustomValidations.Order;
+using Domain.LinxCommerce.CustomValidations.SalesRepresentative;
 using Domain.LinxCommerce.Interfaces.Api;
 using Domain.LinxCommerce.Interfaces.Repositorys;
 using FluentValidation;
@@ -40,6 +41,19 @@ namespace Infrastructure.LinxCommerce.DependencyInjection
             services.AddValidatorsFromAssemblyContaining<OrderDiscountValidator>();
             services.AddValidatorsFromAssemblyContaining<OrderDeliveryMethodValidator>();
             services.AddValidatorsFromAssemblyContaining<OrderAddressValidator>();
+            services.AddValidatorsFromAssemblyContaining<OrderSellerValidator>();
+            services.AddValidatorsFromAssemblyContaining<OrderMultiSiteTenantValidator>();
+            services.AddValidatorsFromAssemblyContaining<OrderTypeValidator>();
+
+            services.AddValidatorsFromAssemblyContaining<SalesRepresentativeValidator>();
+            services.AddValidatorsFromAssemblyContaining<SalesRepresentativeAddressValidator>();
+            services.AddValidatorsFromAssemblyContaining<SalesRepresentativeComissionValidator>();
+            services.AddValidatorsFromAssemblyContaining<SalesRepresentativeContactDataValidator>();
+            services.AddValidatorsFromAssemblyContaining<SalesRepresentativeIdentificationValidator>();
+            services.AddValidatorsFromAssemblyContaining<SalesRepresentativeMaxDiscountValidator>();
+            services.AddValidatorsFromAssemblyContaining<SalesRepresentativePortfolioValidator>();
+            services.AddValidatorsFromAssemblyContaining<SalesRepresentativeShippingRegionValidator>();
+            services.AddValidatorsFromAssemblyContaining<SalesRepresentativeWebSiteSettingsValidator>();
 
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IOrderRepository, OrderRepository>();

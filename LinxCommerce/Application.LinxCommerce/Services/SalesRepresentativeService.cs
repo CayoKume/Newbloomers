@@ -95,8 +95,6 @@ namespace Application.LinxCommerce.Services
                     );
 
                     var saleRepresentative = Newtonsoft.Json.JsonConvert.DeserializeObject<GetSalesRepresentative.Root>(getSaleRepresentativeResponse);
-                    saleRepresentative.SalesRepresentative.Responses.Add(salesRepresentativeID.SalesRepresentativeID, getSaleRepresentativeResponse);
-
                     var validations = _validator.Validate(saleRepresentative.SalesRepresentative);
 
                     if (validations.Errors.Count() > 0)
@@ -111,14 +109,15 @@ namespace Application.LinxCommerce.Services
                                          $"{validations.Errors[j]}"
                             );
                         }
-                        continue;
                     }
 
-                    salesRepresentativeAPIList.Add(saleRepresentative.SalesRepresentative);
+                    salesRepresentativeAPIList.Add(new SalesRepresentative(saleRepresentative.SalesRepresentative, getSaleRepresentativeResponse));
                 }
 
                 if (salesRepresentativeAPIList.Count() > 0)
                 {
+                    _salesRepresentativeRepository.BulkInsertIntoTableRaw(jobParameter: jobParameter, registros: salesRepresentativeAPIList, _logger.GetExecutionGuid());
+
                     salesRepresentativeAPIList.ForEach(s =>
                         _logger.AddRecord(
                             s.SalesRepresentativeID.ToString(), 
@@ -128,8 +127,6 @@ namespace Application.LinxCommerce.Services
                                 .FirstOrDefault()
                         )
                     );
-
-                    _salesRepresentativeRepository.BulkInsertIntoTableRaw(jobParameter: jobParameter, registros: salesRepresentativeAPIList, _logger.GetExecutionGuid());
                     
                     _logger.AddMessage(
                             $"Concluída com sucesso: {salesRepresentativeAPIList.Count()} registro(s) novo(s) inserido(s)!"

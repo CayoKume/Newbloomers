@@ -59,6 +59,27 @@ namespace Domain.LinxCommerce.Entities.Order
             public string? CustomerTradingName { get; set; }
             public string? CustomerSiteTaxPayer { get; set; }
 
+            public Int32? SalesRepresentativeID { get; set; }
+
+            public string? SellerEMail { get; set; }
+            public string? SellerIntegrationID { get; set; }
+            public string? SellerName { get; set; }
+            public string? SellerPhone { get; set; }
+            public Int32? SellerID { get; set; }
+
+            public string? MultiSiteTenantBrandId { get; set; }
+            public string? MultiSiteTenantBrandType { get; set; }
+            public string? MultiSiteTenantCompanyId { get; set; }
+            public string? MultiSiteTenantDeviceType { get; set; }
+
+            public Int32? OrderTypeID { get; set; }
+            public bool? OrderTypeAllowMultiPayment { get; set; }
+            public string? OrderTypeIntegrationID { get; set; }
+            public string? OrderTypeName { get; set; }
+            public bool? OrderTypeEmitFiscalTicket { get; set; }
+            public bool? OrderTypeRequirePayment { get; set; }
+            public bool? OrderTypeRequireInventory { get; set; }
+
             [SkipProperty]
             public List<OrderItem> Items { get; set; } = new List<OrderItem>();
 
@@ -82,6 +103,18 @@ namespace Domain.LinxCommerce.Entities.Order
             
             [SkipProperty]
             public OrderInvoice OrderInvoice { get; set; }
+            
+            [SkipProperty]
+            public OrderSeller Seller { get; set; }
+
+            [SkipProperty]
+            public OrderType OrderType { get; set; }
+
+            [SkipProperty]
+            public OrderMultiSiteTenant MultiSiteTenant { get; set; }
+
+            [SkipProperty]
+            public SalesRepresentative.SalesRepresentative SalesRepresentative { get; set; }
 
             [SkipProperty]
             public Dictionary<Guid?, string> Responses { get; set; } = new Dictionary<Guid?, string>();
@@ -90,6 +123,12 @@ namespace Domain.LinxCommerce.Entities.Order
 
             public Root(Order.Root order, string? getOrderResponse)
             {
+                this.OrderInvoice = new OrderInvoice(order.OrderInvoice, order.OrderID);
+                this.Seller = new OrderSeller(order.Seller);
+                this.OrderType = new OrderType(order.OrderType);
+                this.MultiSiteTenant = new OrderMultiSiteTenant(order.MultiSiteTenant);
+                this.SalesRepresentative = new SalesRepresentative.SalesRepresentative(order.SalesRepresentative);
+
                 this.OrderID = order.OrderID;
                 this.OrderNumber = order.OrderNumber;
                 this.MarketPlaceBrand = order.MarketPlaceBrand;
@@ -142,9 +181,30 @@ namespace Domain.LinxCommerce.Entities.Order
                 this.CustomerCNPJ = order.CustomerCNPJ;
                 this.CustomerTradingName = order.CustomerTradingName;
                 this.CustomerSiteTaxPayer = order.CustomerSiteTaxPayer;
-                this.Responses.Add(order.OrderID, getOrderResponse);
-                this.OrderInvoice = new OrderInvoice(order.OrderInvoice, order.OrderID);
 
+                this.SalesRepresentativeID = order.SalesRepresentative.SalesRepresentativeID;
+
+                this.SellerEMail = this.Seller.EMail;
+                this.SellerIntegrationID = this.Seller.IntegrationID;
+                this.SellerName = this.Seller.Name;
+                this.SellerPhone = this.Seller.Phone;
+                this.SellerID = this.Seller.SellerID;
+
+                this.MultiSiteTenantBrandId = this.MultiSiteTenant.BrandId;
+                this.MultiSiteTenantBrandType = this.MultiSiteTenant.BrandType;
+                this.MultiSiteTenantCompanyId = this.MultiSiteTenant.CompanyId;
+                this.MultiSiteTenantDeviceType = this.MultiSiteTenant.DeviceType;
+
+                this.OrderTypeID = this.OrderType.OrderTypeID;
+                this.OrderTypeAllowMultiPayment = this.OrderType.AllowMultiPayment;
+                this.OrderTypeIntegrationID = this.OrderType.IntegrationID;
+                this.OrderTypeName = this.OrderType.Name;
+                this.OrderTypeEmitFiscalTicket = this.OrderType.EmitFiscalTicket;
+                this.OrderTypeRequirePayment = this.OrderType.RequirePayment;
+                this.OrderTypeRequireInventory = this.OrderType.RequireInventory;
+                
+                this.Responses.Add(order.OrderID, getOrderResponse);
+                
                 foreach (OrderItem item in order.Items)
                 {
                     this.Items.Add(new OrderItem(item));

@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace Domain.LinxCommerce.CustomValidations.SalesRepresentative
 {
-    internal class SalesRepresentativePortfolioValidator : AbstractValidator<SalesRepresentativePortfolio>
+    public class SalesRepresentativePortfolioValidator : AbstractValidator<SalesRepresentativePortfolio>
     {
     }
 }

@@ -10,27 +10,63 @@ namespace Domain.LinxCommerce.CustomValidations.Order
         {
             RuleFor(x => x.PackageNumber)
                 .MaximumLength(10)
-                .WithMessage(x => $"Property: PackageNumber | Value: {x.PackageNumber}, Tamanho do texto: {x.PackageNumber.Length} excede ao permitido: 10");
+                .WithMessage(x => $"Property: PackageNumber | Value: {x.PackageNumber}, Tamanho do texto: {x.PackageNumber.Length} excede ao permitido: 10")
+                .Must((x, packageNumber) =>
+                {
+                    if (packageNumber != null && packageNumber.Length > 50)
+                        x.PackageNumber = x.PackageNumber.Substring(0, 50);
+                    return true;
+                });
 
             RuleFor(x => x.TrackingNumber)
-                .MaximumLength(10)
-                .WithMessage(x => $"Property: TrackingNumber | Value: {x.TrackingNumber}, Tamanho do texto: {x.TrackingNumber.Length} excede ao permitido: 10");
+                .MaximumLength(50)
+                .WithMessage(x => $"Property: TrackingNumber | Value: {x.TrackingNumber}, Tamanho do texto: {x.TrackingNumber.Length} excede ao permitido: 50")
+                .Must((x, trackingNumber) =>
+                {
+                    if (trackingNumber != null && trackingNumber.Length > 50)
+                        x.TrackingNumber = x.TrackingNumber.Substring(0, 50);
+                    return true;
+                });
 
             RuleFor(x => x.TrackingNumberUrl)
-                .MaximumLength(10)
-                .WithMessage(x => $"Property: TrackingNumberUrl | Value: {x.TrackingNumberUrl}, Tamanho do texto: {x.TrackingNumberUrl.Length} excede ao permitido: 10");
+                .MaximumLength(800)
+                .WithMessage(x => $"Property: TrackingNumberUrl | Value: {x.TrackingNumberUrl}, Tamanho do texto: {x.TrackingNumberUrl.Length} excede ao permitido: 800")
+                .Must((x, trackingNumberUrl) =>
+                {
+                    if (trackingNumberUrl != null && trackingNumberUrl.Length > 800)
+                        x.TrackingNumberUrl = x.TrackingNumberUrl.Substring(0, 800);
+                    return true;
+                });
 
             RuleFor(x => x.ShippedBy)
-                .MaximumLength(10)
-                .WithMessage(x => $"Property: ShippedBy | Value: {x.ShippedBy}, Tamanho do texto: {x.ShippedBy.Length} excede ao permitido: 10");
+                .MaximumLength(50)
+                .WithMessage(x => $"Property: ShippedBy | Value: {x.ShippedBy}, Tamanho do texto: {x.ShippedBy.Length} excede ao permitido: 50")
+                .Must((x, shippedBy) =>
+                {
+                    if (shippedBy != null && shippedBy.Length > 50)
+                        x.ShippedBy = x.ShippedBy.Substring(0, 50);
+                    return true;
+                });
 
             RuleFor(x => x.PackageType)
-                .MaximumLength(10)
-                .WithMessage(x => $"Property: PackageType | Value: {x.PackageType}, Tamanho do texto: {x.PackageType.Length} excede ao permitido: 10");
+                .MaximumLength(50)
+                .WithMessage(x => $"Property: PackageType | Value: {x.PackageType}, Tamanho do texto: {x.PackageType.Length} excede ao permitido: 50")
+                .Must((x, packageType) =>
+                {
+                    if (packageType != null && packageType.Length > 50)
+                        x.PackageType = x.PackageType.Substring(0, 50);
+                    return true;
+                });
 
             RuleFor(x => x.Source)
-                .MaximumLength(10)
-                .WithMessage(x => $"Property: Source | Value: {x.Source}, Tamanho do texto: {x.Source.Length} excede ao permitido: 10");
+                .MaximumLength(50)
+                .WithMessage(x => $"Property: Source | Value: {x.Source}, Tamanho do texto: {x.Source.Length} excede ao permitido: 50")
+                .Must((x, source) =>
+                {
+                    if (source != null && source.Length > 50)
+                        x.Source = x.Source.Substring(0, 50);
+                    return true;
+                });
 
             RuleFor(x => x.ShippedDate)
                 .Must((x, shippedDate) =>

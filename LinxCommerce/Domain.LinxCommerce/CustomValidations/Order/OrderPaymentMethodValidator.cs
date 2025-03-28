@@ -10,19 +10,43 @@ namespace Domain.LinxCommerce.CustomValidations.Order
         {
             RuleFor(x => x.PaymentNumber)
                 .MaximumLength(10)
-                .WithMessage(x => $"Property: PaymentNumber | Value: {x.PaymentNumber}, Tamanho do texto: {x.PaymentNumber.Length} excede ao permitido: 10");
+                .WithMessage(x => $"Property: PaymentNumber | Value: {x.PaymentNumber}, Tamanho do texto: {x.PaymentNumber.Length} excede ao permitido: 10")
+                .Must((x, paymentNumber) =>
+                {
+                    if (paymentNumber != null && paymentNumber.Length > 10)
+                        x.PaymentNumber = x.PaymentNumber.Substring(0, 10);
+                    return true;
+                });
 
             RuleFor(x => x.ReconciliationNumber)
                 .MaximumLength(50)
-                .WithMessage(x => $"Property: ReconciliationNumber | Value: {x.ReconciliationNumber}, Tamanho do texto: {x.ReconciliationNumber.Length} excede ao permitido: 50");
+                .WithMessage(x => $"Property: ReconciliationNumber | Value: {x.ReconciliationNumber}, Tamanho do texto: {x.ReconciliationNumber.Length} excede ao permitido: 50")
+                .Must((x, reconciliationNumber) =>
+                {
+                    if (reconciliationNumber != null && reconciliationNumber.Length > 50)
+                        x.ReconciliationNumber = x.ReconciliationNumber.Substring(0, 50);
+                    return true;
+                });
 
             RuleFor(x => x.Status)
                 .MaximumLength(1)
-                .WithMessage(x => $"Property: Status | Value: {x.Status}, Tamanho do texto: {x.Status.Length} excede ao permitido: 1");
+                .WithMessage(x => $"Property: Status | Value: {x.Status}, Tamanho do texto: {x.Status.Length} excede ao permitido: 1")
+                .Must((x, status) =>
+                {
+                    if (status != null && status.Length > 1)
+                        x.Status = x.Status.Substring(0, 1);
+                    return true;
+                });
 
             RuleFor(x => x.IntegrationID)
                 .MaximumLength(50)
-                .WithMessage(x => $"Property: IntegrationID | Value: {x.IntegrationID}, Tamanho do texto: {x.IntegrationID.Length} excede ao permitido: 50");
+                .WithMessage(x => $"Property: IntegrationID | Value: {x.IntegrationID}, Tamanho do texto: {x.IntegrationID.Length} excede ao permitido: 50")
+                .Must((x, integrationID) =>
+                {
+                    if (integrationID != null && integrationID.Length > 50)
+                        x.IntegrationID = x.IntegrationID.Substring(0, 50);
+                    return true;
+                });
 
             RuleFor(x => x.PaymentDate)
                 .Must((x, paymentDate) =>

@@ -1,0 +1,14 @@
+﻿namespace Application.Jadlog.Interfaces
+{
+    public interface IJadlogService
+    {
+        public Task<bool?> InsertOrder();
+        public Task<bool?> CancelOrder();
+        public Task<bool?> TrackingHistory();
+        public Task<bool?> SearchShippingValue();
+        public Task<bool?> SearchDACTEXml();
+        public Task<bool?> SearchPickupPoints();
+        public Task<bool?> SearchQRCodePickupDropoff();
+        public Task<bool?> InsertTreatment();
+    }
+}

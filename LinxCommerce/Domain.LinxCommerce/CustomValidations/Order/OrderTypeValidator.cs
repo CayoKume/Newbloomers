@@ -3,17 +3,17 @@ using FluentValidation;
 
 namespace Domain.LinxCommerce.CustomValidations.Order
 {
-    public class OrderTagValidator : AbstractValidator<OrderTag>
+    public class OrderTypeValidator : AbstractValidator<OrderType>
     {
-        public OrderTagValidator()
+        public OrderTypeValidator()
         {
-            RuleFor(x => x.Alias)
+            RuleFor(x => x.IntegrationID)
                 .MaximumLength(50)
-                .WithMessage(x => $"Property: Alias | Value: {x.Alias}, Tamanho do texto: {x.Alias.Length} excede ao permitido: 50")
-                .Must((x, alias) =>
+                .WithMessage(x => $"Property: IntegrationID | Value: {x.IntegrationID}, Tamanho do texto: {x.IntegrationID.Length} excede ao permitido: 50")
+                .Must((x, integrationID) =>
                 {
-                    if (alias != null && alias.Length > 50)
-                        x.Alias = x.Alias.Substring(0, 50);
+                    if (integrationID != null && integrationID.Length > 50)
+                        x.IntegrationID = x.IntegrationID.Substring(0, 50);
                     return true;
                 });
 

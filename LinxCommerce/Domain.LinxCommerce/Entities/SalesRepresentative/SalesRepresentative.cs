@@ -15,7 +15,7 @@ namespace Domain.LinxCommerce.Entities.SalesRepresentative
         public string? Status { get; set; }
 
         [SkipProperty]
-        public Dictionary<int, string> Responses { get; set; } = new Dictionary<int, string>();
+        public Dictionary<int?, string> Responses { get; set; } = new Dictionary<int?, string>();
 
         [SkipProperty]
         public SalesRepresentativeIdentification? Identification { get; set; }
@@ -40,5 +40,61 @@ namespace Domain.LinxCommerce.Entities.SalesRepresentative
 
         [SkipProperty]
         public SalesRepresentativePortfolio? Portfolio { get; set; }
+
+        public SalesRepresentative() { }
+
+        public SalesRepresentative(SalesRepresentative salesRepresentative)
+        {
+            this.SalesRepresentativeID = salesRepresentative.SalesRepresentativeID;
+            this.Name = salesRepresentative.Name;
+            this.FriendlyCode = salesRepresentative.FriendlyCode;
+            this.ImageUrl = salesRepresentative.ImageUrl;
+            this.IntegrationID = salesRepresentative.IntegrationID;
+            this.AllowQuoteDeletion = salesRepresentative.AllowQuoteDeletion;
+            this.BusinessContractID = salesRepresentative.BusinessContractID;
+            this.SalesRepresentativeType = salesRepresentative.SalesRepresentativeType;
+            this.Status = salesRepresentative.Status;
+
+            this.Identification = salesRepresentative.Identification;
+            this.Commission = salesRepresentative.Commission;
+            this.Contact = salesRepresentative.Contact;
+            this.ShippingRegion = salesRepresentative.ShippingRegion;
+            this.MaxDiscount = salesRepresentative.MaxDiscount;
+            this.WebSiteSettings = salesRepresentative.WebSiteSettings;
+            this.Portfolio = salesRepresentative.Portfolio;
+
+            foreach (var address in salesRepresentative.Addresses)
+            {
+                this.Addresses.Add(new SalesRepresentativeAddress(address));
+            }
+        }
+
+        public SalesRepresentative(SalesRepresentative salesRepresentative, string getSaleRepresentativeResponse)
+        {
+            this.SalesRepresentativeID = salesRepresentative.SalesRepresentativeID;
+            this.Name = salesRepresentative.Name;
+            this.FriendlyCode = salesRepresentative.FriendlyCode;
+            this.ImageUrl = salesRepresentative.ImageUrl;
+            this.IntegrationID = salesRepresentative.IntegrationID;
+            this.AllowQuoteDeletion = salesRepresentative.AllowQuoteDeletion;
+            this.BusinessContractID = salesRepresentative.BusinessContractID;
+            this.SalesRepresentativeType = salesRepresentative.SalesRepresentativeType;
+            this.Status = salesRepresentative.Status;
+
+            this.Identification = salesRepresentative.Identification;
+            this.Commission = salesRepresentative.Commission;
+            this.Contact = salesRepresentative.Contact;
+            this.ShippingRegion = salesRepresentative.ShippingRegion;
+            this.MaxDiscount = salesRepresentative.MaxDiscount;
+            this.WebSiteSettings = salesRepresentative.WebSiteSettings;
+            this.Portfolio = salesRepresentative.Portfolio;
+
+            this.Responses.Add(salesRepresentative.SalesRepresentativeID, getSaleRepresentativeResponse);
+
+            foreach (var address in salesRepresentative.Addresses)
+            {
+                this.Addresses.Add(new SalesRepresentativeAddress(address));
+            }
+        }
     }
 }
