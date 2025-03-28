@@ -5,6 +5,7 @@ using HangfireDashboard.Domain.Extensions;
 using Infrastructure.DatabaseInit;
 using Infrastructure.FlashCourier.DependencyInjection;
 using Infrastructure.IntegrationsCore.Repositorys;
+using Infrastructure.Jadlog.DependencyInjection;
 using Infrastructure.LinxCommerce.DependencyInjection;
 using Infrastructure.LinxMicrovix.Outbound.WebService.DependencyInjection;
 using Infrastructure.TotalExpress.DependencyInjection;
@@ -25,6 +26,7 @@ namespace AzureJobs.Extensions
                 services.AddScopedB2CLinxMicrovixServices();
                 services.AddScopedFlashCourierServices();
                 services.AddScopedTotalExpressServices();
+                services.AddScopedJadlogServices();
 
                 services.AddScopedDatabaseIniService();
                 services.AddScopedB2CLinxMicrovixDatabaseInitServices();

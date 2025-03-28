@@ -2,7 +2,6 @@
 using Application.LinxCommerce.Interfaces;
 using Domain.IntegrationsCore.Entities.Enums;
 using Domain.IntegrationsCore.Exceptions;
-using Domain.LinxCommerce.Entities.Customer;
 using Domain.LinxCommerce.Entities.Order;
 using Domain.LinxCommerce.Entities.Parameters;
 using Domain.LinxCommerce.Entities.Responses;
@@ -128,7 +127,7 @@ namespace Application.LinxCommerce.Services
 
                 var objectRequest = new
                 {
-                    Page = new { PageIndex = 0, PageSize = 3000 },
+                    Page = new { PageIndex = 7, PageSize = 3000 },
                     //Where = $"(ModifiedDate>=\"{DateTime.Now.Date:yyyy-MM-dd}T00:00:00\" && ModifiedDate<=\"{DateTime.Now.Date:yyyy-MM-dd}T23:59:59\")",
                     Where = $"",
                     WhereMetadata = "",

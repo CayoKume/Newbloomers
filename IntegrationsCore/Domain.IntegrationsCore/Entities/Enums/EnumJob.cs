@@ -98,6 +98,8 @@
 
         LinxCommerceSalesRepresentative = 912,
         LinxCommerceCustomers = 916,
-        LinxCommerceOrders = 900
+        LinxCommerceOrders = 900,
+
+        JadlogSearchTrackingHistory = 1100
     }
 }

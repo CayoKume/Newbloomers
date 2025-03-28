@@ -40,7 +40,7 @@ namespace Infrastructure.Jadlog.Api
             try
             {
                 var client = CreateClient(rote, token, clientName, contentType);
-                var response = await client.PostAsync(client.BaseAddress + rote, new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(jArrayObj), Encoding.UTF8, "application/json"));
+                var response = await client.PostAsync(client.BaseAddress + rote, new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(jObj), Encoding.UTF8, "application/json"));
 
                 if (response.IsSuccessStatusCode && response.StatusCode == HttpStatusCode.OK)
                     return await response.Content.ReadAsStringAsync();

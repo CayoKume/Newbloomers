@@ -26,6 +26,8 @@
     <ProjectReference Include="..\LinxMicrovix\LinxMicrovix - Outbound Web Service\Infrastructure.LinxMicrovix.Outbound.WebService\Infrastructure.LinxMicrovix.Outbound.WebService.csproj" />
     <ProjectReference Include="..\Shippment\FlashCourier\Application.FlashCourier\Application.FlashCourier.csproj" />
     <ProjectReference Include="..\Shippment\FlashCourier\Infrastructure.FlashCourier\Infrastructure.FlashCourier.csproj" />
+    <ProjectReference Include="..\Shippment\Jadlog\Application.Jadlog\Application.Jadlog.csproj" />
+    <ProjectReference Include="..\Shippment\Jadlog\Infrastructure.Jadlog\Infrastructure.Jadlog.csproj" />
     <ProjectReference Include="..\Shippment\TotalExpress\Application.TotalExpress\Application.TotalExpress.csproj" />
     <ProjectReference Include="..\Shippment\TotalExpress\Infrastructure.TotalExpress\Infrastructure.TotalExpress.csproj" />
   </ItemGroup>

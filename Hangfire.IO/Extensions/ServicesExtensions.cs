@@ -10,6 +10,7 @@ using Infrastructure.LinxCommerce.DependencyInjection;
 using Infrastructure.LinxMicrovix.Outbound.WebService.DependencyInjection;
 using Infrastructure.TotalExpress.DependencyInjection;
 using Infrastructure.AfterSale.DependencyInjection;
+using Infrastructure.Jadlog.DependencyInjection;
 
 namespace Hangfire.IO.Extensions
 {
@@ -30,6 +31,7 @@ namespace Hangfire.IO.Extensions
             builder.Services.AddScopedFlashCourierServices();
             builder.Services.AddScopedTotalExpressServices();
             builder.Services.AddScopedAfterSaleServices();
+            builder.Services.AddScopedJadlogServices();
 
             builder.Services.AddScopedDatabaseIniService();
             builder.Services.AddScopedB2CLinxMicrovixDatabaseInitServices();
