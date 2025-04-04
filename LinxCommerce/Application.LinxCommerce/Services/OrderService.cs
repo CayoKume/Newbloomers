@@ -8,6 +8,7 @@ using Domain.LinxCommerce.Entities.Responses;
 using Domain.LinxCommerce.Interfaces.Api;
 using Domain.LinxCommerce.Interfaces.Repositorys;
 using FluentValidation;
+using System.Data.Common;
 
 namespace Application.LinxCommerce.Services
 {
@@ -127,17 +128,16 @@ namespace Application.LinxCommerce.Services
 
                 var objectRequest = new
                 {
-                    Page = new { PageIndex = 7, PageSize = 3000 },
-                    //Where = $"(ModifiedDate>=\"{DateTime.Now.Date:yyyy-MM-dd}T00:00:00\" && ModifiedDate<=\"{DateTime.Now.Date:yyyy-MM-dd}T23:59:59\")",
-                    Where = $"",
+                    Page = new { PageIndex = 0, PageSize = 0 },
+                    Where = $"(ModifiedDate>=\"{DateTime.Now.Date:yyyy-MM-dd}T00:00:00\" && ModifiedDate<=\"{DateTime.Now.Date:yyyy-MM-dd}T23:59:59\")",
                     WhereMetadata = "",
                     OrderBy = "OrderNumber",
                 };
 
                 var response = await _apiCall.PostRequest(
-                    jobParameter: jobParameter,
-                    objRequest: objectRequest,
-                    route: "/v1/Sales/API.svc/web/SearchOrders"
+                    jobParameter,
+                    objectRequest,
+                    "/v1/Sales/API.svc/web/SearchOrders"
                 );
 
                 var ordersAPIList = new List<Order.Root>();
@@ -255,9 +255,9 @@ namespace Application.LinxCommerce.Services
                 };
 
                 var response = await _apiCall.PostRequest(
-                    jobParameter: jobParameter,
-                    objRequest: objectRequest,
-                    route: "/v1/Sales/API.svc/web/GetQueueOrders"
+                    jobParameter,
+                    objectRequest,
+                    "/v1/Sales/API.svc/web/GetQueueOrders"
                 );
 
                 var ordersAPIList = new List<Order.Root>();
@@ -326,9 +326,9 @@ namespace Application.LinxCommerce.Services
                     var dequeueObjectRequest = new { QueueItems = listQueueItemID };
 
                     var dequeueResponse = await _apiCall.PostRequest(
-                        jobParameter: jobParameter,
-                        objRequest: dequeueObjectRequest,
-                        route: "/v1/Queue/API.svc/web/DequeueQueueItems"
+                        jobParameter,
+                        dequeueObjectRequest,
+                        "/v1/Queue/API.svc/web/DequeueQueueItems"
                     );
                 }
                 else
@@ -402,9 +402,9 @@ namespace Application.LinxCommerce.Services
                 };
 
                 var response = await _apiCall.PostRequest(
-                    jobParameter: jobParameter,
-                    objRequest: objectRequest,
-                    route: "/v1/Sales/API.svc/web/SearchOrderStatus"
+                    jobParameter,
+                    objectRequest,
+                    "/v1/Sales/API.svc/web/SearchOrderStatus"
                 );
 
                 var orderStatus = Newtonsoft.Json.JsonConvert.DeserializeObject<SearchOrderStatus.Root>(response);
@@ -419,9 +419,116 @@ namespace Application.LinxCommerce.Services
             }
         }
 
-        public Task<string?> UpdateOrder()
+        public Task<bool?> UpdateOrder()
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<bool?> UpdateTrackingNumberOrder(LinxCommerceJobParameter jobParameter)
+        {
+            try
+            {
+                _logger
+                   .Clear()
+                   .AddLog(EnumJob.LinxCommerceUpdateTrackingNumberOrder);
+
+                var successfulTrackingNumber = new List<OrderTrackingNumber>();
+                var trackingNumberOrders = await _orderRepository.GetTrackingNumbersToUpdate();
+
+                if (trackingNumberOrders.Count() > 0)
+                {
+                    for (int i = 0; i < trackingNumberOrders.Count(); i += 80)
+                    {
+                        var lote = trackingNumberOrders.Skip(i).Take(80).ToList();
+
+                        foreach (var item in lote)
+                        {
+                            var objectRequest = new
+                            {
+                                OrderID = item.OrderID,
+                                WorkflowType = "SHIPPED",
+                                Invoice = new
+                                {
+                                    OrderInvoiceID = item.OrderInvoiceID,
+                                    Code = item.OrderInvoiceCode,
+                                    IsIssued = true
+                                },
+                                Shipment = new
+                                {
+                                    TrackingNumber = item.TrackingNumber,
+                                    TrackingUrl = ""
+                                },
+                            };
+
+                            var result = await _apiCall.PostRequest(
+                                jobParameter,
+                                "/v1/Sales/API.svc/web/UpdateOrder",
+                                objectRequest
+                            );
+
+                            if (result)
+                            {
+                                await _orderRepository.InsertIntoUpdateTrackingNumberOrderTable(jobParameter, item);
+                                _logger.AddRecord(
+                                    item.OrderID.ToString(),
+                                    Newtonsoft.Json.JsonConvert.SerializeObject(objectRequest)
+                                );
+                            } 
+                        }
+
+                        Thread.Sleep(5 * 1000);
+                    }
+
+                    _logger.AddMessage(
+                        $"Concluída com sucesso: {successfulTrackingNumber.Count()} registro(s) atualizados(s)!"
+                    );
+                }
+                else
+                    _logger.AddMessage(
+                        $"Concluída com sucesso: {successfulTrackingNumber.Count()} registro(s) atualizados(s)!"
+                    );
+
+                return true;
+            }
+            catch (SQLCommandException ex)
+            {
+                _logger.AddMessage(
+                    stage: ex.Stage,
+                    error: ex.Error,
+                    logLevel: ex.MessageLevel,
+                    message: ex.Message,
+                    exceptionMessage: ex.ExceptionMessage,
+                    commandSQL: ex.CommandSQL
+                );
+
+                throw;
+            }
+            catch (InternalException ex)
+            {
+                _logger.AddMessage(
+                    stage: ex.stage,
+                    error: ex.Error,
+                    logLevel: ex.MessageLevel,
+                    message: ex.Message,
+                    exceptionMessage: ex.ExceptionMessage
+                );
+
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.AddMessage(
+                    message: "Error when executing UpdateTrackingNumberOrder method",
+                    exceptionMessage: ex.Message
+                );
+            }
+            finally
+            {
+                _logger.SetLogEndDate();
+                await _logger.CommitAllChanges();
+            }
+
+            return true;
         }
 
         public Task<string?> UpdateOrderInvoice()

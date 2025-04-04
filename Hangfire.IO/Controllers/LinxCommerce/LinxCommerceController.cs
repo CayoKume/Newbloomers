@@ -251,5 +251,33 @@ namespace HangfireDashboard.UI.Controllers.LinxCommerce
                 return Content($"Unable to integrate the records.\nError: {ex.Message}");
             }
         }
+
+        [HttpPost("UpdateTrackingNumberOrder")]
+        public async Task<ActionResult> UpdateTrackingNumberOrder()
+        {
+            try
+            {
+                var method = _methods
+                    .Where(m => m.MethodName == "UpdateTrackingNumberOrder")
+                    .FirstOrDefault();
+
+                var result = await _orderService.UpdateTrackingNumberOrder(
+                    _linxCommerceJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: "UpdateTrackingNumberOrder"
+                    )
+                );
+
+                if (result != true)
+                    return BadRequest($"Unable to find records on endpoint.");
+                else
+                    return Ok($"Records integrated successfully.");
+            }
+            catch (Exception ex)
+            {
+                Response.StatusCode = 400;
+                return Content($"Unable to integrate the records.\nError: {ex.Message}");
+            }
+        }
     }
 }

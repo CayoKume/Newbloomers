@@ -2,6 +2,7 @@
 {
     public class OrderPackage
     {
+        public DateTime? lastupdateon { get; set; }
         public Guid? OrderPackageID { get; set; }
         public Guid? OrderShipmentID { get; set; }
         public Int32? DeliveryMethodID { get; set; }
@@ -23,6 +24,7 @@
 
         public OrderPackage(OrderPackage orderPackage)
         {
+            this.lastupdateon = DateTime.Now;
             this.OrderPackageID = orderPackage.OrderPackageID;
             this.OrderShipmentID = orderPackage.OrderShipmentID;
             this.DeliveryMethodID = orderPackage.DeliveryMethodID;

@@ -5,6 +5,7 @@ namespace Domain.LinxCommerce.Entities.Order
 {
     public class OrderDeliveryMethod
     {
+        public DateTime lastupdateon { get; set; }
         public string? LogisticOptionId { get; set; }
         public string? LogisticOptionName { get; set; }
         public string? LogisticContractId { get; set; }
@@ -40,6 +41,7 @@ namespace Domain.LinxCommerce.Entities.Order
 
         public OrderDeliveryMethod(OrderDeliveryMethod orderDeliveryMethod)
         {
+            this.lastupdateon = DateTime.Now;
             this.LogisticOptionId = orderDeliveryMethod.LogisticOptionId;
             this.LogisticOptionName = orderDeliveryMethod.LogisticOptionName;
             this.LogisticContractId = orderDeliveryMethod.LogisticContractId;

@@ -2,6 +2,7 @@
 {
     public class OrderTag
     {
+        public DateTime lastupdateon { get; set; }
         public Int32? TagID { get; set; }
         public string? Alias { get; set; }
         public string? Name { get; set; }
@@ -13,6 +14,7 @@
 
         public OrderTag(OrderTag orderTag, Guid? orderID)
         {
+            this.lastupdateon = DateTime.Now;
             this.OrderID = orderID;
             this.IsDeleted = orderTag.IsDeleted;
             this.IsSystem = orderTag.IsSystem;

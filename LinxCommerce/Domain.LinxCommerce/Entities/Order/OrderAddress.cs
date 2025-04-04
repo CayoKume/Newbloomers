@@ -2,6 +2,7 @@
 {
     public class OrderAddress
     {
+        public DateTime lastupdateon { get; set; }
         public Int32? OrderAddressID { get; set; }
         public Guid? OrderID { get; set; }
         public string? Name { get; set; }
@@ -23,6 +24,7 @@
 
         public OrderAddress(OrderAddress orderAddress)
         {
+            this.lastupdateon = DateTime.Now;
             this.OrderAddressID = orderAddress.OrderAddressID;
             this.OrderID = orderAddress.OrderID;
             this.Name = orderAddress.Name;

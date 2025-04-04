@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using System.Globalization;
 
 namespace Domain.LinxCommerce.CustomValidations.Order
 {
@@ -185,6 +186,69 @@ namespace Domain.LinxCommerce.CustomValidations.Order
                         x.CustomerSiteTaxPayer = x.CustomerSiteTaxPayer.Substring(0, 60);
                     return true;
                 });
+
+            RuleFor(x => x.PaymentDate)
+                .Must((x, data) =>
+                {
+                    if (data == null || data.Value < new DateTime(1753, 1, 1))
+                        x.PaymentDate = new DateTime(1753, 1, 1);
+                    return true;
+                })
+                .WithMessage(x => $"Date: {x.PaymentDate} must be between 01/01/1753 and 31/12/9999.");
+
+            RuleFor(x => x.ShipmentDate)
+                .Must((x, data) =>
+                {
+                    if (data == null || data.Value < new DateTime(1753, 1, 1))
+                        x.ShipmentDate = new DateTime(1753, 1, 1);
+                    return true;
+                })
+                .WithMessage(x => $"Date: {x.ShipmentDate} must be between 01/01/1753 and 31/12/9999.");
+
+            RuleFor(x => x.CreatedDate)
+                .Must((x, data) =>
+                {
+                    if (data == null || data.Value < new DateTime(1753, 1, 1))
+                        x.CreatedDate = new DateTime(1753, 1, 1);
+                    return true;
+                })
+                .WithMessage(x => $"Date: {x.CreatedDate} must be between 01/01/1753 and 31/12/9999.");
+
+            RuleFor(x => x.ModifiedDate)
+                .Must((x, data) =>
+                {
+                    if (data == null || data.Value < new DateTime(1753, 1, 1))
+                        x.ModifiedDate = new DateTime(1753, 1, 1);
+                    return true;
+                })
+                .WithMessage(x => $"Date: {x.ModifiedDate} must be between 01/01/1753 and 31/12/9999.");
+
+            RuleFor(x => x.AcquiredDate)
+                .Must((x, data) =>
+                {
+                    if (data == null || data.Value < new DateTime(1753, 1, 1))
+                        x.AcquiredDate = new DateTime(1753, 1, 1);
+                    return true;
+                })
+                .WithMessage(x => $"Date: {x.AcquiredDate} must be between 01/01/1753 and 31/12/9999.");
+
+            RuleFor(x => x.CancelledDate)
+                .Must((x, data) =>
+                {
+                    if (data == null || data.Value < new DateTime(1753, 1, 1))
+                        x.CancelledDate = new DateTime(1753, 1, 1);
+                    return true;
+                })
+                .WithMessage(x => $"Date: {x.CancelledDate} must be between 01/01/1753 and 31/12/9999.");
+
+            RuleFor(x => x.CustomerBirthDate)
+                .Must((x, data) =>
+                {
+                    if (data == null || data.Value < new DateTime(1753, 1, 1))
+                        x.CustomerBirthDate = new DateTime(1753, 1, 1);
+                    return true;
+                })
+                .WithMessage(x => $"Date: {x.CustomerBirthDate} must be between 01/01/1753 and 31/12/9999.");
 
             RuleForEach(x => x.Items)
                 .SetValidator(new OrderItemValidator());

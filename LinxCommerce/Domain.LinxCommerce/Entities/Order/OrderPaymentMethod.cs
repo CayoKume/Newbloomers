@@ -4,6 +4,7 @@ namespace Domain.LinxCommerce.Entities.Order
 {
     public class OrderPaymentMethod
     {
+        public DateTime lastupdateon { get; set; }
         public Int32? OrderPaymentMethodID { get; set; }
         public Guid? OrderID { get; set; }
         public string? PaymentNumber { get; set; }
@@ -32,6 +33,7 @@ namespace Domain.LinxCommerce.Entities.Order
 
         public OrderPaymentMethod(OrderPaymentMethod orderPaymentMethod)
         {
+            this.lastupdateon = DateTime.Now;
             this.OrderPaymentMethodID = orderPaymentMethod.OrderPaymentMethodID;
             this.OrderID = orderPaymentMethod.OrderID;
             this.PaymentNumber = orderPaymentMethod.PaymentNumber;

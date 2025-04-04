@@ -1,8 +1,15 @@
 ﻿using Dapper;
 using Domain.IntegrationsCore.Entities.Bases;
+using Domain.IntegrationsCore.Entities.Enums;
+using Domain.IntegrationsCore.Exceptions;
+using Domain.IntegrationsCore.Extensions;
 using Domain.Jadlog.Entities;
 using Domain.Jadlog.Interfaces.Repositorys;
 using Infrastructure.IntegrationsCore.Connections.SQLServer;
+using System.Data;
+using System.Data.Common;
+using System.Data.SqlClient;
+using System.Reflection;
 
 namespace Infrastructure.Jadlog.Repositorys
 {
@@ -225,45 +232,80 @@ namespace Infrastructure.Jadlog.Repositorys
             }
         }
 
-        public async Task<IEnumerable<ShipmentId>> GetShipmentIds()
+        public async Task<List<ShipmentId>> GetShipmentIds()
         {
-            var sql = $@"SELECT DISTINCT TOP 100
+            var sql = $@"SELECT DISTINCT
                          A.SHIPMENTID AS SHIPMENT_ID,
 
 						 -- PROVISORIO ATÉ A LIBERAÇÃO DA IT4_WMS_DOCUMENTO
-						 D.CNPJ_EMP AS DOC_COMPANY,
 						 CASE
-							WHEN C.COD_CLIENTE_ERP IN (SELECT COD_CLIENTE FROM LINX_MICROVIX_ERP.LINXCLIENTESFORNEC (NOLOCK) WHERE (RAZAO_CLIENTE LIKE '%MNR%')  AND TIPO_CLIENTE = 'J') THEN 'B2B' --B2B MISHA
-							WHEN C.COD_CLIENTE_ERP IN (SELECT COD_CLIENTE FROM LINX_MICROVIX_ERP.LINXCLIENTESFORNEC (NOLOCK) WHERE (RAZAO_CLIENTE LIKE '%NEWFIT%')  AND TIPO_CLIENTE = 'J') THEN 'B2B' --B2B OPEN ERA
-							WHEN C.EMPRESA IN (SELECT EMPRESA FROM LINX_MICROVIX_ERP.LINXLOJAS (NOLOCK) WHERE EMPRESA NOT IN (0, 1, 5, 6, 10)) THEN 'SHIP FROM STORE' --SHIP FROM STORE OPEN ERA E MISHA (EXCLUI MISHA ECOMMERCE, OPEN ECOMMERCE, MARGAUX ECOMMERCE E NEWBLOOMERS)
-							ELSE 'B2C'
-						 END AS PRODUCT
+						  WHEN D.CNPJ_EMP IN (SELECT CNPJ_EMP FROM linx_microvix_erp.LINXLOJAS (NOLOCK) WHERE RAZAO_EMP LIKE '%MNR%') THEN '38367316000199'
+						  WHEN D.CNPJ_EMP IN (SELECT CNPJ_EMP FROM linx_microvix_erp.LINXLOJAS (NOLOCK) WHERE RAZAO_EMP LIKE '%NEWFIT%' OR RAZAO_EMP LIKE '%NEW FIT%') THEN '42538267000187'
+						 END
+						 AS DOC_COMPANY,
+
+						 CASE
+						 WHEN C.COD_CLIENTE_ERP IN (SELECT COD_CLIENTE FROM LINX_MICROVIX_ERP.LINXCLIENTESFORNEC (NOLOCK) WHERE (RAZAO_CLIENTE LIKE '%MNR%')  AND TIPO_CLIENTE = 'J') THEN 'B2B' --B2B MISHA
+						 WHEN C.COD_CLIENTE_ERP IN (SELECT COD_CLIENTE FROM LINX_MICROVIX_ERP.LINXCLIENTESFORNEC (NOLOCK) WHERE (RAZAO_CLIENTE LIKE '%NEWFIT%')  AND TIPO_CLIENTE = 'J') THEN 'B2B' --B2B OPEN ERA
+						 WHEN C.EMPRESA IN (SELECT EMPRESA FROM LINX_MICROVIX_ERP.LINXLOJAS (NOLOCK) WHERE EMPRESA NOT IN (0, 1, 5, 6, 10)) THEN 'SHIP FROM STORE' --SHIP FROM STORE OPEN ERA E MISHA (EXCLUI MISHA ECOMMERCE, OPEN ECOMMERCE, MARGAUX ECOMMERCE E NEWBLOOMERS)
+						 ELSE 'B2C'
+						 END AS PRODUCT,
+
+                         E.SHIPMENTID,
+						 E.[STATUS],
+						 E.UNIDADE,
+						 E.[DATA]
 
                          --C.NB_DOC_REMETENTE AS DOC_COMPANY,
 						 --CASE
-							--WHEN C.CLIENTE_OU_FORNECEDOR IN (SELECT COD_CLIENTE FROM LINX_MICROVIX_ERP.LINXCLIENTESFORNEC (NOLOCK) WHERE (RAZAO_CLIENTE LIKE '%MNR%')  AND TIPO_CLIENTE = 'J') THEN 'B2B' --B2B MISHA
-							--WHEN C.CLIENTE_OU_FORNECEDOR IN (SELECT COD_CLIENTE FROM LINX_MICROVIX_ERP.LINXCLIENTESFORNEC (NOLOCK) WHERE (RAZAO_CLIENTE LIKE '%NEWFIT%')  AND TIPO_CLIENTE = 'J') THEN 'B2B' --B2B OPEN ERA
-							--WHEN C.NB_COD_REMETENTE IN (SELECT EMPRESA FROM LINX_MICROVIX_ERP.LINXLOJAS (NOLOCK) WHERE EMPRESA NOT IN (0, 1, 5, 6, 10)) THEN 'SHIP FROM STORE' --SHIP FROM STORE OPEN ERA E MISHA (EXCLUI MISHA ECOMMERCE, OPEN ECOMMERCE, MARGAUX ECOMMERCE E NEWBLOOMERS)
-							--ELSE 'B2C'
+						 --WHEN C.CLIENTE_OU_FORNECEDOR IN (SELECT COD_CLIENTE FROM LINX_MICROVIX_ERP.LINXCLIENTESFORNEC (NOLOCK) WHERE (RAZAO_CLIENTE LIKE '%MNR%')  AND TIPO_CLIENTE = 'J') THEN 'B2B' --B2B MISHA
+						 --WHEN C.CLIENTE_OU_FORNECEDOR IN (SELECT COD_CLIENTE FROM LINX_MICROVIX_ERP.LINXCLIENTESFORNEC (NOLOCK) WHERE (RAZAO_CLIENTE LIKE '%NEWFIT%')  AND TIPO_CLIENTE = 'J') THEN 'B2B' --B2B OPEN ERA
+						 --WHEN C.NB_COD_REMETENTE IN (SELECT EMPRESA FROM LINX_MICROVIX_ERP.LINXLOJAS (NOLOCK) WHERE EMPRESA NOT IN (0, 1, 5, 6, 10)) THEN 'SHIP FROM STORE' --SHIP FROM STORE OPEN ERA E MISHA (EXCLUI MISHA ECOMMERCE, OPEN ECOMMERCE, MARGAUX ECOMMERCE E NEWBLOOMERS)
+						 --ELSE 'B2C'
 						 --END AS PRODUCT
 
-                         FROM GENERAL.JADLOGPEDIDOS A (NOLOCK)
-                         LEFT JOIN GENERAL.JADLOGTRACKING B (NOLOCK) ON A.SHIPMENTID = B.SHIPMENTID
-						 
+                         FROM 
+		                    GENERAL.JADLOGPEDIDOS A (NOLOCK)
+                         LEFT JOIN 
+		                    GENERAL.JADLOGTRACKING B (NOLOCK) ON A.SHIPMENTID = B.SHIPMENTID
+						 LEFT JOIN 
+                            GENERAL.JADLOGEVENTOS E (NOLOCK) ON A.SHIPMENTID = E.SHIPMENTID
+
 						 -- PROVISORIO ATÉ A LIBERAÇÃO DA IT4_WMS_DOCUMENTO
-						 JOIN LINX_MICROVIX_COMMERCE.B2CCONSULTAPEDIDOS C (NOLOCK) ON A.PEDIDO = C.ORDER_ID
-						 JOIN LINX_MICROVIX_ERP.LINXLOJAS D (NOLOCK) ON C.EMPRESA = D.EMPRESA
+						 JOIN 
+                            LINX_MICROVIX_COMMERCE.B2CCONSULTAPEDIDOS C (NOLOCK) ON A.PEDIDO = C.ORDER_ID
+						 JOIN 
+                            LINX_MICROVIX_ERP.LINXLOJAS D (NOLOCK) ON C.EMPRESA = D.EMPRESA
 
 						 --JOIN GENERAL.IT4_WMS_DOCUMENTO C (NOLOCK) ON A.PEDIDO = C.DOCUMENTO
 
-                         WHERE A.SHIPMENTID != ''
-                         AND B.SHIPMENTID IS NULL";
+                         WHERE 
+		                    A.SHIPMENTID != ''
+		                    AND (B.SHIPMENTID IS NULL OR B.[STATUS] != 'ENTREGUE')";
 
             try
             {
                 using (var conn = _conn.GetDbConnection())
                 {
-                    return await conn.QueryAsync<ShipmentId>(sql);
+                    var result = await conn.QueryAsync<ShipmentId, Evento, ShipmentId>(sql, (shipmentId, evento) =>
+                    {
+                        if (evento != null)
+                            shipmentId.eventos.Add(evento);
+
+                        return shipmentId;
+                    }, splitOn: "SHIPMENTID");
+
+                    var shipmentIds = result.GroupBy(s => s.shipment_id).Select(g =>
+                    {
+                        var groupedIds = g.First();
+
+                        if (groupedIds.eventos.Count > 0)
+                            groupedIds.eventos = g.Select(p => p.eventos.Single()).ToList();
+
+                        return groupedIds;
+                    });
+
+                    return shipmentIds.ToList();
                 }
             }
             catch (Exception ex)
@@ -271,5 +313,160 @@ namespace Infrastructure.Jadlog.Repositorys
                 throw new Exception(@$"Jadlog - GetShipmentIds - Erro ao obter shipments IDs da tabela GENERAL.JADLOGPEDIDOS - {ex.Message}");
             }
         }
+
+        public async Task<bool> BulkInsertIntoTableRaw(List<Consulta> records, Guid? parentExecutionGUID)
+        {
+            try
+            {
+                var trackingTable = CreateSystemDataTable(new Tracking(), "JadLogTracking");
+                var eventsTable = CreateSystemDataTable(new Evento(), "JadLogEventos");
+                var volumesTable = CreateSystemDataTable(new Volume(), "JadLogVolumes");
+
+                for (int i = 0; i < records.Count(); i++)
+                {
+                    trackingTable.Rows.Add(
+                        records[i].tracking.lastupdateon, records[i].tracking.codigo, records[i].tracking.shipmentId, records[i].tracking.dacte, records[i].tracking.dtEmissao, records[i].tracking.status, records[i].tracking.valor, records[i].tracking.peso,
+                        records[i].tracking.nomeRecebedor, records[i].tracking.docRecebedor, records[i].tracking.dataRecebedor, records[i].tracking.dataPrevisaoEntrega
+                    );
+
+                    if (records[i].tracking.eventos.Count() > 0)
+                    {
+                        for (int j = 0; j < records[i].tracking.eventos.Count(); j++)
+                        {
+                            eventsTable.Rows.Add(
+                                records[i].tracking.eventos[j].lastupdateon, records[i].tracking.eventos[j].data, records[i].tracking.eventos[j].status, records[i].tracking.eventos[j].unidade, records[i].tracking.eventos[j].shipmentId
+                            );
+                        }
+                    }
+
+                    if (records[i].tracking.volumes.Count() > 0)
+                    {
+                        for (int j = 0; j < records[i].tracking.volumes.Count(); j++)
+                        {
+                            volumesTable.Rows.Add(
+                                records[i].tracking.volumes[j].lastupdateon, records[i].tracking.volumes[j].shipmentId, records[i].tracking.volumes[j].peso, records[i].tracking.volumes[j].altura, records[i].tracking.volumes[j].largura, records[i].tracking.volumes[j].comprimento
+                            );
+                        }
+                    }
+                }
+
+                BulkInsertIntoTableRaw(
+                     dataTableName: trackingTable.TableName,
+                     dataTable: trackingTable,
+                     dataTableRowsNumber: trackingTable.Rows.Count
+                );
+
+                await CallDbProcMerge("general", trackingTable.TableName, parentExecutionGUID);
+
+                BulkInsertIntoTableRaw(
+                     dataTableName: eventsTable.TableName,
+                     dataTable: eventsTable,
+                     dataTableRowsNumber: eventsTable.Rows.Count
+                );
+
+                await CallDbProcMerge("general", eventsTable.TableName, parentExecutionGUID);
+
+                BulkInsertIntoTableRaw(
+                     dataTableName: volumesTable.TableName,
+                     dataTable: volumesTable,
+                     dataTableRowsNumber: volumesTable.Rows.Count
+                );
+
+                await CallDbProcMerge("general", volumesTable.TableName, parentExecutionGUID);
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        #region REFATORAR: MOVER PARA A BIBLIOTECA CORE
+        private DataTable CreateSystemDataTable<TEntity>(TEntity entity, string tableName)
+        {
+            try
+            {
+                var properties = entity.GetType().GetFilteredProperties();
+                var dataTable = new DataTable(tableName);
+                foreach (PropertyInfo prop in properties)
+                {
+                    dataTable.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
+                }
+                return dataTable;
+            }
+            catch (Exception ex)
+            {
+                throw new InternalException(
+                    stage: EnumStages.CreateSystemDataTable,
+                    error: EnumError.SQLCommand,
+                    level: EnumMessageLevel.Error,
+                    message: $"Error when convert system datatable to bulkinsert",
+                    exceptionMessage: ex.Message
+                );
+            }
+        }
+
+        private bool BulkInsertIntoTableRaw(string? dataTableName, DataTable dataTable, int dataTableRowsNumber)
+        {
+            try
+            {
+                using (var conn = _conn.GetDbConnection())
+                {
+                    using var bulkCopy = new SqlBulkCopy(conn);
+                    bulkCopy.DestinationTableName = $"[untreated].[{dataTableName}]";
+                    //bulkCopy.DestinationTableName = $"[linx_commerce].[{dataTableName}]";
+                    bulkCopy.BatchSize = dataTableRowsNumber;
+                    bulkCopy.BulkCopyTimeout = 360;
+                    foreach (DataColumn c in dataTable.Columns)
+                    {
+                        bulkCopy.ColumnMappings.Add(c.ColumnName, c.ColumnName);
+                    }
+                    bulkCopy.WriteToServer(dataTable);
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new InternalException(
+                    stage: EnumStages.BulkInsertIntoTableRaw,
+                    error: EnumError.SQLCommand,
+                    level: EnumMessageLevel.Error,
+                    message: $"Error when trying to bulk insert records on table raw",
+                    exceptionMessage: ex.Message
+                );
+            }
+        }
+
+        private async Task<bool> CallDbProcMerge(string schemaName, string tableName, Guid? parentExecutionGUID)
+        {
+            try
+            {
+                using (var conn = _conn.GetDbConnection())
+                {
+                    var parameters = new DynamicParameters();
+                    parameters.Add("@ParentExecutionGUID", parentExecutionGUID);
+
+                    var result = await conn.ExecuteAsync($"[{schemaName}].[P_{tableName}_Sincronizacao]", param: parameters, commandType: CommandType.StoredProcedure, commandTimeout: 2700);
+
+                    if (result > 0)
+                        return true;
+
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new InternalException(
+                    stage: EnumStages.CallDbProcMerge,
+                    error: EnumError.SQLCommand,
+                    level: EnumMessageLevel.Error,
+                    message: $"Error when trying to run the merge procedure: P_{tableName}_Sincronizacao",
+                    exceptionMessage: ex.Message
+                );
+            }
+        }
+        #endregion
     }
 }

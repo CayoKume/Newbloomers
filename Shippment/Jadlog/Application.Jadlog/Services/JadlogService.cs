@@ -63,64 +63,65 @@ namespace Application.Jadlog.Services
                    .Clear()
                    .AddLog(EnumJob.JadlogSearchTrackingHistory);
 
+                var consultas = new List<Domain.Jadlog.DTOs.Consulta>();
                 var trackings = new List<Domain.Jadlog.Entities.Consulta>();
                 var parameters = await _jadlogRepository.GetParameters();
                 var shipments = await _jadlogRepository.GetShipmentIds();
 
                 foreach (var parameter in parameters)
                 {
-                    var array = new JArray();
+                    var listExistingShipments = shipments.Where(x => x.product == parameter.product && x.doc_company == parameter.doc_company).ToList();
 
-                    foreach (var shipment in shipments.Where(x => x.product == parameter.product && x.doc_company == parameter.doc_company))
+                    for (int i = 0; i < listExistingShipments.Count(); i += 100)
                     {
-                        array.Add(
-                            new JObject
-                            {
-                                { "shipmentId", shipment.shipment_id }
-                            }
+                        var lote = listExistingShipments.Skip(i).Take(100).ToList();
+                        var consultaObj = new JObject { 
+                            { 
+                                "consulta", JArray.FromObject(lote.Select(s => new { shipmentId = s.shipment_id })) 
+                            } 
+                        };
+
+                        var response = await _apiCall.PostAsync(
+                                        rote: "embarcador/api/tracking/consultar",
+                                        token: parameter.token,
+                                        clientName: "JadlogTechAPI",
+                                        contentType: "application/json",
+                                        jObj: consultaObj
+                                    );
+
+                        var results = Newtonsoft.Json.JsonConvert.DeserializeObject<Domain.Jadlog.DTOs.Root>(response);
+
+                        consultas.AddRange(results.consulta.Where(x => !listExistingShipments.Any(y => 
+                                y.shipment_id == x.shipmentId &&
+                                y.eventos.Count() == x.tracking.eventos
+                                                                .GroupBy(i => new { i.data, i.status, i.unidade })
+                                                                .Select(g => g.First())
+                                                                .Count())
+                            )
                         );
-                    }
-
-                    var consultaObj = new JObject
-                    {
-                        { "consulta", array }
-                    };
-
-                    var response = await _apiCall.PostAsync(
-                        rote: "embarcador/api/tracking/consultar",
-                        token: parameter.token,
-                        clientName: "JadlogTechAPI",
-                        contentType: "application/json",
-                        jObj: consultaObj
-                    );
-
-                    var results = Newtonsoft.Json.JsonConvert.DeserializeObject<Domain.Jadlog.DTOs.Root>(response);
-                    
-                    foreach (var consulta in results.consulta)
-                    {
-                        var validations = _validator.Validate(consulta);
-
-                        if (validations.Errors.Count() > 0)
-                        {
-                            for (int j = 0; j < validations.Errors.Count(); j++)
-                            {
-                                _logger.AddMessage(
-                                    stage: EnumStages.DeserializeXMLToObject,
-                                    error: EnumError.Validation,
-                                    logLevel: EnumMessageLevel.Warning,
-                                    message: $"Error when convert record - shipmentId: {consulta.shipmentId} | tracking_code: {consulta.tracking.codigo}\n" +
-                                             $"{validations.Errors[j]}"
-                                );
-                            }
-                        }
-
-                        trackings.Add(new Domain.Jadlog.Entities.Consulta(consulta, response)); 
                     }
                 }
 
-                if (trackings.Count > 0)
+                foreach (var consulta in consultas)
                 {
-                    //bulkinsert
+                    var validations = _validator.Validate(consulta);
+
+                    foreach (var error in validations.Errors)
+                    {
+                        _logger.AddMessage(
+                            stage: EnumStages.DeserializeXMLToObject,
+                            error: EnumError.Validation,
+                            logLevel: EnumMessageLevel.Warning,
+                            message: $"Error when convert record - shipmentId: {consulta.shipmentId} | tracking_code: {consulta.tracking.codigo}\n{error}"
+                        );
+                    }
+
+                    trackings.Add(new Domain.Jadlog.Entities.Consulta(consulta, Newtonsoft.Json.JsonConvert.SerializeObject(consulta.tracking)));
+                }
+
+                if (trackings.Count() > 0)
+                {
+                    await _jadlogRepository.BulkInsertIntoTableRaw(trackings, _logger.GetExecutionGuid());
 
                     trackings.ForEach(s =>
                             _logger.AddRecord(

@@ -1,4 +1,6 @@
-﻿namespace Domain.Jadlog.CustomValidations
+﻿using System.Globalization;
+
+namespace Domain.Jadlog.CustomValidations
 {
     public static class ConvertToDateTimeValidation
     {
@@ -7,7 +9,7 @@
             if (string.IsNullOrEmpty(text))
                 return false;
 
-            if (!DateTime.TryParse(text, out var boolean))
+            if (!DateTime.TryParse(text, new CultureInfo("pt-BR"), out var boolean))
                 return false;
             else
                 return true;

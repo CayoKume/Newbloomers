@@ -1,5 +1,6 @@
 ﻿using Domain.Jadlog.DTOs;
 using FluentValidation;
+using System.Globalization;
 
 namespace Domain.Jadlog.CustomValidations
 {
@@ -48,14 +49,31 @@ namespace Domain.Jadlog.CustomValidations
                 });
 
             RuleFor(x => x.dtEmissao)
-                .Must(x => ConvertToDateTimeValidation.IsValid(x.ToString()))
-                .WithMessage(x => $"Property: dtEmissao | Value: {x.dtEmissao}, Error when trying to convert value: {x.dtEmissao.ToString()} to DateTime");
+                .Must((x, dtEmissao) =>
+                {
+                    if (dtEmissao == null || DateTime.Parse(dtEmissao, new CultureInfo("pt-BR")) < new DateTime(1753, 1, 1))
+                        x.dtEmissao = new DateTime(1753, 1, 1).ToString();
+                    return true;
+                })
+                .WithMessage(x => $"Date: {x.dtEmissao} must be between 01/01/1753 and 31/12/9999.")
+                .Must(x => ConvertToDateTimeValidation.IsValid(x))
+                .WithMessage(x => $"Property: dtEmissao | Value: {x.dtEmissao}, Error when trying to convert value: {x.dtEmissao} to DateTime");
 
             RuleFor(x => x.recebedor)
                 .SetValidator(new RecebedorValidator());
 
             RuleForEach(x => x.eventos)
                 .SetValidator(new EventoValidator());
+
+            RuleFor(x => x.volumes)
+                .Custom((volumes, context) =>
+                {
+                    if (volumes == null)
+                        context.InstanceToValidate.volumes = new List<Volume>();
+                });
+
+            RuleForEach(x => x.volumes)
+                .SetValidator(new VolumeValidator());
         }
     }
 }

@@ -2,6 +2,7 @@
 {
     public class OrderItem
     {
+        public DateTime? lastupdateon { get; set; }
         public Int64? OrderItemID { get; set; }
         public Guid? OrderID { get; set; }
         public Int32? ParentItemID { get; set; }
@@ -50,6 +51,7 @@
 
         public OrderItem(OrderItem orderItem)
         {
+            this.lastupdateon = DateTime.Now;
             this.OrderItemID = orderItem.OrderItemID;
             this.OrderID = orderItem.OrderID;
             this.ParentItemID = orderItem.ParentItemID;

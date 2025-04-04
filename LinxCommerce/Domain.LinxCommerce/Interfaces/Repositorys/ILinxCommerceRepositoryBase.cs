@@ -14,6 +14,7 @@ namespace Domain.LinxCommerce.Interfaces.Repositorys
         public Task<bool> ExecuteQueryCommand(LinxCommerceJobParameter jobParameter, string? sql);
 
         public bool BulkInsertIntoTableRaw(string? jobName, string? dataTableName, string? databaseName, DataTable dataTable, int dataTableRowsNumber);
+        public bool BulkInsertIntoTableTrusted(string? jobName, string? dataTableName, string? databaseName, DataTable dataTable, int dataTableRowsNumber);
 
         public Task<bool> CallDbProcMerge(LinxCommerceJobParameter jobParameter);
         public Task<bool> CallDbProcMerge(string schemaName, string tableName, Guid? parentExecutionGUID);

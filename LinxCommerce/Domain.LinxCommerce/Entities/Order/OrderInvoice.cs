@@ -2,6 +2,7 @@
 {
     public class OrderInvoice
     {
+        public DateTime lastupdateon { get; set; }
         public Guid? OrderInvoiceID { get; set; }
         public string? Code { get; set; }
         public string? Url { get; set; }
@@ -24,6 +25,7 @@
 
         public OrderInvoice(OrderInvoice orderInvoice, Guid? orderID)
         {
+            this.lastupdateon = DateTime.Now;
             this.OrderInvoiceID = orderInvoice.OrderInvoiceID;
             this.Code = orderInvoice.Code;
             this.Url = orderInvoice.Url;

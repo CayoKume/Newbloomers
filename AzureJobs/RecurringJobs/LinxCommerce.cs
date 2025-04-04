@@ -103,6 +103,27 @@ namespace AzureJobs.RecurringJobs
         //    }
         //}
 
+        //public async Task SearchOrdersByQueue([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    try
+        //    {
+        //        var method = _methods
+        //            .Where(m => m.MethodName == "SearchOrders")
+        //            .FirstOrDefault();
+
+        //        var result = await _orderService.SearchOrdersByQueue(
+        //            _linxCommerceJobParameter.SetParameters(
+        //                jobName: method.MethodName,
+        //                tableName: method.MethodName
+        //            )
+        //        );
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw;
+        //    }
+        //}
+
         //public async Task SearchCustomerByQueue([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
         //{
         //    try

@@ -94,6 +94,37 @@ namespace Infrastructure.LinxCommerce.Repositorys
             }
         }
 
+        public bool BulkInsertIntoTableTrusted(string? jobName, string? dataTableName, string? databaseName, DataTable dataTable, int dataTableRowsNumber)
+        {
+            try
+            {
+                using (var conn = _sqlServerConnection.GetDbConnection())
+                {
+                    using var bulkCopy = new SqlBulkCopy(conn);
+                    bulkCopy.DestinationTableName = $"[linx_commerce].[{dataTableName}]";
+                    bulkCopy.BatchSize = dataTableRowsNumber;
+                    bulkCopy.BulkCopyTimeout = 360;
+                    foreach (DataColumn c in dataTable.Columns)
+                    {
+                        bulkCopy.ColumnMappings.Add(c.ColumnName, c.ColumnName);
+                    }
+                    bulkCopy.WriteToServer(dataTable);
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new InternalException(
+                    stage: EnumStages.BulkInsertIntoTableRaw,
+                    error: EnumError.SQLCommand,
+                    level: EnumMessageLevel.Error,
+                    message: $"Error when trying to bulk insert records on table raw",
+                    exceptionMessage: ex.Message
+                );
+            }
+        }
+
         public async Task<bool> CallDbProcMerge(LinxCommerceJobParameter jobParameter)
         {
             try

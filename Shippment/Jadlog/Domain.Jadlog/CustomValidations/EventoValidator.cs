@@ -1,5 +1,6 @@
 ﻿using Domain.Jadlog.DTOs;
 using FluentValidation;
+using System.Globalization;
 
 namespace Domain.Jadlog.CustomValidations
 {
@@ -28,6 +29,13 @@ namespace Domain.Jadlog.CustomValidations
                 });
 
             RuleFor(x => x.data)
+                .Must((x, data) =>
+                {
+                    if (data == null || DateTime.Parse(data, new CultureInfo("pt-BR")) < new DateTime(1753, 1, 1))
+                        x.data = new DateTime(1753, 1, 1).ToString();
+                    return true;
+                })
+                .WithMessage(x => $"Date: {x.data} must be between 01/01/1753 and 31/12/9999.")
                 .Must(x => ConvertToDateTimeValidation.IsValid(x.ToString()))
                 .WithMessage(x => $"Property: data | Value: {x.data}, Error when trying to convert value: {x.data.ToString()} to DateTime");
         }

@@ -4,6 +4,7 @@ namespace Domain.LinxCommerce.Entities.Order
 {
     public class OrderShipment
     {
+        public DateTime lastupdateon { get; set; }
         public Guid? OrderShipmentID { get; set; }
         public Guid? OrderID { get; set; }
         public Int32? DeliveryMethodID { get; set; }
@@ -20,6 +21,7 @@ namespace Domain.LinxCommerce.Entities.Order
 
         public OrderShipment(OrderShipment orderShipment)
         {
+            this.lastupdateon = DateTime.Now;
             this.OrderShipmentID = orderShipment.OrderShipmentID;
             this.OrderID = orderShipment.OrderID;
             this.DeliveryMethodID = orderShipment.DeliveryMethodID;

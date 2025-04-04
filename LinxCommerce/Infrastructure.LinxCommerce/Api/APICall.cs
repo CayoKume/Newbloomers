@@ -14,6 +14,38 @@ namespace Infrastructure.LinxCommerce.Api
         public APICall(IHttpClientFactory httpClientFactory) =>
             (_httpClientFactory) = (httpClientFactory);
 
+        public async Task<bool> PostRequest(LinxCommerceJobParameter jobParameter, string? route, object objRequest)
+        {
+            try
+            {
+                var client = CreateClient(
+                    jobParameter,
+                    route
+                    );
+
+                var response = await client.PostAsync(
+                    client.BaseAddress + route,
+                    new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(objRequest),
+                    Encoding.UTF8, "application/json")
+                );
+
+                if (response.IsSuccessStatusCode && response.StatusCode == HttpStatusCode.OK)
+                    return true;
+                else
+                    throw new Exception($"{response.StatusCode}");
+            }
+            catch (Exception ex)
+            {
+                throw new InternalException(
+                    stage: EnumStages.PostAsync,
+                    error: EnumError.Exception,
+                    level: EnumMessageLevel.Error,
+                    message: $"Error when querying endpoint: {jobParameter.jobName} on microvix webservice\n" +
+                                $"Request: {Newtonsoft.Json.JsonConvert.SerializeObject(objRequest)}"
+                );
+            }
+        }
+
         public async Task<string> PostRequest(LinxCommerceJobParameter jobParameter, object objRequest, string? route)
         {
             try

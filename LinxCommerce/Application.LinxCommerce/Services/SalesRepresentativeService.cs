@@ -33,9 +33,9 @@ namespace Application.LinxCommerce.Services
                 var salesRepresentativeList = new List<SalesRepresentative>();
 
                 var getSaleRepresentativeResponse = await _apiCall.PostRequest(
-                    jobParameter: jobParameter,
-                    objRequest: new { salesRepresentativeId },
-                    route: "/v1/Sales/API.svc/web/GetSalesRepresentative"
+                    jobParameter,
+                    new { salesRepresentativeId },
+                    "/v1/Sales/API.svc/web/GetSalesRepresentative"
                 );
 
                 var saleRepresentative = Newtonsoft.Json.JsonConvert.DeserializeObject<GetSalesRepresentative.Root>(getSaleRepresentativeResponse);
@@ -73,9 +73,9 @@ namespace Application.LinxCommerce.Services
                 };
 
                 var response = await _apiCall.PostRequest(
-                    jobParameter: jobParameter,
-                    objRequest: objectRequest,
-                    route: "/v1/Sales/API.svc/web/SearchSalesRepresentative"
+                    jobParameter,
+                    objectRequest,
+                    "/v1/Sales/API.svc/web/SearchSalesRepresentative"
                 );
 
                 var salesRepresentativeAPIList = new List<SalesRepresentative>();
@@ -89,9 +89,9 @@ namespace Application.LinxCommerce.Services
                     };
 
                     var getSaleRepresentativeResponse = await _apiCall.PostRequest(
-                        jobParameter: jobParameter,
-                        objRequest: getSaleRepresentativeObjectRequest,
-                        route: "/v1/Sales/API.svc/web/GetSalesRepresentative"
+                        jobParameter,
+                        getSaleRepresentativeObjectRequest,
+                        "/v1/Sales/API.svc/web/GetSalesRepresentative"
                     );
 
                     var saleRepresentative = Newtonsoft.Json.JsonConvert.DeserializeObject<GetSalesRepresentative.Root>(getSaleRepresentativeResponse);

@@ -30,7 +30,8 @@ namespace Application.LinxCommerce.Interfaces
         public Task<string?> SearchFinancialOrderInfo();
 
         public Task<string?> UpdateOrderInvoice();
-        public Task<string?> UpdateOrder();
+        public Task<bool?> UpdateOrder();
+        public Task<bool?> UpdateTrackingNumberOrder(LinxCommerceJobParameter jobParameter);
         public Task<string?> UpdateOrderPackageTrackingNumber();
     }
 }

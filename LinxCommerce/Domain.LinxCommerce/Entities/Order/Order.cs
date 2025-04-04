@@ -6,6 +6,7 @@ namespace Domain.LinxCommerce.Entities.Order
     {
         public class Root
         {
+            public DateTime? lastupdateon { get; set; }
             public Guid? OrderID { get; set; }
             public string? OrderNumber { get; set; }
             public string? MarketPlaceBrand { get; set; }
@@ -123,6 +124,7 @@ namespace Domain.LinxCommerce.Entities.Order
 
             public Root(Order.Root order, string? getOrderResponse)
             {
+                this.lastupdateon = DateTime.Now;
                 this.OrderInvoice = new OrderInvoice(order.OrderInvoice, order.OrderID);
                 this.Seller = new OrderSeller(order.Seller);
                 this.OrderType = new OrderType(order.OrderType);

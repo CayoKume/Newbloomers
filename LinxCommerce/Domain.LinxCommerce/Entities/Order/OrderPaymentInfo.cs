@@ -2,6 +2,7 @@
 {
     public class OrderPaymentInfo
     {
+        public DateTime lastupdateon { get; set; }
         public string? Identifier { get; set; }
         public string? Alias { get; set; }
         public DateTime? PaymentDate { get; set; }
@@ -27,6 +28,7 @@
 
         public OrderPaymentInfo(OrderPaymentInfo orderPaymentInfo, Int32? orderPaymentMethodID)
         {
+            this.lastupdateon = DateTime.Now;
             this.Identifier = orderPaymentInfo.Identifier;
             this.Alias = orderPaymentInfo.Alias;
             this.PaymentDate = orderPaymentInfo.PaymentDate;

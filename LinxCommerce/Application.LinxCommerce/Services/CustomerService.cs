@@ -73,9 +73,9 @@ namespace Application.LinxCommerce.Services
                 };
 
                 var response = await _apiCall.PostRequest(
-                    jobParameter: jobParameter,
-                    objRequest: objectRequest,
-                    route: "/v1/Profile/API.svc/web/SearchCustomer"
+                    jobParameter,
+                    objectRequest,
+                    "/v1/Profile/API.svc/web/SearchCustomer"
                 );
 
                 var customersAPIList = new List<Person>();
@@ -284,9 +284,9 @@ namespace Application.LinxCommerce.Services
                 };
 
                 var response = await _apiCall.PostRequest(
-                    jobParameter: jobParameter,
-                    objRequest: objectRequest,
-                    route: "/v1/Profile/API.svc/web/SearchCustomer"
+                    jobParameter,
+                    objectRequest,
+                    "/v1/Profile/API.svc/web/SearchCustomer"
                 );
 
                 var customersAPIList = new List<Person>();
@@ -411,9 +411,9 @@ namespace Application.LinxCommerce.Services
                 };
 
                 var response = await _apiCall.PostRequest(
-                    jobParameter: jobParameter,
-                    objRequest: objectRequest,
-                    route: "/v1/Profile/API.svc/web/GetQueueCustomers"
+                    jobParameter,
+                    objectRequest,
+                    "/v1/Profile/API.svc/web/GetQueueCustomers"
                 );
 
                 var customersAPIList = new List<Person>();
@@ -489,9 +489,9 @@ namespace Application.LinxCommerce.Services
                     var dequeueObjectRequest = new { QueueItems = listQueueItemID };
 
                     var dequeueResponse = await _apiCall.PostRequest(
-                        jobParameter: jobParameter,
-                        objRequest: dequeueObjectRequest,
-                        route: "/v1/Queue/API.svc/web/DequeueQueueItems"
+                        jobParameter,
+                        dequeueObjectRequest,
+                        "/v1/Queue/API.svc/web/DequeueQueueItems"
                     );
                 }
                 else
