@@ -2,7 +2,6 @@
 using Application.Jadlog.Interfaces;
 using Domain.IntegrationsCore.Entities.Enums;
 using Domain.IntegrationsCore.Exceptions;
-using Domain.Jadlog.DTOs;
 using Domain.Jadlog.Interfaces.Api;
 using Domain.Jadlog.Interfaces.Repositorys;
 using FluentValidation;
@@ -14,10 +13,10 @@ namespace Application.Jadlog.Services
     {
         private readonly IAPICall _apiCall;
         private readonly ILoggerService _logger;
-        private readonly IValidator<Consulta> _validator;
+        private readonly IValidator<Domain.Jadlog.DTOs.Consulta> _validator;
         private readonly IJadlogRepository _jadlogRepository;
 
-        public JadlogService(IJadlogRepository jadlogRepository, IAPICall apiCall, ILoggerService logger, IValidator<Consulta> validator) =>
+        public JadlogService(IJadlogRepository jadlogRepository, IAPICall apiCall, ILoggerService logger, IValidator<Domain.Jadlog.DTOs.Consulta> validator) =>
             (_jadlogRepository, _apiCall, _logger, _validator) = (jadlogRepository, apiCall, logger, validator);
 
         public Task<bool?> CancelOrder()
@@ -184,5 +183,10 @@ namespace Application.Jadlog.Services
 
             return true;
         }
+
+        //private JObject? BuildBodyRequest(Domain.Jadlog.Entities.Parameters parameters, Domain.Jadlog.Entities.Order order)
+        //{
+
+        //}
     }
 }

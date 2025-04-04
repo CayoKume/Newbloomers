@@ -1,118 +1,148 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Domain.IntegrationsCore.Extensions;
+using Domain.LinxCommerce.Entities.Customer;
 
 namespace Domain.LinxCommerce.Entities.Sku
 {
-    public class SKUs
+    public class Sku
     {
-        [Column(TypeName = "varchar(60)")]
+        public DateTime lastupdateon { get; set; }
+
         public string? UPC { get; set; }
 
-        [Column(TypeName = "bit")]
-        public string? DisplayCondition { get; set; }
+        public bool? DisplayCondition { get; set; }
 
-        [Column(TypeName = "int")]
-        public string? DefinitionID { get; set; }
+        public Int32? DefinitionID { get; set; }
 
-        [Column(TypeName = "int")]
-        public string? ConditionID { get; set; }
+        public string? SuppliersIDs { get; set; }
 
-        [Column(TypeName = "int")]
-        public string? UnitOfMeasureID { get; set; }
+        public string? ParentsIDs { get; set; }
 
-        [Column(TypeName = "bit")]
-        public string? ManageStock { get; set; }
+        public Int32? ConditionID { get; set; }
 
-        [Column(TypeName = "decimal(10,2)")]
-        public string? MinimumQtyAllowed { get; set; }
+        public Int32? UnitOfMeasureID { get; set; }
 
-        [Column(TypeName = "decimal(10,2)")]
-        public string? MaximumQtyAllowed { get; set; }
+        public bool? ManageStock { get; set; }
 
-        [Column(TypeName = "bit")]
-        public string? Preorderable { get; set; }
+        public decimal? MinimumQtyAllowed { get; set; }
 
-        [Column(TypeName = "datetime")]
-        public string? PreorderDate { get; set; }
+        public decimal? MaximumQtyAllowed { get; set; }
 
-        [Column(TypeName = "decimal(10,2)")]
-        public string? PreorderLimit { get; set; }
+        public bool? Preorderable { get; set; }
 
-        [Column(TypeName = "bit")]
-        public string? Backorderable { get; set; }
+        public DateTime? PreorderDate { get; set; }
 
-        [Column(TypeName = "decimal(10,2)")]
-        public string? BackorderLimit { get; set; }
+        public decimal? PreorderLimit { get; set; }
 
-        [Column(TypeName = "int")]
-        public string? PurchasingPolicyID { get; set; }
+        public bool? Backorderable { get; set; }
 
-        [Column(TypeName = "decimal(10,2)")]
+        public decimal? BackorderLimit { get; set; }
+
+        public Int32? PurchasingPolicyID { get; set; }
+
         public string? WrappingQty { get; set; }
 
-        [Column(TypeName = "decimal(10,2)")]
-        public string? Weight { get; set; }
+        public decimal? Weight { get; set; }
 
-        [Column(TypeName = "decimal(10,2)")]
-        public string? Height { get; set; }
+        public decimal? Height { get; set; }
 
-        [Column(TypeName = "decimal(10,2)")]
-        public string? Width { get; set; }
+        public decimal? Width { get; set; }
 
-        [Column(TypeName = "decimal(10,2)")]
-        public string? Depth { get; set; }
+        public decimal? Depth { get; set; }
 
-        [Column(TypeName = "decimal(10,2)")]
-        public string? Cost { get; set; }
+        public decimal? Cost { get; set; }
 
-        [Column(TypeName = "decimal(10,2)")]
-        public string? Tax { get; set; }
+        public decimal? Tax { get; set; }
 
-        [Column(TypeName = "bit")]
-        public string? IsVisible { get; set; }
+        public bool? IsVisible { get; set; }
 
-        [Column(TypeName = "varchar(60)")]
-        public string? VisibleFrom { get; set; }
+        public DateTime? VisibleFrom { get; set; }
 
-        [Column(TypeName = "varchar(60)")]
-        public string? VisibleTo { get; set; }
+        public DateTime? VisibleTo { get; set; }
 
-        [Column(TypeName = "bit")]
-        public string? IsDeleted { get; set; }
+        public bool? IsDeleted { get; set; }
 
-        [Column(TypeName = "int")]
-        public string? ProductID { get; set; }
+        public Int32? ProductID { get; set; }
 
-        [Column(TypeName = "varchar(60)")]
         public string? Name { get; set; }
 
-        [Column(TypeName = "varchar(60)")]
         public string? SKU { get; set; }
 
-        [Column(TypeName = "datetime")]
-        public string? CreatedDate { get; set; }
+        public DateTime? CreatedDate { get; set; }
 
-        [Column(TypeName = "varchar(60)")]
         public string? CreatedBy { get; set; }
 
-        [Column(TypeName = "datetime")]
-        public string? ModifiedDate { get; set; }
+        public DateTime? ModifiedDate { get; set; }
 
-        [Column(TypeName = "varchar(60)")]
         public string? ModifiedBy { get; set; }
 
-        [Column(TypeName = "uniqueidentifier")]
         public string? IntegrationID { get; set; }
 
+        [SkipProperty]
+        public List<string?> SuppliersID { get; set; }
 
-        public List<string?> SupplierID { get; set; }
-
-
+        [SkipProperty]
         public List<string?> ParentsID { get; set; }
 
+        [SkipProperty]
+        public List<MetadataValue> MetadataValues { get; set; } = new List<MetadataValue>();
 
-        public List<MetadataValue> MetadataValues { get; set; }
+        [SkipProperty]
+        public List<ParentRelation> ParentRelations { get; set; } = new List<ParentRelation>();
 
+        [SkipProperty]
+        public Dictionary<int?, string> Responses { get; set; } = new Dictionary<int?, string>();
 
-        public List<ParentRelation> ParentRelations { get; set; }
+        public Sku() { }
+
+        public Sku(Sku sku, string? getSkuResponse)
+        {
+            this.lastupdateon = DateTime.Now;
+            this.UPC = sku.UPC;
+            this.DisplayCondition = sku.DisplayCondition;
+            this.DefinitionID = sku.DefinitionID;
+            this.SuppliersIDs = sku.SuppliersID.Count() > 0 ? string.Join(", ", sku.SuppliersID) : null;
+            this.ParentsIDs = sku.ParentsID.Count() > 0 ? string.Join(", ", sku.ParentsID) : null;
+            this.ConditionID = sku.ConditionID;
+            this.UnitOfMeasureID = sku.UnitOfMeasureID;
+            this.ManageStock = sku.ManageStock;
+            this.MinimumQtyAllowed = sku.MinimumQtyAllowed;
+            this.MaximumQtyAllowed = sku.MaximumQtyAllowed;
+            this.Preorderable = sku.Preorderable;
+            this.PreorderDate = sku.PreorderDate;
+            this.PreorderLimit = sku.PreorderLimit;
+            this.Backorderable = sku.Backorderable;
+            this.BackorderLimit = sku.BackorderLimit;
+            this.PurchasingPolicyID = sku.PurchasingPolicyID;
+            this.WrappingQty = sku.WrappingQty;
+            this.Weight = sku.Weight;
+            this.Height = sku.Height;
+            this.Width = sku.Width;
+            this.Depth = sku.Depth;
+            this.Cost = sku.Cost;
+            this.Tax = sku.Tax;
+            this.IsVisible = sku.IsVisible;
+            this.VisibleFrom = sku.VisibleFrom;
+            this.VisibleTo = sku.VisibleTo;
+            this.IsDeleted = sku.IsDeleted;
+            this.ProductID = sku.ProductID;
+            this.Name = sku.Name;
+            this.SKU = sku.SKU;
+            this.CreatedDate = sku.CreatedDate;
+            this.CreatedBy = sku.CreatedBy;
+            this.ModifiedDate = sku.ModifiedDate;
+            this.ModifiedBy = sku.ModifiedBy;
+            this.IntegrationID = sku.IntegrationID;
+            this.Responses.Add(sku.ProductID, getSkuResponse);
+
+            foreach (var metadataValue in sku.MetadataValues)
+            {
+                this.MetadataValues.Add(new MetadataValue(metadataValue, sku.ProductID));
+            }
+
+            foreach (var parentRelation in sku.ParentRelations)
+            {
+                this.ParentRelations.Add(new ParentRelation(parentRelation, sku.ProductID));
+            }
+        }
     }
 }

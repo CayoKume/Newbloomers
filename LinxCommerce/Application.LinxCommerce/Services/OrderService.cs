@@ -273,7 +273,7 @@ namespace Application.LinxCommerce.Services
                 {
                     var getOrderResponse = await _apiCall.PostRequest(
                         jobParameter: jobParameter,
-                        stringIdentifier: enqueuedOrder.Order.OrderID.ToString(),
+                        stringIdentifier: enqueuedOrder.QueueItem.EntityKeyValue,
                         route: "/v1/Sales/API.svc/web/GetOrder"
                     );
 

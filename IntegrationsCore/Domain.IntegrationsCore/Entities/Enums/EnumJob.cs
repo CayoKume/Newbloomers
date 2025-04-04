@@ -100,6 +100,7 @@
         LinxCommerceCustomers = 916,
         LinxCommerceOrders = 900,
         LinxCommerceUpdateTrackingNumberOrder = 917,
+        LinxCommerceSku = 913,
 
         JadlogSearchTrackingHistory = 1100
     }

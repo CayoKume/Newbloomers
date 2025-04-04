@@ -2,6 +2,8 @@
 {
     public class Contact
     {
+        public DateTime lastupdateon { get; set; }
+
         public string? Phone { get; set; }
 
         public string? Phone2 { get; set; }
@@ -16,6 +18,7 @@
 
         public Contact(Contact contact, Int32? customerID)
         {
+            this.lastupdateon = DateTime.Now;
             this.Phone = contact.Phone;
             this.Phone2 = contact.Phone2;
             this.CellPhone = contact.CellPhone;

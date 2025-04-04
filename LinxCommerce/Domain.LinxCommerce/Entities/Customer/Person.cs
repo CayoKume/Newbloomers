@@ -4,6 +4,7 @@ namespace Domain.LinxCommerce.Entities.Customer
 {
     public class Person
     {
+        public DateTime lastupdateon { get; set; }
         public string? Surname { get; set; }
         public DateTime? BirthDate { get; set; }
         public string? Gender { get; set; }
@@ -41,6 +42,7 @@ namespace Domain.LinxCommerce.Entities.Customer
 
         public Person(Person customer, string getCustomerResponse)
         {
+            this.lastupdateon = DateTime.Now;
             this.Surname = customer.Surname;
             this.BirthDate = customer.BirthDate;
             this.Gender = customer.Gender;

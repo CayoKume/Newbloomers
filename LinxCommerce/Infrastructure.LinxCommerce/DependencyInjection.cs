@@ -3,6 +3,7 @@ using Application.LinxCommerce.Services;
 using Domain.LinxCommerce.CustomValidations.Customer;
 using Domain.LinxCommerce.CustomValidations.Order;
 using Domain.LinxCommerce.CustomValidations.SalesRepresentative;
+using Domain.LinxCommerce.CustomValidations.Sku;
 using Domain.LinxCommerce.Interfaces.Api;
 using Domain.LinxCommerce.Interfaces.Repositorys;
 using FluentValidation;
@@ -17,6 +18,8 @@ namespace Infrastructure.LinxCommerce.DependencyInjection
     {
         public static IServiceCollection AddScopedLinxCommerceServices(this IServiceCollection services)
         {
+            services.AddScopedLinxCommerceValidations();
+
             services.AddScoped<ILinxCommerceRepositoryBase, LinxCommerceRepositoryBase>();
             services.AddScoped<IAPICall, APICall>();
             services.AddHttpClient("LinxCommerceAPI", client =>
@@ -24,6 +27,31 @@ namespace Infrastructure.LinxCommerce.DependencyInjection
                 client.BaseAddress = new Uri("https://misha.layer.core.dcg.com.br");
                 client.Timeout = new TimeSpan(0, 20, 0);
             });
+
+            services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IOrderStatusRepository, OrderStatusRepository>();
+
+            //services.AddScoped<IProductService<SearchProductResponse.Root>, ProductService<SearchProductResponse.Root>>();
+            //services.AddScoped<IProductRepository, ProductRepository>();
+
+            services.AddScoped<ISKUService, SKUService>();
+            services.AddScoped<ISKURepository, SKURepository>();
+
+            services.AddScoped<ISalesRepresentativeService, SalesRepresentativeService>();
+            services.AddScoped<ISalesRepresentativeRepository, SalesRepresentativeRepository>();
+
+            services.AddScoped<ICustomerService, CustomerService>();
+            services.AddScoped<ICustomerRepository, CustomerRepository>();
+
+            return services;
+        }
+
+        private static IServiceCollection AddScopedLinxCommerceValidations(this IServiceCollection services)
+        {
+            services.AddValidatorsFromAssemblyContaining<SkuValidator>();
+            services.AddValidatorsFromAssemblyContaining<MetadataValueValidator>();
+            services.AddValidatorsFromAssemblyContaining<ParentRelationValidator>();
 
             services.AddValidatorsFromAssemblyContaining<PersonValidator>();
             services.AddValidatorsFromAssemblyContaining<ContactValidator>();
@@ -54,22 +82,6 @@ namespace Infrastructure.LinxCommerce.DependencyInjection
             services.AddValidatorsFromAssemblyContaining<SalesRepresentativePortfolioValidator>();
             services.AddValidatorsFromAssemblyContaining<SalesRepresentativeShippingRegionValidator>();
             services.AddValidatorsFromAssemblyContaining<SalesRepresentativeWebSiteSettingsValidator>();
-
-            services.AddScoped<IOrderService, OrderService>();
-            services.AddScoped<IOrderRepository, OrderRepository>();
-            services.AddScoped<IOrderStatusRepository, OrderStatusRepository>();
-
-            //services.AddScoped<IProductService<SearchProductResponse.Root>, ProductService<SearchProductResponse.Root>>();
-            //services.AddScoped<IProductRepository, ProductRepository>();
-
-            services.AddScoped<ISKUService, SKUService>();
-            services.AddScoped<ISKURepository, SKURepository>();
-
-            services.AddScoped<ISalesRepresentativeService, SalesRepresentativeService>();
-            services.AddScoped<ISalesRepresentativeRepository, SalesRepresentativeRepository>();
-
-            services.AddScoped<ICustomerService, CustomerService>();
-            services.AddScoped<ICustomerRepository, CustomerRepository>();
 
             return services;
         }

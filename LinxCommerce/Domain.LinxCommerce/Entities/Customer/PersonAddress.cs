@@ -2,6 +2,7 @@
 {
     public class PersonAddress
     {
+        public DateTime lastupdateon { get; set; }
         public Int32? ID { get; set; }
         public string? Name { get; set; }
         public string? ContactName { get; set; }
@@ -20,6 +21,7 @@
 
         public PersonAddress(PersonAddress address, Int32? customerID)
         {
+            this.lastupdateon = DateTime.Now;
             this.ID = address.ID;
             this.Name = address.Name;
             this.ContactName = address.ContactName;

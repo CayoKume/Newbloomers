@@ -30,14 +30,14 @@ namespace Infrastructure.LinxCommerce.Repository
                 {
                     try
                     {
-                        customerTable.Rows.Add(records[i].Surname, records[i].BirthDate, records[i].Gender, records[i].RG, records[i].Cpf,
+                        customerTable.Rows.Add(records[i].lastupdateon, records[i].Surname, records[i].BirthDate, records[i].Gender, records[i].RG, records[i].Cpf,
                                         records[i].CreatedDate, records[i].CustomerID, records[i].CustomerStatusID, records[i].WebSiteID, records[i].Name,
                                         records[i].Email, records[i].CustomerHash, records[i].Password, records[i].CustomerType, records[i].Cnpj, records[i].TradingName,
                                         records[i].Groups.Count() > 0 ? String.Join(", ", records[i].Groups.Select(x => x.CustomerGroupID)) : null);
 
                         if (records[i].Contact != null)
                         {
-                            customerContactTable.Rows.Add(records[i].Contact.Phone, records[i].Contact.Phone2,
+                            customerContactTable.Rows.Add(records[i].Contact.lastupdateon, records[i].Contact.Phone, records[i].Contact.Phone2,
                                 records[i].Contact.CellPhone, records[i].Contact.Fax, records[i].Contact.CustomerID);
                         }
 
@@ -45,7 +45,7 @@ namespace Infrastructure.LinxCommerce.Repository
                         {
                             for (int j = 0; j < records[i].Address.Count(); j++)
                             {
-                                customerAddressTable.Rows.Add(records[i].Address[j].ID, records[i].Address[j].Name, records[i].Address[j].ContactName,
+                                customerAddressTable.Rows.Add(records[i].Address[j].lastupdateon, records[i].Address[j].ID, records[i].Address[j].Name, records[i].Address[j].ContactName,
                                     records[i].Address[j].PostalCode, records[i].Address[j].AddressLine, records[i].Address[j].City, records[i].Address[j].Neighbourhood,
                                     records[i].Address[j].Number, records[i].Address[j].State, records[i].Address[j].AddressNotes, records[i].Address[j].Landmark,
                                     records[i].Address[j].MainAddress, records[i].Address[j].CustomerID);
@@ -54,7 +54,7 @@ namespace Infrastructure.LinxCommerce.Repository
 
                         if (records[i].EmailConfirmation != null)
                         {
-                            customerEmailConfirmationTable.Rows.Add(records[i].EmailConfirmation.CustomerID, records[i].EmailConfirmation.Status, records[i].EmailConfirmation.ConfirmationDate);
+                            customerEmailConfirmationTable.Rows.Add(records[i].EmailConfirmation.lastupdateon, records[i].EmailConfirmation.CustomerID, records[i].EmailConfirmation.Status, records[i].EmailConfirmation.ConfirmationDate);
                         }
                     }
                     catch (Exception)
