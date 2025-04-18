@@ -150,7 +150,7 @@ namespace Domain.LinxCommerce.CustomValidations.Customer
                         x.CreatedDate = new DateTime(1753, 1, 1);
                     return true;
                 })
-                .WithMessage(x => $"Date: {x.BirthDate} must be between 01/01/1753 and 31/12/9999.")
+                .WithMessage(x => $"Date: {x.CreatedDate} must be between 01/01/1753 and 31/12/9999.")
                 .Must(x => ConvertToDateTimeValidation.IsValid(x.ToString()))
                 .WithMessage(x => $"Property: CreatedDate | Value: {x.CreatedDate}, Error when trying to convert value: {x.CreatedDate.ToString()} to DateTime");
         }

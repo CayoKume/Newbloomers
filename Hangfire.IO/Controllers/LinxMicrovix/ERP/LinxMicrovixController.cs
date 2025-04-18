@@ -1,4 +1,5 @@
 ﻿using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxMicrovix;
+using Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
 using Microsoft.AspNetCore.Mvc;
 
@@ -37,6 +38,9 @@ namespace Hangfire.IO.Controllers.LinxMicrovix.ERP
         private readonly ILinxSetoresService _linxSetoresService;
         private readonly ILinxVendedoresService _linxVendedoresService;
         private readonly ILinxXMLDocumentosService _linxXMLDocumentosService;
+        private readonly ILinxRotinaOrigemService _linxRotinaOrigemService;
+        private readonly ILinxCfopFiscalService _linxCfopFiscalService;
+        private readonly ILinxUsuariosService _linxUsuariosService;
         private readonly ILinxProdutosCodBarService _linxProdutosCodBarService;
 
         public LinxMicrovixController(
@@ -68,6 +72,9 @@ namespace Hangfire.IO.Controllers.LinxMicrovix.ERP
             ILinxSetoresService linxSetoresService,
             ILinxVendedoresService linxVendedoresService,
             ILinxXMLDocumentosService linxXMLDocumentosService,
+            ILinxRotinaOrigemService linxRotinaOrigemService,
+            ILinxCfopFiscalService linxCfopFiscalService,
+            ILinxUsuariosService linxUsuariosService,
             ILinxProdutosCodBarService linxProdutosCodBarService
         )
         {
@@ -99,6 +106,9 @@ namespace Hangfire.IO.Controllers.LinxMicrovix.ERP
             _linxSetoresService = linxSetoresService;
             _linxVendedoresService = linxVendedoresService;
             _linxXMLDocumentosService = linxXMLDocumentosService;
+            _linxRotinaOrigemService = linxRotinaOrigemService;
+            _linxCfopFiscalService = linxCfopFiscalService;
+            _linxUsuariosService = linxUsuariosService;
             _linxProdutosCodBarService = linxProdutosCodBarService;
 
             _linxMicrovixJobParameter = new LinxAPIParam(
@@ -891,6 +901,90 @@ namespace Hangfire.IO.Controllers.LinxMicrovix.ERP
                     .FirstOrDefault();
 
                 var result = await _linxVendedoresService.GetRecords(
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
+                );
+
+                if (result != true)
+                    return BadRequest($"Unable to find records on endpoint.");
+                else
+                    return Ok($"Records integrated successfully.");
+            }
+            catch (Exception ex)
+            {
+                Response.StatusCode = 400;
+                return Content($"Unable to integrate the records.\nError: {ex.Message}");
+            }
+        }
+
+        [HttpPost("LinxUsuarios")]
+        public async Task<ActionResult> LinxUsuarios()
+        {
+            try
+            {
+                var method = _methods
+                    .Where(m => m.MethodName == "LinxUsuarios")
+                    .FirstOrDefault();
+
+                var result = await _linxUsuariosService.GetRecords(
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
+                );
+
+                if (result != true)
+                    return BadRequest($"Unable to find records on endpoint.");
+                else
+                    return Ok($"Records integrated successfully.");
+            }
+            catch (Exception ex)
+            {
+                Response.StatusCode = 400;
+                return Content($"Unable to integrate the records.\nError: {ex.Message}");
+            }
+        }
+
+        [HttpPost("LinxRotinaOrigem")]
+        public async Task<ActionResult> LinxRotinaOrigem()
+        {
+            try
+            {
+                var method = _methods
+                    .Where(m => m.MethodName == "LinxRotinaOrigem")
+                    .FirstOrDefault();
+
+                var result = await _linxRotinaOrigemService.GetRecords(
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
+                );
+
+                if (result != true)
+                    return BadRequest($"Unable to find records on endpoint.");
+                else
+                    return Ok($"Records integrated successfully.");
+            }
+            catch (Exception ex)
+            {
+                Response.StatusCode = 400;
+                return Content($"Unable to integrate the records.\nError: {ex.Message}");
+            }
+        }
+
+        [HttpPost("LinxCfopFiscal")]
+        public async Task<ActionResult> LinxCfopFiscal()
+        {
+            try
+            {
+                var method = _methods
+                    .Where(m => m.MethodName == "LinxCfopFiscal")
+                    .FirstOrDefault();
+
+                var result = await _linxCfopFiscalService.GetRecords(
                     _linxMicrovixJobParameter.SetParameters(
                         jobName: method.MethodName,
                         tableName: method.MethodName

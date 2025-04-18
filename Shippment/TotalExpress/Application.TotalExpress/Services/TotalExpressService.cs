@@ -176,9 +176,10 @@ namespace Application.TotalExpress.Services
                         var jObject = new JObject
                         {
                             { "remetenteId", parameter.sender_id },
-                            { "data_inicial", DateTime.Now.Date.ToString("yyyy-MM-dd") }
+                            //{ "data_inicial", "2000-01-01" }
+                            //{ "data_inicial", DateTime.Now.AddDays(-2).Date.ToString("yyyy-MM-dd") }
                             //{ "remetenteId", "" },
-                            //{ "pedido", "" }
+                            { "pedido", "MI-31494" }
                         };
 
                         var headers = new Dictionary<string?, string?>

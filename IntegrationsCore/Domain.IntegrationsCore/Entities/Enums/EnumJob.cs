@@ -95,12 +95,16 @@
         LinxVendedores = 724,
         LinxXMLDocumentos = 725,
         LinxSetores = 726,
+        LinxUsuarios = 728,
+        LinxCfopFiscal = 729,
+        LinxRotinaOrigem = 730,
 
         LinxCommerceSalesRepresentative = 912,
         LinxCommerceCustomers = 916,
         LinxCommerceOrders = 900,
         LinxCommerceUpdateTrackingNumberOrder = 917,
         LinxCommerceSku = 913,
+        LinxCommerceProduct = 909,
 
         JadlogSearchTrackingHistory = 1100
     }

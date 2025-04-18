@@ -417,9 +417,9 @@ namespace Infrastructure.TotalExpress.Repository
         public async Task<IEnumerable<Parameters>> GetSenderIds()
         {
             string? sql = $@"SELECT DISTINCT
-                            REMETENTE_ID AS SENDER_ID
-                            FROM
-                            [GENERAL].[dbo].[PARAMETROS_TOTALEXPRESS]";
+                             REMETENTE_ID AS SENDER_ID
+                             FROM
+                             [GENERAL].[PARAMETROS_TOTALEXPRESS]";
 
             try
             {

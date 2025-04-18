@@ -100,8 +100,8 @@ namespace Domain.LinxCommerce.Entities.Sku
             this.UPC = sku.UPC;
             this.DisplayCondition = sku.DisplayCondition;
             this.DefinitionID = sku.DefinitionID;
-            this.SuppliersIDs = sku.SuppliersID.Count() > 0 ? string.Join(", ", sku.SuppliersID) : null;
-            this.ParentsIDs = sku.ParentsID.Count() > 0 ? string.Join(", ", sku.ParentsID) : null;
+            this.SuppliersIDs = sku.SuppliersIDs;
+            this.ParentsIDs = sku.ParentsIDs;
             this.ConditionID = sku.ConditionID;
             this.UnitOfMeasureID = sku.UnitOfMeasureID;
             this.ManageStock = sku.ManageStock;

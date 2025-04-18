@@ -307,6 +307,15 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.DependencyInjection
             services.AddScoped<ILinxVendedoresService, LinxVendedoresService>();
             services.AddScoped<ILinxVendedoresRepository, LinxVendedoresRepository>();
 
+            services.AddScoped<ILinxUsuariosService, LinxUsuariosService>();
+            services.AddScoped<ILinxUsuariosRepository, LinxUsuariosRepository>();
+
+            services.AddScoped<ILinxCfopFiscalService, LinxCfopFiscalService>();
+            services.AddScoped<ILinxCfopFiscalRepository, LinxCfopFiscalRepository>();
+
+            services.AddScoped<ILinxRotinaOrigemService, LinxRotinaOrigemService>();
+            services.AddScoped<ILinxRotinaOrigemRepository, LinxRotinaOrigemRepository>();
+
             services.AddScoped<ILinxXMLDocumentosService, LinxXMLDocumentosService>();
             services.AddScoped<ILinxXMLDocumentosRepository, LinxXMLDocumentosRepository>();
 

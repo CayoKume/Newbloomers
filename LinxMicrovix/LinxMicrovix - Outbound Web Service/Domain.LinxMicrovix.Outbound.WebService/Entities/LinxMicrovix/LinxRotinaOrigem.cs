@@ -34,7 +34,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             string? portal,
             string? codigo_rotina,
             string? descricao_rotina,
-            string? timestamp
+            string? timestamp,
+            string? recordXml
         )
         {
             lastupdateon = DateTime.Now;
@@ -55,6 +56,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
                 0;
 
             this.descricao_rotina = descricao_rotina;
+            this.recordKey = $"[{codigo_rotina}]|[{timestamp}]";
+            this.recordXml = recordXml;
         }
     }
 }

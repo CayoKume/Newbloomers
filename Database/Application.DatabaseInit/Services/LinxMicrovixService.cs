@@ -2658,6 +2658,20 @@ namespace Application.DatabaseInit.Services
                             );
                 if (
                    listMethods
+                       .Where(m => m.MethodName == "LinxUsuarios")
+                       .First()
+                       .IsActive
+                   )
+                    _linxUsuariosRepository.CreateTableIfNotExists(
+                                databaseName: parameters.databaseName,
+                                jobName: listMethods
+                                        .Where(m => m.MethodName == "LinxUsuarios")
+                                        .First()
+                                        .MethodName,
+                                untreatedDatabaseName: parameters.untreatedDatabaseName
+                            );
+                if (
+                   listMethods
                        .Where(m => m.MethodName == "LinxValeOrdemServicoExterna")
                        .First()
                        .IsActive

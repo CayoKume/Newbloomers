@@ -1,27 +1,30 @@
 ﻿using Domain.IntegrationsCore.Entities.Enums;
 using Domain.IntegrationsCore.Exceptions;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
+using Domain.LinxMicrovix.Outbound.WebService.Entities.LinxMicrovix;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxMicrovix;
 
-namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
+namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.LinxMicrovix
 {
-    public class LinxCfopFiscalRepository : ILinxCfopFiscalRepository
+    public class LinxUsuariosRepository : ILinxUsuariosRepository
     {
-        private readonly ILinxMicrovixAzureSQLRepositoryBase<LinxCfopFiscal> _linxMicrovixRepositoryBase;
+        private readonly ILinxMicrovixAzureSQLRepositoryBase<LinxUsuarios> _linxMicrovixRepositoryBase;
 
-        public LinxCfopFiscalRepository(ILinxMicrovixAzureSQLRepositoryBase<LinxCfopFiscal> linxMicrovixRepositoryBase) =>
+        public LinxUsuariosRepository(ILinxMicrovixAzureSQLRepositoryBase<LinxUsuarios> linxMicrovixRepositoryBase) =>
             (_linxMicrovixRepositoryBase) = (linxMicrovixRepositoryBase);
 
-        public bool BulkInsertIntoTableRaw(LinxAPIParam jobParameter, IList<LinxCfopFiscal> records)
+        public bool BulkInsertIntoTableRaw(LinxAPIParam jobParameter, IList<LinxUsuarios> records)
         {
             try
             {
-                var table = _linxMicrovixRepositoryBase.CreateSystemDataTable(jobParameter.tableName, new LinxCfopFiscal());
+                var table = _linxMicrovixRepositoryBase.CreateSystemDataTable(jobParameter.tableName, new LinxUsuarios());
 
                 for (int i = 0; i < records.Count(); i++)
                 {
-                    table.Rows.Add(records[i].lastupdateon, records[i].portal, records[i].id_cfop_fiscal, records[i].cfop_fiscal, records[i].descricao, records[i].excluido, records[i].timestamp);
+                    table.Rows.Add(records[i].lastupdateon, records[i].usuario_id, records[i].usuario_login, records[i].usuario_nome, records[i].usuario_email, records[i].usuario_grupo_id,
+                        records[i].grupo_usuarios, records[i].usuario_supervisor, records[i].usuario_doc, records[i].vendedor, records[i].data_criacao, records[i].desativado,
+                        records[i].empresas, records[i].portal, records[i].timestamp);
                 }
 
                 _linxMicrovixRepositoryBase.BulkInsertIntoTableRaw(
@@ -37,7 +40,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             }
         }
 
-        public async Task<List<string?>> GetRegistersExists(LinxAPIParam jobParameter, List<Int32> registros)
+        public async Task<List<string?>> GetRegistersExists(LinxAPIParam jobParameter, List<int?> registros)
         {
             try
             {
@@ -61,7 +64,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
                                 identificadores += $"'{top1000List[j]}', ";
                         }
 
-                        string sql = $"SELECT CONCAT('[', id_cfop_fiscal, ']', '|', '[', [TIMESTAMP], ']') FROM [linx_microvix_erp].[LinxCfopFiscal] WHERE id_cfop_fiscal IN ({identificadores})";
+                        string sql = $"SELECT CONCAT('[', usuario_id, ']', '|', '[', usuario_doc, ']', '|', '[', [TIMESTAMP], ']') FROM [linx_microvix_erp].[LinxUsuarios] WHERE usuario_id IN ({identificadores})";
                         var result = await _linxMicrovixRepositoryBase.GetKeyRegistersAlreadyExists(sql);
                         list.AddRange(result);
                     }
@@ -81,7 +84,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
                             identificadores += $"'{registros[i]}', ";
                     }
 
-                    string sql = $"SELECT CONCAT('[', id_cfop_fiscal, ']', '|', '[', [TIMESTAMP], ']') FROM [linx_microvix_erp].[LinxCfopFiscal] WHERE id_cfop_fiscal IN ({identificadores})";
+                    string sql = $"SELECT CONCAT('[', usuario_id, ']', '|', '[', usuario_doc, ']', '|', '[', [TIMESTAMP], ']') FROM [linx_microvix_erp].[LinxUsuarios] WHERE usuario_id IN ({identificadores})";
                     var result = await _linxMicrovixRepositoryBase.GetKeyRegistersAlreadyExists(sql);
                     list.AddRange(result);
 
@@ -97,23 +100,6 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
                     message: "Error when filling identifiers to sql command",
                     exceptionMessage: ex.Message
                 );
-            }
-            catch
-            {
-                throw;
-            }
-        }
-
-        public async Task<bool> InsertRecord(LinxAPIParam jobParameter, LinxCfopFiscal? record)
-        {
-            string? sql = @$"INSERT INTO [untreated].[{jobParameter.tableName}]
-                            ([lastupdateon],[portal],[id_cfop_fiscal],[cfop_fiscal],[descricao],[excluido],[timestamp])
-                            Values
-                            (@lastupdateon,@portal,@id_cfop_fiscal,@cfop_fiscal,@descricao,@excluido,@timestamp)";
-
-            try
-            {
-                return await _linxMicrovixRepositoryBase.InsertRecord(jobParameter.tableName, sql: sql, record: record);
             }
             catch
             {

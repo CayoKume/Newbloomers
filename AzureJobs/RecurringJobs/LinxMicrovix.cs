@@ -37,7 +37,10 @@ namespace AzureJobs.RecurringJobs
         private readonly ILinxLojasService _linxLojasService;
         private readonly ILinxSetoresService _linxSetoresService;
         private readonly ILinxVendedoresService _linxVendedoresService;
+        private readonly ILinxRotinaOrigemService _linxRotinaOrigemService;
+        private readonly ILinxCfopFiscalService _linxCfopFiscalService;
         private readonly ILinxXMLDocumentosService _linxXMLDocumentosService;
+        private readonly ILinxUsuariosService _linxUsuariosService;
         private readonly ILinxProdutosCodBarService _linxProdutosCodBarService;
 
         public LinxMicrovix(
@@ -69,6 +72,9 @@ namespace AzureJobs.RecurringJobs
             ILinxSetoresService linxSetoresService,
             ILinxVendedoresService linxVendedoresService,
             ILinxXMLDocumentosService linxXMLDocumentosService,
+            ILinxRotinaOrigemService linxRotinaOrigemService,
+            ILinxCfopFiscalService linxCfopFiscalService,
+            ILinxUsuariosService linxUsuariosService,
             ILinxProdutosCodBarService linxProdutosCodBarService
         )
         {
@@ -100,6 +106,9 @@ namespace AzureJobs.RecurringJobs
             _linxSetoresService = linxSetoresService;
             _linxVendedoresService = linxVendedoresService;
             _linxXMLDocumentosService = linxXMLDocumentosService;
+            _linxRotinaOrigemService = linxRotinaOrigemService;
+            _linxCfopFiscalService = linxCfopFiscalService;
+            _linxUsuariosService = linxUsuariosService;
             _linxProdutosCodBarService = linxProdutosCodBarService;
 
             _linxMicrovixJobParameter = new LinxAPIParam(
@@ -709,6 +718,69 @@ namespace AzureJobs.RecurringJobs
         //            .FirstOrDefault();
 
         //        var result = await _linxProdutosCamposAdicionaisService.GetRecords(
+        //            _linxMicrovixJobParameter.SetParameters(
+        //                jobName: method.MethodName,
+        //                tableName: method.MethodName
+        //            )
+        //        );
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw;
+        //    }
+        //}
+
+        //public async Task LinxUsuarios([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    try
+        //    {
+        //        var method = _methods
+        //            .Where(m => m.MethodName == "LinxUsuarios")
+        //        .FirstOrDefault();
+
+        //        var result = await _linxUsuariosService.GetRecords(
+        //            _linxMicrovixJobParameter.SetParameters(
+        //                jobName: method.MethodName,
+        //                tableName: method.MethodName
+        //            )
+        //        );
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw;
+        //    }
+        //}
+
+        //public async Task LinxCfopFiscal([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    try
+        //    {
+        //        var method = _methods
+        //            .Where(m => m.MethodName == "LinxCfopFiscal")
+        //        .FirstOrDefault();
+
+        //        var result = await _linxCfopFiscalService.GetRecords(
+        //            _linxMicrovixJobParameter.SetParameters(
+        //                jobName: method.MethodName,
+        //                tableName: method.MethodName
+        //            )
+        //        );
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw;
+        //    }
+        //}
+
+        //public async Task LinxRotinaOrigem([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    try
+        //    {
+        //        var method = _methods
+        //            .Where(m => m.MethodName == "LinxRotinaOrigem")
+        //        .FirstOrDefault();
+
+        //        var result = await _linxRotinaOrigemService.GetRecords(
         //            _linxMicrovixJobParameter.SetParameters(
         //                jobName: method.MethodName,
         //                tableName: method.MethodName

@@ -41,6 +41,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
             string? cfop_fiscal,
             string? descricao,
             string? excluido,
+            string? recordXml,
             string? timestamp
         )
         {
@@ -68,6 +69,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 
             this.cfop_fiscal = cfop_fiscal;
             this.descricao = descricao;
+            this.recordKey = $"[{id_cfop_fiscal}]|[{timestamp}]";
+            this.recordXml = recordXml;
         }
     }
 }

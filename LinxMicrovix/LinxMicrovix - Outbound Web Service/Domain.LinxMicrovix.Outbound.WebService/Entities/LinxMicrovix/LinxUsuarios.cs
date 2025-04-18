@@ -114,6 +114,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entities.LinxMicrovix
             this.usuario_doc = usuario_doc;
             this.desativado = desativado;
             this.empresas = empresas;
+            this.recordKey = $"[{usuario_id}]|[{usuario_doc}]|[{timestamp}]";
+            this.recordXml = recordXml;
         }
     }
 }

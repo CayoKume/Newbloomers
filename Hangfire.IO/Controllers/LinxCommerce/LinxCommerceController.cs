@@ -140,6 +140,62 @@ namespace HangfireDashboard.UI.Controllers.LinxCommerce
             }
         }
 
+        [HttpPost("SearchProductsByDateInterval")]
+        public async Task<ActionResult> SearchProductsByDateInterval()
+        {
+            try
+            {
+                var method = _methods
+                    .Where(m => m.MethodName == "SearchProducts")
+                    .FirstOrDefault();
+
+                var result = await _skuService.SearchProductByDateInterval(
+                    _linxCommerceJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
+                );
+
+                if (result != true)
+                    return BadRequest($"Unable to find records on endpoint.");
+                else
+                    return Ok($"Records integrated successfully.");
+            }
+            catch (Exception ex)
+            {
+                Response.StatusCode = 400;
+                return Content($"Unable to integrate the records.\nError: {ex.Message}");
+            }
+        }
+
+        [HttpPost("SearchProductsByQueue")]
+        public async Task<ActionResult> SearchProductsByQueue()
+        {
+            try
+            {
+                var method = _methods
+                    .Where(m => m.MethodName == "SearchProducts")
+                    .FirstOrDefault();
+
+                var result = await _skuService.SearchProductByQueue(
+                    _linxCommerceJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
+                );
+
+                if (result != true)
+                    return BadRequest($"Unable to find records on endpoint.");
+                else
+                    return Ok($"Records integrated successfully.");
+            }
+            catch (Exception ex)
+            {
+                Response.StatusCode = 400;
+                return Content($"Unable to integrate the records.\nError: {ex.Message}");
+            }
+        }
+
         [HttpPost("SearchOrdersByDateInterval")]
         public async Task<ActionResult> SearchOrdersByDateInterval()
         {

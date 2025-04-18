@@ -27,6 +27,22 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.Base
                           </LinxMicrovix>";
         }
 
+        public string? BuildBodyRequest(LinxAPIParam jobParameter, string? parametersList)
+        {
+            return @$"<?xml version=""1.0"" encoding=""utf-8""?>
+                          <LinxMicrovix>
+                              <Authentication user=""{jobParameter.userAuthentication}"" password=""{jobParameter.userAuthentication}"" />
+                              <ResponseFormat>xml</ResponseFormat>
+                              <Command>
+                                  <Name>{jobParameter.jobName}</Name>
+                                  <Parameters>
+                                      <Parameter id=""chave"">{jobParameter.keyAuthorization}</Parameter>
+                                      {parametersList}
+                                  </Parameters>
+                              </Command>
+                          </LinxMicrovix>";
+        }
+
         public string? BuildBodyRequest(LinxAPIParam jobParameter)
         {
             return @$"<?xml version=""1.0"" encoding=""utf-8""?>

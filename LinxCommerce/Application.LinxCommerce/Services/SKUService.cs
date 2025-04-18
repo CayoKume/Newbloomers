@@ -3,12 +3,12 @@ using Application.LinxCommerce.Interfaces;
 using Domain.IntegrationsCore.Entities.Enums;
 using Domain.IntegrationsCore.Exceptions;
 using Domain.LinxCommerce.Entities.Parameters;
+using Domain.LinxCommerce.Entities.Product;
 using Domain.LinxCommerce.Entities.Responses;
 using Domain.LinxCommerce.Entities.Sku;
 using Domain.LinxCommerce.Interfaces.Api;
 using Domain.LinxCommerce.Interfaces.Repositorys;
 using FluentValidation;
-using System;
 
 namespace Application.LinxCommerce.Services
 {
@@ -18,10 +18,11 @@ namespace Application.LinxCommerce.Services
         private readonly ILoggerService _logger;
         private readonly ILinxCommerceRepositoryBase _linxCommerceRepositoryBase;
         private readonly IValidator<Sku> _validator;
+        private readonly IValidator<Product> _productValidator;
         private readonly ISKURepository _skuRepository;
 
-        public SKUService(IAPICall apiCall, ILoggerService logger, ILinxCommerceRepositoryBase linxCommerceRepositoryBase, IValidator<Sku> validator, ISKURepository skuRepository) =>
-            (_apiCall, _logger, _linxCommerceRepositoryBase, _validator, _skuRepository) = (apiCall, logger, linxCommerceRepositoryBase, validator, skuRepository);
+        public SKUService(IAPICall apiCall, ILoggerService logger, ILinxCommerceRepositoryBase linxCommerceRepositoryBase, IValidator<Sku> validator, IValidator<Product> productValidator, ISKURepository skuRepository) =>
+            (_apiCall, _logger, _linxCommerceRepositoryBase, _validator, _productValidator, _skuRepository) = (apiCall, logger, linxCommerceRepositoryBase, validator, productValidator, skuRepository);
 
         public Task<bool?> ActivateProduct(LinxCommerceJobParameter jobParameter)
         {
@@ -765,9 +766,270 @@ namespace Application.LinxCommerce.Services
             throw new NotImplementedException();
         }
 
-        public Task<bool?> SearchProduct(LinxCommerceJobParameter jobParameter)
+        public async Task<bool?> SearchProductByDateInterval(LinxCommerceJobParameter jobParameter)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _logger
+                   .Clear()
+                   .AddLog(EnumJob.LinxCommerceProduct);
+
+                var objectRequest = new
+                {
+                    Page = new { PageIndex = 0, PageSize = 10000 },
+                    Where = $"(CreatedDate>=\"{DateTime.Now.Date:yyyy-MM-dd}T00:00:00\" && CreatedDate<=\"{DateTime.Now.Date:yyyy-MM-dd}T23:59:59\")",
+                    WhereMetadata = "",
+                    OrderBy = "ProductID",
+                };
+
+                var response = await _apiCall.PostRequest(
+                    jobParameter,
+                    objectRequest,
+                    "/v1/Catalog/API.svc/web/SearchProduct"
+                );
+
+                var productAPIList = new List<Product>();
+                var productsIDs = Newtonsoft.Json.JsonConvert.DeserializeObject<SearchProducts.Root>(response);
+                var groupedIDs = productsIDs.Result.GroupBy(x => x.ProductID).Select(g => g.First()).ToList();
+
+                foreach (var productID in groupedIDs)
+                {
+                    string route = String.Empty;
+
+                    var getProductResponse = await _apiCall.PostRequest(
+                        jobParameter: jobParameter,
+                        intIdentifier: productID.ProductID,
+                        route: "/v1/Catalog/API.svc/web/GetProduct"
+                    );
+
+                    var product = Newtonsoft.Json.JsonConvert.DeserializeObject<Product>(getProductResponse);
+                    var validations = _productValidator.Validate(product);
+
+                    if (validations.Errors.Count() > 0)
+                    {
+                        for (int j = 0; j < validations.Errors.Count(); j++)
+                        {
+                            _logger.AddMessage(
+                                stage: EnumStages.DeserializeXMLToObject,
+                                error: EnumError.Validation,
+                                logLevel: EnumMessageLevel.Warning,
+                                message: $"Error when convert record - ProductID: {product.ProductID} | Name: {product.Name}\n" +
+                                         $"{validations.Errors[j]}"
+                            );
+                        }
+                    }
+
+                    productAPIList.Add(new Product(product, getProductResponse));
+                }
+
+                if (productAPIList.Count() > 0)
+                {
+                    _skuRepository.BulkInsertIntoTableRaw(jobParameter, productAPIList, _logger.GetExecutionGuid());
+
+                    productAPIList.ForEach(p =>
+                        _logger.AddRecord(
+                            p.ProductID.ToString(),
+                            p.Responses
+                                .Where(pair => pair.Key == p.ProductID)
+                                .Select(pair => pair.Value)
+                                .FirstOrDefault()
+                        )
+                    );
+
+                    _logger.AddMessage(
+                        $"Concluída com sucesso: {productAPIList.Count()} registro(s) novo(s) inserido(s)!"
+                    );
+                }
+                else
+                    _logger.AddMessage(
+                        $"Concluída com sucesso: {productAPIList.Count()} registro(s) novo(s) inserido(s)!"
+                    );
+
+                return true;
+            }
+            catch (SQLCommandException ex)
+            {
+                _logger.AddMessage(
+                    stage: ex.Stage,
+                    error: ex.Error,
+                    logLevel: ex.MessageLevel,
+                    message: ex.Message,
+                    exceptionMessage: ex.ExceptionMessage,
+                    commandSQL: ex.CommandSQL
+                );
+
+                throw;
+            }
+            catch (InternalException ex)
+            {
+                _logger.AddMessage(
+                    stage: ex.stage,
+                    error: ex.Error,
+                    logLevel: ex.MessageLevel,
+                    message: ex.Message,
+                    exceptionMessage: ex.ExceptionMessage
+                );
+
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.AddMessage(
+                    message: "Error when executing GetRecords method",
+                    exceptionMessage: ex.Message
+                );
+            }
+            finally
+            {
+                _logger.SetLogEndDate();
+                await _logger.CommitAllChanges();
+            }
+
+            return true;
+        }
+
+        public async Task<bool?> SearchProductByQueue(LinxCommerceJobParameter jobParameter)
+        {
+            try
+            {
+                _logger
+                   .Clear()
+                   .AddLog(EnumJob.LinxCommerceProduct);
+
+                var objectRequest = new
+                {
+                    QueueID = 21,
+                    Page = new { PageIndex = 0, PageSize = 1000 },
+                    Where = $"EntityKeyName==\"CatalogItemID\" && EntityTypeName==\"EZ.Store.Model.Catalog.Product\"",
+                    WhereMetadata = "",
+                    OrderBy = "QueueItemID",
+                };
+
+                var response = await _apiCall.PostRequest(
+                    jobParameter,
+                    objectRequest,
+                    "/v1/Queue/API.svc/web/SearchQueueItems"
+                );
+
+                var productAPIList = new List<Product>();
+                var enqueuedItens = Newtonsoft.Json.JsonConvert.DeserializeObject<SearchQueuedItem.Root>(response);
+                var enqueuedProducts = enqueuedItens
+                                    .Result
+                                    .Where(x => x.EntityKeyName == "CatalogItemID")
+                                    .GroupBy(y => y.EntityKeyValue)
+                                    .Select(g => g.First())
+                                    .ToList();
+
+                foreach (var enqueuedProduct in enqueuedProducts)
+                {
+                    string route = String.Empty;
+
+                    var getProductResponse = await _apiCall.PostRequest(
+                        jobParameter: jobParameter,
+                        intIdentifier: Convert.ToInt32(enqueuedProduct.EntityKeyValue),
+                        route: "/v1/Catalog/API.svc/web/GetProduct"
+                    );
+
+                    var product = Newtonsoft.Json.JsonConvert.DeserializeObject<Product>(getProductResponse);
+                    var validations = _productValidator.Validate(product);
+
+                    if (validations.Errors.Count() > 0)
+                    {
+                        for (int j = 0; j < validations.Errors.Count(); j++)
+                        {
+                            _logger.AddMessage(
+                                stage: EnumStages.DeserializeXMLToObject,
+                                error: EnumError.Validation,
+                                logLevel: EnumMessageLevel.Warning,
+                                message: $"Error when convert record - ProductID: {product.ProductID} | Name: {product.Name}\n" +
+                                         $"{validations.Errors[j]}"
+                            );
+                        }
+                    }
+
+                    productAPIList.Add(new Product(product, getProductResponse));
+                }
+
+                if (productAPIList.Count() > 0)
+                {
+                    _skuRepository.BulkInsertIntoTableRaw(jobParameter, productAPIList, _logger.GetExecutionGuid());
+
+                    productAPIList.ForEach(p =>
+                        _logger.AddRecord(
+                            p.ProductID.ToString(),
+                            p.Responses
+                                .Where(pair => pair.Key == p.ProductID)
+                                .Select(pair => pair.Value)
+                                .FirstOrDefault()
+                        )
+                    );
+
+                    _logger.AddMessage(
+                        $"Concluída com sucesso: {productAPIList.Count()} registro(s) novo(s) inserido(s)!"
+                    );
+
+                    //remover da fila de integração apenas se o registro for inserido no banco de dados
+                    var listQueueItemID = new List<string>();
+
+                    foreach (var enqueuedproduct in enqueuedProducts)
+                    {
+                        listQueueItemID.Add(enqueuedproduct.QueueItemID);
+                    }
+
+                    var dequeueObjectRequest = new { QueueItems = listQueueItemID };
+
+                    var dequeueResponse = await _apiCall.PostRequest(
+                        jobParameter,
+                        dequeueObjectRequest,
+                        "/v1/Queue/API.svc/web/DequeueQueueItems"
+                    );
+                }
+                else
+                    _logger.AddMessage(
+                        $"Concluída com sucesso: {productAPIList.Count()} registro(s) novo(s) inserido(s)!"
+                    );
+
+                return true;
+            }
+            catch (SQLCommandException ex)
+            {
+                _logger.AddMessage(
+                    stage: ex.Stage,
+                    error: ex.Error,
+                    logLevel: ex.MessageLevel,
+                    message: ex.Message,
+                    exceptionMessage: ex.ExceptionMessage,
+                    commandSQL: ex.CommandSQL
+                );
+
+                throw;
+            }
+            catch (InternalException ex)
+            {
+                _logger.AddMessage(
+                    stage: ex.stage,
+                    error: ex.Error,
+                    logLevel: ex.MessageLevel,
+                    message: ex.Message,
+                    exceptionMessage: ex.ExceptionMessage
+                );
+
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.AddMessage(
+                    message: "Error when executing GetRecords method",
+                    exceptionMessage: ex.Message
+                );
+            }
+            finally
+            {
+                _logger.SetLogEndDate();
+                await _logger.CommitAllChanges();
+            }
+
+            return true;
         }
 
         public Task<bool?> SearchProductAdditionalLists(LinxCommerceJobParameter jobParameter)
@@ -825,9 +1087,8 @@ namespace Application.LinxCommerce.Services
 
                 var objectRequest = new
                 {
-                    Page = new { PageIndex = 1, PageSize = 3000 },
-                    //Where = $"(CreatedDate>=\"{DateTime.Now.AddDays(-1).Date:yyyy-MM-dd}T00:00:00\" && CreatedDate<=\"{DateTime.Now.Date:yyyy-MM-dd}T23:59:59\")",
-                    Where = $"",
+                    Page = new { PageIndex = 0, PageSize = 1000 },
+                    Where = $"(CreatedDate>=\"{DateTime.Now.AddDays(-1).Date:yyyy-MM-dd}T00:00:00\" && CreatedDate<=\"{DateTime.Now.Date:yyyy-MM-dd}T23:59:59\")",
                     WhereMetadata = "",
                     OrderBy = "ProductID",
                 };
@@ -937,9 +1198,148 @@ namespace Application.LinxCommerce.Services
             return true;
         }
 
-        public Task<bool?> SearchSKUByQueue(LinxCommerceJobParameter jobParameter)
+        public async Task<bool?> SearchSKUByQueue(LinxCommerceJobParameter jobParameter)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _logger
+                   .Clear()
+                   .AddLog(EnumJob.LinxCommerceSku);
+
+                var objectRequest = new
+                {
+                    QueueID = 21,
+                    Page = new { PageIndex = 0, PageSize = 1000 },
+                    Where = $"EntityKeyName==\"CatalogItemID\" && EntityTypeName==\"EZ.Store.Model.Catalog.StockKeepUnit\"",
+                    WhereMetadata = "",
+                    OrderBy = "QueueItemID",
+                };
+
+                var response = await _apiCall.PostRequest(
+                    jobParameter,
+                    objectRequest,
+                    "/v1/Queue/API.svc/web/SearchQueueItems"
+                );
+
+                var skuAPIList = new List<Sku>();
+                var enqueuedItens = Newtonsoft.Json.JsonConvert.DeserializeObject<SearchQueuedItem.Root>(response);
+                var enqueuedSKU = enqueuedItens
+                                    .Result
+                                    .Where(x => x.EntityKeyName == "CatalogItemID")
+                                    .GroupBy(y => y.EntityKeyValue)
+                                    .Select(g => g.First())
+                                    .ToList();
+
+                foreach (var productID in enqueuedSKU)
+                {
+                    string route = String.Empty;
+
+                    var getSkuResponse = await _apiCall.PostRequest(
+                        jobParameter: jobParameter,
+                        intIdentifier: Convert.ToInt32(productID.EntityKeyValue),
+                        route: "/v1/Catalog/API.svc/web/GetSKU"
+                    );
+
+                    var sku = Newtonsoft.Json.JsonConvert.DeserializeObject<Sku>(getSkuResponse);
+                    var validations = _validator.Validate(sku);
+
+                    if (validations.Errors.Count() > 0)
+                    {
+                        for (int j = 0; j < validations.Errors.Count(); j++)
+                        {
+                            _logger.AddMessage(
+                                stage: EnumStages.DeserializeXMLToObject,
+                                error: EnumError.Validation,
+                                logLevel: EnumMessageLevel.Warning,
+                                message: $"Error when convert record - ProductID: {sku.ProductID} | Name: {sku.Name}\n" +
+                                         $"{validations.Errors[j]}"
+                            );
+                        }
+                    }
+
+                    skuAPIList.Add(new Sku(sku, getSkuResponse));
+                }
+
+                if (skuAPIList.Count() > 0)
+                {
+                    _skuRepository.BulkInsertIntoTableRaw(jobParameter, skuAPIList, _logger.GetExecutionGuid());
+
+                    skuAPIList.ForEach(p =>
+                        _logger.AddRecord(
+                            p.ProductID.ToString(),
+                            p.Responses
+                                .Where(pair => pair.Key == p.ProductID)
+                                .Select(pair => pair.Value)
+                                .FirstOrDefault()
+                        )
+                    );
+
+                    _logger.AddMessage(
+                        $"Concluída com sucesso: {skuAPIList.Count()} registro(s) novo(s) inserido(s)!"
+                    );
+
+                    //remover da fila de integração apenas se o registro for inserido no banco de dados
+                    var listQueueItemID = new List<string>();
+
+                    foreach (var enqueuedsku in enqueuedSKU)
+                    {
+                        listQueueItemID.Add(enqueuedsku.QueueItemID);
+                    }
+
+                    var dequeueObjectRequest = new { QueueItems = listQueueItemID };
+
+                    var dequeueResponse = await _apiCall.PostRequest(
+                        jobParameter,
+                        dequeueObjectRequest,
+                        "/v1/Queue/API.svc/web/DequeueQueueItems"
+                    );
+                }
+                else
+                    _logger.AddMessage(
+                        $"Concluída com sucesso: {skuAPIList.Count()} registro(s) novo(s) inserido(s)!"
+                    );
+
+                return true;
+            }
+            catch (SQLCommandException ex)
+            {
+                _logger.AddMessage(
+                    stage: ex.Stage,
+                    error: ex.Error,
+                    logLevel: ex.MessageLevel,
+                    message: ex.Message,
+                    exceptionMessage: ex.ExceptionMessage,
+                    commandSQL: ex.CommandSQL
+                );
+
+                throw;
+            }
+            catch (InternalException ex)
+            {
+                _logger.AddMessage(
+                    stage: ex.stage,
+                    error: ex.Error,
+                    logLevel: ex.MessageLevel,
+                    message: ex.Message,
+                    exceptionMessage: ex.ExceptionMessage
+                );
+
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.AddMessage(
+                    message: "Error when executing GetRecords method",
+                    exceptionMessage: ex.Message
+                );
+            }
+            finally
+            {
+                _logger.SetLogEndDate();
+                await _logger.CommitAllChanges();
+            }
+
+            return true;
         }
 
         public Task<bool?> SearchSupplier(LinxCommerceJobParameter jobParameter)

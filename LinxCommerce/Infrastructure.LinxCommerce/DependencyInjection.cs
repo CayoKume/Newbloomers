@@ -2,6 +2,7 @@
 using Application.LinxCommerce.Services;
 using Domain.LinxCommerce.CustomValidations.Customer;
 using Domain.LinxCommerce.CustomValidations.Order;
+using Domain.LinxCommerce.CustomValidations.Product;
 using Domain.LinxCommerce.CustomValidations.SalesRepresentative;
 using Domain.LinxCommerce.CustomValidations.Sku;
 using Domain.LinxCommerce.Interfaces.Api;
@@ -49,8 +50,14 @@ namespace Infrastructure.LinxCommerce.DependencyInjection
 
         private static IServiceCollection AddScopedLinxCommerceValidations(this IServiceCollection services)
         {
+            services.AddValidatorsFromAssemblyContaining<ProductValidator>();
+            services.AddValidatorsFromAssemblyContaining<VideoValidator>();
+            services.AddValidatorsFromAssemblyContaining<ImageValidator>();
+            services.AddValidatorsFromAssemblyContaining<MediaAssociationValidator>();
+            services.AddValidatorsFromAssemblyContaining<MidiaValidator>();
+
             services.AddValidatorsFromAssemblyContaining<SkuValidator>();
-            services.AddValidatorsFromAssemblyContaining<MetadataValueValidator>();
+            services.AddValidatorsFromAssemblyContaining<Domain.LinxCommerce.CustomValidations.Sku.MetadataValueValidator>();
             services.AddValidatorsFromAssemblyContaining<ParentRelationValidator>();
 
             services.AddValidatorsFromAssemblyContaining<PersonValidator>();

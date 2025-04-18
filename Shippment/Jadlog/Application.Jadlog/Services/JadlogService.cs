@@ -19,14 +19,98 @@ namespace Application.Jadlog.Services
         public JadlogService(IJadlogRepository jadlogRepository, IAPICall apiCall, ILoggerService logger, IValidator<Domain.Jadlog.DTOs.Consulta> validator) =>
             (_jadlogRepository, _apiCall, _logger, _validator) = (jadlogRepository, apiCall, logger, validator);
 
-        public Task<bool?> CancelOrder()
+        public async Task<bool?> CancelOrder()
         {
-            throw new NotImplementedException();
+            try
+            {
+                return true;
+            }
+            catch (SQLCommandException ex)
+            {
+                _logger.AddMessage(
+                    stage: ex.Stage,
+                    error: ex.Error,
+                    logLevel: ex.MessageLevel,
+                    message: ex.Message,
+                    exceptionMessage: ex.ExceptionMessage,
+                    commandSQL: ex.CommandSQL
+                );
+
+                throw;
+            }
+            catch (InternalException ex)
+            {
+                _logger.AddMessage(
+                    stage: ex.stage,
+                    error: ex.Error,
+                    logLevel: ex.MessageLevel,
+                    message: ex.Message,
+                    exceptionMessage: ex.ExceptionMessage
+                );
+
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.AddMessage(
+                    message: "Error when executing GetRecords method",
+                    exceptionMessage: ex.Message
+                );
+            }
+            finally
+            {
+                _logger.SetLogEndDate();
+                await _logger.CommitAllChanges();
+            }
+
+            return true;
         }
 
-        public Task<bool?> InsertOrder()
+        public async Task<bool?> InsertOrder()
         {
-            throw new NotImplementedException();
+            try
+            {
+                return true;
+            }
+            catch (SQLCommandException ex)
+            {
+                _logger.AddMessage(
+                    stage: ex.Stage,
+                    error: ex.Error,
+                    logLevel: ex.MessageLevel,
+                    message: ex.Message,
+                    exceptionMessage: ex.ExceptionMessage,
+                    commandSQL: ex.CommandSQL
+                );
+
+                throw;
+            }
+            catch (InternalException ex)
+            {
+                _logger.AddMessage(
+                    stage: ex.stage,
+                    error: ex.Error,
+                    logLevel: ex.MessageLevel,
+                    message: ex.Message,
+                    exceptionMessage: ex.ExceptionMessage
+                );
+
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.AddMessage(
+                    message: "Error when executing GetRecords method",
+                    exceptionMessage: ex.Message
+                );
+            }
+            finally
+            {
+                _logger.SetLogEndDate();
+                await _logger.CommitAllChanges();
+            }
+
+            return true;
         }
 
         public Task<bool?> InsertTreatment()

@@ -157,7 +157,8 @@ namespace Application.LinxCommerce.Interfaces
         public Task<bool?> SearchFlag(LinxCommerceJobParameter jobParameter);
         public Task<bool?> SearchMix(LinxCommerceJobParameter jobParameter);
         public Task<bool?> SearchOffers(LinxCommerceJobParameter jobParameter);
-        public Task<bool?> SearchProduct (LinxCommerceJobParameter jobParameter);
+        public Task<bool?> SearchProductByDateInterval(LinxCommerceJobParameter jobParameter);
+        public Task<bool?> SearchProductByQueue(LinxCommerceJobParameter jobParameter);
         public Task<bool?> SearchProductAdditionalLists(LinxCommerceJobParameter jobParameter);
         public Task<bool?> SearchProductAdditionals(LinxCommerceJobParameter jobParameter);
         public Task<bool?> SearchProductAuctions(LinxCommerceJobParameter jobParameter);

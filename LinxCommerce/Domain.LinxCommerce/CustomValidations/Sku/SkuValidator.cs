@@ -1,4 +1,5 @@
 ﻿using Domain.LinxCommerce.CustomValidations.Validations;
+using Domain.LinxCommerce.Entities.Sku;
 using FluentValidation;
 
 namespace Domain.LinxCommerce.CustomValidations.Sku
@@ -17,23 +18,27 @@ namespace Domain.LinxCommerce.CustomValidations.Sku
                     return true;
                 });
 
-            RuleFor(x => x.SuppliersIDs)
+            RuleFor(x => string.Join(", ", x.SuppliersID))
                 .MaximumLength(50)
-                .WithMessage(x => $"Property: SuppliersIDs | Value: {x.SuppliersIDs}, Tamanho do texto: {x.SuppliersIDs.Length} excede ao permitido: 50")
-                .Must((x, SuppliersIDs) =>
+                .WithMessage(x => $"Property: SuppliersIDs | Value: {string.Join(", ", x.SuppliersID)}, Tamanho do texto: {string.Join(", ", x.SuppliersID).Length} excede ao permitido: 50")
+                .Must((x, SuppliersID) =>
                 {
-                    if (SuppliersIDs != null && SuppliersIDs.Length > 50)
-                        x.SuppliersIDs = x.SuppliersIDs.Substring(0, 50);
+                    if (SuppliersID != null && string.Join(", ", SuppliersID).Length > 50)
+                        x.SuppliersIDs = string.Join(", ", SuppliersID).Substring(0, 50);
+                    else
+                        x.SuppliersIDs = string.Join(", ", SuppliersID);
                     return true;
                 });
 
-            RuleFor(x => x.ParentsIDs)
+            RuleFor(x => string.Join(", ", x.ParentsID))
                 .MaximumLength(50)
-                .WithMessage(x => $"Property: ParentsIDs | Value: {x.ParentsIDs}, Tamanho do texto: {x.ParentsIDs.Length} excede ao permitido: 50")
-                .Must((x, ParentsIDs) =>
+                .WithMessage(x => $"Property: ParentsIDs | Value: {string.Join(", ", x.ParentsID)}, Tamanho do texto: {string.Join(", ", x.ParentsID).Length} excede ao permitido: 50")
+                .Must((x, ParentsID) =>
                 {
-                    if (ParentsIDs != null && ParentsIDs.Length > 50)
-                        x.ParentsIDs = x.ParentsIDs.Substring(0, 50);
+                    if (ParentsID != null && string.Join(", ", ParentsID).Length > 50)
+                        x.ParentsIDs = string.Join(", ", ParentsID).Substring(0, 50);
+                    else
+                        x.ParentsIDs = string.Join(", ", ParentsID);
                     return true;
                 });
 

@@ -2,13 +2,31 @@
 {
     public class Image
     {
+        public DateTime lastupdateon { get; set; }
         public string? RelativePath { get; set; }
         public string? Extension { get; set; }
-        public string? MaxWidth { get; set; }
-        public string? MaxHeight { get; set; }
-        public string? Width { get; set; }
-        public string? Height { get; set; }
-        public string? MediaSizeType { get; set; }
+        public decimal? MaxWidth { get; set; }
+        public decimal? MaxHeight { get; set; }
+        public decimal? Width { get; set; }
+        public decimal? Height { get; set; }
+        public Int32? MediaSizeType { get; set; }
         public string? AbsolutePath { get; set; }
+        public Int32? MediaID { get; set; }
+
+        public Image() { }
+
+        public Image(Image image, Int32? mediaID) 
+        {
+            this.lastupdateon = DateTime.Now;
+            this.RelativePath = image.RelativePath;
+            this.Extension = image.Extension;
+            this.MaxWidth = image.MaxWidth;
+            this.MaxHeight = image.MaxHeight;
+            this.Width = image.Width;
+            this.Height = image.Height;
+            this.MediaSizeType = image.MediaSizeType;
+            this.AbsolutePath = image.AbsolutePath;
+            this.MediaID = mediaID;
+        }
     }
 }
