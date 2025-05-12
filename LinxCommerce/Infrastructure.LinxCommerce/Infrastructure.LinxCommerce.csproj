@@ -9,6 +9,10 @@
   <ItemGroup>
     <PackageReference Include="Dapper" Version="2.1.35" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.11.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.4">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
@@ -17,6 +21,10 @@
     <ProjectReference Include="..\..\IntegrationsCore\Infrastructure.IntegrationsCore\Infrastructure.IntegrationsCore.csproj" />
     <ProjectReference Include="..\Application.LinxCommerce\Application.LinxCommerce.csproj" />
     <ProjectReference Include="..\Domain.LinxCommerce\Domain.LinxCommerce.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Data\" />
   </ItemGroup>
 
 </Project>
