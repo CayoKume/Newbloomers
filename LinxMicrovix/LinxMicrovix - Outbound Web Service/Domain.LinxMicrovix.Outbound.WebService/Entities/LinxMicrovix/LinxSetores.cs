@@ -6,7 +6,6 @@ using System.Linq;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 {
-    [Table("LinxSetores", Schema = "linx_microvix_erp")]
     public class LinxSetores
     {
         public DateTime? lastupdateon { get; private set; }

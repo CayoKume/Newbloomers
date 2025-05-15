@@ -6,7 +6,6 @@ using System.Globalization;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 {
-    [Table("LinxProdutosTabelasPrecos", Schema = "linx_microvix_erp")]
     public class LinxProdutosTabelasPrecos
     {
         public DateTime? lastupdateon { get; private set; }

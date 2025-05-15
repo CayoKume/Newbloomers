@@ -5,7 +5,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 {
-    [Table("LinxProdutosCamposAdicionais", Schema = "linx_microvix_erp")]
     public class LinxProdutosCamposAdicionais
     {
         public DateTime? lastupdateon { get; private set; }

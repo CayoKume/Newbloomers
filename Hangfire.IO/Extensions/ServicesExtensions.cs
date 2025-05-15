@@ -11,6 +11,13 @@ using Infrastructure.LinxMicrovix.Outbound.WebService.DependencyInjection;
 using Infrastructure.TotalExpress.DependencyInjection;
 using Infrastructure.AfterSale.DependencyInjection;
 using Infrastructure.Jadlog.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
+using Infrastructure.AfterSale.Data;
+using Infrastructure.LinxCommerce.Data;
+using Infrastructure.LinxMicrovix.Outbound.WebService.Data;
+using Infrastructure.FlashCourier.Data;
+using Infrastructure.Jadlog.Data;
+using Infrastructure.TotalExpress.Data;
 
 namespace Hangfire.IO.Extensions
 {
@@ -18,13 +25,9 @@ namespace Hangfire.IO.Extensions
     {
         public static WebApplicationBuilder AddServices(this WebApplicationBuilder builder)
         {
-            var serverName = builder.Configuration.GetSection("ConfigureServer").GetSection("ServerName").Value;
-            var databaseName = builder.Configuration.GetSection("ConfigureServer").GetSection("GeneralDatabaseName").Value;
-            var connectionstring = builder.Configuration.GetConnectionString("Connection").Replace("[catalog]", databaseName).Replace("[database]", databaseName);
-
             builder.Services.AddScopedSQLServerConnection();
 
-            builder.Services.AddAuditServices();
+            builder.Services.AddScopedAuditServices();
             builder.Services.AddScopedLinxCommerceServices();
             builder.Services.AddScopedLinxMicrovixServices();
             builder.Services.AddScopedB2CLinxMicrovixServices();
@@ -33,16 +36,90 @@ namespace Hangfire.IO.Extensions
             builder.Services.AddScopedAfterSaleServices();
             builder.Services.AddScopedJadlogServices();
 
+            #region Remover após a adição do Entity Framework
             builder.Services.AddScopedDatabaseIniService();
             builder.Services.AddScopedB2CLinxMicrovixDatabaseInitServices();
             builder.Services.AddScopedLinxMicrovixDatabaseInitServices();
+            #endregion
 
-            //builder.Services.AddHangfireService(connectionstring, serverName);
+            builder.Services.AddDbContextService(builder);
+            //builder.Services.AddHangfireService(builder);
 
             return builder;
         }
 
-        public static IServiceCollection AddAuditServices(this IServiceCollection services)
+        public static IServiceCollection AddDbContextService(this IServiceCollection services, WebApplicationBuilder builder)
+        {
+            var databaseType = builder.Configuration.GetSection("ConfigureServer").GetSection("DatabaseType").Value;
+            var connectionstring = builder.Configuration.GetConnectionString("Connection").Replace("[catalog]", "NEWBLOOMERS").Replace("[database]", "NEWBLOOMERS");
+
+            if (databaseType == "SQLServer")
+            {
+                services.AddDbContext<AfterSaleDbContext>(
+                    x => x.UseSqlServer(connectionstring));
+
+                services.AddDbContext<LinxCommerceDbContext>(
+                    x => x.UseSqlServer(connectionstring));
+
+                services.AddDbContext<LinxMicrovixOutboundDbContext>(
+                    x => x.UseSqlServer(connectionstring));
+
+                services.AddDbContext<FlashCourierDbContext>(
+                    x => x.UseSqlServer(connectionstring));
+
+                services.AddDbContext<JadlogDbContext>(
+                    x => x.UseSqlServer(connectionstring));
+
+                services.AddDbContext<TotalExpressDbContext>(
+                    x => x.UseSqlServer(connectionstring)); 
+            }
+
+            if (databaseType == "MySql")
+            {
+                services.AddDbContext<AfterSaleDbContext>(
+                    x => x.UseMySQL(connectionstring));
+
+                services.AddDbContext<LinxCommerceDbContext>(
+                    x => x.UseMySQL(connectionstring));
+
+                services.AddDbContext<LinxMicrovixOutboundDbContext>(
+                    x => x.UseMySQL(connectionstring));
+
+                services.AddDbContext<FlashCourierDbContext>(
+                    x => x.UseMySQL(connectionstring));
+
+                services.AddDbContext<JadlogDbContext>(
+                    x => x.UseMySQL(connectionstring));
+
+                services.AddDbContext<TotalExpressDbContext>(
+                    x => x.UseMySQL(connectionstring)); 
+            }
+
+            if (databaseType == "Postgree")
+            {
+                services.AddDbContext<AfterSaleDbContext>(
+                    x => x.UseNpgsql(connectionstring));
+
+                services.AddDbContext<LinxCommerceDbContext>(
+                    x => x.UseNpgsql(connectionstring));
+
+                services.AddDbContext<LinxMicrovixOutboundDbContext>(
+                    x => x.UseNpgsql(connectionstring));
+
+                services.AddDbContext<FlashCourierDbContext>(
+                    x => x.UseNpgsql(connectionstring));
+
+                services.AddDbContext<JadlogDbContext>(
+                    x => x.UseNpgsql(connectionstring));
+                
+                services.AddDbContext<TotalExpressDbContext>(
+                    x => x.UseNpgsql(connectionstring));
+            }
+
+            return services;
+        }
+
+        public static IServiceCollection AddScopedAuditServices(this IServiceCollection services)
         {
             services.AddScoped<ILogRepository, LogRepository>();
             services.AddScoped<ILoggerService, LoggerService>();
@@ -50,8 +127,12 @@ namespace Hangfire.IO.Extensions
             return services;
         }
 
-        public static IServiceCollection AddHangfireService(this IServiceCollection services, string? connectionstring, string? serverName)
+        public static IServiceCollection AddHangfireService(this IServiceCollection services, WebApplicationBuilder builder)
         {
+            var serverName = builder.Configuration.GetSection("ConfigureServer").GetSection("ServerName").Value;
+            var databaseName = builder.Configuration.GetSection("ConfigureServer").GetSection("GeneralDatabaseName").Value;
+            var connectionstring = builder.Configuration.GetConnectionString("Connection").Replace("[catalog]", databaseName).Replace("[database]", databaseName);
+
             services
                 .AddHangfire(configuration => configuration
                 .UseFilter(new AutomaticRetryAttribute { Attempts = 0 })
