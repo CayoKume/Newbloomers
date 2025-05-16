@@ -6,7 +6,7 @@ using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxCommerce
 {
-    public class B2CConsultaTransportadoresTrustedMap : IEntityTypeConfiguration<B2CConsultaTransportadores>
+    public class B2CConsultaTransportadoresMap : IEntityTypeConfiguration<B2CConsultaTransportadores>
     {
         public void Configure(EntityTypeBuilder<B2CConsultaTransportadores> builder)
         {
@@ -63,7 +63,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxComm
                 .HasColumnType("varchar(80)");
 
             builder.Property(e => e.obs)
-                .HasColumnType("varchar(MAX)");
+                .HasProviderColumnType(LogicalColumnType.Varchar_Max);
 
             builder.Property(e => e.timestamp)
                 .HasColumnType("bigint");
@@ -134,7 +134,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxComm
                 .HasColumnType("varchar(80)");
 
             builder.Property(e => e.obs)
-                .HasColumnType("varchar(MAX)");
+                .HasProviderColumnType(LogicalColumnType.Varchar_Max);
 
             builder.Property(e => e.timestamp)
                 .HasColumnType("bigint");

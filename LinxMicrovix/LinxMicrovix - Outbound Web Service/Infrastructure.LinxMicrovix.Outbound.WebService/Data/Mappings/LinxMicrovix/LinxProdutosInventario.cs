@@ -6,7 +6,7 @@ using Domain.LinxMicrovix.Outbound.WebService.Enums;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
-    public class LinxProdutosInventarioTrustedMap : IEntityTypeConfiguration<LinxProdutosInventario>
+    public class LinxProdutosInventarioMap : IEntityTypeConfiguration<LinxProdutosInventario>
     {
         public void Configure(EntityTypeBuilder<LinxProdutosInventario> builder)
         {

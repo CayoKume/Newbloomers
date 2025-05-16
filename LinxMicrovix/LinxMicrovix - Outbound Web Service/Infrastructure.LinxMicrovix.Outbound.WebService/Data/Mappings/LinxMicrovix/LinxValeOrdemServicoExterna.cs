@@ -6,7 +6,7 @@ using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
-    public class LinxValeOrdemServicoExternaTrustedMap : IEntityTypeConfiguration<LinxValeOrdemServicoExterna>
+    public class LinxValeOrdemServicoExternaMap : IEntityTypeConfiguration<LinxValeOrdemServicoExterna>
     {
         public void Configure(EntityTypeBuilder<LinxValeOrdemServicoExterna> builder)
         {

@@ -6,42 +6,13 @@ using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxCommerce
 {
-    public class B2CConsultaClientesEstadoCivilTrustedMap : IEntityTypeConfiguration<B2CConsultaClientesEstadoCivil>
+    public class B2CConsultaClientesEstadoCivilMap : IEntityTypeConfiguration<B2CConsultaClientesEstadoCivil>
     {
         public void Configure(EntityTypeBuilder<B2CConsultaClientesEstadoCivil> builder)
         {
             builder.ToTable("B2CConsultaClientesEstadoCivil", "linx_microvix_commerce");
 
             builder.HasKey(e => e.id_estado_civil);
-
-            builder.Property(e => e.lastupdateon)
-                .HasProviderColumnType(LogicalColumnType.DateTime);
-
-            builder.Property(e => e.id_estado_civil)
-                .HasColumnType("int");
-
-            builder.Property(e => e.estado_civil)
-                .HasColumnType("varchar(20)");
-
-            builder.Property(e => e.timestamp)
-                .HasColumnType("bigint");
-
-            builder.Property(e => e.portal)
-                .HasColumnType("int");
-        }
-    }
-
-    public class B2CConsultaClientesEstadoCivilRawMap : IEntityTypeConfiguration<B2CConsultaClientesEstadoCivil>
-    {
-        public void Configure(EntityTypeBuilder<B2CConsultaClientesEstadoCivil> builder)
-        {
-            builder.ToTable("B2CConsultaClientesEstadoCivil", "untreated");
-
-            builder.HasKey(e => e.id);
-
-            builder.Property(e => e.id)
-                .HasColumnType("int")
-                .ValueGeneratedOnAdd();
 
             builder.Property(e => e.lastupdateon)
                 .HasProviderColumnType(LogicalColumnType.DateTime);

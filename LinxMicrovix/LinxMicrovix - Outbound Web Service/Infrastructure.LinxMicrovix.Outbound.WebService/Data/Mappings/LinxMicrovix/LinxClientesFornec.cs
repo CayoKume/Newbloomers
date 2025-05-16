@@ -6,7 +6,7 @@ using Domain.LinxMicrovix.Outbound.WebService.Enums;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
-    public class LinxClientesFornecTrustedMap : IEntityTypeConfiguration<LinxClientesFornec>
+    public class LinxClientesFornecMap : IEntityTypeConfiguration<LinxClientesFornec>
     {
         public void Configure(EntityTypeBuilder<LinxClientesFornec> builder)
         {
@@ -138,7 +138,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasColumnType("int");
 
             builder.Property(e => e.obs)
-                .HasColumnType("varchar(max)");
+                .HasProviderColumnType(LogicalColumnType.Varchar_Max);
 
             builder.Property(e => e.mae)
                 .HasColumnType("varchar(60)");
@@ -281,7 +281,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasColumnType("int");
 
             builder.Property(e => e.obs)
-                .HasColumnType("varchar(max)");
+                .HasProviderColumnType(LogicalColumnType.Varchar_Max);
 
             builder.Property(e => e.mae)
                 .HasColumnType("varchar(60)");

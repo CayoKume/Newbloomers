@@ -1,15 +1,20 @@
 ﻿using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
-using Domain.LinxMicrovix.Outbound.WebService.Entities.LinxMicrovix;
+using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
 using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using System.Configuration;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data
 {
     public class LinxMicrovixOutboundDbContext : DbContext
     {
-        public LinxMicrovixOutboundDbContext(DbContextOptions<LinxMicrovixOutboundDbContext> options)
+        private readonly IConfiguration _configuration;
+
+        public LinxMicrovixOutboundDbContext(DbContextOptions<LinxMicrovixOutboundDbContext> options, IConfiguration configuration)
         : base(options)
         {
+            _configuration = configuration;
         }
 
         public DbSet<LinxAcoesPromocionais> LinxAcoesPromocionais { get; set; } = null!;
@@ -145,7 +150,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data
         public DbSet<LinxProdutosTabelas> LinxProdutosTabelas { get; set; } = null!;
         public DbSet<LinxProdutosTabelasPrecos> LinxProdutosTabelasPrecos { get; set; } = null!;
         public DbSet<LinxRamosAtividade> LinxRamosAtividade { get; set; } = null!;
-        public DbSet<LinxReducoesZ> LinxReducoesZ { get; set; } = null!;
+        //public DbSet<LinxReducoesZ> LinxReducoesZ { get; set; } = null!;
         public DbSet<LinxRemessasIdentificadores> LinxRemessasIdentificadores { get; set; } = null!;
         public DbSet<LinxRemessasOperacoes> LinxRemessasOperacoes { get; set; } = null!;
         public DbSet<LinxRemessasRetornoTipos> LinxRemessasRetornoTipos { get; set; } = null!;
@@ -155,7 +160,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data
         public DbSet<LinxSerialVenda> LinxSerialVenda { get; set; } = null!;
         public DbSet<LinxSeries> LinxSeries { get; set; } = null!;
         public DbSet<LinxServicos> LinxServicos { get; set; } = null!;
-        public DbSet<LinxServicosDetalhes> LinxServicosDetalhes { get; set; } = null!;
+        //public DbSet<LinxServicosDetalhes> LinxServicosDetalhes { get; set; } = null!;
         public DbSet<LinxSetores> LinxSetores { get; set; } = null!;
         public DbSet<LinxSpedTipoBaseCredito> LinxSpedTipoBaseCredito { get; set; } = null!;
         public DbSet<LinxSpedTipoItem> LinxSpedTipoItem { get; set; } = null!;
@@ -172,6 +177,8 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data
         public DbSet<LinxVendedores> LinxVendedores { get; set; } = null!;
         public DbSet<LinxXMLDocumentos> LinxXMLDocumentos { get; set; } = null!;
 
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(Infrastructure.LinxMicrovix.Outbound.WebService.DependencyInjection.DependencyInjection).Assembly);
@@ -182,6 +189,23 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data
                                   providerName.Contains("Npgsql") ? "PostgreSQL" :
                                   providerName.Contains("MySql") ? "MySql" :
                                   null;
+
+            var assembly = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(a => a.GetName().Name == "Domain.LinxMicrovix.Outbound.WebService");
+
+
+            var entidadesB2CLinxMicrovixParaIgnorar = _configuration
+                            .GetSection("B2CLinxMicrovix")
+                            .GetSection("Methods")
+                            .Get<List<LinxMethods>>()
+                            .Where(x => x.IsActive == false)
+                            .ToList();
+
+            var entidadesLinxMicrovixParaIgnorar = _configuration
+                            .GetSection("LinxMicrovix")
+                            .GetSection("Methods")
+                            .Get<List<LinxMethods>>()
+                            .Where(x => x.IsActive == false)
+                            .ToList();
 
             if (providerKey == null) 
                 return;
@@ -203,6 +227,18 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data
                         }
                     }
                 }
+            }
+
+            foreach (var entidade in entidadesLinxMicrovixParaIgnorar)
+            {
+                var type = assembly.GetType($"Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix.{entidade.MethodName}");
+                modelBuilder.Ignore(type);
+            }
+
+            foreach (var entidade in entidadesB2CLinxMicrovixParaIgnorar)
+            {
+                var type = assembly.GetType($"Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce.{entidade.MethodName}");
+                modelBuilder.Ignore(type);
             }
         }
     }

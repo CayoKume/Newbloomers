@@ -6,7 +6,7 @@ using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
-    public class LinxB2CPedidosTrustedMap : IEntityTypeConfiguration<LinxB2CPedidos>
+    public class LinxB2CPedidosMap : IEntityTypeConfiguration<LinxB2CPedidos>
     {
         public void Configure(EntityTypeBuilder<LinxB2CPedidos> builder)
         {
@@ -87,7 +87,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasProviderColumnType(LogicalColumnType.DateTime);
 
             builder.Property(e => e.mensagem_falha_faturamento)
-                .HasColumnType("varchar(max)");
+                .HasProviderColumnType(LogicalColumnType.Varchar_Max);
 
             builder.Property(e => e.portal)
                 .HasColumnType("int");
@@ -191,7 +191,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasProviderColumnType(LogicalColumnType.DateTime);
 
             builder.Property(e => e.mensagem_falha_faturamento)
-                .HasColumnType("varchar(max)");
+                .HasProviderColumnType(LogicalColumnType.Varchar_Max);
 
             builder.Property(e => e.portal)
                 .HasColumnType("int");

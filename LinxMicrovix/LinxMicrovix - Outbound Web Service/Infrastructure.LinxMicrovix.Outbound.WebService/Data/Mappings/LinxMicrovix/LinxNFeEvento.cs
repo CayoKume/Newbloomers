@@ -6,7 +6,7 @@ using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
-    public class LinxNFeEventoTrustedMap : IEntityTypeConfiguration<LinxNFeEvento>
+    public class LinxNFeEventoMap : IEntityTypeConfiguration<LinxNFeEvento>
     {
         public void Configure(EntityTypeBuilder<LinxNFeEvento> builder)
         {
@@ -33,7 +33,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasColumnType("varchar(6)");
 
             builder.Property(e => e.xml)
-                .HasColumnType("varchar(max)");
+                .HasProviderColumnType(LogicalColumnType.Varchar_Max);
 
             builder.Property(e => e.timestamp)
                 .HasColumnType("bigint");
@@ -77,7 +77,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasColumnType("varchar(6)");
 
             builder.Property(e => e.xml)
-                .HasColumnType("varchar(max)");
+                .HasProviderColumnType(LogicalColumnType.Varchar_Max);
 
             builder.Property(e => e.timestamp)
                 .HasColumnType("bigint");

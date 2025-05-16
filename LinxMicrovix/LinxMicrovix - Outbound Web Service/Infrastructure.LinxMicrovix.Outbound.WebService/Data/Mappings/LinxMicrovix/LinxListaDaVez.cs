@@ -6,7 +6,7 @@ using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
-    public class LinxListaDaVezTrustedMap : IEntityTypeConfiguration<LinxListaDaVez>
+    public class LinxListaDaVezMap : IEntityTypeConfiguration<LinxListaDaVez>
     {
         public void Configure(EntityTypeBuilder<LinxListaDaVez> builder)
         {
@@ -40,7 +40,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasProviderColumnType(LogicalColumnType.DateTime);
 
             builder.Property(e => e.obs)
-                .HasColumnType("varchar(max)");
+                .HasProviderColumnType(LogicalColumnType.Varchar_Max);
 
             builder.Property(e => e.desc_produto_neg)
                 .HasColumnType("varchar(50)");
@@ -90,7 +90,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasProviderColumnType(LogicalColumnType.DateTime);
 
             builder.Property(e => e.obs)
-                .HasColumnType("varchar(max)");
+                .HasProviderColumnType(LogicalColumnType.Varchar_Max);
 
             builder.Property(e => e.desc_produto_neg)
                 .HasColumnType("varchar(50)");

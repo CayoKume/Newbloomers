@@ -44,69 +44,123 @@ namespace Hangfire.IO.Extensions
         public static IServiceCollection AddDbContextService(this IServiceCollection services, WebApplicationBuilder builder)
         {
             var databaseType = builder.Configuration.GetSection("ConfigureServer").GetSection("DatabaseType").Value;
-            var connectionstring = builder.Configuration.GetConnectionString("Connection").Replace("[catalog]", "NEWBLOOMERS").Replace("[database]", "NEWBLOOMERS");
+            var connectionstring = builder.Configuration.GetConnectionString("Connection");
 
             if (databaseType == "SQLServer")
             {
-                services.AddDbContext<AfterSaleDbContext>(
-                    x => x.UseSqlServer(connectionstring));
+                services.AddDbContext<AfterSaleDbContext>((serviceProvider, options) =>
+                {
+                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+                    options.UseSqlServer(connectionstring);
+                });
 
-                services.AddDbContext<LinxCommerceDbContext>(
-                    x => x.UseSqlServer(connectionstring));
+                services.AddDbContext<LinxCommerceDbContext>((serviceProvider, options) =>
+                {
+                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+                    options.UseSqlServer(connectionstring);
+                });
 
-                services.AddDbContext<LinxMicrovixOutboundDbContext>(
-                    x => x.UseSqlServer(connectionstring));
+                services.AddDbContext<LinxMicrovixOutboundDbContext>((serviceProvider, options) =>
+                {
+                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+                    options.UseSqlServer(connectionstring);
+                });
 
-                services.AddDbContext<FlashCourierDbContext>(
-                    x => x.UseSqlServer(connectionstring));
+                services.AddDbContext<FlashCourierDbContext>((serviceProvider, options) =>
+                {
+                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+                    options.UseSqlServer(connectionstring);
+                });
 
-                services.AddDbContext<JadlogDbContext>(
-                    x => x.UseSqlServer(connectionstring));
+                services.AddDbContext<JadlogDbContext>((serviceProvider, options) =>
+                {
+                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+                    options.UseSqlServer(connectionstring);
+                });
 
-                services.AddDbContext<TotalExpressDbContext>(
-                    x => x.UseSqlServer(connectionstring)); 
+                services.AddDbContext<TotalExpressDbContext>((serviceProvider, options) =>
+                {
+                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+                    options.UseSqlServer(connectionstring);
+                });
             }
 
             if (databaseType == "MySql")
             {
-                services.AddDbContext<AfterSaleDbContext>(
-                    x => x.UseMySQL(connectionstring));
+                services.AddDbContext<AfterSaleDbContext>((serviceProvider, options) =>
+                {
+                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+                    options.UseMySQL(connectionstring);
+                });
 
-                services.AddDbContext<LinxCommerceDbContext>(
-                    x => x.UseMySQL(connectionstring));
+                services.AddDbContext<LinxCommerceDbContext>((serviceProvider, options) =>
+                {
+                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+                    options.UseMySQL(connectionstring);
+                });
 
-                services.AddDbContext<LinxMicrovixOutboundDbContext>(
-                    x => x.UseMySQL(connectionstring));
+                services.AddDbContext<LinxMicrovixOutboundDbContext>((serviceProvider, options) =>
+                {
+                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+                    options.UseMySQL(connectionstring);
+                });
 
-                services.AddDbContext<FlashCourierDbContext>(
-                    x => x.UseMySQL(connectionstring));
+                services.AddDbContext<FlashCourierDbContext>((serviceProvider, options) =>
+                {
+                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+                    options.UseMySQL(connectionstring);
+                });
 
-                services.AddDbContext<JadlogDbContext>(
-                    x => x.UseMySQL(connectionstring));
+                services.AddDbContext<JadlogDbContext>((serviceProvider, options) =>
+                {
+                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+                    options.UseMySQL(connectionstring);
+                });
 
-                services.AddDbContext<TotalExpressDbContext>(
-                    x => x.UseMySQL(connectionstring)); 
+                services.AddDbContext<TotalExpressDbContext>((serviceProvider, options) =>
+                {
+                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+                    options.UseMySQL(connectionstring);
+                });
             }
 
             if (databaseType == "Postgree")
             {
-                services.AddDbContext<AfterSaleDbContext>(
-                    x => x.UseNpgsql(connectionstring));
+                services.AddDbContext<AfterSaleDbContext>((serviceProvider, options) =>
+                {
+                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+                    options.UseNpgsql(connectionstring);
+                });
 
-                services.AddDbContext<LinxCommerceDbContext>(
-                    x => x.UseNpgsql(connectionstring));
+                services.AddDbContext<LinxCommerceDbContext>((serviceProvider, options) =>
+                {
+                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+                    options.UseNpgsql(connectionstring);
+                });
 
-                services.AddDbContext<LinxMicrovixOutboundDbContext>(
-                    x => x.UseNpgsql(connectionstring));
+                services.AddDbContext<LinxMicrovixOutboundDbContext>((serviceProvider, options) =>
+                {
+                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+                    options.UseNpgsql(connectionstring);
+                });
 
-                services.AddDbContext<FlashCourierDbContext>(
-                    x => x.UseNpgsql(connectionstring));
+                services.AddDbContext<FlashCourierDbContext>((serviceProvider, options) =>
+                {
+                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+                    options.UseNpgsql(connectionstring);
+                });
 
-                services.AddDbContext<JadlogDbContext>(
-                    x => x.UseNpgsql(connectionstring));
-                
-                services.AddDbContext<TotalExpressDbContext>(
-                    x => x.UseNpgsql(connectionstring));
+                services.AddDbContext<JadlogDbContext>((serviceProvider, options) =>
+                {
+                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+                    options.UseNpgsql(connectionstring);
+                });
+
+                services.AddDbContext<TotalExpressDbContext>((serviceProvider, options) =>
+                {
+                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+                    options.UseNpgsql(connectionstring);
+                });
             }
 
             return services;

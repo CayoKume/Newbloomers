@@ -6,7 +6,7 @@ using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
-    public class LinxClientesFornecCreditoAvulsoTrustedMap : IEntityTypeConfiguration<LinxClientesFornecCreditoAvulso>
+    public class LinxClientesFornecCreditoAvulsoMap : IEntityTypeConfiguration<LinxClientesFornecCreditoAvulso>
     {
         public void Configure(EntityTypeBuilder<LinxClientesFornecCreditoAvulso> builder)
         {
@@ -30,7 +30,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasColumnType("int");
 
             builder.Property(e => e.data)
-                .HasColumnType("decimal(10,2)");
+                .HasProviderColumnType(LogicalColumnType.DateTime);
 
             builder.Property(e => e.cd)
                 .HasColumnType("char(1)");
@@ -39,7 +39,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasColumnType("decimal(10,2)");
 
             builder.Property(e => e.motivo)
-                .HasColumnType("varchar(max)");
+                .HasProviderColumnType(LogicalColumnType.Varchar_Max);
 
             builder.Property(e => e.timestamp)
                 .HasColumnType("bigint");
@@ -80,7 +80,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasColumnType("int");
 
             builder.Property(e => e.data)
-                .HasColumnType("decimal(10,2)");
+                .HasProviderColumnType(LogicalColumnType.DateTime);
 
             builder.Property(e => e.cd)
                 .HasColumnType("char(1)");
@@ -89,7 +89,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasColumnType("decimal(10,2)");
 
             builder.Property(e => e.motivo)
-                .HasColumnType("varchar(max)");
+                .HasProviderColumnType(LogicalColumnType.Varchar_Max);
 
             builder.Property(e => e.timestamp)
                 .HasColumnType("bigint");

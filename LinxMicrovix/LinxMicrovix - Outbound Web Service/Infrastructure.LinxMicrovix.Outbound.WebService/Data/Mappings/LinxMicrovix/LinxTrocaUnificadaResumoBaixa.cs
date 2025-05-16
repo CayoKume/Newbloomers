@@ -6,7 +6,7 @@ using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
-    public class LinxTrocaUnificadaResumoBaixaTrustedMap : IEntityTypeConfiguration<LinxTrocaUnificadaResumoBaixa>
+    public class LinxTrocaUnificadaResumoBaixaMap : IEntityTypeConfiguration<LinxTrocaUnificadaResumoBaixa>
     {
         public void Configure(EntityTypeBuilder<LinxTrocaUnificadaResumoBaixa> builder)
         {
@@ -33,7 +33,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasColumnType("bigint");
 
             builder.Property(e => e.data_troca_baixa)
-                .HasColumnType("int");
+                .HasProviderColumnType(LogicalColumnType.DateTime);
 
             builder.Property(e => e.transacao_baixa)
                 .HasColumnType("int");
@@ -77,7 +77,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasColumnType("bigint");
 
             builder.Property(e => e.data_troca_baixa)
-                .HasColumnType("int");
+                .HasProviderColumnType(LogicalColumnType.DateTime);
 
             builder.Property(e => e.transacao_baixa)
                 .HasColumnType("int");

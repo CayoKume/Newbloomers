@@ -10,6 +10,7 @@
                 { "bool", "bit" },
                 { "tinyint", "tinyint" },
                 { "uuid", "uniqueidentifier" },
+                { "varchar_max", "varchar(max)" },
                 { "datetime", "datetime" }
             }
         },
@@ -19,6 +20,7 @@
                 { "bool", "boolean" },
                 { "tinyint", "smallint" },
                 { "uuid", "uuid" },
+                { "varchar_max", "text" },
                 { "datetime", "timestamp without time zone" }
             }
         },
@@ -28,6 +30,7 @@
                 { "bool", "boolean" },
                 { "tinyint", "tinyint" },
                 { "uuid", "char(36)" },
+                { "varchar_max", "varchar(max)" },
                 { "datetime", "datetime" }
             }
         }

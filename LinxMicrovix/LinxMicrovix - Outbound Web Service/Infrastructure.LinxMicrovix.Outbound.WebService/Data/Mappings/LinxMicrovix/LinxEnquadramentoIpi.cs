@@ -6,7 +6,7 @@ using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
-    public class LinxEnquadramentoIpiTrustedMap : IEntityTypeConfiguration<LinxEnquadramentoIpi>
+    public class LinxEnquadramentoIpiMap : IEntityTypeConfiguration<LinxEnquadramentoIpi>
     {
         public void Configure(EntityTypeBuilder<LinxEnquadramentoIpi> builder)
         {

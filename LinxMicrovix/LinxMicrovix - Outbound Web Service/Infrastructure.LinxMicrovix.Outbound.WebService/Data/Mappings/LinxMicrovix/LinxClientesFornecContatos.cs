@@ -6,7 +6,7 @@ using Domain.LinxMicrovix.Outbound.WebService.Enums;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
-    public class LinxClientesFornecContatosTrustedMap : IEntityTypeConfiguration<LinxClientesFornecContatos>
+    public class LinxClientesFornecContatosMap : IEntityTypeConfiguration<LinxClientesFornecContatos>
     {
         public void Configure(EntityTypeBuilder<LinxClientesFornecContatos> builder)
         {

@@ -6,7 +6,7 @@ using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
-    public class LinxFidelidadeTrustedMap : IEntityTypeConfiguration<LinxFidelidade>
+    public class LinxFidelidadeMap : IEntityTypeConfiguration<LinxFidelidade>
     {
         public void Configure(EntityTypeBuilder<LinxFidelidade> builder)
         {
@@ -27,7 +27,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasColumnType("int");
 
             builder.Property(e => e.data_transacao)
-                .HasColumnType("int");
+                .HasProviderColumnType(LogicalColumnType.DateTime);
 
             builder.Property(e => e.operacao)
                 .HasColumnType("int");
@@ -74,7 +74,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasColumnType("int");
 
             builder.Property(e => e.data_transacao)
-                .HasColumnType("int");
+                .HasProviderColumnType(LogicalColumnType.DateTime);
 
             builder.Property(e => e.operacao)
                 .HasColumnType("int");

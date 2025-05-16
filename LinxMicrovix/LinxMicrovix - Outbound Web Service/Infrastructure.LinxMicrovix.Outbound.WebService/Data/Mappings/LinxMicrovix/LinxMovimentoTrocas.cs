@@ -6,7 +6,7 @@ using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
-    public class LinxMovimentoTrocasTrustedMap : IEntityTypeConfiguration<LinxMovimentoTrocas>
+    public class LinxMovimentoTrocasMap : IEntityTypeConfiguration<LinxMovimentoTrocas>
     {
         public void Configure(EntityTypeBuilder<LinxMovimentoTrocas> builder)
         {

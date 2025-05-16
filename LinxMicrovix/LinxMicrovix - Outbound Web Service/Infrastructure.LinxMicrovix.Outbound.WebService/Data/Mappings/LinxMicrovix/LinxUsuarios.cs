@@ -1,12 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
-using Domain.LinxMicrovix.Outbound.WebService.Entities.LinxMicrovix;
+using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
 using Domain.LinxMicrovix.Outbound.WebService.Enums;
 using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
-    public class LinxUsuariosTrustedMap : IEntityTypeConfiguration<LinxUsuarios>
+    public class LinxUsuariosMap : IEntityTypeConfiguration<LinxUsuarios>
     {
         public void Configure(EntityTypeBuilder<LinxUsuarios> builder)
         {
@@ -51,7 +51,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasColumnType("char(1)");
 
             builder.Property(e => e.empresas)
-                .HasColumnType("varchar(MAX)");
+                .HasProviderColumnType(LogicalColumnType.Varchar_Max);
 
             builder.Property(e => e.portal)
                 .HasColumnType("int");
@@ -110,7 +110,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasColumnType("char(1)");
 
             builder.Property(e => e.empresas)
-                .HasColumnType("varchar(MAX)");
+                .HasProviderColumnType(LogicalColumnType.Varchar_Max);
 
             builder.Property(e => e.portal)
                 .HasColumnType("int");

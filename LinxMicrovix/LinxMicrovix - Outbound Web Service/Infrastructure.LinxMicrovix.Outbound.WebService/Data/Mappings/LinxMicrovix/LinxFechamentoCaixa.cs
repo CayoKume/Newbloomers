@@ -6,7 +6,7 @@ using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
-    public class LinxFechamentoCaixaTrustedMap : IEntityTypeConfiguration<LinxFechamentoCaixa>
+    public class LinxFechamentoCaixaMap : IEntityTypeConfiguration<LinxFechamentoCaixa>
     {
         public void Configure(EntityTypeBuilder<LinxFechamentoCaixa> builder)
         {
@@ -24,7 +24,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasProviderColumnType(LogicalColumnType.Bool);
 
             builder.Property(e => e.data)
-                .HasColumnType("int");
+                .HasProviderColumnType(LogicalColumnType.DateTime);
 
             builder.Property(e => e.empresa)
                 .HasColumnType("int");
@@ -155,7 +155,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasProviderColumnType(LogicalColumnType.Bool);
 
             builder.Property(e => e.data)
-                .HasColumnType("int");
+                .HasProviderColumnType(LogicalColumnType.DateTime);
 
             builder.Property(e => e.empresa)
                 .HasColumnType("int");

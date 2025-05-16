@@ -6,7 +6,7 @@ using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
-    public class LinxB2CPedidosStatusTrustedMap : IEntityTypeConfiguration<LinxB2CPedidosStatus>
+    public class LinxB2CPedidosStatusMap : IEntityTypeConfiguration<LinxB2CPedidosStatus>
     {
         public void Configure(EntityTypeBuilder<LinxB2CPedidosStatus> builder)
         {

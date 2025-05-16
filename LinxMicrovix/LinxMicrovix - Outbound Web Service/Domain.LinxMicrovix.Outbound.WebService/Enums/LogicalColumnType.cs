@@ -11,6 +11,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Enums
         Bool,
         TinyInt,
         UUID,
-        DateTime
+        DateTime,
+        Varchar_Max
     }
 }

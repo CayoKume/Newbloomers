@@ -6,7 +6,7 @@ using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
-    public class LinxPedidosVendaTrustedMap : IEntityTypeConfiguration<LinxPedidosVenda>
+    public class LinxPedidosVendaMap : IEntityTypeConfiguration<LinxPedidosVenda>
     {
         public void Configure(EntityTypeBuilder<LinxPedidosVenda> builder)
         {
@@ -74,7 +74,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasColumnType("varchar(35)");
 
             builder.Property(e => e.obs)
-                .HasColumnType("varchar(max)");
+                .HasProviderColumnType(LogicalColumnType.Varchar_Max);
 
             builder.Property(e => e.aprovado)
                 .HasColumnType("char(1)");
@@ -113,7 +113,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasColumnType("char(1)");
 
             builder.Property(e => e.nf_gerada)
-                .HasColumnType("varchar(max)");
+                .HasProviderColumnType(LogicalColumnType.Varchar_Max);
 
             builder.Property(e => e.status)
                 .HasColumnType("char(1)");
@@ -226,7 +226,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasColumnType("varchar(35)");
 
             builder.Property(e => e.obs)
-                .HasColumnType("varchar(max)");
+                .HasProviderColumnType(LogicalColumnType.Varchar_Max);
 
             builder.Property(e => e.aprovado)
                 .HasColumnType("char(1)");
@@ -265,7 +265,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasColumnType("char(1)");
 
             builder.Property(e => e.nf_gerada)
-                .HasColumnType("varchar(max)");
+                .HasProviderColumnType(LogicalColumnType.Varchar_Max);
 
             builder.Property(e => e.status)
                 .HasColumnType("char(1)");

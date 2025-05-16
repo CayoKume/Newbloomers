@@ -6,7 +6,7 @@ using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
-    public class LinxCupomDescontoTrustedMap : IEntityTypeConfiguration<LinxCupomDesconto>
+    public class LinxCupomDescontoMap : IEntityTypeConfiguration<LinxCupomDesconto>
     {
         public void Configure(EntityTypeBuilder<LinxCupomDesconto> builder)
         {

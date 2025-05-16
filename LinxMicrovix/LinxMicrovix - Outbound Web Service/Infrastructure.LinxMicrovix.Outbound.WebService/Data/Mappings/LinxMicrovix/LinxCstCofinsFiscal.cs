@@ -6,7 +6,7 @@ using Domain.LinxMicrovix.Outbound.WebService.Enums;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
-    public class LinxCstCofinsFiscalTrustedMap : IEntityTypeConfiguration<LinxCstCofinsFiscal>
+    public class LinxCstCofinsFiscalMap : IEntityTypeConfiguration<LinxCstCofinsFiscal>
     {
         public void Configure(EntityTypeBuilder<LinxCstCofinsFiscal> builder)
         {

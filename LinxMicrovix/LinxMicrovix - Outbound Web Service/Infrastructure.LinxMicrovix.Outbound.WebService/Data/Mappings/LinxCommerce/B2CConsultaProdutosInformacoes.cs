@@ -6,7 +6,7 @@ using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxCommerce
 {
-    public class B2CConsultaProdutosInformacoesTrustedMap : IEntityTypeConfiguration<B2CConsultaProdutosInformacoes>
+    public class B2CConsultaProdutosInformacoesMap : IEntityTypeConfiguration<B2CConsultaProdutosInformacoes>
     {
         public void Configure(EntityTypeBuilder<B2CConsultaProdutosInformacoes> builder)
         {
@@ -24,39 +24,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxComm
                 .HasColumnType("bigint");
 
             builder.Property(e => e.informacoes_produto)
-                .HasColumnType("varchar(MAX)");
-
-            builder.Property(e => e.timestamp)
-                .HasColumnType("bigint");
-
-            builder.Property(e => e.portal)
-                .HasColumnType("int");
-        }
-    }
-
-    public class B2CConsultaProdutosInformacoesRawMap : IEntityTypeConfiguration<B2CConsultaProdutosInformacoes>
-    {
-        public void Configure(EntityTypeBuilder<B2CConsultaProdutosInformacoes> builder)
-        {
-            builder.ToTable("B2CConsultaProdutosInformacoes", "untreated");
-
-            builder.HasKey(e => e.id);
-
-            builder.Property(e => e.id)
-                .HasColumnType("int")
-                .ValueGeneratedOnAdd();
-
-            builder.Property(e => e.lastupdateon)
-                .HasProviderColumnType(LogicalColumnType.DateTime);
-
-            builder.Property(e => e.id_produtos_informacoes)
-                .HasColumnType("int");
-
-            builder.Property(e => e.codigoproduto)
-                .HasColumnType("bigint");
-
-            builder.Property(e => e.informacoes_produto)
-                .HasColumnType("varchar(MAX)");
+                .HasProviderColumnType(LogicalColumnType.Varchar_Max);
 
             builder.Property(e => e.timestamp)
                 .HasColumnType("bigint");

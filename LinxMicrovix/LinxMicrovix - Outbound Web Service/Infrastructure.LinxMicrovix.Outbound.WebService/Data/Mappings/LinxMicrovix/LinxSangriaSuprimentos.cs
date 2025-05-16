@@ -6,7 +6,7 @@ using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
-    public class LinxSangriaSuprimentosTrustedMap : IEntityTypeConfiguration<LinxSangriaSuprimentos>
+    public class LinxSangriaSuprimentosMap : IEntityTypeConfiguration<LinxSangriaSuprimentos>
     {
         public void Configure(EntityTypeBuilder<LinxSangriaSuprimentos> builder)
         {
@@ -33,7 +33,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasColumnType("decimal(10,2)");
 
             builder.Property(e => e.obs)
-                .HasColumnType("varchar(max)");
+                .HasProviderColumnType(LogicalColumnType.Varchar_Max);
 
             builder.Property(e => e.cancelado)
                 .HasColumnType("char(1)");
@@ -83,7 +83,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasColumnType("decimal(10,2)");
 
             builder.Property(e => e.obs)
-                .HasColumnType("varchar(max)");
+                .HasProviderColumnType(LogicalColumnType.Varchar_Max);
 
             builder.Property(e => e.cancelado)
                 .HasColumnType("char(1)");

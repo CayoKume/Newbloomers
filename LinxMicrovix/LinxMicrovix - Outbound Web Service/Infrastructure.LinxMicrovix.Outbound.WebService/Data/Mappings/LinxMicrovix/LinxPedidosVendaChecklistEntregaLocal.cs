@@ -6,7 +6,7 @@ using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
-    public class LinxPedidosVendaChecklistEntregaLocalTrustedMap : IEntityTypeConfiguration<LinxPedidosVendaChecklistEntregaLocal>
+    public class LinxPedidosVendaChecklistEntregaLocalMap : IEntityTypeConfiguration<LinxPedidosVendaChecklistEntregaLocal>
     {
         public void Configure(EntityTypeBuilder<LinxPedidosVendaChecklistEntregaLocal> builder)
         {

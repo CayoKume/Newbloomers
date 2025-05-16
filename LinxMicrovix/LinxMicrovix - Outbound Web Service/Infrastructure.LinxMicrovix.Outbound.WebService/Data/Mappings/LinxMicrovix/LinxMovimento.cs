@@ -6,7 +6,7 @@ using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
-    public class LinxMovimentoTrustedMap : IEntityTypeConfiguration<LinxMovimento>
+    public class LinxMovimentoMap : IEntityTypeConfiguration<LinxMovimento>
     {
         public void Configure(EntityTypeBuilder<LinxMovimento> builder)
         {
@@ -209,7 +209,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
         .HasColumnType("varchar(100)");
 
     builder.Property(e => e.obs)
-        .HasColumnType("varchar(max)");
+        .HasProviderColumnType(LogicalColumnType.Varchar_Max);
 
     builder.Property(e => e.preco_unitario)
         .HasColumnType("decimal(10,2)");
@@ -556,7 +556,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasColumnType("varchar(100)");
 
             builder.Property(e => e.obs)
-                .HasColumnType("varchar(max)");
+                .HasProviderColumnType(LogicalColumnType.Varchar_Max);
 
             builder.Property(e => e.preco_unitario)
                 .HasColumnType("decimal(10,2)");

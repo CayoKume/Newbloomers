@@ -7,7 +7,7 @@ using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
-    public class LinxOrcamentoComponenteFormulaTrustedMap : IEntityTypeConfiguration<LinxOrcamentoComponenteFormula>
+    public class LinxOrcamentoComponenteFormulaMap : IEntityTypeConfiguration<LinxOrcamentoComponenteFormula>
     {
         public void Configure(EntityTypeBuilder<LinxOrcamentoComponenteFormula> builder)
         {
@@ -46,7 +46,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasColumnType("varchar(30)");
 
             builder.Property(e => e.data_validade_lote)
-                .HasColumnType("int");
+                .HasProviderColumnType(LogicalColumnType.DateTime);
 
             builder.Property(e => e.codigo_ws)
                 .HasColumnType("varchar(50)");
@@ -102,7 +102,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasColumnType("varchar(30)");
 
             builder.Property(e => e.data_validade_lote)
-                .HasColumnType("int");
+                .HasProviderColumnType(LogicalColumnType.DateTime);
 
             builder.Property(e => e.codigo_ws)
                 .HasColumnType("varchar(50)");

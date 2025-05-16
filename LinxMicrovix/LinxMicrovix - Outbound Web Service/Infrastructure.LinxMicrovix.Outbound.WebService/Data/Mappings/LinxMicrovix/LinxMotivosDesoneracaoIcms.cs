@@ -6,7 +6,7 @@ using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
-    public class LinxMotivosDesoneracaoIcmsTrustedMap : IEntityTypeConfiguration<LinxMotivosDesoneracaoIcms>
+    public class LinxMotivosDesoneracaoIcmsMap : IEntityTypeConfiguration<LinxMotivosDesoneracaoIcms>
     {
         public void Configure(EntityTypeBuilder<LinxMotivosDesoneracaoIcms> builder)
         {

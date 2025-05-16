@@ -1,5 +1,5 @@
 ﻿using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
-using Domain.LinxMicrovix.Outbound.WebService.Entities.LinxMicrovix;
+using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxMicrovix
 {

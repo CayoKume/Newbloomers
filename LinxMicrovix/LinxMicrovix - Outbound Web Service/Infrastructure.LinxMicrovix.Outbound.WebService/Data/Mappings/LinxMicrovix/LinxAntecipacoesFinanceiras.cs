@@ -6,7 +6,7 @@ using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
-    public class LinxAntecipacoesFinanceirasTrustedMap : IEntityTypeConfiguration<LinxAntecipacoesFinanceiras>
+    public class LinxAntecipacoesFinanceirasMap : IEntityTypeConfiguration<LinxAntecipacoesFinanceiras>
     {
         public void Configure(EntityTypeBuilder<LinxAntecipacoesFinanceiras> builder)
         {

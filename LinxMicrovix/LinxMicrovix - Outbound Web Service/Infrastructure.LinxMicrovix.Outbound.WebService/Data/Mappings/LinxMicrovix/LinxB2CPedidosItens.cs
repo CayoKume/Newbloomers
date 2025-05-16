@@ -6,7 +6,7 @@ using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
-    public class LinxB2CPedidosItensTrustedMap : IEntityTypeConfiguration<LinxB2CPedidosItens>
+    public class LinxB2CPedidosItensMap : IEntityTypeConfiguration<LinxB2CPedidosItens>
     {
         public void Configure(EntityTypeBuilder<LinxB2CPedidosItens> builder)
         {

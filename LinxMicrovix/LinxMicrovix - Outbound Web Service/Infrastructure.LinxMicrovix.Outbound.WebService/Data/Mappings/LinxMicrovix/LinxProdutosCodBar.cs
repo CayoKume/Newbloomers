@@ -6,7 +6,7 @@ using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
-    public class LinxProdutosCodBarTrustedMap : IEntityTypeConfiguration<LinxProdutosCodBar>
+    public class LinxProdutosCodBarMap : IEntityTypeConfiguration<LinxProdutosCodBar>
     {
         public void Configure(EntityTypeBuilder<LinxProdutosCodBar> builder)
         {

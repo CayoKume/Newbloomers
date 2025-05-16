@@ -6,7 +6,7 @@ using Domain.LinxMicrovix.Outbound.WebService.Enums;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
-    public class LinxMovimentoCamposAdicionaisTrustedMap : IEntityTypeConfiguration<LinxMovimentoCamposAdicionais>
+    public class LinxMovimentoCamposAdicionaisMap : IEntityTypeConfiguration<LinxMovimentoCamposAdicionais>
     {
         public void Configure(EntityTypeBuilder<LinxMovimentoCamposAdicionais> builder)
         {

@@ -6,7 +6,7 @@ using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
-    public class LinxOticoReceitasTrustedMap : IEntityTypeConfiguration<LinxOticoReceitas>
+    public class LinxOticoReceitasMap : IEntityTypeConfiguration<LinxOticoReceitas>
     {
         public void Configure(EntityTypeBuilder<LinxOticoReceitas> builder)
         {
@@ -273,7 +273,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasProviderColumnType(LogicalColumnType.Bool);
 
             builder.Property(e => e.migracao_observacao)
-                .HasColumnType("varchar(max)");
+                .HasProviderColumnType(LogicalColumnType.Varchar_Max);
 
             builder.Property(e => e.portal)
                 .HasColumnType("int");
@@ -554,7 +554,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasProviderColumnType(LogicalColumnType.Bool);
 
             builder.Property(e => e.migracao_observacao)
-                .HasColumnType("varchar(max)");
+                .HasProviderColumnType(LogicalColumnType.Varchar_Max);
 
             builder.Property(e => e.portal)
                 .HasColumnType("int");

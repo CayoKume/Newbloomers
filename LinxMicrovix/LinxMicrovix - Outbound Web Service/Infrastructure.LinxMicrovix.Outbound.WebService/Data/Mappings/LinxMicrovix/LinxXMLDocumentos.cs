@@ -6,7 +6,7 @@ using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
-    public class LinxXMLDocumentosTrustedMap : IEntityTypeConfiguration<LinxXMLDocumentos>
+    public class LinxXMLDocumentosMap : IEntityTypeConfiguration<LinxXMLDocumentos>
     {
         public void Configure(EntityTypeBuilder<LinxXMLDocumentos> builder)
         {
@@ -39,7 +39,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasColumnType("int");
 
             builder.Property(e => e.xml)
-                .HasColumnType("varchar(max)");
+                .HasProviderColumnType(LogicalColumnType.Varchar_Max);
 
             builder.Property(e => e.excluido)
                 .HasProviderColumnType(LogicalColumnType.Bool);
@@ -60,7 +60,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasColumnType("varchar(15)");
 
             builder.Property(e => e.xmlDistribuicao)
-                .HasColumnType("varchar(max)");
+                .HasProviderColumnType(LogicalColumnType.Varchar_Max);
 
             builder.Property(e => e.nProtDeneg)
                 .HasColumnType("varchar(15)");
@@ -113,7 +113,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasColumnType("int");
 
             builder.Property(e => e.xml)
-                .HasColumnType("varchar(max)");
+                .HasProviderColumnType(LogicalColumnType.Varchar_Max);
 
             builder.Property(e => e.excluido)
                 .HasProviderColumnType(LogicalColumnType.Bool);
@@ -134,7 +134,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasColumnType("varchar(15)");
 
             builder.Property(e => e.xmlDistribuicao)
-                .HasColumnType("varchar(max)");
+                .HasProviderColumnType(LogicalColumnType.Varchar_Max);
 
             builder.Property(e => e.nProtDeneg)
                 .HasColumnType("varchar(15)");

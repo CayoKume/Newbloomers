@@ -6,7 +6,7 @@ using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
-    public class LinxProdutosInformacoesTrustedMap : IEntityTypeConfiguration<LinxProdutosInformacoes>
+    public class LinxProdutosInformacoesMap : IEntityTypeConfiguration<LinxProdutosInformacoes>
     {
         public void Configure(EntityTypeBuilder<LinxProdutosInformacoes> builder)
         {
@@ -21,7 +21,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasColumnType("bigint");
 
             builder.Property(e => e.informacoes_produto)
-                .HasColumnType("varchar(max)");
+                .HasProviderColumnType(LogicalColumnType.Varchar_Max);
         }
     }
 
@@ -44,7 +44,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasColumnType("bigint");
 
             builder.Property(e => e.informacoes_produto)
-                .HasColumnType("varchar(max)");
+                .HasProviderColumnType(LogicalColumnType.Varchar_Max);
         }
     }
 }

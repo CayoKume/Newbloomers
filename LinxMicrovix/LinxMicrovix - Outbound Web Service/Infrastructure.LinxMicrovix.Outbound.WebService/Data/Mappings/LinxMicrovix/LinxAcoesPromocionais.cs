@@ -6,7 +6,7 @@ using Domain.LinxMicrovix.Outbound.WebService.Enums;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
-    public class LinxAcoesPromocionaisTrustedMap : IEntityTypeConfiguration<LinxAcoesPromocionais>
+    public class LinxAcoesPromocionaisMap : IEntityTypeConfiguration<LinxAcoesPromocionais>
     {
         public void Configure(EntityTypeBuilder<LinxAcoesPromocionais> builder)
         {
@@ -44,7 +44,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
 
             builder
                 .Property(x => x.observacao)
-                .HasColumnType("varchar(max)");
+                .HasProviderColumnType(LogicalColumnType.Varchar_Max);
 
             builder
                 .Property(x => x.ativa)
@@ -111,7 +111,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
 
             builder
                 .Property(x => x.observacao)
-                .HasColumnType("varchar(max)");
+                .HasProviderColumnType(LogicalColumnType.Varchar_Max);
 
             builder
                 .Property(x => x.ativa)

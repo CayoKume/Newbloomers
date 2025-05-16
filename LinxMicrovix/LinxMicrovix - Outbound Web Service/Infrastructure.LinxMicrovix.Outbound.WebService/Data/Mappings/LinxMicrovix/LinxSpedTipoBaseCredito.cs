@@ -6,7 +6,7 @@ using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
-    public class LinxSpedTipoBaseCreditoTrustedMap : IEntityTypeConfiguration<LinxSpedTipoBaseCredito>
+    public class LinxSpedTipoBaseCreditoMap : IEntityTypeConfiguration<LinxSpedTipoBaseCredito>
     {
         public void Configure(EntityTypeBuilder<LinxSpedTipoBaseCredito> builder)
         {

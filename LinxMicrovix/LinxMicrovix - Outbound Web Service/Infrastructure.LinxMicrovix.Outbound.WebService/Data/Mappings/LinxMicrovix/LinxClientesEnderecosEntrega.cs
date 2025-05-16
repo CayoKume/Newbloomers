@@ -1,12 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
-using Domain.LinxMicrovix.Outbound.WebService.Entities.LinxMicrovix;
+using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
 using Domain.LinxMicrovix.Outbound.WebService.Enums;
 using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
-    public class LinxClientesEnderecosEntregaTrustedMap : IEntityTypeConfiguration<LinxClientesEnderecosEntrega>
+    public class LinxClientesEnderecosEntregaMap : IEntityTypeConfiguration<LinxClientesEnderecosEntrega>
     {
         public void Configure(EntityTypeBuilder<LinxClientesEnderecosEntrega> builder)
         {

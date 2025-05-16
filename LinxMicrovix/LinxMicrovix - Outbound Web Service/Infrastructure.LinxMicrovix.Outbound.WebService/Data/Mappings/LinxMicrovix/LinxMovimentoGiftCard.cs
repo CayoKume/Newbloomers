@@ -6,7 +6,7 @@ using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
-    public class LinxMovimentoGiftCardTrustedMap : IEntityTypeConfiguration<LinxMovimentoGiftCard>
+    public class LinxMovimentoGiftCardMap : IEntityTypeConfiguration<LinxMovimentoGiftCard>
     {
         public void Configure(EntityTypeBuilder<LinxMovimentoGiftCard> builder)
         {
@@ -36,10 +36,10 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasColumnType("decimal(10,2)");
 
             builder.Property(e => e.json_envio)
-                .HasColumnType("varchar(max)");
+                .HasProviderColumnType(LogicalColumnType.Varchar_Max);
 
             builder.Property(e => e.json_retorno)
-                .HasColumnType("varchar(max)");
+                .HasProviderColumnType(LogicalColumnType.Varchar_Max);
 
             builder.Property(e => e.qtde_tentativa)
                 .HasColumnType("int");
@@ -104,10 +104,10 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasColumnType("decimal(10,2)");
 
             builder.Property(e => e.json_envio)
-                .HasColumnType("varchar(max)");
+                .HasProviderColumnType(LogicalColumnType.Varchar_Max);
 
             builder.Property(e => e.json_retorno)
-                .HasColumnType("varchar(max)");
+                .HasProviderColumnType(LogicalColumnType.Varchar_Max);
 
             builder.Property(e => e.qtde_tentativa)
                 .HasColumnType("int");

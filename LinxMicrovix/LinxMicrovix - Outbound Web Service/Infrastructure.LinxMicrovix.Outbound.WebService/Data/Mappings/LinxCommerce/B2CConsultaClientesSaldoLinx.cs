@@ -6,48 +6,13 @@ using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxCommerce
 {
-    public class B2CConsultaClientesSaldoLinxTrustedMap : IEntityTypeConfiguration<B2CConsultaClientesSaldoLinx>
+    public class B2CConsultaClientesSaldoLinxMap : IEntityTypeConfiguration<B2CConsultaClientesSaldoLinx>
     {
         public void Configure(EntityTypeBuilder<B2CConsultaClientesSaldoLinx> builder)
         {
             builder.ToTable("B2CConsultaClientesSaldoLinx", "linx_microvix_commerce");
 
             builder.HasKey(e => new { e.cod_cliente_erp, e.cod_cliente_b2c, e.empresa });
-
-            builder.Property(e => e.lastupdateon)
-                .HasProviderColumnType(LogicalColumnType.DateTime);
-
-            builder.Property(e => e.cod_cliente_erp)
-                .HasColumnType("int");
-
-            builder.Property(e => e.cod_cliente_b2c)
-                .HasColumnType("int");
-
-            builder.Property(e => e.empresa)
-                .HasColumnType("int");
-
-            builder.Property(e => e.valor)
-                .HasColumnType("decimal(10,2)");
-
-            builder.Property(e => e.timestamp)
-                .HasColumnType("bigint");
-
-            builder.Property(e => e.portal)
-                .HasColumnType("int");
-        }
-    }
-
-    public class B2CConsultaClientesSaldoLinxRawMap : IEntityTypeConfiguration<B2CConsultaClientesSaldoLinx>
-    {
-        public void Configure(EntityTypeBuilder<B2CConsultaClientesSaldoLinx> builder)
-        {
-            builder.ToTable("B2CConsultaClientesSaldoLinx", "untreated");
-
-            builder.HasKey(e => e.id);
-
-            builder.Property(e => e.id)
-                .HasColumnType("int")
-                .ValueGeneratedOnAdd();
 
             builder.Property(e => e.lastupdateon)
                 .HasProviderColumnType(LogicalColumnType.DateTime);

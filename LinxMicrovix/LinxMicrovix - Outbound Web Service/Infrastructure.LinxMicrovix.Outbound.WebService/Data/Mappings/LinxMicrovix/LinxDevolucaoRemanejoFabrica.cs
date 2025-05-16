@@ -6,7 +6,7 @@ using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
-    public class LinxDevolucaoRemanejoFabricaTrustedMap : IEntityTypeConfiguration<LinxDevolucaoRemanejoFabrica>
+    public class LinxDevolucaoRemanejoFabricaMap : IEntityTypeConfiguration<LinxDevolucaoRemanejoFabrica>
     {
         public void Configure(EntityTypeBuilder<LinxDevolucaoRemanejoFabrica> builder)
         {

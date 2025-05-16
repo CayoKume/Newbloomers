@@ -6,7 +6,7 @@ using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
-    public class LinxDadosOpticosDavTrustedMap : IEntityTypeConfiguration<LinxDadosOpticosDav>
+    public class LinxDadosOpticosDavMap : IEntityTypeConfiguration<LinxDadosOpticosDav>
     {
         public void Configure(EntityTypeBuilder<LinxDadosOpticosDav> builder)
         {
@@ -147,7 +147,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasColumnType("decimal(10,2)");
 
             builder.Property(e => e.observacao)
-                .HasColumnType("varchar(max)");
+                .HasProviderColumnType(LogicalColumnType.Varchar_Max);
 
             builder.Property(e => e.paciente)
                 .HasColumnType("varchar(100)");
@@ -383,7 +383,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasColumnType("decimal(10,2)");
 
             builder.Property(e => e.observacao)
-                .HasColumnType("varchar(max)");
+                .HasProviderColumnType(LogicalColumnType.Varchar_Max);
 
             builder.Property(e => e.paciente)
                 .HasColumnType("varchar(100)");

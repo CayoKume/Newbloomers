@@ -6,7 +6,7 @@ using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
-    public class LinxFaturasTrustedMap : IEntityTypeConfiguration<LinxFaturas>
+    public class LinxFaturasMap : IEntityTypeConfiguration<LinxFaturas>
     {
         public void Configure(EntityTypeBuilder<LinxFaturas> builder)
         {

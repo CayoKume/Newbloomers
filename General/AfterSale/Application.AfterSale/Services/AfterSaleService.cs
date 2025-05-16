@@ -170,16 +170,44 @@ namespace Application.AfterSale.Services
                             rote = nextPage.next_page_url; 
                         }
 
-                        foreach (var reverse in simplifiedReverses)
+                        int indice = simplifiedReverses.Count() / 30;
+
+                        if (indice > 1)
                         {
-                            var _response = await _apiCall.GetAsync(
-                                token: company.Token.ToString(),
-                                rote: $"v3/api/reverses/{reverse.id}"
-                            );
+                            for (int i = 0; i <= indice; i++)
+                            {
+                                string identificadores = String.Empty;
+                                var top30List = simplifiedReverses.Skip(i * 30).Take(30).ToList();
 
-                            var completeReverse = Newtonsoft.Json.JsonConvert.DeserializeObject<Root>(_response);
+                                for (int j = 0; j < top30List.Count(); j++)
+                                {
+                                    var _response = await _apiCall.GetAsync(
+                                        token: company.Token.ToString(),
+                                        rote: $"v3/api/reverses/{top30List[j].id}"
+                                    );
 
-                            completeReverses.Add(completeReverse.data);
+                                    var completeReverse = Newtonsoft.Json.JsonConvert.DeserializeObject<Root>(_response);
+
+                                    completeReverses.Add(completeReverse.data);
+                                }
+
+                                //API da AfterSale lança Too Many Requests após 30 consultas
+                                Thread.Sleep(60 * 1000);
+                            }
+                        }
+                        else
+                        {
+                            foreach (var reverse in simplifiedReverses)
+                            {
+                                var _response = await _apiCall.GetAsync(
+                                    token: company.Token.ToString(),
+                                    rote: $"v3/api/reverses/{reverse.id}"
+                                );
+
+                                var completeReverse = Newtonsoft.Json.JsonConvert.DeserializeObject<Root>(_response);
+
+                                completeReverses.Add(completeReverse.data);
+                            }
                         }
                     }
 

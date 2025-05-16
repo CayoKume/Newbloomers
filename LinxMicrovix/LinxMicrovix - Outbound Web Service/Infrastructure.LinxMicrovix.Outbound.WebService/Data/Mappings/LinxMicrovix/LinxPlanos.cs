@@ -6,7 +6,7 @@ using Domain.LinxMicrovix.Outbound.WebService.Enums;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
-    public class LinxPlanosTrustedMap : IEntityTypeConfiguration<LinxPlanos>
+    public class LinxPlanosMap : IEntityTypeConfiguration<LinxPlanos>
     {
         public void Configure(EntityTypeBuilder<LinxPlanos> builder)
         {
@@ -54,7 +54,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasColumnType("decimal(10,2)");
 
             builder.Property(e => e.dt_upd)
-                .HasColumnType("int");
+                .HasProviderColumnType(LogicalColumnType.DateTime);
 
             builder.Property(e => e.desativado)
                 .HasColumnType("char(1)");
@@ -119,7 +119,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasColumnType("decimal(10,2)");
 
             builder.Property(e => e.dt_upd)
-                .HasColumnType("int");
+                .HasProviderColumnType(LogicalColumnType.DateTime);
 
             builder.Property(e => e.desativado)
                 .HasColumnType("char(1)");

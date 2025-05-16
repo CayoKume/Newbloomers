@@ -6,48 +6,13 @@ using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxCommerce
 {
-    public class B2CConsultaProdutosDimensoesTrustedMap : IEntityTypeConfiguration<B2CConsultaProdutosDimensoes>
+    public class B2CConsultaProdutosDimensoesMap : IEntityTypeConfiguration<B2CConsultaProdutosDimensoes>
     {
         public void Configure(EntityTypeBuilder<B2CConsultaProdutosDimensoes> builder)
         {
             builder.ToTable("B2CConsultaProdutosDimensoes", "linx_microvix_commerce");
 
             builder.HasKey(e => e.codigoproduto);
-
-            builder.Property(e => e.lastupdateon)
-                .HasProviderColumnType(LogicalColumnType.DateTime);
-
-            builder.Property(e => e.codigoproduto)
-                .HasColumnType("bigint");
-
-            builder.Property(e => e.altura)
-                .HasColumnType("decimal(10,2)");
-
-            builder.Property(e => e.comprimento)
-                .HasColumnType("decimal(10,2)");
-
-            builder.Property(e => e.timestamp)
-                .HasColumnType("bigint");
-
-            builder.Property(e => e.largura)
-                .HasColumnType("decimal(10,2)");
-
-            builder.Property(e => e.portal)
-                .HasColumnType("int");
-        }
-    }
-
-    public class B2CConsultaProdutosDimensoesRawMap : IEntityTypeConfiguration<B2CConsultaProdutosDimensoes>
-    {
-        public void Configure(EntityTypeBuilder<B2CConsultaProdutosDimensoes> builder)
-        {
-            builder.ToTable("B2CConsultaProdutosDimensoes", "untreated");
-
-            builder.HasKey(e => e.id);
-
-            builder.Property(e => e.id)
-                .HasColumnType("int")
-                .ValueGeneratedOnAdd();
 
             builder.Property(e => e.lastupdateon)
                 .HasProviderColumnType(LogicalColumnType.DateTime);

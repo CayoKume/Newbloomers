@@ -36,7 +36,7 @@ namespace Domain.AfterSale.Entities
         public int? brand_id { get; set; }
         public int? ecommerce_order_id { get; set; }
         public int? ecommerce_id { get; set; }
-        public int? destination_seller_id { get; set; }
+        public string? destination_seller_id { get; set; }
 
         public bool? skip_process_step { get; set; }
         public bool? is_erased { get; set; }

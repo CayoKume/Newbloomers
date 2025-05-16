@@ -6,42 +6,13 @@ using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxCommerce
 {
-    public class B2CConsultaPedidosTiposTrustedMap : IEntityTypeConfiguration<B2CConsultaPedidosTipos>
+    public class B2CConsultaPedidosTiposMap : IEntityTypeConfiguration<B2CConsultaPedidosTipos>
     {
         public void Configure(EntityTypeBuilder<B2CConsultaPedidosTipos> builder)
         {
             builder.ToTable("B2CConsultaPedidosTipos", "linx_microvix_commerce");
 
             builder.HasKey(e => e.id_tipo_b2c);
-
-            builder.Property(e => e.lastupdateon)
-                .HasProviderColumnType(LogicalColumnType.DateTime);
-
-            builder.Property(e => e.id_tipo_b2c)
-                .HasColumnType("int");
-
-            builder.Property(e => e.descricao)
-                .HasColumnType("varchar(200)");
-
-            builder.Property(e => e.pos_timestamp_old)
-                .HasColumnType("bigint");
-
-            builder.Property(e => e.portal)
-                .HasColumnType("int");
-        }
-    }
-
-    public class B2CConsultaPedidosTiposRawMap : IEntityTypeConfiguration<B2CConsultaPedidosTipos>
-    {
-        public void Configure(EntityTypeBuilder<B2CConsultaPedidosTipos> builder)
-        {
-            builder.ToTable("B2CConsultaPedidosTipos", "untreated");
-
-            builder.HasKey(e => e.id);
-
-            builder.Property(e => e.id)
-                .HasColumnType("int")
-                .ValueGeneratedOnAdd();
 
             builder.Property(e => e.lastupdateon)
                 .HasProviderColumnType(LogicalColumnType.DateTime);

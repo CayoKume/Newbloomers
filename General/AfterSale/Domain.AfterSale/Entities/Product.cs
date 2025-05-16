@@ -10,7 +10,7 @@
         public int? qty { get; set; }
         public int? requested_qty { get; set; }
         public int? received_qty { get; set; }
-        public int? product_received_comment { get; set; }
+        public string? product_received_comment { get; set; }
         public string? comments { get; set; }
         public string? reverse_action { get; set; }
         public string? customer_retention_method_id { get; set; }

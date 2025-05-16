@@ -77,43 +77,46 @@ public class AfterSaleRepository : IAfterSaleRepository
 
     public async Task<bool> InsertIntoAfterSaleReverses(List<Data> data)
     {
-        //var reversesTable = CreateSystemDataTable(new Status(), "AfterSaleStatus");
-        //var tabela 2
-        //var tabela 3
+        var reversesTable = CreateSystemDataTable(new ReverseComplete(), "AfterSaleReverses");
+        var customerTable = CreateSystemDataTable(new CustomerComplete(), "AfterSaleCustomer");
+        var addressTable = CreateSystemDataTable(new Address(), "AfterSaleAddress");
+        var trackingHistoryTable = CreateSystemDataTable(new TrackingHistory(), "AfterSaleReverseTrackings");
 
-        //for (int i = 0; i < statusReverses.Count; i++)
-        //{
-        //    reversesTable.Rows.Add(statusReverses[i].id, statusReverses[i].name, statusReverses[i].description);
-        //}
+        for (int i = 0; i < data.Count; i++)
+        {
+            reversesTable.Rows.Add(data[i].reverse.id, data[i].reverse.reverse_type, data[i].reverse.reverse_type_name, data[i].reverse.created_at, data[i].reverse.updated_at, data[i].reverse.order_id, data[i].reverse.total_amount,
+                data[i].reverse.returned_invoice, data[i].customer is not null ? data[i].customer.id : null, data[i].customer is not null ? data[i].customer.first_name : null, data[i].customer is not null ? data[i].customer.last_name : null, data[i].reverse.status_id, data[i].reverse.status is not null ? data[i].reverse.status.name : null, data[i].reverse.status is not null ? data[i].reverse.status.description : null,
+                data[i].reverse.tracking is not null ? data[i].reverse.tracking.tracking_code : null, data[i].reverse.tracking is not null ? data[i].reverse.tracking.shipping_amount : null, data[i].reverse.tracking is not null ? data[i].reverse.refunds.Count : null, data[i].reverse.invoice, data[i].reverse.service_type_change);
+        }
 
-        //try
-        //{
-        //    using (var conn = _sqlServerConnection.GetDbConnection())
-        //    {
-        //        using var bulkCopy = new SqlBulkCopy(conn);
-        //        //bulkCopy.DestinationTableName = $"[untreated].[{reversesTable.TableName}]";
-        //        bulkCopy.DestinationTableName = $"[general].[{reversesTable.TableName}]";
-        //        bulkCopy.BatchSize = reversesTable.Rows.Count;
-        //        bulkCopy.BulkCopyTimeout = 360;
-        //        foreach (DataColumn c in reversesTable.Columns)
-        //        {
-        //            bulkCopy.ColumnMappings.Add(c.ColumnName, c.ColumnName);
-        //        }
-        //        bulkCopy.WriteToServer(reversesTable);
-        //    }
+        try
+        {
+            using (var conn = _sqlServerConnection.GetDbConnection())
+            {
+                using var bulkCopy = new SqlBulkCopy(conn);
+                //bulkCopy.DestinationTableName = $"[untreated].[{reversesTable.TableName}]";
+                bulkCopy.DestinationTableName = $"[general].[{reversesTable.TableName}]";
+                bulkCopy.BatchSize = reversesTable.Rows.Count;
+                bulkCopy.BulkCopyTimeout = 360;
+                foreach (DataColumn c in reversesTable.Columns)
+                {
+                    bulkCopy.ColumnMappings.Add(c.ColumnName, c.ColumnName);
+                }
+                bulkCopy.WriteToServer(reversesTable);
+            }
 
-        //    return true;
-        //}
-        //catch (Exception ex)
-        //{
-        //    throw new InternalException(
-        //        stage: EnumStages.BulkInsertIntoTableRaw,
-        //        error: EnumError.SQLCommand,
-        //        level: EnumMessageLevel.Error,
-        //        message: $"Error when trying to bulk insert records on table raw",
-        //        exceptionMessage: ex.Message
-        //    );
-        //}
+            return true;
+        }
+        catch (Exception ex)
+        {
+            throw new InternalException(
+                stage: EnumStages.BulkInsertIntoTableRaw,
+                error: EnumError.SQLCommand,
+                level: EnumMessageLevel.Error,
+                message: $"Error when trying to bulk insert records on table raw",
+                exceptionMessage: ex.Message
+            );
+        }
 
         throw new NotImplementedException();
     }

@@ -6,7 +6,7 @@ using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
-    public class LinxProdutosOpticosFormatoAroTrustedMap : IEntityTypeConfiguration<LinxProdutosOpticosFormatoAro>
+    public class LinxProdutosOpticosFormatoAroMap : IEntityTypeConfiguration<LinxProdutosOpticosFormatoAro>
     {
         public void Configure(EntityTypeBuilder<LinxProdutosOpticosFormatoAro> builder)
         {

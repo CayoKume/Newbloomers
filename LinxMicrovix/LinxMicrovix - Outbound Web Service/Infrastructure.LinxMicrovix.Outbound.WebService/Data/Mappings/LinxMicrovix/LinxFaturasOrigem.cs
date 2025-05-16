@@ -6,7 +6,7 @@ using Domain.LinxMicrovix.Outbound.WebService.Enums;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
-    public class LinxFaturasOrigemTrustedMap : IEntityTypeConfiguration<LinxFaturasOrigem>
+    public class LinxFaturasOrigemMap : IEntityTypeConfiguration<LinxFaturasOrigem>
     {
         public void Configure(EntityTypeBuilder<LinxFaturasOrigem> builder)
         {

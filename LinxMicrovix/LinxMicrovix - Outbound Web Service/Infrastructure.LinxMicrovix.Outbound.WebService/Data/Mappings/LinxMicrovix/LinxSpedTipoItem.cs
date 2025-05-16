@@ -6,7 +6,7 @@ using Domain.LinxMicrovix.Outbound.WebService.Enums;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
-    public class LinxSpedTipoItemTrustedMap : IEntityTypeConfiguration<LinxSpedTipoItem>
+    public class LinxSpedTipoItemMap : IEntityTypeConfiguration<LinxSpedTipoItem>
     {
         public void Configure(EntityTypeBuilder<LinxSpedTipoItem> builder)
         {

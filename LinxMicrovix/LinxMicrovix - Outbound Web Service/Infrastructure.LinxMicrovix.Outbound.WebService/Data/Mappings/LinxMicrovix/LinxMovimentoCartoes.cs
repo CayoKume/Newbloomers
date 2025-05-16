@@ -6,7 +6,7 @@ using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
-    public class LinxMovimentoCartoesTrustedMap : IEntityTypeConfiguration<LinxMovimentoCartoes>
+    public class LinxMovimentoCartoesMap : IEntityTypeConfiguration<LinxMovimentoCartoes>
     {
         public void Configure(EntityTypeBuilder<LinxMovimentoCartoes> builder)
         {
@@ -71,7 +71,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasProviderColumnType(LogicalColumnType.Bool);
 
             builder.Property(e => e.texto_comprovante)
-                .HasColumnType("varchar(max)");
+                .HasProviderColumnType(LogicalColumnType.Varchar_Max);
 
             builder.Property(e => e.id_maquineta_pos)
                 .HasColumnType("int");
@@ -154,7 +154,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasProviderColumnType(LogicalColumnType.Bool);
 
             builder.Property(e => e.texto_comprovante)
-                .HasColumnType("varchar(max)");
+                .HasProviderColumnType(LogicalColumnType.Varchar_Max);
 
             builder.Property(e => e.id_maquineta_pos)
                 .HasColumnType("int");

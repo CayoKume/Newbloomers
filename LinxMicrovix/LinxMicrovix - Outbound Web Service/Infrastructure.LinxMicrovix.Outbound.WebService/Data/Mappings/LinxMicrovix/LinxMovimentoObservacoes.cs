@@ -6,7 +6,7 @@ using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
-    public class LinxMovimentoObservacoesTrustedMap : IEntityTypeConfiguration<LinxMovimentoObservacoes>
+    public class LinxMovimentoObservacoesMap : IEntityTypeConfiguration<LinxMovimentoObservacoes>
     {
         public void Configure(EntityTypeBuilder<LinxMovimentoObservacoes> builder)
         {

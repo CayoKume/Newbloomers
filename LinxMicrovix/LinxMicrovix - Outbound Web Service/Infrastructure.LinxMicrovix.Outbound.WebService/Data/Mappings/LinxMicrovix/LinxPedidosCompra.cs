@@ -6,7 +6,7 @@ using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
-    public class LinxPedidosCompraTrustedMap : IEntityTypeConfiguration<LinxPedidosCompra>
+    public class LinxPedidosCompraMap : IEntityTypeConfiguration<LinxPedidosCompra>
     {
         public void Configure(EntityTypeBuilder<LinxPedidosCompra> builder)
         {
@@ -68,7 +68,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasColumnType("varchar(35)");
 
             builder.Property(e => e.obs)
-                .HasColumnType("varchar(max)");
+                .HasProviderColumnType(LogicalColumnType.Varchar_Max);
 
             builder.Property(e => e.aprovado)
                 .HasColumnType("char(1)");
@@ -184,7 +184,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasColumnType("varchar(35)");
 
             builder.Property(e => e.obs)
-                .HasColumnType("varchar(max)");
+                .HasProviderColumnType(LogicalColumnType.Varchar_Max);
 
             builder.Property(e => e.aprovado)
                 .HasColumnType("char(1)");

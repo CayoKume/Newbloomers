@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using Domain.IntegrationsCore.Extensions;
 using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 
-namespace Domain.LinxMicrovix.Outbound.WebService.Entities.LinxMicrovix
+namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 {
     public class LinxClientesEnderecosEntrega
     {
