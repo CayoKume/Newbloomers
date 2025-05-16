@@ -8,6 +8,10 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 {
     public class LinxValesComprasEnviadosAPI
     {
+        [NotMapped]
+        [SkipProperty]
+        public Int32 id { get; set; }
+
         public DateTime? lastupdateon { get; private set; }
 
         public Int32? numero_controle { get; private set; }

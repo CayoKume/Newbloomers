@@ -67,7 +67,11 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
         {
             builder.ToTable("LinxUsuarios", "untreated");
 
-            builder.HasKey(e => e.usuario_id);
+            builder.HasKey(e => e.id);
+
+            builder.Property(e => e.id)
+                .HasColumnType("int")
+                .ValueGeneratedOnAdd();
 
             builder.Property(e => e.lastupdateon)
                 .HasProviderColumnType(LogicalColumnType.DateTime);

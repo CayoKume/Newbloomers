@@ -5,9 +5,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
 {
-    [Table("B2CConsultaMarcas", Schema = "linx_microvix_commerce")]
     public class B2CConsultaMarcas
     {
+        [NotMapped]
+        [SkipProperty]
+        public Int32 id { get; set; }
+
         public DateTime? lastupdateon { get; private set; }
 
         public Int32? codigo_marca { get; private set; }

@@ -7,6 +7,10 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 {
     public class LinxAcoesPromocionaisCombinacaoProdutosItens
     {
+        [NotMapped]
+        [SkipProperty]
+        public Int32 id { get; set; }
+
         public DateTime lastupdateon { get; private set; }
 
         public Int32? id_acoes_promocionais_combinacao_produtos_itens { get; private set; }

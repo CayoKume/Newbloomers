@@ -34,7 +34,11 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
         {
             builder.ToTable("LinxPedidosVendaChecklistEntregaArmazenamento", "untreated");
 
-            builder.HasKey(e => e.id_checklist_entrega_armazenamento);
+            builder.HasKey(e => e.id);
+
+            builder.Property(e => e.id)
+                .HasColumnType("int")
+                .ValueGeneratedOnAdd();
 
             builder.Property(e => e.lastupdateon)
                 .HasProviderColumnType(LogicalColumnType.DateTime);

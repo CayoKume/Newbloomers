@@ -7,6 +7,10 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 {
     public class LinxSpedTipoBaseCredito
     {
+        [NotMapped]
+        [SkipProperty]
+        public Int32 id { get; set; }
+
         public DateTime? lastupdateon { get; private set; }
 
         public Int32? id_sped_tipo_base_credito { get; private set; }

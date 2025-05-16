@@ -46,31 +46,35 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
         {
             builder.ToTable("LinxCest", "untreated");
 
-        builder.HasKey(e => e.id_cest);
+            builder.HasKey(e => e.id);
 
-        builder.Property(e => e.lastupdateon)
+            builder.Property(e => e.id)
+                .HasColumnType("int")
+                .ValueGeneratedOnAdd();
+
+            builder.Property(e => e.lastupdateon)
             .HasProviderColumnType(LogicalColumnType.DateTime);
 
-        builder.Property(e => e.portal)
-            .HasColumnType("int");
+            builder.Property(e => e.portal)
+                .HasColumnType("int");
 
-        builder.Property(e => e.id_cest)
-            .HasColumnType("int");
+            builder.Property(e => e.id_cest)
+                .HasColumnType("int");
 
-        builder.Property(e => e.descricao)
-            .HasColumnType("varchar(700)");
+            builder.Property(e => e.descricao)
+                .HasColumnType("varchar(700)");
 
-        builder.Property(e => e.cest)
-            .HasColumnType("varchar(10)");
+            builder.Property(e => e.cest)
+                .HasColumnType("varchar(10)");
 
-        builder.Property(e => e.id_segmento_mercadoria_bem)
-            .HasColumnType("int");
+            builder.Property(e => e.id_segmento_mercadoria_bem)
+                .HasColumnType("int");
 
-        builder.Property(e => e.ativo)
-            .HasProviderColumnType(LogicalColumnType.Bool);
+            builder.Property(e => e.ativo)
+                .HasProviderColumnType(LogicalColumnType.Bool);
 
-        builder.Property(e => e.timestamp)
-            .HasColumnType("bigint");
+            builder.Property(e => e.timestamp)
+                .HasColumnType("bigint");
         }
     }
 }

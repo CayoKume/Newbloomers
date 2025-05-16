@@ -40,7 +40,11 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
         {
             builder.ToTable("LinxProdutosCamposAdicionais", "untreated");
 
-            builder.HasKey(e => new { e.cod_produto, e.campo });
+            builder.HasKey(e => e.id);
+
+            builder.Property(e => e.id)
+                .HasColumnType("int")
+                .ValueGeneratedOnAdd();
 
             builder.Property(e => e.lastupdateon)
                 .HasProviderColumnType(LogicalColumnType.DateTime);

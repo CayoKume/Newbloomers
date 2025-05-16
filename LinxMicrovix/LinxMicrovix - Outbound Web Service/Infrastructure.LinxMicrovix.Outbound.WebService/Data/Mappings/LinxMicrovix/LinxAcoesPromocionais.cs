@@ -15,6 +15,10 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasKey(x => x.id_acoes_promocionais);
 
             builder
+                .Property(x => x.id_acoes_promocionais)
+                .HasColumnType("int");
+
+            builder
                 .Property(x => x.lastupdateon)
                 .HasProviderColumnType(LogicalColumnType.DateTime);
 
@@ -32,11 +36,11 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
 
             builder
                 .Property(x => x.vigencia_inicio)
-                .HasColumnType("datetime");
+                .HasProviderColumnType(LogicalColumnType.DateTime);
 
             builder
                 .Property(x => x.vigencia_fim)
-                .HasColumnType("datetime");
+                .HasProviderColumnType(LogicalColumnType.DateTime);
 
             builder
                 .Property(x => x.observacao)
@@ -69,8 +73,17 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
         public void Configure(EntityTypeBuilder<LinxAcoesPromocionais> builder)
         {
             builder
-                .ToTable("LinxAcoesPromocionais", "untreated")
-                .HasKey(x => x.id_acoes_promocionais);
+                .ToTable("LinxAcoesPromocionais", "untreated");
+
+            builder.HasKey(e => e.id);
+
+            builder.Property(e => e.id)
+                .HasColumnType("int")
+                .ValueGeneratedOnAdd();
+
+            builder
+                .Property(x => x.id_acoes_promocionais)
+                .HasColumnType("int");
 
             builder
                 .Property(x => x.lastupdateon)
@@ -90,11 +103,11 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
 
             builder
                 .Property(x => x.vigencia_inicio)
-                .HasColumnType("datetime");
+                .HasProviderColumnType(LogicalColumnType.DateTime);
 
             builder
                 .Property(x => x.vigencia_fim)
-                .HasColumnType("datetime");
+                .HasProviderColumnType(LogicalColumnType.DateTime);
 
             builder
                 .Property(x => x.observacao)

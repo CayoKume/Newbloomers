@@ -8,6 +8,10 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 {
     public class LinxTrocaUnificadaResumoVendas
     {
+        [NotMapped]
+        [SkipProperty]
+        public Int32 id { get; set; }
+
         public DateTime? lastupdateon { get; private set; }
 
         public Int64? id_troca_unificada_resumo_vendas { get; private set; }

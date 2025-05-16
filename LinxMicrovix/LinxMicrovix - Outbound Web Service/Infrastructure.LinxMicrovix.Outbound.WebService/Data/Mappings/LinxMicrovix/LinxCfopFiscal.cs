@@ -43,28 +43,32 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
         {
             builder.ToTable("LinxCfopFiscal", "untreated");
 
-        builder.HasKey(e => e.id_cfop_fiscal);
+            builder.HasKey(e => e.id);
 
-        builder.Property(e => e.lastupdateon)
+            builder.Property(e => e.id)
+                .HasColumnType("int")
+                .ValueGeneratedOnAdd();
+
+            builder.Property(e => e.lastupdateon)
             .HasProviderColumnType(LogicalColumnType.DateTime);
 
-        builder.Property(e => e.portal)
-            .HasColumnType("int");
+            builder.Property(e => e.portal)
+                .HasColumnType("int");
 
-        builder.Property(e => e.id_cfop_fiscal)
-            .HasColumnType("int");
+            builder.Property(e => e.id_cfop_fiscal)
+                .HasColumnType("int");
 
-        builder.Property(e => e.cfop_fiscal)
-            .HasColumnType("varchar(5)");
+            builder.Property(e => e.cfop_fiscal)
+                .HasColumnType("varchar(5)");
 
-        builder.Property(e => e.descricao)
-            .HasColumnType("varchar(300)");
+            builder.Property(e => e.descricao)
+                .HasColumnType("varchar(300)");
 
-        builder.Property(e => e.excluido)
-            .HasProviderColumnType(LogicalColumnType.Bool);
+            builder.Property(e => e.excluido)
+                .HasProviderColumnType(LogicalColumnType.Bool);
 
-        builder.Property(e => e.timestamp)
-            .HasColumnType("bigint");
+            builder.Property(e => e.timestamp)
+                .HasColumnType("bigint");
         }
     }
 }

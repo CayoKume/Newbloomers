@@ -28,7 +28,7 @@
         public StatusHistories status_histories { get; set; } 
         public TotalAmountHistories total_amount_histories { get; set; } 
         public Voucher voucher { get; set; } 
-        public Reverse reverse { get; set; } 
+        public ReverseComplete reverse { get; set; } 
         public List<Product> products { get; set; } 
     }
 }

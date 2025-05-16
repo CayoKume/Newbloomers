@@ -12,49 +12,49 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
         {
             builder.ToTable("LinxDevolucaoRemanejoFabrica", "linx_microvix_erp");
 
-    builder.HasKey(e => e.id_devolucao_remanejo_fabrica);
+            builder.HasKey(e => e.id_devolucao_remanejo_fabrica);
 
-    builder.Property(e => e.lastupdateon)
-        .HasProviderColumnType(LogicalColumnType.DateTime);
+            builder.Property(e => e.lastupdateon)
+                .HasProviderColumnType(LogicalColumnType.DateTime);
 
-    builder.Property(e => e.id_devolucao_remanejo_fabrica)
-        .HasColumnType("int");
+            builder.Property(e => e.id_devolucao_remanejo_fabrica)
+                .HasColumnType("int");
 
-    builder.Property(e => e.id_devolucao_remanejo_fabrica_tipo)
-        .HasColumnType("int");
+            builder.Property(e => e.id_devolucao_remanejo_fabrica_tipo)
+                .HasColumnType("int");
 
-    builder.Property(e => e.id_motivo_devolucao_fabrica)
-        .HasColumnType("int");
+            builder.Property(e => e.id_motivo_devolucao_fabrica)
+                .HasColumnType("int");
 
-    builder.Property(e => e.id_deposito)
-        .HasColumnType("int");
+            builder.Property(e => e.id_deposito)
+                .HasColumnType("int");
 
-    builder.Property(e => e.id_devolucao_remanejo_fabrica_status)
-        .HasColumnType("int");
+            builder.Property(e => e.id_devolucao_remanejo_fabrica_status)
+                .HasColumnType("int");
 
-    builder.Property(e => e.empresa)
-        .HasColumnType("int");
+            builder.Property(e => e.empresa)
+                .HasColumnType("int");
 
-    builder.Property(e => e.fornecedor)
-        .HasColumnType("int");
+            builder.Property(e => e.fornecedor)
+                .HasColumnType("int");
 
-    builder.Property(e => e.cfop)
-        .HasColumnType("char(10)");
+            builder.Property(e => e.cfop)
+                .HasColumnType("char(10)");
 
-    builder.Property(e => e.serie)
-        .HasColumnType("varchar(10)");
+            builder.Property(e => e.serie)
+                .HasColumnType("varchar(10)");
 
-    builder.Property(e => e.codigo_solicitacao)
-        .HasColumnType("varchar(50)");
+            builder.Property(e => e.codigo_solicitacao)
+                .HasColumnType("varchar(50)");
 
-    builder.Property(e => e.portal)
-        .HasColumnType("int");
+            builder.Property(e => e.portal)
+                .HasColumnType("int");
 
-    builder.Property(e => e.data_solicitacao)
-        .HasProviderColumnType(LogicalColumnType.DateTime);
+            builder.Property(e => e.data_solicitacao)
+                .HasProviderColumnType(LogicalColumnType.DateTime);
 
-    builder.Property(e => e.timestamp)
-        .HasColumnType("bigint");
+            builder.Property(e => e.timestamp)
+                .HasColumnType("bigint");
         }
     }
 
@@ -64,7 +64,11 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
         {
             builder.ToTable("LinxDevolucaoRemanejoFabrica", "untreated");
 
-            builder.HasKey(e => e.id_devolucao_remanejo_fabrica);
+            builder.HasKey(e => e.id);
+
+            builder.Property(e => e.id)
+                .HasColumnType("int")
+                .ValueGeneratedOnAdd();
 
             builder.Property(e => e.lastupdateon)
                 .HasProviderColumnType(LogicalColumnType.DateTime);

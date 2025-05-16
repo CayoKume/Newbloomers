@@ -6,9 +6,12 @@ using System.Globalization;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
 {
-    [Table("LinxLojasParametros", Schema = "linx_microvix_erp")]
     public class LinxLojasParametros
     {
+        [NotMapped]
+        [SkipProperty]
+        public Int32 id { get; set; }
+
         public DateTime? lastupdateon { get; private set; }
 
         public Int32? portal { get; private set; }

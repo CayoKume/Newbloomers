@@ -2,7 +2,7 @@
 
 namespace Domain.AfterSale.Entities
 {
-    public class Reverse
+    public class ReverseComplete
     {
         public string? returned_invoice { get; set; }
         public string? service_type_changed { get; set; }
@@ -65,7 +65,7 @@ namespace Domain.AfterSale.Entities
 
     public class Data
     {
-        public Reverse reverse { get; set; }
+        public ReverseComplete reverse { get; set; }
         public CustomerComplete customer { get; set; }
         public string? ecommerce_order { get; set; }
         public List<TrackingHistory> tracking_history { get; set; }

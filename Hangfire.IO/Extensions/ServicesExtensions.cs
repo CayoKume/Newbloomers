@@ -2,7 +2,6 @@
 using Application.IntegrationsCore.Services;
 using Domain.IntegrationsCore.Interfaces;
 using Hangfire.SqlServer;
-using Infrastructure.DatabaseInit;
 using Infrastructure.FlashCourier.DependencyInjection;
 using Infrastructure.IntegrationsCore.DependencyInjection;
 using Infrastructure.IntegrationsCore.Repositorys;
@@ -35,12 +34,6 @@ namespace Hangfire.IO.Extensions
             builder.Services.AddScopedTotalExpressServices();
             builder.Services.AddScopedAfterSaleServices();
             builder.Services.AddScopedJadlogServices();
-
-            #region Remover após a adição do Entity Framework
-            builder.Services.AddScopedDatabaseIniService();
-            builder.Services.AddScopedB2CLinxMicrovixDatabaseInitServices();
-            builder.Services.AddScopedLinxMicrovixDatabaseInitServices();
-            #endregion
 
             builder.Services.AddDbContextService(builder);
             //builder.Services.AddHangfireService(builder);

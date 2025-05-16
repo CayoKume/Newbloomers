@@ -5,9 +5,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
 {
-    [Table("B2CConsultaFormasPagamento", Schema = "linx_microvix_commerce")]
     public class B2CConsultaFormasPagamento
     {
+        [NotMapped]
+        [SkipProperty]
+        public Int32 id { get; set; }
+
         public DateTime? lastupdateon { get; private set; }
 
         public Int32? cod_forma_pgto { get; private set; }

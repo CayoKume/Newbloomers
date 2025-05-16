@@ -84,7 +84,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasColumnType("char(1)");
 
             builder.Property(e => e.identificador)
-                .HasColumnType("uniqueidentifier");
+                .HasProviderColumnType(LogicalColumnType.UUID);
 
             builder.Property(e => e.nsu)
                 .HasColumnType("varchar(50)");
@@ -169,7 +169,11 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
         {
             builder.ToTable("LinxFaturas", "untreated");
 
-            builder.HasKey(e => e.codigo_fatura);
+            builder.HasKey(e => e.id);
+
+            builder.Property(e => e.id)
+                .HasColumnType("int")
+                .ValueGeneratedOnAdd();
 
             builder.Property(e => e.lastupdateon)
                 .HasProviderColumnType(LogicalColumnType.DateTime);
@@ -241,7 +245,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasColumnType("char(1)");
 
             builder.Property(e => e.identificador)
-                .HasColumnType("uniqueidentifier");
+                .HasProviderColumnType(LogicalColumnType.UUID);
 
             builder.Property(e => e.nsu)
                 .HasColumnType("varchar(50)");

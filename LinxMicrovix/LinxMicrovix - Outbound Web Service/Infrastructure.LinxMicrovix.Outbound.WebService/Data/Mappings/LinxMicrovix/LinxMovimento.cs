@@ -366,18 +366,11 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
         {
             builder.ToTable("LinxMovimento", "untreated");
 
-            builder.HasKey(e => new {
-                e.cnpj_emp,
-                e.documento,
-                e.chave_nf,
-                e.data_documento,
-                e.codigo_cliente,
-                e.cod_produto,
-                e.cancelado,
-                e.excluido,
-                e.transacao_pedido_venda,
-                e.ordem
-            });
+            builder.HasKey(e => e.id);
+
+            builder.Property(e => e.id)
+                .HasColumnType("int")
+                .ValueGeneratedOnAdd();
 
             builder.Property(e => e.lastupdateon)
                 .HasProviderColumnType(LogicalColumnType.DateTime);

@@ -1,6 +1,6 @@
 ﻿namespace Domain.AfterSale.Entities
 {
-    public class Reverses
+    public class ReverseSimplified
     {
         public int? id { get; set; }
         public string? reverse_type { get; set; }
@@ -30,6 +30,6 @@
         public int? to { get; set; }
         public int? total { get; set; }
         public bool? success { get; set; }
-        public List<Reverses> data { get; set; }
+        public List<ReverseSimplified> data { get; set; }
     }
 }

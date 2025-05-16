@@ -30,7 +30,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasColumnType("int");
 
             builder.Property(e => e.ativo)
-                .HasColumnType("bit");
+                .HasProviderColumnType(LogicalColumnType.Bool);
 
             builder.Property(e => e.id_ncm)
                 .HasColumnType("int");
@@ -46,7 +46,11 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
         {
             builder.ToTable("LinxNcm", "untreated");
 
-            builder.HasKey(e => e.id_ncm);
+            builder.HasKey(e => e.id);
+
+            builder.Property(e => e.id)
+                .HasColumnType("int")
+                .ValueGeneratedOnAdd();
 
             builder.Property(e => e.lastupdateon)
                 .HasProviderColumnType(LogicalColumnType.DateTime);
@@ -64,7 +68,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasColumnType("int");
 
             builder.Property(e => e.ativo)
-                .HasColumnType("bit");
+                .HasProviderColumnType(LogicalColumnType.Bool);
 
             builder.Property(e => e.id_ncm)
                 .HasColumnType("int");

@@ -75,8 +75,46 @@ public class AfterSaleRepository : IAfterSaleRepository
         throw new NotImplementedException();
     }
 
-    public Task<bool> InsertIntoAfterSaleReverses()
+    public async Task<bool> InsertIntoAfterSaleReverses(List<Data> data)
     {
+        //var reversesTable = CreateSystemDataTable(new Status(), "AfterSaleStatus");
+        //var tabela 2
+        //var tabela 3
+
+        //for (int i = 0; i < statusReverses.Count; i++)
+        //{
+        //    reversesTable.Rows.Add(statusReverses[i].id, statusReverses[i].name, statusReverses[i].description);
+        //}
+
+        //try
+        //{
+        //    using (var conn = _sqlServerConnection.GetDbConnection())
+        //    {
+        //        using var bulkCopy = new SqlBulkCopy(conn);
+        //        //bulkCopy.DestinationTableName = $"[untreated].[{reversesTable.TableName}]";
+        //        bulkCopy.DestinationTableName = $"[general].[{reversesTable.TableName}]";
+        //        bulkCopy.BatchSize = reversesTable.Rows.Count;
+        //        bulkCopy.BulkCopyTimeout = 360;
+        //        foreach (DataColumn c in reversesTable.Columns)
+        //        {
+        //            bulkCopy.ColumnMappings.Add(c.ColumnName, c.ColumnName);
+        //        }
+        //        bulkCopy.WriteToServer(reversesTable);
+        //    }
+
+        //    return true;
+        //}
+        //catch (Exception ex)
+        //{
+        //    throw new InternalException(
+        //        stage: EnumStages.BulkInsertIntoTableRaw,
+        //        error: EnumError.SQLCommand,
+        //        level: EnumMessageLevel.Error,
+        //        message: $"Error when trying to bulk insert records on table raw",
+        //        exceptionMessage: ex.Message
+        //    );
+        //}
+
         throw new NotImplementedException();
     }
 
@@ -124,9 +162,43 @@ public class AfterSaleRepository : IAfterSaleRepository
         }
     }
 
-    public Task<bool> InsertIntoAfterSaleReversesTransportations()
+    public async Task<bool> InsertIntoAfterSaleReversesTransportations(Transportations transportations)
     {
-        throw new NotImplementedException();
+        var transportationsTable = CreateSystemDataTable(new Transportations(), "AfterSaleTransportations");
+
+        for (int i = 0; i < transportations.data.Count; i++)
+        {
+            transportationsTable.Rows.Add(transportations.data[i]);
+        }
+
+        try
+        {
+            using (var conn = _sqlServerConnection.GetDbConnection())
+            {
+                using var bulkCopy = new SqlBulkCopy(conn);
+                //bulkCopy.DestinationTableName = $"[untreated].[{statusReversesTable.TableName}]";
+                bulkCopy.DestinationTableName = $"[general].[{transportationsTable.TableName}]";
+                bulkCopy.BatchSize = transportationsTable.Rows.Count;
+                bulkCopy.BulkCopyTimeout = 360;
+                foreach (DataColumn c in transportationsTable.Columns)
+                {
+                    bulkCopy.ColumnMappings.Add(c.ColumnName, c.ColumnName);
+                }
+                bulkCopy.WriteToServer(transportationsTable);
+            }
+
+            return true;
+        }
+        catch (Exception ex)
+        {
+            throw new InternalException(
+                stage: EnumStages.BulkInsertIntoTableRaw,
+                error: EnumError.SQLCommand,
+                level: EnumMessageLevel.Error,
+                message: $"Error when trying to bulk insert records on table raw",
+                exceptionMessage: ex.Message
+            );
+        }
     }
 
     private  DataTable CreateSystemDataTable<TEntity>(TEntity entity, string tableName)

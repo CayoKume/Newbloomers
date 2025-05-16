@@ -37,7 +37,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
 
             builder.Property(e => e.timestamp)
                 .HasColumnType("bigint");
-                }
+        }
     }
 
     public class LinxCupomDescontoVendasRawMap : IEntityTypeConfiguration<LinxCupomDescontoVendas>
@@ -46,7 +46,11 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
         {
             builder.ToTable("LinxCupomDescontoVendas", "untreated");
 
-            builder.HasKey(e => e.id_cupom_desconto_vendas);
+            builder.HasKey(e => e.id);
+
+            builder.Property(e => e.id)
+                .HasColumnType("int")
+                .ValueGeneratedOnAdd();
 
             builder.Property(e => e.lastupdateon)
                 .HasProviderColumnType(LogicalColumnType.DateTime);

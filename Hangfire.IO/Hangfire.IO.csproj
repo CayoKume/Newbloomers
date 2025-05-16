@@ -15,8 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Database\Application.DatabaseInit\Application.DatabaseInit.csproj" />
-    <ProjectReference Include="..\Database\Infrastructure.DatabaseInit\Infrastructure.DatabaseInit.csproj" />
     <ProjectReference Include="..\General\AfterSale\Application.AfterSale\Application.AfterSale.csproj" />
     <ProjectReference Include="..\General\AfterSale\Infrastructure.AfterSale\Infrastructure.AfterSale.csproj" />
     <ProjectReference Include="..\IntegrationsCore\Infrastructure.IntegrationsCore\Infrastructure.IntegrationsCore.csproj" />

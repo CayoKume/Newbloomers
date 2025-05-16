@@ -3,46 +3,10 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 using Domain.LinxMicrovix.Outbound.WebService.Enums;
 using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
+using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
-    public class LinxOrcamentoComponenteFormula
-    {
-        public DateTime? lastupdateon { get; private set; }
-
-        public Int32? id_orcamento_componente_formula { get; private set; }
-
-        public Int32? documento { get; private set; }
-
-        public Int64? codigo_produto { get; private set; }
-
-        [LengthValidation(length: 10, propertyName: "codigo_componente")]
-        public string? codigo_componente { get; private set; }
-
-        [LengthValidation(length: 50, propertyName: "descricao_componente")]
-        public string? descricao_componente { get; private set; }
-
-        [LengthValidation(length: 5, propertyName: "unidade")]
-        public string? unidade { get; private set; }
-
-        public decimal? quantidade { get; private set; }
-
-        public decimal? valor_componente { get; private set; }
-
-        [LengthValidation(length: 30, propertyName: "lote_componente")]
-        public string? lote_componente { get; private set; }
-
-        public DateTime? data_validade_lote { get; private set; }
-
-        [LengthValidation(length: 50, propertyName: "codigo_ws")]
-        public string? codigo_ws { get; private set; }
-
-        public Int32? portal { get; private set; }
-
-        public Int64? timestamp { get; private set; }
-
-    }
-
     public class LinxOrcamentoComponenteFormulaTrustedMap : IEntityTypeConfiguration<LinxOrcamentoComponenteFormula>
     {
         public void Configure(EntityTypeBuilder<LinxOrcamentoComponenteFormula> builder)
@@ -101,7 +65,11 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
         {
             builder.ToTable("LinxOrcamentoComponenteFormula", "untreated");
 
-            builder.HasKey(e => e.id_orcamento_componente_formula);
+            builder.HasKey(e => e.id);
+
+            builder.Property(e => e.id)
+                .HasColumnType("int")
+                .ValueGeneratedOnAdd();
 
             builder.Property(e => e.lastupdateon)
                 .HasProviderColumnType(LogicalColumnType.DateTime);

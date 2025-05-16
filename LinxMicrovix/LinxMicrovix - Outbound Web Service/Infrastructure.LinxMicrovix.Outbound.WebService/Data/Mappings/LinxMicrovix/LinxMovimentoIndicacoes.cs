@@ -15,7 +15,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
             builder.HasKey(e => e.identificador);
 
             builder.Property(e => e.lastupdateon)
-                .HasColumnType("datetime");
+                .HasProviderColumnType(LogicalColumnType.DateTime);
 
             builder.Property(e => e.identificador)
                 .HasProviderColumnType(LogicalColumnType.UUID);
@@ -34,10 +34,14 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
         {
             builder.ToTable("LinxMovimentoIndicacoes", "untreated");
 
-            builder.HasKey(e => e.identificador);
+            builder.HasKey(e => e.id);
+
+            builder.Property(e => e.id)
+                .HasColumnType("int")
+                .ValueGeneratedOnAdd();
 
             builder.Property(e => e.lastupdateon)
-                .HasColumnType("datetime");
+                .HasProviderColumnType(LogicalColumnType.DateTime);
 
             builder.Property(e => e.identificador)
                 .HasProviderColumnType(LogicalColumnType.UUID);

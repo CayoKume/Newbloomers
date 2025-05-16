@@ -40,25 +40,29 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
         {
              builder.ToTable("LinxClientesFornecClasses", "untreated");
 
-        builder.HasKey(e => new { e.cod_cliente, e.cod_classe });
+            builder.HasKey(e => e.id);
 
-        builder.Property(e => e.lastupdateon)
+            builder.Property(e => e.id)
+                .HasColumnType("int")
+                .ValueGeneratedOnAdd();
+
+            builder.Property(e => e.lastupdateon)
             .HasProviderColumnType(LogicalColumnType.DateTime);
 
-        builder.Property(e => e.portal)
-            .HasColumnType("int");
+            builder.Property(e => e.portal)
+                .HasColumnType("int");
 
-        builder.Property(e => e.cod_cliente)
-            .HasColumnType("int");
+            builder.Property(e => e.cod_cliente)
+                .HasColumnType("int");
 
-        builder.Property(e => e.cod_classe)
-            .HasColumnType("int");
+            builder.Property(e => e.cod_classe)
+                .HasColumnType("int");
 
-        builder.Property(e => e.nome_classe)
-            .HasColumnType("varchar(50)");
+            builder.Property(e => e.nome_classe)
+                .HasColumnType("varchar(50)");
 
-        builder.Property(e => e.timestamp)
-            .HasColumnType("bigint");
+            builder.Property(e => e.timestamp)
+                .HasColumnType("bigint");
         }
     }
 }

@@ -11,8 +11,8 @@ public interface IAfterSaleRepository
 
     /*Insert in Database*/
     public Task<bool> InsertIntoAfterSaleReversesStatus(List<Status> data);
-    public Task<bool> InsertIntoAfterSaleReverses();
-    public Task<bool> InsertIntoAfterSaleReversesTransportations();
+    public Task<bool> InsertIntoAfterSaleReverses(List<Data> data);
+    public Task<bool> InsertIntoAfterSaleReversesTransportations(Transportations transportations);
     public Task<bool> InsertIntoAfterSaleReversesCourierAttributes();
 
     public Task<bool> InsertIntoAfterSaleRefundsStatus();

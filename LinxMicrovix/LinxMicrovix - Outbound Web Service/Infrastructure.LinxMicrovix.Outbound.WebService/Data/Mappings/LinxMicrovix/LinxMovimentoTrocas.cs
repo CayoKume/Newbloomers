@@ -92,14 +92,11 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
         {
             builder.ToTable("LinxMovimentoTrocas", "untreated");
 
-            builder.HasKey(e => new { 
-                e.cnpj_emp, 
-                e.num_vale, 
-                e.doc_origem, 
-                e.doc_venda, 
-                e.doc_venda_origem, 
-                e.cod_cliente 
-            });
+            builder.HasKey(e => e.id);
+
+            builder.Property(e => e.id)
+                .HasColumnType("int")
+                .ValueGeneratedOnAdd();
 
             builder.Property(e => e.lastupdateon)
                 .HasProviderColumnType(LogicalColumnType.DateTime);

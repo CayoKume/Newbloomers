@@ -8,16 +8,15 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
 {
     public class LinxAntecipacoesFinanceirasTrustedMap : IEntityTypeConfiguration<LinxAntecipacoesFinanceiras>
     {
-
-        public Guid? identificador { get; private set; }
-
-        public bool? cancelado { get; private set; }
-
         public void Configure(EntityTypeBuilder<LinxAntecipacoesFinanceiras> builder)
         {
             builder
                 .ToTable("LinxAntecipacoesFinanceiras", "linx_microvix_erp")
                 .HasKey(x => x.id_antecipacoes_financeiras);
+
+            builder
+                .Property(x => x.id_antecipacoes_financeiras)
+                .HasColumnType("int");
 
             builder
                 .Property(x => x.lastupdateon)
@@ -106,8 +105,17 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
         public void Configure(EntityTypeBuilder<LinxAntecipacoesFinanceiras> builder)
         {
             builder
-                .ToTable("LinxAntecipacoesFinanceiras", "untreated")
-                .HasKey(x => x.id_antecipacoes_financeiras);
+                .ToTable("LinxAntecipacoesFinanceiras", "untreated");
+
+            builder.HasKey(e => e.id);
+
+            builder.Property(e => e.id)
+                .HasColumnType("int")
+                .ValueGeneratedOnAdd();
+
+            builder
+                .Property(x => x.id_antecipacoes_financeiras)
+                .HasColumnType("int");
 
             builder
                 .Property(x => x.lastupdateon)

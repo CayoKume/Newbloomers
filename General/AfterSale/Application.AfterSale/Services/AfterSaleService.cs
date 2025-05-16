@@ -136,7 +136,8 @@ namespace Application.AfterSale.Services
 
                 foreach (var company in companys)
                 {
-                    var reverses = new List<Reverses>();
+                    var simplifiedReverses = new List<ReverseSimplified>();
+                    var completeReverses = new List<Data>();
 
                     var parameters = new Dictionary<string, string>
                     {
@@ -152,7 +153,7 @@ namespace Application.AfterSale.Services
                     );
 
                     var page = Newtonsoft.Json.JsonConvert.DeserializeObject<GetReverses>(response);
-                    reverses.AddRange(page.data);
+                    simplifiedReverses.AddRange(page.data);
                     string? rote = page.next_page_url;
 
                     if (page.last_page > 1)
@@ -165,12 +166,24 @@ namespace Application.AfterSale.Services
                             );
 
                             var nextPage = Newtonsoft.Json.JsonConvert.DeserializeObject<GetReverses>(responseByPage);
-                            reverses.AddRange(nextPage.data);
+                            simplifiedReverses.AddRange(nextPage.data);
                             rote = nextPage.next_page_url; 
+                        }
+
+                        foreach (var reverse in simplifiedReverses)
+                        {
+                            var _response = await _apiCall.GetAsync(
+                                token: company.Token.ToString(),
+                                rote: $"v3/api/reverses/{reverse.id}"
+                            );
+
+                            var completeReverse = Newtonsoft.Json.JsonConvert.DeserializeObject<Root>(_response);
+
+                            completeReverses.Add(completeReverse.data);
                         }
                     }
 
-                    //await _afterSaleRepository.InsertIntoAfterSaleReversesStatus(); 
+                    await _afterSaleRepository.InsertIntoAfterSaleReverses(completeReverses); 
                 }
 
                 return true;
@@ -256,9 +269,9 @@ namespace Application.AfterSale.Services
                     rote: "v3/api/transportations"
                 );
 
-                var transportations = Newtonsoft.Json.JsonConvert.DeserializeObject<List<String>>(response);
+                var transportations = Newtonsoft.Json.JsonConvert.DeserializeObject<Transportations>(response);
 
-                //await _afterSaleRepository.InsertIntoAfterSaleReversesStatus();
+                await _afterSaleRepository.InsertIntoAfterSaleReversesTransportations(transportations);
 
                 return true;
             }

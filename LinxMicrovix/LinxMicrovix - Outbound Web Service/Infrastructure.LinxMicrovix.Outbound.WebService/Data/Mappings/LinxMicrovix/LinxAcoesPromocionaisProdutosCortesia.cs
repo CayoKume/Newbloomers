@@ -8,18 +8,15 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
 {
     public class LinxAcoesPromocionaisProdutosCortesiaTrustedMap : IEntityTypeConfiguration<LinxAcoesPromocionaisProdutosCortesia>
     {
-
-        public Int32? id_acoes_promocionais { get; private set; }
-
-        public Int64? codigoproduto { get; private set; }
-
-        public Int32? id_combinacao_produto { get; private set; }
-
         public void Configure(EntityTypeBuilder<LinxAcoesPromocionaisProdutosCortesia> builder)
         {
             builder
                 .ToTable("LinxAcoesPromocionaisProdutosCortesia", "linx_microvix_erp")
                 .HasKey(x => x.id_acoes_promocionais_produtos_cortesia);
+
+            builder
+                .Property(x => x.id_acoes_promocionais_produtos_cortesia)
+                .HasColumnType("int");
 
             builder
                 .Property(x => x.lastupdateon)
@@ -52,8 +49,17 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
         public void Configure(EntityTypeBuilder<LinxAcoesPromocionaisProdutosCortesia> builder)
         {
             builder
-                .ToTable("LinxAcoesPromocionaisProdutosCortesia", "untreated")
-                .HasKey(x => x.id_acoes_promocionais_produtos_cortesia);
+                .ToTable("LinxAcoesPromocionaisProdutosCortesia", "untreated");
+
+            builder.HasKey(e => e.id);
+
+            builder.Property(e => e.id)
+                .HasColumnType("int")
+                .ValueGeneratedOnAdd();
+
+            builder
+                .Property(x => x.id_acoes_promocionais_produtos_cortesia)
+                .HasColumnType("int");
 
             builder
                 .Property(x => x.lastupdateon)

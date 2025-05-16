@@ -34,19 +34,23 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
         {
             builder.ToTable("LinxClientesFornecContatosParentesco", "untreated");
 
-        builder.HasKey(e => e.id_parentesco);
+            builder.HasKey(e => e.id);
 
-        builder.Property(e => e.lastupdateon)
-            .HasProviderColumnType(LogicalColumnType.DateTime);
+            builder.Property(e => e.id)
+                .HasColumnType("int")
+                .ValueGeneratedOnAdd();
 
-        builder.Property(e => e.id_parentesco)
-            .HasColumnType("int");
+            builder.Property(e => e.lastupdateon)
+                .HasProviderColumnType(LogicalColumnType.DateTime);
 
-        builder.Property(e => e.descricao_parentesco)
-            .HasColumnType("varchar(50)");
+            builder.Property(e => e.id_parentesco)
+                .HasColumnType("int");
 
-        builder.Property(e => e.timestamp)
-            .HasColumnType("bigint");
+            builder.Property(e => e.descricao_parentesco)
+                .HasColumnType("varchar(50)");
+
+            builder.Property(e => e.timestamp)
+                .HasColumnType("bigint");
         }
     }
 

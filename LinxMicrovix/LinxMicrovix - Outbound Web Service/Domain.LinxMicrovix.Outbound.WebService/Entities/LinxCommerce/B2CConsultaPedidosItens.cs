@@ -6,9 +6,12 @@ using System.Globalization;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
 {
-    [Table("B2CConsultaPedidosItens", Schema = "linx_microvix_commerce")]
     public class B2CConsultaPedidosItens
     {
+        [NotMapped]
+        [SkipProperty]
+        public Int32 id { get; set; }
+
         public DateTime? lastupdateon { get; private set; }
 
         public Int64? id_pedido_item { get; private set; }

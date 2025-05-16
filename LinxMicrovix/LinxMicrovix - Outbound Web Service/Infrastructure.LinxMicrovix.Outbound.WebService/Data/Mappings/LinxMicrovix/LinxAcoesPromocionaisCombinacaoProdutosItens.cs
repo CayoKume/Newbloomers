@@ -15,6 +15,10 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasKey(x => x.id_acoes_promocionais_combinacao_produtos_itens);
 
             builder
+                .Property(x => x.id_acoes_promocionais_combinacao_produtos_itens)
+                .HasColumnType("int");
+
+            builder
                 .Property(x => x.lastupdateon)
                 .HasProviderColumnType(LogicalColumnType.DateTime);
 
@@ -41,8 +45,17 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
         public void Configure(EntityTypeBuilder<LinxAcoesPromocionaisCombinacaoProdutosItens> builder)
         {
             builder
-                .ToTable("LinxAcoesPromocionaisCombinacaoProdutosItens", "untreated")
-                .HasKey(x => x.id_acoes_promocionais_combinacao_produtos_itens);
+                .ToTable("LinxAcoesPromocionaisCombinacaoProdutosItens", "untreated");
+
+            builder.HasKey(e => e.id);
+
+            builder.Property(e => e.id)
+                .HasColumnType("int")
+                .ValueGeneratedOnAdd();
+
+            builder
+                .Property(x => x.id_acoes_promocionais_combinacao_produtos_itens)
+                .HasColumnType("int");
 
             builder
                 .Property(x => x.lastupdateon)

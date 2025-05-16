@@ -15,6 +15,10 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasKey(x => x.plano);
 
             builder
+                .Property(x => x.plano)
+                .HasColumnType("int");
+
+            builder
                 .Property(x => x.cnpj_emp)
                 .HasColumnType("varchar(14)");
 
@@ -97,8 +101,17 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
         public void Configure(EntityTypeBuilder<LinxAntecipacoesFinanceirasPlanos> builder)
         {
             builder
-                .ToTable("LinxAntecipacoesFinanceirasPlanos", "untreated")
-                .HasKey(x => x.plano);
+                .ToTable("LinxAntecipacoesFinanceirasPlanos", "untreated");
+
+            builder.HasKey(e => e.id);
+
+            builder.Property(e => e.id)
+                .HasColumnType("int")
+                .ValueGeneratedOnAdd();
+
+            builder
+                .Property(x => x.plano)
+                .HasColumnType("int");
 
             builder
                 .Property(x => x.cnpj_emp)

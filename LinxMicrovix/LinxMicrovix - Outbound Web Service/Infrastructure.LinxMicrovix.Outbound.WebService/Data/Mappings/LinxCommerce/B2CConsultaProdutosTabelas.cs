@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce;
+using Domain.LinxMicrovix.Outbound.WebService.Enums;
+using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxCommerce
 {
@@ -8,7 +10,27 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxComm
     {
         public void Configure(EntityTypeBuilder<B2CConsultaProdutosTabelas> builder)
         {
-            throw new NotImplementedException();
+            builder.ToTable("B2CConsultaProdutosTabelas", "linx_microvix_commerce");
+
+            builder.HasKey(e => e.id_tabela);
+
+            builder.Property(e => e.lastupdateon)
+                .HasProviderColumnType(LogicalColumnType.DateTime);
+
+            builder.Property(e => e.id_tabela)
+                .HasColumnType("int");
+
+            builder.Property(e => e.nome_tabela)
+                .HasColumnType("varchar(50)");
+
+            builder.Property(e => e.ativa)
+                .HasColumnType("char(1)");
+
+            builder.Property(e => e.timestamp)
+                .HasColumnType("bigint");
+
+            builder.Property(e => e.portal)
+                .HasColumnType("int");
         }
     }
 
@@ -16,7 +38,31 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxComm
     {
         public void Configure(EntityTypeBuilder<B2CConsultaProdutosTabelas> builder)
         {
-            throw new NotImplementedException();
+            builder.ToTable("B2CConsultaProdutosTabelas", "untreated");
+
+            builder.HasKey(e => e.id);
+
+            builder.Property(e => e.id)
+                .HasColumnType("int")
+                .ValueGeneratedOnAdd();
+
+            builder.Property(e => e.lastupdateon)
+                .HasProviderColumnType(LogicalColumnType.DateTime);
+
+            builder.Property(e => e.id_tabela)
+                .HasColumnType("int");
+
+            builder.Property(e => e.nome_tabela)
+                .HasColumnType("varchar(50)");
+
+            builder.Property(e => e.ativa)
+                .HasColumnType("char(1)");
+
+            builder.Property(e => e.timestamp)
+                .HasColumnType("bigint");
+
+            builder.Property(e => e.portal)
+                .HasColumnType("int");
         }
     }
 }
