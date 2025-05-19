@@ -4,56 +4,23 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Domain.LinxMicrovix.Outbound.WebService.Enums;
 using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
 
+
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
     public class LinxCestMap : IEntityTypeConfiguration<LinxCest>
     {
+        
+
+        
+
         public void Configure(EntityTypeBuilder<LinxCest> builder)
         {
-            builder.ToTable("LinxCest", "linx_microvix_erp");
+            builder.ToTable("LinxCest");
 
             builder.HasKey(e => e.id_cest);
 
             builder.Property(e => e.lastupdateon)
                 .HasProviderColumnType(LogicalColumnType.DateTime);
-
-            builder.Property(e => e.portal)
-                .HasColumnType("int");
-
-            builder.Property(e => e.id_cest)
-                .HasColumnType("int");
-
-            builder.Property(e => e.descricao)
-                .HasColumnType("varchar(700)");
-
-            builder.Property(e => e.cest)
-                .HasColumnType("varchar(10)");
-
-            builder.Property(e => e.id_segmento_mercadoria_bem)
-                .HasColumnType("int");
-
-            builder.Property(e => e.ativo)
-                .HasProviderColumnType(LogicalColumnType.Bool);
-
-            builder.Property(e => e.timestamp)
-                .HasColumnType("bigint");
-        }
-    }
-
-    public class LinxCestRawMap : IEntityTypeConfiguration<LinxCest>
-    {
-        public void Configure(EntityTypeBuilder<LinxCest> builder)
-        {
-            builder.ToTable("LinxCest", "untreated");
-
-            builder.HasKey(e => e.id);
-
-            builder.Property(e => e.id)
-                .HasColumnType("int")
-                .ValueGeneratedOnAdd();
-
-            builder.Property(e => e.lastupdateon)
-            .HasProviderColumnType(LogicalColumnType.DateTime);
 
             builder.Property(e => e.portal)
                 .HasColumnType("int");

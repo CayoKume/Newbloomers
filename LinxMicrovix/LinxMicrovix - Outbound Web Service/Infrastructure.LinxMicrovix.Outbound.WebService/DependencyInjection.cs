@@ -14,6 +14,8 @@ using Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Dapper.Base;
 using Infrastructure.LinxMicrovix.Outbound.WebService.Repository.Dapper.LinxMicrovix;
 using LinxMicrovix.Outbound.Web.Service.Application.Services.LinxMicrovix;
 using Microsoft.Extensions.DependencyInjection;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Schemas;
+using Application.LinxMicrovix.Outbound.WebService.Services.Schemas;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.DependencyInjection
 {
@@ -21,6 +23,8 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.DependencyInjection
     {
         public static IServiceCollection AddScopedB2CLinxMicrovixServices(this IServiceCollection services)
         {
+            services.AddScoped<ISchemaConfigurable, SchemaConfigurable>();
+
             services.AddScoped<ILinxMicrovixServiceBase, LinxMicrovixServiceBase>();
             services.AddScoped(typeof(ILinxMicrovixAzureSQLRepositoryBase<>), typeof(LinxMicrovixAzureSQLRepositoryBase<>));
             services.AddScoped(typeof(ILinxMicrovixSQLServerRepositoryBase<>), typeof(LinxMicrovixSQLServerRepositoryBase<>));
@@ -220,6 +224,8 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.DependencyInjection
 
         public static IServiceCollection AddScopedLinxMicrovixServices(this IServiceCollection services)
         {
+            services.AddScoped<ISchemaConfigurable, SchemaConfigurable>();
+
             services.AddScoped<ILinxMicrovixServiceBase, LinxMicrovixServiceBase>();
             services.AddScoped(typeof(ILinxMicrovixAzureSQLRepositoryBase<>), typeof(LinxMicrovixAzureSQLRepositoryBase<>));
             services.AddScoped(typeof(ILinxMicrovixSQLServerRepositoryBase<>), typeof(LinxMicrovixSQLServerRepositoryBase<>));

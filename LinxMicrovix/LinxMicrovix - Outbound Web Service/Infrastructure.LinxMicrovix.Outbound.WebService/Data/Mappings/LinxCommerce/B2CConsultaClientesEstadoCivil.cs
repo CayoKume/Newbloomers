@@ -4,13 +4,18 @@ using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce;
 using Domain.LinxMicrovix.Outbound.WebService.Enums;
 using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
 
+
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxCommerce
 {
     public class B2CConsultaClientesEstadoCivilMap : IEntityTypeConfiguration<B2CConsultaClientesEstadoCivil>
     {
+        
+
+        
+
         public void Configure(EntityTypeBuilder<B2CConsultaClientesEstadoCivil> builder)
         {
-            builder.ToTable("B2CConsultaClientesEstadoCivil", "linx_microvix_commerce");
+            builder.ToTable("B2CConsultaClientesEstadoCivil");
 
             builder.HasKey(e => e.id_estado_civil);
 

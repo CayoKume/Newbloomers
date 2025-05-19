@@ -4,13 +4,18 @@ using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce;
 using Domain.LinxMicrovix.Outbound.WebService.Enums;
 using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
 
+
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxCommerce
 {
     public class B2CConsultaFormasPagamentoMap : IEntityTypeConfiguration<B2CConsultaFormasPagamento>
     {
+        
+
+        
+
         public void Configure(EntityTypeBuilder<B2CConsultaFormasPagamento> builder)
         {
-            builder.ToTable("B2CConsultaFormasPagamento", "linx_microvix_commerce");
+            builder.ToTable("B2CConsultaFormasPagamento");
 
             builder.HasKey(e => e.cod_forma_pgto);
 

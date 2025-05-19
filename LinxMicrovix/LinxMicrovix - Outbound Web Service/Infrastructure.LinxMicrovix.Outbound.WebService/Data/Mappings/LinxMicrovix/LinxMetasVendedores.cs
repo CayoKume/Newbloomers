@@ -4,62 +4,20 @@ using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
 using Domain.LinxMicrovix.Outbound.WebService.Enums;
 using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
 
+
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
     public class LinxMetasVendedoresMap : IEntityTypeConfiguration<LinxMetasVendedores>
     {
+        
+
+        
+
         public void Configure(EntityTypeBuilder<LinxMetasVendedores> builder)
         {
-            builder.ToTable("LinxMetasVendedores", "linx_microvix_erp");
+            builder.ToTable("LinxMetasVendedores");
 
             builder.HasKey(e => e.id_meta);
-
-            builder.Property(e => e.lastupdateon)
-                .HasProviderColumnType(LogicalColumnType.DateTime);
-
-            builder.Property(e => e.portal)
-                .HasColumnType("int");
-
-            builder.Property(e => e.cnpj_emp)
-                .HasColumnType("varchar(14)");
-
-            builder.Property(e => e.id_meta)
-                .HasColumnType("int");
-
-            builder.Property(e => e.descricao_meta)
-                .HasColumnType("varchar(50)");
-
-            builder.Property(e => e.data_inicial_meta)
-                .HasProviderColumnType(LogicalColumnType.DateTime);
-
-            builder.Property(e => e.data_final_meta)
-                .HasProviderColumnType(LogicalColumnType.DateTime);
-
-            builder.Property(e => e.valor_meta_loja)
-                .HasColumnType("decimal(10,2)");
-
-            builder.Property(e => e.valor_meta_vendedor)
-                .HasColumnType("decimal(10,2)");
-
-            builder.Property(e => e.cod_vendedor)
-                .HasColumnType("int");
-
-            builder.Property(e => e.timestamp)
-                .HasColumnType("bigint");
-        }
-    }
-
-    public class LinxMetasVendedoresRawMap : IEntityTypeConfiguration<LinxMetasVendedores>
-    {
-        public void Configure(EntityTypeBuilder<LinxMetasVendedores> builder)
-        {
-            builder.ToTable("LinxMetasVendedores", "linx_microvix_erp");
-
-            builder.HasKey(e => e.id);
-
-            builder.Property(e => e.id)
-                .HasColumnType("int")
-                .ValueGeneratedOnAdd();
 
             builder.Property(e => e.lastupdateon)
                 .HasProviderColumnType(LogicalColumnType.DateTime);

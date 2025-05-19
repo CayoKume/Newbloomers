@@ -4,13 +4,18 @@ using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce;
 using Domain.LinxMicrovix.Outbound.WebService.Enums;
 using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
 
+
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxCommerce
 {
     public class B2CConsultaCNPJsChaveMap : IEntityTypeConfiguration<B2CConsultaCNPJsChave>
     {
+        
+
+        
+
         public void Configure(EntityTypeBuilder<B2CConsultaCNPJsChave> builder)
         {
-            builder.ToTable("B2CConsultaCNPJsChave", "linx_microvix_commerce");
+            builder.ToTable("B2CConsultaCNPJsChave");
 
             builder.HasKey(e => new { e.cnpj, e.id_empresas_rede, e.empresa });
 

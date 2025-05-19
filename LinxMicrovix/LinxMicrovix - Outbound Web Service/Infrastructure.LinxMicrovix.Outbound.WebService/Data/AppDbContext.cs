@@ -1,20 +1,23 @@
 ﻿using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Schemas;
 using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using System.Configuration;
+using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data
 {
     public class LinxMicrovixOutboundDbContext : DbContext
     {
         private readonly IConfiguration _configuration;
+        private readonly ISchemaConfigurable _schemaEcomConfigurable;
 
-        public LinxMicrovixOutboundDbContext(DbContextOptions<LinxMicrovixOutboundDbContext> options, IConfiguration configuration)
+        public LinxMicrovixOutboundDbContext(DbContextOptions<LinxMicrovixOutboundDbContext> options, IConfiguration configuration, ISchemaConfigurable schemaConfigurable)
         : base(options)
         {
             _configuration = configuration;
+            _schemaEcomConfigurable = schemaConfigurable;
         }
 
         public DbSet<LinxAcoesPromocionais> LinxAcoesPromocionais { get; set; } = null!;
@@ -177,7 +180,69 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data
         public DbSet<LinxVendedores> LinxVendedores { get; set; } = null!;
         public DbSet<LinxXMLDocumentos> LinxXMLDocumentos { get; set; } = null!;
 
-
+        public DbSet<B2CConsultaClassificacao> B2CConsultaClassificacao { get; set; } = null!;
+        public DbSet<B2CConsultaClientes> B2CConsultaClientes { get; set; } = null!;
+        public DbSet<B2CConsultaClientesContatos> B2CConsultaClientesContatos { get; set; } = null!;
+        public DbSet<B2CConsultaClientesContatosParentesco> B2CConsultaClientesContatosParentesco { get; set; } = null!;
+        public DbSet<B2CConsultaClientesEnderecosEntrega> B2CConsultaClientesEnderecosEntrega { get; set; } = null!;
+        public DbSet<B2CConsultaClientesEstadoCivil> B2CConsultaClientesEstadoCivil { get; set; } = null!;
+        public DbSet<B2CConsultaClientesSaldo> B2CConsultaClientesSaldo { get; set; } = null!;
+        public DbSet<B2CConsultaClientesSaldoLinx> B2CConsultaClientesSaldoLinx { get; set; } = null!;
+        public DbSet<B2CConsultaCNPJsChave> B2CConsultaCNPJsChave { get; set; } = null!;
+        public DbSet<B2CConsultaCodigoRastreio> B2CConsultaCodigoRastreio { get; set; } = null!;
+        public DbSet<B2CConsultaColecoes> B2CConsultaColecoes { get; set; } = null!;
+        public DbSet<B2CConsultaEmpresas> B2CConsultaEmpresas { get; set; } = null!;
+        public DbSet<B2CConsultaEspessuras> B2CConsultaEspessuras { get; set; } = null!;
+        public DbSet<B2CConsultaFlags> B2CConsultaFlags { get; set; } = null!;
+        public DbSet<B2CConsultaFormasPagamento> B2CConsultaFormasPagamento { get; set; } = null!;
+        public DbSet<B2CConsultaFornecedores> B2CConsultaFornecedores { get; set; } = null!;
+        public DbSet<B2CConsultaGrade1> B2CConsultaGrade1 { get; set; } = null!;
+        public DbSet<B2CConsultaGrade2> B2CConsultaGrade2 { get; set; } = null!;
+        public DbSet<B2CConsultaImagens> B2CConsultaImagens { get; set; } = null!;
+        public DbSet<B2CConsultaImagensHD> B2CConsultaImagensHD { get; set; } = null!;
+        public DbSet<B2CConsultaLegendasCadastrosAuxiliares> B2CConsultaLegendasCadastrosAuxiliares { get; set; } = null!;
+        public DbSet<B2CConsultaLinhas> B2CConsultaLinhas { get; set; } = null!;
+        public DbSet<B2CConsultaMarcas> B2CConsultaMarcas { get; set; } = null!;
+        public DbSet<B2CConsultaNFe> B2CConsultaNFe { get; set; } = null!;
+        public DbSet<B2CConsultaNFeSituacao> B2CConsultaNFeSituacao { get; set; } = null!;
+        public DbSet<B2CConsultaPalavrasChavePesquisa> B2CConsultaPalavrasChavePesquisa { get; set; } = null!;
+        public DbSet<B2CConsultaPedidos> B2CConsultaPedidos { get; set; } = null!;
+        public DbSet<B2CConsultaPedidosIdentificador> B2CConsultaPedidosIdentificador { get; set; } = null!;
+        public DbSet<B2CConsultaPedidosItens> B2CConsultaPedidosItens { get; set; } = null!;
+        public DbSet<B2CConsultaPedidosPlanos> B2CConsultaPedidosPlanos { get; set; } = null!;
+        public DbSet<B2CConsultaPedidosStatus> B2CConsultaPedidosStatus { get; set; } = null!;
+        public DbSet<B2CConsultaPedidosTipos> B2CConsultaPedidosTipos { get; set; } = null!;
+        public DbSet<B2CConsultaPlanos> B2CConsultaPlanos { get; set; } = null!;
+        public DbSet<B2CConsultaPlanosParcelas> B2CConsultaPlanosParcelas { get; set; } = null!;
+        public DbSet<B2CConsultaProdutos> B2CConsultaProdutos { get; set; } = null!;
+        public DbSet<B2CConsultaProdutosAssociados> B2CConsultaProdutosAssociados { get; set; } = null!;
+        public DbSet<B2CConsultaProdutosCampanhas> B2CConsultaProdutosCampanhas { get; set; } = null!;
+        public DbSet<B2CConsultaProdutosCamposAdicionaisDetalhes> B2CConsultaProdutosCamposAdicionaisDetalhes { get; set; } = null!;
+        public DbSet<B2CConsultaProdutosCamposAdicionaisNomes> B2CConsultaProdutosCamposAdicionaisNomes { get; set; } = null!;
+        public DbSet<B2CConsultaProdutosCamposAdicionaisValores> B2CConsultaProdutosCamposAdicionaisValores { get; set; } = null!;
+        public DbSet<B2CConsultaProdutosCodebar> B2CConsultaProdutosCodebar { get; set; } = null!;
+        public DbSet<B2CConsultaProdutosCustos> B2CConsultaProdutosCustos { get; set; } = null!;
+        public DbSet<B2CConsultaProdutosDepositos> B2CConsultaProdutosDepositos { get; set; } = null!;
+        public DbSet<B2CConsultaProdutosDetalhes> B2CConsultaProdutosDetalhes { get; set; } = null!;
+        public DbSet<B2CConsultaProdutosDetalhesDepositos> B2CConsultaProdutosDetalhesDepositos { get; set; } = null!;
+        public DbSet<B2CConsultaProdutosDimensoes> B2CConsultaProdutosDimensoes { get; set; } = null!;
+        public DbSet<B2CConsultaProdutosFlags> B2CConsultaProdutosFlags { get; set; } = null!;
+        public DbSet<B2CConsultaProdutosImagens> B2CConsultaProdutosImagens { get; set; } = null!;
+        public DbSet<B2CConsultaProdutosInformacoes> B2CConsultaProdutosInformacoes { get; set; } = null!;
+        public DbSet<B2CConsultaProdutosPalavrasChavePesquisa> B2CConsultaProdutosPalavrasChavePesquisa { get; set; } = null!;
+        public DbSet<B2CConsultaProdutosPromocao> B2CConsultaProdutosPromocao { get; set; } = null!;
+        public DbSet<B2CConsultaProdutosStatus> B2CConsultaProdutosStatus { get; set; } = null!;
+        public DbSet<B2CConsultaProdutosTabelas> B2CConsultaProdutosTabelas { get; set; } = null!;
+        public DbSet<B2CConsultaProdutosTabelasPrecos> B2CConsultaProdutosTabelasPrecos { get; set; } = null!;
+        public DbSet<B2CConsultaProdutosTags> B2CConsultaProdutosTags { get; set; } = null!;
+        public DbSet<B2CConsultaSetores> B2CConsultaSetores { get; set; } = null!;
+        public DbSet<B2CConsultaStatus> B2CConsultaStatus { get; set; } = null!;
+        public DbSet<B2CConsultaTags> B2CConsultaTags { get; set; } = null!;
+        public DbSet<B2CConsultaTipoEncomenda> B2CConsultaTipoEncomenda { get; set; } = null!;
+        public DbSet<B2CConsultaTiposCobrancaFrete> B2CConsultaTiposCobrancaFrete { get; set; } = null!;
+        public DbSet<B2CConsultaTransportadores> B2CConsultaTransportadores { get; set; } = null!;
+        public DbSet<B2CConsultaUnidade> B2CConsultaUnidade { get; set; } = null!;
+        public DbSet<B2CConsultaVendedores> B2CConsultaVendedores { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -239,6 +304,22 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data
             {
                 var type = assembly.GetType($"Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce.{entidade.MethodName}");
                 modelBuilder.Ignore(type);
+            }
+
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                var schema = String.Empty;
+                var clrType = entityType.ClrType;
+
+                if (clrType.Namespace?.Contains("Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce") == true)
+                    schema = _schemaEcomConfigurable.SetEcomSchema();
+                
+                if (clrType.Namespace?.Contains("Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix") == true)
+                    schema = _schemaEcomConfigurable.SetErpSchema();
+
+                //schema = _schemaEcomConfigurable.SetUnteatredSchema();
+
+                entityType.SetSchema(schema);
             }
         }
     }
