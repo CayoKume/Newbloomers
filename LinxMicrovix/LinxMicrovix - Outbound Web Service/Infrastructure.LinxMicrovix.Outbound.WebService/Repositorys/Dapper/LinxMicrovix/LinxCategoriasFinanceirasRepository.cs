@@ -8,7 +8,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.Dapper.Linx
     {
         public LinxCategoriasFinanceirasRepository()
         {
-            
+
         }
 
         public bool BulkInsertIntoTableRaw(LinxAPIParam jobParameter, IList<LinxCategoriasFinanceiras> records)

@@ -1,4 +1,4 @@
-﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
+using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -8,7 +8,6 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
 {
     public class B2CConsultaPedidosIdentificador
     {
-        [NotMapped]
         [SkipProperty]
         public Int32 id { get; set; }
 

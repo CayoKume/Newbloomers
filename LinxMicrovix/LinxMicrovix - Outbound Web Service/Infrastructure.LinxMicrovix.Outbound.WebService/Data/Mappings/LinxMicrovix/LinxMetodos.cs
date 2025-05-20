@@ -1,20 +1,18 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Infrastructure.LinxMicrovix.Outbound.WebService.Schema;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
 using Domain.LinxMicrovix.Outbound.WebService.Enums;
 using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
 
-
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
     public class LinxMetodosMap : IEntityTypeConfiguration<LinxMetodos>
     {
-        
-
-        
-
         public void Configure(EntityTypeBuilder<LinxMetodos> builder)
         {
+            var schema = SchemaContext.GetSchema(typeof(LinxMetodos));
+
             builder.ToTable("LinxMetodos");
 
             builder.HasKey(e => e.methodID);

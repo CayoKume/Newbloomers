@@ -8,9 +8,9 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.Dapper.Linx
     {
         public LinxCstIpiFiscalRepository()
         {
-            
+
         }
-        
+
         public bool BulkInsertIntoTableRaw(LinxAPIParam jobParameter, IList<LinxCstIpiFiscal> records)
         {
             throw new NotImplementedException();

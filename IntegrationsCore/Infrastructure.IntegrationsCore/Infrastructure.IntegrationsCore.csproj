@@ -24,4 +24,9 @@
     <ProjectReference Include="..\Domain.IntegrationsCore\Domain.IntegrationsCore.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Data\Mappings\" />
+    <Folder Include="Repositorys\EFCore\" />
+  </ItemGroup>
+
 </Project>

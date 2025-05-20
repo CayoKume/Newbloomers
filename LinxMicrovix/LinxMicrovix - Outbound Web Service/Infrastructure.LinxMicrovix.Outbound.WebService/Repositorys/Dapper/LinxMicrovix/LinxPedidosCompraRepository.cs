@@ -25,7 +25,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.Dapper.Linx
                     table.Rows.Add(records[i].lastupdateon, records[i].portal, records[i].cnpj_emp, records[i].cod_pedido, records[i].data_pedido, records[i].transacao,
                         records[i].usuario, records[i].codigo_fornecedor, records[i].cod_produto, records[i].quantidade, records[i].valor_unitario, records[i].cod_comprador,
                         records[i].valor_frete, records[i].valor_total, records[i].cod_plano_pagamento, records[i].plano_pagamento, records[i].obs, records[i].aprovado, records[i].cancelado, records[i].encerrado,
-                        records[i].data_aprovacao, records[i].numero_ped_fornec, records[i].tipo_frete, records[i].natureza_operacao, records[i].previsao_entrega, records[i].numero_projeto_officina, records[i].status_pedido, 
+                        records[i].data_aprovacao, records[i].numero_ped_fornec, records[i].tipo_frete, records[i].natureza_operacao, records[i].previsao_entrega, records[i].numero_projeto_officina, records[i].status_pedido,
                         records[i].qtde_entregue, records[i].descricao_frete, records[i].integrado_linx, records[i].nf_gerada, records[i].timestamp, records[i].empresa, records[i].nf_origem_ws);
                 }
 

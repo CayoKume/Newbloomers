@@ -11,7 +11,7 @@ using System.Reflection;
 using Domain.IntegrationsCore.Extensions;
 using static System.Net.Mime.MediaTypeNames;
 
-namespace Infrastructure.IntegrationsCore.Repositorys
+namespace Infrastructure.IntegrationsCore.Repositorys.Dapper
 {
     public class LogRepository : ILogRepository
     {
@@ -43,7 +43,7 @@ namespace Infrastructure.IntegrationsCore.Repositorys
                 {
                     await conn.ExecuteAsync(
                             sql: @$"INSERT INTO [auditing].[Logs] ([IdJob], [StartDate], [EndDate], [Execution])
-                                   VALUES ({(Int64)log.Job}, '{log.StartDate.ToString("s")}', '{log.EndDate.ToString("s")}', '{log.Execution}')",
+                                   VALUES ({(long)log.Job}, '{log.StartDate.ToString("s")}', '{log.EndDate.ToString("s")}', '{log.Execution}')",
                             commandTimeout: 360
                         );
 

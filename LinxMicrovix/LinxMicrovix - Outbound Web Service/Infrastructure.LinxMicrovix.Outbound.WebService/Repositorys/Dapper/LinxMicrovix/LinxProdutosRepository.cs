@@ -24,12 +24,12 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.Dapper.Linx
                 {
                     table.Rows.Add(records[i].lastupdateon, records[i].portal, records[i].cod_produto, records[i].cod_barra, records[i].nome, records[i].ncm,
                         records[i].cest, records[i].referencia, records[i].cod_auxiliar, records[i].unidade, records[i].desc_cor, records[i].desc_tamanho,
-                        records[i].desc_setor, records[i].desc_linha, records[i].desc_marca, records[i].desc_colecao, records[i].dt_update, records[i].cod_fornecedor, 
-                        records[i].desativado, records[i].desc_espessura, records[i].id_espessura, records[i].desc_classificacao, records[i].id_classificacao, 
-                        records[i].origem_mercadoria, records[i].peso_liquido, records[i].peso_bruto, records[i].id_cor, records[i].id_tamanho, records[i].id_setor, 
-                        records[i].id_linha, records[i].id_marca, records[i].id_colecao, records[i].dt_inclusao, records[i].timestamp, records[i].fator_conversao, 
-                        records[i].codigo_integracao_ws, records[i].codigo_integracao_reshop, records[i].id_produtos_opticos_tipo, records[i].id_sped_tipo_item, 
-                        records[i].componente, records[i].altura_para_frete, records[i].largura_para_frete, records[i].comprimento_para_frete, records[i].loja_virtual, 
+                        records[i].desc_setor, records[i].desc_linha, records[i].desc_marca, records[i].desc_colecao, records[i].dt_update, records[i].cod_fornecedor,
+                        records[i].desativado, records[i].desc_espessura, records[i].id_espessura, records[i].desc_classificacao, records[i].id_classificacao,
+                        records[i].origem_mercadoria, records[i].peso_liquido, records[i].peso_bruto, records[i].id_cor, records[i].id_tamanho, records[i].id_setor,
+                        records[i].id_linha, records[i].id_marca, records[i].id_colecao, records[i].dt_inclusao, records[i].timestamp, records[i].fator_conversao,
+                        records[i].codigo_integracao_ws, records[i].codigo_integracao_reshop, records[i].id_produtos_opticos_tipo, records[i].id_sped_tipo_item,
+                        records[i].componente, records[i].altura_para_frete, records[i].largura_para_frete, records[i].comprimento_para_frete, records[i].loja_virtual,
                         records[i].cod_comprador, records[i].obrigatorio_identificacao_cliente, records[i].descricao_basica, records[i].curva);
                 }
 

@@ -1,29 +1,39 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Infrastructure.LinxMicrovix.Outbound.WebService.Schema;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
 using Domain.LinxMicrovix.Outbound.WebService.Enums;
 using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
 
-
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
     public class LinxClientesEnderecosEntregaMap : IEntityTypeConfiguration<LinxClientesEnderecosEntrega>
     {
-        
-
-        
-
         public void Configure(EntityTypeBuilder<LinxClientesEnderecosEntrega> builder)
         {
+            var schema = SchemaContext.GetSchema(typeof(LinxClientesEnderecosEntrega));
+
             builder.ToTable("LinxClientesEnderecosEntrega");
 
-            builder.HasKey(e => e.id_endereco_entrega);
+            if (schema == "linx_microvix_erp")
+            {
+                builder.HasKey(e => e.id_endereco_entrega);
+                builder.Ignore(x => x.id);
+            }
+            else
+            {
+                builder.HasKey(x => x.id);
+
+                builder.Property(e => e.id)
+                    .HasColumnType("int")
+                    .ValueGeneratedOnAdd();
+            }
 
             builder.Property(e => e.lastupdateon)
                 .HasProviderColumnType(LogicalColumnType.DateTime);
 
-                builder.Property(e => e.id_endereco_entrega)
-                .HasColumnType("int");
+            builder.Property(e => e.id_endereco_entrega)
+            .HasColumnType("int");
 
             builder.Property(e => e.cod_cliente)
                 .HasColumnType("int");

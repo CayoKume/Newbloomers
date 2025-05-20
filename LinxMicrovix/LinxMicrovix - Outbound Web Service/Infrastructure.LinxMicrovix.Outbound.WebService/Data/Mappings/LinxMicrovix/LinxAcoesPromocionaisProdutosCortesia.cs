@@ -1,24 +1,34 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Infrastructure.LinxMicrovix.Outbound.WebService.Schema;
+using Microsoft.EntityFrameworkCore;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Domain.LinxMicrovix.Outbound.WebService.Enums;
 using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
 
-
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
     public class LinxAcoesPromocionaisProdutosCortesiaMap : IEntityTypeConfiguration<LinxAcoesPromocionaisProdutosCortesia>
     {
-        
-
-        
-
         public void Configure(EntityTypeBuilder<LinxAcoesPromocionaisProdutosCortesia> builder)
         {
-            builder
-                .ToTable("LinxAcoesPromocionaisProdutosCortesia")
-                .HasKey(x => x.id_acoes_promocionais_produtos_cortesia);
+            var schema = SchemaContext.GetSchema(typeof(LinxAcoesPromocionaisProdutosCortesia));
 
+            builder.ToTable("LinxAcoesPromocionaisProdutosCortesia");
+
+            if (schema == "linx_microvix_erp")
+            {
+                builder.HasKey(x => x.id_acoes_promocionais_produtos_cortesia);
+                builder.Ignore(e => e.id);
+            }
+            else
+            {
+                builder.HasKey(x => x.id);
+
+                builder.Property(e => e.id)
+                    .HasColumnType("int")
+                    .ValueGeneratedOnAdd();
+            }
+            
             builder
                 .Property(x => x.id_acoes_promocionais_produtos_cortesia)
                 .HasColumnType("int");

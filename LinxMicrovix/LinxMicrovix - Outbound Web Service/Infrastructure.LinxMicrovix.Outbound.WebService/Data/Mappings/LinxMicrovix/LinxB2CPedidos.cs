@@ -1,23 +1,33 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Infrastructure.LinxMicrovix.Outbound.WebService.Schema;
+using Microsoft.EntityFrameworkCore;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Domain.LinxMicrovix.Outbound.WebService.Enums;
 using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
 
-
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
     public class LinxB2CPedidosMap : IEntityTypeConfiguration<LinxB2CPedidos>
     {
-        
-
-        
-
         public void Configure(EntityTypeBuilder<LinxB2CPedidos> builder)
         {
+            var schema = SchemaContext.GetSchema(typeof(LinxB2CPedidos));
+
             builder.ToTable("LinxB2CPedidos");
 
-            builder.HasKey(e => new { e.id_pedido, e.cod_cliente_erp, e.cod_cliente_b2c, e.empresa, e.order_id });
+            if (schema == "linx_microvix_erp")
+            {
+                builder.HasKey(e => new { e.id_pedido, e.cod_cliente_erp, e.cod_cliente_b2c, e.empresa, e.order_id });
+                builder.Ignore(x => x.id);
+            }
+            else
+            {
+                builder.HasKey(x => x.id);
+
+                builder.Property(e => e.id)
+                    .HasColumnType("int")
+                    .ValueGeneratedOnAdd();
+            }
 
             builder.Property(e => e.lastupdateon)
                 .HasProviderColumnType(LogicalColumnType.DateTime);

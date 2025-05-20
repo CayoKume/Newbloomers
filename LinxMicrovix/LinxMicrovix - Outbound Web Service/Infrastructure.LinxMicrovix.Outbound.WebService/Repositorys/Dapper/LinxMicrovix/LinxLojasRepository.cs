@@ -24,9 +24,9 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.Dapper.Linx
                 {
                     table.Rows.Add(records[i].lastupdateon, records[i].portal, records[i].empresa, records[i].nome_emp, records[i].razao_emp, records[i].cnpj_emp,
                         records[i].inscricao_emp, records[i].endereco_emp, records[i].num_emp, records[i].complement_emp, records[i].bairro_emp, records[i].cep_emp,
-                        records[i].cidade_emp, records[i].estado_emp, records[i].fone_emp, records[i].email_emp, records[i].cod_ibge_municipio, records[i].data_criacao_emp, 
-                        records[i].data_criacao_portal, records[i].sistema_tributacao, records[i].regime_tributario, records[i].area_empresa, records[i].timestamp, 
-                        records[i].sigla_empresa, records[i].id_classe_fiscal, records[i].centro_distribuicao, records[i].inscricao_municipal_emp, records[i].cnae_emp, 
+                        records[i].cidade_emp, records[i].estado_emp, records[i].fone_emp, records[i].email_emp, records[i].cod_ibge_municipio, records[i].data_criacao_emp,
+                        records[i].data_criacao_portal, records[i].sistema_tributacao, records[i].regime_tributario, records[i].area_empresa, records[i].timestamp,
+                        records[i].sigla_empresa, records[i].id_classe_fiscal, records[i].centro_distribuicao, records[i].inscricao_municipal_emp, records[i].cnae_emp,
                         records[i].cod_cliente_linx, records[i].tabela_preco_preferencial);
                 }
 

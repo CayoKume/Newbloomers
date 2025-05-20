@@ -1,34 +1,45 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Infrastructure.LinxMicrovix.Outbound.WebService.Schema;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
 using Domain.LinxMicrovix.Outbound.WebService.Enums;
 using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
 
-
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
     public class LinxMovimentoMap : IEntityTypeConfiguration<LinxMovimento>
     {
-        
-
-        
-
         public void Configure(EntityTypeBuilder<LinxMovimento> builder)
         {
+            var schema = SchemaContext.GetSchema(typeof(LinxMovimento));
+
             builder.ToTable("LinxMovimento");
 
-            builder.HasKey(e => new { 
-                e.cnpj_emp, 
-                e.documento, 
-                e.chave_nf, 
-                e.data_documento, 
-                e.codigo_cliente, 
-                e.cod_produto, 
-                e.cancelado, 
-                e.excluido, 
-                e.transacao_pedido_venda, 
-                e.ordem 
-            });
+            if (schema == "linx_microvix_erp")
+            {
+                builder.HasKey(e => new
+                {
+                    e.cnpj_emp,
+                    e.documento,
+                    e.chave_nf,
+                    e.data_documento,
+                    e.codigo_cliente,
+                    e.cod_produto,
+                    e.cancelado,
+                    e.excluido,
+                    e.transacao_pedido_venda,
+                    e.ordem
+                });
+                builder.Ignore(x => x.id);
+            }
+            else
+            {
+                builder.HasKey(x => x.id);
+
+                builder.Property(e => e.id)
+                    .HasColumnType("int")
+                    .ValueGeneratedOnAdd();
+            }
 
             builder.Property(e => e.lastupdateon)
                 .HasProviderColumnType(LogicalColumnType.DateTime);

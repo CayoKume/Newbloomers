@@ -24,27 +24,27 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.Dapper.Linx
                 {
                     table.Rows.Add(records[i].lastupdateon, records[i].portal, records[i].cnpj_emp, records[i].transacao, records[i].usuario, records[i].documento,
                         records[i].chave_nf, records[i].ecf, records[i].numero_serie_ecf, records[i].modelo_nf, records[i].data_documento, records[i].data_lancamento,
-                        records[i].codigo_cliente, records[i].serie, records[i].desc_cfop, records[i].id_cfop, records[i].cod_vendedor, records[i].quantidade, records[i].preco_custo, 
-                        records[i].valor_liquido, records[i].desconto, records[i].cst_icms, records[i].cst_pis, records[i].cst_cofins, records[i].cst_ipi, records[i].valor_icms, 
-                        records[i].aliquota_icms, records[i].base_icms, records[i].valor_pis, records[i].aliquota_pis, records[i].base_pis, records[i].valor_cofins, records[i].aliquota_cofins, 
-                        records[i].base_cofins, records[i].valor_icms_st, records[i].aliquota_icms_st, records[i].base_icms_st, records[i].valor_ipi, records[i].aliquota_ipi, records[i].base_ipi, 
-                        records[i].valor_total, records[i].forma_dinheiro, records[i].total_dinheiro, records[i].forma_cheque, records[i].total_cheque, records[i].forma_cartao, records[i].total_cartao, 
-                        records[i].forma_crediario, records[i].total_crediario, records[i].forma_convenio, records[i].total_convenio, records[i].frete, records[i].operacao, records[i].tipo_transacao, 
-                        records[i].cod_produto, records[i].cod_barra, records[i].cancelado, records[i].excluido, records[i].soma_relatorio, records[i].identificador, records[i].deposito, records[i].obs, 
-                        records[i].preco_unitario, records[i].hora_lancamento, records[i].natureza_operacao, records[i].tabela_preco, records[i].nome_tabela_preco, records[i].cod_sefaz_situacao, 
-                        records[i].desc_sefaz_situacao, records[i].protocolo_aut_nfe, records[i].dt_update, records[i].forma_cheque_prazo, records[i].total_cheque_prazo, records[i].cod_natureza_operacao, 
-                        records[i].preco_tabela_epoca, records[i].desconto_total_item, records[i].conferido, records[i].transacao_pedido_venda, records[i].codigo_modelo_nf, records[i].acrescimo, 
-                        records[i].mob_checkout, records[i].aliquota_iss, records[i].base_iss, records[i].ordem, records[i].codigo_rotina_origem, records[i].timestamp, records[i].troco, records[i].transportador, 
-                        records[i].icms_aliquota_desonerado, records[i].icms_valor_desonerado_item, records[i].empresa, records[i].desconto_item, records[i].aliq_iss, records[i].iss_base_item, records[i].despesas, 
-                        records[i].seguro_total_item, records[i].acrescimo_total_item, records[i].despesas_total_item, records[i].forma_pix, records[i].total_pix, records[i].forma_deposito_bancario, 
-                        records[i].total_deposito_bancario, records[i].id_venda_produto_b2c, records[i].item_promocional, records[i].acrescimo_item, records[i].icms_st_antecipado_aliquota, records[i].icms_st_antecipado_margem, 
+                        records[i].codigo_cliente, records[i].serie, records[i].desc_cfop, records[i].id_cfop, records[i].cod_vendedor, records[i].quantidade, records[i].preco_custo,
+                        records[i].valor_liquido, records[i].desconto, records[i].cst_icms, records[i].cst_pis, records[i].cst_cofins, records[i].cst_ipi, records[i].valor_icms,
+                        records[i].aliquota_icms, records[i].base_icms, records[i].valor_pis, records[i].aliquota_pis, records[i].base_pis, records[i].valor_cofins, records[i].aliquota_cofins,
+                        records[i].base_cofins, records[i].valor_icms_st, records[i].aliquota_icms_st, records[i].base_icms_st, records[i].valor_ipi, records[i].aliquota_ipi, records[i].base_ipi,
+                        records[i].valor_total, records[i].forma_dinheiro, records[i].total_dinheiro, records[i].forma_cheque, records[i].total_cheque, records[i].forma_cartao, records[i].total_cartao,
+                        records[i].forma_crediario, records[i].total_crediario, records[i].forma_convenio, records[i].total_convenio, records[i].frete, records[i].operacao, records[i].tipo_transacao,
+                        records[i].cod_produto, records[i].cod_barra, records[i].cancelado, records[i].excluido, records[i].soma_relatorio, records[i].identificador, records[i].deposito, records[i].obs,
+                        records[i].preco_unitario, records[i].hora_lancamento, records[i].natureza_operacao, records[i].tabela_preco, records[i].nome_tabela_preco, records[i].cod_sefaz_situacao,
+                        records[i].desc_sefaz_situacao, records[i].protocolo_aut_nfe, records[i].dt_update, records[i].forma_cheque_prazo, records[i].total_cheque_prazo, records[i].cod_natureza_operacao,
+                        records[i].preco_tabela_epoca, records[i].desconto_total_item, records[i].conferido, records[i].transacao_pedido_venda, records[i].codigo_modelo_nf, records[i].acrescimo,
+                        records[i].mob_checkout, records[i].aliquota_iss, records[i].base_iss, records[i].ordem, records[i].codigo_rotina_origem, records[i].timestamp, records[i].troco, records[i].transportador,
+                        records[i].icms_aliquota_desonerado, records[i].icms_valor_desonerado_item, records[i].empresa, records[i].desconto_item, records[i].aliq_iss, records[i].iss_base_item, records[i].despesas,
+                        records[i].seguro_total_item, records[i].acrescimo_total_item, records[i].despesas_total_item, records[i].forma_pix, records[i].total_pix, records[i].forma_deposito_bancario,
+                        records[i].total_deposito_bancario, records[i].id_venda_produto_b2c, records[i].item_promocional, records[i].acrescimo_item, records[i].icms_st_antecipado_aliquota, records[i].icms_st_antecipado_margem,
                         records[i].icms_st_antecipado_percentual_reducao, records[i].icms_st_antecipado_valor_item, records[i].icms_base_desonerado_item, records[i].codigo_status_nfe);
                 }
 
-               _linxMicrovixRepositoryBase.BulkInsertIntoTableRaw(
-                    dataTable: table,
-                    dataTableRowsNumber: table.Rows.Count
-                );
+                _linxMicrovixRepositoryBase.BulkInsertIntoTableRaw(
+                     dataTable: table,
+                     dataTableRowsNumber: table.Rows.Count
+                 );
 
                 return true;
             }

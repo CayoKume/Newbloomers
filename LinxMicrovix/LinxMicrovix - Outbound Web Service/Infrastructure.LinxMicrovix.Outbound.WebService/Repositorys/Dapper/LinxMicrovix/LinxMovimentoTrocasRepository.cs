@@ -24,7 +24,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.Dapper.Linx
                 {
                     table.Rows.Add(records[i].lastupdateon, records[i].portal, records[i].cnpj_emp, records[i].identificador, records[i].num_vale, records[i].valor_vale,
                         records[i].motivo, records[i].doc_origem, records[i].serie_origem, records[i].doc_venda, records[i].serie_venda, records[i].excluido,
-                        records[i].timestamp, records[i].desfazimento, records[i].empresa, records[i].vale_cod_cliente, records[i].vale_codigoproduto, records[i].id_vale_ordem_servico_externa, 
+                        records[i].timestamp, records[i].desfazimento, records[i].empresa, records[i].vale_cod_cliente, records[i].vale_codigoproduto, records[i].id_vale_ordem_servico_externa,
                         records[i].doc_venda_origem, records[i].serie_venda_origem, records[i].cod_cliente);
                 }
 

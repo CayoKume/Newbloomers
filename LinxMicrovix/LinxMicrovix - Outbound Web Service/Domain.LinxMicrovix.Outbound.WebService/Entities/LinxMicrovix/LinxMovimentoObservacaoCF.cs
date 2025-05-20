@@ -1,4 +1,4 @@
-﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
+using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -8,7 +8,6 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
     public class LinxMovimentoObservacaoCF
     {
         [NotMapped]
-        [SkipProperty]
         public Int32 id { get; set; }
 
         public DateTime? lastupdateon { get; private set; }

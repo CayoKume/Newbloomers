@@ -1,10 +1,10 @@
 ﻿using Application.IntegrationsCore.Interfaces;
 using Application.IntegrationsCore.Services;
 using Domain.IntegrationsCore.Interfaces;
-using HangfireDashboard.Domain.Extensions;
 using Infrastructure.DatabaseInit;
 using Infrastructure.FlashCourier.DependencyInjection;
-using Infrastructure.IntegrationsCore.Repositorys;
+using Infrastructure.IntegrationsCore.DependencyInjection;
+using Infrastructure.IntegrationsCore.Repositorys.Dapper;
 using Infrastructure.Jadlog.DependencyInjection;
 using Infrastructure.LinxCommerce.DependencyInjection;
 using Infrastructure.LinxMicrovix.Outbound.WebService.DependencyInjection;

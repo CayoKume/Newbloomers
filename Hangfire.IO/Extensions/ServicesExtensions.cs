@@ -4,7 +4,6 @@ using Domain.IntegrationsCore.Interfaces;
 using Hangfire.SqlServer;
 using Infrastructure.FlashCourier.DependencyInjection;
 using Infrastructure.IntegrationsCore.DependencyInjection;
-using Infrastructure.IntegrationsCore.Repositorys;
 using Infrastructure.LinxCommerce.DependencyInjection;
 using Infrastructure.LinxMicrovix.Outbound.WebService.DependencyInjection;
 using Infrastructure.TotalExpress.DependencyInjection;
@@ -17,6 +16,7 @@ using Infrastructure.LinxMicrovix.Outbound.WebService.Data;
 using Infrastructure.FlashCourier.Data;
 using Infrastructure.Jadlog.Data;
 using Infrastructure.TotalExpress.Data;
+using Infrastructure.IntegrationsCore.Repositorys.Dapper;
 
 namespace Hangfire.IO.Extensions
 {

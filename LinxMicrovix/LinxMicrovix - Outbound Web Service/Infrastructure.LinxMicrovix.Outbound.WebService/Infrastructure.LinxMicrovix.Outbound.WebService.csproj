@@ -14,7 +14,7 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
-    <Folder Include="Repositorys\EFCore\" />
+    <Folder Include="Repositorys\EFCore\LinxMicrovix\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -5,19 +5,22 @@ using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce;
+using Infrastructure.LinxMicrovix.Outbound.WebService.Schema;
+using Infrastructure.IntegrationsCore.Data;
+using MySqlX.XDevAPI;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data
 {
     public class LinxMicrovixOutboundDbContext : DbContext
     {
         private readonly IConfiguration _configuration;
-        private readonly ISchemaConfigurable _schemaEcomConfigurable;
+        private readonly ISchemaConfigurable _schemaConfigurable;
 
         public LinxMicrovixOutboundDbContext(DbContextOptions<LinxMicrovixOutboundDbContext> options, IConfiguration configuration, ISchemaConfigurable schemaConfigurable)
         : base(options)
         {
             _configuration = configuration;
-            _schemaEcomConfigurable = schemaConfigurable;
+            _schemaConfigurable = schemaConfigurable;
         }
 
         public DbSet<LinxAcoesPromocionais> LinxAcoesPromocionais { get; set; } = null!;
@@ -246,6 +249,31 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            SchemaContext.Clear();
+
+            var configTypes = typeof(LinxMicrovixOutboundDbContext).Assembly.GetTypes()
+                .Where(t => !t.IsAbstract && !t.IsInterface)
+                .SelectMany(t => t.GetInterfaces()
+                    .Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEntityTypeConfiguration<>))
+                    .Select(i => new { ConfigType = t, EntityType = i.GetGenericArguments()[0] }))
+                .ToList();
+
+            foreach (var config in configTypes)
+            {
+                var schema = String.Empty;
+
+                if (config.EntityType.Namespace?.Contains("Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce") == true)
+                    schema = _schemaConfigurable.SetEcomSchema();
+
+                if (config.EntityType.Namespace?.Contains("Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix") == true)
+                    schema = _schemaConfigurable.SetErpSchema();
+
+                //schema = _schemaConfigurable.SetUnteatredSchema();
+
+                //Console.WriteLine($"[DEBUG] Registrando schema para {config.EntityType.Name}: {schema}");
+                SchemaContext.RegisterSchema(config.EntityType, schema);
+            }
+
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(Infrastructure.LinxMicrovix.Outbound.WebService.DependencyInjection.DependencyInjection).Assembly);
 
             string? providerName = Database.ProviderName;
@@ -272,7 +300,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data
                             .Where(x => x.IsActive == false)
                             .ToList();
 
-            if (providerKey == null) 
+            if (providerKey == null)
                 return;
 
             var typeMappings = ProviderColumnTypeMappings.Mappings[providerKey];
@@ -312,12 +340,12 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data
                 var clrType = entityType.ClrType;
 
                 if (clrType.Namespace?.Contains("Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce") == true)
-                    schema = _schemaEcomConfigurable.SetEcomSchema();
-                
-                if (clrType.Namespace?.Contains("Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix") == true)
-                    schema = _schemaEcomConfigurable.SetErpSchema();
+                    schema = _schemaConfigurable.SetEcomSchema();
 
-                //schema = _schemaEcomConfigurable.SetUnteatredSchema();
+                if (clrType.Namespace?.Contains("Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix") == true)
+                    schema = _schemaConfigurable.SetErpSchema();
+
+                //schema = _schemaConfigurable.SetUnteatredSchema();
 
                 entityType.SetSchema(schema);
             }

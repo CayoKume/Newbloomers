@@ -1,23 +1,33 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Infrastructure.LinxMicrovix.Outbound.WebService.Schema;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
 using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
 using Domain.LinxMicrovix.Outbound.WebService.Enums;
 
-
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
     public class LinxSpedTipoItemMap : IEntityTypeConfiguration<LinxSpedTipoItem>
     {
-        
-
-        
-
         public void Configure(EntityTypeBuilder<LinxSpedTipoItem> builder)
         {
+            var schema = SchemaContext.GetSchema(typeof(LinxSpedTipoItem));
+
             builder.ToTable("LinxSpedTipoItem");
 
-            builder.HasKey(e => e.id_sped_tipo_item);
+            if (schema == "linx_microvix_erp")
+            {
+                builder.HasKey(e => e.id_sped_tipo_item);
+                builder.Ignore(x => x.id);
+            }
+            else
+            {
+                builder.HasKey(x => x.id);
+
+                builder.Property(e => e.id)
+                    .HasColumnType("int")
+                    .ValueGeneratedOnAdd();
+            }
 
             builder.Property(e => e.lastupdateon)
                 .HasProviderColumnType(LogicalColumnType.DateTime);

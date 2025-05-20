@@ -1,23 +1,33 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Infrastructure.LinxMicrovix.Outbound.WebService.Schema;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
 using Domain.LinxMicrovix.Outbound.WebService.Enums;
 using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
 
-
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
     public class LinxNfceEstacaoMap : IEntityTypeConfiguration<LinxNfceEstacao>
     {
-        
-
-        
-
         public void Configure(EntityTypeBuilder<LinxNfceEstacao> builder)
         {
+            var schema = SchemaContext.GetSchema(typeof(LinxNfceEstacao));
+
             builder.ToTable("LinxNfceEstacao");
 
-            builder.HasKey(e => e.id_nfce_estacao);
+            if (schema == "linx_microvix_erp")
+            {
+                builder.HasKey(e => e.id_nfce_estacao);
+                builder.Ignore(x => x.id);
+            }
+            else
+            {
+                builder.HasKey(x => x.id);
+
+                builder.Property(e => e.id)
+                    .HasColumnType("int")
+                    .ValueGeneratedOnAdd();
+            }
 
             builder.Property(e => e.lastupdateon)
                 .HasProviderColumnType(LogicalColumnType.DateTime);

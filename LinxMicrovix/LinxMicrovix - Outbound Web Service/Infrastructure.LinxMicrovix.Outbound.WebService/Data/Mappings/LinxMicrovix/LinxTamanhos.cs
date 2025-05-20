@@ -1,20 +1,18 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Infrastructure.LinxMicrovix.Outbound.WebService.Schema;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
 using Domain.LinxMicrovix.Outbound.WebService.Enums;
 using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
 
-
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
     public class LinxTamanhosMap : IEntityTypeConfiguration<LinxTamanhos>
     {
-        
-
-        
-
         public void Configure(EntityTypeBuilder<LinxTamanhos> builder)
         {
+            var schema = SchemaContext.GetSchema(typeof(LinxTamanhos));
+
             builder.ToTable("LinxTamanhos");
 
             builder.HasKey(e => e.id);

@@ -1,23 +1,33 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Infrastructure.LinxMicrovix.Outbound.WebService.Schema;
+using Microsoft.EntityFrameworkCore;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Domain.LinxMicrovix.Outbound.WebService.Enums;
 using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
 
-
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
     public class LinxAntecipacoesFinanceirasPlanosMap : IEntityTypeConfiguration<LinxAntecipacoesFinanceirasPlanos>
     {
-        
-
-        
-
         public void Configure(EntityTypeBuilder<LinxAntecipacoesFinanceirasPlanos> builder)
         {
-            builder
-                .ToTable("LinxAntecipacoesFinanceirasPlanos")
-                .HasKey(x => x.plano);
+            var schema = SchemaContext.GetSchema(typeof(LinxAntecipacoesFinanceirasPlanos));
+
+            builder.ToTable("LinxAntecipacoesFinanceirasPlanos");
+
+            if (schema == "linx_microvix_erp")
+            {
+                builder.HasKey(x => x.plano);
+                builder.Ignore(x => x.id);
+            }
+            else
+            {
+                builder.HasKey(x => x.id);
+
+                builder.Property(e => e.id)
+                    .HasColumnType("int")
+                    .ValueGeneratedOnAdd();
+            }
 
             builder
                 .Property(x => x.plano)

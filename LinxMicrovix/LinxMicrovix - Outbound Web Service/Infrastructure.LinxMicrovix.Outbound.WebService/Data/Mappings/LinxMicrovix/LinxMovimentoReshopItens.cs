@@ -1,23 +1,33 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Infrastructure.LinxMicrovix.Outbound.WebService.Schema;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
 using Domain.LinxMicrovix.Outbound.WebService.Enums;
 using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
 
-
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
     public class LinxMovimentoReshopItensMap : IEntityTypeConfiguration<LinxMovimentoReshopItens>
     {
-        
-
-        
-
         public void Configure(EntityTypeBuilder<LinxMovimentoReshopItens> builder)
         {
+            var schema = SchemaContext.GetSchema(typeof(LinxMovimentoReshopItens));
+
             builder.ToTable("LinxMovimentoReshopItens");
 
-            builder.HasKey(e => e.id_movimento_campanha_reshop_item);
+            if (schema == "linx_microvix_erp")
+            {
+                builder.HasKey(e => e.id_movimento_campanha_reshop_item);
+                builder.Ignore(x => x.id);
+            }
+            else
+            {
+                builder.HasKey(x => x.id);
+
+                builder.Property(e => e.id)
+                    .HasColumnType("int")
+                    .ValueGeneratedOnAdd();
+            }
 
             builder.Property(e => e.lastupdateon)
                 .HasProviderColumnType(LogicalColumnType.DateTime);

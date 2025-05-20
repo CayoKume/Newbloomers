@@ -1,28 +1,39 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Infrastructure.LinxMicrovix.Outbound.WebService.Schema;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
 using Domain.LinxMicrovix.Outbound.WebService.Enums;
 using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
 
-
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
     public class LinxMovimentoCartoesMap : IEntityTypeConfiguration<LinxMovimentoCartoes>
     {
-        
-
-        
-
         public void Configure(EntityTypeBuilder<LinxMovimentoCartoes> builder)
         {
+            var schema = SchemaContext.GetSchema(typeof(LinxMovimentoCartoes));
+
             builder.ToTable("LinxMovimentoCartoes");
 
-            builder.HasKey(e => new { 
-                e.identificador, 
-                e.cnpj_emp, 
-                e.cupomfiscal, 
-                e.cod_autorizacao 
-            });
+            if (schema == "linx_microvix_erp")
+            {
+                builder.HasKey(e => new
+                {
+                    e.identificador,
+                    e.cnpj_emp,
+                    e.cupomfiscal,
+                    e.cod_autorizacao
+                });
+                builder.Ignore(x => x.id);
+            }
+            else
+            {
+                builder.HasKey(x => x.id);
+
+                builder.Property(e => e.id)
+                    .HasColumnType("int")
+                    .ValueGeneratedOnAdd();
+            }
 
             builder.Property(e => e.lastupdateon)
                 .HasProviderColumnType(LogicalColumnType.DateTime);

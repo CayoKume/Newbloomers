@@ -24,7 +24,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.Dapper.Linx
                 {
                     table.Rows.Add(records[i].lastupdateon, records[i].identificador, records[i].portal, records[i].cnpj_emp, records[i].codlojasitef, records[i].data_lancamento,
                         records[i].cupomfiscal, records[i].credito_debito, records[i].id_cartao_bandeira, records[i].descricao_bandeira, records[i].valor, records[i].ordem_cartao,
-                        records[i].nsu_host, records[i].nsu_sitef, records[i].cod_autorizacao, records[i].id_antecipacoes_financeiras, records[i].transacao_servico_terceiro, 
+                        records[i].nsu_host, records[i].nsu_sitef, records[i].cod_autorizacao, records[i].id_antecipacoes_financeiras, records[i].transacao_servico_terceiro,
                         records[i].texto_comprovante, records[i].id_maquineta_pos, records[i].descricao_maquineta, records[i].serie_maquineta, records[i].timestamp, records[i].cartao_prepago);
                 }
 

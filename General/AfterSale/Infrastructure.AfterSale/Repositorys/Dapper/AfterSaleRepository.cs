@@ -11,14 +11,14 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using System.Reflection;
 
-namespace Domain.AfterSale.Interfaces;
+namespace Infrastructure.AfterSale.Repositorys.Dapper;
 
 public class AfterSaleRepository : IAfterSaleRepository
 {
     private readonly ISQLServerConnection? _sqlServerConnection;
 
     public AfterSaleRepository(ISQLServerConnection? sqlServerConnection) =>
-            (_sqlServerConnection) = (sqlServerConnection);
+            _sqlServerConnection = sqlServerConnection;
 
     public async Task<IEnumerable<Company>> GetCompanys()
     {
@@ -75,7 +75,7 @@ public class AfterSaleRepository : IAfterSaleRepository
         throw new NotImplementedException();
     }
 
-    public async Task<bool> InsertIntoAfterSaleReverses(List<Data> data)
+    public async Task<bool> InsertIntoAfterSaleReverses(List<Domain.AfterSale.Entities.Data> data)
     {
         var reversesTable = CreateSystemDataTable(new ReverseComplete(), "AfterSaleReverses");
         var customerTable = CreateSystemDataTable(new CustomerComplete(), "AfterSaleCustomer");
@@ -204,7 +204,7 @@ public class AfterSaleRepository : IAfterSaleRepository
         }
     }
 
-    private  DataTable CreateSystemDataTable<TEntity>(TEntity entity, string tableName)
+    private DataTable CreateSystemDataTable<TEntity>(TEntity entity, string tableName)
     {
         try
         {

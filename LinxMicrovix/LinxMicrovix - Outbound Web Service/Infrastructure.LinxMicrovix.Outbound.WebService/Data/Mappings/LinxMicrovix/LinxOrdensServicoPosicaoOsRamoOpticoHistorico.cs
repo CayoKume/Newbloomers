@@ -1,23 +1,33 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Infrastructure.LinxMicrovix.Outbound.WebService.Schema;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
 using Domain.LinxMicrovix.Outbound.WebService.Enums;
 using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
 
-
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
     public class LinxOrdensServicoPosicaoOsRamoOpticoHistoricoMap : IEntityTypeConfiguration<LinxOrdensServicoPosicaoOsRamoOpticoHistorico>
     {
-        
-
-        
-
         public void Configure(EntityTypeBuilder<LinxOrdensServicoPosicaoOsRamoOpticoHistorico> builder)
         {
+            var schema = SchemaContext.GetSchema(typeof(LinxOrdensServicoPosicaoOsRamoOpticoHistorico));
+
             builder.ToTable("LinxOrdensServicoPosicaoOsRamoOpticoHistorico");
 
-            builder.HasKey(e => e.id_ordens_servico_posicao_os_ramo_optico_historico);
+            if (schema == "linx_microvix_erp")
+            {
+                builder.HasKey(e => e.id_ordens_servico_posicao_os_ramo_optico_historico);
+                builder.Ignore(x => x.id);
+            }
+            else
+            {
+                builder.HasKey(x => x.id);
+
+                builder.Property(e => e.id)
+                    .HasColumnType("int")
+                    .ValueGeneratedOnAdd();
+            }
 
             builder.Property(e => e.lastupdateon)
                 .HasProviderColumnType(LogicalColumnType.DateTime);
