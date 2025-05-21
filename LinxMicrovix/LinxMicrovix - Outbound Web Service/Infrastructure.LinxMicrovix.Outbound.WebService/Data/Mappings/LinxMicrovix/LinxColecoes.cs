@@ -1,9 +1,9 @@
-using Infrastructure.LinxMicrovix.Outbound.WebService.Schema;
+using Infrastructure.IntegrationsCore.Data.Schemas;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
-using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
-using Domain.LinxMicrovix.Outbound.WebService.Enums;
+using Infrastructure.IntegrationsCore.Data.Extensions;
+using Domain.IntegrationsCore.Entities.Enums;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
@@ -30,7 +30,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
             }
 
             builder.Property(e => e.lastupdateon)
-                .HasProviderColumnType(LogicalColumnType.DateTime);
+                .HasProviderColumnType(EnumTableColumnType.DateTime);
 
             builder.Property(e => e.id_colecao)
                 .HasColumnType("int");

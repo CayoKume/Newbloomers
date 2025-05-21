@@ -1,9 +1,9 @@
-using Infrastructure.LinxMicrovix.Outbound.WebService.Schema;
+using Infrastructure.IntegrationsCore.Data.Schemas;
 using Microsoft.EntityFrameworkCore;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Domain.LinxMicrovix.Outbound.WebService.Enums;
-using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
+using Domain.IntegrationsCore.Entities.Enums;
+using Infrastructure.IntegrationsCore.Data.Extensions;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
@@ -30,13 +30,13 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
             }
 
             builder.Property(e => e.lastupdateon)
-                .HasProviderColumnType(LogicalColumnType.DateTime);
+                .HasProviderColumnType(EnumTableColumnType.DateTime);
 
             builder.Property(e => e.id_pedido)
                 .HasColumnType("int");
 
             builder.Property(e => e.dt_pedido)
-                .HasProviderColumnType(LogicalColumnType.DateTime);
+                .HasProviderColumnType(EnumTableColumnType.DateTime);
 
             builder.Property(e => e.cod_cliente_erp)
                 .HasColumnType("int");
@@ -60,7 +60,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasColumnType("decimal(10,2)");
 
             builder.Property(e => e.finalizado)
-                .HasProviderColumnType(LogicalColumnType.Bool);
+                .HasProviderColumnType(EnumTableColumnType.Bool);
 
             builder.Property(e => e.valor_frete_gratis)
                 .HasColumnType("decimal(10,2)");
@@ -78,7 +78,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasColumnType("int");
 
             builder.Property(e => e.ativo)
-                .HasProviderColumnType(LogicalColumnType.Bool);
+                .HasProviderColumnType(EnumTableColumnType.Bool);
 
             builder.Property(e => e.empresa)
                 .HasColumnType("int");
@@ -96,13 +96,13 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasColumnType("bigint");
 
             builder.Property(e => e.dt_insert)
-                .HasProviderColumnType(LogicalColumnType.DateTime);
+                .HasProviderColumnType(EnumTableColumnType.DateTime);
 
             builder.Property(e => e.dt_disponivel_faturamento)
-                .HasProviderColumnType(LogicalColumnType.DateTime);
+                .HasProviderColumnType(EnumTableColumnType.DateTime);
 
             builder.Property(e => e.mensagem_falha_faturamento)
-                .HasProviderColumnType(LogicalColumnType.Varchar_Max);
+                .HasProviderColumnType(EnumTableColumnType.Varchar_Max);
 
             builder.Property(e => e.portal)
                 .HasColumnType("int");

@@ -1,6 +1,4 @@
-﻿using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Schema;
-
-namespace Infrastructure.LinxMicrovix.Outbound.WebService.Schema
+﻿namespace Infrastructure.IntegrationsCore.Data.Schemas
 {
     public static class SchemaContext
     {

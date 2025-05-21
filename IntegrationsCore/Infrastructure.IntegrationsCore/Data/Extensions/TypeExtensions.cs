@@ -1,4 +1,4 @@
-﻿namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions
+﻿namespace Infrastructure.IntegrationsCore.Data.Extensions
 {
     public static class TypeExtensions
     {

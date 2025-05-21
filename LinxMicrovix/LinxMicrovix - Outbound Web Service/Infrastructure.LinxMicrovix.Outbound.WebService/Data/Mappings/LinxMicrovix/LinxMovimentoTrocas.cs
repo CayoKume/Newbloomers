@@ -1,9 +1,9 @@
-using Infrastructure.LinxMicrovix.Outbound.WebService.Schema;
+using Infrastructure.IntegrationsCore.Data.Schemas;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
-using Domain.LinxMicrovix.Outbound.WebService.Enums;
-using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
+using Domain.IntegrationsCore.Entities.Enums;
+using Infrastructure.IntegrationsCore.Data.Extensions;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
@@ -38,7 +38,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
             }
 
             builder.Property(e => e.lastupdateon)
-                .HasProviderColumnType(LogicalColumnType.DateTime);
+                .HasProviderColumnType(EnumTableColumnType.DateTime);
 
             builder.Property(e => e.portal)
                 .HasColumnType("int");
@@ -47,7 +47,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasColumnType("varchar(14)");
 
             builder.Property(e => e.identificador)
-                .HasProviderColumnType(LogicalColumnType.UUID);
+                .HasProviderColumnType(EnumTableColumnType.UUID);
 
             builder.Property(e => e.num_vale)
                 .HasColumnType("bigint");
@@ -71,13 +71,13 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasColumnType("char(10)");
 
             builder.Property(e => e.excluido)
-                .HasProviderColumnType(LogicalColumnType.Bool);
+                .HasProviderColumnType(EnumTableColumnType.Bool);
 
             builder.Property(e => e.timestamp)
                 .HasColumnType("bigint");
 
             builder.Property(e => e.desfazimento)
-                .HasProviderColumnType(LogicalColumnType.Bool);
+                .HasProviderColumnType(EnumTableColumnType.Bool);
 
             builder.Property(e => e.empresa)
                 .HasColumnType("int");

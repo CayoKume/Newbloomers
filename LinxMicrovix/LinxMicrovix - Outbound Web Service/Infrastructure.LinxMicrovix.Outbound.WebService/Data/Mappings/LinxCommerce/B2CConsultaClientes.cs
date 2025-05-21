@@ -1,9 +1,9 @@
-using Infrastructure.LinxMicrovix.Outbound.WebService.Schema;
+using Infrastructure.IntegrationsCore.Data.Schemas;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce;
-using Domain.LinxMicrovix.Outbound.WebService.Enums;
-using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
+using Domain.IntegrationsCore.Entities.Enums;
+using Infrastructure.IntegrationsCore.Data.Extensions;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxCommerce
@@ -31,7 +31,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxComm
             }
             
             builder.Property(e => e.lastupdateon)
-                .HasProviderColumnType(LogicalColumnType.DateTime);
+                .HasProviderColumnType(EnumTableColumnType.DateTime);
 
             builder.Property(e => e.cod_cliente_b2c)
                 .HasColumnType("int");
@@ -55,10 +55,10 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxComm
                 .HasColumnType("varchar(50)");
 
             builder.Property(e => e.dt_cadastro)
-                .HasProviderColumnType(LogicalColumnType.DateTime);
+                .HasProviderColumnType(EnumTableColumnType.DateTime);
 
             builder.Property(e => e.dt_nasc_cliente)
-                .HasProviderColumnType(LogicalColumnType.DateTime);
+                .HasProviderColumnType(EnumTableColumnType.DateTime);
 
             builder.Property(e => e.end_cliente)
                 .HasColumnType("varchar(250)");
@@ -100,7 +100,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxComm
                 .HasColumnType("varchar(7)");
 
             builder.Property(e => e.estado_civil_cliente)
-                .HasProviderColumnType(LogicalColumnType.TinyInt);
+                .HasProviderColumnType(EnumTableColumnType.TinyInt);
 
             builder.Property(e => e.empresa_cliente)
                 .HasColumnType("varchar(30)");
@@ -112,22 +112,22 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxComm
                 .HasColumnType("char(1)");
 
             builder.Property(e => e.dt_update)
-                .HasProviderColumnType(LogicalColumnType.DateTime);
+                .HasProviderColumnType(EnumTableColumnType.DateTime);
 
             builder.Property(e => e.ativo)
-                .HasProviderColumnType(LogicalColumnType.Bool);
+                .HasProviderColumnType(EnumTableColumnType.Bool);
 
             builder.Property(e => e.receber_email)
-                .HasProviderColumnType(LogicalColumnType.Bool);
+                .HasProviderColumnType(EnumTableColumnType.Bool);
 
             builder.Property(e => e.dt_expedicao_rg)
-                .HasProviderColumnType(LogicalColumnType.DateTime);
+                .HasProviderColumnType(EnumTableColumnType.DateTime);
 
             builder.Property(e => e.naturalidade)
                 .HasColumnType("varchar(40)");
 
             builder.Property(e => e.tempo_residencia)
-                .HasProviderColumnType(LogicalColumnType.TinyInt);
+                .HasProviderColumnType(EnumTableColumnType.TinyInt);
 
             builder.Property(e => e.renda)
                 .HasColumnType("decimal(10,2)");
@@ -145,7 +145,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxComm
                 .HasColumnType("int");
 
             builder.Property(e => e.aceita_programa_fidelidade)
-                .HasProviderColumnType(LogicalColumnType.Bool);
+                .HasProviderColumnType(EnumTableColumnType.Bool);
         }
     }
 }

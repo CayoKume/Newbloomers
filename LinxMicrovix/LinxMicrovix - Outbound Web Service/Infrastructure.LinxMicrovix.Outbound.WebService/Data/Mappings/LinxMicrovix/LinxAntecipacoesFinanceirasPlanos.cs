@@ -1,9 +1,9 @@
-using Infrastructure.LinxMicrovix.Outbound.WebService.Schema;
+using Infrastructure.IntegrationsCore.Data.Schemas;
 using Microsoft.EntityFrameworkCore;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Domain.LinxMicrovix.Outbound.WebService.Enums;
-using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
+using Domain.IntegrationsCore.Entities.Enums;
+using Infrastructure.IntegrationsCore.Data.Extensions;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
@@ -51,15 +51,15 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
 
             builder
                 .Property(x => x.lastupdateon)
-                .HasProviderColumnType(LogicalColumnType.DateTime);
+                .HasProviderColumnType(EnumTableColumnType.DateTime);
 
             builder
                 .Property(x => x.previsao_entrega)
-                .HasProviderColumnType(LogicalColumnType.DateTime);
+                .HasProviderColumnType(EnumTableColumnType.DateTime);
 
             builder
                 .Property(x => x.cancelado)
-                .HasProviderColumnType(LogicalColumnType.Bool);
+                .HasProviderColumnType(EnumTableColumnType.Bool);
 
             builder
                 .Property(x => x.portal)

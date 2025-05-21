@@ -1,9 +1,9 @@
-using Infrastructure.LinxMicrovix.Outbound.WebService.Schema;
+using Infrastructure.IntegrationsCore.Data.Schemas;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce;
-using Domain.LinxMicrovix.Outbound.WebService.Enums;
-using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
+using Domain.IntegrationsCore.Entities.Enums;
+using Infrastructure.IntegrationsCore.Data.Extensions;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxCommerce
@@ -31,7 +31,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxComm
             }
             
             builder.Property(e => e.lastupdateon)
-                .HasProviderColumnType(LogicalColumnType.DateTime);
+                .HasProviderColumnType(EnumTableColumnType.DateTime);
 
             builder.Property(e => e.id_pedido_planos)
                 .HasColumnType("bigint");
@@ -52,7 +52,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxComm
                 .HasColumnType("varchar(50)");
 
             builder.Property(e => e.texto_comprovante)
-                .HasProviderColumnType(LogicalColumnType.Varchar_Max);
+                .HasProviderColumnType(EnumTableColumnType.Varchar_Max);
 
             builder.Property(e => e.cod_loja_sitef)
                 .HasColumnType("varchar(10)");

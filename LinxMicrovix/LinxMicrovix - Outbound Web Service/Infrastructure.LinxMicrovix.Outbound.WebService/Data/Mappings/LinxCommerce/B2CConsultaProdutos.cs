@@ -1,9 +1,9 @@
-using Infrastructure.LinxMicrovix.Outbound.WebService.Schema;
+using Infrastructure.IntegrationsCore.Data.Schemas;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce;
-using Domain.LinxMicrovix.Outbound.WebService.Enums;
-using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
+using Domain.IntegrationsCore.Entities.Enums;
+using Infrastructure.IntegrationsCore.Data.Extensions;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxCommerce
@@ -31,7 +31,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxComm
             }
             
             builder.Property(e => e.lastupdateon)
-                .HasProviderColumnType(LogicalColumnType.DateTime);
+                .HasProviderColumnType(EnumTableColumnType.DateTime);
 
             builder.Property(e => e.codigoproduto)
                 .HasColumnType("bigint");
@@ -76,22 +76,22 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxComm
                 .HasColumnType("varchar(50)");
 
             builder.Property(e => e.ativo)
-                .HasProviderColumnType(LogicalColumnType.Bool);
+                .HasProviderColumnType(EnumTableColumnType.Bool);
 
             builder.Property(e => e.codigo_classificacao)
                 .HasColumnType("int");
 
             builder.Property(e => e.dt_cadastro)
-                .HasProviderColumnType(LogicalColumnType.DateTime);
+                .HasProviderColumnType(EnumTableColumnType.DateTime);
 
             builder.Property(e => e.observacao)
-                .HasProviderColumnType(LogicalColumnType.Varchar_Max);
+                .HasProviderColumnType(EnumTableColumnType.Varchar_Max);
 
             builder.Property(e => e.cod_fornecedor)
                 .HasColumnType("int");
 
             builder.Property(e => e.dt_update)
-                .HasProviderColumnType(LogicalColumnType.DateTime);
+                .HasProviderColumnType(EnumTableColumnType.DateTime);
 
             builder.Property(e => e.altura_para_frete)
                 .HasColumnType("decimal(10,2)");
@@ -115,7 +115,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxComm
                 .HasColumnType("varchar(8000)");
 
             builder.Property(e => e.canais_ecommerce_publicados)
-                .HasProviderColumnType(LogicalColumnType.TinyInt);
+                .HasProviderColumnType(EnumTableColumnType.TinyInt);
 
             builder.Property(e => e.inicio_publicacao_produto)
                 .HasColumnType("date");

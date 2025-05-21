@@ -1,13 +1,11 @@
 ﻿using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Schemas;
-using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings;
+using Infrastructure.IntegrationsCore.Data.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce;
-using Infrastructure.LinxMicrovix.Outbound.WebService.Schema;
-using Infrastructure.IntegrationsCore.Data;
-using MySqlX.XDevAPI;
+using Infrastructure.IntegrationsCore.Data.Schemas;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data
 {
@@ -303,7 +301,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data
             if (providerKey == null)
                 return;
 
-            var typeMappings = ProviderColumnTypeMappings.Mappings[providerKey];
+            var typeMappings = ProviderColumnTypes.Mappings[providerKey];
 
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {

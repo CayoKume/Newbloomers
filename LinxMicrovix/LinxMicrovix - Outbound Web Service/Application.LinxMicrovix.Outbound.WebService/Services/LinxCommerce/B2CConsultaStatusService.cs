@@ -1,7 +1,6 @@
 ﻿using Application.IntegrationsCore.Interfaces;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxCommerce;
-using Dapper;
 using Domain.IntegrationsCore.Entities.Enums;
 using Domain.IntegrationsCore.Exceptions;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce;

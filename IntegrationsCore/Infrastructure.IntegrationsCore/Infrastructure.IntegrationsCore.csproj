@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Application.IntegrationsCore\Application.IntegrationsCore.csproj" />
     <ProjectReference Include="..\Domain.IntegrationsCore\Domain.IntegrationsCore.csproj" />
   </ItemGroup>
 

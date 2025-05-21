@@ -1,13 +1,13 @@
-﻿using Domain.LinxMicrovix.Outbound.WebService.Enums;
+﻿using Domain.IntegrationsCore.Entities.Enums;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions
+namespace Infrastructure.IntegrationsCore.Data.Extensions
 {
     public static class PropertyBuilderExtensions
     {
         public static PropertyBuilder<TProperty> HasProviderColumnType<TProperty>(
             this PropertyBuilder<TProperty> builder,
-            LogicalColumnType logicalType)
+            EnumTableColumnType logicalType)
         {
             return builder.HasAnnotation("Custom:ColumnTypeMapper", logicalType.ToString());
         }

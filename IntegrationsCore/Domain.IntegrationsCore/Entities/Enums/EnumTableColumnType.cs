@@ -1,6 +1,6 @@
 ﻿namespace Domain.IntegrationsCore.Entities.Enums
 {
-    public enum LogicalColumnType
+    public enum EnumTableColumnType
     {
         Bool,
         TinyInt,

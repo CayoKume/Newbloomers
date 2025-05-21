@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
-using Domain.LinxMicrovix.Outbound.WebService.Enums;
-using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
-using Infrastructure.LinxMicrovix.Outbound.WebService.Schema;
+using Domain.IntegrationsCore.Entities.Enums;
+using Infrastructure.IntegrationsCore.Data.Extensions;
+using Infrastructure.IntegrationsCore.Data.Schemas;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
@@ -30,13 +30,13 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
             }
 
             builder.Property(e => e.lastupdateon)
-                .HasProviderColumnType(LogicalColumnType.DateTime);
+                .HasProviderColumnType(EnumTableColumnType.DateTime);
 
             builder.Property(e => e.id_movimento_ordem_servico_externa)
                 .HasColumnType("int");
 
             builder.Property(e => e.identificador)
-                .HasProviderColumnType(LogicalColumnType.UUID);
+                .HasProviderColumnType(EnumTableColumnType.UUID);
 
             builder.Property(e => e.codigo_ordem_servico)
                 .HasColumnType("varchar(20)");
