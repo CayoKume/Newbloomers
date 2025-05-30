@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 
-namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
+namespace Domain.LinxMicrovix.Outbound.WebService.Entities.LinxMicrovix
 {
     public class LinxFaturas
     {

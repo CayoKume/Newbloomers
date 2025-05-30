@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 
-namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
+namespace Domain.LinxMicrovix.Outbound.WebService.Entities.LinxCommerce
 {
     public class B2CConsultaPedidosStatus
     {

@@ -3,8 +3,8 @@ using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxMicrovix;
 using Domain.IntegrationsCore.Entities.Enums;
 using Domain.IntegrationsCore.Exceptions;
-using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
-using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
+using Domain.LinxMicrovix.Outbound.WebService.Entities.LinxMicrovix;
+using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Api;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxMicrovix;
@@ -113,10 +113,10 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                 {
                     var body = _linxMicrovixServiceBase.BuildBodyRequest(
                                 parametersList: parameters
-                                                .Replace("[data_cad_inicial]", $"{DateTime.Today.AddDays(-7).ToString("yyyy-MM-dd")}")
-                                                .Replace("[data_cad_fim]", $"{DateTime.Today.ToString("yyyy-MM-dd")}")
-                                                .Replace("[data_vig_inicial]", $"{DateTime.Today.AddDays(-7).ToString("yyyy-MM-dd")}")
-                                                .Replace("[data_vig_fim]", $"{DateTime.Today.ToString("yyyy-MM-dd")}")
+                                                .Replace("[data_cad_inicial]", $"2000-01-01")
+                                                .Replace("[data_cad_fim]", $"{DateTime.Today.AddYears(5).ToString("yyyy-MM-dd")}")
+                                                .Replace("[data_vig_inicial]", $"2000-01-01")
+                                                .Replace("[data_vig_fim]", $"{DateTime.Today.AddYears(5).ToString("yyyy-MM-dd")}")
                                                 .Replace("[promocao_ativa]", "N"),
                                 jobParameter: jobParameter,
                                 cnpj_emp: cnpj_emp.doc_company

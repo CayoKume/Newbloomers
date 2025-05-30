@@ -48,7 +48,7 @@ namespace Hangfire.IO.Extensions
 
             if (databaseType == "SQLServer")
             {
-                services.AddDbContext<AfterSaleDbContext>((serviceProvider, options) =>
+                services.AddDbContext<AfterSaleTreatedDbContext>((serviceProvider, options) =>
                 {
                     var configuration = serviceProvider.GetRequiredService<IConfiguration>();
                     options.UseSqlServer(connectionstring);
@@ -60,7 +60,13 @@ namespace Hangfire.IO.Extensions
                     options.UseSqlServer(connectionstring);
                 });
 
-                services.AddDbContext<LinxMicrovixOutboundDbContext>((serviceProvider, options) =>
+                services.AddDbContext<LinxMicrovixOutboundTreatedDbContext>((serviceProvider, options) =>
+                {
+                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+                    options.UseSqlServer(connectionstring);
+                });
+
+                services.AddDbContext<LinxMicrovixOutboundUntreatedDbContext>((serviceProvider, options) =>
                 {
                     var configuration = serviceProvider.GetRequiredService<IConfiguration>();
                     options.UseSqlServer(connectionstring);
@@ -87,7 +93,7 @@ namespace Hangfire.IO.Extensions
 
             if (databaseType == "MySql")
             {
-                services.AddDbContext<AfterSaleDbContext>((serviceProvider, options) =>
+                services.AddDbContext<AfterSaleTreatedDbContext>((serviceProvider, options) =>
                 {
                     var configuration = serviceProvider.GetRequiredService<IConfiguration>();
                     options.UseMySQL(connectionstring);
@@ -99,7 +105,13 @@ namespace Hangfire.IO.Extensions
                     options.UseMySQL(connectionstring);
                 });
 
-                services.AddDbContext<LinxMicrovixOutboundDbContext>((serviceProvider, options) =>
+                services.AddDbContext<LinxMicrovixOutboundTreatedDbContext>((serviceProvider, options) =>
+                {
+                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+                    options.UseMySQL(connectionstring);
+                });
+
+                services.AddDbContext<LinxMicrovixOutboundUntreatedDbContext>((serviceProvider, options) =>
                 {
                     var configuration = serviceProvider.GetRequiredService<IConfiguration>();
                     options.UseMySQL(connectionstring);
@@ -126,7 +138,7 @@ namespace Hangfire.IO.Extensions
 
             if (databaseType == "Postgree")
             {
-                services.AddDbContext<AfterSaleDbContext>((serviceProvider, options) =>
+                services.AddDbContext<AfterSaleTreatedDbContext>((serviceProvider, options) =>
                 {
                     var configuration = serviceProvider.GetRequiredService<IConfiguration>();
                     options.UseNpgsql(connectionstring);
@@ -138,7 +150,13 @@ namespace Hangfire.IO.Extensions
                     options.UseNpgsql(connectionstring);
                 });
 
-                services.AddDbContext<LinxMicrovixOutboundDbContext>((serviceProvider, options) =>
+                services.AddDbContext<LinxMicrovixOutboundTreatedDbContext>((serviceProvider, options) =>
+                {
+                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+                    options.UseNpgsql(connectionstring);
+                });
+
+                services.AddDbContext<LinxMicrovixOutboundUntreatedDbContext>((serviceProvider, options) =>
                 {
                     var configuration = serviceProvider.GetRequiredService<IConfiguration>();
                     options.UseNpgsql(connectionstring);

@@ -1,15 +1,14 @@
 ﻿using Dapper;
-using Domain.AfterSale.Entites.Company;
-using Domain.AfterSale.Entities;
 using Domain.AfterSale.Interfaces.Repositorys;
 using Domain.IntegrationsCore.Entities.Enums;
 using Domain.IntegrationsCore.Exceptions;
 using Domain.IntegrationsCore.Extensions;
 using Infrastructure.IntegrationsCore.Connections.SQLServer;
 using System.Data;
-using System.Data.Common;
 using System.Data.SqlClient;
 using System.Reflection;
+using Domain.AfterSale.Entities;
+using Reverse = Domain.AfterSale.Entities.Reverse;
 
 namespace Infrastructure.AfterSale.Repositorys.Dapper;
 
@@ -24,7 +23,7 @@ public class AfterSaleRepository : IAfterSaleRepository
     {
         string? sql = @$"SELECT DISTINCT
                      CNPJ_EMP AS DOC_COMPANY,
-                     TOKEN
+                     TOKENMO
                      FROM GENERAL.PARAMETROS_AFTERSALE";
 
         using (var conn = _sqlServerConnection.GetIDbConnection())
@@ -77,8 +76,8 @@ public class AfterSaleRepository : IAfterSaleRepository
 
     public async Task<bool> InsertIntoAfterSaleReverses(List<Domain.AfterSale.Entities.Data> data)
     {
-        var reversesTable = CreateSystemDataTable(new ReverseComplete(), "AfterSaleReverses");
-        var customerTable = CreateSystemDataTable(new CustomerComplete(), "AfterSaleCustomer");
+        var reversesTable = CreateSystemDataTable(new Reverse(), "AfterSaleReverses");
+        var customerTable = CreateSystemDataTable(new Customer(), "AfterSaleCustomer");
         var addressTable = CreateSystemDataTable(new Address(), "AfterSaleAddress");
         var trackingHistoryTable = CreateSystemDataTable(new TrackingHistory(), "AfterSaleReverseTrackings");
 
@@ -126,7 +125,7 @@ public class AfterSaleRepository : IAfterSaleRepository
         throw new NotImplementedException();
     }
 
-    public async Task<bool> InsertIntoAfterSaleReversesStatus(List<Status> statusReverses)
+    public async Task<bool> InsertIntoAfterSaleStatus(List<Status> statusReverses)
     {
         var statusReversesTable = CreateSystemDataTable(new Status(), "AfterSaleStatus");
 
@@ -165,7 +164,7 @@ public class AfterSaleRepository : IAfterSaleRepository
         }
     }
 
-    public async Task<bool> InsertIntoAfterSaleReversesTransportations(Transportations transportations)
+    public async Task<bool> InsertIntoAfterSaleTransportations(Transportations transportations)
     {
         var transportationsTable = CreateSystemDataTable(new Transportations(), "AfterSaleTransportations");
 
@@ -226,5 +225,15 @@ public class AfterSaleRepository : IAfterSaleRepository
                 exceptionMessage: ex.Message
             );
         }
+    }
+
+    public Task<bool> InsertIntoAfterSaleTransportations(List<Transportations> transportations)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<bool> InsertIntoAfterSaleEcommerce(List<Ecommerce> data)
+    {
+        throw new NotImplementedException();
     }
 }

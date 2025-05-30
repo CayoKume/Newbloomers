@@ -1,4 +1,4 @@
-﻿using Domain.TotalExpress.Entites;
+﻿using Domain.TotalExpress.Entities;
 
 namespace Domain.TotalExpress.Interfaces.Repository
 {

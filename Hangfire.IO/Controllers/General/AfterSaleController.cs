@@ -25,9 +25,9 @@ namespace Hangfire.IO.Controllers.General
                 var result = await _afterSaleService.GetMe();
 
                 if (result == true)
-                    return BadRequest($"Unable to find records on endpoint.");
-                else
                     return Ok($"Records integrated successfully.");
+                else
+                    return BadRequest($"Unable to find records on endpoint.");
             }
             catch (Exception ex)
             {
@@ -44,9 +44,9 @@ namespace Hangfire.IO.Controllers.General
                 var result = await _afterSaleService.GetReverses();
 
                 if (result == true)
-                    return BadRequest($"Unable to find records on endpoint.");
-                else
                     return Ok($"Records integrated successfully.");
+                else
+                    return BadRequest($"Unable to find records on endpoint.");
             }
             catch (Exception ex)
             {
@@ -63,9 +63,9 @@ namespace Hangfire.IO.Controllers.General
                 var result = await _afterSaleService.GetReversesById(cnpj_emp: cnpj_emp, id: id);
 
                 if (result == true)
-                    return BadRequest($"Unable to find records on endpoint.");
-                else
                     return Ok($"Records integrated successfully.");
+                else
+                    return BadRequest($"Unable to find records on endpoint.");
             }
             catch (Exception ex)
             {
@@ -82,9 +82,9 @@ namespace Hangfire.IO.Controllers.General
                 var result = await _afterSaleService.GetReversesStatus();
 
                 if (result == true)
-                    return BadRequest($"Unable to find records on endpoint.");
-                else
                     return Ok($"Records integrated successfully.");
+                else
+                    return BadRequest($"Unable to find records on endpoint.");
             }
             catch (Exception ex)
             {
@@ -101,9 +101,10 @@ namespace Hangfire.IO.Controllers.General
                 var result = await _afterSaleService.GetReversesTransportations();
 
                 if (result == true)
-                    return BadRequest($"Unable to find records on endpoint.");
-                else
                     return Ok($"Records integrated successfully.");
+
+                else
+                    return BadRequest($"Unable to find records on endpoint.");
             }
             catch (Exception ex)
             {

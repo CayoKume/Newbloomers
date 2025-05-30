@@ -1,9 +1,9 @@
 ﻿using Domain.IntegrationsCore.Entities.Enums;
 using Domain.IntegrationsCore.Exceptions;
-using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
+using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxMicrovix;
-using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
+using Domain.LinxMicrovix.Outbound.WebService.Entities.LinxMicrovix;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.Dapper.LinxMicrovix
 {
@@ -54,6 +54,30 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.Dapper.Linx
                 }
 
                 string sql = $"SELECT cnpj_emp, cod_produto, TIMESTAMP FROM [linx_microvix_erp].[LinxProdutosDetalhes] WHERE cod_produto IN ({identificadores})";
+
+                return await _linxMicrovixRepositoryBase.GetRegistersExists(sql);
+            }
+            catch (Exception ex) when (ex is not InternalException && ex is not SQLCommandException)
+            {
+                throw new InternalException(
+                    stage: EnumStages.GetRegistersExists,
+                    error: EnumError.Exception,
+                    level: EnumMessageLevel.Error,
+                    message: "Error when filling identifiers to sql command",
+                    exceptionMessage: ex.Message
+                );
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public async Task<List<LinxProdutosDetalhes>> GetRegistersExists(LinxAPIParam jobParameter)
+        {
+            try
+            {
+                string sql = $"SELECT DISTINCT top 30000 cod_produto, cnpj_emp FROM [linx_microvix_erp].[LinxProdutosDetalhes] where desc_config_tributaria = 'pendente'";
 
                 return await _linxMicrovixRepositoryBase.GetRegistersExists(sql);
             }

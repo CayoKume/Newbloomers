@@ -17,9 +17,4 @@
     <ProjectReference Include="..\Domain.AfterSale\Domain.AfterSale.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Data\Mappings\" />
-    <Folder Include="Repositorys\EFCore\" />
-  </ItemGroup>
-
 </Project>

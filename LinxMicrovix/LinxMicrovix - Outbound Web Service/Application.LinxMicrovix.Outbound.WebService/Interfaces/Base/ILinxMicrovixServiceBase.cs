@@ -1,5 +1,5 @@
 ﻿using Application.IntegrationsCore.Interfaces;
-using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
+using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
 
 namespace Application.LinxMicrovix.Outbound.WebService.Interfaces.Base
 {

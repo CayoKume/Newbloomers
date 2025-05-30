@@ -2,7 +2,7 @@
 using Domain.IntegrationsCore.Entities.Enums;
 using Domain.IntegrationsCore.Exceptions;
 using Domain.IntegrationsCore.Extensions;
-using Domain.LinxMicrovix.Outbound.WebService.Entites.Base;
+using Domain.LinxMicrovix.Outbound.WebService.Entities.Base;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
 using Infrastructure.IntegrationsCore.Connections.MySQL;
 using Infrastructure.IntegrationsCore.Connections.PostgreSQL;

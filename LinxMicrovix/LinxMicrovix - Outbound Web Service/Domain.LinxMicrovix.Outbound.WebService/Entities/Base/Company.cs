@@ -1,6 +1,6 @@
 ﻿using Domain.IntegrationsCore.Entities.Bases;
 
-namespace Domain.LinxMicrovix.Outbound.WebService.Entites.Base
+namespace Domain.LinxMicrovix.Outbound.WebService.Entities.Base
 {
     public class Company : CompanyBase
     {

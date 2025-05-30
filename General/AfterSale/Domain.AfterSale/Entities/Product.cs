@@ -25,9 +25,6 @@
         public string? returned_invoice { get; set; }
         public string? invoice { get; set; }
         public int? order_id { get; set; }
-        public string?[] image_url { get; set; }
         public Reason reason { get; set; }
-        public List<Image> images { get; set; }
-        public string?[] refund_product_requests { get; set; }
     }
 }

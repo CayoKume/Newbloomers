@@ -1,6 +1,6 @@
 ﻿using Domain.IntegrationsCore.Entities.Bases;
 
-namespace Domain.TotalExpress.Entites
+namespace Domain.TotalExpress.Entities
 {
     public class Client : ClientBase
     {

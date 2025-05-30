@@ -1,6 +1,6 @@
 ﻿using Application.LinxCommerce.Interfaces;
 using Domain.LinxCommerce.Entities.Parameters;
-using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
+using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
 using Microsoft.Azure.WebJobs;
 
 namespace AzureJobs.RecurringJobs
@@ -103,26 +103,26 @@ namespace AzureJobs.RecurringJobs
         //    }
         //}
 
-        public async Task SearchProductsByQueue([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
-        {
-            try
-            {
-                var method = _methods
-                    .Where(m => m.MethodName == "SearchProducts")
-                    .FirstOrDefault();
+        //public async Task SearchProductsByQueue([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    try
+        //    {
+        //        var method = _methods
+        //            .Where(m => m.MethodName == "SearchProducts")
+        //            .FirstOrDefault();
 
-                var result = await _skuService.SearchProductByQueue(
-                    _linxCommerceJobParameter.SetParameters(
-                        jobName: method.MethodName,
-                        tableName: method.MethodName
-                    )
-                );
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-        }
+        //        var result = await _skuService.SearchProductByQueue(
+        //            _linxCommerceJobParameter.SetParameters(
+        //                jobName: method.MethodName,
+        //                tableName: method.MethodName
+        //            )
+        //        );
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw;
+        //    }
+        //}
 
         //public async Task SearchSKUsByQueue([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
         //{

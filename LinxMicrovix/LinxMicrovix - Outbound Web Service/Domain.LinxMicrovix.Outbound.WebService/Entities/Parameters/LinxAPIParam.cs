@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters
+namespace Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters
 {
     [Table("LinxAPIParam", Schema = "linx_microvix")]
     public class LinxAPIParam : ParameterBase
