@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
-using System.Data.SqlClient;
 using System.Data;
+using System.Data.SqlClient;
 
 namespace Infrastructure.IntegrationsCore.Connections.SQLServer
 {
@@ -15,7 +15,7 @@ namespace Infrastructure.IntegrationsCore.Connections.SQLServer
 
         public void Dispose() => _connection?.Dispose();
 
-        public SqlConnection GetDbConnection(string catalog)
+        public SqlConnection GetDbConnection(string? catalog)
         {
             try
             {
@@ -30,11 +30,41 @@ namespace Infrastructure.IntegrationsCore.Connections.SQLServer
             }
         }
 
-        public IDbConnection GetIDbConnection(string catalog)
+        public IDbConnection GetIDbConnection(string? catalog)
         {
             try
             {
                 _connection = new SqlConnection(_connectionstring.Replace("[catalog]", catalog).Replace("[database]", catalog));
+                _connection.Open();
+                return _connection;
+            }
+            catch (Exception ex)
+            {
+                _connection?.Dispose();
+                throw new InvalidOperationException("Failed to establish a database connection.", ex);
+            }
+        }
+
+        public SqlConnection GetDbConnection()
+        {
+            try
+            {
+                _conn = new SqlConnection(_connectionstring.Replace("[catalog]", "NEWBLOOMERS").Replace("[database]", "NEWBLOOMERS"));
+                _conn.Open();
+                return _conn;
+            }
+            catch (Exception ex)
+            {
+                _conn?.Dispose();
+                throw new InvalidOperationException("Failed to establish a database connection.", ex);
+            }
+        }
+
+        public IDbConnection GetIDbConnection()
+        {
+            try
+            {
+                _connection = new SqlConnection(_connectionstring.Replace("[catalog]", "NEWBLOOMERS").Replace("[database]", "NEWBLOOMERS"));
                 _connection.Open();
                 return _connection;
             }

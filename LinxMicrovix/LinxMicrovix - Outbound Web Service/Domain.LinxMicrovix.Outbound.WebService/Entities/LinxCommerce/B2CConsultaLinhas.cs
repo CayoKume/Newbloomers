@@ -1,68 +1,69 @@
-﻿using System.ComponentModel.DataAnnotations;
+using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
+using Domain.IntegrationsCore.Extensions;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Domain.LinxMicrovix_Outbound_Web_Service.Entites.LinxCommerce
+namespace Domain.LinxMicrovix.Outbound.WebService.Entities.LinxCommerce
 {
     public class B2CConsultaLinhas
     {
-        [Column(TypeName = "datetime")]
+        [NotMapped]
+        public Int32 id { get; set; }
+
         public DateTime? lastupdateon { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? codigo_linha { get; private set; }
 
-        [Column(TypeName = "varchar(30)")]
+        [LengthValidation(length: 30, propertyName: "nome_linha")]
         public string? nome_linha { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
-        [Column(TypeName = "varchar(250)")]
+        [LengthValidation(length: 250, propertyName: "setores")]
         public string? setores { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordKey { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordXml { get; private set; }
 
         public B2CConsultaLinhas() { }
 
         public B2CConsultaLinhas(
+            List<ValidationResult> listValidations,
             string? codigo_linha,
             string? nome_linha,
             string? timestamp,
             string? setores,
-            string? portal
+            string? portal,
+            string? recordXml
         )
         {
             lastupdateon = DateTime.Now;
 
             this.codigo_linha =
-                String.IsNullOrEmpty(codigo_linha) ? 0
-                : Convert.ToInt32(codigo_linha);
-
-            this.nome_linha =
-                String.IsNullOrEmpty(nome_linha) ? ""
-                : nome_linha.Substring(
-                    0,
-                    nome_linha.Length > 30 ? 30
-                    : nome_linha.Length
-                );
-
-            this.setores =
-                String.IsNullOrEmpty(setores) ? ""
-                : setores.Substring(
-                    0,
-                    setores.Length > 250 ? 250
-                    : setores.Length
-                );
-
-            this.timestamp =
-                String.IsNullOrEmpty(timestamp) ? 0
-                : Convert.ToInt64(timestamp);
+                ConvertToInt32Validation.IsValid(codigo_linha, "codigo_linha", listValidations) ?
+                Convert.ToInt32(codigo_linha) :
+                0;
 
             this.portal =
-                String.IsNullOrEmpty(portal) ? 0
-                : Convert.ToInt32(portal);
+                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
+                Convert.ToInt32(portal) :
+                0;
+
+            this.timestamp =
+                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
+                Convert.ToInt64(timestamp) :
+                0;
+
+            this.nome_linha = nome_linha;
+            this.setores = setores;
+            this.recordXml = recordXml;
         }
     }
 }

@@ -1,89 +1,82 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
+using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Domain.LinxMicrovix_Outbound_Web_Service.Entites.LinxCommerce
+namespace Domain.LinxMicrovix.Outbound.WebService.Entities.LinxCommerce
 {
     public class B2CConsultaCodigoRastreio
     {
-        [Column(TypeName = "datetime")]
+        [NotMapped]
+        public Int32 id { get; set; }
+
         public DateTime? lastupdateon { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? id_pedido { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? documento { get; private set; }
 
-        [Column(TypeName = "varchar(10)")]
+        [LengthValidation(length: 10, propertyName: "serie")]
         public string? serie { get; private set; }
 
-        [Column(TypeName = "varchar(20)")]
+        [LengthValidation(length: 20, propertyName: "codigo_rastreio")]
         public string? codigo_rastreio { get; private set; }
 
-        [Column(TypeName = "varchar(20)")]
+        [LengthValidation(length: 20, propertyName: "sequencia_volume")]
         public string? sequencia_volume { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordKey { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordXml { get; private set; }
 
         public B2CConsultaCodigoRastreio() { }
 
         public B2CConsultaCodigoRastreio(
+            List<ValidationResult> listValidations,
             string? id_pedido,
             string? documento,
             string? serie,
             string? codigo_rastreio,
             string? sequencia_volume,
             string? timestamp,
-            string? portal
+            string? portal,
+            string? recordXml
         )
         {
             lastupdateon = DateTime.Now;
 
             this.id_pedido =
-                String.IsNullOrEmpty(id_pedido) ? 0
-                : Convert.ToInt32(id_pedido);
+                ConvertToInt32Validation.IsValid(id_pedido, "id_pedido", listValidations) ?
+                Convert.ToInt32(id_pedido) :
+                0;
 
             this.documento =
-                String.IsNullOrEmpty(documento) ? 0
-                : Convert.ToInt32(documento);
-
-            this.serie =
-                String.IsNullOrEmpty(serie) ? ""
-                : serie.Substring(
-                    0,
-                    serie.Length > 10 ? 10
-                    : serie.Length
-                );
-
-            this.codigo_rastreio =
-                String.IsNullOrEmpty(codigo_rastreio) ? ""
-                : codigo_rastreio.Substring(
-                    0,
-                    codigo_rastreio.Length > 20 ? 20
-                    : codigo_rastreio.Length
-                );
-
-            this.sequencia_volume =
-                String.IsNullOrEmpty(sequencia_volume) ? ""
-                : sequencia_volume.Substring(
-                    0,
-                    sequencia_volume.Length > 20 ? 20
-                    : sequencia_volume.Length
-                );
-
-            this.timestamp =
-                String.IsNullOrEmpty(timestamp) ? 0
-                : Convert.ToInt64(timestamp);
+                ConvertToInt32Validation.IsValid(documento, "documento", listValidations) ?
+                Convert.ToInt32(documento) :
+                0;
 
             this.portal =
-                String.IsNullOrEmpty(portal) ? 0
-                : Convert.ToInt32(portal);
+                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
+                Convert.ToInt32(portal) :
+                0;
 
+            this.timestamp =
+                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
+                Convert.ToInt64(timestamp) :
+                0;
+
+            this.serie = serie;
+            this.codigo_rastreio = codigo_rastreio;
+            this.sequencia_volume = sequencia_volume;
+            this.recordXml = recordXml;
         }
     }
 }

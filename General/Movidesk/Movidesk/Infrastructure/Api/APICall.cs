@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Movidesk.Infrastructure.Api
+﻿namespace Movidesk.Infrastructure.Api
 {
     internal class APICall
     {

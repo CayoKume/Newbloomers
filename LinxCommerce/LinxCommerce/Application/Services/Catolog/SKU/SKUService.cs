@@ -1,4 +1,4 @@
-﻿using IntegrationsCore.Domain.Entities.Parameters;
+﻿using Domain.IntegrationsCore.Entities.Parameters;
 using LinxCommerce.Domain.Entities.Catolog.Sku;
 using LinxCommerce.Infrastructure.Api;
 using LinxCommerce.Infrastructure.Repository.Base;

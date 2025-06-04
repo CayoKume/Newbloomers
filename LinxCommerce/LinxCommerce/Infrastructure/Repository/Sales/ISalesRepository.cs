@@ -1,4 +1,4 @@
-﻿using IntegrationsCore.Domain.Entities;
+﻿using Domain.IntegrationsCore.Entities.Parameters;
 using static Dapper.SqlMapper;
 using System.Data;
 

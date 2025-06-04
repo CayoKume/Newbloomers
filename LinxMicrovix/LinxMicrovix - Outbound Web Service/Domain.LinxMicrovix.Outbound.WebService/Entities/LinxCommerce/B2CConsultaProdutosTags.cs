@@ -1,72 +1,80 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
+using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Domain.LinxMicrovix_Outbound_Web_Service.Entites.LinxCommerce
+namespace Domain.LinxMicrovix.Outbound.WebService.Entities.LinxCommerce
 {
     public class B2CConsultaProdutosTags
     {
-        [Column(TypeName = "datetime")]
+        [NotMapped]
+        public Int32 id { get; set; }
+
         public DateTime? lastupdateon { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? id_b2c_tags_produtos { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_b2c_tags { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? codigoproduto { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
-        [Column(TypeName = "varchar(300)")]
+        [LengthValidation(length: 300, propertyName: "descricao_b2c_tags")]
         public string? descricao_b2c_tags { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordKey { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordXml { get; private set; }
 
         public B2CConsultaProdutosTags() { }
 
         public B2CConsultaProdutosTags(
+            List<ValidationResult> listValidations,
             string? portal,
             string? id_b2c_tags_produtos,
             string? id_b2c_tags,
             string? codigoproduto,
             string? timestamp,
-            string? descricao_b2c_tags
+            string? descricao_b2c_tags,
+            string? recordXml
         )
         {
             lastupdateon = DateTime.Now;
 
             this.id_b2c_tags_produtos =
-                String.IsNullOrEmpty(id_b2c_tags_produtos) ? 0
-                : Convert.ToInt32(id_b2c_tags_produtos);
+                ConvertToInt32Validation.IsValid(id_b2c_tags_produtos, "id_b2c_tags_produtos", listValidations) ?
+                Convert.ToInt32(id_b2c_tags_produtos) :
+                0;
 
             this.id_b2c_tags =
-                String.IsNullOrEmpty(id_b2c_tags) ? 0
-                : Convert.ToInt32(id_b2c_tags);
+                ConvertToInt32Validation.IsValid(id_b2c_tags, "id_b2c_tags", listValidations) ?
+                Convert.ToInt32(id_b2c_tags) :
+                0;
 
             this.codigoproduto =
-                String.IsNullOrEmpty(codigoproduto) ? 0
-                : Convert.ToInt64(codigoproduto);
-
-            this.descricao_b2c_tags =
-                String.IsNullOrEmpty(descricao_b2c_tags) ? ""
-                : descricao_b2c_tags.Substring(
-                    0,
-                    descricao_b2c_tags.Length > 300 ? 300
-                    : descricao_b2c_tags.Length
-                );
-
-            this.timestamp =
-                String.IsNullOrEmpty(timestamp) ? 0
-                : Convert.ToInt64(timestamp);
+                ConvertToInt64Validation.IsValid(codigoproduto, "codigoproduto", listValidations) ?
+                Convert.ToInt64(codigoproduto) :
+                0;
 
             this.portal =
-                String.IsNullOrEmpty(portal) ? 0
-                : Convert.ToInt32(portal);
+                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
+                Convert.ToInt32(portal) :
+                0;
+
+            this.timestamp =
+                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
+                Convert.ToInt64(timestamp) :
+                0;
+
+            this.descricao_b2c_tags = descricao_b2c_tags;
+            this.recordXml = recordXml;
         }
     }
 }

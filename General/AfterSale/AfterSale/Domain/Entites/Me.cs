@@ -56,7 +56,7 @@
         public bool could_be_retained { get; set; }
         public bool cashback_allow_third_party { get; set; }
         public bool show_product_images { get; set; }
-        public Reason[] reason { get; set;}
+        public Reason[] reason { get; set; }
     }
 
     public class Pages

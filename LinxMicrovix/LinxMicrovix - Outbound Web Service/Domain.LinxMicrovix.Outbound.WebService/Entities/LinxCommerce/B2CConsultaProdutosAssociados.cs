@@ -1,43 +1,44 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
+using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Globalization;
 
-namespace Domain.LinxMicrovix_Outbound_Web_Service.Entites.LinxCommerce
+namespace Domain.LinxMicrovix.Outbound.WebService.Entities.LinxCommerce
 {
     public class B2CConsultaProdutosAssociados
     {
-        [Column(TypeName = "datetime")]
+
         public DateTime? lastupdateon { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? id { get; private set; }
 
-        [Key]
-        [Column(TypeName = "bigint")]
         public Int64? codigoproduto { get; private set; }
 
-        [Key]
-        [Column(TypeName = "bigint")]
         public Int64? codigoproduto_associado { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? coeficiente_desconto { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? qtde_item { get; private set; }
 
-        [Column(TypeName = "bit")]
         public Int32? item_obrigatorio { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordKey { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordXml { get; private set; }
 
         public B2CConsultaProdutosAssociados() { }
 
         public B2CConsultaProdutosAssociados(
+            List<ValidationResult> listValidations,
             string? id,
             string? codigoproduto,
             string? codigoproduto_associado,
@@ -45,42 +46,53 @@ namespace Domain.LinxMicrovix_Outbound_Web_Service.Entites.LinxCommerce
             string? timestamp,
             string? portal,
             string? qtde_item,
-            string? item_obrigatorio
+            string? item_obrigatorio,
+            string? recordXml
         )
         {
             lastupdateon = DateTime.Now;
 
             this.id =
-                String.IsNullOrEmpty(id) ? 0
-                : Convert.ToInt32(id);
+                ConvertToInt32Validation.IsValid(id, "id", listValidations) ?
+                Convert.ToInt32(id) :
+                0;
 
             this.codigoproduto =
-                String.IsNullOrEmpty(codigoproduto) ? 0
-                : Convert.ToInt64(codigoproduto);
+                ConvertToInt64Validation.IsValid(codigoproduto, "codigoproduto", listValidations) ?
+                Convert.ToInt64(codigoproduto) :
+                0;
 
             this.codigoproduto_associado =
-                String.IsNullOrEmpty(codigoproduto_associado) ? 0
-                : Convert.ToInt64(codigoproduto_associado);
+                ConvertToInt64Validation.IsValid(codigoproduto_associado, "codigoproduto_associado", listValidations) ?
+                Convert.ToInt64(codigoproduto_associado) :
+                0;
 
             this.coeficiente_desconto =
-                String.IsNullOrEmpty(coeficiente_desconto) ? 0
-                : Convert.ToDecimal(coeficiente_desconto);
+                ConvertToDecimalValidation.IsValid(coeficiente_desconto, "coeficiente_desconto", listValidations) ?
+                Convert.ToDecimal(coeficiente_desconto, new CultureInfo("en-US")) :
+                0;
 
             this.qtde_item =
-                String.IsNullOrEmpty(qtde_item) ? 0
-                : Convert.ToDecimal(qtde_item);
+                ConvertToDecimalValidation.IsValid(qtde_item, "qtde_item", listValidations) ?
+                Convert.ToDecimal(qtde_item, new CultureInfo("en-US")) :
+                0;
 
             this.item_obrigatorio =
-                String.IsNullOrEmpty(item_obrigatorio) ? 0
-                : Convert.ToInt32(item_obrigatorio);
-
-            this.timestamp =
-               String.IsNullOrEmpty(timestamp) ? 0
-               : Convert.ToInt64(timestamp);
+                ConvertToInt32Validation.IsValid(item_obrigatorio, "item_obrigatorio", listValidations) ?
+                Convert.ToInt32(item_obrigatorio) :
+                0;
 
             this.portal =
-                String.IsNullOrEmpty(portal) ? 0
-                : Convert.ToInt32(portal);
+                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
+                Convert.ToInt32(portal) :
+                0;
+
+            this.timestamp =
+                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
+                Convert.ToInt64(timestamp) :
+                0;
+
+            this.recordXml = recordXml;
         }
     }
 }

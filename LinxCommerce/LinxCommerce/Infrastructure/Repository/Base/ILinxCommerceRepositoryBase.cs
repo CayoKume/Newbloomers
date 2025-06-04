@@ -1,5 +1,4 @@
-﻿using IntegrationsCore.Domain.Entities;
-using IntegrationsCore.Domain.Entities.Parameters;
+﻿using Domain.IntegrationsCore.Entities.Parameters;
 using System.Data;
 
 namespace LinxCommerce.Infrastructure.Repository.Base

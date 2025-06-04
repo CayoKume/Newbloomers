@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Domain.FlashCourier\Domain.FlashCourier.csproj" />
+  </ItemGroup>
+
 </Project>

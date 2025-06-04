@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\IntegrationsCore\Application.IntegrationsCore\Application.IntegrationsCore.csproj" />
+    <ProjectReference Include="..\Domain.Jadlog\Domain.Jadlog.csproj" />
+  </ItemGroup>
+
 </Project>

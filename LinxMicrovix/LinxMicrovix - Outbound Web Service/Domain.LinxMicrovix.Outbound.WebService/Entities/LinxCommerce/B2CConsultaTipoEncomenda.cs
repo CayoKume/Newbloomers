@@ -1,56 +1,64 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
+using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Domain.LinxMicrovix_Outbound_Web_Service.Entites.LinxCommerce
+namespace Domain.LinxMicrovix.Outbound.WebService.Entities.LinxCommerce
 {
     public class B2CConsultaTipoEncomenda
     {
-        [Column(TypeName = "datetime")]
+        [NotMapped]
+        public Int32 id { get; set; }
+
         public DateTime? lastupdateon { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? id_tipo_encomenda { get; private set; }
 
-        [Column(TypeName = "varchar(100)")]
+        [LengthValidation(length: 100, propertyName: "nm_tipo_encomenda")]
         public string? nm_tipo_encomenda { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordKey { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordXml { get; private set; }
 
         public B2CConsultaTipoEncomenda() { }
 
         public B2CConsultaTipoEncomenda(
+            List<ValidationResult> listValidations,
             string? id_tipo_encomenda,
             string? nm_tipo_encomenda,
             string? timestamp,
-            string? portal
+            string? portal,
+            string? recordXml
         )
         {
             lastupdateon = DateTime.Now;
 
-            this.nm_tipo_encomenda =
-                String.IsNullOrEmpty(nm_tipo_encomenda) ? ""
-                : nm_tipo_encomenda.Substring(
-                    0,
-                    nm_tipo_encomenda.Length > 100 ? 100
-                    : nm_tipo_encomenda.Length
-                );
-
             this.id_tipo_encomenda =
-                String.IsNullOrEmpty(id_tipo_encomenda) ? 0
-                : Convert.ToInt32(id_tipo_encomenda);
-
-            this.timestamp =
-                String.IsNullOrEmpty(timestamp) ? 0
-                : Convert.ToInt64(timestamp);
+                ConvertToInt32Validation.IsValid(id_tipo_encomenda, "id_tipo_encomenda", listValidations) ?
+                Convert.ToInt32(id_tipo_encomenda) :
+                0;
 
             this.portal =
-                String.IsNullOrEmpty(portal) ? 0
-                : Convert.ToInt32(portal);
+                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
+                Convert.ToInt32(portal) :
+                0;
+
+            this.timestamp =
+                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
+                Convert.ToInt64(timestamp) :
+                0;
+
+            this.nm_tipo_encomenda = nm_tipo_encomenda;
+            this.recordXml = recordXml;
         }
     }
 }

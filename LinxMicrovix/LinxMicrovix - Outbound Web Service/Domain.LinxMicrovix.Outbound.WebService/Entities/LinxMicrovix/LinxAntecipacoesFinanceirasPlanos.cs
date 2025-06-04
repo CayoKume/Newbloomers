@@ -1,75 +1,72 @@
-﻿using System.ComponentModel.DataAnnotations;
+using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
+using Domain.IntegrationsCore.Extensions;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 
-namespace Domain.LinxMicrovix_Outbound_Web_Service.Entites.LinxMicrovix
+namespace Domain.LinxMicrovix.Outbound.WebService.Entities.LinxMicrovix
 {
     public class LinxAntecipacoesFinanceirasPlanos
     {
-        [Column(TypeName = "datetime")]
+        [SkipProperty]
+        public Int32 id { get; set; }
+
         public DateTime lastupdateon { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
-        [Column(TypeName = "varchar(14)")]
+        [LengthValidation(length: 14, propertyName: "cnpj_emp")]
         public string? cnpj_emp { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_antecipacoes_financeiras { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? numero_antecipacao { get; private set; }
 
-        [Column(TypeName = "varchar(50)")]
+        [LengthValidation(length: 50, propertyName: "forma_pgto")]
         public string? forma_pgto { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? plano { get; private set; }
 
-        [Column(TypeName = "varchar(35)")]
+        [LengthValidation(length: 35, propertyName: "nome_plano")]
         public string? nome_plano { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? valor { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_ordservprod { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_vendas_pos_produtos_tmp { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_vendas_pos { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? cancelado { get; private set; }
 
-        [Column(TypeName = "datetime")]
         public DateTime? previsao_entrega { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? numero_ficha { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_vendas_pos_produtos_campos_adicionais_tmp { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_link_pagamento_linx_pay_hub { get; private set; }
 
-        [Column(TypeName = "varchar(20)")]
+        [LengthValidation(length: 20, propertyName: "codigo_gerencial")]
         public string? codigo_gerencial { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? empresa { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordKey { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordXml { get; private set; }
 
         public LinxAntecipacoesFinanceirasPlanos() { }
 
         public LinxAntecipacoesFinanceirasPlanos(
+            List<ValidationResult> listValidations,
             string? portal,
             string? cnpj_emp,
             string? id_antecipacoes_financeiras,
@@ -93,97 +90,85 @@ namespace Domain.LinxMicrovix_Outbound_Web_Service.Entites.LinxMicrovix
         {
             this.lastupdateon = DateTime.Now;
 
-            this.cnpj_emp =
-                cnpj_emp == String.Empty ? ""
-                : cnpj_emp.Substring(
-                    0,
-                    cnpj_emp.Length > 14 ? 14
-                    : cnpj_emp.Length
-                );
-
             this.empresa =
-                empresa == String.Empty ? 0
-                : Convert.ToInt32(empresa);
-
-            this.codigo_gerencial =
-                codigo_gerencial == String.Empty ? ""
-                : codigo_gerencial.Substring(
-                    0,
-                    codigo_gerencial.Length > 20 ? 20
-                    : codigo_gerencial.Length
-                );
+                ConvertToInt32Validation.IsValid(empresa, "empresa", listValidations) ?
+                Convert.ToInt32(empresa) :
+                0;
 
             this.id_link_pagamento_linx_pay_hub =
-                id_link_pagamento_linx_pay_hub == String.Empty ? 0
-                : Convert.ToInt32(id_link_pagamento_linx_pay_hub);
+                ConvertToInt32Validation.IsValid(id_link_pagamento_linx_pay_hub, "id_link_pagamento_linx_pay_hub", listValidations) ?
+                Convert.ToInt32(id_link_pagamento_linx_pay_hub) :
+                0;
 
             this.id_vendas_pos_produtos_campos_adicionais_tmp =
-                id_vendas_pos_produtos_campos_adicionais_tmp == String.Empty ? 0
-                : Convert.ToInt32(id_vendas_pos_produtos_campos_adicionais_tmp);
+                ConvertToInt32Validation.IsValid(id_vendas_pos_produtos_campos_adicionais_tmp, "id_vendas_pos_produtos_campos_adicionais_tmp", listValidations) ?
+                Convert.ToInt32(id_vendas_pos_produtos_campos_adicionais_tmp) :
+                0;
 
             this.numero_ficha =
-                numero_ficha == String.Empty ? 0
-                : Convert.ToInt64(numero_ficha);
+                ConvertToInt64Validation.IsValid(numero_ficha, "numero_ficha", listValidations) ?
+                Convert.ToInt64(numero_ficha) :
+                0;
 
             this.previsao_entrega =
-                String.IsNullOrEmpty(previsao_entrega) ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
-                : Convert.ToDateTime(previsao_entrega);
+                ConvertToDateTimeValidation.IsValid(previsao_entrega, "previsao_entrega", listValidations) ?
+                Convert.ToDateTime(previsao_entrega) :
+                new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar);
 
             this.id_ordservprod =
-                id_ordservprod == String.Empty ? 0
-                : Convert.ToInt32(id_ordservprod);
+                ConvertToInt32Validation.IsValid(id_ordservprod, "id_ordservprod", listValidations) ?
+                Convert.ToInt32(id_ordservprod) :
+                0;
 
             this.id_vendas_pos_produtos_tmp =
-                id_vendas_pos_produtos_tmp == String.Empty ? 0
-                : Convert.ToInt32(id_vendas_pos_produtos_tmp);
+                ConvertToInt32Validation.IsValid(id_vendas_pos_produtos_tmp, "id_vendas_pos_produtos_tmp", listValidations) ?
+                Convert.ToInt32(id_vendas_pos_produtos_tmp) :
+                0;
 
             this.id_vendas_pos =
-                id_vendas_pos == String.Empty ? 0
-                : Convert.ToInt32(id_vendas_pos);
+                ConvertToInt32Validation.IsValid(id_vendas_pos, "id_vendas_pos", listValidations) ?
+                Convert.ToInt32(id_vendas_pos) :
+                0;
 
             this.id_antecipacoes_financeiras =
-                id_antecipacoes_financeiras == String.Empty ? 0
-                : Convert.ToInt32(id_antecipacoes_financeiras);
+                ConvertToInt32Validation.IsValid(id_antecipacoes_financeiras, "id_antecipacoes_financeiras", listValidations) ?
+                Convert.ToInt32(id_antecipacoes_financeiras) :
+                0;
 
             this.numero_antecipacao =
-                numero_antecipacao == String.Empty ? 0
-                : Convert.ToInt32(numero_antecipacao);
-
-            this.forma_pgto =
-                forma_pgto == String.Empty ? ""
-                : forma_pgto.Substring(
-                    0,
-                    forma_pgto.Length > 50 ? 50
-                    : forma_pgto.Length
-                );
+                ConvertToInt32Validation.IsValid(numero_antecipacao, "numero_antecipacao", listValidations) ?
+                Convert.ToInt32(numero_antecipacao) :
+                0;
 
             this.plano =
-                plano == String.Empty ? 0
-                : Convert.ToInt32(plano);
-
-            this.nome_plano =
-                nome_plano == String.Empty ? ""
-                : nome_plano.Substring(
-                    0,
-                    nome_plano.Length > 35 ? 35
-                    : nome_plano.Length
-                );
+                ConvertToInt32Validation.IsValid(plano, "plano", listValidations) ?
+                Convert.ToInt32(plano) :
+                0;
 
             this.valor =
-                valor == String.Empty ? 0
-                : Convert.ToDecimal(valor);
+                ConvertToDecimalValidation.IsValid(valor, "valor", listValidations) ?
+                Convert.ToDecimal(valor, new CultureInfo("en-US")) :
+                0;
 
             this.cancelado =
-                String.IsNullOrEmpty(cancelado) ? false
-                : Convert.ToBoolean(cancelado);
-
-            this.timestamp =
-                timestamp == String.Empty ? 0
-                : Convert.ToInt64(timestamp);
+                ConvertToBooleanValidation.IsValid(cancelado, "cancelado", listValidations) ?
+                Convert.ToBoolean(cancelado) :
+                false;
 
             this.portal =
-                portal == String.Empty ? 0
-                : Convert.ToInt32(portal);
+                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
+                Convert.ToInt32(portal) :
+                0;
+
+            this.timestamp =
+                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
+                Convert.ToInt64(timestamp) :
+                0;
+
+            this.cnpj_emp = cnpj_emp;
+            this.codigo_gerencial = codigo_gerencial;
+            this.forma_pgto = forma_pgto;
+            this.nome_plano = nome_plano;
         }
     }
 }

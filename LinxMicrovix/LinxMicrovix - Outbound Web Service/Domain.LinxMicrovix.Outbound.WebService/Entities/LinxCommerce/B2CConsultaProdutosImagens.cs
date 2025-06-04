@@ -1,61 +1,75 @@
-﻿using System.ComponentModel.DataAnnotations;
+using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
+using Domain.IntegrationsCore.Extensions;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Domain.LinxMicrovix_Outbound_Web_Service.Entites.LinxCommerce
+namespace Domain.LinxMicrovix.Outbound.WebService.Entities.LinxCommerce
 {
     public class B2CConsultaProdutosImagens
     {
+        [NotMapped]
+        public Int32 id { get; set; }
 
-        [Column(TypeName = "datetime")]
         public DateTime? lastupdateon { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? id_imagem_produto { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_imagem { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? codigoproduto { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordKey { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordXml { get; private set; }
 
         public B2CConsultaProdutosImagens() { }
 
         public B2CConsultaProdutosImagens(
+            List<ValidationResult> listValidations,
             string? id_imagem_produto,
             string? id_imagem,
             string? codigoproduto,
             string? timestamp,
-            string? portal
+            string? portal,
+            string? recordXml
         )
         {
             lastupdateon = DateTime.Now;
 
             this.id_imagem_produto =
-                String.IsNullOrEmpty(id_imagem_produto) ? 0
-                : Convert.ToInt32(id_imagem_produto);
+                ConvertToInt32Validation.IsValid(id_imagem_produto, "id_imagem_produto", listValidations) ?
+                Convert.ToInt32(id_imagem_produto) :
+                0;
 
             this.codigoproduto =
-                String.IsNullOrEmpty(codigoproduto) ? 0
-                : Convert.ToInt64(codigoproduto);
+                ConvertToInt64Validation.IsValid(codigoproduto, "codigoproduto", listValidations) ?
+                Convert.ToInt64(codigoproduto) :
+                0;
 
             this.id_imagem =
-                String.IsNullOrEmpty(id_imagem) ? 0
-                : Convert.ToInt32(id_imagem);
-
-            this.timestamp =
-                String.IsNullOrEmpty(timestamp) ? 0
-                : Convert.ToInt64(timestamp);
+                ConvertToInt32Validation.IsValid(id_imagem, "id_imagem", listValidations) ?
+                Convert.ToInt32(id_imagem) :
+                0;
 
             this.portal =
-                String.IsNullOrEmpty(portal) ? 0
-                : Convert.ToInt32(portal);
+                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
+                Convert.ToInt32(portal) :
+                0;
+
+            this.timestamp =
+                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
+                Convert.ToInt64(timestamp) :
+                0;
+
+            this.recordXml = recordXml;
         }
     }
 }

@@ -1,7 +1,7 @@
-﻿using IntegrationsCore.Domain.Entities.Parameters;
+﻿using Domain.IntegrationsCore.Entities.Parameters;
 using System.Net;
 using System.Text;
-using static IntegrationsCore.Domain.Exceptions.APIErrorsExceptions;
+using static Domain.IntegrationsCore.Exceptions.APIErrorsExceptions;
 
 namespace LinxCommerce.Infrastructure.Api
 {

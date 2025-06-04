@@ -1,49 +1,54 @@
-﻿using System.ComponentModel.DataAnnotations;
+using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
+using Domain.IntegrationsCore.Extensions;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Domain.LinxMicrovix_Outbound_Web_Service.Entites.LinxCommerce
+namespace Domain.LinxMicrovix.Outbound.WebService.Entities.LinxCommerce
 {
     public class B2CConsultaCNPJsChave
     {
-        [Column(TypeName = "datetime")]
+        [NotMapped]
+        public Int32 id { get; set; }
+
         public DateTime? lastupdateon { get; private set; }
 
-        [Key]
-        [Column(TypeName = "varchar(14)")]
+        [LengthValidation(length: 14, propertyName: "cnpj")]
         public string? cnpj { get; private set; }
 
-        [Column(TypeName = "varchar(250)")]
+        [LengthValidation(length: 250, propertyName: "nome_empresa")]
         public string? nome_empresa { get; private set; }
 
-        [Key]
-        [Column(TypeName = "smallint")]
         public Int32? id_empresas_rede { get; private set; }
 
-        [Column(TypeName = "varchar(100)")]
+        [LengthValidation(length: 100, propertyName: "rede")]
         public string? rede { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
-        [Column(TypeName = "varchar(50)")]
+        [LengthValidation(length: 50, propertyName: "nome_portal")]
         public string? nome_portal { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? empresa { get; private set; }
 
-        [Column(TypeName = "varchar(50)")]
+        [LengthValidation(length: 50, propertyName: "classificacao_portal")]
         public string? classificacao_portal { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? b2c { get; private set; }
 
-        [Column(TypeName = "bit")]
         public bool? oms { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordKey { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordXml { get; private set; }
 
         public B2CConsultaCNPJsChave() { }
 
         public B2CConsultaCNPJsChave(
+            List<ValidationResult> listValidations,
             string? cnpj,
             string? nome_empresa,
             string? id_empresas_rede,
@@ -53,70 +58,43 @@ namespace Domain.LinxMicrovix_Outbound_Web_Service.Entites.LinxCommerce
             string? empresa,
             string? classificacao_portal,
             string? b2c,
-            string? oms
+            string? oms,
+            string? recordXml
         )
         {
             lastupdateon = DateTime.Now;
 
-            this.cnpj =
-                String.IsNullOrEmpty(cnpj) ? ""
-                : cnpj.Substring(
-                    0,
-                    cnpj.Length > 14 ? 14
-                    : cnpj.Length
-                );
-
-            this.nome_empresa =
-                String.IsNullOrEmpty(nome_empresa) ? ""
-                : nome_empresa.Substring(
-                    0,
-                    nome_empresa.Length > 250 ? 250
-                    : nome_empresa.Length
-                );
-
             this.id_empresas_rede =
-                String.IsNullOrEmpty(id_empresas_rede) ? 0
-                : Convert.ToInt32(id_empresas_rede);
-
-            this.rede =
-                String.IsNullOrEmpty(rede) ? ""
-                : rede.Substring(
-                    0,
-                    rede.Length > 100 ? 100
-                    : rede.Length
-                );
-
-            this.nome_portal =
-                String.IsNullOrEmpty(nome_portal) ? ""
-                : nome_portal.Substring(
-                    0,
-                    nome_portal.Length > 50 ? 50
-                    : nome_portal.Length
-                );
+                ConvertToInt32Validation.IsValid(id_empresas_rede, "id_empresas_rede", listValidations) ?
+                Convert.ToInt32(id_empresas_rede) :
+                0;
 
             this.empresa =
-                String.IsNullOrEmpty(empresa) ? 0
-                : Convert.ToInt32(empresa);
-
-            this.classificacao_portal =
-                String.IsNullOrEmpty(classificacao_portal) ? ""
-                : classificacao_portal.Substring(
-                    0,
-                    classificacao_portal.Length > 50 ? 50
-                    : classificacao_portal.Length
-                );
+                ConvertToInt32Validation.IsValid(empresa, "empresa", listValidations) ?
+                Convert.ToInt32(empresa) :
+                0;
 
             this.b2c =
-                String.IsNullOrEmpty(b2c) ? false
-                : Convert.ToBoolean(b2c);
+                ConvertToBooleanValidation.IsValid(b2c, "b2c", listValidations) ?
+                Convert.ToBoolean(b2c) :
+                false;
 
             this.oms =
-                String.IsNullOrEmpty(oms) ? false
-                : Convert.ToBoolean(oms);
+                ConvertToBooleanValidation.IsValid(oms, "oms", listValidations) ?
+                Convert.ToBoolean(oms) :
+                false;
 
             this.portal =
-                String.IsNullOrEmpty(portal) ? 0
-                : Convert.ToInt32(portal);
+                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
+                Convert.ToInt32(portal) :
+                0;
+
+            this.cnpj = cnpj;
+            this.nome_empresa = nome_empresa;
+            this.classificacao_portal = classificacao_portal;
+            this.rede = rede;
+            this.nome_portal = nome_portal;
+            this.recordXml = recordXml;
         }
     }
 }

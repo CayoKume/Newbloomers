@@ -1,56 +1,65 @@
-﻿using System.ComponentModel.DataAnnotations;
+using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
+using Domain.IntegrationsCore.Extensions;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Domain.LinxMicrovix_Outbound_Web_Service.Entites.LinxCommerce
+namespace Domain.LinxMicrovix.Outbound.WebService.Entities.LinxCommerce
 {
     public class B2CConsultaNFeSituacao
     {
-        [Column(TypeName = "datetime")]
+        [NotMapped]
+        public Int32 id { get; set; }
+
         public DateTime? lastupdateon { get; private set; }
 
-        [Key]
-        [Column(TypeName = "tinyint")]
         public Int32? id_nfe_situacao { get; private set; }
 
-        [Column(TypeName = "varchar(30)")]
+        [LengthValidation(length: 30, propertyName: "descricao")]
         public string? descricao { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordKey { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordXml { get; private set; }
 
         public B2CConsultaNFeSituacao() { }
 
         public B2CConsultaNFeSituacao(
+            List<ValidationResult> listValidations,
             string? id_nfe_situacao,
             string? descricao,
             string? timestamp,
-            string? portal
+            string? portal,
+            string? recordXml
         )
         {
             lastupdateon = DateTime.Now;
 
             this.id_nfe_situacao =
-                String.IsNullOrEmpty(id_nfe_situacao) ? 0
-                : Convert.ToInt32(id_nfe_situacao);
-
-            this.descricao =
-                String.IsNullOrEmpty(descricao) ? ""
-                : descricao.Substring(
-                    0,
-                    descricao.Length > 30 ? 30
-                    : descricao.Length
-                );
-
-            this.timestamp =
-                String.IsNullOrEmpty(timestamp) ? 0
-                : Convert.ToInt64(timestamp);
+                ConvertToInt32Validation.IsValid(id_nfe_situacao, "id_nfe_situacao", listValidations) ?
+                Convert.ToInt32(id_nfe_situacao) :
+                0;
 
             this.portal =
-                String.IsNullOrEmpty(portal) ? 0
-                : Convert.ToInt32(portal);
+                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
+                Convert.ToInt32(portal) :
+                0;
+
+            this.timestamp =
+                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
+                Convert.ToInt64(timestamp) :
+                0;
+
+            this.descricao = descricao;
+            this.recordKey = $"[{id_nfe_situacao}]|[{timestamp}]";
+            this.recordXml = recordXml;
         }
     }
 }

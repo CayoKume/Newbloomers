@@ -1,12 +1,45 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
+using Domain.IntegrationsCore.Extensions;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Domain.LinxMicrovix_Outbound_Web_Service.Entites.LinxMicrovix
+namespace Domain.LinxMicrovix.Outbound.WebService.Entities.LinxMicrovix
 {
     public class LinxProdutosInformacoes
-{
-}
+    {
+        [NotMapped]
+        public Int32 id { get; set; }
+
+        public DateTime? lastupdateon { get; private set; }
+
+        public Int64? codigoproduto { get; set; }
+
+        public string? informacoes_produto { get; set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordKey { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordXml { get; private set; }
+
+        public LinxProdutosInformacoes() { }
+
+        public LinxProdutosInformacoes(
+            List<ValidationResult> listValidations,
+            string? codigoproduto,
+            string? informacoes_produto
+        )
+        {
+            lastupdateon = DateTime.Now;
+
+            this.codigoproduto =
+                ConvertToInt64Validation.IsValid(codigoproduto, "codigoproduto", listValidations) ?
+                Convert.ToInt64(codigoproduto) :
+                0;
+
+            this.informacoes_produto = informacoes_produto;
+        }
+    }
 }

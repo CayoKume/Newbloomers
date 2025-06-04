@@ -1,35 +1,42 @@
-﻿using Domain.LinxMicrovix_Outbound_Web_Service.Entites.LinxCommerce;
-using Domain.LinxMicrovix_Outbound_Web_Service.Interfaces.Repositorys.Base;
-using Domain.LinxMicrovix_Outbound_Web_Service.Interfaces.Api;
-using Domain.LinxMicrovix_Outbound_Web_Service.Interfaces.Repositorys.LinxCommerce;
-using Domain.IntegrationsCore.Entities.Parameters;
-using static Domain.IntegrationsCore.Exceptions.InternalErrorsExceptions;
-using Application.LinxMicrovix_Outbound_Web_Service.Interfaces.LinxCommerce;
-using Application.LinxMicrovix_Outbound_Web_Service.Interfaces.Base;
+﻿using Application.IntegrationsCore.Interfaces;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxCommerce;
+using Domain.IntegrationsCore.Entities.Enums;
+using Domain.IntegrationsCore.Exceptions;
+using Domain.LinxMicrovix.Outbound.WebService.Entities.LinxCommerce;
+using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
+using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Api;
+using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
+using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxCommerce;
+using System.ComponentModel.DataAnnotations;
 
-namespace Application.LinxMicrovix_Outbound_Web_Service.Services
+namespace Application.LinxMicrovix.Outbound.WebService.Services
 {
     public class B2CConsultaCodigoRastreioService : IB2CConsultaCodigoRastreioService
     {
         private readonly IAPICall _apiCall;
+        private readonly ILoggerService _logger;
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
-        private readonly ILinxMicrovixRepositoryBase<B2CConsultaCodigoRastreio> _linxMicrovixRepositoryBase;
+        private readonly ILinxMicrovixAzureSQLRepositoryBase<B2CConsultaCodigoRastreio> _linxMicrovixRepositoryBase;
         private readonly IB2CConsultaCodigoRastreioRepository _b2cConsultaCodigoRastreioRepository;
+        private static List<string?> _b2cConsultaCodigoRastreioCache { get; set; } = new List<string?>();
 
         public B2CConsultaCodigoRastreioService(
             IAPICall apiCall,
+            ILoggerService logger,
             IB2CConsultaCodigoRastreioRepository b2cConsultaCodigoRastreioRepository,
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
-            ILinxMicrovixRepositoryBase<B2CConsultaCodigoRastreio> linxMicrovixRepositoryBase
+            ILinxMicrovixAzureSQLRepositoryBase<B2CConsultaCodigoRastreio> linxMicrovixRepositoryBase
         )
         {
             _apiCall = apiCall;
+            _logger = logger;
             _b2cConsultaCodigoRastreioRepository = b2cConsultaCodigoRastreioRepository;
             _linxMicrovixServiceBase = linxMicrovixServiceBase;
             _linxMicrovixRepositoryBase = linxMicrovixRepositoryBase;
         }
 
-        public List<B2CConsultaCodigoRastreio?> DeserializeXMLToObject(LinxMicrovixJobParameter jobParameter, List<Dictionary<string?, string?>> records)
+        public List<B2CConsultaCodigoRastreio?> DeserializeXMLToObject(LinxAPIParam jobParameter, List<Dictionary<string?, string?>> records)
         {
             var list = new List<B2CConsultaCodigoRastreio>();
 
@@ -37,45 +44,60 @@ namespace Application.LinxMicrovix_Outbound_Web_Service.Services
             {
                 try
                 {
+                    var validations = new List<ValidationResult>();
+
                     var entity = new B2CConsultaCodigoRastreio(
+                        listValidations: validations,
                         id_pedido: records[i].Where(pair => pair.Key == "id_pedido").Select(pair => pair.Value).FirstOrDefault(),
                         documento: records[i].Where(pair => pair.Key == "documento").Select(pair => pair.Value).FirstOrDefault(),
                         serie: records[i].Where(pair => pair.Key == "serie").Select(pair => pair.Value).FirstOrDefault(),
                         codigo_rastreio: records[i].Where(pair => pair.Key == "codigo_rastreio").Select(pair => pair.Value).FirstOrDefault(),
                         sequencia_volume: records[i].Where(pair => pair.Key == "sequencia_volume").Select(pair => pair.Value).FirstOrDefault(),
                         timestamp: records[i].Where(pair => pair.Key == "timestamp").Select(pair => pair.Value).FirstOrDefault(),
-                        portal: records[i].Where(pair => pair.Key == "portal").Select(pair => pair.Value).FirstOrDefault()
+                        portal: records[i].Where(pair => pair.Key == "portal").Select(pair => pair.Value).FirstOrDefault(),
+                        recordXml: records[i].Where(pair => pair.Key == "recordXml").Select(pair => pair.Value).FirstOrDefault()
                     );
+
+                    var contexto = new ValidationContext(entity, null, null);
+                    Validator.TryValidateObject(entity, contexto, validations, true);
+
+                    if (validations.Count() > 0)
+                    {
+                        for (int j = 0; j < validations.Count(); j++)
+                        {
+                            _logger.AddMessage(
+                                stage: EnumStages.DeserializeXMLToObject,
+                                error: EnumError.Validation,
+                                logLevel: EnumMessageLevel.Warning,
+                                message: $"Error when convert record - id_pedido: {records[i].Where(pair => pair.Key == "id_pedido").Select(pair => pair.Value).FirstOrDefault()} | codigo_rastreio: {records[i].Where(pair => pair.Key == "codigo_rastreio").Select(pair => pair.Value).FirstOrDefault()}\n" +
+                                         $"{validations[j].ErrorMessage}"
+                            );
+                        }
+                        continue;
+                    }
 
                     list.Add(entity);
                 }
                 catch (Exception ex)
                 {
-                    throw new InternalErrorException()
-                    {
-                        project = jobParameter.projectName,
-                        job = jobParameter.jobName,
-                        method = "DeserializeXMLToObject",
-                        message = $"Error when convert record: Pedido - {records[i].Where(pair => pair.Key == "id_pedido").Select(pair => pair.Value).FirstOrDefault()} Código - {records[i].Where(pair => pair.Key == "codigo_rastreio").Select(pair => pair.Value).FirstOrDefault()}",
-                        record = $"Pedido - {records[i].Where(pair => pair.Key == "id_pedido").Select(pair => pair.Value).FirstOrDefault()} Código - {records[i].Where(pair => pair.Key == "codigo_rastreio").Select(pair => pair.Value).FirstOrDefault()}",
-                        propertie = " - ",
-                        exception = ex.Message
-                    };
+                    throw new InternalException(
+                        stage: EnumStages.DeserializeXMLToObject,
+                        error: EnumError.Exception,
+                        level: EnumMessageLevel.Error,
+                        message: $"Error when convert record - id_pedido: {records[i].Where(pair => pair.Key == "id_pedido").Select(pair => pair.Value).FirstOrDefault()} | codigo_rastreio: {records[i].Where(pair => pair.Key == "codigo_rastreio").Select(pair => pair.Value).FirstOrDefault()}",
+                        exceptionMessage: ex.Message
+                    );
                 }
             }
 
             return list;
         }
 
-        public async Task<bool> GetRecord(LinxMicrovixJobParameter jobParameter, string? identificador, string? cnpj_emp)
+        public async Task<bool> GetRecord(LinxAPIParam jobParameter, string? identificador, string? cnpj_emp)
         {
             try
             {
-                await _linxMicrovixRepositoryBase.DeleteLogResponse(jobParameter);
-                await _linxMicrovixRepositoryBase.CreateDataTableIfNotExists(jobParameter);
-                await _b2cConsultaCodigoRastreioRepository.InsertParametersIfNotExists(jobParameter);
-
-                string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter);
+                string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter.parametersInterval, jobParameter.tableName, jobParameter.jobName);
 
                 var body = _linxMicrovixServiceBase.BuildBodyRequest(
                     parametersList: parameters.Replace("[0]", "0").Replace("[id_pedido]", identificador),
@@ -94,17 +116,6 @@ namespace Application.LinxMicrovix_Outbound_Web_Service.Services
                         await _b2cConsultaCodigoRastreioRepository.InsertRecord(record: record, jobParameter: jobParameter);
                     }
 
-                    await _linxMicrovixRepositoryBase.InsertLogResponse(
-                        jobParameter: jobParameter,
-                        response: response,
-                        record: new
-                        {
-                            method = jobParameter.jobName,
-                            parameters_interval = jobParameter.parametersInterval,
-                            response = response
-                        });
-                    await _linxMicrovixRepositoryBase.UpdateLogParameters(jobParameter: jobParameter, lastResponse: response);
-
                     return true;
                 }
 
@@ -116,18 +127,14 @@ namespace Application.LinxMicrovix_Outbound_Web_Service.Services
             }
         }
 
-        public async Task<bool> GetRecords(LinxMicrovixJobParameter jobParameter)
+        public async Task<bool> GetRecords(LinxAPIParam jobParameter)
         {
+            IList<B2CConsultaCodigoRastreio> _listSomenteNovos = new List<B2CConsultaCodigoRastreio>();
+
             try
             {
-                await _linxMicrovixRepositoryBase.DeleteLogResponse(jobParameter);
-                await _linxMicrovixRepositoryBase.CreateDataTableIfNotExists(jobParameter);
-                await _b2cConsultaCodigoRastreioRepository.CreateTableMerge(jobParameter: jobParameter);
-                await _b2cConsultaCodigoRastreioRepository.InsertParametersIfNotExists(jobParameter);
-                await _linxMicrovixRepositoryBase.ExecuteTruncateRawTable(jobParameter);
-
-                string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter);
-                var cnpjs_emp = await _linxMicrovixRepositoryBase.GetB2CCompanys(jobParameter);
+                string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter.parametersInterval, jobParameter.tableName, jobParameter.jobName);
+                var cnpjs_emp = await _linxMicrovixRepositoryBase.GetB2CCompanys();
 
                 foreach (var cnpj_emp in cnpjs_emp)
                 {
@@ -143,30 +150,80 @@ namespace Application.LinxMicrovix_Outbound_Web_Service.Services
                     if (xmls.Count() > 0)
                     {
                         var listRecords = DeserializeXMLToObject(jobParameter, xmls);
-                        _b2cConsultaCodigoRastreioRepository.BulkInsertIntoTableRaw(records: listRecords, jobParameter: jobParameter);
-                    }
 
-                    await _linxMicrovixRepositoryBase.InsertLogResponse(
-                        jobParameter: jobParameter,
-                        response: response,
-                        record: new
+                        //if (_b2cConsultaCodigoRastreioCache.GetList().Count == 0)
+                        //{
+                        //    var list_existentes = await _b2cConsultaCodigoRastreioRepository.GetRegistersExists(jobParameter: jobParameter, registros: listRecords);
+                        //    _b2cConsultaCodigoRastreioCache.AddList(list_existentes);
+                        //}
+
+                        //_listSomenteNovos = _b2cConsultaCodigoRastreioCache.FiltrarList(listRecords);
+
+                        if (_listSomenteNovos.Count() > 0)
                         {
-                            method = jobParameter.jobName,
-                            parameters_interval = jobParameter.parametersInterval,
-                            response = response
-                        });
-                    await _linxMicrovixRepositoryBase.UpdateLogParameters(jobParameter: jobParameter, lastResponse: response); 
+                            _b2cConsultaCodigoRastreioRepository.BulkInsertIntoTableRaw(records: _listSomenteNovos, jobParameter: jobParameter);
+                            
+                            //for (int i = 0; i < _listSomenteNovos.Count; i++)
+                            //{
+                            //    var key = _b2cConsultaCodigoRastreioCache.GetKey(_listSomenteNovos[i]);
+                            //    if (_b2cConsultaCodigoRastreioCache.GetDictionaryXml().ContainsKey(key))
+                            //    {
+                            //        var xml = _b2cConsultaCodigoRastreioCache.GetDictionaryXml()[key];
+                            //        _logger.AddRecord(key, xml);
+                            //    }
+                            //}
+
+                            await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
+
+                            _logger.AddMessage(
+                                $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"
+                            );
+                        }
+                        else
+                            _logger.AddMessage(
+                                $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"
+                            );
+                    }
                 }
-
-                await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter: jobParameter);
-                await _linxMicrovixRepositoryBase.ExecuteTruncateRawTable(jobParameter);
-
-                return true;
             }
-            catch
+            catch (SQLCommandException ex)
             {
+                _logger.AddMessage(
+                    stage: ex.Stage,
+                    error: ex.Error,
+                    logLevel: ex.MessageLevel,
+                    message: ex.Message,
+                    exceptionMessage: ex.ExceptionMessage,
+                    commandSQL: ex.CommandSQL
+                );
+
                 throw;
             }
+            catch (InternalException ex)
+            {
+                _logger.AddMessage(
+                    stage: ex.stage,
+                    error: ex.Error,
+                    logLevel: ex.MessageLevel,
+                    message: ex.Message,
+                    exceptionMessage: ex.ExceptionMessage
+                );
+
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.AddMessage(
+                    message: "Error when executing GetRecords method",
+                    exceptionMessage: ex.Message
+                );
+            }
+            finally
+            {
+                //await _logger.CommitAllChanges();
+            }
+
+            return true;
         }
     }
 }

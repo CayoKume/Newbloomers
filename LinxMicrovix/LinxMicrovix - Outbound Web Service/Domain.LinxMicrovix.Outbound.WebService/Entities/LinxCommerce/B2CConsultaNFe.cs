@@ -1,77 +1,73 @@
-﻿using System.ComponentModel.DataAnnotations;
+using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
+using Domain.IntegrationsCore.Extensions;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 
-namespace Domain.LinxMicrovix_Outbound_Web_Service.Entites.LinxCommerce
+namespace Domain.LinxMicrovix.Outbound.WebService.Entities.LinxCommerce
 {
     public class B2CConsultaNFe
     {
-        [Column(TypeName = "datetime")]
+        [SkipProperty]
+        public Int32 id { get; set; }
+
         public DateTime? lastupdateon { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? id_nfe { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? id_pedido { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? documento { get; private set; }
 
-        [Column(TypeName = "smalldatetime")]
         public DateTime? data_emissao { get; private set; }
 
-        [Key]
-        [Column(TypeName = "char(44)")]
+        [LengthValidation(length: 44, propertyName: "chave_nfe")]
         public string? chave_nfe { get; private set; }
 
-        [Column(TypeName = "tinyint")]
         public Int32? situacao { get; private set; }
 
-        [Column(TypeName = "varchar(MAX)")]
         public string? xml { get; private set; }
 
-        [Column(TypeName = "bit")]
-        public Int32? excluido { get; private set; }
+        public bool? excluido { get; private set; }
 
-        [Column(TypeName = "uniqueidentifier")]
         public Guid? identificador_microvix { get; private set; }
 
-        [Column(TypeName = "smalldatetime")]
         public DateTime? dt_insert { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? valor_nota { get; private set; }
 
-        [Column(TypeName = "varchar(10)")]
+        [LengthValidation(length: 10, propertyName: "serie")]
         public string? serie { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? frete { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
-        
-        [Column(TypeName = "varchar(15)")]
+
+        [LengthValidation(length: 15, propertyName: "nProt")]
         public string? nProt { get; private set; }
 
-        [Column(TypeName = "varchar(3)")]
+        [LengthValidation(length: 3, propertyName: "codigo_modelo_nf")]
         public string? codigo_modelo_nf { get; private set; }
 
-        [Column(TypeName = "varchar(255)")]
+        [LengthValidation(length: 255, propertyName: "justificativa")]
         public string? justificativa { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? tpAmb { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordKey { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordXml { get; private set; }
 
         public B2CConsultaNFe() { }
 
         public B2CConsultaNFe(
+            List<ValidationResult> listValidations,
             string? id_nfe,
             string? id_pedido,
             string? documento,
@@ -90,106 +86,84 @@ namespace Domain.LinxMicrovix_Outbound_Web_Service.Entites.LinxCommerce
             string? nProt,
             string? codigo_modelo_nf,
             string? justificativa,
-            string? tpAmb
+            string? tpAmb,
+            string? recordXml
         )
         {
             lastupdateon = DateTime.Now;
 
             this.id_nfe =
-                String.IsNullOrEmpty(id_nfe) ? 0
-                : Convert.ToInt32(id_nfe);
+                ConvertToInt32Validation.IsValid(id_nfe, "id_nfe", listValidations) ?
+                Convert.ToInt32(id_nfe) :
+                0;
 
             this.id_pedido =
-                String.IsNullOrEmpty(id_pedido) ? 0
-                : Convert.ToInt32(id_pedido);
+                ConvertToInt32Validation.IsValid(id_pedido, "id_pedido", listValidations) ?
+                Convert.ToInt32(id_pedido) :
+                0;
 
             this.documento =
-                String.IsNullOrEmpty(documento) ? 0
-                : Convert.ToInt32(documento);
+                ConvertToInt32Validation.IsValid(documento, "documento", listValidations) ?
+                Convert.ToInt32(documento) :
+                0;
 
             this.data_emissao =
-                String.IsNullOrEmpty(data_emissao) ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
-                : Convert.ToDateTime(data_emissao);
-
-            this.chave_nfe =
-                String.IsNullOrEmpty(chave_nfe) ? ""
-                : chave_nfe.Substring(
-                    0,
-                    chave_nfe.Length > 44 ? 44
-                    : chave_nfe.Length
-                );
+                ConvertToDateTimeValidation.IsValid(data_emissao, "data_emissao", listValidations) ?
+                Convert.ToDateTime(data_emissao) :
+                new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar);
 
             this.situacao =
-                String.IsNullOrEmpty(situacao) ? 0
-                : Convert.ToInt32(situacao);
-
-            this.xml =
-                String.IsNullOrEmpty(xml) ? ""
-                : xml;
+                ConvertToInt32Validation.IsValid(situacao, "situacao", listValidations) ?
+                Convert.ToInt32(situacao) :
+                0;
 
             this.excluido =
-                String.IsNullOrEmpty(excluido) ? 0
-                : Convert.ToInt32(excluido);
+                ConvertToBooleanValidation.IsValid(excluido, "excluido", listValidations) ?
+                Convert.ToBoolean(excluido) :
+                false;
 
             this.identificador_microvix =
                 String.IsNullOrEmpty(identificador_microvix) ? null
                 : Guid.Parse(identificador_microvix);
 
             this.dt_insert =
-                String.IsNullOrEmpty(dt_insert) ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
-                : Convert.ToDateTime(dt_insert);
+               ConvertToDateTimeValidation.IsValid(dt_insert, "dt_insert", listValidations) ?
+               Convert.ToDateTime(dt_insert) :
+               new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar);
 
             this.valor_nota =
-                String.IsNullOrEmpty(valor_nota) ? 0
-                : Convert.ToDecimal(valor_nota);
-
-            this.serie =
-                String.IsNullOrEmpty(serie) ? ""
-                : serie.Substring(
-                    0,
-                    serie.Length > 10 ? 10
-                    : serie.Length
-                );
+                ConvertToDecimalValidation.IsValid(valor_nota, "valor_nota", listValidations) ?
+                Convert.ToDecimal(valor_nota, new CultureInfo("en-US")) :
+                0;
 
             this.frete =
-                String.IsNullOrEmpty(frete) ? 0
-                : Convert.ToDecimal(frete);
-
-            this.nProt =
-                String.IsNullOrEmpty(nProt) ? ""
-                : nProt.Substring(
-                    0,
-                    nProt.Length > 15 ? 15
-                    : nProt.Length
-                );
-
-            this.codigo_modelo_nf =
-                String.IsNullOrEmpty(codigo_modelo_nf) ? ""
-                : codigo_modelo_nf.Substring(
-                    0,
-                    codigo_modelo_nf.Length > 3 ? 3
-                    : codigo_modelo_nf.Length
-                );
-
-            this.justificativa =
-                String.IsNullOrEmpty(justificativa) ? ""
-                : justificativa.Substring(
-                    0,
-                    justificativa.Length > 255 ? 255
-                    : justificativa.Length
-                );
+                ConvertToDecimalValidation.IsValid(frete, "frete", listValidations) ?
+                Convert.ToDecimal(frete, new CultureInfo("en-US")) :
+                0;
 
             this.tpAmb =
-                String.IsNullOrEmpty(tpAmb) ? 0
-                : Convert.ToInt32(tpAmb);
-
-            this.timestamp =
-                String.IsNullOrEmpty(timestamp) ? 0
-                : Convert.ToInt64(timestamp);
+                ConvertToInt32Validation.IsValid(tpAmb, "tpAmb", listValidations) ?
+                Convert.ToInt32(tpAmb) :
+                0;
 
             this.portal =
-                String.IsNullOrEmpty(portal) ? 0
-                : Convert.ToInt32(portal);
+                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
+                Convert.ToInt32(portal) :
+                0;
+
+            this.timestamp =
+                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
+                Convert.ToInt64(timestamp) :
+                0;
+
+            this.chave_nfe = chave_nfe;
+            this.xml = xml;
+            this.nProt = nProt;
+            this.codigo_modelo_nf = codigo_modelo_nf;
+            this.justificativa = justificativa;
+            this.serie = serie;
+            this.recordKey = $"[{id_nfe}]|[{id_pedido}]|[{chave_nfe}]|[{timestamp}]";
+            this.recordXml = recordXml;
         }
     }
 }

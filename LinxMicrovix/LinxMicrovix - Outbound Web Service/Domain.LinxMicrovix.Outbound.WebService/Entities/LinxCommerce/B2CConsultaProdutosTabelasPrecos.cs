@@ -1,68 +1,84 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
+using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Globalization;
 
-namespace Domain.LinxMicrovix_Outbound_Web_Service.Entites.LinxCommerce
+namespace Domain.LinxMicrovix.Outbound.WebService.Entities.LinxCommerce
 {
     public class B2CConsultaProdutosTabelasPrecos
     {
-        [Column(TypeName = "datetime")]
+        [SkipProperty]
+        public Int32 id { get; set; }
+
         public DateTime? lastupdateon { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? id_prod_tab_preco { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? id_tabela { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? codigoproduto { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? precovenda { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordKey { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordXml { get; private set; }
 
         public B2CConsultaProdutosTabelasPrecos() { }
 
         public B2CConsultaProdutosTabelasPrecos(
+            List<ValidationResult> listValidations,
             string? id_prod_tab_preco,
             string? id_tabela,
             string? codigoproduto,
             string? precovenda,
             string? timestamp,
-            string? portal
+            string? portal,
+            string? recordXml
         )
         {
             lastupdateon = DateTime.Now;
 
             this.id_prod_tab_preco =
-                String.IsNullOrEmpty(id_prod_tab_preco) ? 0
-                : Convert.ToInt32(id_prod_tab_preco);
+                ConvertToInt32Validation.IsValid(id_prod_tab_preco, "id_prod_tab_preco", listValidations) ?
+                Convert.ToInt32(id_prod_tab_preco) :
+                0;
 
             this.id_tabela =
-                String.IsNullOrEmpty(id_tabela) ? 0
-                : Convert.ToInt32(id_tabela);
+                ConvertToInt32Validation.IsValid(id_tabela, "id_tabela", listValidations) ?
+                Convert.ToInt32(id_tabela) :
+                0;
 
             this.codigoproduto =
-                String.IsNullOrEmpty(codigoproduto) ? 0
-                : Convert.ToInt64(codigoproduto);
+                ConvertToInt64Validation.IsValid(codigoproduto, "codigoproduto", listValidations) ?
+                Convert.ToInt64(codigoproduto) :
+                0;
 
             this.precovenda =
-                String.IsNullOrEmpty(precovenda) ? 0
-                : Convert.ToDecimal(precovenda);
-
-            this.timestamp =
-                String.IsNullOrEmpty(timestamp) ? 0
-                : Convert.ToInt64(timestamp);
+                ConvertToDecimalValidation.IsValid(precovenda, "precovenda", listValidations) ?
+                Convert.ToDecimal(precovenda, new CultureInfo("en-US")) :
+                0;
 
             this.portal =
-                String.IsNullOrEmpty(portal) ? 0
-                : Convert.ToInt32(portal);
+                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
+                Convert.ToInt32(portal) :
+                0;
+
+            this.timestamp =
+                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
+                Convert.ToInt64(timestamp) :
+                0;
+
+            this.recordXml = recordXml;
         }
     }
 }

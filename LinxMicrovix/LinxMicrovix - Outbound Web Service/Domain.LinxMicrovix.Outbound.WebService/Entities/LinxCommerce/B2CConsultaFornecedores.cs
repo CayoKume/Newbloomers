@@ -1,72 +1,79 @@
-﻿using System.ComponentModel.DataAnnotations;
+using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
+using Domain.IntegrationsCore.Extensions;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Domain.LinxMicrovix_Outbound_Web_Service.Entites.LinxCommerce
+namespace Domain.LinxMicrovix.Outbound.WebService.Entities.LinxCommerce
 {
     public class B2CConsultaFornecedores
     {
-        [Column(TypeName = "datetime")]
+        [NotMapped]
+        public Int32 id { get; set; }
+
         public DateTime? lastupdateon { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? cod_fornecedor { get; private set; }
 
-        [Column(TypeName = "varchar(60)")]
+        [LengthValidation(length: 60, propertyName: "nome")]
         public string? nome { get; private set; }
 
-        [Column(TypeName = "varchar(60)")]
+        [LengthValidation(length: 60, propertyName: "nome_fantasia")]
         public string? nome_fantasia { get; private set; }
 
-        [Column(TypeName = "char(1)")]
+        [LengthValidation(length: 1, propertyName: "tipo_pessoa")]
         public string? tipo_pessoa { get; private set; }
 
-        [Column(TypeName = "char(1)")]
+        [LengthValidation(length: 1, propertyName: "tipo_fornecedor")]
         public string? tipo_fornecedor { get; private set; }
 
-        [Column(TypeName = "varchar(250)")]
+        [LengthValidation(length: 250, propertyName: "endereco")]
         public string? endereco { get; private set; }
 
-        [Column(TypeName = "varchar(20)")]
+        [LengthValidation(length: 20, propertyName: "numero_rua")]
         public string? numero_rua { get; private set; }
 
-        [Column(TypeName = "varchar(60)")]
+        [LengthValidation(length: 60, propertyName: "bairro")]
         public string? bairro { get; private set; }
 
-        [Column(TypeName = "char(9)")]
+        [LengthValidation(length: 9, propertyName: "cep")]
         public string? cep { get; private set; }
 
-        [Column(TypeName = "varchar(40)")]
+        [LengthValidation(length: 40, propertyName: "cidade")]
         public string? cidade { get; private set; }
 
-        [Column(TypeName = "char(2)")]
+        [LengthValidation(length: 2, propertyName: "uf")]
         public string? uf { get; private set; }
 
-        [Key]
-        [Column(TypeName = "varchar(14)")]
+        [LengthValidation(length: 14, propertyName: "documento")]
         public string? documento { get; private set; }
 
-        [Column(TypeName = "varchar(20)")]
+        [LengthValidation(length: 20, propertyName: "fone")]
         public string? fone { get; private set; }
 
-        [Column(TypeName = "varchar(50)")]
+        [LengthValidation(length: 50, propertyName: "email")]
         public string? email { get; private set; }
 
-        [Column(TypeName = "varchar(80)")]
+        [LengthValidation(length: 80, propertyName: "pais")]
         public string? pais { get; private set; }
 
-        [Column(TypeName = "varchar(MAX)")]
         public string? obs { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordKey { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordXml { get; private set; }
 
         public B2CConsultaFornecedores() { }
 
         public B2CConsultaFornecedores(
+            List<ValidationResult> listValidations,
             string? cod_fornecedor,
             string? nome,
             string? nome_fantasia,
@@ -84,138 +91,43 @@ namespace Domain.LinxMicrovix_Outbound_Web_Service.Entites.LinxCommerce
             string? pais,
             string? obs,
             string? timestamp,
-            string? portal
+            string? portal,
+            string? recordXml
         )
         {
             lastupdateon = DateTime.Now;
 
             this.cod_fornecedor =
-                String.IsNullOrEmpty(cod_fornecedor) ? 0
-                : Convert.ToInt32(cod_fornecedor);
-
-            this.nome =
-                String.IsNullOrEmpty(nome) ? ""
-                : nome.Substring(
-                    0,
-                    nome.Length > 60 ? 60
-                    : nome.Length
-                );
-
-            this.nome_fantasia =
-                String.IsNullOrEmpty(nome_fantasia) ? ""
-                : nome_fantasia.Substring(
-                    0,
-                    nome_fantasia.Length > 60 ? 60
-                    : nome_fantasia.Length
-                );
-
-            this.tipo_pessoa =
-                String.IsNullOrEmpty(tipo_pessoa) ? ""
-                : tipo_pessoa.Substring(
-                    0,
-                    tipo_pessoa.Length > 1 ? 1
-                    : tipo_pessoa.Length
-                );
-
-            this.tipo_fornecedor =
-                String.IsNullOrEmpty(tipo_fornecedor) ? ""
-                : tipo_fornecedor.Substring(
-                    0,
-                    tipo_fornecedor.Length > 1 ? 1
-                    : tipo_fornecedor.Length
-                );
-
-            this.endereco =
-                String.IsNullOrEmpty(endereco) ? ""
-                : endereco.Substring(
-                    0,
-                    endereco.Length > 250 ? 250
-                    : endereco.Length
-                );
-
-            this.numero_rua =
-                String.IsNullOrEmpty(numero_rua) ? ""
-                : numero_rua.Substring(
-                    0,
-                    numero_rua.Length > 20 ? 20
-                    : numero_rua.Length
-                );
-
-            this.bairro =
-                String.IsNullOrEmpty(bairro) ? ""
-                : bairro.Substring(
-                    0,
-                    bairro.Length > 60 ? 60
-                    : bairro.Length
-                );
-
-            this.cep =
-                String.IsNullOrEmpty(cep) ? ""
-                : cep.Substring(
-                    0,
-                    cep.Length > 9 ? 9
-                    : cep.Length
-                );
-
-            this.cidade =
-                String.IsNullOrEmpty(cidade) ? ""
-                : cidade.Substring(
-                    0,
-                    cidade.Length > 40 ? 40
-                    : cidade.Length
-                );
-
-            this.uf =
-                String.IsNullOrEmpty(uf) ? ""
-                : uf.Substring(
-                    0,
-                    uf.Length > 2 ? 2
-                    : uf.Length
-                );
-
-            this.documento =
-                String.IsNullOrEmpty(documento) ? ""
-                : documento.Substring(
-                    0,
-                    documento.Length > 14 ? 14
-                    : documento.Length
-                );
-
-            this.fone =
-                String.IsNullOrEmpty(fone) ? ""
-                : fone.Substring(
-                    0,
-                    fone.Length > 20 ? 20
-                    : fone.Length
-                );
-
-            this.email =
-                String.IsNullOrEmpty(email) ? ""
-                : email.Substring(
-                    0,
-                    email.Length > 50 ? 50
-                    : email.Length
-                );
-
-            this.pais =
-                String.IsNullOrEmpty(pais) ? ""
-                : pais.Substring(
-                    0,
-                    pais.Length > 80 ? 80
-                    : pais.Length
-                );
-
-            this.obs =
-                String.IsNullOrEmpty(obs) ? ""
-                : obs;
-
-            this.timestamp =
-                String.IsNullOrEmpty(timestamp) ? 0
-                : Convert.ToInt64(timestamp);
+                ConvertToInt32Validation.IsValid(cod_fornecedor, "cod_fornecedor", listValidations) ?
+                Convert.ToInt32(cod_fornecedor) :
+                0;
 
             this.portal =
-                String.IsNullOrEmpty(portal) ? 0
-                : Convert.ToInt32(portal);
+                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
+                Convert.ToInt32(portal) :
+                0;
+
+            this.timestamp =
+                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
+                Convert.ToInt64(timestamp) :
+                0;
+
+            this.nome = nome;
+            this.nome_fantasia = nome_fantasia;
+            this.tipo_pessoa = tipo_pessoa;
+            this.tipo_fornecedor = tipo_fornecedor;
+            this.endereco = endereco;
+            this.numero_rua = numero_rua;
+            this.bairro = bairro;
+            this.cep = cep;
+            this.cidade = cidade;
+            this.uf = uf;
+            this.documento = documento;
+            this.fone = fone;
+            this.email = email;
+            this.pais = pais;
+            this.obs = obs;
+            this.recordXml = recordXml;
         }
     }
 }

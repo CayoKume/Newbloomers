@@ -1,50 +1,55 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
+using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Globalization;
 
-namespace Domain.LinxMicrovix_Outbound_Web_Service.Entites.LinxCommerce
+namespace Domain.LinxMicrovix.Outbound.WebService.Entities.LinxCommerce
 {
     public class B2CConsultaProdutosDetalhes
     {
-        [Column(TypeName = "datetime")]
+        [SkipProperty]
+        public Int32 id { get; set; }
+
         public DateTime? lastupdateon { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? id_prod_det { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? codigoproduto { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? empresa { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? saldo { get; private set; }
 
-        [Column(TypeName = "bit")]
         public Int32? controla_lote { get; private set; }
 
-        [Column(TypeName = "varchar(250)")]
+        [LengthValidation(length: 250, propertyName: "nomeproduto_alternativo")]
         public string? nomeproduto_alternativo { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
-        [Column(TypeName = "varchar(20)")]
+        [LengthValidation(length: 20, propertyName: "referencia")]
         public string? referencia { get; private set; }
 
-        [Column(TypeName = "varchar(50)")]
+        [LengthValidation(length: 50, propertyName: "localizacao")]
         public string? localizacao { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
-        [Column(TypeName = "smallint")]
         public Int32? tempo_preparacao_estoque { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordKey { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordXml { get; private set; }
 
         public B2CConsultaProdutosDetalhes() { }
 
         public B2CConsultaProdutosDetalhes(
+            List<ValidationResult> listValidations,
             string? id_prod_det,
             string? codigoproduto,
             string? empresa,
@@ -55,66 +60,56 @@ namespace Domain.LinxMicrovix_Outbound_Web_Service.Entites.LinxCommerce
             string? referencia,
             string? localizacao,
             string? portal,
-            string? tempo_preparacao_estoque
+            string? tempo_preparacao_estoque,
+            string? recordXml
         )
         {
             lastupdateon = DateTime.Now;
 
             this.id_prod_det =
-                String.IsNullOrEmpty(id_prod_det) ? 0
-                : Convert.ToInt32(id_prod_det);
+                ConvertToInt32Validation.IsValid(id_prod_det, "id_prod_det", listValidations) ?
+                Convert.ToInt32(id_prod_det) :
+                0;
 
             this.codigoproduto =
-                String.IsNullOrEmpty(codigoproduto) ? 0
-                : Convert.ToInt64(codigoproduto);
+                ConvertToInt64Validation.IsValid(codigoproduto, "codigoproduto", listValidations) ?
+                Convert.ToInt64(codigoproduto) :
+                0;
 
             this.empresa =
-                String.IsNullOrEmpty(empresa) ? 0
-                : Convert.ToInt32(empresa);
+                ConvertToInt32Validation.IsValid(empresa, "empresa", listValidations) ?
+                Convert.ToInt32(empresa) :
+                0;
 
             this.saldo =
-                String.IsNullOrEmpty(saldo) ? 0
-                : Convert.ToDecimal(saldo);
+                ConvertToDecimalValidation.IsValid(saldo, "saldo", listValidations) ?
+                Convert.ToDecimal(saldo, new CultureInfo("en-US")) :
+                0;
 
             this.controla_lote =
-                String.IsNullOrEmpty(controla_lote) ? 0
-                : Convert.ToInt32(controla_lote);
-
-            this.nomeproduto_alternativo =
-                String.IsNullOrEmpty(nomeproduto_alternativo) ? ""
-                : nomeproduto_alternativo.Substring(
-                    0,
-                    nomeproduto_alternativo.Length > 250 ? 250
-                    : nomeproduto_alternativo.Length
-                );
-
-            this.referencia =
-                String.IsNullOrEmpty(referencia) ? ""
-                : referencia.Substring(
-                    0,
-                    referencia.Length > 20 ? 20
-                    : referencia.Length
-                );
-
-            this.localizacao =
-                String.IsNullOrEmpty(localizacao) ? ""
-                : localizacao.Substring(
-                    0,
-                    localizacao.Length > 50 ? 50
-                    : localizacao.Length
-                );
+                ConvertToInt32Validation.IsValid(controla_lote, "controla_lote", listValidations) ?
+                Convert.ToInt32(controla_lote) :
+                0;
 
             this.tempo_preparacao_estoque =
-                String.IsNullOrEmpty(tempo_preparacao_estoque) ? 0
-                : Convert.ToInt32(tempo_preparacao_estoque);
-
-            this.timestamp =
-                String.IsNullOrEmpty(timestamp) ? 0
-                : Convert.ToInt64(timestamp);
+                ConvertToInt32Validation.IsValid(tempo_preparacao_estoque, "tempo_preparacao_estoque", listValidations) ?
+                Convert.ToInt32(tempo_preparacao_estoque) :
+                0;
 
             this.portal =
-                String.IsNullOrEmpty(portal) ? 0
-                : Convert.ToInt32(portal);
+                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
+                Convert.ToInt32(portal) :
+                0;
+
+            this.timestamp =
+                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
+                Convert.ToInt64(timestamp) :
+                0;
+
+            this.nomeproduto_alternativo = nomeproduto_alternativo;
+            this.referencia = referencia;
+            this.localizacao = localizacao;
+            this.recordXml = recordXml;
         }
     }
 }

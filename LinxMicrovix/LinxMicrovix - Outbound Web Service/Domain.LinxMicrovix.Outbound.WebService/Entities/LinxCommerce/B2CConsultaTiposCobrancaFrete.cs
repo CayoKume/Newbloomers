@@ -1,56 +1,64 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
+using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Domain.LinxMicrovix_Outbound_Web_Service.Entites.LinxCommerce
+namespace Domain.LinxMicrovix.Outbound.WebService.Entities.LinxCommerce
 {
     public class B2CConsultaTiposCobrancaFrete
     {
-        [Column(TypeName = "datetime")]
+        [NotMapped]
+        public Int32 id { get; set; }
+
         public DateTime? lastupdateon { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? codigo_tipo_cobranca_frete { get; private set; }
 
-        [Column(TypeName = "varchar(60)")]
+        [LengthValidation(length: 60, propertyName: "nome_tipo_cobranca_frete")]
         public string? nome_tipo_cobranca_frete { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordKey { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordXml { get; private set; }
 
         public B2CConsultaTiposCobrancaFrete() { }
 
         public B2CConsultaTiposCobrancaFrete(
+            List<ValidationResult> listValidations,
             string? codigo_tipo_cobranca_frete,
             string? nome_tipo_cobranca_frete,
             string? timestamp,
-            string? portal
+            string? portal,
+            string? recordXml
         )
         {
             lastupdateon = DateTime.Now;
 
-            this.nome_tipo_cobranca_frete =
-                String.IsNullOrEmpty(nome_tipo_cobranca_frete) ? ""
-                : nome_tipo_cobranca_frete.Substring(
-                    0,
-                    nome_tipo_cobranca_frete.Length > 60 ? 60
-                    : nome_tipo_cobranca_frete.Length
-                );
-
             this.codigo_tipo_cobranca_frete =
-                String.IsNullOrEmpty(codigo_tipo_cobranca_frete) ? 0
-                : Convert.ToInt32(codigo_tipo_cobranca_frete);
-
-            this.timestamp =
-                String.IsNullOrEmpty(timestamp) ? 0
-                : Convert.ToInt64(timestamp);
+                ConvertToInt32Validation.IsValid(codigo_tipo_cobranca_frete, "codigo_tipo_cobranca_frete", listValidations) ?
+                Convert.ToInt32(codigo_tipo_cobranca_frete) :
+                0;
 
             this.portal =
-                String.IsNullOrEmpty(portal) ? 0
-                : Convert.ToInt32(portal);
+                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
+                Convert.ToInt32(portal) :
+                0;
+
+            this.timestamp =
+                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
+                Convert.ToInt64(timestamp) :
+                0;
+
+            this.nome_tipo_cobranca_frete = nome_tipo_cobranca_frete;
+            this.recordXml = recordXml;
         }
     }
 }

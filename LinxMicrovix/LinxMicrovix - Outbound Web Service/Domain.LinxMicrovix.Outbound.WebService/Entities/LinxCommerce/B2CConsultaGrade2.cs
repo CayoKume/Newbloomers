@@ -1,56 +1,64 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
+using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Domain.LinxMicrovix_Outbound_Web_Service.Entites.LinxCommerce
+namespace Domain.LinxMicrovix.Outbound.WebService.Entities.LinxCommerce
 {
     public class B2CConsultaGrade2
     {
-        [Column(TypeName = "datetime")]
+        [NotMapped]
+        public Int32 id { get; set; }
+
         public DateTime? lastupdateon { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? codigo_grade2 { get; private set; }
 
-        [Column(TypeName = "varchar(100)")]
+        [LengthValidation(length: 100, propertyName: "nome_grade2")]
         public string? nome_grade2 { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordKey { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordXml { get; private set; }
 
         public B2CConsultaGrade2() { }
 
         public B2CConsultaGrade2(
+            List<ValidationResult> listValidations,
             string? codigo_grade2,
             string? nome_grade2,
             string? timestamp,
-            string? portal
+            string? portal,
+            string? recordXml
         )
         {
             lastupdateon = DateTime.Now;
 
             this.codigo_grade2 =
-                String.IsNullOrEmpty(codigo_grade2) ? 0
-                : Convert.ToInt32(codigo_grade2);
-
-            this.nome_grade2 =
-                String.IsNullOrEmpty(nome_grade2) ? ""
-                : nome_grade2.Substring(
-                    0,
-                    nome_grade2.Length > 100 ? 100
-                    : nome_grade2.Length
-                );
-
-            this.timestamp =
-                String.IsNullOrEmpty(timestamp) ? 0
-                : Convert.ToInt64(timestamp);
+                ConvertToInt32Validation.IsValid(codigo_grade2, "codigo_grade2", listValidations) ?
+                Convert.ToInt32(codigo_grade2) :
+                0;
 
             this.portal =
-                String.IsNullOrEmpty(portal) ? 0
-                : Convert.ToInt32(portal);
+                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
+                Convert.ToInt32(portal) :
+                0;
+
+            this.timestamp =
+                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
+                Convert.ToInt64(timestamp) :
+                0;
+
+            this.nome_grade2 = nome_grade2;
+            this.recordXml = recordXml;
         }
     }
 }

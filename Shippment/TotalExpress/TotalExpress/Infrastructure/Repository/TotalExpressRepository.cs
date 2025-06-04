@@ -1,11 +1,11 @@
 ﻿using Dapper;
-using IntegrationsCore.Infrastructure.Connections.MySQL;
-using IntegrationsCore.Infrastructure.Connections.PostgreSQL;
-using IntegrationsCore.Infrastructure.Connections.SQLServer;
+using Infrastructure.IntegrationsCore.Connections.MySQL;
+using Infrastructure.IntegrationsCore.Connections.PostgreSQL;
+using Infrastructure.IntegrationsCore.Connections.SQLServer;
 using Newtonsoft.Json;
 using System.Data;
 using TotalExpress.Domain.Entites;
-using static IntegrationsCore.Domain.Exceptions.RepositorysExceptions;
+using static Domain.IntegrationsCore.Exceptions.RepositorysExceptions;
 
 namespace TotalExpress.Infrastructure.Repository
 {
@@ -35,7 +35,7 @@ namespace TotalExpress.Infrastructure.Repository
 
             try
             {
-                using (var conn = _sqlServerConnection.GetIDbConnection())
+                using (var conn = _sqlServerConnection.GetIDbConnection(""))
                 {
                     var result = await conn.ExecuteAsync(
                         sql: sql,
@@ -78,7 +78,7 @@ namespace TotalExpress.Infrastructure.Repository
 
             try
             {
-                using (var conn = _sqlServerConnection.GetIDbConnection())
+                using (var conn = _sqlServerConnection.GetIDbConnection(""))
                 {
                     var result = await conn.ExecuteAsync(
                         sql: sql,
@@ -205,7 +205,7 @@ namespace TotalExpress.Infrastructure.Repository
 
             try
             {
-                using (var conn = _sqlServerConnection.GetIDbConnection())
+                using (var conn = _sqlServerConnection.GetIDbConnection(""))
                 {
                     var result = await conn.QueryAsync<Order, Product, Client, ShippingCompany, Company, Invoice, Order>(sql, (order, product, client, shippingCompany, company, invoice) =>
                     {
@@ -340,7 +340,7 @@ namespace TotalExpress.Infrastructure.Repository
 
             try
             {
-                using (var conn = _sqlServerConnection.GetIDbConnection())
+                using (var conn = _sqlServerConnection.GetIDbConnection(""))
                 {
                     var result = await conn.QueryAsync<Order, Product, Client, ShippingCompany, Company, Invoice, Order>(sql, (order, product, client, shippingCompany, company, invoice) =>
                     {
@@ -388,7 +388,7 @@ namespace TotalExpress.Infrastructure.Repository
 
             try
             {
-                using (var conn = _sqlServerConnection.GetIDbConnection())
+                using (var conn = _sqlServerConnection.GetIDbConnection(""))
                 {
                     return await conn.QueryFirstOrDefaultAsync<Parameters>(sql);
                 }
@@ -417,7 +417,7 @@ namespace TotalExpress.Infrastructure.Repository
 
             try
             {
-                using (var conn = _sqlServerConnection.GetIDbConnection())
+                using (var conn = _sqlServerConnection.GetIDbConnection(""))
                 {
                     return await conn.QueryAsync<Parameters>(sql);
                 }
@@ -454,7 +454,7 @@ namespace TotalExpress.Infrastructure.Repository
 
             try
             {
-                using (var conn = _sqlServerConnection.GetIDbConnection())
+                using (var conn = _sqlServerConnection.GetIDbConnection(""))
                 {
                     var result = await conn.ExecuteAsync(
                         sql: sql,

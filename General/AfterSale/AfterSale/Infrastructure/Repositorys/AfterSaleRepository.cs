@@ -9,7 +9,7 @@ public class AfterSaleRepository : IAfterSaleRepository
     {
         try
         {
-            
+            throw new NotImplementedException();
         }
         catch (Exception ex)
         {

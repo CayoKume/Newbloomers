@@ -1,14 +1,13 @@
 ﻿using Microsoft.Extensions.Configuration;
-using ISQLLinxCommerceConnection = IntegrationsCore.Infrastructure.Connections.SQLServer.ILinxCommerce;
-using IMySQLLinxCommerceConnection = IntegrationsCore.Infrastructure.Connections.MySQL.ILinxCommerce;
-using IPostgreSQLLinxCommerceConnection = IntegrationsCore.Infrastructure.Connections.PostgreSQL.ILinxCommerce;
-using IntegrationsCore.Domain.Entities.Parameters;
+using Domain.IntegrationsCore.Entities.Parameters;
 using System.Data;
-using IntegrationsCore.Domain.Entities;
 using Dapper;
-using static IntegrationsCore.Domain.Exceptions.RepositorysExceptions;
-using static IntegrationsCore.Domain.Exceptions.InternalErrorsExceptions;
 using System.ComponentModel;
+using Infrastructure.IntegrationsCore.Connections.SQLServer;
+using Infrastructure.IntegrationsCore.Connections.MySQL;
+using Infrastructure.IntegrationsCore.Connections.PostgreSQL;
+using static Domain.IntegrationsCore.Exceptions.RepositorysExceptions;
+using static Domain.IntegrationsCore.Exceptions.InternalErrorsExceptions;
 using System.Data.SqlClient;
 
 namespace LinxCommerce.Infrastructure.Repository.Base
@@ -18,12 +17,12 @@ namespace LinxCommerce.Infrastructure.Repository.Base
         private readonly string? _parametersTableName;
 
         private readonly IConfiguration _configuration;
-        private readonly ISQLLinxCommerceConnection? _sqlServerConnection;
-        private readonly IMySQLLinxCommerceConnection? _mySQLConnection;
-        private readonly IPostgreSQLLinxCommerceConnection? _postgreSQLConnection;
+        private readonly ISQLServerConnection? _sqlServerConnection;
+        private readonly IMySQLConnection? _mySQLConnection;
+        private readonly IPostgreSQLConnection? _postgreSQLConnection;
 
         public LinxCommerceRepositoryBase(
-            ISQLLinxCommerceConnection sqlServerConnection,
+            ISQLServerConnection sqlServerConnection,
             IConfiguration configuration
         )
         {
@@ -36,7 +35,7 @@ namespace LinxCommerce.Infrastructure.Repository.Base
         }
 
         public LinxCommerceRepositoryBase(
-            IMySQLLinxCommerceConnection mySQLConnection,
+            IMySQLConnection mySQLConnection,
             IConfiguration configuration
         )
         {
@@ -49,7 +48,7 @@ namespace LinxCommerce.Infrastructure.Repository.Base
         }
 
         public LinxCommerceRepositoryBase(
-            IPostgreSQLLinxCommerceConnection postgreSQLConnection,
+            IPostgreSQLConnection postgreSQLConnection,
             IConfiguration configuration
         )
         {
@@ -65,7 +64,7 @@ namespace LinxCommerce.Infrastructure.Repository.Base
         {
             try
             {
-                using (var conn = _sqlServerConnection.GetDbConnection())
+                using (var conn = _sqlServerConnection.GetDbConnection(jobParameter.databaseName))
                 {
                     using var bulkCopy = new SqlBulkCopy(conn);
                     bulkCopy.DestinationTableName = $"[{jobParameter.tableName}_raw]";
@@ -95,7 +94,7 @@ namespace LinxCommerce.Infrastructure.Repository.Base
         {
             try
             {
-                using (var conn = _sqlServerConnection.GetIDbConnection())
+                using (var conn = _sqlServerConnection.GetDbConnection(jobParameter.databaseName))
                 {
                     var result = await conn.ExecuteAsync($"P_{jobParameter.tableName}_Sync", commandType: CommandType.StoredProcedure, commandTimeout: 2700);
 
@@ -159,7 +158,7 @@ namespace LinxCommerce.Infrastructure.Repository.Base
 
             try
             {
-                using (var conn = _sqlServerConnection.GetIDbConnection())
+                using (var conn = _sqlServerConnection.GetDbConnection(jobParameter.databaseName))
                 {
                     var result = await conn.ExecuteAsync(sql: sql, commandTimeout: 360);
 
@@ -188,7 +187,7 @@ namespace LinxCommerce.Infrastructure.Repository.Base
         {
             try
             {
-                using (var conn = _sqlServerConnection.GetIDbConnection())
+                using (var conn = _sqlServerConnection.GetDbConnection(jobParameter.databaseName))
                 {
                     var result = await conn.ExecuteAsync(sql: sql, commandTimeout: 360);
 
@@ -219,7 +218,7 @@ namespace LinxCommerce.Infrastructure.Repository.Base
 
             try
             {
-                using (var conn = _sqlServerConnection.GetIDbConnection())
+                using (var conn = _sqlServerConnection.GetDbConnection(jobParameter.databaseName))
                 {
                     var result = await conn.ExecuteAsync(sql: sql, commandTimeout: 360);
 
@@ -253,7 +252,7 @@ namespace LinxCommerce.Infrastructure.Repository.Base
 
             try
             {
-                using (var conn = _sqlServerConnection.GetIDbConnection())
+                using (var conn = _sqlServerConnection.GetDbConnection(jobParameter.databaseName))
                 {
                     return await conn.QueryFirstOrDefaultAsync<string?>(sql: sql, commandTimeout: 360);
                 }
@@ -279,7 +278,7 @@ namespace LinxCommerce.Infrastructure.Repository.Base
 
             try
             {
-                using (var conn = _sqlServerConnection.GetIDbConnection())
+                using (var conn = _sqlServerConnection.GetDbConnection(jobParameter.databaseName))
                 {
                     return await conn.QueryFirstAsync<string>(sql: sql, commandTimeout: 360);
                 }
@@ -308,7 +307,7 @@ namespace LinxCommerce.Infrastructure.Repository.Base
 
             try
             {
-                using (var conn = _sqlServerConnection.GetIDbConnection())
+                using (var conn = _sqlServerConnection.GetDbConnection(jobParameter.databaseName))
                 {
                     var result = await conn.ExecuteAsync(sql: sql, param: record, commandTimeout: 360);
 
@@ -341,7 +340,7 @@ namespace LinxCommerce.Infrastructure.Repository.Base
 
             try
             {
-                using (var conn = _sqlServerConnection.GetIDbConnection())
+                using (var conn = _sqlServerConnection.GetDbConnection(jobParameter.databaseName))
                 {
                     var result = await conn.ExecuteAsync(sql: sql, param: parameter, commandTimeout: 360);
 
@@ -370,7 +369,7 @@ namespace LinxCommerce.Infrastructure.Repository.Base
         {
             try
             {
-                using (var conn = _sqlServerConnection.GetIDbConnection())
+                using (var conn = _sqlServerConnection.GetDbConnection(jobParameter.databaseName))
                 {
                     var result = await conn.ExecuteAsync(sql: sql, param: record, commandTimeout: 360);
 
@@ -405,7 +404,7 @@ namespace LinxCommerce.Infrastructure.Repository.Base
 
             try
             {
-                using (var conn = _sqlServerConnection.GetIDbConnection())
+                using (var conn = _sqlServerConnection.GetDbConnection(jobParameter.databaseName))
                 {
                     var result = await conn.ExecuteAsync(sql: sql, commandTimeout: 360);
 

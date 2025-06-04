@@ -4,7 +4,7 @@ using IPostgreLinxMicrovixConnection = IntegrationsCore.Infrastructure.Connectio
 using System.Data.SqlClient;
 using System.Data;
 using Dapper;
-using static IntegrationsCore.Domain.Exceptions.RepositorysExceptions;
+
 using Z.Dapper.Plus;
 
 namespace WebJobsApplication.Infrastructure.Connections.LinxMicrovix

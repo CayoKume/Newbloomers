@@ -1,7 +1,4 @@
-﻿
-using System.Threading.Channels;
-
-namespace AfterSale;
+﻿namespace AfterSale;
 
 public class AfterSaleService : IAfterSaleService
 {
@@ -180,6 +177,6 @@ public class AfterSaleService : IAfterSaleService
     public Task<string?> ApproveReverseById(Int64 id)
     {
         throw new NotImplementedException();
-    } 
+    }
     #endregion
 }

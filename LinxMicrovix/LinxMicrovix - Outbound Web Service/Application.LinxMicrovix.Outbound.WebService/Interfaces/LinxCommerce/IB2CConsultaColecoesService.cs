@@ -1,12 +1,12 @@
-﻿using Domain.IntegrationsCore.Entities.Parameters;
-using Domain.LinxMicrovix_Outbound_Web_Service.Entites.LinxCommerce;
+﻿using Domain.LinxMicrovix.Outbound.WebService.Entities.LinxCommerce;
+using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
 
-namespace Application.LinxMicrovix_Outbound_Web_Service.Interfaces.LinxCommerce
+namespace Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxCommerce
 {
     public interface IB2CConsultaColecoesService
     {
-        public List<B2CConsultaColecoes?> DeserializeXMLToObject(LinxMicrovixJobParameter jobParameter, List<Dictionary<string?, string?>> records);
-        public Task<bool> GetRecords(LinxMicrovixJobParameter jobParameter);
-        public Task<bool> GetRecord(LinxMicrovixJobParameter jobParameter, string? identificador, string? cnpj_emp);
+        public List<B2CConsultaColecoes?> DeserializeXMLToObject(LinxAPIParam jobParameter, List<Dictionary<string?, string?>> records);
+        public Task<bool> GetRecords(LinxAPIParam jobParameter);
+        public Task<bool> GetRecord(LinxAPIParam jobParameter, string? identificador, string? cnpj_emp);
     }
 }

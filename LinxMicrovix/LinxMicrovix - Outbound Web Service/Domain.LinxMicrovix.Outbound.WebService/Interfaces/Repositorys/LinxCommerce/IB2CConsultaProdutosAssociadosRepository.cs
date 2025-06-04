@@ -1,14 +1,12 @@
-﻿using Domain.IntegrationsCore.Entities.Parameters;
+﻿using Domain.LinxMicrovix.Outbound.WebService.Entities.LinxCommerce;
+using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
 
-using Domain.LinxMicrovix_Outbound_Web_Service.Entites.LinxCommerce;
-
-namespace Domain.LinxMicrovix_Outbound_Web_Service.Interfaces.Repositorys.LinxCommerce
+namespace Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxCommerce
 {
     public interface IB2CConsultaProdutosAssociadosRepository
     {
-        public Task<bool> InsertRecord(LinxMicrovixJobParameter jobParameter, B2CConsultaProdutosAssociados? record);
-        public Task<bool> InsertParametersIfNotExists(LinxMicrovixJobParameter jobParameter);
-        public Task<bool> CreateTableMerge(LinxMicrovixJobParameter jobParameter);
-        public bool BulkInsertIntoTableRaw(LinxMicrovixJobParameter jobParameter, List<B2CConsultaProdutosAssociados> records);
+        public Task<bool> InsertRecord(LinxAPIParam jobParameter, B2CConsultaProdutosAssociados? record);
+        public bool BulkInsertIntoTableRaw(LinxAPIParam jobParameter, IList<B2CConsultaProdutosAssociados> records);
+        public Task<List<B2CConsultaProdutosAssociados>> GetRegistersExists(LinxAPIParam jobParameter, List<B2CConsultaProdutosAssociados> registros);
     }
 }

@@ -1,13 +1,14 @@
-﻿using Domain.IntegrationsCore.Entities.Parameters;
-using Domain.LinxMicrovix_Outbound_Web_Service.Interfaces.Api;
+﻿using Domain.IntegrationsCore.Entities.Enums;
+using Domain.IntegrationsCore.Exceptions;
+using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
+using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Api;
 using System.Net;
-using static Domain.IntegrationsCore.Exceptions.APIErrorsExceptions;
 
-namespace Infrastructure.LinxMicrovix_Outbound_Web_Service.Api
+namespace Infrastructure.LinxMicrovix.Outbound.WebService.Api
 {
     public class APICall : IAPICall
     {
-        public async Task<string?> PostAsync(LinxMicrovixJobParameter jobParameter, string? body)
+        public async Task<string?> PostAsync(LinxAPIParam jobParameter, string? body)
         {
             try
             {
@@ -23,50 +24,36 @@ namespace Infrastructure.LinxMicrovix_Outbound_Web_Service.Api
                 if (response.StatusCode == HttpStatusCode.OK)
                     return new StreamReader(response.GetResponseStream()).ReadToEnd().Replace("'", "");
                 else
-                    return String.Empty;
-            }
-            catch (APICallErrorException)
-            {
-                throw;
+                    throw new InternalException(
+                        stage: EnumStages.PostAsync,
+                        error: EnumError.EndPointException,
+                        level: EnumMessageLevel.Error,
+                        message: $"Error when querying endpoint: {jobParameter.jobName} on microvix webservice\n" +
+                                 $"API return HttpStatusCode:'{response.StatusCode}' when it was expected '{HttpStatusCode.OK}'\n" +
+                                 $"Request: {body}"
+                    );
             }
             catch (Exception ex)
             {
-                throw new APICallErrorException()
-                {
-                    project = jobParameter.projectName,
-                    job = jobParameter.jobName,
-                    method = "CallAPIAsync",
-                    endpoint = jobParameter.jobName,
-                    message = $"Error when querying endpoint: {jobParameter.jobName} on microvix webservice",
-                    exception = ex.Message
-                };
+                throw new InternalException(
+                    stage: EnumStages.PostAsync,
+                    error: EnumError.Exception,
+                    level: EnumMessageLevel.Error,
+                    message: $"Error when querying endpoint: {jobParameter.jobName} on microvix webservice\n" +
+                                $"Request: {body}"
+                );
             }
         }
 
-        private HttpWebRequest CreateClient(LinxMicrovixJobParameter jobParameter, byte[] bytes)
+        private HttpWebRequest CreateClient(LinxAPIParam jobParameter, byte[] bytes)
         {
-            try
-            {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create($"https://webapi.microvix.com.br/1.0/api/integracao/{jobParameter.jobName}");
-                request.ContentType = "text/xml; encoding='utf-8'";
-                request.ContentLength = bytes.Length;
-                request.Method = "POST";
-                request.Timeout = 15 * 1000;
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create($"https://webapi.microvix.com.br/1.0/api/integracao/{jobParameter.jobName}");
+            request.ContentType = "text/xml; encoding='utf-8'";
+            request.ContentLength = bytes.Length;
+            request.Method = "POST";
+            request.Timeout = 30 * 1000;
 
-                return request;
-            }
-            catch (Exception ex)
-            {
-                throw new APICallErrorException()
-                {
-                    project = jobParameter.projectName,
-                    job = jobParameter.jobName,
-                    method = "CreateClient",
-                    endpoint = jobParameter.jobName,
-                    message = $"Error when creating request to query the endpoint: {jobParameter.jobName} on microvix webservice",
-                    exception = ex.Message
-                };
-            }
+            return request;
         }
     }
 }

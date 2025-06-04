@@ -8,6 +8,25 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.1" />
+    <PackageReference Include="Microsoft.Azure.WebJobs" Version="3.0.41" />
+    <PackageReference Include="Microsoft.Azure.WebJobs.Core" Version="3.0.41" />
+    <PackageReference Include="Microsoft.Azure.WebJobs.Extensions" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Azure.WebJobs.Host.Storage" Version="5.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Database\Infrastructure.DatabaseInit\Infrastructure.DatabaseInit.csproj" />
+    <ProjectReference Include="..\IntegrationsCore\Infrastructure.IntegrationsCore\Infrastructure.IntegrationsCore.csproj" />
+    <ProjectReference Include="..\LinxCommerce\Application.LinxCommerce\Application.LinxCommerce.csproj" />
+    <ProjectReference Include="..\LinxCommerce\Infrastructure.LinxCommerce\Infrastructure.LinxCommerce.csproj" />
+    <ProjectReference Include="..\LinxMicrovix\LinxMicrovix - Outbound Web Service\Application.LinxMicrovix.Outbound.WebService\Application.LinxMicrovix.Outbound.WebService.csproj" />
+    <ProjectReference Include="..\LinxMicrovix\LinxMicrovix - Outbound Web Service\Infrastructure.LinxMicrovix.Outbound.WebService\Infrastructure.LinxMicrovix.Outbound.WebService.csproj" />
+    <ProjectReference Include="..\Shippment\FlashCourier\Application.FlashCourier\Application.FlashCourier.csproj" />
+    <ProjectReference Include="..\Shippment\FlashCourier\Infrastructure.FlashCourier\Infrastructure.FlashCourier.csproj" />
+    <ProjectReference Include="..\Shippment\Jadlog\Application.Jadlog\Application.Jadlog.csproj" />
+    <ProjectReference Include="..\Shippment\Jadlog\Infrastructure.Jadlog\Infrastructure.Jadlog.csproj" />
+    <ProjectReference Include="..\Shippment\TotalExpress\Application.TotalExpress\Application.TotalExpress.csproj" />
+    <ProjectReference Include="..\Shippment\TotalExpress\Infrastructure.TotalExpress\Infrastructure.TotalExpress.csproj" />
   </ItemGroup>
 </Project>

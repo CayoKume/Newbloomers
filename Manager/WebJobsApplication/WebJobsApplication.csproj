@@ -17,6 +17,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\LinxMicrovix\LinxMicrovix - Outbound Web Service\Application.LinxMicrovix.Outbound.WebService\Application.LinxMicrovix.Outbound.WebService.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="Settings.job">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -1,68 +1,69 @@
-﻿using System.ComponentModel.DataAnnotations;
+using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
+using Domain.IntegrationsCore.Extensions;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Domain.LinxMicrovix_Outbound_Web_Service.Entites.LinxCommerce
+namespace Domain.LinxMicrovix.Outbound.WebService.Entities.LinxCommerce
 {
     public class B2CConsultaImagens
     {
-        [Column(TypeName = "datetime")]
+        [NotMapped]
+        public Int32 id { get; set; }
+
         public DateTime? lastupdateon { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? id_imagem { get; private set; }
 
-        [Column(TypeName = "char(32)")]
+        [LengthValidation(length: 32, propertyName: "md5")]
         public string? md5 { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
-        [Column(TypeName = "varchar(4000)")]
+        [LengthValidation(length: 4000, propertyName: "url_imagem_blob")]
         public string? url_imagem_blob { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordKey { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordXml { get; private set; }
 
         public B2CConsultaImagens() { }
 
         public B2CConsultaImagens(
+            List<ValidationResult> listValidations,
             string? id_imagem,
             string? md5,
             string? timestamp,
             string? portal,
-            string? url_imagem_blob
+            string? url_imagem_blob,
+            string? recordXml
         )
         {
             lastupdateon = DateTime.Now;
 
             this.id_imagem =
-                String.IsNullOrEmpty(id_imagem) ? 0
-                : Convert.ToInt32(id_imagem);
-
-            this.md5 =
-                String.IsNullOrEmpty(md5) ? ""
-                : md5.Substring(
-                    0,
-                    md5.Length > 32 ? 32
-                    : md5.Length
-                );
-
-            this.url_imagem_blob =
-                String.IsNullOrEmpty(url_imagem_blob) ? ""
-                : url_imagem_blob.Substring(
-                    0,
-                    url_imagem_blob.Length > 200 ? 200
-                    : url_imagem_blob.Length
-                );
-
-            this.timestamp =
-                String.IsNullOrEmpty(timestamp) ? 0
-                : Convert.ToInt64(timestamp);
+                ConvertToInt32Validation.IsValid(id_imagem, "id_imagem", listValidations) ?
+                Convert.ToInt32(id_imagem) :
+                0;
 
             this.portal =
-                String.IsNullOrEmpty(portal) ? 0
-                : Convert.ToInt32(portal);
+                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
+                Convert.ToInt32(portal) :
+                0;
+
+            this.timestamp =
+                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
+                Convert.ToInt64(timestamp) :
+                0;
+
+            this.md5 = md5;
+            this.url_imagem_blob = url_imagem_blob;
+            this.recordXml = recordXml;
         }
     }
 }

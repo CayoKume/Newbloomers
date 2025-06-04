@@ -1,4 +1,4 @@
-﻿using IntegrationsCore.Domain.Entities.Bases;
+﻿using Domain.IntegrationsCore.Entities.Bases;
 
 namespace AfterSale.Domain.Entites.Company
 {

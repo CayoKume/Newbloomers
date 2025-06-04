@@ -1,12 +1,12 @@
-﻿using Domain.IntegrationsCore.Entities.Parameters;
-using Domain.LinxMicrovix_Outbound_Web_Service.Entites.LinxMicrovix;
+﻿using Domain.LinxMicrovix.Outbound.WebService.Entities.LinxMicrovix;
+using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
 
-namespace Application.LinxMicrovix_Outbound_Web_Service.Interfaces.LinxMicrovix
+namespace Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxMicrovix
 {
     public interface ILinxProdutosCodBarService
     {
-        public List<LinxProdutosCodBar?> DeserializeXMLToObject(LinxMicrovixJobParameter jobParameter, List<Dictionary<string?, string?>> records);
-        public Task<bool> GetRecords(LinxMicrovixJobParameter jobParameter);
-        public Task<bool> GetRecord(LinxMicrovixJobParameter jobParameter, string? identificador, string? cnpj_emp);
+        public List<LinxProdutosCodBar?> DeserializeXMLToObject(LinxAPIParam jobParameter, List<Dictionary<string?, string?>> records);
+        public Task<bool> GetRecords(LinxAPIParam jobParameter);
+        public Task<bool> GetRecord(LinxAPIParam jobParameter, string? identificador);
     }
 }

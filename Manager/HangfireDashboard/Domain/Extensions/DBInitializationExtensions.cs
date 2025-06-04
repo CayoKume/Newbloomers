@@ -1,6 +1,6 @@
-﻿using HangfireDashboard.Domain.Entites;
+﻿using Domain.IntegrationsCore.Entities.Parameters;
+using HangfireDashboard.Domain.Entites;
 using HangfireDashboard.Infrastructure.Repository;
-using IntegrationsCore.Domain.Entities.Parameters;
 
 namespace HangfireDashboard.Domain.Extensions
 {

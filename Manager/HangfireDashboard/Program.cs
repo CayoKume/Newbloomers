@@ -1,10 +1,10 @@
 using HangfireDashboard.Domain.Extensions;
-using System.Configuration;
+using Infrastructure.LinxMicrovix.Outbound.WebService;
 
 var builder = WebApplication.CreateBuilder(args);
 var serverName = builder.Configuration.GetSection("ConfigureServer").GetSection("ServerName").Value;
 
-ConfigurationHelperExtensions.Initialize(builder.Configuration);
+//ConfigurationHelperExtensions.Initialize(builder.Configuration);
 
 builder
     .AddArchitectures()
@@ -12,7 +12,7 @@ builder
 
 var app = builder.Build();
 
-await app.DatabaseInitialization(app.Configuration);
+//await app.DatabaseInitialization(app.Configuration);
 
 app.UseApplication(serverName);
 

@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\IntegrationsCore\Application.IntegrationsCore\Application.IntegrationsCore.csproj" />
+    <ProjectReference Include="..\Domain.LinxMicrovix.Outbound.WebService\Domain.LinxMicrovix.Outbound.WebService.csproj" />
+  </ItemGroup>
+
 </Project>

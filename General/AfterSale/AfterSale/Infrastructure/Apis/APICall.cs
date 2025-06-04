@@ -18,7 +18,7 @@ public class APICall : IAPICall
             var result = await client.GetAsync($"{client.BaseAddress}{rote}?{encodedParameters}");
             return await result.Content.ReadAsStringAsync();
         }
-        catch 
+        catch
         {
             throw;
         }
@@ -42,7 +42,7 @@ public class APICall : IAPICall
     {
         try
         {
-
+            throw new NotImplementedException();
         }
         catch
         {
@@ -54,7 +54,7 @@ public class APICall : IAPICall
     {
         try
         {
-
+            throw new NotImplementedException();
         }
         catch
         {

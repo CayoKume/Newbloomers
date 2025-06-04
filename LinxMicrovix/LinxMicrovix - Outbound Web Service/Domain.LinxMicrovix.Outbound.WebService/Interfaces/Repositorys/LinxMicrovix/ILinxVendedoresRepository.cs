@@ -1,13 +1,12 @@
-﻿using Domain.IntegrationsCore.Entities.Parameters;
-using Domain.LinxMicrovix_Outbound_Web_Service.Entites.LinxMicrovix;
+﻿using Domain.LinxMicrovix.Outbound.WebService.Entities.LinxMicrovix;
+using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
 
-namespace Domain.LinxMicrovix_Outbound_Web_Service.Interfaces.Repositorys.LinxMicrovix
+namespace Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxMicrovix
 {
     public interface ILinxVendedoresRepository
     {
-        public Task<bool> InsertRecord(LinxMicrovixJobParameter jobParameter, LinxVendedores? record);
-        public Task<bool> InsertParametersIfNotExists(LinxMicrovixJobParameter jobParameter);
-        public Task<bool> CreateTableMerge(LinxMicrovixJobParameter jobParameter);
-        public bool BulkInsertIntoTableRaw(LinxMicrovixJobParameter jobParameter, List<LinxVendedores> records);
+        public Task<bool> InsertRecord(LinxAPIParam jobParameter, LinxVendedores? record);
+        public bool BulkInsertIntoTableRaw(LinxAPIParam jobParameter, IList<LinxVendedores> records);
+        public Task<List<string>> GetRegistersExists();
     }
 }

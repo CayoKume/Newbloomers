@@ -1,57 +1,58 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
+using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 
-namespace Domain.LinxMicrovix_Outbound_Web_Service.Entites.LinxCommerce
+namespace Domain.LinxMicrovix.Outbound.WebService.Entities.LinxCommerce
 {
     public class B2CConsultaProdutosPromocao
     {
-        [Column(TypeName = "datetime")]
+        [SkipProperty]
+        public Int32 id { get; set; }
+
         public DateTime? lastupdateon { get; private set; }
 
-        [Key]
-        [Column(TypeName = "bigint")]
         public Int64? codigo_promocao { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? empresa { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? codigoproduto { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? preco { get; private set; }
 
-        [Column(TypeName = "smalldatetime")]
         public DateTime? data_inicio { get; private set; }
 
-        [Column(TypeName = "smalldatetime")]
         public DateTime? data_termino { get; private set; }
 
-        [Column(TypeName = "datetime")]
         public DateTime? data_cadastro { get; private set; }
 
-        [Column(TypeName = "char(1)")]
+        [LengthValidation(length: 1, propertyName: "ativa")]
         public string? ativa { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? codigo_campanha { get; private set; }
 
-        [Column(TypeName = "bit")]
         public Int32? promocao_opcional { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
-        [Column(TypeName = "varchar(20)")]
+        [LengthValidation(length: 20, propertyName: "referencia")]
         public string? referencia { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordKey { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordXml { get; private set; }
 
         public B2CConsultaProdutosPromocao() { }
 
         public B2CConsultaProdutosPromocao(
+            List<ValidationResult> listValidations,
             string? codigo_promocao,
             string? empresa,
             string? codigoproduto,
@@ -64,70 +65,70 @@ namespace Domain.LinxMicrovix_Outbound_Web_Service.Entites.LinxCommerce
             string? promocao_opcional,
             string? timestamp,
             string? referencia,
-            string? portal
+            string? portal,
+            string? recordXml
         )
         {
             lastupdateon = DateTime.Now;
 
             this.codigo_promocao =
-                String.IsNullOrEmpty(codigo_promocao) ? 0
-                : Convert.ToInt32(codigo_promocao);
+                ConvertToInt32Validation.IsValid(codigo_promocao, "codigo_promocao", listValidations) ?
+                Convert.ToInt32(codigo_promocao) :
+                0;
 
             this.empresa =
-                String.IsNullOrEmpty(empresa) ? 0
-                : Convert.ToInt32(empresa);
+                ConvertToInt32Validation.IsValid(empresa, "empresa", listValidations) ?
+                Convert.ToInt32(empresa) :
+                0;
 
             this.codigoproduto =
-                String.IsNullOrEmpty(codigoproduto) ? 0
-                : Convert.ToInt64(codigoproduto);
+                ConvertToInt64Validation.IsValid(codigoproduto, "codigoproduto", listValidations) ?
+                Convert.ToInt64(codigoproduto) :
+                0;
 
             this.preco =
-                String.IsNullOrEmpty(preco) ? 0
-                : Convert.ToDecimal(preco);
+                ConvertToDecimalValidation.IsValid(preco, "preco", listValidations) ?
+                Convert.ToDecimal(preco, new CultureInfo("en-US")) :
+                0;
 
             this.data_inicio =
-                String.IsNullOrEmpty(data_inicio) ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
-                : Convert.ToDateTime(data_inicio);
+                ConvertToDateTimeValidation.IsValid(data_inicio, "data_inicio", listValidations) ?
+                Convert.ToDateTime(data_inicio) :
+                new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar);
 
             this.data_termino =
-                String.IsNullOrEmpty(data_termino) ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
-                : Convert.ToDateTime(data_termino);
+                ConvertToDateTimeValidation.IsValid(data_termino, "data_termino", listValidations) ?
+                Convert.ToDateTime(data_termino) :
+                new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar);
 
             this.data_cadastro =
-                String.IsNullOrEmpty(data_cadastro) ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
-                : Convert.ToDateTime(data_cadastro);
-
-            this.ativa =
-                String.IsNullOrEmpty(ativa) ? ""
-                : ativa.Substring(
-                    0,
-                    ativa.Length > 1 ? 1
-                    : ativa.Length
-                );
+                ConvertToDateTimeValidation.IsValid(data_cadastro, "data_cadastro", listValidations) ?
+                Convert.ToDateTime(data_cadastro) :
+                new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar);
 
             this.codigo_campanha =
-                String.IsNullOrEmpty(codigo_campanha) ? 0
-                : Convert.ToInt32(codigo_campanha);
+                ConvertToInt32Validation.IsValid(codigo_campanha, "codigo_campanha", listValidations) ?
+                Convert.ToInt32(codigo_campanha) :
+                0;
 
             this.promocao_opcional =
-                String.IsNullOrEmpty(promocao_opcional) ? 0
-                : Convert.ToInt32(promocao_opcional);
-
-            this.referencia =
-                String.IsNullOrEmpty(referencia) ? ""
-                : referencia.Substring(
-                    0,
-                    referencia.Length > 20 ? 20
-                    : referencia.Length
-                );
-
-            this.timestamp =
-                String.IsNullOrEmpty(timestamp) ? 0
-                : Convert.ToInt64(timestamp);
+                ConvertToInt32Validation.IsValid(promocao_opcional, "promocao_opcional", listValidations) ?
+                Convert.ToInt32(promocao_opcional) :
+                0;
 
             this.portal =
-                String.IsNullOrEmpty(portal) ? 0
-                : Convert.ToInt32(portal);
+                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
+                Convert.ToInt32(portal) :
+                0;
+
+            this.timestamp =
+                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
+                Convert.ToInt64(timestamp) :
+                0;
+
+            this.ativa = ativa;
+            this.referencia = referencia;
+            this.recordXml = recordXml;
         }
     }
 }

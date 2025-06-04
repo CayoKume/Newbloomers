@@ -1,56 +1,64 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
+using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Domain.LinxMicrovix_Outbound_Web_Service.Entites.LinxCommerce
+namespace Domain.LinxMicrovix.Outbound.WebService.Entities.LinxCommerce
 {
     public class B2CConsultaSetores
     {
-        [Column(TypeName = "datetime")]
+        [NotMapped]
+        public Int32 id { get; set; }
+
         public DateTime? lastupdateon { get; private set; }
 
-        [Key]
-        [Column(TypeName = "int")]
         public Int32? codigo_setor { get; private set; }
 
-        [Column(TypeName = "varchar(100)")]
+        [LengthValidation(length: 100, propertyName: "nome_setor")]
         public string? nome_setor { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordKey { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordXml { get; private set; }
 
         public B2CConsultaSetores() { }
 
         public B2CConsultaSetores(
+            List<ValidationResult> listValidations,
             string? codigo_setor,
             string? nome_setor,
             string? timestamp,
-            string? portal
+            string? portal,
+            string? recordXml
         )
         {
             lastupdateon = DateTime.Now;
 
-            this.nome_setor =
-                String.IsNullOrEmpty(nome_setor) ? ""
-                : nome_setor.Substring(
-                    0,
-                    nome_setor.Length > 100 ? 100
-                    : nome_setor.Length
-                );
-
             this.codigo_setor =
-                String.IsNullOrEmpty(codigo_setor) ? 0
-                : Convert.ToInt32(codigo_setor);
-
-            this.timestamp =
-                String.IsNullOrEmpty(timestamp) ? 0
-                : Convert.ToInt64(timestamp);
+                ConvertToInt32Validation.IsValid(codigo_setor, "codigo_setor", listValidations) ?
+                Convert.ToInt32(codigo_setor) :
+                0;
 
             this.portal =
-                String.IsNullOrEmpty(portal) ? 0
-                : Convert.ToInt32(portal);
+                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
+                Convert.ToInt32(portal) :
+                0;
+
+            this.timestamp =
+                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
+                Convert.ToInt64(timestamp) :
+                0;
+
+            this.nome_setor = nome_setor;
+            this.recordXml = recordXml;
         }
     }
 }

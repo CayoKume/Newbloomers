@@ -228,12 +228,13 @@ namespace LinxMicrovix_Outbound_Web_Service.Application.Services.LinxCommerce
             catch (LoggerException bex)
             {
                 _logger.ImportLogsFromException(bex)
-                    .SetLogMsgAndStatus(EnumIdLogLevel.StatusError
-                             , EnumIdError.IntegrationsExceptions
-                             , "Execução concluída com falhas previstas!"
-                             , "");
+                    .SetLogMsgAndStatus(
+                        EnumIdLogLevel.StatusError
+                        , EnumIdError.IntegrationsExceptions
+                        , bex.Message
+                        , "");
 
-                return false;
+                throw;
             }
             catch (Exception ex)
             {

@@ -6,4 +6,14 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\IntegrationsCore\Application.IntegrationsCore\Application.IntegrationsCore.csproj" />
+    <ProjectReference Include="..\Domain.LinxCommerce\Domain.LinxCommerce.csproj" />
+  </ItemGroup>
+
 </Project>

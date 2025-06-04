@@ -1,4 +1,5 @@
-﻿using IntegrationsCore.Domain.Entities.Bases;
+﻿
+using Domain.IntegrationsCore.Entities.Bases;
 
 namespace TotalExpress.Domain.Entites
 {

@@ -1,111 +1,99 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
+using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 
-namespace Domain.LinxMicrovix_Outbound_Web_Service.Entites.LinxCommerce
+namespace Domain.LinxMicrovix.Outbound.WebService.Entities.LinxCommerce
 {
     public class B2CConsultaProdutos
     {
-        [Column(TypeName = "datetime")]
+        [SkipProperty]
+        public Int32 id { get; set; }
+
         public DateTime? lastupdateon { get; private set; }
 
-        [Key]
-        [Column(TypeName = "bigint")]
         public Int64? codigoproduto { get; private set; }
 
-        [Column(TypeName = "varchar(20)")]
+        [LengthValidation(length: 20, propertyName: "referencia")]
         public string? referencia { get; private set; }
 
-        [Column(TypeName = "varchar(40)")]
+        [LengthValidation(length: 40, propertyName: "codauxiliar1")]
         public string? codauxiliar1 { get; private set; }
 
-        [Column(TypeName = "varchar(100)")]
+        [LengthValidation(length: 100, propertyName: "descricao_basica")]
         public string? descricao_basica { get; private set; }
 
-        [Column(TypeName = "varchar(250)")]
+        [LengthValidation(length: 250, propertyName: "nome_produto")]
         public string? nome_produto { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? peso_liquido { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? codigo_setor { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? codigo_linha { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? codigo_marca { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? codigo_colecao { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? codigo_espessura { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? codigo_grade1 { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? codigo_grade2 { get; private set; }
 
-        [Column(TypeName = "varchar(50)")]
+        [LengthValidation(length: 50, propertyName: "unidade")]
         public string? unidade { get; private set; }
 
-        [Column(TypeName = "bit")]
         public Int32? ativo { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? codigo_classificacao { get; private set; }
 
-        [Column(TypeName = "smalldatetime")]
         public DateTime? dt_cadastro { get; private set; }
 
-        [Column(TypeName = "varchar(MAX)")]
         public string? observacao { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? cod_fornecedor { get; private set; }
 
-        [Column(TypeName = "smalldatetime")]
         public DateTime? dt_update { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? altura_para_frete { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? largura_para_frete { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? comprimento_para_frete { get; private set; }
 
-        [Column(TypeName = "bigint")]
         public Int64? timestamp { get; private set; }
 
-        [Column(TypeName = "decimal(10,2)")]
         public decimal? peso_bruto { get; private set; }
 
-        [Column(TypeName = "int")]
         public Int32? portal { get; private set; }
 
-        [Column(TypeName = "varchar(8000)")]
+        [LengthValidation(length: 8000, propertyName: "descricao_completa_commerce")]
         public string? descricao_completa_commerce { get; private set; }
 
-        [Column(TypeName = "tinyint")]
         public Int32? canais_ecommerce_publicados { get; private set; }
 
-        [Column(TypeName = "date")]
         public DateTime? inicio_publicacao_produto { get; private set; }
 
-        [Column(TypeName = "date")]
         public DateTime? fim_publicacao_produto { get; private set; }
 
-        [Column(TypeName = "varchar(50)")]
+        [LengthValidation(length: 50, propertyName: "codigo_integracao_oms")]
         public string? codigo_integracao_oms { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordKey { get; private set; }
+
+        [NotMapped]
+        [SkipProperty]
+        public string? recordXml { get; private set; }
 
         public B2CConsultaProdutos() { }
 
         public B2CConsultaProdutos(
+            List<ValidationResult> listValidations,
             string? codigoproduto,
             string? referencia,
             string? codauxiliar1,
@@ -136,162 +124,136 @@ namespace Domain.LinxMicrovix_Outbound_Web_Service.Entites.LinxCommerce
             string? canais_ecommerce_publicados,
             string? inicio_publicacao_produto,
             string? fim_publicacao_produto,
-            string? codigo_integracao_oms
+            string? codigo_integracao_oms,
+            string? recordXml
         )
         {
             lastupdateon = DateTime.Now;
 
             this.cod_fornecedor =
-                String.IsNullOrEmpty(cod_fornecedor) ? 0
-                : Convert.ToInt32(cod_fornecedor);
+                ConvertToInt32Validation.IsValid(cod_fornecedor, "cod_fornecedor", listValidations) ?
+                Convert.ToInt32(cod_fornecedor) :
+                0;
 
             this.canais_ecommerce_publicados =
-                String.IsNullOrEmpty(canais_ecommerce_publicados) ? 0
-                : Convert.ToInt32(canais_ecommerce_publicados);
+                ConvertToInt32Validation.IsValid(canais_ecommerce_publicados, "canais_ecommerce_publicados", listValidations) ?
+                Convert.ToInt32(canais_ecommerce_publicados) :
+                0;
 
             this.inicio_publicacao_produto =
-                String.IsNullOrEmpty(inicio_publicacao_produto) ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
-                : Convert.ToDateTime(inicio_publicacao_produto);
+                ConvertToDateTimeValidation.IsValid(inicio_publicacao_produto, "inicio_publicacao_produto", listValidations) ?
+                Convert.ToDateTime(inicio_publicacao_produto) :
+                new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar);
 
             this.fim_publicacao_produto =
-                String.IsNullOrEmpty(fim_publicacao_produto) ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
-                : Convert.ToDateTime(fim_publicacao_produto);
+                ConvertToDateTimeValidation.IsValid(fim_publicacao_produto, "fim_publicacao_produto", listValidations) ?
+                Convert.ToDateTime(fim_publicacao_produto) :
+                new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar);
 
             this.altura_para_frete =
-                String.IsNullOrEmpty(altura_para_frete) ? 0
-                : Convert.ToDecimal(altura_para_frete);
+                ConvertToDecimalValidation.IsValid(altura_para_frete, "altura_para_frete", listValidations) ?
+                Convert.ToDecimal(altura_para_frete, new CultureInfo("en-US")) :
+                0;
 
             this.largura_para_frete =
-                String.IsNullOrEmpty(largura_para_frete) ? 0
-                : Convert.ToDecimal(largura_para_frete);
+                ConvertToDecimalValidation.IsValid(largura_para_frete, "largura_para_frete", listValidations) ?
+                Convert.ToDecimal(largura_para_frete, new CultureInfo("en-US")) :
+                0;
 
             this.comprimento_para_frete =
-                String.IsNullOrEmpty(comprimento_para_frete) ? 0
-                : Convert.ToDecimal(comprimento_para_frete);
+                ConvertToDecimalValidation.IsValid(comprimento_para_frete, "comprimento_para_frete", listValidations) ?
+                Convert.ToDecimal(comprimento_para_frete, new CultureInfo("en-US")) :
+                0;
 
             this.peso_bruto =
-                String.IsNullOrEmpty(peso_bruto) ? 0
-                : Convert.ToDecimal(peso_bruto);
-
-            this.descricao_completa_commerce =
-                String.IsNullOrEmpty(descricao_completa_commerce) ? ""
-                : descricao_completa_commerce.Substring(
-                    0,
-                    descricao_completa_commerce.Length > 8000 ? 8000
-                    : descricao_completa_commerce.Length
-                );
-
-            this.codigo_integracao_oms =
-                String.IsNullOrEmpty(codigo_integracao_oms) ? ""
-                : codigo_integracao_oms.Substring(
-                    0,
-                    codigo_integracao_oms.Length > 50 ? 50
-                    : codigo_integracao_oms.Length
-                );
+                ConvertToDecimalValidation.IsValid(peso_bruto, "peso_bruto", listValidations) ?
+                Convert.ToDecimal(peso_bruto, new CultureInfo("en-US")) :
+                0;
 
             this.dt_update =
-                String.IsNullOrEmpty(dt_update) ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
-                : Convert.ToDateTime(dt_update);
+                ConvertToDateTimeValidation.IsValid(dt_update, "dt_update", listValidations) ?
+                Convert.ToDateTime(dt_update) :
+                new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar);
 
             this.codigoproduto =
-                String.IsNullOrEmpty(codigoproduto) ? 0
-                : Convert.ToInt64(codigoproduto);
-
-            this.referencia =
-                String.IsNullOrEmpty(referencia) ? ""
-                : referencia.Substring(
-                    0,
-                    referencia.Length > 20 ? 20
-                    : referencia.Length
-                );
-
-            this.codauxiliar1 =
-                String.IsNullOrEmpty(codauxiliar1) ? ""
-                : codauxiliar1.Substring(
-                    0,
-                    codauxiliar1.Length > 40 ? 40
-                    : codauxiliar1.Length
-                );
-
-            this.descricao_basica =
-                String.IsNullOrEmpty(descricao_basica) ? ""
-                : descricao_basica.Substring(
-                    0,
-                    descricao_basica.Length > 100 ? 100
-                    : descricao_basica.Length
-                );
-
-            this.nome_produto =
-                String.IsNullOrEmpty(nome_produto) ? ""
-                : nome_produto.Substring(
-                    0,
-                    nome_produto.Length > 250 ? 250
-                    : nome_produto.Length
-                );
+                ConvertToInt64Validation.IsValid(codigoproduto, "codigoproduto", listValidations) ?
+                Convert.ToInt64(codigoproduto) :
+                0;
 
             this.peso_liquido =
-                String.IsNullOrEmpty(peso_liquido) ? 0
-                : Convert.ToDecimal(peso_liquido);
+                ConvertToDecimalValidation.IsValid(peso_liquido, "peso_liquido", listValidations) ?
+                Convert.ToDecimal(peso_liquido, new CultureInfo("en-US")) :
+                0;
 
             this.codigo_setor =
-                String.IsNullOrEmpty(codigo_setor) ? 0
-                : Convert.ToInt32(codigo_setor);
+                ConvertToInt32Validation.IsValid(codigo_setor, "codigo_setor", listValidations) ?
+                Convert.ToInt32(codigo_setor) :
+                0;
 
             this.codigo_linha =
-                String.IsNullOrEmpty(codigo_linha) ? 0
-                : Convert.ToInt32(codigo_linha);
+                ConvertToInt32Validation.IsValid(codigo_linha, "codigo_linha", listValidations) ?
+                Convert.ToInt32(codigo_linha) :
+                0;
 
             this.codigo_marca =
-                String.IsNullOrEmpty(codigo_marca) ? 0
-                : Convert.ToInt32(codigo_marca);
+                ConvertToInt32Validation.IsValid(codigo_marca, "codigo_marca", listValidations) ?
+                Convert.ToInt32(codigo_marca) :
+                0;
 
             this.codigo_colecao =
-                String.IsNullOrEmpty(codigo_colecao) ? 0
-                : Convert.ToInt32(codigo_colecao);
+                ConvertToInt32Validation.IsValid(codigo_colecao, "codigo_colecao", listValidations) ?
+                Convert.ToInt32(codigo_colecao) :
+                0;
 
             this.codigo_espessura =
-                String.IsNullOrEmpty(codigo_espessura) ? 0
-                : Convert.ToInt32(codigo_espessura);
+                ConvertToInt32Validation.IsValid(codigo_espessura, "codigo_espessura", listValidations) ?
+                Convert.ToInt32(codigo_espessura) :
+                0;
 
             this.codigo_grade1 =
-                String.IsNullOrEmpty(codigo_grade1) ? 0
-                : Convert.ToInt32(codigo_grade1);
+                ConvertToInt32Validation.IsValid(codigo_grade1, "codigo_grade1", listValidations) ?
+                Convert.ToInt32(codigo_grade1) :
+                0;
 
             this.codigo_grade2 =
-                String.IsNullOrEmpty(codigo_grade2) ? 0
-                : Convert.ToInt32(codigo_grade2);
-
-            this.unidade =
-                String.IsNullOrEmpty(unidade) ? ""
-                : unidade.Substring(
-                    0,
-                    unidade.Length > 50 ? 50
-                    : unidade.Length
-                );
+                ConvertToInt32Validation.IsValid(codigo_grade2, "codigo_grade2", listValidations) ?
+                Convert.ToInt32(codigo_grade2) :
+                0;
 
             this.ativo =
-                String.IsNullOrEmpty(ativo) ? 0
-                : Convert.ToInt32(ativo);
+                ConvertToInt32Validation.IsValid(ativo, "ativo", listValidations) ?
+                Convert.ToInt32(ativo) :
+                0;
 
             this.codigo_classificacao =
-                String.IsNullOrEmpty(codigo_classificacao) ? 0
-                : Convert.ToInt32(codigo_classificacao);
+                ConvertToInt32Validation.IsValid(codigo_classificacao, "codigo_classificacao", listValidations) ?
+                Convert.ToInt32(codigo_classificacao) :
+                0;
 
             this.dt_cadastro =
-                String.IsNullOrEmpty(dt_cadastro) ? new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar)
-                : Convert.ToDateTime(dt_cadastro);
-
-            this.observacao =
-                String.IsNullOrEmpty(observacao) ? ""
-                : observacao;
-
-            this.timestamp =
-                String.IsNullOrEmpty(timestamp) ? 0
-                : Convert.ToInt64(timestamp);
+                ConvertToDateTimeValidation.IsValid(dt_cadastro, "dt_cadastro", listValidations) ?
+                Convert.ToDateTime(dt_cadastro) :
+                new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar);
 
             this.portal =
-                String.IsNullOrEmpty(portal) ? 0
-                : Convert.ToInt32(portal);
+                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
+                Convert.ToInt32(portal) :
+                0;
+
+            this.timestamp =
+                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
+                Convert.ToInt64(timestamp) :
+                0;
+
+            this.unidade = unidade;
+            this.observacao = observacao;
+            this.referencia = referencia;
+            this.codauxiliar1 = codauxiliar1;
+            this.descricao_basica = descricao_basica;
+            this.nome_produto = nome_produto;
+            this.descricao_completa_commerce = descricao_completa_commerce;
+            this.codigo_integracao_oms = codigo_integracao_oms;
+            this.recordXml = recordXml;
         }
     }
 }

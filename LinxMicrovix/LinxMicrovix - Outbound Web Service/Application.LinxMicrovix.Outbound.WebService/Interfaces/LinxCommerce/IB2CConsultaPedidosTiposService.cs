@@ -1,11 +1,11 @@
-﻿using Domain.IntegrationsCore.Entities.Parameters;
-using Domain.LinxMicrovix_Outbound_Web_Service.Entites.LinxCommerce;
+﻿using Domain.LinxMicrovix.Outbound.WebService.Entities.LinxCommerce;
+using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
 
-namespace Application.LinxMicrovix_Outbound_Web_Service.Interfaces.LinxCommerce
+namespace Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxCommerce
 {
     public interface IB2CConsultaPedidosTiposService
     {
-        public List<B2CConsultaPedidosTipos?> DeserializeXMLToObject(LinxMicrovixJobParameter jobParameter, List<Dictionary<string?, string?>> records);
-        public Task<bool> GetRecords(LinxMicrovixJobParameter jobParameter);
+        public List<B2CConsultaPedidosTipos?> DeserializeXMLToObject(LinxAPIParam jobParameter, List<Dictionary<string?, string?>> records);
+        public Task<bool> GetRecords(LinxAPIParam jobParameter);
     }
 }

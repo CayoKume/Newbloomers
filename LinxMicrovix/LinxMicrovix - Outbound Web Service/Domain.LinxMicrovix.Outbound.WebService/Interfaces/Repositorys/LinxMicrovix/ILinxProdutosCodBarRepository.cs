@@ -1,13 +1,13 @@
-﻿using Domain.IntegrationsCore.Entities.Parameters;
-using Domain.LinxMicrovix_Outbound_Web_Service.Entites.LinxMicrovix;
+﻿using Domain.LinxMicrovix.Outbound.WebService.Entities.LinxMicrovix;
+using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
 
-namespace Domain.LinxMicrovix_Outbound_Web_Service.Interfaces.Repositorys.LinxMicrovix
+namespace Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxMicrovix
 {
     public interface ILinxProdutosCodBarRepository
     {
-        public Task<bool> InsertRecord(LinxMicrovixJobParameter jobParameter, LinxProdutosCodBar? record);
-        public Task<bool> InsertParametersIfNotExists(LinxMicrovixJobParameter jobParameter);
-        public Task<bool> CreateTableMerge(LinxMicrovixJobParameter jobParameter);
-        public bool BulkInsertIntoTableRaw(LinxMicrovixJobParameter jobParameter, List<LinxProdutosCodBar> records);
+        public Task<bool> InsertRecord(LinxAPIParam jobParameter, LinxProdutosCodBar? record);
+        public bool BulkInsertIntoTableRaw(LinxAPIParam jobParameter, IList<LinxProdutosCodBar> records);
+        public Task<List<string?>> GetRegistersExists(LinxAPIParam jobParameter, List<Int64?> registros);
+        public Task<IEnumerable<string?>> GetProductsSetorIds(LinxAPIParam jobParameter);
     }
 }

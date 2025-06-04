@@ -1,8 +1,8 @@
 ﻿using Hangfire;
-using FlashCourier.Application.Services;
+//using FlashCourier.Application.Services;
 using LinxMicrovix_Outbound_Web_Service.Application.Services.LinxMicrovix;
-using IntegrationsCore.Domain.Entities;
 using HangfireDashboard.Domain.Entites;
+using Domain.IntegrationsCore.Entities.Parameters;
 
 namespace HangfireDashboard.Domain.Extensions
 {
@@ -101,15 +101,15 @@ namespace HangfireDashboard.Domain.Extensions
 
         private static void FlashCourierRecurringJobs()
         {
-            RecurringJob.AddOrUpdate<IFlashCourierService>("FlashCourierSendOrders", service => service.SendOrders(),
-                Cron.MinuteInterval(3)
-            //,queue: "srv-vm-app02"
-            );
+            //RecurringJob.AddOrUpdate<IFlashCourierService>("FlashCourierSendOrders", service => service.SendOrders(),
+            //    Cron.MinuteInterval(3)
+            ////,queue: "srv-vm-app02"
+            //);
 
-            RecurringJob.AddOrUpdate<IFlashCourierService>("FlashCourierUpdateLogOrders", service => service.UpdateLogOrders(),
-                Cron.MinuteInterval(5)
-            //,queue: "srv-vm-app02"
-            );
+            //RecurringJob.AddOrUpdate<IFlashCourierService>("FlashCourierUpdateLogOrders", service => service.UpdateLogOrders(),
+            //    Cron.MinuteInterval(5)
+            ////,queue: "srv-vm-app02"
+            //);
         }
     }
 }

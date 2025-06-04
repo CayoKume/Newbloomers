@@ -1,9 +1,9 @@
-﻿using Domain.IntegrationsCore.Entities.Parameters;
+﻿using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
 
-namespace Domain.LinxMicrovix_Outbound_Web_Service.Interfaces.Api
+namespace Domain.LinxMicrovix.Outbound.WebService.Interfaces.Api
 {
     public interface IAPICall
     {
-        public Task<string?> PostAsync(LinxMicrovixJobParameter jobParameter, string? body);
+        public Task<string?> PostAsync(LinxAPIParam jobParameter, string? body);
     }
 }
