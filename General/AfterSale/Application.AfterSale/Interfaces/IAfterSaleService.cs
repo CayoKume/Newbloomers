@@ -5,7 +5,7 @@
         /* Me - Infos about your ecommerce */
         public Task<bool?> GetMe();
 
-        /* Reverses - operations available to reverses */
+        /* ReverseSimplified - operations available to reverses */
         public Task<bool?> GetReversesStatus();
         public Task<bool?> GetReversesTransportations();
         public Task<bool?> GetReverses();

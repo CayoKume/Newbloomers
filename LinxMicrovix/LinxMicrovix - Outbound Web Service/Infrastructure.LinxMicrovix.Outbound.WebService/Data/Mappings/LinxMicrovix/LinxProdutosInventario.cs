@@ -1,55 +1,36 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Infrastructure.IntegrationsCore.Data.Schemas;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
-using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
-using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
-using Domain.LinxMicrovix.Outbound.WebService.Enums;
+using Domain.LinxMicrovix.Outbound.WebService.Entities.LinxMicrovix;
+using Infrastructure.IntegrationsCore.Data.Extensions;
+using Domain.IntegrationsCore.Entities.Enums;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
-    public class LinxProdutosInventarioTrustedMap : IEntityTypeConfiguration<LinxProdutosInventario>
+    public class LinxProdutosInventarioMap : IEntityTypeConfiguration<LinxProdutosInventario>
     {
         public void Configure(EntityTypeBuilder<LinxProdutosInventario> builder)
         {
-            builder.ToTable("LinxProdutosInventario", "linx_microvix_erp");
+            var schema = SchemaContext.GetSchema(typeof(LinxProdutosInventario));
 
-            builder.HasKey(e => new { e.cnpj_emp, e.cod_produto, e.cod_deposito });
+            builder.ToTable("LinxProdutosInventario");
 
-            builder.Property(e => e.lastupdateon)
-                .HasProviderColumnType(LogicalColumnType.DateTime);
+            if (schema == "linx_microvix_erp")
+            {
+                builder.HasKey(e => new { e.cnpj_emp, e.cod_produto, e.cod_deposito });
+                builder.Ignore(x => x.id);
+            }
+            else
+            {
+                builder.HasKey(x => x.id);
 
-            builder.Property(e => e.portal)
-                .HasColumnType("int");
-
-            builder.Property(e => e.cnpj_emp)
-                .HasColumnType("varchar(14)");
-
-            builder.Property(e => e.cod_produto)
-                .HasColumnType("bigint");
-
-            builder.Property(e => e.cod_barra)
-                .HasColumnType("varchar(20)");
-
-            builder.Property(e => e.quantidade)
-                .HasColumnType("decimal(10,2)");
-
-            builder.Property(e => e.cod_deposito)
-                .HasColumnType("int");
-
-            builder.Property(e => e.empresa)
-                .HasColumnType("int");
-        }
-    }
-
-    public class LinxProdutosInventarioRawMap : IEntityTypeConfiguration<LinxProdutosInventario>
-    {
-        public void Configure(EntityTypeBuilder<LinxProdutosInventario> builder)
-        {
-            builder.ToTable("LinxProdutosInventario", "untreated");
-
-            builder.HasKey(e => new { e.cnpj_emp, e.cod_produto, e.cod_deposito });
+                builder.Property(e => e.id)
+                    .HasColumnType("int")
+                    .ValueGeneratedOnAdd();
+            }
 
             builder.Property(e => e.lastupdateon)
-                .HasProviderColumnType(LogicalColumnType.DateTime);
+                .HasProviderColumnType(EnumTableColumnType.DateTime);
 
             builder.Property(e => e.portal)
                 .HasColumnType("int");

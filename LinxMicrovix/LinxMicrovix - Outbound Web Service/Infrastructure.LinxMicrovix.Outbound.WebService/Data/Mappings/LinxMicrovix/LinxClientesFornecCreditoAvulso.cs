@@ -1,21 +1,36 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
-using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
-using Domain.LinxMicrovix.Outbound.WebService.Enums;
-using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
+using Domain.LinxMicrovix.Outbound.WebService.Entities.LinxMicrovix;
+using Domain.IntegrationsCore.Entities.Enums;
+using Infrastructure.IntegrationsCore.Data.Extensions;
+using Infrastructure.IntegrationsCore.Data.Schemas;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
-    public class LinxClientesFornecCreditoAvulsoTrustedMap : IEntityTypeConfiguration<LinxClientesFornecCreditoAvulso>
+    public class LinxClientesFornecCreditoAvulsoMap : IEntityTypeConfiguration<LinxClientesFornecCreditoAvulso>
     {
         public void Configure(EntityTypeBuilder<LinxClientesFornecCreditoAvulso> builder)
         {
-            builder.ToTable("LinxClientesFornecCreditoAvulso", "linx_microvix_erp");
+            var schema = SchemaContext.GetSchema(typeof(LinxClientesFornecCreditoAvulso));
 
-            builder.HasKey(e => e.cod_cliente);
+            builder.ToTable("LinxClientesFornecCreditoAvulso");
+
+            if (schema == "linx_microvix_erp")
+            {
+                builder.HasKey(e => e.cod_cliente);
+                builder.Ignore(x => x.id);
+            }
+            else
+            {
+                builder.HasKey(x => x.id);
+
+                builder.Property(e => e.id)
+                    .HasColumnType("int")
+                    .ValueGeneratedOnAdd();
+            }
 
             builder.Property(e => e.lastupdateon)
-                .HasProviderColumnType(LogicalColumnType.DateTime);
+                .HasProviderColumnType(EnumTableColumnType.DateTime);
 
             builder.Property(e => e.portal)
                 .HasColumnType("int");
@@ -30,7 +45,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasColumnType("int");
 
             builder.Property(e => e.data)
-                .HasColumnType("decimal(10,2)");
+                .HasProviderColumnType(EnumTableColumnType.DateTime);
 
             builder.Property(e => e.cd)
                 .HasColumnType("char(1)");
@@ -39,62 +54,16 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasColumnType("decimal(10,2)");
 
             builder.Property(e => e.motivo)
-                .HasColumnType("varchar(max)");
+                .HasProviderColumnType(EnumTableColumnType.Varchar_Max);
 
             builder.Property(e => e.timestamp)
                 .HasColumnType("bigint");
 
             builder.Property(e => e.identificador)
-                .HasProviderColumnType(LogicalColumnType.UUID);
+                .HasProviderColumnType(EnumTableColumnType.UUID);
 
             builder.Property(e => e.cnpj_emp)
                 .HasColumnType("varchar(14)");
-        }
-    }
-
-    public class LinxClientesFornecCreditoAvulsoRawMap : IEntityTypeConfiguration<LinxClientesFornecCreditoAvulso>
-    {
-        public void Configure(EntityTypeBuilder<LinxClientesFornecCreditoAvulso> builder)
-        {
-            builder.ToTable("LinxClientesFornecCreditoAvulso", "untreated");
-
-        builder.HasKey(e => e.cod_cliente);
-
-        builder.Property(e => e.lastupdateon)
-            .HasProviderColumnType(LogicalColumnType.DateTime);
-
-        builder.Property(e => e.portal)
-            .HasColumnType("int");
-
-        builder.Property(e => e.empresa)
-            .HasColumnType("int");
-
-        builder.Property(e => e.cod_cliente)
-            .HasColumnType("int");
-
-        builder.Property(e => e.controle)
-            .HasColumnType("int");
-
-        builder.Property(e => e.data)
-            .HasColumnType("decimal(10,2)");
-
-        builder.Property(e => e.cd)
-            .HasColumnType("char(1)");
-
-        builder.Property(e => e.valor)
-            .HasColumnType("decimal(10,2)");
-
-        builder.Property(e => e.motivo)
-            .HasColumnType("varchar(max)");
-
-        builder.Property(e => e.timestamp)
-            .HasColumnType("bigint");
-
-        builder.Property(e => e.identificador)
-            .HasProviderColumnType(LogicalColumnType.UUID);
-
-        builder.Property(e => e.cnpj_emp)
-            .HasColumnType("varchar(14)");
         }
     }
 }

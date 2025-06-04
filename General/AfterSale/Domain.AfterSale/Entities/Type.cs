@@ -1,4 +1,4 @@
-﻿namespace Domain.AfterSale.Entities.Types
+﻿namespace Domain.AfterSale.Entities
 {
     public class Type
     {

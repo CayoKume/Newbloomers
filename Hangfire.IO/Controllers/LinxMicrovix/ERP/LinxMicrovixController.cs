@@ -1,6 +1,6 @@
 ﻿using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxMicrovix;
 using Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix;
-using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
+using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hangfire.IO.Controllers.LinxMicrovix.ERP

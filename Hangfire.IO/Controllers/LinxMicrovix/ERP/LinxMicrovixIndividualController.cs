@@ -1,5 +1,5 @@
 ﻿using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxMicrovix;
-using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
+using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
@@ -513,6 +513,34 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                     ),
                     identificador: cod_produto,
                     cnpj_emp: cnpj_emp
+                );
+
+                if (result != true)
+                    return BadRequest($"Unable to find records on endpoint.");
+                else
+                    return Ok($"Records integrated successfully.");
+            }
+            catch (Exception ex)
+            {
+                Response.StatusCode = 400;
+                return Content($"Unable to integrate the records.\nError: {ex.Message}");
+            }
+        }
+
+        [HttpPost("LinxProdutosDetalhesWithZeroStock")]
+        public async Task<ActionResult> LinxProdutosDetalhesWithZeroStock()
+        {
+            try
+            {
+                var method = _methods
+                    .Where(m => m.MethodName == "LinxProdutosDetalhes")
+                    .FirstOrDefault();
+
+                var result = await _linxProdutosDetalhesService.GetZeroStockRecords(
+                    _linxMicrovixJobParameter.SetParameters(
+                        jobName: method.MethodName,
+                        tableName: method.MethodName
+                    )
                 );
 
                 if (result != true)

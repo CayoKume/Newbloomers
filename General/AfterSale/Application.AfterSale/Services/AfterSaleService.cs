@@ -2,6 +2,7 @@
 using Domain.AfterSale.Entities;
 using Domain.AfterSale.Interfaces.Api;
 using Domain.AfterSale.Interfaces.Repositorys;
+
 namespace Application.AfterSale.Services
 {
     public class AfterSaleService : IAfterSaleService
@@ -20,6 +21,7 @@ namespace Application.AfterSale.Services
         {
             try
             {
+                var list = new List<Ecommerce>();
                 var companys = await _afterSaleRepository.GetCompanys();
 
                 foreach (var company in companys)
@@ -30,7 +32,11 @@ namespace Application.AfterSale.Services
                     );
 
                     var me = Newtonsoft.Json.JsonConvert.DeserializeObject<Me>(response);
+
+                    list.Add(me.data);
                 }
+
+                await _afterSaleRepository.InsertIntoAfterSaleEcommerce(list);
 
                 return true;
             }
@@ -136,7 +142,8 @@ namespace Application.AfterSale.Services
 
                 foreach (var company in companys)
                 {
-                    var reverses = new List<Reverses>();
+                    var simplifiedReverses = new List<Reverse>();
+                    var completeReverses = new List<Data>();
 
                     var parameters = new Dictionary<string, string>
                     {
@@ -151,8 +158,8 @@ namespace Application.AfterSale.Services
                         encodedParameters: encodedParameters
                     );
 
-                    var page = Newtonsoft.Json.JsonConvert.DeserializeObject<GetReverses>(response);
-                    reverses.AddRange(page.data);
+                    var page = Newtonsoft.Json.JsonConvert.DeserializeObject<ResponseReverses>(response);
+                    simplifiedReverses.AddRange(page.data);
                     string? rote = page.next_page_url;
 
                     if (page.last_page > 1)
@@ -164,13 +171,55 @@ namespace Application.AfterSale.Services
                                 rote: rote.Replace("https://api.send4.com.br/", "")
                             );
 
-                            var nextPage = Newtonsoft.Json.JsonConvert.DeserializeObject<GetReverses>(responseByPage);
-                            reverses.AddRange(nextPage.data);
+                            var nextPage = Newtonsoft.Json.JsonConvert.DeserializeObject<ResponseReverses>(responseByPage);
+                            simplifiedReverses.AddRange(nextPage.data);
                             rote = nextPage.next_page_url; 
+                        }
+
+                        int indice = simplifiedReverses.Count() / 30;
+
+                        if (indice > 1)
+                        {
+                            for (int i = 0; i <= indice; i++)
+                            {
+                                string identificadores = String.Empty;
+                                var top30List = simplifiedReverses.Skip(i * 30).Take(30).ToList();
+
+                                for (int j = 0; j < top30List.Count(); j++)
+                                {
+                                    var _response = await _apiCall.GetAsync(
+                                        token: company.Token.ToString(),
+                                        rote: $"v3/api/reverses/{top30List[j].id}"
+                                    );
+
+                                    var completeReverse = Newtonsoft.Json.JsonConvert.DeserializeObject<Root>(_response);
+                                    completeReverse.data.reverse.customer_id = completeReverse.data.customer.id;
+
+                                    completeReverses.Add(completeReverse.data);
+                                }
+
+                                //API da AfterSale lança Too Many Requests após 30 consultas
+                                Thread.Sleep(60 * 1000);
+                            }
+                        }
+                        else
+                        {
+                            foreach (var reverse in simplifiedReverses)
+                            {
+                                var _response = await _apiCall.GetAsync(
+                                    token: company.Token.ToString(),
+                                    rote: $"v3/api/reverses/{reverse.id}"
+                                );
+
+                                var completeReverse = Newtonsoft.Json.JsonConvert.DeserializeObject<Root>(_response);
+                                completeReverse.data.reverse.customer_id = completeReverse.data.customer.id;
+
+                                completeReverses.Add(completeReverse.data);
+                            }
                         }
                     }
 
-                    //await _afterSaleRepository.InsertIntoAfterSaleReversesStatus(); 
+                    await _afterSaleRepository.InsertIntoAfterSaleReverses(completeReverses); 
                 }
 
                 return true;
@@ -230,9 +279,9 @@ namespace Application.AfterSale.Services
                     rote: "v3/api/reverses/status"
                 );
 
-                var status = Newtonsoft.Json.JsonConvert.DeserializeObject<GetStatus>(response);
+                var status = Newtonsoft.Json.JsonConvert.DeserializeObject<ResponseStatus>(response);
 
-                await _afterSaleRepository.InsertIntoAfterSaleReversesStatus(status.data);
+                await _afterSaleRepository.InsertIntoAfterSaleStatus(status.data);
 
                 return true;
             }
@@ -249,6 +298,7 @@ namespace Application.AfterSale.Services
         {
             try
             {
+                var list = new List<Transportations>();
                 var companys = await _afterSaleRepository.GetCompanys();
 
                 var response = await _apiCall.GetAsync(
@@ -256,9 +306,14 @@ namespace Application.AfterSale.Services
                     rote: "v3/api/transportations"
                 );
 
-                var transportations = Newtonsoft.Json.JsonConvert.DeserializeObject<List<String>>(response);
+                var transportations = Newtonsoft.Json.JsonConvert.DeserializeObject<Transportations>(response);
 
-                //await _afterSaleRepository.InsertIntoAfterSaleReversesStatus();
+                foreach(var transportation in transportations.data)
+                {
+                    list.Add(new Transportations { description = transportation});
+                }
+
+                await _afterSaleRepository.InsertIntoAfterSaleTransportations(list);
 
                 return true;
             }

@@ -1,6 +1,6 @@
 ﻿using Application.LinxCommerce.Interfaces;
 using Domain.LinxCommerce.Entities.Parameters;
-using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
+using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 

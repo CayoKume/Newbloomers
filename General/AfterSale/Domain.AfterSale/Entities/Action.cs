@@ -1,4 +1,4 @@
-﻿namespace Domain.AfterSale.Entites.Actions
+﻿namespace Domain.AfterSale.Entities
 {
     public class Action
     {

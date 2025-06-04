@@ -1,46 +1,39 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
-using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
-using Domain.LinxMicrovix.Outbound.WebService.Enums;
-using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
+using Domain.LinxMicrovix.Outbound.WebService.Entities.LinxMicrovix;
+using Domain.IntegrationsCore.Entities.Enums;
+using Infrastructure.IntegrationsCore.Data.Extensions;
+using Infrastructure.IntegrationsCore.Data.Schemas;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
-    public class LinxMovimentoIndicacoesTrustedMap : IEntityTypeConfiguration<LinxMovimentoIndicacoes>
+    public class LinxMovimentoIndicacoesMap : IEntityTypeConfiguration<LinxMovimentoIndicacoes>
     {
         public void Configure(EntityTypeBuilder<LinxMovimentoIndicacoes> builder)
         {
-            builder.ToTable("LinxMovimentoIndicacoes", "linx_microvix_erp");
+            var schema = SchemaContext.GetSchema(typeof(LinxMovimentoIndicacoes));
 
-            builder.HasKey(e => e.identificador);
+            builder.ToTable("LinxMovimentoIndicacoes");
 
-            builder.Property(e => e.lastupdateon)
-                .HasColumnType("datetime");
+            if (schema == "linx_microvix_erp")
+            {
+                builder.HasKey(e => e.identificador);
+                builder.Ignore(x => x.id);
+            }
+            else
+            {
+                builder.HasKey(x => x.id);
 
-            builder.Property(e => e.identificador)
-                .HasProviderColumnType(LogicalColumnType.UUID);
-
-            builder.Property(e => e.cod_cliente)
-                .HasColumnType("int");
-
-            builder.Property(e => e.timestamp)
-                .HasColumnType("bigint");
-        }
-    }
-
-    public class LinxMovimentoIndicacoesRawMap : IEntityTypeConfiguration<LinxMovimentoIndicacoes>
-    {
-        public void Configure(EntityTypeBuilder<LinxMovimentoIndicacoes> builder)
-        {
-            builder.ToTable("LinxMovimentoIndicacoes", "untreated");
-
-            builder.HasKey(e => e.identificador);
+                builder.Property(e => e.id)
+                    .HasColumnType("int")
+                    .ValueGeneratedOnAdd();
+            }
 
             builder.Property(e => e.lastupdateon)
-                .HasColumnType("datetime");
+                .HasProviderColumnType(EnumTableColumnType.DateTime);
 
             builder.Property(e => e.identificador)
-                .HasProviderColumnType(LogicalColumnType.UUID);
+                .HasProviderColumnType(EnumTableColumnType.UUID);
 
             builder.Property(e => e.cod_cliente)
                 .HasColumnType("int");

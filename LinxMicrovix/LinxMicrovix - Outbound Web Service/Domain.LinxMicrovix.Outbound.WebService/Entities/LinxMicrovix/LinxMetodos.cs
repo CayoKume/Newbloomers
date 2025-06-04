@@ -1,11 +1,14 @@
-﻿using Domain.IntegrationsCore.Extensions;
+using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
+namespace Domain.LinxMicrovix.Outbound.WebService.Entities.LinxMicrovix
 {
     public class LinxMetodos
     {
+        [NotMapped]
+        [SkipProperty]
+
         public DateTime? lastupdateon { get; private set; }
 
         public int? methodID { get; set; }

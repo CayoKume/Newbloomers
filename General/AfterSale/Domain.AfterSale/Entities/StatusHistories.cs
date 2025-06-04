@@ -10,6 +10,5 @@
         public DateTime? date { get; set; }
         public string? comments { get; set; }
         public Status status { get; set; }
-        public User user { get; set; }
     }
 }

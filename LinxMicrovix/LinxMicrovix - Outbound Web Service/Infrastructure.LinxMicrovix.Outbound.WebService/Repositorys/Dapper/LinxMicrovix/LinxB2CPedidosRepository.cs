@@ -1,9 +1,9 @@
 ﻿using Domain.IntegrationsCore.Entities.Enums;
 using Domain.IntegrationsCore.Exceptions;
-using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
+using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxMicrovix;
-using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
+using Domain.LinxMicrovix.Outbound.WebService.Entities.LinxMicrovix;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.Dapper.LinxMicrovix
 {
@@ -25,7 +25,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.Dapper.Linx
                     table.Rows.Add(records[i].lastupdateon, records[i].id_pedido, records[i].dt_pedido, records[i].cod_cliente_erp, records[i].cod_cliente_b2c, records[i].vl_frete,
                         records[i].forma_pgto, records[i].plano_pagamento, records[i].anotacao, records[i].taxa_impressao, records[i].finalizado, records[i].valor_frete_gratis,
                         records[i].tipo_frete, records[i].id_status, records[i].cod_transportador, records[i].tipo_cobranca_frete, records[i].ativo, records[i].empresa, records[i].id_tabela_preco, records[i].valor_credito,
-                        records[i].cod_vendedor, records[i].timestamp, records[i].dt_insert, records[i].dt_disponivel_faturamento, records[i].mensagem_falha_faturamento, records[i].portal, records[i].id_tipo_b2c, 
+                        records[i].cod_vendedor, records[i].timestamp, records[i].dt_insert, records[i].dt_disponivel_faturamento, records[i].mensagem_falha_faturamento, records[i].portal, records[i].id_tipo_b2c,
                         records[i].ecommerce_origem, records[i].marketplace_loja, records[i].order_id);
                 }
 

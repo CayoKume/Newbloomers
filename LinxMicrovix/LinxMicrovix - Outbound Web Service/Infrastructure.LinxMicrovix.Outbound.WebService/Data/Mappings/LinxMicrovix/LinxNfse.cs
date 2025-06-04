@@ -1,21 +1,36 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Infrastructure.IntegrationsCore.Data.Schemas;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
-using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
-using Domain.LinxMicrovix.Outbound.WebService.Enums;
-using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
+using Domain.LinxMicrovix.Outbound.WebService.Entities.LinxMicrovix;
+using Domain.IntegrationsCore.Entities.Enums;
+using Infrastructure.IntegrationsCore.Data.Extensions;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
-    public class LinxNfseTrustedMap : IEntityTypeConfiguration<LinxNfse>
+    public class LinxNfseMap : IEntityTypeConfiguration<LinxNfse>
     {
         public void Configure(EntityTypeBuilder<LinxNfse> builder)
         {
-            builder.ToTable("LinxNfse", "linx_microvix_erp");
+            var schema = SchemaContext.GetSchema(typeof(LinxNfse));
 
-            builder.HasKey(e => e.id_nfse);
+            builder.ToTable("LinxNfse");
+
+            if (schema == "linx_microvix_erp")
+            {
+                builder.HasKey(e => e.id_nfse);
+                builder.Ignore(x => x.id);
+            }
+            else
+            {
+                builder.HasKey(x => x.id);
+
+                builder.Property(e => e.id)
+                    .HasColumnType("int")
+                    .ValueGeneratedOnAdd();
+            }
 
             builder.Property(e => e.lastupdateon)
-                .HasProviderColumnType(LogicalColumnType.DateTime);
+                .HasProviderColumnType(EnumTableColumnType.DateTime);
 
             builder.Property(e => e.id_nfse)
                 .HasColumnType("int");
@@ -33,47 +48,10 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasColumnType("int");
 
             builder.Property(e => e.identificador)
-                .HasProviderColumnType(LogicalColumnType.UUID);
+                .HasProviderColumnType(EnumTableColumnType.UUID);
 
             builder.Property(e => e.dt_insert)
-                .HasProviderColumnType(LogicalColumnType.DateTime);
-
-            builder.Property(e => e.timestamp)
-                .HasColumnType("bigint");
-                }
-    }
-
-    public class LinxNfseRawMap : IEntityTypeConfiguration<LinxNfse>
-    {
-        public void Configure(EntityTypeBuilder<LinxNfse> builder)
-        {
-            builder.ToTable("LinxNfse", "untreated");
-
-            builder.HasKey(e => e.id_nfse);
-
-            builder.Property(e => e.lastupdateon)
-                .HasProviderColumnType(LogicalColumnType.DateTime);
-
-            builder.Property(e => e.id_nfse)
-                .HasColumnType("int");
-
-            builder.Property(e => e.portal)
-                .HasColumnType("int");
-
-            builder.Property(e => e.documento)
-                .HasColumnType("int");
-
-            builder.Property(e => e.codigo_verificacao)
-                .HasColumnType("varchar(50)");
-
-            builder.Property(e => e.id_nfse_situacao)
-                .HasColumnType("int");
-
-            builder.Property(e => e.identificador)
-                .HasProviderColumnType(LogicalColumnType.UUID);
-
-            builder.Property(e => e.dt_insert)
-                .HasProviderColumnType(LogicalColumnType.DateTime);
+                .HasProviderColumnType(EnumTableColumnType.DateTime);
 
             builder.Property(e => e.timestamp)
                 .HasColumnType("bigint");

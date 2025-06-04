@@ -1,21 +1,36 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Infrastructure.IntegrationsCore.Data.Schemas;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
-using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
-using Domain.LinxMicrovix.Outbound.WebService.Enums;
-using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
+using Domain.LinxMicrovix.Outbound.WebService.Entities.LinxMicrovix;
+using Domain.IntegrationsCore.Entities.Enums;
+using Infrastructure.IntegrationsCore.Data.Extensions;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
-    public class LinxMovimentoReshopTrustedMap : IEntityTypeConfiguration<LinxMovimentoReshop>
+    public class LinxMovimentoReshopMap : IEntityTypeConfiguration<LinxMovimentoReshop>
     {
         public void Configure(EntityTypeBuilder<LinxMovimentoReshop> builder)
         {
-            builder.ToTable("LinxMovimentoReshop", "linx_microvix_erp");
+            var schema = SchemaContext.GetSchema(typeof(LinxMovimentoReshop));
 
-            builder.HasKey(e => e.identificador);
+            builder.ToTable("LinxMovimentoReshop");
+
+            if (schema == "linx_microvix_erp")
+            {
+                builder.HasKey(e => e.identificador);
+                builder.Ignore(x => x.id);
+            }
+            else
+            {
+                builder.HasKey(x => x.id);
+
+                builder.Property(e => e.id)
+                    .HasColumnType("int")
+                    .ValueGeneratedOnAdd();
+            }
 
             builder.Property(e => e.lastupdateon)
-                .HasProviderColumnType(LogicalColumnType.DateTime);
+                .HasProviderColumnType(EnumTableColumnType.DateTime);
 
             builder.Property(e => e.id_movimento_campanha_reshop)
                 .HasColumnType("int");
@@ -24,7 +39,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasColumnType("int");
 
             builder.Property(e => e.identificador)
-                .HasProviderColumnType(LogicalColumnType.UUID);
+                .HasProviderColumnType(EnumTableColumnType.UUID);
 
             builder.Property(e => e.nome)
                 .HasColumnType("varchar(200)");
@@ -33,47 +48,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasColumnType("varchar(200)");
 
             builder.Property(e => e.aplicar_desconto_venda)
-                .HasProviderColumnType(LogicalColumnType.Bool);
-
-            builder.Property(e => e.valor_desconto_subtotal)
-                .HasColumnType("decimal(10,2)");
-
-            builder.Property(e => e.valor_desconto_completo)
-                .HasColumnType("decimal(10,2)");
-
-            builder.Property(e => e.timestamp)
-                .HasColumnType("bigint");
-        }
-    }
-
-    public class LinxMovimentoReshopRawMap : IEntityTypeConfiguration<LinxMovimentoReshop>
-    {
-        public void Configure(EntityTypeBuilder<LinxMovimentoReshop> builder)
-        {
-            builder.ToTable("LinxMovimentoReshop", "untreated");
-
-            builder.HasKey(e => e.identificador);
-
-            builder.Property(e => e.lastupdateon)
-                .HasProviderColumnType(LogicalColumnType.DateTime);
-
-            builder.Property(e => e.id_movimento_campanha_reshop)
-                .HasColumnType("int");
-
-            builder.Property(e => e.id_campanha)
-                .HasColumnType("int");
-
-            builder.Property(e => e.identificador)
-                .HasProviderColumnType(LogicalColumnType.UUID);
-
-            builder.Property(e => e.nome)
-                .HasColumnType("varchar(200)");
-
-            builder.Property(e => e.descricao)
-                .HasColumnType("varchar(200)");
-
-            builder.Property(e => e.aplicar_desconto_venda)
-                .HasProviderColumnType(LogicalColumnType.Bool);
+                .HasProviderColumnType(EnumTableColumnType.Bool);
 
             builder.Property(e => e.valor_desconto_subtotal)
                 .HasColumnType("decimal(10,2)");

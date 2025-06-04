@@ -1,48 +1,31 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Infrastructure.IntegrationsCore.Data.Schemas;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
-using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
-using Domain.LinxMicrovix.Outbound.WebService.Enums;
-using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
+using Domain.LinxMicrovix.Outbound.WebService.Entities.LinxMicrovix;
+using Domain.IntegrationsCore.Entities.Enums;
+using Infrastructure.IntegrationsCore.Data.Extensions;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
-    public class LinxMetodosTrustedMap : IEntityTypeConfiguration<LinxMetodos>
+    public class LinxMetodosMap : IEntityTypeConfiguration<LinxMetodos>
     {
         public void Configure(EntityTypeBuilder<LinxMetodos> builder)
         {
-            builder.ToTable("LinxMetodos", "linx_microvix_erp");
+            var schema = SchemaContext.GetSchema(typeof(LinxMetodos));
+
+            builder.ToTable("LinxMetodos");
 
             builder.HasKey(e => e.methodID);
 
             builder.Property(e => e.lastupdateon)
-                .HasProviderColumnType(LogicalColumnType.DateTime);
+                .HasProviderColumnType(EnumTableColumnType.DateTime);
 
             builder.Property(e => e.methodID)
                 .HasColumnType("int")
                 .ValueGeneratedOnAdd();
 
             builder.Property(e => e.Retorno)
-                .HasColumnType("varchar(max)");
-        }
-    }
-
-    public class LinxMetodosRawMap : IEntityTypeConfiguration<LinxMetodos>
-    {
-        public void Configure(EntityTypeBuilder<LinxMetodos> builder)
-        {
-            builder.ToTable("LinxMetodos", "untreated");
-
-            builder.HasKey(e => e.methodID);
-
-            builder.Property(e => e.lastupdateon)
-                .HasProviderColumnType(LogicalColumnType.DateTime);
-
-            builder.Property(e => e.methodID)
-                .HasColumnType("int")
-                .ValueGeneratedOnAdd();
-
-            builder.Property(e => e.Retorno)
-                .HasColumnType("varchar(max)");
+                .HasProviderColumnType(EnumTableColumnType.Varchar_Max);
         }
     }
 }

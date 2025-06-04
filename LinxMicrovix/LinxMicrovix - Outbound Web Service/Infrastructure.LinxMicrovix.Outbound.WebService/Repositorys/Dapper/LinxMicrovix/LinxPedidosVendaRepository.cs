@@ -1,9 +1,9 @@
 ﻿using Domain.IntegrationsCore.Entities.Enums;
 using Domain.IntegrationsCore.Exceptions;
-using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
+using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxMicrovix;
-using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
+using Domain.LinxMicrovix.Outbound.WebService.Entities.LinxMicrovix;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.Dapper.LinxMicrovix
 {
@@ -25,8 +25,8 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.Dapper.Linx
                     table.Rows.Add(records[i].lastupdateon, records[i].portal, records[i].cnpj_emp, records[i].cod_pedido, records[i].data_lancamento, records[i].hora_lancamento,
                         records[i].transacao, records[i].usuario, records[i].codigo_cliente, records[i].cod_produto, records[i].quantidade, records[i].valor_unitario,
                         records[i].cod_vendedor, records[i].valor_frete, records[i].valor_total, records[i].desconto_item, records[i].cod_plano_pagamento, records[i].plano_pagamento, records[i].obs, records[i].aprovado,
-                        records[i].cancelado, records[i].data_aprovacao, records[i].data_alteracao, records[i].tipo_frete, records[i].natureza_operacao, records[i].tabela_preco, records[i].nome_tabela_preco, records[i].previsao_entrega, 
-                        records[i].realizado_por, records[i].pontuacao_ser, records[i].venda_externa, records[i].nf_gerada, records[i].status, records[i].numero_projeto_officina, records[i].cod_natureza_operacao, records[i].margem_contribuicao, 
+                        records[i].cancelado, records[i].data_aprovacao, records[i].data_alteracao, records[i].tipo_frete, records[i].natureza_operacao, records[i].tabela_preco, records[i].nome_tabela_preco, records[i].previsao_entrega,
+                        records[i].realizado_por, records[i].pontuacao_ser, records[i].venda_externa, records[i].nf_gerada, records[i].status, records[i].numero_projeto_officina, records[i].cod_natureza_operacao, records[i].margem_contribuicao,
                         records[i].doc_origem, records[i].posicao_item, records[i].orcamento_origem, records[i].transacao_origem, records[i].timestamp, records[i].desconto, records[i].transacao_ws, records[i].empresa, records[i].transportador, records[i].deposito);
                 }
 
@@ -78,7 +78,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.Dapper.Linx
                 {
                     var list = new List<string>();
                     var identificadores = String.Empty;
-                    
+
                     for (int i = 0; i < registros.Count(); i++)
                     {
                         if (i == registros.Count() - 1)

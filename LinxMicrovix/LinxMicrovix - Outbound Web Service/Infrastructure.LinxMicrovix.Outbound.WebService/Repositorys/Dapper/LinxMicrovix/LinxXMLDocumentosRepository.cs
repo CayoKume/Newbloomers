@@ -1,7 +1,7 @@
 ﻿using Domain.IntegrationsCore.Entities.Enums;
 using Domain.IntegrationsCore.Exceptions;
-using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
-using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
+using Domain.LinxMicrovix.Outbound.WebService.Entities.LinxMicrovix;
+using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxMicrovix;
 
@@ -24,7 +24,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.Dapper.Linx
                 {
                     table.Rows.Add(records[i].lastupdateon, records[i].portal, records[i].cnpj_emp, records[i].documento, records[i].serie, records[i].data_emissao,
                         records[i].chave_nfe, records[i].situacao, records[i].xml, records[i].excluido, records[i].identificador_microvix, records[i].dt_insert,
-                        records[i].timestamp, records[i].nProtCanc, records[i].nProtInut, records[i].xmlDistribuicao, records[i].nProtDeneg, records[i].cStat, 
+                        records[i].timestamp, records[i].nProtCanc, records[i].nProtInut, records[i].xmlDistribuicao, records[i].nProtDeneg, records[i].cStat,
                         records[i].id_nfe, records[i].cod_cliente);
                 }
 

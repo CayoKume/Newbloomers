@@ -1,5 +1,5 @@
-﻿using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
-using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
+﻿using Domain.LinxMicrovix.Outbound.WebService.Entities.LinxMicrovix;
+using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxMicrovix;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.Dapper.LinxMicrovix
@@ -8,7 +8,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.Dapper.Linx
     {
         public LinxAcoesPromocionaisProdutosCortesiaRepository()
         {
-            
+
         }
 
         public bool BulkInsertIntoTableRaw(LinxAPIParam jobParameter, IList<LinxAcoesPromocionaisProdutosCortesia> records)

@@ -1,21 +1,36 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
+using Infrastructure.IntegrationsCore.Data.Schemas;
+using Microsoft.EntityFrameworkCore;
+using Domain.LinxMicrovix.Outbound.WebService.Entities.LinxMicrovix;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Domain.LinxMicrovix.Outbound.WebService.Enums;
-using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
+using Domain.IntegrationsCore.Entities.Enums;
+using Infrastructure.IntegrationsCore.Data.Extensions;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
-    public class LinxClasseFiscalTrustedMap : IEntityTypeConfiguration<LinxClasseFiscal>
+    public class LinxClasseFiscalMap : IEntityTypeConfiguration<LinxClasseFiscal>
     {
         public void Configure(EntityTypeBuilder<LinxClasseFiscal> builder)
         {
-            builder.ToTable("LinxClasseFiscal", "linx_microvix_erp");
+            var schema = SchemaContext.GetSchema(typeof(LinxClasseFiscal));
 
-            builder.HasKey(e => e.id_classe_fiscal);
+            builder.ToTable("LinxClasseFiscal");
+
+            if (schema == "linx_microvix_erp")
+            {
+                builder.HasKey(e => e.id_classe_fiscal);
+                builder.Ignore(x => x.id);
+            }
+            else
+            {
+                builder.HasKey(x => x.id);
+
+                builder.Property(e => e.id)
+                    .HasColumnType("int")
+                    .ValueGeneratedOnAdd();
+            }
 
             builder.Property(e => e.lastupdateon)
-                .HasProviderColumnType(LogicalColumnType.DateTime);
+                .HasProviderColumnType(EnumTableColumnType.DateTime);
 
             builder.Property(e => e.portal)
                 .HasColumnType("int");
@@ -27,38 +42,10 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasColumnType("varchar(150)");
 
             builder.Property(e => e.excluido)
-                .HasProviderColumnType(LogicalColumnType.Bool);
+                .HasProviderColumnType(EnumTableColumnType.Bool);
 
             builder.Property(e => e.timestamp)
                 .HasColumnType("bigint");
-        }
-    }
-
-    public class LinxClasseFiscalRawMap : IEntityTypeConfiguration<LinxClasseFiscal>
-    {
-        public void Configure(EntityTypeBuilder<LinxClasseFiscal> builder)
-        {
-            builder.ToTable("LinxClasseFiscal", "untreated");
-
-        builder.HasKey(e => e.id_classe_fiscal);
-
-        builder.Property(e => e.lastupdateon)
-            .HasProviderColumnType(LogicalColumnType.DateTime);
-
-        builder.Property(e => e.portal)
-            .HasColumnType("int");
-
-        builder.Property(e => e.id_classe_fiscal)
-            .HasColumnType("int");
-
-        builder.Property(e => e.descricao)
-            .HasColumnType("varchar(150)");
-
-        builder.Property(e => e.excluido)
-            .HasProviderColumnType(LogicalColumnType.Bool);
-
-        builder.Property(e => e.timestamp)
-            .HasColumnType("bigint");
         }
     }
 }

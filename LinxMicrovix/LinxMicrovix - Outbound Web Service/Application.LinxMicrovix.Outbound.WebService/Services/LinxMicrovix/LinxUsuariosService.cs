@@ -3,7 +3,7 @@ using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxMicrovix;
 using Domain.IntegrationsCore.Entities.Enums;
 using Domain.IntegrationsCore.Exceptions;
-using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
+using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
 using Domain.LinxMicrovix.Outbound.WebService.Entities.LinxMicrovix;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Api;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;

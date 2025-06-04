@@ -1,21 +1,36 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Infrastructure.IntegrationsCore.Data.Schemas;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
-using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
-using Domain.LinxMicrovix.Outbound.WebService.Enums;
-using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
+using Domain.LinxMicrovix.Outbound.WebService.Entities.LinxMicrovix;
+using Domain.IntegrationsCore.Entities.Enums;
+using Infrastructure.IntegrationsCore.Data.Extensions;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
-    public class LinxMovimentoSerialTrustedMap : IEntityTypeConfiguration<LinxMovimentoSerial>
+    public class LinxMovimentoSerialMap : IEntityTypeConfiguration<LinxMovimentoSerial>
     {
         public void Configure(EntityTypeBuilder<LinxMovimentoSerial> builder)
         {
-            builder.ToTable("LinxMovimentoSerial", "linx_microvix_erp");
+            var schema = SchemaContext.GetSchema(typeof(LinxMovimentoSerial));
 
-            builder.HasKey(e => e.identificador);
+            builder.ToTable("LinxMovimentoSerial");
+
+            if (schema == "linx_microvix_erp")
+            {
+                builder.HasKey(e => e.identificador);
+                builder.Ignore(x => x.id);
+            }
+            else
+            {
+                builder.HasKey(x => x.id);
+
+                builder.Property(e => e.id)
+                    .HasColumnType("int")
+                    .ValueGeneratedOnAdd();
+            }
 
             builder.Property(e => e.lastupdateon)
-                .HasProviderColumnType(LogicalColumnType.DateTime);
+                .HasProviderColumnType(EnumTableColumnType.DateTime);
 
             builder.Property(e => e.portal)
                 .HasColumnType("int");
@@ -24,38 +39,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasColumnType("varchar(14)");
 
             builder.Property(e => e.identificador)
-                .HasProviderColumnType(LogicalColumnType.UUID);
-
-            builder.Property(e => e.transacao)
-                .HasColumnType("int");
-
-            builder.Property(e => e.serial)
-                .HasColumnType("varchar(50)");
-
-            builder.Property(e => e.timestamp)
-                .HasColumnType("bigint");
-        }
-    }
-
-    public class LinxMovimentoSerialRawMap : IEntityTypeConfiguration<LinxMovimentoSerial>
-    {
-        public void Configure(EntityTypeBuilder<LinxMovimentoSerial> builder)
-        {
-            builder.ToTable("LinxMovimentoSerial", "untreated");
-
-            builder.HasKey(e => e.identificador);
-
-            builder.Property(e => e.lastupdateon)
-                .HasProviderColumnType(LogicalColumnType.DateTime);
-
-            builder.Property(e => e.portal)
-                .HasColumnType("int");
-
-            builder.Property(e => e.cnpj_emp)
-                .HasColumnType("varchar(14)");
-
-            builder.Property(e => e.identificador)
-                .HasProviderColumnType(LogicalColumnType.UUID);
+                .HasProviderColumnType(EnumTableColumnType.UUID);
 
             builder.Property(e => e.transacao)
                 .HasColumnType("int");

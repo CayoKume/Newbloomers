@@ -1,27 +1,42 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Infrastructure.IntegrationsCore.Data.Schemas;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
-using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
-using Domain.LinxMicrovix.Outbound.WebService.Enums;
-using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
+using Domain.LinxMicrovix.Outbound.WebService.Entities.LinxMicrovix;
+using Domain.IntegrationsCore.Entities.Enums;
+using Infrastructure.IntegrationsCore.Data.Extensions;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
-    public class LinxRemessasIdentificadoresTrustedMap : IEntityTypeConfiguration<LinxRemessasIdentificadores>
+    public class LinxRemessasIdentificadoresMap : IEntityTypeConfiguration<LinxRemessasIdentificadores>
     {
         public void Configure(EntityTypeBuilder<LinxRemessasIdentificadores> builder)
         {
-            builder.ToTable("LinxRemessasIdentificadores", "linx_microvix_erp");
+            var schema = SchemaContext.GetSchema(typeof(LinxRemessasIdentificadores));
 
-            builder.HasKey(e => e.id_remessas);
+            builder.ToTable("LinxRemessasIdentificadores");
+
+            if (schema == "linx_microvix_erp")
+            {
+                builder.HasKey(e => e.id_remessas);
+                builder.Ignore(x => x.id);
+            }
+            else
+            {
+                builder.HasKey(x => x.id);
+
+                builder.Property(e => e.id)
+                    .HasColumnType("int")
+                    .ValueGeneratedOnAdd();
+            }
 
             builder.Property(e => e.lastupdateon)
-                .HasProviderColumnType(LogicalColumnType.DateTime);
+                .HasProviderColumnType(EnumTableColumnType.DateTime);
 
             builder.Property(e => e.identificador_venda)
-                .HasProviderColumnType(LogicalColumnType.UUID);
+                .HasProviderColumnType(EnumTableColumnType.UUID);
 
             builder.Property(e => e.identificador_remessa)
-                .HasProviderColumnType(LogicalColumnType.UUID);
+                .HasProviderColumnType(EnumTableColumnType.UUID);
 
             builder.Property(e => e.id_remessas)
                 .HasColumnType("int");
@@ -36,47 +51,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasColumnType("int");
 
             builder.Property(e => e.identificador_devolucao)
-                .HasProviderColumnType(LogicalColumnType.UUID);
-
-            builder.Property(e => e.transacao_remessa)
-                .HasColumnType("int");
-
-            builder.Property(e => e.id_remessa_operacoes)
-                .HasColumnType("int");
-        }
-    }
-
-    public class LinxRemessasIdentificadoresRawMap : IEntityTypeConfiguration<LinxRemessasIdentificadores>
-    {
-        public void Configure(EntityTypeBuilder<LinxRemessasIdentificadores> builder)
-        {
-            builder.ToTable("LinxRemessasIdentificadores", "untreated");
-
-            builder.HasKey(e => e.id_remessas);
-
-            builder.Property(e => e.lastupdateon)
-                .HasProviderColumnType(LogicalColumnType.DateTime);
-
-            builder.Property(e => e.identificador_venda)
-                .HasProviderColumnType(LogicalColumnType.UUID);
-
-            builder.Property(e => e.identificador_remessa)
-                .HasProviderColumnType(LogicalColumnType.UUID);
-
-            builder.Property(e => e.id_remessas)
-                .HasColumnType("int");
-
-            builder.Property(e => e.id_remessas_acertos)
-                .HasColumnType("int");
-
-            builder.Property(e => e.transacao_acerto)
-                .HasColumnType("int");
-
-            builder.Property(e => e.qtde_total_acerto)
-                .HasColumnType("int");
-
-            builder.Property(e => e.identificador_devolucao)
-                .HasProviderColumnType(LogicalColumnType.UUID);
+                .HasProviderColumnType(EnumTableColumnType.UUID);
 
             builder.Property(e => e.transacao_remessa)
                 .HasColumnType("int");

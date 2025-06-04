@@ -1,4 +1,4 @@
-﻿namespace Domain.TotalExpress.Entites
+﻿namespace Domain.TotalExpress.Entities
 {
     public class Status
     {

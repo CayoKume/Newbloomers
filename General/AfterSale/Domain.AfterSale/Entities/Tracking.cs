@@ -1,4 +1,6 @@
-﻿namespace Domain.AfterSale.Entities
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Domain.AfterSale.Entities
 {
     public class Tracking
     {
@@ -7,8 +9,8 @@
         public int? courier_contract_id { get; set; }
         public string? authorization_code { get; set; }
         public string? tracking_code { get; set; }
-        public string? shipping_amount { get; set; }
-        public string? package_amount { get; set; }
+        public decimal? shipping_amount { get; set; }
+        public decimal? package_amount { get; set; }
         public string? courier_name { get; set; }
         public string? tracking_url { get; set; }
         public DateTime? expire_date { get; set; }
@@ -26,5 +28,8 @@
         public string? extra_fields { get; set; }
         public DateTime? updated_at { get; set; }
         public DateTime? deleted_at { get; set; }
+
+        [NotMapped]
+        public Reverse reverse { get; set; }
     }
 }

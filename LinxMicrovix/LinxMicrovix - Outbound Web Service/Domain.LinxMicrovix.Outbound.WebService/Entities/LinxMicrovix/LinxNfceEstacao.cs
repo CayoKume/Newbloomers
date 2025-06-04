@@ -1,12 +1,15 @@
-﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
+using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
+namespace Domain.LinxMicrovix.Outbound.WebService.Entities.LinxMicrovix
 {
     public class LinxNfceEstacao
     {
+        [NotMapped]
+        public Int32 id { get; set; }
+
         public DateTime? lastupdateon { get; private set; }
 
         public Int32? id_nfce_estacao { get; private set; }

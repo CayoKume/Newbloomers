@@ -1,21 +1,36 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Infrastructure.IntegrationsCore.Data.Schemas;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
-using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
-using Domain.LinxMicrovix.Outbound.WebService.Enums;
-using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
+using Domain.LinxMicrovix.Outbound.WebService.Entities.LinxMicrovix;
+using Domain.IntegrationsCore.Entities.Enums;
+using Infrastructure.IntegrationsCore.Data.Extensions;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
-    public class LinxClientesFornecCamposAdicionaisTrustedMap : IEntityTypeConfiguration<LinxClientesFornecCamposAdicionais>
+    public class LinxClientesFornecCamposAdicionaisMap : IEntityTypeConfiguration<LinxClientesFornecCamposAdicionais>
     {
         public void Configure(EntityTypeBuilder<LinxClientesFornecCamposAdicionais> builder)
         {
-            builder.ToTable("LinxClientesFornecCamposAdicionais", "linx_microvix_erp");
+            var schema = SchemaContext.GetSchema(typeof(LinxClientesFornecCamposAdicionais));
 
-            builder.HasKey(e => e.cod_cliente);
+            builder.ToTable("LinxClientesFornecCamposAdicionais");
+
+            if (schema == "linx_microvix_erp")
+            {
+                builder.HasKey(e => new { e.cod_cliente });
+                builder.Ignore(x => x.id);
+            }
+            else
+            {
+                builder.HasKey(x => x.id);
+
+                builder.Property(e => e.id)
+                    .HasColumnType("int")
+                    .ValueGeneratedOnAdd();
+            }
 
             builder.Property(e => e.lastupdateon)
-                .HasProviderColumnType(LogicalColumnType.DateTime);
+                .HasProviderColumnType(EnumTableColumnType.DateTime);
 
             builder.Property(e => e.portal)
                 .HasColumnType("int");
@@ -28,31 +43,6 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
 
             builder.Property(e => e.valor)
                 .HasColumnType("varchar(100)");
-        }
-    }
-
-    public class LinxClientesFornecCamposAdicionaisRawMap : IEntityTypeConfiguration<LinxClientesFornecCamposAdicionais>
-    {
-        public void Configure(EntityTypeBuilder<LinxClientesFornecCamposAdicionais> builder)
-        {
-            builder.ToTable("LinxClientesFornecCamposAdicionais", "untreated");
-
-        builder.HasKey(e => e.cod_cliente);
-
-        builder.Property(e => e.lastupdateon)
-            .HasProviderColumnType(LogicalColumnType.DateTime);
-
-        builder.Property(e => e.portal)
-            .HasColumnType("int");
-
-        builder.Property(e => e.cod_cliente)
-            .HasColumnType("int");
-
-        builder.Property(e => e.campo)
-            .HasColumnType("varchar(50)");
-
-        builder.Property(e => e.valor)
-            .HasColumnType("varchar(100)");
         }
     }
 }

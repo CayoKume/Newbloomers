@@ -1,21 +1,36 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
+using Infrastructure.IntegrationsCore.Data.Schemas;
+using Microsoft.EntityFrameworkCore;
+using Domain.LinxMicrovix.Outbound.WebService.Entities.LinxMicrovix;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Domain.LinxMicrovix.Outbound.WebService.Enums;
-using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
+using Domain.IntegrationsCore.Entities.Enums;
+using Infrastructure.IntegrationsCore.Data.Extensions;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
-    public class LinxCestTrustedMap : IEntityTypeConfiguration<LinxCest>
+    public class LinxCestMap : IEntityTypeConfiguration<LinxCest>
     {
         public void Configure(EntityTypeBuilder<LinxCest> builder)
         {
-            builder.ToTable("LinxCest", "linx_microvix_erp");
+            var schema = SchemaContext.GetSchema(typeof(LinxCest));
 
-            builder.HasKey(e => e.id_cest);
+            builder.ToTable("LinxCest");
+
+            if (schema == "linx_microvix_erp")
+            {
+                builder.HasKey(e => new { e.id_cest });
+                builder.Ignore(x => x.id);
+            }
+            else
+            {
+                builder.HasKey(x => x.id);
+
+                builder.Property(e => e.id)
+                    .HasColumnType("int")
+                    .ValueGeneratedOnAdd();
+            }
 
             builder.Property(e => e.lastupdateon)
-                .HasProviderColumnType(LogicalColumnType.DateTime);
+                .HasProviderColumnType(EnumTableColumnType.DateTime);
 
             builder.Property(e => e.portal)
                 .HasColumnType("int");
@@ -33,44 +48,10 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasColumnType("int");
 
             builder.Property(e => e.ativo)
-                .HasProviderColumnType(LogicalColumnType.Bool);
+                .HasProviderColumnType(EnumTableColumnType.Bool);
 
             builder.Property(e => e.timestamp)
                 .HasColumnType("bigint");
-        }
-    }
-
-    public class LinxCestRawMap : IEntityTypeConfiguration<LinxCest>
-    {
-        public void Configure(EntityTypeBuilder<LinxCest> builder)
-        {
-            builder.ToTable("LinxCest", "untreated");
-
-        builder.HasKey(e => e.id_cest);
-
-        builder.Property(e => e.lastupdateon)
-            .HasProviderColumnType(LogicalColumnType.DateTime);
-
-        builder.Property(e => e.portal)
-            .HasColumnType("int");
-
-        builder.Property(e => e.id_cest)
-            .HasColumnType("int");
-
-        builder.Property(e => e.descricao)
-            .HasColumnType("varchar(700)");
-
-        builder.Property(e => e.cest)
-            .HasColumnType("varchar(10)");
-
-        builder.Property(e => e.id_segmento_mercadoria_bem)
-            .HasColumnType("int");
-
-        builder.Property(e => e.ativo)
-            .HasProviderColumnType(LogicalColumnType.Bool);
-
-        builder.Property(e => e.timestamp)
-            .HasColumnType("bigint");
         }
     }
 }

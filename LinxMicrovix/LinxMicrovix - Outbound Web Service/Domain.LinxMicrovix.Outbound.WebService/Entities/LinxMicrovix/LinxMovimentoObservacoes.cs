@@ -1,12 +1,15 @@
-﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
+using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
+namespace Domain.LinxMicrovix.Outbound.WebService.Entities.LinxMicrovix
 {
     public class LinxMovimentoObservacoes
     {
+        [NotMapped]
+        public Int32 id { get; set; }
+
         public DateTime? lastupdateon { get; private set; }
 
         public Int32? id_obs { get; private set; }

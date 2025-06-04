@@ -1,13 +1,15 @@
-﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
+using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
+namespace Domain.LinxMicrovix.Outbound.WebService.Entities.LinxCommerce
 {
-    [Table("B2CConsultaFormasPagamento", Schema = "linx_microvix_commerce")]
     public class B2CConsultaFormasPagamento
     {
+        [NotMapped]
+        public Int32 id { get; set; }
+
         public DateTime? lastupdateon { get; private set; }
 
         public Int32? cod_forma_pgto { get; private set; }

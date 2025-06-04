@@ -1,6 +1,6 @@
-﻿using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
+﻿using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxMicrovix;
-using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
+using Domain.LinxMicrovix.Outbound.WebService.Entities.LinxMicrovix;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.Dapper.LinxMicrovix
 {
@@ -8,9 +8,9 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.Dapper.Linx
     {
         public LinxCstIpiFiscalRepository()
         {
-            
+
         }
-        
+
         public bool BulkInsertIntoTableRaw(LinxAPIParam jobParameter, IList<LinxCstIpiFiscal> records)
         {
             throw new NotImplementedException();

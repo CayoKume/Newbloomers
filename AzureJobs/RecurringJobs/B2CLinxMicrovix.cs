@@ -1,6 +1,6 @@
 ﻿using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxCommerce;
 using Application.LinxMicrovix.Outbound.WebService.Services;
-using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
+using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
 using Microsoft.Azure.WebJobs;
 
 namespace AzureJobs.RecurringJobs

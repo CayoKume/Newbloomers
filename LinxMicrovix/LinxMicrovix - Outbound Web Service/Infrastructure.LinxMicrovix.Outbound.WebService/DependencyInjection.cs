@@ -14,6 +14,8 @@ using Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Dapper.Base;
 using Infrastructure.LinxMicrovix.Outbound.WebService.Repository.Dapper.LinxMicrovix;
 using LinxMicrovix.Outbound.Web.Service.Application.Services.LinxMicrovix;
 using Microsoft.Extensions.DependencyInjection;
+using Application.IntegrationsCore.Interfaces;
+using Application.IntegrationsCore.Services;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.DependencyInjection
 {

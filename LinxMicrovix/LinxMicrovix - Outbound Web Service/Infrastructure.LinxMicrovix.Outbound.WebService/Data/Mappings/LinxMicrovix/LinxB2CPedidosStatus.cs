@@ -1,21 +1,36 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
+using Infrastructure.IntegrationsCore.Data.Schemas;
+using Microsoft.EntityFrameworkCore;
+using Domain.LinxMicrovix.Outbound.WebService.Entities.LinxMicrovix;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Domain.LinxMicrovix.Outbound.WebService.Enums;
-using Infrastructure.LinxMicrovix.Outbound.WebService.Data.Extensions;
+using Domain.IntegrationsCore.Entities.Enums;
+using Infrastructure.IntegrationsCore.Data.Extensions;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {
-    public class LinxB2CPedidosStatusTrustedMap : IEntityTypeConfiguration<LinxB2CPedidosStatus>
+    public class LinxB2CPedidosStatusMap : IEntityTypeConfiguration<LinxB2CPedidosStatus>
     {
         public void Configure(EntityTypeBuilder<LinxB2CPedidosStatus> builder)
         {
-            builder.ToTable("LinxB2CPedidosStatus", "linx_microvix_erp");
+            var schema = SchemaContext.GetSchema(typeof(LinxB2CPedidosStatus));
 
-            builder.HasKey(e => e.id);
+            builder.ToTable("LinxB2CPedidosStatus");
 
+            if (schema == "linx_microvix_erp")
+            {
+                builder.HasKey(e => new { e.id_pedido, e.id_status, e.id });
+                builder.Ignore(x => x.id);
+            }
+            else
+            {
+                builder.HasKey(x => x.id);
+
+                builder.Property(e => e.id)
+                    .HasColumnType("int")
+                    .ValueGeneratedOnAdd();
+            }
+            
             builder.Property(e => e.lastupdateon)
-                .HasProviderColumnType(LogicalColumnType.DateTime);
+                .HasProviderColumnType(EnumTableColumnType.DateTime);
 
             builder.Property(e => e.id)
                 .HasColumnType("int");
@@ -27,7 +42,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                 .HasColumnType("int");
 
             builder.Property(e => e.data_hora)
-                .HasProviderColumnType(LogicalColumnType.DateTime);
+                .HasProviderColumnType(EnumTableColumnType.DateTime);
 
             builder.Property(e => e.anotacao)
                 .HasColumnType("varchar(80)");
@@ -37,14 +52,6 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
 
             builder.Property(e => e.portal)
                 .HasColumnType("int");
-        }
-    }
-
-    public class LinxB2CPedidosStatusRawMap : IEntityTypeConfiguration<LinxB2CPedidosStatus>
-    {
-        public void Configure(EntityTypeBuilder<LinxB2CPedidosStatus> builder)
-        {
-            throw new NotImplementedException();
         }
     }
 }
