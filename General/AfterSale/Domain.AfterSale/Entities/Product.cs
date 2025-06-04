@@ -10,7 +10,7 @@
         public int? qty { get; set; }
         public int? requested_qty { get; set; }
         public int? received_qty { get; set; }
-        public int? product_received_comment { get; set; }
+        public string? product_received_comment { get; set; }
         public string? comments { get; set; }
         public string? reverse_action { get; set; }
         public string? customer_retention_method_id { get; set; }
@@ -25,9 +25,6 @@
         public string? returned_invoice { get; set; }
         public string? invoice { get; set; }
         public int? order_id { get; set; }
-        public string?[] image_url { get; set; }
         public Reason reason { get; set; }
-        public List<Image> images { get; set; }
-        public string?[] refund_product_requests { get; set; }
     }
 }

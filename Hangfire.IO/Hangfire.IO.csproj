@@ -7,16 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Hangfire.AspNetCore" Version="1.8.15" />
-    <PackageReference Include="Hangfire.Core" Version="1.8.15" />
-    <PackageReference Include="Hangfire.SqlServer" Version="1.8.15" />
+    <PackageReference Include="Hangfire.AspNetCore" Version="1.8.18" />
+    <PackageReference Include="Hangfire.Core" Version="1.8.18" />
+    <PackageReference Include="Hangfire.SqlServer" Version="1.8.18" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.10" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="8.1.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Database\Application.DatabaseInit\Application.DatabaseInit.csproj" />
-    <ProjectReference Include="..\Database\Infrastructure.DatabaseInit\Infrastructure.DatabaseInit.csproj" />
     <ProjectReference Include="..\General\AfterSale\Application.AfterSale\Application.AfterSale.csproj" />
     <ProjectReference Include="..\General\AfterSale\Infrastructure.AfterSale\Infrastructure.AfterSale.csproj" />
     <ProjectReference Include="..\IntegrationsCore\Infrastructure.IntegrationsCore\Infrastructure.IntegrationsCore.csproj" />

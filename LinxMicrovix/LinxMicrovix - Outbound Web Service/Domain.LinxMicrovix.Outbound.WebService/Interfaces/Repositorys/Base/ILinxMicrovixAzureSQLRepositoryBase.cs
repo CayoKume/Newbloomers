@@ -1,5 +1,5 @@
-﻿using Domain.LinxMicrovix.Outbound.WebService.Entites.Base;
-using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
+﻿using Domain.LinxMicrovix.Outbound.WebService.Entities.Base;
+using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
 using System.Data;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base

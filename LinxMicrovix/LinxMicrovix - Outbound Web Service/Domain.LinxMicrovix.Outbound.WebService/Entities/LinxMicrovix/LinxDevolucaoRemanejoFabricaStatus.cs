@@ -1,13 +1,15 @@
-﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
+using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix
+namespace Domain.LinxMicrovix.Outbound.WebService.Entities.LinxMicrovix
 {
-    [Table("LinxDevolucaoRemanejoFabricaStatus", Schema = "linx_microvix_erp")]
     public class LinxDevolucaoRemanejoFabricaStatus
     {
+        [NotMapped]
+        public Int32 id { get; set; }
+
         public DateTime? lastupdateon { get; private set; }
 
         public Int32? id_devolucao_remanejo_fabrica_status { get; private set; }

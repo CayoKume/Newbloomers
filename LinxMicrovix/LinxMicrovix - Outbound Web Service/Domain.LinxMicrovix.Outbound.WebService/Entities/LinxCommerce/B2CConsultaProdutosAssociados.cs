@@ -1,14 +1,14 @@
-﻿using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
+using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
 using Domain.IntegrationsCore.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 
-namespace Domain.LinxMicrovix.Outbound.WebService.Entites.LinxCommerce
+namespace Domain.LinxMicrovix.Outbound.WebService.Entities.LinxCommerce
 {
-    [Table("B2CConsultaProdutosAssociados", Schema = "linx_microvix_commerce")]
     public class B2CConsultaProdutosAssociados
     {
+
         public DateTime? lastupdateon { get; private set; }
 
         public Int32? id { get; private set; }

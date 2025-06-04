@@ -1,4 +1,4 @@
-﻿using Domain.LinxMicrovix.Outbound.WebService.Entites.Parameters;
+﻿using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
 using Domain.LinxMicrovix.Outbound.WebService.Entities.LinxMicrovix;
 
 namespace Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxMicrovix

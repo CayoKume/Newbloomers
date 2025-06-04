@@ -18,7 +18,12 @@ namespace Domain.Jadlog.Entities
             this.lastupdateon = DateTime.Now;
             this.data = DateTime.Parse(evento.data, new CultureInfo("pt-BR"));
             this.status = evento.status;
-            this.unidade = evento.unidade;
+
+            if (evento.unidade is null)
+                this.unidade = String.Empty;
+            else
+                this.unidade = evento.unidade;
+            
             this.shipmentId = shipmentId;
         }
     }

@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using Domain.IntegrationsCore.Extensions;
 using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
@@ -7,6 +7,9 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entities.LinxMicrovix
 {
     public class LinxClientesEnderecosEntrega
     {
+        [NotMapped]
+        public Int32 id { get; set; }
+
         public DateTime? lastupdateon { get; private set; }
 
         public Int32? id_endereco_entrega { get; private set; }

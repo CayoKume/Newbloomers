@@ -1,6 +1,6 @@
 ﻿using Domain.IntegrationsCore.Entities.Bases;
 
-namespace Domain.AfterSale.Entites.Company
+namespace Domain.AfterSale.Entities
 {
     public class Company : CompanyBase
     {

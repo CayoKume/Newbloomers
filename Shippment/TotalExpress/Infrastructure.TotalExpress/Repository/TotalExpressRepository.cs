@@ -1,5 +1,5 @@
 ﻿using Dapper;
-using Domain.TotalExpress.Entites;
+using Domain.TotalExpress.Entities;
 using Domain.TotalExpress.Interfaces.Repository;
 using Infrastructure.IntegrationsCore.Connections.MySQL;
 using Infrastructure.IntegrationsCore.Connections.PostgreSQL;

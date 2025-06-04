@@ -1,4 +1,4 @@
-﻿namespace Domain.AfterSale.Entites.Banks
+﻿namespace Domain.AfterSale.Entities
 {
     public class Bank
     {

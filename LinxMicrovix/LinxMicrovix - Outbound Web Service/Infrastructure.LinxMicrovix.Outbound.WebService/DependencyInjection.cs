@@ -4,17 +4,18 @@ using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxMicrovix;
 using Application.LinxMicrovix.Outbound.WebService.Services;
 using Application.LinxMicrovix.Outbound.WebService.Services.Base;
 using Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix;
-using Domain.LinxMicrovix.Outbound.WebService.Entites.LinxMicrovix;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Api;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxCommerce;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxMicrovix;
 using Infrastructure.LinxMicrovix.Outbound.WebService.Api;
-using Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerce;
-using Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base;
-using Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.LinxMicrovix;
+using Infrastructure.LinxMicrovix.Outbound.WebService.Repository.Dapper.LinxCommerce;
+using Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Dapper.Base;
+using Infrastructure.LinxMicrovix.Outbound.WebService.Repository.Dapper.LinxMicrovix;
 using LinxMicrovix.Outbound.Web.Service.Application.Services.LinxMicrovix;
 using Microsoft.Extensions.DependencyInjection;
+using Application.IntegrationsCore.Interfaces;
+using Application.IntegrationsCore.Services;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.DependencyInjection
 {

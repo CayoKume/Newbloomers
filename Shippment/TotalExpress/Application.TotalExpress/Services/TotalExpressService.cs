@@ -1,5 +1,5 @@
 ﻿using Application.TotalExpress.Interfaces;
-using Domain.TotalExpress.Entites;
+using Domain.TotalExpress.Entities;
 using Domain.TotalExpress.Interfaces.Api;
 using Domain.TotalExpress.Interfaces.Repository;
 using Newtonsoft.Json;
