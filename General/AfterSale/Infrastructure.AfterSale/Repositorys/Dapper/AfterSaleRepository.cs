@@ -9,21 +9,24 @@ using System.Data.SqlClient;
 using System.Reflection;
 using Domain.AfterSale.Entities;
 using Reverse = Domain.AfterSale.Entities.Reverse;
+using Domain.IntegrationsCore.Interfaces;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Infrastructure.AfterSale.Repositorys.Dapper;
 
 public class AfterSaleRepository : IAfterSaleRepository
 {
     private readonly ISQLServerConnection? _sqlServerConnection;
+    private readonly IIntegrationsCoreRepository? _integrationsCoreRepository;
 
-    public AfterSaleRepository(ISQLServerConnection? sqlServerConnection) =>
-            _sqlServerConnection = sqlServerConnection;
+    public AfterSaleRepository(ISQLServerConnection? sqlServerConnection, IIntegrationsCoreRepository? integrationsCoreRepository) =>
+            (_sqlServerConnection, _integrationsCoreRepository) = (sqlServerConnection, integrationsCoreRepository);
 
     public async Task<IEnumerable<Company>> GetCompanys()
     {
         string? sql = @$"SELECT DISTINCT
                      CNPJ_EMP AS DOC_COMPANY,
-                     TOKENMO
+                     TOKEN AS TOKEN
                      FROM GENERAL.PARAMETROS_AFTERSALE";
 
         using (var conn = _sqlServerConnection.GetIDbConnection())
@@ -76,33 +79,22 @@ public class AfterSaleRepository : IAfterSaleRepository
 
     public async Task<bool> InsertIntoAfterSaleReverses(List<Domain.AfterSale.Entities.Data> data)
     {
-        var reversesTable = CreateSystemDataTable(new Reverse(), "AfterSaleReverses");
-        var customerTable = CreateSystemDataTable(new Customer(), "AfterSaleCustomer");
-        var addressTable = CreateSystemDataTable(new Address(), "AfterSaleAddress");
-        var trackingHistoryTable = CreateSystemDataTable(new TrackingHistory(), "AfterSaleReverseTrackings");
-
-        for (int i = 0; i < data.Count; i++)
-        {
-            reversesTable.Rows.Add(data[i].reverse.id, data[i].reverse.reverse_type, data[i].reverse.reverse_type_name, data[i].reverse.created_at, data[i].reverse.updated_at, data[i].reverse.order_id, data[i].reverse.total_amount,
-                data[i].reverse.returned_invoice, data[i].customer is not null ? data[i].customer.id : null, data[i].customer is not null ? data[i].customer.first_name : null, data[i].customer is not null ? data[i].customer.last_name : null, data[i].reverse.status_id, data[i].reverse.status is not null ? data[i].reverse.status.name : null, data[i].reverse.status is not null ? data[i].reverse.status.description : null,
-                data[i].reverse.tracking is not null ? data[i].reverse.tracking.tracking_code : null, data[i].reverse.tracking is not null ? data[i].reverse.tracking.shipping_amount : null, data[i].reverse.tracking is not null ? data[i].reverse.refunds.Count : null, data[i].reverse.invoice, data[i].reverse.service_type_change);
-        }
+        var reversesTable = _integrationsCoreRepository.CreateSystemDataTable(entity: new Reverse(), tableName: "AfterSaleReverses");
+        var customerTable = _integrationsCoreRepository.CreateSystemDataTable(entity: new Customer(), tableName: "AfterSaleCustomers");
+        var addressTable = _integrationsCoreRepository.CreateSystemDataTable(entity: new Address(), tableName: "AfterSaleAddresses");
+        var trackingHistoryTable = _integrationsCoreRepository.CreateSystemDataTable(entity: new TrackingHistory(), tableName: "AfterSaleTrackingHistories");
 
         try
         {
-            using (var conn = _sqlServerConnection.GetDbConnection())
-            {
-                using var bulkCopy = new SqlBulkCopy(conn);
-                //bulkCopy.DestinationTableName = $"[untreated].[{reversesTable.TableName}]";
-                bulkCopy.DestinationTableName = $"[general].[{reversesTable.TableName}]";
-                bulkCopy.BatchSize = reversesTable.Rows.Count;
-                bulkCopy.BulkCopyTimeout = 360;
-                foreach (DataColumn c in reversesTable.Columns)
-                {
-                    bulkCopy.ColumnMappings.Add(c.ColumnName, c.ColumnName);
-                }
-                bulkCopy.WriteToServer(reversesTable);
-            }
+            _integrationsCoreRepository.FillSystemDataTable(reversesTable, data.Select(x => x.reverse).ToList());
+            _integrationsCoreRepository.FillSystemDataTable(customerTable, data.Select(x => x.customer).ToList());
+            _integrationsCoreRepository.FillSystemDataTable(addressTable, data.Select(x => x.customer.address).ToList());
+            _integrationsCoreRepository.FillSystemDataTable(trackingHistoryTable, data.SelectMany(x => x.tracking_history).ToList());
+
+            _integrationsCoreRepository.BulkInsertIntoTableRaw(reversesTable);
+            _integrationsCoreRepository.BulkInsertIntoTableRaw(customerTable);
+            _integrationsCoreRepository.BulkInsertIntoTableRaw(addressTable);
+            _integrationsCoreRepository.BulkInsertIntoTableRaw(trackingHistoryTable);
 
             return true;
         }
@@ -116,8 +108,6 @@ public class AfterSaleRepository : IAfterSaleRepository
                 exceptionMessage: ex.Message
             );
         }
-
-        throw new NotImplementedException();
     }
 
     public Task<bool> InsertIntoAfterSaleReversesCourierAttributes()
@@ -127,28 +117,13 @@ public class AfterSaleRepository : IAfterSaleRepository
 
     public async Task<bool> InsertIntoAfterSaleStatus(List<Status> statusReverses)
     {
-        var statusReversesTable = CreateSystemDataTable(new Status(), "AfterSaleStatus");
-
-        for (int i = 0; i < statusReverses.Count; i++)
-        {
-            statusReversesTable.Rows.Add(statusReverses[i].id, statusReverses[i].name, statusReverses[i].description);
-        }
-
+        var statusReversesTable = _integrationsCoreRepository.CreateSystemDataTable( entity: new Status(), tableName: "AfterSaleStatus");
+        
         try
         {
-            using (var conn = _sqlServerConnection.GetDbConnection())
-            {
-                using var bulkCopy = new SqlBulkCopy(conn);
-                //bulkCopy.DestinationTableName = $"[untreated].[{statusReversesTable.TableName}]";
-                bulkCopy.DestinationTableName = $"[general].[{statusReversesTable.TableName}]";
-                bulkCopy.BatchSize = statusReversesTable.Rows.Count;
-                bulkCopy.BulkCopyTimeout = 360;
-                foreach (DataColumn c in statusReversesTable.Columns)
-                {
-                    bulkCopy.ColumnMappings.Add(c.ColumnName, c.ColumnName);
-                }
-                bulkCopy.WriteToServer(statusReversesTable);
-            }
+            _integrationsCoreRepository.FillSystemDataTable(statusReversesTable, statusReverses);
+
+            _integrationsCoreRepository.BulkInsertIntoTableRaw(statusReversesTable);
 
             return true;
         }
@@ -166,28 +141,13 @@ public class AfterSaleRepository : IAfterSaleRepository
 
     public async Task<bool> InsertIntoAfterSaleTransportations(Transportations transportations)
     {
-        var transportationsTable = CreateSystemDataTable(new Transportations(), "AfterSaleTransportations");
-
-        for (int i = 0; i < transportations.data.Count; i++)
-        {
-            transportationsTable.Rows.Add(transportations.data[i]);
-        }
+        var transportationsTable = _integrationsCoreRepository.CreateSystemDataTable( entity: new Transportations(), tableName: "AfterSaleTransportations");
 
         try
         {
-            using (var conn = _sqlServerConnection.GetDbConnection())
-            {
-                using var bulkCopy = new SqlBulkCopy(conn);
-                //bulkCopy.DestinationTableName = $"[untreated].[{statusReversesTable.TableName}]";
-                bulkCopy.DestinationTableName = $"[general].[{transportationsTable.TableName}]";
-                bulkCopy.BatchSize = transportationsTable.Rows.Count;
-                bulkCopy.BulkCopyTimeout = 360;
-                foreach (DataColumn c in transportationsTable.Columns)
-                {
-                    bulkCopy.ColumnMappings.Add(c.ColumnName, c.ColumnName);
-                }
-                bulkCopy.WriteToServer(transportationsTable);
-            }
+            _integrationsCoreRepository.FillSystemDataTable(transportationsTable, transportations.data);
+
+            _integrationsCoreRepository.BulkInsertIntoTableRaw(transportationsTable);
 
             return true;
         }
@@ -203,33 +163,28 @@ public class AfterSaleRepository : IAfterSaleRepository
         }
     }
 
-    private DataTable CreateSystemDataTable<TEntity>(TEntity entity, string tableName)
+    public async Task<bool> InsertIntoAfterSaleTransportations(List<Transportations> transportations)
     {
+        var transportationsTable = _integrationsCoreRepository.CreateSystemDataTable(entity: new Transportations(), tableName: "AfterSaleTransportations");
+
         try
         {
-            var properties = entity.GetType().GetFilteredProperties();
-            var dataTable = new DataTable(tableName);
-            foreach (PropertyInfo prop in properties)
-            {
-                dataTable.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
-            }
-            return dataTable;
+            _integrationsCoreRepository.FillSystemDataTable(transportationsTable, transportations);
+
+            _integrationsCoreRepository.BulkInsertIntoTableRaw(transportationsTable);
+
+            return true;
         }
         catch (Exception ex)
         {
             throw new InternalException(
-                stage: EnumStages.CreateSystemDataTable,
+                stage: EnumStages.BulkInsertIntoTableRaw,
                 error: EnumError.SQLCommand,
                 level: EnumMessageLevel.Error,
-                message: $"Error when convert system datatable to bulkinsert",
+                message: $"Error when trying to bulk insert records on table raw",
                 exceptionMessage: ex.Message
             );
         }
-    }
-
-    public Task<bool> InsertIntoAfterSaleTransportations(List<Transportations> transportations)
-    {
-        throw new NotImplementedException();
     }
 
     public Task<bool> InsertIntoAfterSaleEcommerce(List<Ecommerce> data)

@@ -193,6 +193,7 @@ namespace Application.AfterSale.Services
                                     );
 
                                     var completeReverse = Newtonsoft.Json.JsonConvert.DeserializeObject<Root>(_response);
+                                    completeReverse.data.reverse.customer_id = completeReverse.data.customer.id;
 
                                     completeReverses.Add(completeReverse.data);
                                 }

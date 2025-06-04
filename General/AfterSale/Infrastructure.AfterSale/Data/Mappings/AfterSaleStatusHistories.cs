@@ -17,10 +17,15 @@ namespace Infrastructure.AfterSale.Data.Mappings
 
             builder.HasKey(x => x.id);
 
+            if (schema == "untreated")
+            {
+                builder.Ignore(x => x.status);
+            }
+
             builder
-                .Property(x => x.id)
-                .HasColumnType("int")
-                .ValueGeneratedNever();
+            .Property(x => x.id)
+            .HasColumnType("int")
+            .ValueGeneratedNever();
 
             builder
                 .Property(x => x.reverse_id)

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.AfterSale.Data.Migrations.SQLServer
 {
-    [DbContext(typeof(AfterSaleTreatedDbContext))]
-    partial class AfterSaleTreatedDbContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(AfterSaleUntreatedDbContext))]
+    partial class AfterSaleUntreatedDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
@@ -64,7 +64,7 @@ namespace Infrastructure.AfterSale.Data.Migrations.SQLServer
 
                     b.HasKey("id");
 
-                    b.ToTable("AfterSaleAddresses", "general");
+                    b.ToTable("AfterSaleAddresses", "untreated");
                 });
 
             modelBuilder.Entity("Domain.AfterSale.Entities.Customer", b =>
@@ -96,16 +96,9 @@ namespace Infrastructure.AfterSale.Data.Migrations.SQLServer
                     b.Property<int?>("shipping_address_id")
                         .HasColumnType("int");
 
-                    b.Property<int?>("shipping_addressid")
-                        .HasColumnType("int");
-
                     b.HasKey("id");
 
-                    b.HasIndex("shipping_address_id");
-
-                    b.HasIndex("shipping_addressid");
-
-                    b.ToTable("AfterSaleCustomers", "general");
+                    b.ToTable("AfterSaleCustomers", "untreated");
                 });
 
             modelBuilder.Entity("Domain.AfterSale.Entities.Ecommerce", b =>
@@ -180,9 +173,7 @@ namespace Infrastructure.AfterSale.Data.Migrations.SQLServer
 
                     b.HasKey("id");
 
-                    b.HasIndex("address_id");
-
-                    b.ToTable("AfterSaleEcommerces", "general");
+                    b.ToTable("AfterSaleEcommerces", "untreated");
                 });
 
             modelBuilder.Entity("Domain.AfterSale.Entities.Parameters", b =>
@@ -197,7 +188,7 @@ namespace Infrastructure.AfterSale.Data.Migrations.SQLServer
 
                     b.HasKey("doc_company");
 
-                    b.ToTable("Parametros_AfterSale", "general");
+                    b.ToTable("Parametros_AfterSale", "untreated");
 
                     b.HasData(
                         new
@@ -257,9 +248,7 @@ namespace Infrastructure.AfterSale.Data.Migrations.SQLServer
 
                     b.HasKey("id");
 
-                    b.HasIndex("ecommerce_id");
-
-                    b.ToTable("AfterSaleReasons", "general");
+                    b.ToTable("AfterSaleReasons", "untreated");
                 });
 
             modelBuilder.Entity("Domain.AfterSale.Entities.Reverse", b =>
@@ -431,13 +420,7 @@ namespace Infrastructure.AfterSale.Data.Migrations.SQLServer
 
                     b.HasKey("id");
 
-                    b.HasIndex("customer_id");
-
-                    b.HasIndex("ecommerce_id");
-
-                    b.HasIndex("status_id");
-
-                    b.ToTable("AfterSaleReverses", "general");
+                    b.ToTable("AfterSaleReverses", "untreated");
                 });
 
             modelBuilder.Entity("Domain.AfterSale.Entities.Status", b =>
@@ -453,7 +436,7 @@ namespace Infrastructure.AfterSale.Data.Migrations.SQLServer
 
                     b.HasKey("id");
 
-                    b.ToTable("AfterSaleStatus", "general");
+                    b.ToTable("AfterSaleStatus", "untreated");
                 });
 
             modelBuilder.Entity("Domain.AfterSale.Entities.StatusHistories", b =>
@@ -477,19 +460,12 @@ namespace Infrastructure.AfterSale.Data.Migrations.SQLServer
                     b.Property<int?>("status_id")
                         .HasColumnType("int");
 
-                    b.Property<int>("statusid")
-                        .HasColumnType("int");
-
                     b.Property<int?>("user_id")
                         .HasColumnType("int");
 
                     b.HasKey("id");
 
-                    b.HasIndex("reverse_id");
-
-                    b.HasIndex("statusid");
-
-                    b.ToTable("AfterSaleStatusHistories", "general");
+                    b.ToTable("AfterSaleStatusHistories", "untreated");
                 });
 
             modelBuilder.Entity("Domain.AfterSale.Entities.TrackingHistory", b =>
@@ -524,9 +500,7 @@ namespace Infrastructure.AfterSale.Data.Migrations.SQLServer
 
                     b.HasKey("id");
 
-                    b.HasIndex("tracking_id");
-
-                    b.ToTable("AfterSaleTrackingHistories", "general");
+                    b.ToTable("AfterSaleTrackingHistories", "untreated");
                 });
 
             modelBuilder.Entity("Domain.AfterSale.Entities.Transportations", b =>
@@ -542,101 +516,7 @@ namespace Infrastructure.AfterSale.Data.Migrations.SQLServer
 
                     b.HasKey("id");
 
-                    b.ToTable("AfterSaleTransportations", "general");
-                });
-
-            modelBuilder.Entity("Domain.AfterSale.Entities.Customer", b =>
-                {
-                    b.HasOne("Domain.AfterSale.Entities.Address", "address")
-                        .WithMany()
-                        .HasForeignKey("shipping_address_id")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.HasOne("Domain.AfterSale.Entities.Address", "shipping_address")
-                        .WithMany()
-                        .HasForeignKey("shipping_addressid");
-
-                    b.Navigation("address");
-
-                    b.Navigation("shipping_address");
-                });
-
-            modelBuilder.Entity("Domain.AfterSale.Entities.Ecommerce", b =>
-                {
-                    b.HasOne("Domain.AfterSale.Entities.Address", "address")
-                        .WithMany()
-                        .HasForeignKey("address_id")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.Navigation("address");
-                });
-
-            modelBuilder.Entity("Domain.AfterSale.Entities.Reason", b =>
-                {
-                    b.HasOne("Domain.AfterSale.Entities.Ecommerce", null)
-                        .WithMany("reasons")
-                        .HasForeignKey("ecommerce_id")
-                        .OnDelete(DeleteBehavior.NoAction);
-                });
-
-            modelBuilder.Entity("Domain.AfterSale.Entities.Reverse", b =>
-                {
-                    b.HasOne("Domain.AfterSale.Entities.Customer", "customer")
-                        .WithMany()
-                        .HasForeignKey("customer_id")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.HasOne("Domain.AfterSale.Entities.Ecommerce", "ecommerce")
-                        .WithMany()
-                        .HasForeignKey("ecommerce_id")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.HasOne("Domain.AfterSale.Entities.Status", "status")
-                        .WithMany()
-                        .HasForeignKey("status_id")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.Navigation("customer");
-
-                    b.Navigation("ecommerce");
-
-                    b.Navigation("status");
-                });
-
-            modelBuilder.Entity("Domain.AfterSale.Entities.StatusHistories", b =>
-                {
-                    b.HasOne("Domain.AfterSale.Entities.Reverse", null)
-                        .WithMany("status_histories")
-                        .HasForeignKey("reverse_id")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.HasOne("Domain.AfterSale.Entities.Status", "status")
-                        .WithMany()
-                        .HasForeignKey("statusid")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("status");
-                });
-
-            modelBuilder.Entity("Domain.AfterSale.Entities.TrackingHistory", b =>
-                {
-                    b.HasOne("Domain.AfterSale.Entities.Reverse", null)
-                        .WithMany("tracking_history")
-                        .HasForeignKey("tracking_id")
-                        .OnDelete(DeleteBehavior.NoAction);
-                });
-
-            modelBuilder.Entity("Domain.AfterSale.Entities.Ecommerce", b =>
-                {
-                    b.Navigation("reasons");
-                });
-
-            modelBuilder.Entity("Domain.AfterSale.Entities.Reverse", b =>
-                {
-                    b.Navigation("status_histories");
-
-                    b.Navigation("tracking_history");
+                    b.ToTable("AfterSaleTransportations", "untreated");
                 });
 #pragma warning restore 612, 618
         }

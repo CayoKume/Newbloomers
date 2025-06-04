@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Domain.IntegrationsCore.Extensions;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.AfterSale.Entities
 {
@@ -58,17 +59,32 @@ namespace Domain.AfterSale.Entities
 
         public int? customer_id { get; set; }
 
+        [SkipProperty]
         public Ecommerce ecommerce { get; set; }
+
+        [SkipProperty]
         public Customer customer { get; set; }
+
+        [SkipProperty]
         public Status status { get; set; }
+
+        [SkipProperty]
         public Tracking? tracking { get; set; }
         
         [NotMapped]
+        [SkipProperty]
         public Destination destination_data { get; set; }
 
+        [SkipProperty]
         public List<Product> products { get; set; }
+
+        [SkipProperty]
         public List<Refund> refunds { get; set; }
+
+        [SkipProperty]
         public List<StatusHistories> status_histories { get; set; }
+
+        [SkipProperty]
         public List<TrackingHistory> tracking_history { get; set; }
     }
 

@@ -17,20 +17,6 @@ namespace Infrastructure.AfterSale.Data.Migrations.SQLServer
                 name: "general");
 
             migrationBuilder.CreateTable(
-                name: "AfterSaleActions",
-                schema: "general",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false),
-                    name = table.Column<string>(type: "varchar(60)", nullable: true),
-                    description = table.Column<string>(type: "varchar(60)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AfterSaleActions", x => x.id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AfterSaleAddresses",
                 schema: "general",
                 columns: table => new
@@ -51,20 +37,6 @@ namespace Infrastructure.AfterSale.Data.Migrations.SQLServer
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AfterSaleAddresses", x => x.id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AfterSaleBanks",
-                schema: "general",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false),
-                    name = table.Column<string>(type: "varchar(60)", nullable: true),
-                    description = table.Column<string>(type: "varchar(60)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AfterSaleBanks", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -93,35 +65,6 @@ namespace Infrastructure.AfterSale.Data.Migrations.SQLServer
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AfterSaleTransportations", x => x.id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AfterSaleTypes",
-                schema: "general",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    name = table.Column<string>(type: "varchar(60)", nullable: true),
-                    description = table.Column<string>(type: "varchar(60)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AfterSaleTypes", x => x.id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AfterSaleVouchers",
-                schema: "general",
-                columns: table => new
-                {
-                    redemption_code = table.Column<string>(type: "varchar(50)", nullable: false),
-                    giftcard_id = table.Column<string>(type: "varchar(50)", nullable: true),
-                    expiring_date = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AfterSaleVouchers", x => x.redemption_code);
                 });
 
             migrationBuilder.CreateTable(
@@ -356,7 +299,7 @@ namespace Infrastructure.AfterSale.Data.Migrations.SQLServer
                     id = table.Column<int>(type: "int", nullable: false),
                     tracking_id = table.Column<int>(type: "int", nullable: true),
                     status = table.Column<string>(type: "varchar(60)", nullable: true),
-                    message = table.Column<string>(type: "varchar(60)", nullable: true),
+                    message = table.Column<string>(type: "varchar(3000)", nullable: true),
                     status_updated_at = table.Column<DateTime>(type: "datetime2", nullable: true),
                     created_at = table.Column<DateTime>(type: "datetime2", nullable: true),
                     updated_at = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -371,236 +314,6 @@ namespace Infrastructure.AfterSale.Data.Migrations.SQLServer
                         principalSchema: "general",
                         principalTable: "AfterSaleReverses",
                         principalColumn: "id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AfterSaleTrackings",
-                schema: "general",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false),
-                    reverse_id = table.Column<int>(type: "int", nullable: true),
-                    courier_contract_id = table.Column<int>(type: "int", nullable: true),
-                    authorization_code = table.Column<string>(type: "varchar(60)", nullable: true),
-                    tracking_code = table.Column<string>(type: "varchar(60)", nullable: true),
-                    shipping_amount = table.Column<decimal>(type: "decimal(10,2)", nullable: true),
-                    package_amount = table.Column<decimal>(type: "decimal(10,2)", nullable: true),
-                    courier_name = table.Column<string>(type: "varchar(60)", nullable: true),
-                    tracking_url = table.Column<string>(type: "varchar(4000)", nullable: true),
-                    expire_date = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    collect_date = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    requested_collect_date = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    status = table.Column<string>(type: "varchar(50)", nullable: true),
-                    message = table.Column<string>(type: "varchar(60)", nullable: true),
-                    status_updated_at = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    is_change_collect_to_post = table.Column<bool>(type: "bit", nullable: true),
-                    type = table.Column<string>(type: "varchar(60)", nullable: true),
-                    qr_code = table.Column<string>(type: "varchar(60)", nullable: true),
-                    service_type = table.Column<string>(type: "varchar(60)", nullable: true),
-                    cte = table.Column<string>(type: "varchar(60)", nullable: true),
-                    delivery_deadline = table.Column<string>(type: "varchar(60)", nullable: true),
-                    extra_fields = table.Column<string>(type: "varchar(60)", nullable: true),
-                    updated_at = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    deleted_at = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AfterSaleTrackings", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_AfterSaleTrackings_AfterSaleReverses_reverse_id",
-                        column: x => x.reverse_id,
-                        principalSchema: "general",
-                        principalTable: "AfterSaleReverses",
-                        principalColumn: "id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AfterSaleRefunds",
-                schema: "general",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false),
-                    type = table.Column<string>(type: "varchar(50)", nullable: true),
-                    action = table.Column<string>(type: "varchar(50)", nullable: true),
-                    bonus_amount = table.Column<decimal>(type: "decimal(10,2)", nullable: true),
-                    bonus_amount_percent = table.Column<decimal>(type: "decimal(10,2)", nullable: true),
-                    requested_shipping_amount = table.Column<decimal>(type: "decimal(10,2)", nullable: true),
-                    shipping_method = table.Column<string>(type: "varchar(50)", nullable: true),
-                    requested_raw_amount = table.Column<decimal>(type: "decimal(10,2)", nullable: true),
-                    requested_amount = table.Column<decimal>(type: "decimal(10,2)", nullable: true),
-                    received_amount = table.Column<decimal>(type: "decimal(10,2)", nullable: true),
-                    received_raw_amount = table.Column<decimal>(type: "decimal(10,2)", nullable: true),
-                    total_amount = table.Column<decimal>(type: "decimal(10,2)", nullable: true),
-                    free_shipping = table.Column<bool>(type: "bit", nullable: true),
-                    created_at = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    updated_at = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    cashback_account = table.Column<string>(type: "varchar(50)", nullable: true),
-                    should_ask_voucher_code = table.Column<bool>(type: "bit", nullable: true),
-                    requested_total_amount = table.Column<decimal>(type: "decimal(10,2)", nullable: true),
-                    can_edit_wire_transfer = table.Column<bool>(type: "bit", nullable: true),
-                    has_wire_transfer_account = table.Column<bool>(type: "bit", nullable: true),
-                    customer_retention_method_id = table.Column<string>(type: "varchar(50)", nullable: true),
-                    external_order_url = table.Column<string>(type: "varchar(4000)", nullable: true),
-                    reverse_id = table.Column<int>(type: "int", nullable: true),
-                    order_id = table.Column<string>(type: "varchar(50)", nullable: true),
-                    ecommerce_order_id = table.Column<int>(type: "int", nullable: true),
-                    last_status_history_date = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    refunded_shipping_type = table.Column<string>(type: "varchar(50)", nullable: true),
-                    voucher_giftcard_id = table.Column<string>(type: "varchar(50)", nullable: true),
-                    customer_id = table.Column<int>(type: "int", nullable: false),
-                    status_id = table.Column<int>(type: "int", nullable: false),
-                    reverseid = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AfterSaleRefunds", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_AfterSaleRefunds_AfterSaleCustomers_customer_id",
-                        column: x => x.customer_id,
-                        principalSchema: "general",
-                        principalTable: "AfterSaleCustomers",
-                        principalColumn: "id");
-                    table.ForeignKey(
-                        name: "FK_AfterSaleRefunds_AfterSaleReverses_reverse_id",
-                        column: x => x.reverse_id,
-                        principalSchema: "general",
-                        principalTable: "AfterSaleReverses",
-                        principalColumn: "id");
-                    table.ForeignKey(
-                        name: "FK_AfterSaleRefunds_AfterSaleReverses_reverseid",
-                        column: x => x.reverseid,
-                        principalSchema: "general",
-                        principalTable: "AfterSaleReverses",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AfterSaleRefunds_AfterSaleStatusHistories_reverse_id",
-                        column: x => x.reverse_id,
-                        principalSchema: "general",
-                        principalTable: "AfterSaleStatusHistories",
-                        principalColumn: "id");
-                    table.ForeignKey(
-                        name: "FK_AfterSaleRefunds_AfterSaleStatus_status_id",
-                        column: x => x.status_id,
-                        principalSchema: "general",
-                        principalTable: "AfterSaleStatus",
-                        principalColumn: "id");
-                    table.ForeignKey(
-                        name: "FK_AfterSaleRefunds_AfterSaleVouchers_voucher_giftcard_id",
-                        column: x => x.voucher_giftcard_id,
-                        principalSchema: "general",
-                        principalTable: "AfterSaleVouchers",
-                        principalColumn: "redemption_code");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AfterSaleOrderTransactions",
-                schema: "general",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false),
-                    refund_id = table.Column<int>(type: "int", nullable: true),
-                    ecommerce_order_id = table.Column<int>(type: "int", nullable: true),
-                    transaction_id = table.Column<int>(type: "int", nullable: true),
-                    acquirer = table.Column<string>(type: "varchar(60)", nullable: true),
-                    nsu = table.Column<string>(type: "varchar(60)", nullable: true),
-                    tid = table.Column<string>(type: "varchar(60)", nullable: true),
-                    total_amount = table.Column<decimal>(type: "decimal(10,2)", nullable: true),
-                    merchant_name = table.Column<string>(type: "varchar(60)", nullable: true),
-                    date = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AfterSaleOrderTransactions", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_AfterSaleOrderTransactions_AfterSaleRefunds_refund_id",
-                        column: x => x.refund_id,
-                        principalSchema: "general",
-                        principalTable: "AfterSaleRefunds",
-                        principalColumn: "id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AfterSaleProducts",
-                schema: "general",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false),
-                    reverse_id = table.Column<int>(type: "int", nullable: true),
-                    motive_id = table.Column<int>(type: "int", nullable: true),
-                    ecommerce_order_product_id = table.Column<int>(type: "int", nullable: true),
-                    refund_id = table.Column<int>(type: "int", nullable: true),
-                    qty = table.Column<int>(type: "int", nullable: true),
-                    requested_qty = table.Column<int>(type: "int", nullable: true),
-                    received_qty = table.Column<int>(type: "int", nullable: true),
-                    product_received_comment = table.Column<string>(type: "varchar(150)", nullable: true),
-                    comments = table.Column<string>(type: "varchar(60)", nullable: true),
-                    reverse_action = table.Column<string>(type: "varchar(60)", nullable: true),
-                    customer_retention_method_id = table.Column<string>(type: "varchar(60)", nullable: true),
-                    protocol = table.Column<string>(type: "varchar(60)", nullable: true),
-                    product_id = table.Column<string>(type: "varchar(60)", nullable: true),
-                    hash = table.Column<string>(type: "varchar(60)", nullable: true),
-                    name = table.Column<string>(type: "varchar(60)", nullable: true),
-                    sku = table.Column<string>(type: "varchar(60)", nullable: true),
-                    price = table.Column<string>(type: "varchar(60)", nullable: true),
-                    selling_price = table.Column<string>(type: "varchar(60)", nullable: true),
-                    weight = table.Column<string>(type: "varchar(60)", nullable: true),
-                    returned_invoice = table.Column<string>(type: "varchar(60)", nullable: true),
-                    invoice = table.Column<string>(type: "varchar(60)", nullable: true),
-                    order_id = table.Column<int>(type: "int", nullable: true),
-                    reasonid = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AfterSaleProducts", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_AfterSaleProducts_AfterSaleReasons_reasonid",
-                        column: x => x.reasonid,
-                        principalSchema: "general",
-                        principalTable: "AfterSaleReasons",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AfterSaleProducts_AfterSaleRefunds_refund_id",
-                        column: x => x.refund_id,
-                        principalSchema: "general",
-                        principalTable: "AfterSaleRefunds",
-                        principalColumn: "id");
-                    table.ForeignKey(
-                        name: "FK_AfterSaleProducts_AfterSaleReverses_reverse_id",
-                        column: x => x.reverse_id,
-                        principalSchema: "general",
-                        principalTable: "AfterSaleReverses",
-                        principalColumn: "id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AfterSaleTotalAmountHistories",
-                schema: "general",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false),
-                    total_amount = table.Column<decimal>(type: "decimal(10,2)", nullable: true),
-                    date = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    refund_id = table.Column<int>(type: "int", nullable: false),
-                    typeid = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AfterSaleTotalAmountHistories", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_AfterSaleTotalAmountHistories_AfterSaleRefunds_refund_id",
-                        column: x => x.refund_id,
-                        principalSchema: "general",
-                        principalTable: "AfterSaleRefunds",
-                        principalColumn: "id");
-                    table.ForeignKey(
-                        name: "FK_AfterSaleTotalAmountHistories_AfterSaleTypes_typeid",
-                        column: x => x.typeid,
-                        principalSchema: "general",
-                        principalTable: "AfterSaleTypes",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
@@ -632,64 +345,10 @@ namespace Infrastructure.AfterSale.Data.Migrations.SQLServer
                 column: "address_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AfterSaleOrderTransactions_refund_id",
-                schema: "general",
-                table: "AfterSaleOrderTransactions",
-                column: "refund_id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AfterSaleProducts_reasonid",
-                schema: "general",
-                table: "AfterSaleProducts",
-                column: "reasonid");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AfterSaleProducts_refund_id",
-                schema: "general",
-                table: "AfterSaleProducts",
-                column: "refund_id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AfterSaleProducts_reverse_id",
-                schema: "general",
-                table: "AfterSaleProducts",
-                column: "reverse_id");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_AfterSaleReasons_ecommerce_id",
                 schema: "general",
                 table: "AfterSaleReasons",
                 column: "ecommerce_id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AfterSaleRefunds_customer_id",
-                schema: "general",
-                table: "AfterSaleRefunds",
-                column: "customer_id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AfterSaleRefunds_reverse_id",
-                schema: "general",
-                table: "AfterSaleRefunds",
-                column: "reverse_id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AfterSaleRefunds_reverseid",
-                schema: "general",
-                table: "AfterSaleRefunds",
-                column: "reverseid");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AfterSaleRefunds_status_id",
-                schema: "general",
-                table: "AfterSaleRefunds",
-                column: "status_id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AfterSaleRefunds_voucher_giftcard_id",
-                schema: "general",
-                table: "AfterSaleRefunds",
-                column: "voucher_giftcard_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AfterSaleReverses_customer_id",
@@ -722,62 +381,25 @@ namespace Infrastructure.AfterSale.Data.Migrations.SQLServer
                 column: "statusid");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AfterSaleTotalAmountHistories_refund_id",
-                schema: "general",
-                table: "AfterSaleTotalAmountHistories",
-                column: "refund_id",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AfterSaleTotalAmountHistories_typeid",
-                schema: "general",
-                table: "AfterSaleTotalAmountHistories",
-                column: "typeid");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_AfterSaleTrackingHistories_tracking_id",
                 schema: "general",
                 table: "AfterSaleTrackingHistories",
                 column: "tracking_id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AfterSaleTrackings_reverse_id",
-                schema: "general",
-                table: "AfterSaleTrackings",
-                column: "reverse_id",
-                unique: true,
-                filter: "[reverse_id] IS NOT NULL");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AfterSaleActions",
+                name: "AfterSaleReasons",
                 schema: "general");
 
             migrationBuilder.DropTable(
-                name: "AfterSaleBanks",
-                schema: "general");
-
-            migrationBuilder.DropTable(
-                name: "AfterSaleOrderTransactions",
-                schema: "general");
-
-            migrationBuilder.DropTable(
-                name: "AfterSaleProducts",
-                schema: "general");
-
-            migrationBuilder.DropTable(
-                name: "AfterSaleTotalAmountHistories",
+                name: "AfterSaleStatusHistories",
                 schema: "general");
 
             migrationBuilder.DropTable(
                 name: "AfterSaleTrackingHistories",
-                schema: "general");
-
-            migrationBuilder.DropTable(
-                name: "AfterSaleTrackings",
                 schema: "general");
 
             migrationBuilder.DropTable(
@@ -786,26 +408,6 @@ namespace Infrastructure.AfterSale.Data.Migrations.SQLServer
 
             migrationBuilder.DropTable(
                 name: "Parametros_AfterSale",
-                schema: "general");
-
-            migrationBuilder.DropTable(
-                name: "AfterSaleReasons",
-                schema: "general");
-
-            migrationBuilder.DropTable(
-                name: "AfterSaleRefunds",
-                schema: "general");
-
-            migrationBuilder.DropTable(
-                name: "AfterSaleTypes",
-                schema: "general");
-
-            migrationBuilder.DropTable(
-                name: "AfterSaleStatusHistories",
-                schema: "general");
-
-            migrationBuilder.DropTable(
-                name: "AfterSaleVouchers",
                 schema: "general");
 
             migrationBuilder.DropTable(

@@ -1,4 +1,6 @@
-﻿namespace Domain.AfterSale.Entities
+﻿using Domain.IntegrationsCore.Extensions;
+
+namespace Domain.AfterSale.Entities
 {
     public class Customer
     {
@@ -11,7 +13,11 @@
         public string? last_name { get; set; }
         public string? phone { get; set; }
         public int? shipping_address_id { get; set; }
+
+        [SkipProperty]
         public Address? shipping_address { get; set; }
+
+        [SkipProperty]
         public Address? address { get; set; }
     }
 }

@@ -100,8 +100,19 @@ namespace Infrastructure.AfterSale.Repositorys.EFCore
         {
             try
             {
-                _context.AddRange(data);
+                var reverses = data.Select(d => d.reverse).ToList();
+                var customers = data.Select(d => d.customer).ToList();
+                var trackings = data.Select(d => d.tracking_history).ToList();
+
+                //_context.AddRange(customers);
+                //await _context.SaveChangesAsync();
+
+                _context.AddRange(reverses);
                 await _context.SaveChangesAsync();
+
+                _context.AddRange(trackings);
+                await _context.SaveChangesAsync();
+
                 return true;
             }
             catch

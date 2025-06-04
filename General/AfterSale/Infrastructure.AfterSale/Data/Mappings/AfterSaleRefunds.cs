@@ -15,46 +15,59 @@ namespace Infrastructure.AfterSale.Data.Mappings
 
             builder.ToTable("AfterSaleRefunds");
 
-            builder
-                .HasOne(x => x.voucher)
-                .WithMany()
-                .HasForeignKey(y => y.voucher_giftcard_id)
-                .OnDelete(DeleteBehavior.NoAction);
+            if (schema != "untreated")
+            {
+                builder
+                    .HasOne(x => x.voucher)
+                    .WithMany()
+                    .HasForeignKey(y => y.voucher_giftcard_id)
+                    .OnDelete(DeleteBehavior.NoAction);
 
-            builder
-                .HasOne(x => x.total_amount_histories)
-                .WithOne(t => t.Refund)
-                .HasForeignKey<TotalAmountHistories>(t => t.refund_id)
-                .OnDelete(DeleteBehavior.NoAction);
-            
-            builder
-                .HasOne(x => x.status_histories)
-                .WithMany()
-                .HasForeignKey(y => y.reverse_id)
-                .OnDelete(DeleteBehavior.NoAction);
+                builder
+                    .HasOne(x => x.total_amount_histories)
+                    .WithOne(t => t.Refund)
+                    .HasForeignKey<TotalAmountHistories>(t => t.refund_id)
+                    .OnDelete(DeleteBehavior.NoAction);
 
-            builder
-                .HasOne(x => x.customer)
-                .WithMany()
-                .HasForeignKey(y => y.customer_id)
-                .OnDelete(DeleteBehavior.NoAction);
+                builder
+                    .HasOne(x => x.status_histories)
+                    .WithMany()
+                    .HasForeignKey(y => y.reverse_id)
+                    .OnDelete(DeleteBehavior.NoAction);
 
-            builder
-                .HasOne(x => x.status)
-                .WithMany()
-                .HasForeignKey(y => y.status_id)
-                .OnDelete(DeleteBehavior.NoAction);
+                builder
+                    .HasOne(x => x.customer)
+                    .WithMany()
+                    .HasForeignKey(y => y.customer_id)
+                    .OnDelete(DeleteBehavior.NoAction);
 
-            builder
-                .HasMany(x => x.products)
-                .WithOne()
-                .HasForeignKey(y => y.refund_id)
-                .OnDelete(DeleteBehavior.NoAction);
+                builder
+                    .HasOne(x => x.status)
+                    .WithMany()
+                    .HasForeignKey(y => y.status_id)
+                    .OnDelete(DeleteBehavior.NoAction);
 
-            builder
-                .HasMany(x => x.order_transactions)
-                .WithOne()
-                .HasForeignKey(y => y.refund_id);
+                builder
+                    .HasMany(x => x.products)
+                    .WithOne()
+                    .HasForeignKey(y => y.refund_id)
+                    .OnDelete(DeleteBehavior.NoAction);
+
+                builder
+                    .HasMany(x => x.order_transactions)
+                    .WithOne()
+                    .HasForeignKey(y => y.refund_id); 
+            }
+            else
+            {
+                builder.Ignore(x => x.voucher);
+                builder.Ignore(x => x.total_amount_histories);
+                builder.Ignore(x => x.status_histories);
+                builder.Ignore(x => x.customer);
+                builder.Ignore(x => x.status);
+                builder.Ignore(x => x.products);
+                builder.Ignore(x => x.order_transactions);
+            }
 
             builder.HasKey(x => x.id);
 

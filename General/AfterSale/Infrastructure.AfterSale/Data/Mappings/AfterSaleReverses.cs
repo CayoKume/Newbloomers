@@ -18,53 +18,67 @@ namespace Infrastructure.AfterSale.Data.Mappings
 
             //builder.HasOne(x => x.destination_data);
 
-            builder
-                .HasOne(x => x.ecommerce)
-                .WithMany()
-                .HasForeignKey(y => y.ecommerce_id)
-                .OnDelete(DeleteBehavior.NoAction);
+            if (schema != "untreated")
+            {
+                builder
+                    .HasOne(x => x.ecommerce)
+                    .WithMany()
+                    .HasForeignKey(y => y.ecommerce_id)
+                    .OnDelete(DeleteBehavior.NoAction);
 
-            builder
-                .HasOne(x => x.status)
-                .WithMany()
-                .HasForeignKey(y => y.status_id)
-                .OnDelete(DeleteBehavior.NoAction);
+                builder
+                    .HasOne(x => x.status)
+                    .WithMany()
+                    .HasForeignKey(y => y.status_id)
+                    .OnDelete(DeleteBehavior.NoAction);
 
-            builder
-                .HasOne(x => x.tracking)
-                .WithOne(y => y.reverse)
-                .HasForeignKey<Tracking>(y => y.reverse_id)
-                .OnDelete(DeleteBehavior.NoAction);
+                builder
+                    .HasOne(x => x.tracking)
+                    .WithOne(y => y.reverse)
+                    .HasForeignKey<Tracking>(y => y.reverse_id)
+                    .OnDelete(DeleteBehavior.NoAction);
 
-            builder
-                .HasOne(x => x.customer)
-                .WithMany()
-                .HasForeignKey(y => y.customer_id)
-                .OnDelete(DeleteBehavior.NoAction);
+                builder
+                    .HasOne(x => x.customer)
+                    .WithMany()
+                    .HasForeignKey(y => y.customer_id)
+                    .OnDelete(DeleteBehavior.NoAction);
 
-            builder
-                .HasMany(x => x.products)
-                .WithOne()
-                .HasForeignKey(y => y.reverse_id)
-                .OnDelete(DeleteBehavior.NoAction);
-            
-            builder
-                .HasMany(x => x.refunds)
-                .WithOne()
-                .HasForeignKey(y => y.reverse_id)
-                .OnDelete(DeleteBehavior.NoAction);
-            
-            builder
-                .HasMany(x => x.status_histories)
-                .WithOne()
-                .HasForeignKey(y => y.reverse_id)
-                .OnDelete(DeleteBehavior.NoAction);
-            
-            builder
-                .HasMany(x => x.tracking_history)
-                .WithOne()
-                .HasForeignKey(y => y.tracking_id)
-                .OnDelete(DeleteBehavior.NoAction);
+                builder
+                    .HasMany(x => x.products)
+                    .WithOne()
+                    .HasForeignKey(y => y.reverse_id)
+                    .OnDelete(DeleteBehavior.NoAction);
+
+                builder
+                    .HasMany(x => x.refunds)
+                    .WithOne()
+                    .HasForeignKey(y => y.reverse_id)
+                    .OnDelete(DeleteBehavior.NoAction);
+
+                builder
+                    .HasMany(x => x.status_histories)
+                    .WithOne()
+                    .HasForeignKey(y => y.reverse_id)
+                    .OnDelete(DeleteBehavior.NoAction);
+
+                builder
+                    .HasMany(x => x.tracking_history)
+                    .WithOne()
+                    .HasForeignKey(y => y.tracking_id)
+                    .OnDelete(DeleteBehavior.NoAction); 
+            }
+            else
+            {
+                builder.Ignore(x => x.ecommerce);
+                builder.Ignore(x => x.status);
+                builder.Ignore(x => x.tracking);
+                builder.Ignore(x => x.customer);
+                builder.Ignore(x => x.products);
+                builder.Ignore(x => x.refunds);
+                builder.Ignore(x => x.status_histories);
+                builder.Ignore(x => x.tracking_history);
+            }
 
             builder.HasKey(x => x.id);
 

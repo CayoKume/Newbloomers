@@ -15,17 +15,25 @@ namespace Infrastructure.AfterSale.Data.Mappings
 
             builder.HasKey(x => x.id);
 
-            builder
-                .HasOne(x => x.address)
-                .WithMany()
-                .HasForeignKey(o => o.address_id)
-                .OnDelete(DeleteBehavior.NoAction);
+            if (schema != "untreated")
+            {
+                builder
+                    .HasOne(x => x.address)
+                    .WithMany()
+                    .HasForeignKey(o => o.address_id)
+                    .OnDelete(DeleteBehavior.NoAction);
 
-            builder
-                .HasOne(x => x.address)
-                .WithMany()
-                .HasForeignKey(o => o.shipping_address_id)
-                .OnDelete(DeleteBehavior.NoAction);
+                builder
+                    .HasOne(x => x.address)
+                    .WithMany()
+                    .HasForeignKey(o => o.shipping_address_id)
+                    .OnDelete(DeleteBehavior.NoAction); 
+            }
+            else
+            {
+                builder.Ignore(x => x.address);
+                builder.Ignore(x => x.shipping_address);
+            }
 
             builder
                 .Property(x => x.id)

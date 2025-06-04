@@ -32,7 +32,7 @@ namespace Infrastructure.AfterSale.Data.Mappings
 
             builder
                 .Property(x => x.message)
-                .HasColumnType("varchar(60)");
+                .HasColumnType("varchar(3000)");
 
             builder
                 .Property(x => x.status_updated_at)

@@ -21,7 +21,7 @@ namespace Infrastructure.AfterSale.Data
             var entitiesToIgnore = new List<string>();
 
             var methods = _configuration
-                .GetSection("LinxMicrovix:Methods")
+                .GetSection("AfterSale:Methods")
                 .Get<List<Methods>>() ?? new List<Methods>();
 
             entitiesToIgnore.AddRange(methods
@@ -60,6 +60,53 @@ namespace Infrastructure.AfterSale.Data
 
     public class AfterSaleUntreatedDbContext : DbContext
     {
-        //public DbSet<>  { get; set; } = null!;
+        private readonly IConfiguration _configuration;
+
+        public AfterSaleUntreatedDbContext(DbContextOptions<AfterSaleUntreatedDbContext> options, IConfiguration configuration)
+        : base(options) =>
+            _configuration = configuration;
+
+        public DbSet<Domain.AfterSale.Entities.Action> AfterSaleAction { get; set; } = null!;
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            var entitiesToIgnore = new List<string>();
+
+            var methods = _configuration
+                .GetSection("AfterSale:Methods")
+                .Get<List<Methods>>() ?? new List<Methods>();
+
+            entitiesToIgnore.AddRange(methods
+                .Where(x => !x.IsActive)
+                .Select(x => $"Domain.AfterSale.Entities.{x.MethodName}"));
+
+            var configTypes = typeof(AfterSaleUntreatedDbContext).Assembly.GetTypes()
+                .Where(t => !t.IsAbstract && !t.IsInterface)
+                .SelectMany(t => t.GetInterfaces()
+                    .Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEntityTypeConfiguration<>))
+                    .Select(i => new { ConfigType = t, EntityType = i.GetGenericArguments()[0] }))
+                .ToList();
+
+            foreach (var config in configTypes)
+            {
+                SchemaContext.RegisterSchema(config.EntityType, "untreated");
+            }
+
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(Infrastructure.AfterSale.DependencyInjection.DependencyInjection).Assembly);
+
+            modelBuilder.ApplyCustomColumnTypeMappings(this);
+
+            modelBuilder.IgnoreEntitiesBasedOnConfiguration("Domain.AfterSale", entitiesToIgnore);
+
+            foreach (var config in configTypes)
+            {
+                SchemaContext.RegisterSchema(config.EntityType, "untreated");
+            }
+
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                entityType.SetSchema("untreated");
+            }
+        }
     }
 }

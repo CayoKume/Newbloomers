@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.AfterSale.Data.Migrations.SQLServer
 {
     [DbContext(typeof(AfterSaleTreatedDbContext))]
-    [Migration("20250530194956_init")]
+    [Migration("20250603234433_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -24,22 +24,6 @@ namespace Infrastructure.AfterSale.Data.Migrations.SQLServer
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("Domain.AfterSale.Entities.Action", b =>
-                {
-                    b.Property<int>("id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("description")
-                        .HasColumnType("varchar(60)");
-
-                    b.Property<string>("name")
-                        .HasColumnType("varchar(60)");
-
-                    b.HasKey("id");
-
-                    b.ToTable("AfterSaleActions", "general");
-                });
 
             modelBuilder.Entity("Domain.AfterSale.Entities.Address", b =>
                 {
@@ -84,22 +68,6 @@ namespace Infrastructure.AfterSale.Data.Migrations.SQLServer
                     b.HasKey("id");
 
                     b.ToTable("AfterSaleAddresses", "general");
-                });
-
-            modelBuilder.Entity("Domain.AfterSale.Entities.Bank", b =>
-                {
-                    b.Property<int>("id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("description")
-                        .HasColumnType("varchar(60)");
-
-                    b.Property<string>("name")
-                        .HasColumnType("varchar(60)");
-
-                    b.HasKey("id");
-
-                    b.ToTable("AfterSaleBanks", "general");
                 });
 
             modelBuilder.Entity("Domain.AfterSale.Entities.Customer", b =>
@@ -220,46 +188,6 @@ namespace Infrastructure.AfterSale.Data.Migrations.SQLServer
                     b.ToTable("AfterSaleEcommerces", "general");
                 });
 
-            modelBuilder.Entity("Domain.AfterSale.Entities.OrderTransactions", b =>
-                {
-                    b.Property<int>("id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("acquirer")
-                        .HasColumnType("varchar(60)");
-
-                    b.Property<DateTime?>("date")
-                        .HasColumnType("datetime2")
-                        .HasAnnotation("Custom:ColumnTypeMapper", "DateTime");
-
-                    b.Property<int?>("ecommerce_order_id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("merchant_name")
-                        .HasColumnType("varchar(60)");
-
-                    b.Property<string>("nsu")
-                        .HasColumnType("varchar(60)");
-
-                    b.Property<int?>("refund_id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("tid")
-                        .HasColumnType("varchar(60)");
-
-                    b.Property<decimal?>("total_amount")
-                        .HasColumnType("decimal(10,2)");
-
-                    b.Property<int?>("transaction_id")
-                        .HasColumnType("int");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("refund_id");
-
-                    b.ToTable("AfterSaleOrderTransactions", "general");
-                });
-
             modelBuilder.Entity("Domain.AfterSale.Entities.Parameters", b =>
                 {
                     b.Property<string>("doc_company")
@@ -285,91 +213,6 @@ namespace Infrastructure.AfterSale.Data.Migrations.SQLServer
                             doc_company = "42538267000268",
                             Token = new Guid("56dfd210-0472-11ee-bfa0-99577f33d6f0")
                         });
-                });
-
-            modelBuilder.Entity("Domain.AfterSale.Entities.Product", b =>
-                {
-                    b.Property<int>("id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("comments")
-                        .HasColumnType("varchar(60)");
-
-                    b.Property<string>("customer_retention_method_id")
-                        .HasColumnType("varchar(60)");
-
-                    b.Property<int?>("ecommerce_order_product_id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("hash")
-                        .HasColumnType("varchar(60)");
-
-                    b.Property<string>("invoice")
-                        .HasColumnType("varchar(60)");
-
-                    b.Property<int?>("motive_id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("name")
-                        .HasColumnType("varchar(60)");
-
-                    b.Property<int?>("order_id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("price")
-                        .HasColumnType("varchar(60)");
-
-                    b.Property<string>("product_id")
-                        .HasColumnType("varchar(60)");
-
-                    b.Property<string>("product_received_comment")
-                        .HasColumnType("varchar(150)");
-
-                    b.Property<string>("protocol")
-                        .HasColumnType("varchar(60)");
-
-                    b.Property<int?>("qty")
-                        .HasColumnType("int");
-
-                    b.Property<int>("reasonid")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("received_qty")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("refund_id")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("requested_qty")
-                        .HasColumnType("int");
-
-                    b.Property<string>("returned_invoice")
-                        .HasColumnType("varchar(60)");
-
-                    b.Property<string>("reverse_action")
-                        .HasColumnType("varchar(60)");
-
-                    b.Property<int?>("reverse_id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("selling_price")
-                        .HasColumnType("varchar(60)");
-
-                    b.Property<string>("sku")
-                        .HasColumnType("varchar(60)");
-
-                    b.Property<string>("weight")
-                        .HasColumnType("varchar(60)");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("reasonid");
-
-                    b.HasIndex("refund_id");
-
-                    b.HasIndex("reverse_id");
-
-                    b.ToTable("AfterSaleProducts", "general");
                 });
 
             modelBuilder.Entity("Domain.AfterSale.Entities.Reason", b =>
@@ -420,123 +263,6 @@ namespace Infrastructure.AfterSale.Data.Migrations.SQLServer
                     b.HasIndex("ecommerce_id");
 
                     b.ToTable("AfterSaleReasons", "general");
-                });
-
-            modelBuilder.Entity("Domain.AfterSale.Entities.Refund", b =>
-                {
-                    b.Property<int>("id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("action")
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<decimal?>("bonus_amount")
-                        .HasColumnType("decimal(10,2)");
-
-                    b.Property<decimal?>("bonus_amount_percent")
-                        .HasColumnType("decimal(10,2)");
-
-                    b.Property<bool?>("can_edit_wire_transfer")
-                        .HasColumnType("bit")
-                        .HasAnnotation("Custom:ColumnTypeMapper", "Bool");
-
-                    b.Property<string>("cashback_account")
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<DateTime?>("created_at")
-                        .HasColumnType("datetime2")
-                        .HasAnnotation("Custom:ColumnTypeMapper", "DateTime");
-
-                    b.Property<int>("customer_id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("customer_retention_method_id")
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<int?>("ecommerce_order_id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("external_order_url")
-                        .HasColumnType("varchar(4000)");
-
-                    b.Property<bool?>("free_shipping")
-                        .HasColumnType("bit")
-                        .HasAnnotation("Custom:ColumnTypeMapper", "Bool");
-
-                    b.Property<bool?>("has_wire_transfer_account")
-                        .HasColumnType("bit")
-                        .HasAnnotation("Custom:ColumnTypeMapper", "Bool");
-
-                    b.Property<DateTime?>("last_status_history_date")
-                        .HasColumnType("datetime2")
-                        .HasAnnotation("Custom:ColumnTypeMapper", "DateTime");
-
-                    b.Property<string>("order_id")
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<decimal?>("received_amount")
-                        .HasColumnType("decimal(10,2)");
-
-                    b.Property<decimal?>("received_raw_amount")
-                        .HasColumnType("decimal(10,2)");
-
-                    b.Property<string>("refunded_shipping_type")
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<decimal?>("requested_amount")
-                        .HasColumnType("decimal(10,2)");
-
-                    b.Property<decimal?>("requested_raw_amount")
-                        .HasColumnType("decimal(10,2)");
-
-                    b.Property<decimal?>("requested_shipping_amount")
-                        .HasColumnType("decimal(10,2)");
-
-                    b.Property<decimal?>("requested_total_amount")
-                        .HasColumnType("decimal(10,2)");
-
-                    b.Property<int?>("reverse_id")
-                        .HasColumnType("int");
-
-                    b.Property<int>("reverseid")
-                        .HasColumnType("int");
-
-                    b.Property<string>("shipping_method")
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<bool?>("should_ask_voucher_code")
-                        .HasColumnType("bit")
-                        .HasAnnotation("Custom:ColumnTypeMapper", "Bool");
-
-                    b.Property<int>("status_id")
-                        .HasColumnType("int");
-
-                    b.Property<decimal?>("total_amount")
-                        .HasColumnType("decimal(10,2)");
-
-                    b.Property<string>("type")
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<DateTime?>("updated_at")
-                        .HasColumnType("datetime2")
-                        .HasAnnotation("Custom:ColumnTypeMapper", "DateTime");
-
-                    b.Property<string>("voucher_giftcard_id")
-                        .HasColumnType("varchar(50)");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("customer_id");
-
-                    b.HasIndex("reverse_id");
-
-                    b.HasIndex("reverseid");
-
-                    b.HasIndex("status_id");
-
-                    b.HasIndex("voucher_giftcard_id");
-
-                    b.ToTable("AfterSaleRefunds", "general");
                 });
 
             modelBuilder.Entity("Domain.AfterSale.Entities.Reverse", b =>
@@ -769,124 +495,6 @@ namespace Infrastructure.AfterSale.Data.Migrations.SQLServer
                     b.ToTable("AfterSaleStatusHistories", "general");
                 });
 
-            modelBuilder.Entity("Domain.AfterSale.Entities.TotalAmountHistories", b =>
-                {
-                    b.Property<int>("id")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("date")
-                        .HasColumnType("datetime2")
-                        .HasAnnotation("Custom:ColumnTypeMapper", "DateTime");
-
-                    b.Property<int>("refund_id")
-                        .HasColumnType("int");
-
-                    b.Property<decimal?>("total_amount")
-                        .HasColumnType("decimal(10,2)");
-
-                    b.Property<int>("typeid")
-                        .HasColumnType("int");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("refund_id")
-                        .IsUnique();
-
-                    b.HasIndex("typeid");
-
-                    b.ToTable("AfterSaleTotalAmountHistories", "general");
-                });
-
-            modelBuilder.Entity("Domain.AfterSale.Entities.Tracking", b =>
-                {
-                    b.Property<int>("id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("authorization_code")
-                        .HasColumnType("varchar(60)");
-
-                    b.Property<DateTime?>("collect_date")
-                        .HasColumnType("datetime2")
-                        .HasAnnotation("Custom:ColumnTypeMapper", "DateTime");
-
-                    b.Property<int?>("courier_contract_id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("courier_name")
-                        .HasColumnType("varchar(60)");
-
-                    b.Property<string>("cte")
-                        .HasColumnType("varchar(60)");
-
-                    b.Property<DateTime?>("deleted_at")
-                        .HasColumnType("datetime2")
-                        .HasAnnotation("Custom:ColumnTypeMapper", "DateTime");
-
-                    b.Property<string>("delivery_deadline")
-                        .HasColumnType("varchar(60)");
-
-                    b.Property<DateTime?>("expire_date")
-                        .HasColumnType("datetime2")
-                        .HasAnnotation("Custom:ColumnTypeMapper", "DateTime");
-
-                    b.Property<string>("extra_fields")
-                        .HasColumnType("varchar(60)");
-
-                    b.Property<bool?>("is_change_collect_to_post")
-                        .HasColumnType("bit")
-                        .HasAnnotation("Custom:ColumnTypeMapper", "Bool");
-
-                    b.Property<string>("message")
-                        .HasColumnType("varchar(60)");
-
-                    b.Property<decimal?>("package_amount")
-                        .HasColumnType("decimal(10,2)");
-
-                    b.Property<string>("qr_code")
-                        .HasColumnType("varchar(60)");
-
-                    b.Property<DateTime?>("requested_collect_date")
-                        .HasColumnType("datetime2")
-                        .HasAnnotation("Custom:ColumnTypeMapper", "DateTime");
-
-                    b.Property<int?>("reverse_id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("service_type")
-                        .HasColumnType("varchar(60)");
-
-                    b.Property<decimal?>("shipping_amount")
-                        .HasColumnType("decimal(10,2)");
-
-                    b.Property<string>("status")
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<DateTime?>("status_updated_at")
-                        .HasColumnType("datetime2")
-                        .HasAnnotation("Custom:ColumnTypeMapper", "DateTime");
-
-                    b.Property<string>("tracking_code")
-                        .HasColumnType("varchar(60)");
-
-                    b.Property<string>("tracking_url")
-                        .HasColumnType("varchar(4000)");
-
-                    b.Property<string>("type")
-                        .HasColumnType("varchar(60)");
-
-                    b.Property<DateTime?>("updated_at")
-                        .HasColumnType("datetime2")
-                        .HasAnnotation("Custom:ColumnTypeMapper", "DateTime");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("reverse_id")
-                        .IsUnique()
-                        .HasFilter("[reverse_id] IS NOT NULL");
-
-                    b.ToTable("AfterSaleTrackings", "general");
-                });
-
             modelBuilder.Entity("Domain.AfterSale.Entities.TrackingHistory", b =>
                 {
                     b.Property<int>("id")
@@ -901,7 +509,7 @@ namespace Infrastructure.AfterSale.Data.Migrations.SQLServer
                         .HasAnnotation("Custom:ColumnTypeMapper", "DateTime");
 
                     b.Property<string>("message")
-                        .HasColumnType("varchar(60)");
+                        .HasColumnType("varchar(3000)");
 
                     b.Property<string>("status")
                         .HasColumnType("varchar(60)");
@@ -940,42 +548,6 @@ namespace Infrastructure.AfterSale.Data.Migrations.SQLServer
                     b.ToTable("AfterSaleTransportations", "general");
                 });
 
-            modelBuilder.Entity("Domain.AfterSale.Entities.Type", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
-
-                    b.Property<string>("description")
-                        .HasColumnType("varchar(60)");
-
-                    b.Property<string>("name")
-                        .HasColumnType("varchar(60)");
-
-                    b.HasKey("id");
-
-                    b.ToTable("AfterSaleTypes", "general");
-                });
-
-            modelBuilder.Entity("Domain.AfterSale.Entities.Voucher", b =>
-                {
-                    b.Property<string>("redemption_code")
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<DateTime?>("expiring_date")
-                        .HasColumnType("datetime2")
-                        .HasAnnotation("Custom:ColumnTypeMapper", "DateTime");
-
-                    b.Property<string>("giftcard_id")
-                        .HasColumnType("varchar(50)");
-
-                    b.HasKey("redemption_code");
-
-                    b.ToTable("AfterSaleVouchers", "general");
-                });
-
             modelBuilder.Entity("Domain.AfterSale.Entities.Customer", b =>
                 {
                     b.HasOne("Domain.AfterSale.Entities.Address", "address")
@@ -1002,86 +574,12 @@ namespace Infrastructure.AfterSale.Data.Migrations.SQLServer
                     b.Navigation("address");
                 });
 
-            modelBuilder.Entity("Domain.AfterSale.Entities.OrderTransactions", b =>
-                {
-                    b.HasOne("Domain.AfterSale.Entities.Refund", null)
-                        .WithMany("order_transactions")
-                        .HasForeignKey("refund_id");
-                });
-
-            modelBuilder.Entity("Domain.AfterSale.Entities.Product", b =>
-                {
-                    b.HasOne("Domain.AfterSale.Entities.Reason", "reason")
-                        .WithMany()
-                        .HasForeignKey("reasonid")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.AfterSale.Entities.Refund", null)
-                        .WithMany("products")
-                        .HasForeignKey("refund_id")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.HasOne("Domain.AfterSale.Entities.Reverse", null)
-                        .WithMany("products")
-                        .HasForeignKey("reverse_id")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.Navigation("reason");
-                });
-
             modelBuilder.Entity("Domain.AfterSale.Entities.Reason", b =>
                 {
                     b.HasOne("Domain.AfterSale.Entities.Ecommerce", null)
                         .WithMany("reasons")
                         .HasForeignKey("ecommerce_id")
                         .OnDelete(DeleteBehavior.NoAction);
-                });
-
-            modelBuilder.Entity("Domain.AfterSale.Entities.Refund", b =>
-                {
-                    b.HasOne("Domain.AfterSale.Entities.Customer", "customer")
-                        .WithMany()
-                        .HasForeignKey("customer_id")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("Domain.AfterSale.Entities.Reverse", null)
-                        .WithMany("refunds")
-                        .HasForeignKey("reverse_id")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.HasOne("Domain.AfterSale.Entities.StatusHistories", "status_histories")
-                        .WithMany()
-                        .HasForeignKey("reverse_id")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.HasOne("Domain.AfterSale.Entities.Reverse", "reverse")
-                        .WithMany()
-                        .HasForeignKey("reverseid")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.AfterSale.Entities.Status", "status")
-                        .WithMany()
-                        .HasForeignKey("status_id")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("Domain.AfterSale.Entities.Voucher", "voucher")
-                        .WithMany()
-                        .HasForeignKey("voucher_giftcard_id")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.Navigation("customer");
-
-                    b.Navigation("reverse");
-
-                    b.Navigation("status");
-
-                    b.Navigation("status_histories");
-
-                    b.Navigation("voucher");
                 });
 
             modelBuilder.Entity("Domain.AfterSale.Entities.Reverse", b =>
@@ -1124,35 +622,6 @@ namespace Infrastructure.AfterSale.Data.Migrations.SQLServer
                     b.Navigation("status");
                 });
 
-            modelBuilder.Entity("Domain.AfterSale.Entities.TotalAmountHistories", b =>
-                {
-                    b.HasOne("Domain.AfterSale.Entities.Refund", "Refund")
-                        .WithOne("total_amount_histories")
-                        .HasForeignKey("Domain.AfterSale.Entities.TotalAmountHistories", "refund_id")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("Domain.AfterSale.Entities.Type", "type")
-                        .WithMany()
-                        .HasForeignKey("typeid")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Refund");
-
-                    b.Navigation("type");
-                });
-
-            modelBuilder.Entity("Domain.AfterSale.Entities.Tracking", b =>
-                {
-                    b.HasOne("Domain.AfterSale.Entities.Reverse", "reverse")
-                        .WithOne("tracking")
-                        .HasForeignKey("Domain.AfterSale.Entities.Tracking", "reverse_id")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.Navigation("reverse");
-                });
-
             modelBuilder.Entity("Domain.AfterSale.Entities.TrackingHistory", b =>
                 {
                     b.HasOne("Domain.AfterSale.Entities.Reverse", null)
@@ -1166,25 +635,9 @@ namespace Infrastructure.AfterSale.Data.Migrations.SQLServer
                     b.Navigation("reasons");
                 });
 
-            modelBuilder.Entity("Domain.AfterSale.Entities.Refund", b =>
-                {
-                    b.Navigation("order_transactions");
-
-                    b.Navigation("products");
-
-                    b.Navigation("total_amount_histories")
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Domain.AfterSale.Entities.Reverse", b =>
                 {
-                    b.Navigation("products");
-
-                    b.Navigation("refunds");
-
                     b.Navigation("status_histories");
-
-                    b.Navigation("tracking");
 
                     b.Navigation("tracking_history");
                 });

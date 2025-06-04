@@ -53,6 +53,12 @@ namespace Hangfire.IO.Extensions
                     var configuration = serviceProvider.GetRequiredService<IConfiguration>();
                     options.UseSqlServer(connectionstring);
                 });
+                
+                services.AddDbContext<AfterSaleUntreatedDbContext>((serviceProvider, options) =>
+                {
+                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+                    options.UseSqlServer(connectionstring);
+                });
 
                 services.AddDbContext<LinxCommerceDbContext>((serviceProvider, options) =>
                 {
@@ -99,6 +105,12 @@ namespace Hangfire.IO.Extensions
                     options.UseMySQL(connectionstring);
                 });
 
+                services.AddDbContext<AfterSaleUntreatedDbContext>((serviceProvider, options) =>
+                {
+                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+                    options.UseMySQL(connectionstring);
+                });
+
                 services.AddDbContext<LinxCommerceDbContext>((serviceProvider, options) =>
                 {
                     var configuration = serviceProvider.GetRequiredService<IConfiguration>();
@@ -139,6 +151,12 @@ namespace Hangfire.IO.Extensions
             if (databaseType == "Postgree")
             {
                 services.AddDbContext<AfterSaleTreatedDbContext>((serviceProvider, options) =>
+                {
+                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+                    options.UseNpgsql(connectionstring);
+                });
+
+                services.AddDbContext<AfterSaleUntreatedDbContext>((serviceProvider, options) =>
                 {
                     var configuration = serviceProvider.GetRequiredService<IConfiguration>();
                     options.UseNpgsql(connectionstring);

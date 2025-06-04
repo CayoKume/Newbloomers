@@ -15,17 +15,25 @@ namespace Infrastructure.AfterSale.Data.Mappings
 
             builder.ToTable("AfterSaleEcommerces");
 
-            builder
-                .HasMany(x => x.reasons)
-                .WithOne()
-                .HasForeignKey(y => y.ecommerce_id)
-                .OnDelete(DeleteBehavior.NoAction);
-            
-            builder
-                .HasOne(x => x.address)
-                .WithMany()
-                .HasForeignKey(y => y.address_id)
-                .OnDelete(DeleteBehavior.NoAction);
+            if (schema != "untreated")
+            {
+                builder
+                    .HasMany(x => x.reasons)
+                    .WithOne()
+                    .HasForeignKey(y => y.ecommerce_id)
+                    .OnDelete(DeleteBehavior.NoAction);
+
+                builder
+                    .HasOne(x => x.address)
+                    .WithMany()
+                    .HasForeignKey(y => y.address_id)
+                    .OnDelete(DeleteBehavior.NoAction); 
+            }
+            else
+            {
+                builder.Ignore(x => x.reasons);
+                builder.Ignore(x => x.address);
+            }
 
             builder.HasKey(x => x.id);
 

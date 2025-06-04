@@ -117,7 +117,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                                                 .Replace("[data_cad_fim]", $"{DateTime.Today.AddYears(5).ToString("yyyy-MM-dd")}")
                                                 .Replace("[data_vig_inicial]", $"2000-01-01")
                                                 .Replace("[data_vig_fim]", $"{DateTime.Today.AddYears(5).ToString("yyyy-MM-dd")}")
-                                                .Replace("[promocao_ativa]", "N"),
+                                                .Replace("[promocao_ativa]", "S"),
                                 jobParameter: jobParameter,
                                 cnpj_emp: cnpj_emp.doc_company
                             );
@@ -144,7 +144,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                     if (_listSomenteNovos.Count() > 0)
                     {
                         _linxProdutosPromocoesRepository.BulkInsertIntoTableRaw(records: _listSomenteNovos, jobParameter: jobParameter);
-                        await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
+                       await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
 
                         for (int i = 0; i < _listSomenteNovos.Count; i++)
                         {
