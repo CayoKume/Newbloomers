@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <h1 align="center">EXPERT_CRONJobsScheduler</h1>
 
 ## :floppy_disk: Technologies.
@@ -33,3 +34,6 @@ The integrations covered are:
 
 ## :hammer_and_pick: Features and Application Demo.
 To run the project, clone the repository and run the HangfireJobsScheduler.sln file
+=======
+# newbloomers-integrations
+>>>>>>> 36e449110869f70cb603b76fb27242df69aa4e0e
