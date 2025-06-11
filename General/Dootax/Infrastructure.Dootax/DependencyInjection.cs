@@ -3,7 +3,7 @@ using Application.Dootax.Services;
 using Domain.Dootax.Interfaces.Apis;
 using Domain.Dootax.Interfaces.Repositorys;
 using Infrastructure.Dootax.Api;
-using Infrastructure.Dootax.Repositorys.Dapper;
+using Infrastructure.Dootax.Repositorys;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Infrastructure.Dootax

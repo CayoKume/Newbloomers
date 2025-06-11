@@ -105,26 +105,30 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                    .Clear()
                    .AddLog(EnumJob.LinxProdutosPromocoes);
 
+                string[] characters = { "S", "N" };
                 var xmls = new List<Dictionary<string?, string?>>();
                 string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter.parametersInterval, jobParameter.parametersTableName, jobParameter.jobName);
                 var cnpjs_emp = await _linxMicrovixRepositoryBase.GetMicrovixCompanys();
 
-                foreach (var cnpj_emp in cnpjs_emp)
+                foreach (var character in characters)
                 {
-                    var body = _linxMicrovixServiceBase.BuildBodyRequest(
-                                parametersList: parameters
-                                                .Replace("[data_cad_inicial]", $"2000-01-01")
-                                                .Replace("[data_cad_fim]", $"{DateTime.Today.AddYears(5).ToString("yyyy-MM-dd")}")
-                                                .Replace("[data_vig_inicial]", $"2000-01-01")
-                                                .Replace("[data_vig_fim]", $"{DateTime.Today.AddYears(5).ToString("yyyy-MM-dd")}")
-                                                .Replace("[promocao_ativa]", "S"),
-                                jobParameter: jobParameter,
-                                cnpj_emp: cnpj_emp.doc_company
-                            );
+                    foreach (var cnpj_emp in cnpjs_emp)
+                    {
+                        var body = _linxMicrovixServiceBase.BuildBodyRequest(
+                                                parametersList: parameters
+                                                                .Replace("[data_cad_inicial]", $"{DateTime.Today.ToString("yyyy-MM-dd")}")
+                                                                .Replace("[data_cad_fim]", $"{DateTime.Today.AddYears(5).ToString("yyyy-MM-dd")}")
+                                                                .Replace("[data_vig_inicial]", $"{DateTime.Today.ToString("yyyy-MM-dd")}")
+                                                                .Replace("[data_vig_fim]", $"{DateTime.Today.AddYears(5).ToString("yyyy-MM-dd")}")
+                                                                .Replace("[promocao_ativa]", $"{character}"),
+                                                jobParameter: jobParameter,
+                                                cnpj_emp: cnpj_emp.doc_company
+                                            );
 
-                    string? response = await _apiCall.PostAsync(jobParameter: jobParameter, body: body);
-                    var result = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response);
-                    xmls.AddRange(result);
+                        string? response = await _apiCall.PostAsync(jobParameter: jobParameter, body: body);
+                        var result = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response);
+                        xmls.AddRange(result); 
+                    }
                 }
 
                 if (xmls.Count() > 0)

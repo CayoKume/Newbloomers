@@ -1,4 +1,6 @@
-﻿namespace Domain.AfterSale.Entities
+﻿using Domain.IntegrationsCore.Extensions;
+
+namespace Domain.AfterSale.Entities
 {
     public class Ecommerce
     {
@@ -24,7 +26,10 @@
         public string? brand_id { get; set; }
         public string? app_name { get; set; }
 
+        [SkipProperty]
         public Address address { get; set; }
+
+        [SkipProperty]
         public List<Reason> reasons { get; set; }
     }
 }

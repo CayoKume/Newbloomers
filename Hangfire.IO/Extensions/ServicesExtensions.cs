@@ -16,7 +16,10 @@ using Infrastructure.LinxMicrovix.Outbound.WebService.Data;
 using Infrastructure.FlashCourier.Data;
 using Infrastructure.Jadlog.Data;
 using Infrastructure.TotalExpress.Data;
-using Infrastructure.IntegrationsCore.Repositorys.Dapper;
+using Infrastructure.Dootax.Data;
+using Infrastructure.Dootax;
+using Infrastructure.IntegrationsCore.Repositorys;
+using Infrastructure.Movidesk;
 
 namespace Hangfire.IO.Extensions
 {
@@ -34,6 +37,8 @@ namespace Hangfire.IO.Extensions
             builder.Services.AddScopedTotalExpressServices();
             builder.Services.AddScopedAfterSaleServices();
             builder.Services.AddScopedJadlogServices();
+            builder.Services.AddScopedDootaxServices();
+            builder.Services.AddScopedMovideskServices();
 
             builder.Services.AddDbContextService(builder);
             //builder.Services.AddHangfireService(builder);
@@ -55,6 +60,18 @@ namespace Hangfire.IO.Extensions
                 });
                 
                 services.AddDbContext<AfterSaleUntreatedDbContext>((serviceProvider, options) =>
+                {
+                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+                    options.UseSqlServer(connectionstring);
+                });
+
+                services.AddDbContext<DootaxTreatedDbContext>((serviceProvider, options) =>
+                {
+                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+                    options.UseSqlServer(connectionstring);
+                });
+
+                services.AddDbContext<DootaxUntreatedDbContext>((serviceProvider, options) =>
                 {
                     var configuration = serviceProvider.GetRequiredService<IConfiguration>();
                     options.UseSqlServer(connectionstring);
@@ -111,6 +128,18 @@ namespace Hangfire.IO.Extensions
                     options.UseMySQL(connectionstring);
                 });
 
+                services.AddDbContext<DootaxTreatedDbContext>((serviceProvider, options) =>
+                {
+                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+                    options.UseMySQL(connectionstring);
+                });
+
+                services.AddDbContext<DootaxUntreatedDbContext>((serviceProvider, options) =>
+                {
+                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+                    options.UseMySQL(connectionstring);
+                });
+
                 services.AddDbContext<LinxCommerceDbContext>((serviceProvider, options) =>
                 {
                     var configuration = serviceProvider.GetRequiredService<IConfiguration>();
@@ -157,6 +186,18 @@ namespace Hangfire.IO.Extensions
                 });
 
                 services.AddDbContext<AfterSaleUntreatedDbContext>((serviceProvider, options) =>
+                {
+                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+                    options.UseNpgsql(connectionstring);
+                });
+
+                services.AddDbContext<DootaxTreatedDbContext>((serviceProvider, options) =>
+                {
+                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+                    options.UseNpgsql(connectionstring);
+                });
+
+                services.AddDbContext<DootaxUntreatedDbContext>((serviceProvider, options) =>
                 {
                     var configuration = serviceProvider.GetRequiredService<IConfiguration>();
                     options.UseNpgsql(connectionstring);

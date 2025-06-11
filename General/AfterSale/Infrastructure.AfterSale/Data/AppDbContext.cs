@@ -14,8 +14,6 @@ namespace Infrastructure.AfterSale.Data
         : base(options) =>
             _configuration = configuration;
 
-        public DbSet<Domain.AfterSale.Entities.Action> AfterSaleAction { get; set; } = null!;
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             var entitiesToIgnore = new List<string>();
@@ -65,8 +63,6 @@ namespace Infrastructure.AfterSale.Data
         public AfterSaleUntreatedDbContext(DbContextOptions<AfterSaleUntreatedDbContext> options, IConfiguration configuration)
         : base(options) =>
             _configuration = configuration;
-
-        public DbSet<Domain.AfterSale.Entities.Action> AfterSaleAction { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

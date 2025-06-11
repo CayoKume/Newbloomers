@@ -1,6 +1,6 @@
 ﻿using Domain.IntegrationsCore.Interfaces;
 using Infrastructure.IntegrationsCore.Connections.SQLServer;
-using Infrastructure.IntegrationsCore.Repositorys.Dapper;
+using Infrastructure.IntegrationsCore.Repositorys;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Infrastructure.IntegrationsCore.DependencyInjection

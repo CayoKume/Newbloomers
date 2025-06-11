@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Domain.Dootax\Domain.Dootax.csproj" />
+  </ItemGroup>
+
 </Project>

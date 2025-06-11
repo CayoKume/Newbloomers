@@ -612,7 +612,7 @@ namespace AzureJobs.RecurringJobs
         //            .Where(m => m.MethodName == "LinxProdutosDetalhes")
         //            .FirstOrDefault();
 
-        //        var result = await _linxProdutosDetalhesService.GetRecords(
+        //        var result = await _linxProdutosDetalhesService.GetZeroStockRecords(
         //            _linxMicrovixJobParameter.SetParameters(
         //                jobName: method.MethodName,
         //                tableName: method.MethodName

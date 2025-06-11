@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Domain.Dootax.Entities;
 
 namespace Domain.Dootax.Interfaces.Repositorys
 {
-    internal interface IDootaxRepository
+    public interface IDootaxRepository
     {
+        public Task<IEnumerable<XML>> GetXMLs();
+        public Task InsertSendFilesSuccessfulLog(string cnpjcpf, string documento, string serie, string chavenfe);
     }
 }

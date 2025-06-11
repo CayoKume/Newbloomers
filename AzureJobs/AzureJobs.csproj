@@ -16,7 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Database\Infrastructure.DatabaseInit\Infrastructure.DatabaseInit.csproj" />
     <ProjectReference Include="..\IntegrationsCore\Infrastructure.IntegrationsCore\Infrastructure.IntegrationsCore.csproj" />
     <ProjectReference Include="..\LinxCommerce\Application.LinxCommerce\Application.LinxCommerce.csproj" />
     <ProjectReference Include="..\LinxCommerce\Infrastructure.LinxCommerce\Infrastructure.LinxCommerce.csproj" />

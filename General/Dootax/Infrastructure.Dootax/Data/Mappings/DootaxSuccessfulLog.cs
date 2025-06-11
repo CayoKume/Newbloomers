@@ -20,7 +20,7 @@ namespace Infrastructure.Dootax.Data.Mappings
             builder
                 .Property(c => c.id)
                 .HasColumnType("int")
-                .ValueGeneratedNever();
+                .ValueGeneratedOnAdd();
 
             builder
                 .Property(c => c.cnpj_emp)

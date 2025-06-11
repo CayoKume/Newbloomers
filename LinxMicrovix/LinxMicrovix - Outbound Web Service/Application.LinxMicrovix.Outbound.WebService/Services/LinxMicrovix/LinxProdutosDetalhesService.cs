@@ -285,7 +285,6 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                     string? response = await _apiCall.PostAsync(jobParameter: jobParameter, body: body);
                     var result = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response);
                     xmls.AddRange(result);
-                    Console.WriteLine(xmls.Count());
                 }
 
                 if (xmls.Count() > 0)

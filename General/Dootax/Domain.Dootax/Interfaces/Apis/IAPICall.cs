@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Domain.Dootax.Entities;
 
 namespace Domain.Dootax.Interfaces.Apis
 {
-    internal interface IAPICall
+    public interface IAPICall
     {
+        public Task<XML> PostAsync(XML xml);
     }
 }
