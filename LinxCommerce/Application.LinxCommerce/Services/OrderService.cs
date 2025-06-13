@@ -1,7 +1,7 @@
 ﻿using Application.IntegrationsCore.Interfaces;
 using Application.LinxCommerce.Interfaces;
+using Domain.IntegrationsCore.Entities.Exceptions;
 using Domain.IntegrationsCore.Enums;
-using Domain.IntegrationsCore.Models.Exceptions;
 using Domain.LinxCommerce.Entities.Order;
 using Domain.LinxCommerce.Entities.Parameters;
 using Domain.LinxCommerce.Entities.Responses;

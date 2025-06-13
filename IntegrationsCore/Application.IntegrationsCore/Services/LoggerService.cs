@@ -1,5 +1,5 @@
 using Application.IntegrationsCore.Interfaces;
-using Domain.IntegrationsCore.Models.Errors;
+using Domain.IntegrationsCore.Entities.Auditing;
 using Domain.IntegrationsCore.Enums;
 using Domain.IntegrationsCore.Interfaces;
 

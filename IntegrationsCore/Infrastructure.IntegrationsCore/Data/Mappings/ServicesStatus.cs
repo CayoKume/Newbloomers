@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.Entities;
+﻿using Domain.IntegrationsCore.Entities.Auditing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

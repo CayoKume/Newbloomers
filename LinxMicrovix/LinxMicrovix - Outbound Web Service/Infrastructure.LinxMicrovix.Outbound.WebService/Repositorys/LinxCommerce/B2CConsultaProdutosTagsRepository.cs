@@ -1,5 +1,5 @@
-﻿using Domain.IntegrationsCore.Enums;
-using Domain.IntegrationsCore.Models.Exceptions;
+﻿using Domain.IntegrationsCore.Entities.Exceptions;
+using Domain.IntegrationsCore.Enums;
 using Domain.LinxMicrovix.Outbound.WebService.Entities.LinxCommerce;
 using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;

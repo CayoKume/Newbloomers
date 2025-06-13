@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.Models.Bases;
+﻿using Domain.IntegrationsCore.Entities.Base;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 

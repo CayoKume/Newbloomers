@@ -1,8 +1,8 @@
 ﻿using Application.IntegrationsCore.Interfaces;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxCommerce;
+using Domain.IntegrationsCore.Entities.Exceptions;
 using Domain.IntegrationsCore.Enums;
-using Domain.IntegrationsCore.Models.Exceptions;
 using Domain.LinxMicrovix.Outbound.WebService.Entities.LinxCommerce;
 using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Api;

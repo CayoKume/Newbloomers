@@ -18,7 +18,7 @@ namespace Infrastructure.Stone
             services.AddScoped<IAPICall, APICall>();
             services.AddHttpClient("StoneAPI", client =>
             {
-                client.BaseAddress = new Uri("https://apis.totalexpress.com.br/");
+                client.BaseAddress = new Uri("https://stg-entrega.stone.com.br/api/smart-logistic-gateway/");
                 client.Timeout = new TimeSpan(0, 20, 0);
             });
 

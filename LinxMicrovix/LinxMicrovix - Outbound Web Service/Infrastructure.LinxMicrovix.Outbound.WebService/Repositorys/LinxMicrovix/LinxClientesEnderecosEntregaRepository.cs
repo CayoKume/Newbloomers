@@ -2,8 +2,8 @@
 using Domain.LinxMicrovix.Outbound.WebService.Entities.LinxMicrovix;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxMicrovix;
-using Domain.IntegrationsCore.Models.Exceptions;
 using Domain.IntegrationsCore.Enums;
+using Domain.IntegrationsCore.Entities.Exceptions;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxMicrovix
 {

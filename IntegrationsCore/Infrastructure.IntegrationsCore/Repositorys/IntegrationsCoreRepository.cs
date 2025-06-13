@@ -1,5 +1,5 @@
 ﻿using Dapper;
-using Domain.IntegrationsCore.Models.Errors;
+using Domain.IntegrationsCore.Entities.Auditing;
 using Domain.IntegrationsCore.Enums;
 using Domain.IntegrationsCore.Models.Exceptions;
 using Domain.IntegrationsCore.Extensions;

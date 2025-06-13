@@ -1,5 +1,4 @@
 ﻿using Dapper;
-using Domain.IntegrationsCore.Models.Bases;
 using Domain.IntegrationsCore.Enums;
 using Domain.IntegrationsCore.Models.Exceptions;
 using Domain.IntegrationsCore.Extensions;
@@ -10,6 +9,7 @@ using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Reflection;
+using Domain.IntegrationsCore.Entities.Base;
 
 namespace Infrastructure.Jadlog.Repositorys
 {

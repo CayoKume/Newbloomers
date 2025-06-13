@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.Models.Parameters;
+﻿using Domain.IntegrationsCore.Entities.Parameters;
 using Infrastructure.IntegrationsCore.Data.Extensions;
 using Infrastructure.IntegrationsCore.Data.Schemas;
 using Microsoft.EntityFrameworkCore;
