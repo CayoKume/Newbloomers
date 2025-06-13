@@ -1,13 +1,12 @@
 ﻿using Dapper;
-using Domain.IntegrationsCore.Entities.Enums;
-using Domain.IntegrationsCore.Entities.Errors;
-using Domain.IntegrationsCore.Exceptions;
+using Domain.IntegrationsCore.Models.Errors;
+using Domain.IntegrationsCore.Enums;
+using Domain.IntegrationsCore.Models.Exceptions;
 using Domain.IntegrationsCore.Extensions;
 using Domain.IntegrationsCore.Interfaces;
 using Infrastructure.IntegrationsCore.Connections.SQLServer;
 using System.Data;
 using System.Data.SqlClient;
-using System.Drawing;
 using System.Reflection;
 
 namespace Infrastructure.IntegrationsCore.Repositorys

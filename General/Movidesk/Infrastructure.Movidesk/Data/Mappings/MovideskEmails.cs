@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.Entities.Enums;
+﻿using Domain.IntegrationsCore.Enums;
 using Domain.Movidesk.Entities;
 using Infrastructure.IntegrationsCore.Data.Extensions;
 using Infrastructure.IntegrationsCore.Data.Schemas;
@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Movidesk.Data.Mappings
 {
-    internal class MovideskEmailsMap : IEntityTypeConfiguration<Email>
+    public class MovideskEmailsMap : IEntityTypeConfiguration<Email>
     {
         public void Configure(EntityTypeBuilder<Email> builder)
         {

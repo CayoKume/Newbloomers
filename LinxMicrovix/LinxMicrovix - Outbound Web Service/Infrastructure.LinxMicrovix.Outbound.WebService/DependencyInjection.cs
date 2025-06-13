@@ -14,8 +14,9 @@ using Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base;
 using Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxMicrovix;
 using LinxMicrovix.Outbound.Web.Service.Application.Services.LinxMicrovix;
 using Microsoft.Extensions.DependencyInjection;
-using Application.IntegrationsCore.Interfaces;
-using Application.IntegrationsCore.Services;
+using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore;
+using Infrastructure.LinxMicrovix.Outbound.WebService.Data;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.DependencyInjection
 {
@@ -319,6 +320,56 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.DependencyInjection
 
             services.AddScoped<ILinxXMLDocumentosService, LinxXMLDocumentosService>();
             services.AddScoped<ILinxXMLDocumentosRepository, LinxXMLDocumentosRepository>();
+
+            return services;
+        }
+
+        public static IServiceCollection AddDbContextLinxMicrovixService(this IServiceCollection services, string databaseType, string connectionstring)
+        {
+            if (databaseType == "SQLServer")
+            {
+                services.AddDbContext<LinxMicrovixOutboundTreatedDbContext>((serviceProvider, options) =>
+                {
+                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+                    options.UseSqlServer(connectionstring);
+                });
+
+                services.AddDbContext<LinxMicrovixOutboundUntreatedDbContext>((serviceProvider, options) =>
+                {
+                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+                    options.UseSqlServer(connectionstring);
+                });
+            }
+
+            if (databaseType == "MySql")
+            {
+                services.AddDbContext<LinxMicrovixOutboundTreatedDbContext>((serviceProvider, options) =>
+                {
+                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+                    options.UseMySQL(connectionstring);
+                });
+
+                services.AddDbContext<LinxMicrovixOutboundUntreatedDbContext>((serviceProvider, options) =>
+                {
+                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+                    options.UseMySQL(connectionstring);
+                });
+            }
+
+            if (databaseType == "Postgree")
+            {
+                services.AddDbContext<LinxMicrovixOutboundTreatedDbContext>((serviceProvider, options) =>
+                {
+                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+                    options.UseNpgsql(connectionstring);
+                });
+
+                services.AddDbContext<LinxMicrovixOutboundUntreatedDbContext>((serviceProvider, options) =>
+                {
+                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+                    options.UseNpgsql(connectionstring);
+                });
+            }
 
             return services;
         }

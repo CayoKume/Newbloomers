@@ -1,7 +1,7 @@
 ﻿using Dapper;
-using Domain.IntegrationsCore.Entities.Enums;
-using Domain.IntegrationsCore.Exceptions;
+using Domain.IntegrationsCore.Enums;
 using Domain.IntegrationsCore.Extensions;
+using Domain.IntegrationsCore.Models.Exceptions;
 using Domain.LinxMicrovix.Outbound.WebService.Entities.Base;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
 using Infrastructure.IntegrationsCore.Connections.MySQL;

@@ -1,8 +1,4 @@
-﻿using Domain.IntegrationsCore.Entities.Enums;
-using Domain.IntegrationsCore.Exceptions;
-using Domain.IntegrationsCore.Extensions;
-
-namespace Domain.LinxCommerce.Entities.SalesRepresentative
+﻿namespace Domain.LinxCommerce.Entities.SalesRepresentative
 {
     public class SalesRepresentativeCustomerRelation
     {

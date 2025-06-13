@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.Entities.Errors;
+﻿using Domain.IntegrationsCore.Models.Errors;
 
 namespace Domain.IntegrationsCore.Interfaces
 {

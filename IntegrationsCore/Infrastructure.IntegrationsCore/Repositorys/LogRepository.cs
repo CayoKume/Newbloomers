@@ -1,7 +1,6 @@
 ﻿using Dapper;
-using Domain.IntegrationsCore.Entities.Enums;
-using Domain.IntegrationsCore.Entities.Errors;
-using Domain.IntegrationsCore.Exceptions;
+using Domain.IntegrationsCore.Models.Errors;
+using Domain.IntegrationsCore.Models.Exceptions;
 using Domain.IntegrationsCore.Interfaces;
 using Infrastructure.IntegrationsCore.Connections.SQLServer;
 using System.Data;
@@ -9,7 +8,7 @@ using System.Data.SqlClient;
 using static Dapper.SqlMapper;
 using System.Reflection;
 using Domain.IntegrationsCore.Extensions;
-using static System.Net.Mime.MediaTypeNames;
+using Domain.IntegrationsCore.Enums;
 
 namespace Infrastructure.IntegrationsCore.Repositorys
 {

@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.Entities.Enums;
+﻿using Domain.IntegrationsCore.Enums;
 using Domain.Movidesk.Entities;
 using Infrastructure.IntegrationsCore.Data.Extensions;
 using Infrastructure.IntegrationsCore.Data.Schemas;

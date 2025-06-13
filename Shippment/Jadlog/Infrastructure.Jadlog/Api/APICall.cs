@@ -1,5 +1,5 @@
-﻿using Domain.IntegrationsCore.Entities.Enums;
-using Domain.IntegrationsCore.Exceptions;
+﻿using Domain.IntegrationsCore.Enums;
+using Domain.IntegrationsCore.Models.Exceptions;
 using Domain.Jadlog.Interfaces.Api;
 using Newtonsoft.Json.Linq;
 using System.Net;

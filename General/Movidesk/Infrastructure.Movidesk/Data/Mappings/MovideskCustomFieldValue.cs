@@ -1,5 +1,4 @@
-﻿using Domain.IntegrationsCore.Entities.Enums;
-using Domain.Movidesk.Entities;
+﻿using Domain.Movidesk.Entities;
 using Infrastructure.IntegrationsCore.Data.Schemas;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -19,9 +18,8 @@ namespace Infrastructure.Movidesk.Data.Mappings
             if (schema != "untreated")
             {
                 builder
-                    .HasOne(x => x.items)
-                    .WithMany()
-                    .HasForeignKey(o => o.customFieldId)
+                    .HasMany(x => x.items)
+                    .WithOne()
                     .OnDelete(DeleteBehavior.NoAction);
             }
             else

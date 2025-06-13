@@ -1,9 +1,9 @@
 using Infrastructure.IntegrationsCore.Data.Schemas;
 using Domain.LinxMicrovix.Outbound.WebService.Entities.LinxMicrovix;
-using Domain.IntegrationsCore.Entities.Enums;
 using Infrastructure.IntegrationsCore.Data.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Domain.IntegrationsCore.Enums;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicrovix
 {

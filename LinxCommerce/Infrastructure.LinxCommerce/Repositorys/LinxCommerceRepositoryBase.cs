@@ -1,6 +1,6 @@
 ﻿using Dapper;
-using Domain.IntegrationsCore.Entities.Enums;
-using Domain.IntegrationsCore.Exceptions;
+using Domain.IntegrationsCore.Enums;
+using Domain.IntegrationsCore.Models.Exceptions;
 using Domain.IntegrationsCore.Extensions;
 using Domain.LinxCommerce.Entities.Parameters;
 using Domain.LinxCommerce.Interfaces.Repositorys;

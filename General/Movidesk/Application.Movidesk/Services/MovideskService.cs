@@ -22,12 +22,11 @@ namespace Application.Movidesk.Services
         {
             try
             {
-                //var token = await _movideskRepository.GetTokenAsync();
-                var token = "7b034c69-b176-46f7-bc71-d6a290f18b73";
+                var token = await _movideskRepository.GetTokenAsync();
 
                 var response = await _apiCall.GetAsync(
                     rote: "persons",
-                    token: token
+                    token: token.Token
                 );
 
                 var persons = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Person>>(response);
@@ -49,12 +48,11 @@ namespace Application.Movidesk.Services
         {
             try
             {
-                //var token = await _movideskRepository.GetTokenAsync();
-                var token = "7b034c69-b176-46f7-bc71-d6a290f18b73";
+                var token = await _movideskRepository.GetTokenAsync();
 
                 var response = await _apiCall.GetAsync(
                     rote: "services",
-                    token: token
+                    token: token.Token
                 );
 
                 var services = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Service>>(response);
@@ -67,7 +65,7 @@ namespace Application.Movidesk.Services
             }
         }
 
-        public async Task<bool> GetTicket()
+        public Task<bool> GetTicket()
         {
             throw new NotImplementedException();
         }
@@ -76,8 +74,8 @@ namespace Application.Movidesk.Services
         {
             try
             {
-                //var token = await _movideskRepository.GetTokenAsync();
-                var token = "7b034c69-b176-46f7-bc71-d6a290f18b73";
+                var token = await _movideskRepository.GetTokenAsync();
+
                 var filters = "createdDate ge 2016-10-10T00:00:00.00z and createdDate le 2016-10-17T00:00:00.00z";
 
                 var selectItens = "id, protocol, type, subject, category, urgency, status, baseStatus, justification," +
@@ -97,7 +95,7 @@ namespace Application.Movidesk.Services
 
                 var response = await _apiCall.GetAsync(
                     rote: "tickets",
-                    token: token,
+                    token: token.Token,
                     filters: filters,
                     selectItens: selectItens,
                     expandItens: expandItens

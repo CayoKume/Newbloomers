@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.Entities.Enums;
+﻿using Domain.IntegrationsCore.Enums;
 
 namespace Application.IntegrationsCore.Interfaces
 {

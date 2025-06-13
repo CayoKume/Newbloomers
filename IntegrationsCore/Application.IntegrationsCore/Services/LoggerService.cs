@@ -1,6 +1,6 @@
 using Application.IntegrationsCore.Interfaces;
-using Domain.IntegrationsCore.Entities.Enums;
-using Domain.IntegrationsCore.Entities.Errors;
+using Domain.IntegrationsCore.Models.Errors;
+using Domain.IntegrationsCore.Enums;
 using Domain.IntegrationsCore.Interfaces;
 
 namespace Application.IntegrationsCore.Services

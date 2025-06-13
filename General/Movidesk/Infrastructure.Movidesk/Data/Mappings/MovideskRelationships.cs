@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.Entities.Enums;
+﻿using Domain.IntegrationsCore.Enums;
 using Domain.Movidesk.Entities;
 using Infrastructure.IntegrationsCore.Data.Extensions;
 using Infrastructure.IntegrationsCore.Data.Schemas;
@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Movidesk.Data.Mappings
 {
-    internal class MovideskRelationshipsMap : IEntityTypeConfiguration<Relationship>
+    public class MovideskRelationshipsMap : IEntityTypeConfiguration<Relationship>
     {
         public void Configure(EntityTypeBuilder<Relationship> builder)
         {
@@ -20,9 +20,9 @@ namespace Infrastructure.Movidesk.Data.Mappings
             if (schema != "untreated")
             {
                 builder
-                    .HasOne(x => x.services)
-                    .WithMany()
-                    .HasForeignKey(o => o.id)
+                    .HasMany(x => x.services)
+                    .WithOne()
+                    .HasForeignKey(y => y.id)
                     .OnDelete(DeleteBehavior.NoAction);
             }
             else

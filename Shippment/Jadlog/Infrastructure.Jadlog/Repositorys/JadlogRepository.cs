@@ -1,7 +1,7 @@
 ﻿using Dapper;
-using Domain.IntegrationsCore.Entities.Bases;
-using Domain.IntegrationsCore.Entities.Enums;
-using Domain.IntegrationsCore.Exceptions;
+using Domain.IntegrationsCore.Models.Bases;
+using Domain.IntegrationsCore.Enums;
+using Domain.IntegrationsCore.Models.Exceptions;
 using Domain.IntegrationsCore.Extensions;
 using Domain.Jadlog.Entities;
 using Domain.Jadlog.Interfaces.Repositorys;

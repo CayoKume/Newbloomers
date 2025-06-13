@@ -1,5 +1,5 @@
 ﻿using Domain.AfterSale.Entities;
-using Domain.IntegrationsCore.Entities.Enums;
+using Domain.IntegrationsCore.Enums;
 using Infrastructure.IntegrationsCore.Data.Extensions;
 using Infrastructure.IntegrationsCore.Data.Schemas;
 using Microsoft.EntityFrameworkCore;

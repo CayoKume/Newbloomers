@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.Entities.Enums;
+﻿using Domain.IntegrationsCore.Enums;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Domain.IntegrationsCore.Extensions

@@ -1,7 +1,7 @@
 ﻿using Application.IntegrationsCore.Interfaces;
 using Application.Jadlog.Interfaces;
-using Domain.IntegrationsCore.Entities.Enums;
-using Domain.IntegrationsCore.Exceptions;
+using Domain.IntegrationsCore.Enums;
+using Domain.IntegrationsCore.Models.Exceptions;
 using Domain.Jadlog.Interfaces.Api;
 using Domain.Jadlog.Interfaces.Repositorys;
 using FluentValidation;

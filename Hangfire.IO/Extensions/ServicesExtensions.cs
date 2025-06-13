@@ -10,13 +10,6 @@ using Infrastructure.TotalExpress.DependencyInjection;
 using Infrastructure.AfterSale.DependencyInjection;
 using Infrastructure.Jadlog.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
-using Infrastructure.AfterSale.Data;
-using Infrastructure.LinxCommerce.Data;
-using Infrastructure.LinxMicrovix.Outbound.WebService.Data;
-using Infrastructure.FlashCourier.Data;
-using Infrastructure.Jadlog.Data;
-using Infrastructure.TotalExpress.Data;
-using Infrastructure.Dootax.Data;
 using Infrastructure.Dootax;
 using Infrastructure.IntegrationsCore.Repositorys;
 using Infrastructure.Movidesk;
@@ -51,194 +44,14 @@ namespace Hangfire.IO.Extensions
             var databaseType = builder.Configuration.GetSection("ConfigureServer").GetSection("DatabaseType").Value;
             var connectionstring = builder.Configuration.GetConnectionString("Connection");
 
-            if (databaseType == "SQLServer")
-            {
-                services.AddDbContext<AfterSaleTreatedDbContext>((serviceProvider, options) =>
-                {
-                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-                    options.UseSqlServer(connectionstring);
-                });
-                
-                services.AddDbContext<AfterSaleUntreatedDbContext>((serviceProvider, options) =>
-                {
-                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-                    options.UseSqlServer(connectionstring);
-                });
-
-                services.AddDbContext<DootaxTreatedDbContext>((serviceProvider, options) =>
-                {
-                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-                    options.UseSqlServer(connectionstring);
-                });
-
-                services.AddDbContext<DootaxUntreatedDbContext>((serviceProvider, options) =>
-                {
-                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-                    options.UseSqlServer(connectionstring);
-                });
-
-                services.AddDbContext<LinxCommerceDbContext>((serviceProvider, options) =>
-                {
-                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-                    options.UseSqlServer(connectionstring);
-                });
-
-                services.AddDbContext<LinxMicrovixOutboundTreatedDbContext>((serviceProvider, options) =>
-                {
-                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-                    options.UseSqlServer(connectionstring);
-                });
-
-                services.AddDbContext<LinxMicrovixOutboundUntreatedDbContext>((serviceProvider, options) =>
-                {
-                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-                    options.UseSqlServer(connectionstring);
-                });
-
-                services.AddDbContext<FlashCourierDbContext>((serviceProvider, options) =>
-                {
-                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-                    options.UseSqlServer(connectionstring);
-                });
-
-                services.AddDbContext<JadlogDbContext>((serviceProvider, options) =>
-                {
-                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-                    options.UseSqlServer(connectionstring);
-                });
-
-                services.AddDbContext<TotalExpressDbContext>((serviceProvider, options) =>
-                {
-                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-                    options.UseSqlServer(connectionstring);
-                });
-            }
-
-            if (databaseType == "MySql")
-            {
-                services.AddDbContext<AfterSaleTreatedDbContext>((serviceProvider, options) =>
-                {
-                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-                    options.UseMySQL(connectionstring);
-                });
-
-                services.AddDbContext<AfterSaleUntreatedDbContext>((serviceProvider, options) =>
-                {
-                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-                    options.UseMySQL(connectionstring);
-                });
-
-                services.AddDbContext<DootaxTreatedDbContext>((serviceProvider, options) =>
-                {
-                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-                    options.UseMySQL(connectionstring);
-                });
-
-                services.AddDbContext<DootaxUntreatedDbContext>((serviceProvider, options) =>
-                {
-                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-                    options.UseMySQL(connectionstring);
-                });
-
-                services.AddDbContext<LinxCommerceDbContext>((serviceProvider, options) =>
-                {
-                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-                    options.UseMySQL(connectionstring);
-                });
-
-                services.AddDbContext<LinxMicrovixOutboundTreatedDbContext>((serviceProvider, options) =>
-                {
-                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-                    options.UseMySQL(connectionstring);
-                });
-
-                services.AddDbContext<LinxMicrovixOutboundUntreatedDbContext>((serviceProvider, options) =>
-                {
-                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-                    options.UseMySQL(connectionstring);
-                });
-
-                services.AddDbContext<FlashCourierDbContext>((serviceProvider, options) =>
-                {
-                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-                    options.UseMySQL(connectionstring);
-                });
-
-                services.AddDbContext<JadlogDbContext>((serviceProvider, options) =>
-                {
-                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-                    options.UseMySQL(connectionstring);
-                });
-
-                services.AddDbContext<TotalExpressDbContext>((serviceProvider, options) =>
-                {
-                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-                    options.UseMySQL(connectionstring);
-                });
-            }
-
-            if (databaseType == "Postgree")
-            {
-                services.AddDbContext<AfterSaleTreatedDbContext>((serviceProvider, options) =>
-                {
-                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-                    options.UseNpgsql(connectionstring);
-                });
-
-                services.AddDbContext<AfterSaleUntreatedDbContext>((serviceProvider, options) =>
-                {
-                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-                    options.UseNpgsql(connectionstring);
-                });
-
-                services.AddDbContext<DootaxTreatedDbContext>((serviceProvider, options) =>
-                {
-                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-                    options.UseNpgsql(connectionstring);
-                });
-
-                services.AddDbContext<DootaxUntreatedDbContext>((serviceProvider, options) =>
-                {
-                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-                    options.UseNpgsql(connectionstring);
-                });
-
-                services.AddDbContext<LinxCommerceDbContext>((serviceProvider, options) =>
-                {
-                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-                    options.UseNpgsql(connectionstring);
-                });
-
-                services.AddDbContext<LinxMicrovixOutboundTreatedDbContext>((serviceProvider, options) =>
-                {
-                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-                    options.UseNpgsql(connectionstring);
-                });
-
-                services.AddDbContext<LinxMicrovixOutboundUntreatedDbContext>((serviceProvider, options) =>
-                {
-                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-                    options.UseNpgsql(connectionstring);
-                });
-
-                services.AddDbContext<FlashCourierDbContext>((serviceProvider, options) =>
-                {
-                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-                    options.UseNpgsql(connectionstring);
-                });
-
-                services.AddDbContext<JadlogDbContext>((serviceProvider, options) =>
-                {
-                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-                    options.UseNpgsql(connectionstring);
-                });
-
-                services.AddDbContext<TotalExpressDbContext>((serviceProvider, options) =>
-                {
-                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-                    options.UseNpgsql(connectionstring);
-                });
-            }
+            builder.Services.AddDbContextAfterSaleService(databaseType, connectionstring);
+            builder.Services.AddDbContextMovideskService(databaseType, connectionstring);
+            builder.Services.AddDbContextDootaxService(databaseType, connectionstring);
+            //builder.Services.AddDbContextLinxCommerceService(databaseType, connectionstring);
+            builder.Services.AddDbContextLinxMicrovixService(databaseType, connectionstring);
+            //builder.Services.AddDbContextFlashCourierService(databaseType, connectionstring);
+            //builder.Services.AddDbContextJadlogService(databaseType, connectionstring);
+            //builder.Services.AddDbContextTotalExpressService(databaseType, connectionstring);
 
             return services;
         }

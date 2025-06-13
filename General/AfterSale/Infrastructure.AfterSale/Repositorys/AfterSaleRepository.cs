@@ -1,12 +1,12 @@
 ﻿using Dapper;
 using Domain.AfterSale.Interfaces.Repositorys;
-using Domain.IntegrationsCore.Entities.Enums;
-using Domain.IntegrationsCore.Exceptions;
+using Domain.IntegrationsCore.Models.Exceptions;
 using Infrastructure.IntegrationsCore.Connections.SQLServer;
 using System.Data;
 using Domain.AfterSale.Entities;
 using Reverse = Domain.AfterSale.Entities.Reverse;
 using Domain.IntegrationsCore.Interfaces;
+using Domain.IntegrationsCore.Enums;
 
 namespace Infrastructure.AfterSale.Repositorys;
 

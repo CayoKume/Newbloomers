@@ -1,12 +1,10 @@
 ﻿using Dapper;
-using Domain.IntegrationsCore.Entities.Enums;
-using Domain.IntegrationsCore.Entities.Errors;
-using Domain.IntegrationsCore.Exceptions;
+using Domain.IntegrationsCore.Enums;
+using Domain.IntegrationsCore.Models.Exceptions;
 using Domain.LinxCommerce.Entities.Order;
 using Domain.LinxCommerce.Entities.Parameters;
 using Domain.LinxCommerce.Interfaces.Repositorys;
 using Infrastructure.IntegrationsCore.Connections.SQLServer;
-using System.Collections.Generic;
 using System.Data.SqlClient;
 
 namespace Infrastructure.LinxCommerce.Repositorys

@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.Entities.Enums;
+﻿using Domain.IntegrationsCore.Enums;
 using Domain.Movidesk.Entities;
 using Infrastructure.IntegrationsCore.Data.Extensions;
 using Infrastructure.IntegrationsCore.Data.Schemas;
@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Movidesk.Data.Mappings
 {
-    internal class MovideskPersonsMap : IEntityTypeConfiguration<Person>
+    public class MovideskPersonsMap : IEntityTypeConfiguration<Person>
     {
         public void Configure(EntityTypeBuilder<Person> builder)
         {
@@ -20,33 +20,33 @@ namespace Infrastructure.Movidesk.Data.Mappings
             if (schema != "untreated")
             {
                 builder
-                    .HasOne(x => x.addresses)
-                    .WithMany()
-                    .HasForeignKey(o => o.id)
+                    .HasMany(x => x.addresses)
+                    .WithOne()
+                    //.HasForeignKey(y => y.id)
                     .OnDelete(DeleteBehavior.NoAction);
 
                 builder
-                    .HasOne(x => x.contacts)
-                    .WithMany()
-                    .HasForeignKey(o => o.id)
+                    .HasMany(x => x.contacts)
+                    .WithOne()
+                    //.HasForeignKey(y => y.id)
                     .OnDelete(DeleteBehavior.NoAction);
 
                 builder
-                    .HasOne(x => x.emails)
-                    .WithMany()
-                    .HasForeignKey(o => o.id)
+                    .HasMany(x => x.emails)
+                    .WithOne()
+                    //.HasForeignKey(y => y.id)
                     .OnDelete(DeleteBehavior.NoAction);
 
                 builder
-                    .HasOne(x => x.relationships)
-                    .WithMany()
-                    .HasForeignKey(o => o.id)
+                    .HasMany(x => x.relationships)
+                    .WithOne()
+                    //.HasForeignKey(y => y.id)
                     .OnDelete(DeleteBehavior.NoAction);
 
                 builder
-                    .HasOne(x => x.customFieldValues)
-                    .WithMany()
-                    .HasForeignKey(o => o.id)
+                    .HasMany(x => x.customFieldValues)
+                    .WithOne()
+                    //.HasForeignKey(y => y.customFieldId)
                     .OnDelete(DeleteBehavior.NoAction);
             }
             else
@@ -60,7 +60,7 @@ namespace Infrastructure.Movidesk.Data.Mappings
 
             builder
                 .Property(x => x.id)
-                .HasColumnType("int");
+                .HasColumnType("varchar(60)");
 
             builder
                 .Property(x => x.personType)

@@ -11,7 +11,10 @@ using FluentValidation;
 using Infrastructure.LinxCommerce.Api;
 using Infrastructure.LinxCommerce.Repository;
 using Infrastructure.LinxCommerce.Repositorys;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
+using Infrastructure.LinxCommerce.Data;
 
 namespace Infrastructure.LinxCommerce.DependencyInjection
 {
@@ -89,6 +92,38 @@ namespace Infrastructure.LinxCommerce.DependencyInjection
             services.AddValidatorsFromAssemblyContaining<SalesRepresentativePortfolioValidator>();
             services.AddValidatorsFromAssemblyContaining<SalesRepresentativeShippingRegionValidator>();
             services.AddValidatorsFromAssemblyContaining<SalesRepresentativeWebSiteSettingsValidator>();
+
+            return services;
+        }
+
+        public static IServiceCollection AddDbContextLinxCommerceService(this IServiceCollection services, string databaseType, string connectionstring)
+        {
+            if (databaseType == "SQLServer")
+            {
+                services.AddDbContext<LinxCommerceDbContext>((serviceProvider, options) =>
+                {
+                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+                    options.UseSqlServer(connectionstring);
+                });
+            }
+
+            if (databaseType == "MySql")
+            {
+                services.AddDbContext<LinxCommerceDbContext>((serviceProvider, options) =>
+                {
+                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+                    options.UseMySQL(connectionstring);
+                });
+            }
+
+            if (databaseType == "Postgree")
+            {
+                services.AddDbContext<LinxCommerceDbContext>((serviceProvider, options) =>
+                {
+                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+                    options.UseNpgsql(connectionstring);
+                });
+            }
 
             return services;
         }

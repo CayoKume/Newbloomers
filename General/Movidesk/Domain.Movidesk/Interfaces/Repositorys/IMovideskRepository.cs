@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Domain.Movidesk.Entities;
 
 namespace Domain.Movidesk.Interfaces.Repositorys
 {
     public interface IMovideskRepository
     {
+        public Task<Parameters> GetTokenAsync();
     }
 }

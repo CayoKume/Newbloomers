@@ -2,8 +2,8 @@
 using Domain.AfterSale.Entities;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Infrastructure.IntegrationsCore.Data.Schemas;
-using Domain.IntegrationsCore.Entities.Enums;
 using Infrastructure.IntegrationsCore.Data.Extensions;
+using Domain.IntegrationsCore.Enums;
 
 namespace Infrastructure.AfterSale.Data.Mappings
 {

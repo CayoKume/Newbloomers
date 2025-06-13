@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.Entities.Bases;
+﻿using Domain.IntegrationsCore.Models.Bases;
 
 namespace Domain.AfterSale.Entities
 {

@@ -9,7 +9,7 @@ namespace Infrastructure.Movidesk.Api
         public APICall(IHttpClientFactory httpClientFactory) =>
             (_httpClientFactory) = (httpClientFactory);
 
-        public async Task<string> GetAsync(string rote, string token)
+        public async Task<string> GetAsync(string rote, Guid? token)
         {
             try
             {
@@ -24,7 +24,7 @@ namespace Infrastructure.Movidesk.Api
             }
         }
 
-        public async Task<string> GetAsync(string rote, string token, string filters, string selectItens, string expandItens)
+        public async Task<string> GetAsync(string rote, Guid? token, string filters, string selectItens, string expandItens)
         {
             try
             {

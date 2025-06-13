@@ -1,7 +1,4 @@
-﻿using Domain.IntegrationsCore.Entities.Enums;
-using Domain.IntegrationsCore.Exceptions;
-
-namespace Domain.LinxCommerce.Entities.Order
+﻿namespace Domain.LinxCommerce.Entities.Order
 {
     public class OrderDeliveryMethod
     {

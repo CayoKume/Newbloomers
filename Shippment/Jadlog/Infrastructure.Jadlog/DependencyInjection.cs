@@ -6,7 +6,10 @@ using Domain.Jadlog.Interfaces.Repositorys;
 using FluentValidation;
 using Infrastructure.Jadlog.Api;
 using Infrastructure.Jadlog.Repositorys;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
+using Infrastructure.Jadlog.Data;
 
 namespace Infrastructure.Jadlog.DependencyInjection
 {
@@ -35,6 +38,38 @@ namespace Infrastructure.Jadlog.DependencyInjection
 
             services.AddScoped<IJadlogService, JadlogService>();
             services.AddScoped<IJadlogRepository, JadlogRepository>();
+
+            return services;
+        }
+
+        public static IServiceCollection AddDbContextJadlogService(this IServiceCollection services, string databaseType, string connectionstring)
+        {
+            if (databaseType == "SQLServer")
+            {
+                services.AddDbContext<JadlogDbContext>((serviceProvider, options) =>
+                {
+                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+                    options.UseSqlServer(connectionstring);
+                });
+            }
+
+            if (databaseType == "MySql")
+            {
+                services.AddDbContext<JadlogDbContext>((serviceProvider, options) =>
+                {
+                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+                    options.UseMySQL(connectionstring);
+                });
+            }
+
+            if (databaseType == "Postgree")
+            {
+                services.AddDbContext<JadlogDbContext>((serviceProvider, options) =>
+                {
+                    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+                    options.UseNpgsql(connectionstring);
+                });
+            }
 
             return services;
         }
