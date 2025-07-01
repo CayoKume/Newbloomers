@@ -2,6 +2,11 @@
 {
     public class DeliveryAddress
     {
+        /// <summary>
+        /// auto increment property created to be the primary key of the migration
+        /// </summary>
+        public Int32? id { get; private set; }
+
         public string? address { get; set; }
         public string? addressNumber { get; set; }
         public string? city { get; set; }

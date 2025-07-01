@@ -17,7 +17,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
         private readonly IAPICall _apiCall;
         private readonly ILoggerService _logger;
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
-        private readonly ILinxMicrovixAzureSQLRepositoryBase<LinxNaturezaOperacao> _linxMicrovixRepositoryBase;
+        private readonly ILinxMicrovixRepositoryBase<LinxNaturezaOperacao> _linxMicrovixRepositoryBase;
         private readonly ILinxNaturezaOperacaoRepository _linxNaturezaOperacaoRepository;
         private static List<string?> _linxNaturezaOperacaoCache { get; set; } = new List<string?>();
 
@@ -25,7 +25,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
             IAPICall apiCall,
             ILoggerService logger,
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
-            ILinxMicrovixAzureSQLRepositoryBase<LinxNaturezaOperacao> linxMicrovixRepositoryBase,
+            ILinxMicrovixRepositoryBase<LinxNaturezaOperacao> linxMicrovixRepositoryBase,
             ILinxNaturezaOperacaoRepository linxNaturezaOperacaoRepository
         )
         {
@@ -216,7 +216,10 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                     var listRecords = DeserializeXMLToObject(jobParameter, xmls);
 
                     if (_linxNaturezaOperacaoCache.Count == 0)
-                        _linxNaturezaOperacaoCache = await _linxNaturezaOperacaoRepository.GetRegistersExists();
+                    {
+                        var list = await _linxNaturezaOperacaoRepository.GetRegistersExists();
+                        _linxNaturezaOperacaoCache = list.ToList();
+                    }
 
                     var _listSomenteNovos = listRecords.Where(x => !_linxNaturezaOperacaoCache.Any(y => 
                         y == x.recordKey

@@ -9,9 +9,9 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxMicrovi
 {
     public class LinxProdutosDetalhesRepository : ILinxProdutosDetalhesRepository
     {
-        private readonly ILinxMicrovixAzureSQLRepositoryBase<LinxProdutosDetalhes> _linxMicrovixRepositoryBase;
+        private readonly ILinxMicrovixRepositoryBase<LinxProdutosDetalhes> _linxMicrovixRepositoryBase;
 
-        public LinxProdutosDetalhesRepository(ILinxMicrovixAzureSQLRepositoryBase<LinxProdutosDetalhes> linxMicrovixRepositoryBase) =>
+        public LinxProdutosDetalhesRepository(ILinxMicrovixRepositoryBase<LinxProdutosDetalhes> linxMicrovixRepositoryBase) =>
             (_linxMicrovixRepositoryBase) = (linxMicrovixRepositoryBase);
 
         public bool BulkInsertIntoTableRaw(LinxAPIParam jobParameter, IList<LinxProdutosDetalhes> records)
@@ -28,8 +28,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxMicrovi
                 }
 
                 _linxMicrovixRepositoryBase.BulkInsertIntoTableRaw(
-                    dataTable: table,
-                    dataTableRowsNumber: table.Rows.Count
+                    dataTable: table
                 );
 
                 return true;
@@ -40,7 +39,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxMicrovi
             }
         }
 
-        public async Task<List<LinxProdutosDetalhes>> GetRegistersExists(LinxAPIParam jobParameter, List<LinxProdutosDetalhes> registros)
+        public async Task<IEnumerable<LinxProdutosDetalhes>> GetRegistersExists(LinxAPIParam jobParameter, List<LinxProdutosDetalhes> registros)
         {
             try
             {
@@ -73,7 +72,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxMicrovi
             }
         }
 
-        public async Task<List<LinxProdutosDetalhes>> GetRegistersExists(LinxAPIParam jobParameter)
+        public async Task<IEnumerable<LinxProdutosDetalhes>> GetRegistersExists(LinxAPIParam jobParameter)
         {
             try
             {

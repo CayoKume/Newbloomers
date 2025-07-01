@@ -108,6 +108,13 @@ namespace Application.IntegrationsCore.Interfaces
         /// </summary>
         /// <returns></returns>
         public Guid? GetExecutionGuid();
+
+        /// <summary>
+        /// Returns the SHA256 hash of a JSON string for reponses that not contains any comparable field, like a timestamp or a unique identifier.
+        /// </summary>
+        /// <param name="json"></param>
+        /// <returns></returns>
+        public string ComputeSha256Hash(string json);
     }
 }
 

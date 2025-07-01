@@ -17,7 +17,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
         private readonly IAPICall _apiCall;
         private readonly ILoggerService _logger;
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
-        private readonly ILinxMicrovixAzureSQLRepositoryBase<LinxProdutosTabelasPrecos> _linxMicrovixRepositoryBase;
+        private readonly ILinxMicrovixRepositoryBase<LinxProdutosTabelasPrecos> _linxMicrovixRepositoryBase;
         private readonly ILinxProdutosTabelasPrecosRepository _linxProdutosTabelasPrecosRepository;
         private static List<string?> _linxProdutosTabelasPrecosCache { get; set; } = new List<string?>();
 
@@ -25,7 +25,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
             IAPICall apiCall,
             ILoggerService logger,
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
-            ILinxMicrovixAzureSQLRepositoryBase<LinxProdutosTabelasPrecos> linxMicrovixRepositoryBase,
+            ILinxMicrovixRepositoryBase<LinxProdutosTabelasPrecos> linxMicrovixRepositoryBase,
             ILinxProdutosTabelasPrecosRepository linxProdutosTabelasPrecosRepository
         )
         {
@@ -208,10 +208,14 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                     var listRecords = DeserializeXMLToObject(jobParameter, xmls);
 
                     if (_linxProdutosTabelasPrecosCache.Count == 0)
-                        _linxProdutosTabelasPrecosCache = await _linxProdutosTabelasPrecosRepository.GetRegistersExists(
+                    {
+                        var list = await _linxProdutosTabelasPrecosRepository.GetRegistersExists(
                             jobParameter: jobParameter, 
                             registros: listRecords.Select(x => x.cod_produto).ToList()
                         );
+
+                        _linxProdutosTabelasPrecosCache = list.ToList();
+                    }
 
                     var _listSomenteNovos = listRecords.Where(x => !_linxProdutosTabelasPrecosCache.Any(y => 
                         y == x.recordKey

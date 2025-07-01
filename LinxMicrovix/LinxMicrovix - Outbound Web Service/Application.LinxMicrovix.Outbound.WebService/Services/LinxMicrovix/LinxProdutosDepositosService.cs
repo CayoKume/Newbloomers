@@ -17,7 +17,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
         private readonly IAPICall _apiCall;
         private readonly ILoggerService _logger;
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
-        private readonly ILinxMicrovixAzureSQLRepositoryBase<LinxProdutosDepositos> _linxMicrovixRepositoryBase;
+        private readonly ILinxMicrovixRepositoryBase<LinxProdutosDepositos> _linxMicrovixRepositoryBase;
         private readonly ILinxProdutosDepositosRepository _linxProdutosDepositosRepository;
         private static List<string?> _linxProdutosDepositosCache { get; set; } = new List<string?>();
 
@@ -25,7 +25,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
             IAPICall apiCall,
             ILoggerService logger,
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
-            ILinxMicrovixAzureSQLRepositoryBase<LinxProdutosDepositos> linxMicrovixRepositoryBase,
+            ILinxMicrovixRepositoryBase<LinxProdutosDepositos> linxMicrovixRepositoryBase,
             ILinxProdutosDepositosRepository linxProdutosDepositosRepository
         )
         {
@@ -186,7 +186,10 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                     var listRecords = DeserializeXMLToObject(jobParameter, xmls);
 
                     if (_linxProdutosDepositosCache.Count == 0)
-                        _linxProdutosDepositosCache = await _linxProdutosDepositosRepository.GetRegistersExists();
+                    {
+                        var list = await _linxProdutosDepositosRepository.GetRegistersExists();
+                        _linxProdutosDepositosCache = list.ToList();
+                    }
 
                     var _listSomenteNovos = listRecords.Where(x => !_linxProdutosDepositosCache.Any(y => 
                         y == x.recordKey

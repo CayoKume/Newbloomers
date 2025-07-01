@@ -106,6 +106,8 @@
         LinxCommerceSku = 913,
         LinxCommerceProduct = 909,
 
-        JadlogSearchTrackingHistory = 1100
+        JadlogSearchTrackingHistory = 1100,
+
+        AfterSaleEcommerces = 1200
     }
 }

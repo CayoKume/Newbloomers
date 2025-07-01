@@ -3,6 +3,7 @@ using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxCommerce;
 using Domain.IntegrationsCore.Entities.Exceptions;
 using Domain.IntegrationsCore.Enums;
+using Domain.IntegrationsCore.Interfaces;
 using Domain.LinxMicrovix.Outbound.WebService.Entities.LinxCommerce;
 using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Api;
@@ -17,7 +18,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
         private readonly IAPICall _apiCall;
         private readonly ILoggerService _logger;
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
-        private readonly ILinxMicrovixAzureSQLRepositoryBase<B2CConsultaClientesEnderecosEntrega> _linxMicrovixRepositoryBase;
+        private readonly ILinxMicrovixRepositoryBase<B2CConsultaClientesEnderecosEntrega> _linxMicrovixRepositoryBase;
         private readonly IB2CConsultaClientesEnderecosEntregaRepository _b2cConsultaClientesEnderecosEntregaRepository;
         private static List<string?> _b2cConsultaClientesEnderecosEntregaCache { get; set; } = new List<string?>();
 
@@ -25,7 +26,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
             IAPICall apiCall,
             ILoggerService logger,
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
-            ILinxMicrovixAzureSQLRepositoryBase<B2CConsultaClientesEnderecosEntrega> linxMicrovixRepositoryBase,
+            ILinxMicrovixRepositoryBase<B2CConsultaClientesEnderecosEntrega> linxMicrovixRepositoryBase,
             IB2CConsultaClientesEnderecosEntregaRepository b2cConsultaClientesEnderecosEntregaRepository
         )
         {
@@ -160,12 +161,16 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                     var listRecords = DeserializeXMLToObject(jobParameter, xmls);
 
                     if (_b2cConsultaClientesEnderecosEntregaCache.Count == 0)
-                        _b2cConsultaClientesEnderecosEntregaCache = await _b2cConsultaClientesEnderecosEntregaRepository.GetRegistersExists(
+                    {
+                        var list = await _b2cConsultaClientesEnderecosEntregaRepository.GetRegistersExists(
                             jobParameter: jobParameter,
                             registros: listRecords
                                         .Select(x => x.id_endereco_entrega)
                                         .ToList()
                         );
+
+                        _b2cConsultaClientesEnderecosEntregaCache = list.ToList();
+                    }
 
                     var _listSomenteNovos = listRecords.Where(x => !_b2cConsultaClientesEnderecosEntregaCache.Any(y =>
                         y == x.recordKey

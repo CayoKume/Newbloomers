@@ -17,7 +17,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
         private readonly IAPICall _apiCall;
         private readonly ILoggerService _logger;
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
-        private readonly ILinxMicrovixAzureSQLRepositoryBase<LinxXMLDocumentos> _linxMicrovixRepositoryBase;
+        private readonly ILinxMicrovixRepositoryBase<LinxXMLDocumentos> _linxMicrovixRepositoryBase;
         private readonly ILinxXMLDocumentosRepository _linxXMLDocumentosRepository;
         private static List<string> _linxXMLDocumentosCache { get; set; } = new List<string>();
 
@@ -25,7 +25,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
             IAPICall apiCall,
             ILoggerService logger,
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
-            ILinxMicrovixAzureSQLRepositoryBase<LinxXMLDocumentos> linxMicrovixRepositoryBase,
+            ILinxMicrovixRepositoryBase<LinxXMLDocumentos> linxMicrovixRepositoryBase,
             ILinxXMLDocumentosRepository linxXMLDocumentosRepository
         )
         {
@@ -190,7 +190,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                 foreach (var cnpj_emp in cnpjs_emp)
                 {
                     var body = _linxMicrovixServiceBase.BuildBodyRequest(
-                                parametersList: parameters.Replace("[0]", "0").Replace("[data_inicial]", $"{DateTime.Today.AddDays(-31).ToString("yyyy-MM-dd")}").Replace("[data_fim]", $"{DateTime.Today.ToString("yyyy-MM-dd")}"),
+                                parametersList: parameters.Replace("[0]", "0").Replace("[data_inicial]", $"{DateTime.Today.AddDays(-7).ToString("yyyy-MM-dd")}").Replace("[data_fim]", $"{DateTime.Today.ToString("yyyy-MM-dd")}"),
                                 jobParameter: jobParameter,
                                 cnpj_emp: cnpj_emp.doc_company
                             );
@@ -205,10 +205,14 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                     var listRecords = DeserializeXMLToObject(jobParameter, xmls);
 
                     if (_linxXMLDocumentosCache.Count == 0)
-                        _linxXMLDocumentosCache = await _linxXMLDocumentosRepository.GetRegistersExists(
+                    {
+                        var list = await _linxXMLDocumentosRepository.GetRegistersExists(
                             jobParameter: jobParameter, 
                             registros: listRecords.Select(x => x.chave_nfe).ToList()
                         );
+
+                        _linxXMLDocumentosCache = list.ToList();
+                    }
 
                     var _listSomenteNovos = listRecords.Where(x => !_linxXMLDocumentosCache.Any(y => 
                         y == x.recordKey

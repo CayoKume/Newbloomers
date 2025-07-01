@@ -17,7 +17,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
         private readonly IAPICall _apiCall;
         private readonly ILoggerService _logger;
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
-        private readonly ILinxMicrovixAzureSQLRepositoryBase<LinxProdutosInventario> _linxMicrovixRepositoryBase;
+        private readonly ILinxMicrovixRepositoryBase<LinxProdutosInventario> _linxMicrovixRepositoryBase;
         private readonly ILinxProdutosInventarioRepository _linxProdutosInventarioRepository;
         //NÃO ADICIONADO SISTEMA DE CACHE POR CONTA DE REGRA DE NEGOCIO, A PROC DE SINCRONIZAÇÃO PRECISA RECEBER TODOS OS DADOS DA API EM TODAS AS EXECUÇÕES DO JOB
 
@@ -25,7 +25,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
             IAPICall apiCall,
             ILoggerService logger,
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
-            ILinxMicrovixAzureSQLRepositoryBase<LinxProdutosInventario> linxMicrovixRepositoryBase,
+            ILinxMicrovixRepositoryBase<LinxProdutosInventario> linxMicrovixRepositoryBase,
             ILinxProdutosInventarioRepository linxProdutosInventarioRepository
         )
         {

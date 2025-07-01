@@ -17,7 +17,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
         private readonly IAPICall _apiCall;
         private readonly ILoggerService _logger;
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
-        private readonly ILinxMicrovixAzureSQLRepositoryBase<LinxMovimentoPlanos> _linxMicrovixRepositoryBase;
+        private readonly ILinxMicrovixRepositoryBase<LinxMovimentoPlanos> _linxMicrovixRepositoryBase;
         private readonly ILinxMovimentoPlanosRepository _linxMovimentoPlanosRepository;
         private static List<string?> _linxMovimentoPlanosCache { get; set; } = new List<string?>();
 
@@ -25,7 +25,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
             IAPICall apiCall,
             ILoggerService logger,
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
-            ILinxMicrovixAzureSQLRepositoryBase<LinxMovimentoPlanos> linxMicrovixRepositoryBase,
+            ILinxMicrovixRepositoryBase<LinxMovimentoPlanos> linxMicrovixRepositoryBase,
             ILinxMovimentoPlanosRepository linxMovimentoPlanosRepository
         )
         {
@@ -209,10 +209,14 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                     var listRecords = DeserializeXMLToObject(jobParameter, xmls);
 
                     if (_linxMovimentoPlanosCache.Count == 0)
-                        _linxMovimentoPlanosCache = await _linxMovimentoPlanosRepository.GetRegistersExists(
+                    {
+                        var list = await _linxMovimentoPlanosRepository.GetRegistersExists(
                             jobParameter: jobParameter, 
                             registros: listRecords
                         );
+
+                        _linxMovimentoPlanosCache = list.ToList();
+                    }
 
                     var _listSomenteNovos = listRecords.Where(x => !_linxMovimentoPlanosCache.Any(y => 
                         y == x.recordKey

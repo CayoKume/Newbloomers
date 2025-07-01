@@ -17,7 +17,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
         private readonly IAPICall _apiCall;
         private readonly ILoggerService _logger;
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
-        private readonly ILinxMicrovixAzureSQLRepositoryBase<LinxUsuarios> _linxMicrovixRepositoryBase;
+        private readonly ILinxMicrovixRepositoryBase<LinxUsuarios> _linxMicrovixRepositoryBase;
         private readonly ILinxUsuariosRepository _linxUsuariosRepository;
         private static List<string?> _linxUsuariosCache { get; set; } = new List<string?>();
 
@@ -25,7 +25,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
             IAPICall apiCall,
             ILoggerService logger,
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
-            ILinxMicrovixAzureSQLRepositoryBase<LinxUsuarios> linxMicrovixRepositoryBase,
+            ILinxMicrovixRepositoryBase<LinxUsuarios> linxMicrovixRepositoryBase,
             ILinxUsuariosRepository linxUsuariosRepository
         )
         {
@@ -121,12 +121,16 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                     var listRecords = DeserializeXMLToObject(jobParameter, xmls);
 
                     if (_linxUsuariosCache.Count == 0)
-                        _linxUsuariosCache = await _linxUsuariosRepository.GetRegistersExists(
+                    {
+                        var list = await _linxUsuariosRepository.GetRegistersExists(
                             jobParameter: jobParameter,
                             registros: listRecords
                                         .Select(x => x.usuario_id)
                                         .ToList()
                         );
+
+                        _linxUsuariosCache = list.ToList();
+                    }
 
                     var _listSomenteNovos = listRecords.Where(x => !_linxUsuariosCache.Any(y =>
                         y == x.recordKey

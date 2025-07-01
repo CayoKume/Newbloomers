@@ -1,5 +1,5 @@
 ﻿using Domain.IntegrationsCore.Enums;
-using Domain.IntegrationsCore.Models.Exceptions;
+using Domain.IntegrationsCore.Entities.Exceptions;
 using Domain.LinxCommerce.Entities.Parameters;
 using Domain.LinxCommerce.Interfaces.Api;
 using System.Net;

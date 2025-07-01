@@ -3,6 +3,7 @@ using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxCommerce;
 using Domain.IntegrationsCore.Entities.Exceptions;
 using Domain.IntegrationsCore.Enums;
+using Domain.IntegrationsCore.Interfaces;
 using Domain.LinxMicrovix.Outbound.WebService.Entities.LinxCommerce;
 using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Api;
@@ -17,7 +18,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
         private readonly IAPICall _apiCall;
         private readonly ILoggerService _logger;
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
-        private readonly ILinxMicrovixAzureSQLRepositoryBase<B2CConsultaPedidosStatus> _linxMicrovixRepositoryBase;
+        private readonly ILinxMicrovixRepositoryBase<B2CConsultaPedidosStatus> _linxMicrovixRepositoryBase;
         private readonly IB2CConsultaPedidosStatusRepository _b2cConsultaPedidosStatusRepository;
         private static List<string?> _b2cConsultaPedidosStatusCache { get; set; } = new List<string?>();
 
@@ -25,7 +26,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
             IAPICall apiCall,
             ILoggerService logger,
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
-            ILinxMicrovixAzureSQLRepositoryBase<B2CConsultaPedidosStatus> linxMicrovixRepositoryBase,
+            ILinxMicrovixRepositoryBase<B2CConsultaPedidosStatus> linxMicrovixRepositoryBase,
             IB2CConsultaPedidosStatusRepository b2cConsultaPedidosStatusRepository
         )
         {
@@ -188,12 +189,16 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                     var listRecords = DeserializeXMLToObject(jobParameter, xmls);
 
                     if (_b2cConsultaPedidosStatusCache.Count == 0)
-                        _b2cConsultaPedidosStatusCache = await _b2cConsultaPedidosStatusRepository.GetRegistersExists(
+                    {
+                        var list = await _b2cConsultaPedidosStatusRepository.GetRegistersExists(
                             jobParameter: jobParameter, 
                             registros: listRecords
                                         .Select(x => x.id)
                                         .ToList()
                         );
+
+                        _b2cConsultaPedidosStatusCache = list.ToList();
+                    }
 
 
                     var _listSomenteNovos = listRecords.Where(x => !_b2cConsultaPedidosStatusCache.Any(y => 

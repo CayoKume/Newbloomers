@@ -17,7 +17,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
         private readonly IAPICall _apiCall;
         private readonly ILoggerService _logger;
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
-        private readonly ILinxMicrovixAzureSQLRepositoryBase<LinxMovimentoCartoes> _linxMicrovixRepositoryBase;
+        private readonly ILinxMicrovixRepositoryBase<LinxMovimentoCartoes> _linxMicrovixRepositoryBase;
         private readonly ILinxMovimentoCartoesRepository _linxMovimentoCartoesRepository;
         private static List<string?> _linxMovimentoCartoesCache { get; set; } = new List<string?>();
 
@@ -25,7 +25,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
             IAPICall apiCall,
             ILoggerService logger,
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
-            ILinxMicrovixAzureSQLRepositoryBase<LinxMovimentoCartoes> linxMicrovixRepositoryBase,
+            ILinxMicrovixRepositoryBase<LinxMovimentoCartoes> linxMicrovixRepositoryBase,
             ILinxMovimentoCartoesRepository linxMovimentoCartoesRepository
         )
         {
@@ -216,13 +216,17 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                     var listRecords = DeserializeXMLToObject(jobParameter, xmls);
 
                     if (_linxMovimentoCartoesCache.Count == 0)
-                        _linxMovimentoCartoesCache = await _linxMovimentoCartoesRepository.GetRegistersExists(
+                    {
+                        var list = await _linxMovimentoCartoesRepository.GetRegistersExists(
                             jobParameter: jobParameter, 
                             registros: listRecords
                                         .GroupBy(y => y.identificador)
                                         .Select(x => x.First())
                                         .ToList()
                         );
+
+                        _linxMovimentoCartoesCache = list.ToList();
+                    }
 
                     var _listSomenteNovos = listRecords.Where(x => !_linxMovimentoCartoesCache.Any(y => 
                         y == x.recordKey

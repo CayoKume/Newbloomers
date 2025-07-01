@@ -17,7 +17,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
         private readonly IAPICall _apiCall;
         private readonly ILoggerService _logger;
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
-        private readonly ILinxMicrovixAzureSQLRepositoryBase<B2CConsultaStatus> _linxMicrovixRepositoryBase;
+        private readonly ILinxMicrovixRepositoryBase<B2CConsultaStatus> _linxMicrovixRepositoryBase;
         private readonly IB2CConsultaStatusRepository _b2cConsultaStatusRepository;
         private static List<string?> _b2cConsultaStatusCache { get; set; } = new List<string?>();
 
@@ -25,7 +25,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
             IAPICall apiCall,
             ILoggerService logger,
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
-            ILinxMicrovixAzureSQLRepositoryBase<B2CConsultaStatus> linxMicrovixRepositoryBase,
+            ILinxMicrovixRepositoryBase<B2CConsultaStatus> linxMicrovixRepositoryBase,
             IB2CConsultaStatusRepository b2cConsultaStatusRepository
         )
         {
@@ -120,12 +120,16 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                     var listRecords = DeserializeXMLToObject(jobParameter, xmls);
 
                     if (_b2cConsultaStatusCache.Count == 0)
-                        _b2cConsultaStatusCache = await _b2cConsultaStatusRepository.GetRegistersExists(
+                    {
+                        var list = await _b2cConsultaStatusRepository.GetRegistersExists(
                             jobParameter: jobParameter, 
                             registros: listRecords
                                         .Select(x => x.id_status)
                                         .ToList()
                         );
+
+                        _b2cConsultaStatusCache = list.ToList();
+                    }
 
                     var _listSomenteNovos = listRecords.Where(x => !_b2cConsultaStatusCache.Any(y => 
                         y == x.recordKey

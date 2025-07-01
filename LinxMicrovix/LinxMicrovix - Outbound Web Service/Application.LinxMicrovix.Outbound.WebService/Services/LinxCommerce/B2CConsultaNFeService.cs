@@ -3,6 +3,7 @@ using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxCommerce;
 using Domain.IntegrationsCore.Entities.Exceptions;
 using Domain.IntegrationsCore.Enums;
+using Domain.IntegrationsCore.Interfaces;
 using Domain.LinxMicrovix.Outbound.WebService.Entities.LinxCommerce;
 using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Api;
@@ -17,7 +18,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
         private readonly IAPICall _apiCall;
         private readonly ILoggerService _logger;
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
-        private readonly ILinxMicrovixAzureSQLRepositoryBase<B2CConsultaNFe> _linxMicrovixRepositoryBase;
+        private readonly ILinxMicrovixRepositoryBase<B2CConsultaNFe> _linxMicrovixRepositoryBase;
         private readonly IB2CConsultaNFeRepository _b2cConsultaNFeRepository;
         private static List<string?> _b2cConsultaNFeCache { get; set; } = new List<string?>();
 
@@ -25,7 +26,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
             IAPICall apiCall,
             ILoggerService logger,
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
-            ILinxMicrovixAzureSQLRepositoryBase<B2CConsultaNFe> linxMicrovixRepositoryBase,
+            ILinxMicrovixRepositoryBase<B2CConsultaNFe> linxMicrovixRepositoryBase,
             IB2CConsultaNFeRepository b2cConsultaNFeRepository
         )
         {
@@ -200,12 +201,16 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                     var listRecords = DeserializeXMLToObject(jobParameter, xmls);
 
                     if (_b2cConsultaNFeCache.Count == 0)
-                        _b2cConsultaNFeCache = await _b2cConsultaNFeRepository.GetRegistersExists(
+                    {
+                        var list = await _b2cConsultaNFeRepository.GetRegistersExists(
                             jobParameter: jobParameter, 
                             registros: listRecords
                                         .Select(x => x.id_nfe)
                                         .ToList()
                         );
+
+                        _b2cConsultaNFeCache = list.ToList();
+                    }
 
                     var _listSomenteNovos = listRecords.Where(x => !_b2cConsultaNFeCache.Any(y => 
                         y == x.recordKey

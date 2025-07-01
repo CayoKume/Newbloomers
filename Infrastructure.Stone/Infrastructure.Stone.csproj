@@ -12,8 +12,4 @@
     <ProjectReference Include="..\Shippment\Stone\Domain.Stone\Domain.Stone.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Data\Mappings\" />
-  </ItemGroup>
-
 </Project>

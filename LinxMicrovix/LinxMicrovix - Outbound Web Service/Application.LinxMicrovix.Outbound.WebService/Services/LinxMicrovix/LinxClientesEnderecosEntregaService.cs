@@ -17,7 +17,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
         private readonly IAPICall _apiCall;
         private readonly ILoggerService _logger;
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
-        private readonly ILinxMicrovixAzureSQLRepositoryBase<LinxClientesEnderecosEntrega> _linxMicrovixRepositoryBase;
+        private readonly ILinxMicrovixRepositoryBase<LinxClientesEnderecosEntrega> _linxMicrovixRepositoryBase;
         private readonly ILinxClientesEnderecosEntregaRepository _linxClientesEnderecosEntregaRepository;
         private static List<string?> _linxClientesEnderecosEntregaCache { get; set; } = new List<string?>();
 
@@ -25,7 +25,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
             IAPICall apiCall,
             ILoggerService logger,
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
-            ILinxMicrovixAzureSQLRepositoryBase<LinxClientesEnderecosEntrega> linxMicrovixRepositoryBase,
+            ILinxMicrovixRepositoryBase<LinxClientesEnderecosEntrega> linxMicrovixRepositoryBase,
             ILinxClientesEnderecosEntregaRepository linxClientesEnderecosEntregaRepository
         )
         {
@@ -125,12 +125,16 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                     var listRecords = DeserializeXMLToObject(jobParameter, xmls);
 
                     if (_linxClientesEnderecosEntregaCache.Count == 0)
-                        _linxClientesEnderecosEntregaCache = await _linxClientesEnderecosEntregaRepository.GetRegistersExists(
+                    {
+                        var list = await _linxClientesEnderecosEntregaRepository.GetRegistersExists(
                             jobParameter: jobParameter,
                             registros: listRecords
                                         .Select(x => x.id_endereco_entrega)
                                         .ToList()
                         );
+
+                        _linxClientesEnderecosEntregaCache = list.ToList();
+                    }
 
                     var _listSomenteNovos = listRecords.Where(x => !_linxClientesEnderecosEntregaCache.Any(y =>
                         y == x.recordKey

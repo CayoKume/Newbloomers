@@ -3,6 +3,7 @@ using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxCommerce;
 using Domain.IntegrationsCore.Entities.Exceptions;
 using Domain.IntegrationsCore.Enums;
+using Domain.IntegrationsCore.Interfaces;
 using Domain.LinxMicrovix.Outbound.WebService.Entities.LinxCommerce;
 using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Api;
@@ -17,7 +18,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
         private readonly IAPICall _apiCall;
         private readonly ILoggerService _logger;
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
-        private readonly ILinxMicrovixAzureSQLRepositoryBase<B2CConsultaCNPJsChave> _linxMicrovixRepositoryBase;
+        private readonly ILinxMicrovixRepositoryBase<B2CConsultaCNPJsChave> _linxMicrovixRepositoryBase;
         private readonly IB2CConsultaCNPJsChaveRepository _b2cConsultaCNPJsChaveRepository;
         private static List<string?> _b2cConsultaCNPJsChaveCache { get; set; } = new List<string?>();
 
@@ -26,7 +27,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
             ILoggerService logger,
             IB2CConsultaCNPJsChaveRepository b2cConsultaCNPJsChaveRepository,
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
-            ILinxMicrovixAzureSQLRepositoryBase<B2CConsultaCNPJsChave> linxMicrovixRepositoryBase
+            ILinxMicrovixRepositoryBase<B2CConsultaCNPJsChave> linxMicrovixRepositoryBase
         )
         {
             _apiCall = apiCall;

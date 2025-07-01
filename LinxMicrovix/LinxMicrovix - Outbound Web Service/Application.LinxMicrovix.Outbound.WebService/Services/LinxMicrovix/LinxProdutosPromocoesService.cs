@@ -17,7 +17,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
         private readonly IAPICall _apiCall;
         private readonly ILoggerService _logger;
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
-        private readonly ILinxMicrovixAzureSQLRepositoryBase<LinxProdutosPromocoes> _linxMicrovixRepositoryBase;
+        private readonly ILinxMicrovixRepositoryBase<LinxProdutosPromocoes> _linxMicrovixRepositoryBase;
         private readonly ILinxProdutosPromocoesRepository _linxProdutosPromocoesRepository;
         private static List<string?> _linxProdutosPromocoesCache { get; set; } = new List<string?>();
 
@@ -25,7 +25,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
             IAPICall apiCall,
             ILoggerService logger,
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
-            ILinxMicrovixAzureSQLRepositoryBase<LinxProdutosPromocoes> linxMicrovixRepositoryBase,
+            ILinxMicrovixRepositoryBase<LinxProdutosPromocoes> linxMicrovixRepositoryBase,
             ILinxProdutosPromocoesRepository linxProdutosPromocoesRepository
         )
         {
@@ -136,10 +136,14 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                     var listRecords = DeserializeXMLToObject(jobParameter, xmls);
 
                     if (_linxProdutosPromocoesCache.Count == 0)
-                        _linxProdutosPromocoesCache = await _linxProdutosPromocoesRepository.GetRegistersExists(
+                    {
+                        var list = await _linxProdutosPromocoesRepository.GetRegistersExists(
                             jobParameter: jobParameter, 
                             registros: listRecords.Select(x => x.cod_produto).ToList()
                         );
+
+                        _linxProdutosPromocoesCache = list.ToList();
+                    }
 
                     var _listSomenteNovos = listRecords.Where(x => !_linxProdutosPromocoesCache.Any(y => 
                         y == x.recordKey

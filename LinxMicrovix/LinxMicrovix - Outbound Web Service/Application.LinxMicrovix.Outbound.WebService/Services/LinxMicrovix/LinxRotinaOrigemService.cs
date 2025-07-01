@@ -17,7 +17,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
         private readonly IAPICall _apiCall;
         private readonly ILoggerService _logger;
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
-        private readonly ILinxMicrovixAzureSQLRepositoryBase<LinxRotinaOrigem> _linxMicrovixRepositoryBase;
+        private readonly ILinxMicrovixRepositoryBase<LinxRotinaOrigem> _linxMicrovixRepositoryBase;
         private readonly ILinxRotinaOrigemRepository _linxRotinaOrigemRepository;
         private static List<string?> _linxRotinaOrigemCache { get; set; } = new List<string?>();
 
@@ -25,7 +25,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
             IAPICall apiCall,
             ILoggerService logger,
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
-            ILinxMicrovixAzureSQLRepositoryBase<LinxRotinaOrigem> linxMicrovixRepositoryBase,
+            ILinxMicrovixRepositoryBase<LinxRotinaOrigem> linxMicrovixRepositoryBase,
             ILinxRotinaOrigemRepository linxRotinaOrigemRepository
         )
         {
@@ -183,12 +183,16 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                     var listRecords = DeserializeXMLToObject(jobParameter, xmls);
 
                     if (_linxRotinaOrigemCache.Count == 0)
-                        _linxRotinaOrigemCache = await _linxRotinaOrigemRepository.GetRegistersExists(
+                    {
+                        var list = await _linxRotinaOrigemRepository.GetRegistersExists(
                             jobParameter: jobParameter,
                             registros: listRecords
                                         .Select(x => x.codigo_rotina)
                                         .ToList()
                         );
+
+                        _linxRotinaOrigemCache = list.ToList();
+                    }
 
                     var _listSomenteNovos = listRecords.Where(x => !_linxRotinaOrigemCache.Any(y =>
                         y == x.recordKey

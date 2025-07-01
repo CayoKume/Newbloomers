@@ -1,7 +1,7 @@
 ﻿using Dapper;
 using Domain.IntegrationsCore.Entities.Auditing;
 using Domain.IntegrationsCore.Enums;
-using Domain.IntegrationsCore.Models.Exceptions;
+using Domain.IntegrationsCore.Entities.Exceptions;
 using Domain.IntegrationsCore.Extensions;
 using Domain.IntegrationsCore.Interfaces;
 using Infrastructure.IntegrationsCore.Connections.SQLServer;
@@ -100,6 +100,35 @@ namespace Infrastructure.IntegrationsCore.Repositorys
             }
         }
 
+        public async Task<bool> CallDbProcMerge(string schemaName, string tableName, Guid? parentExecutionGUID)
+        {
+            try
+            {
+                using (var conn = _sqlServerConnection.GetIDbConnection())
+                {
+                    var parameters = new DynamicParameters();
+                    parameters.Add("@ParentExecutionGUID", parentExecutionGUID);
+
+                    var result = await conn.ExecuteAsync($"[{schemaName}].[P_{tableName}_Sincronizacao]", param: parameters, commandType: CommandType.StoredProcedure, commandTimeout: 2700);
+
+                    if (result > 0)
+                        return true;
+
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new InternalException(
+                    stage: EnumStages.CallDbProcMerge,
+                    error: EnumError.SQLCommand,
+                    level: EnumMessageLevel.Error,
+                    message: $"Error when trying to run the merge procedure: P_{tableName}_Sincronizacao",
+                    exceptionMessage: ex.Message
+                );
+            }
+        }
+
         public async Task<bool> LogInsert(Log log)
         {
             try
@@ -150,6 +179,137 @@ namespace Infrastructure.IntegrationsCore.Repositorys
                 error: EnumError.SQLCommand,
                     level: EnumMessageLevel.Error,
                     message: $"Error when trying to insert record in database table: [auditing].[Messages]",
+                    exceptionMessage: ex.Message
+                );
+            }
+        }
+
+        public async Task<TEntity?> GetRecord<TEntity>(string? sql)
+        {
+            try
+            {
+                using (var conn = _sqlServerConnection.GetIDbConnection())
+                {
+                    return await conn.QueryFirstOrDefaultAsync<TEntity?>(sql: sql, commandTimeout: 360);
+                }
+            }
+            catch (SqlException ex)
+            {
+                throw new SQLCommandException(
+                    stage: EnumStages.GetParameters,
+                    message: $"Error when trying to get parameters from database",
+                    exceptionMessage: ex.Message,
+                    commandSQL: sql
+                );
+            }
+            catch (Exception ex)
+            {
+                throw new InternalException(
+                    stage: EnumStages.GetParameters,
+                    error: EnumError.SQLCommand,
+                    level: EnumMessageLevel.Error,
+                    message: $"Error when trying to get parameters from database",
+                    exceptionMessage: ex.Message
+                );
+            }
+        }
+
+        public async Task<IEnumerable<TEntity?>> GetRecords<TEntity>(string? sql)
+        {
+            try
+            {
+                using (var conn = _sqlServerConnection.GetDbConnection())
+                {
+                    var result = await conn.QueryAsync<TEntity>(sql: sql, commandTimeout: 360);
+                    return result.ToList();
+                }
+            }
+            catch (SqlException ex)
+            {
+                throw new SQLCommandException(
+                    stage: EnumStages.GetRegistersExists,
+                    message: $"Error when trying to get records that already exist in trusted table",
+                    exceptionMessage: ex.Message,
+                    commandSQL: sql
+                );
+            }
+            catch (Exception ex)
+            {
+                throw new InternalException(
+                    stage: EnumStages.GetRegistersExists,
+                    error: EnumError.SQLCommand,
+                    level: EnumMessageLevel.Error,
+                    message: $"Error when trying to get records that already exist in trusted table",
+                    exceptionMessage: ex.Message
+                );
+            }
+        }
+
+        public async Task<bool> InsertRecord(string? sql, object entity)
+        {
+            try
+            {
+                using (var conn = _sqlServerConnection.GetIDbConnection())
+                {
+                    var result = await conn.ExecuteAsync(sql: sql, param: entity, commandTimeout: 360);
+
+                    if (result > 0)
+                        return true;
+
+                    return false;
+                }
+            }
+            catch (SqlException ex)
+            {
+                throw new SQLCommandException(
+                stage: EnumStages.InsertRecord,
+                    message: $"Error when trying to insert record in database table: tableNameHere",
+                    exceptionMessage: ex.Message,
+                    commandSQL: sql
+                );
+            }
+            catch (Exception ex)
+            {
+                throw new InternalException(
+                    stage: EnumStages.InsertRecord,
+                    error: EnumError.SQLCommand,
+                level: EnumMessageLevel.Error,
+                    message: $"Error when trying to insert record in database table: tableNameHere",
+                    exceptionMessage: ex.Message
+                );
+            }
+        }
+
+        public async Task<bool> ExecuteCommand(string? sql)
+        {
+            try
+            {
+                using (var conn = _sqlServerConnection.GetIDbConnection())
+                {
+                    var result = await conn.ExecuteAsync(sql: sql, commandTimeout: 360);
+
+                    if (result > 0)
+                        return true;
+
+                    return false;
+                }
+            }
+            catch (SqlException ex)
+            {
+                throw new SQLCommandException(
+                    stage: EnumStages.ExecuteQueryCommand,
+                    message: $"Error when trying to execute command sql",
+                    exceptionMessage: ex.Message,
+                    commandSQL: sql
+                );
+            }
+            catch (Exception ex)
+            {
+                throw new InternalException(
+                    stage: EnumStages.ExecuteQueryCommand,
+                    error: EnumError.SQLCommand,
+                    level: EnumMessageLevel.Error,
+                    message: $"Error when trying to execute command sql",
                     exceptionMessage: ex.Message
                 );
             }

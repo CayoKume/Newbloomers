@@ -17,7 +17,7 @@ namespace LinxMicrovix.Outbound.Web.Service.Application.Services.LinxMicrovix
         private readonly IAPICall _apiCall;
         private readonly ILoggerService _logger;
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
-        private readonly ILinxMicrovixAzureSQLRepositoryBase<LinxProdutosCodBar> _linxMicrovixRepositoryBase;
+        private readonly ILinxMicrovixRepositoryBase<LinxProdutosCodBar> _linxMicrovixRepositoryBase;
         private readonly ILinxProdutosCodBarRepository _linxProdutosCodBarRepository;
         private static List<string?> _linxProdutosCodBarCache { get; set; } = new List<string?>();
 
@@ -25,7 +25,7 @@ namespace LinxMicrovix.Outbound.Web.Service.Application.Services.LinxMicrovix
             IAPICall apiCall,
             ILoggerService logger,
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
-            ILinxMicrovixAzureSQLRepositoryBase<LinxProdutosCodBar> linxMicrovixRepositoryBase,
+            ILinxMicrovixRepositoryBase<LinxProdutosCodBar> linxMicrovixRepositoryBase,
             ILinxProdutosCodBarRepository linxProdutosCodBarRepository
         )
         {
@@ -196,12 +196,16 @@ namespace LinxMicrovix.Outbound.Web.Service.Application.Services.LinxMicrovix
                     var listRecords = DeserializeXMLToObject(jobParameter, xmls);
 
                     if (_linxProdutosCodBarCache.Count == 0)
-                        _linxProdutosCodBarCache = await _linxProdutosCodBarRepository.GetRegistersExists(
+                    {
+                        var list = await _linxProdutosCodBarRepository.GetRegistersExists(
                             jobParameter: jobParameter, 
                             registros: listRecords
                                         .Select(x => x.cod_produto)
                                         .ToList()
                         );
+
+                        _linxProdutosCodBarCache = list.ToList();
+                    }
 
                     var _listSomenteNovos = listRecords.Where(x => !_linxProdutosCodBarCache.Any(y => 
                         y == x.recordKey

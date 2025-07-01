@@ -17,7 +17,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
         private readonly IAPICall _apiCall;
         private readonly ILoggerService _logger;
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
-        private readonly ILinxMicrovixAzureSQLRepositoryBase<LinxClientesFornec> _linxMicrovixRepositoryBase;
+        private readonly ILinxMicrovixRepositoryBase<LinxClientesFornec> _linxMicrovixRepositoryBase;
         private readonly ILinxClientesFornecRepository _linxClientesFornecRepository;
         private static List<string?> _linxClientesFornecCache { get; set; } = new List<string?>();
 
@@ -25,7 +25,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
             IAPICall apiCall,
             ILoggerService logger,
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
-            ILinxMicrovixAzureSQLRepositoryBase<LinxClientesFornec> linxMicrovixRepositoryBase,
+            ILinxMicrovixRepositoryBase<LinxClientesFornec> linxMicrovixRepositoryBase,
             ILinxClientesFornecRepository linxClientesFornecRepository
         )
         {
@@ -223,12 +223,16 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                     var listRecords = DeserializeXMLToObject(jobParameter, xmls);
 
                     if (_linxClientesFornecCache.Count == 0)
-                        _linxClientesFornecCache = await _linxClientesFornecRepository.GetRegistersExists(
+                    {
+                        var list = await _linxClientesFornecRepository.GetRegistersExists(
                             jobParameter: jobParameter,
                             registros: listRecords
                                         .Select(x => x.doc_cliente)
                                         .ToList()
                         );
+
+                        _linxClientesFornecCache = list.ToList();
+                    }
 
                     var _listSomenteNovos = listRecords.Where(x => !_linxClientesFornecCache.Any(y => 
                         y == x.recordKey

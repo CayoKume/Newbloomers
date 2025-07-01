@@ -9,16 +9,19 @@ public interface IAfterSaleRepository
     public Task<Company> GetCompany(string cnpj_emp);
 
     /*Insert in Database*/
-    public Task<bool> InsertIntoAfterSaleEcommerce(List<Ecommerce> data);
-    public Task<bool> InsertIntoAfterSaleStatus(List<Status> data);
-    public Task<bool> InsertIntoAfterSaleReverses(List<Data> data);
-    public Task<bool> InsertIntoAfterSaleTransportations(List<Transportations> transportations);
-    public Task<bool> InsertIntoAfterSaleTransportations(Transportations transportations);
-    public Task<bool> InsertIntoAfterSaleReversesCourierAttributes();
+    public bool InsertIntoAfterSaleEcommerce(List<Ecommerce> data);
+    public bool InsertIntoAfterSaleStatus(List<Status> data);
+    public bool InsertIntoAfterSaleReverses(List<Data> data);
+    public bool InsertIntoAfterSaleTransportations(List<Transportations> transportations);
+    public bool InsertIntoAfterSaleTransportations(Transportations transportations);
+    public bool InsertIntoAfterSaleReversesCourierAttributes();
 
-    public Task<bool> InsertIntoAfterSaleRefundsStatus();
-    public Task<bool> InsertIntoAfterSaleRefundsActions();
-    public Task<bool> InsertIntoAfterSaleRefundsBanks();
-    public Task<bool> InsertIntoAfterSaleRefundsTypes();
-    public Task<bool> InsertIntoAfterSaleRefunds();
+    public bool InsertIntoAfterSaleRefundsStatus();
+    public bool InsertIntoAfterSaleRefundsActions();
+    public bool InsertIntoAfterSaleRefundsBanks();
+    public bool InsertIntoAfterSaleRefundsTypes();
+    public bool InsertIntoAfterSaleRefunds();
+
+    /*Call Proc Merge*/
+    //public Task<bool> CallProcMerge();
 }

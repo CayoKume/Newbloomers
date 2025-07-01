@@ -3,6 +3,7 @@ using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxCommerce;
 using Domain.IntegrationsCore.Entities.Exceptions;
 using Domain.IntegrationsCore.Enums;
+using Domain.IntegrationsCore.Interfaces;
 using Domain.LinxMicrovix.Outbound.WebService.Entities.LinxCommerce;
 using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Api;
@@ -17,7 +18,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
         private readonly IAPICall _apiCall;
         private readonly ILoggerService _logger;
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
-        private readonly ILinxMicrovixAzureSQLRepositoryBase<B2CConsultaEmpresas> _linxMicrovixRepositoryBase;
+        private readonly ILinxMicrovixRepositoryBase<B2CConsultaEmpresas> _linxMicrovixRepositoryBase;
         private readonly IB2CConsultaEmpresasRepository _b2cConsultaEmpresasRepository;
         private static List<string?> _b2cConsultaEmpresasCache { get; set; } = new List<string?>();
 
@@ -25,7 +26,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
             IAPICall apiCall,
             ILoggerService logger,
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
-            ILinxMicrovixAzureSQLRepositoryBase<B2CConsultaEmpresas> linxMicrovixRepositoryBase,
+            ILinxMicrovixRepositoryBase<B2CConsultaEmpresas> linxMicrovixRepositoryBase,
             IB2CConsultaEmpresasRepository b2cConsultaEmpresasRepository
         )
         {
@@ -125,12 +126,16 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                     var listRecords = DeserializeXMLToObject(jobParameter, xmls);
 
                     if (_b2cConsultaEmpresasCache.Count == 0)
-                        _b2cConsultaEmpresasCache = await _b2cConsultaEmpresasRepository.GetRegistersExists(
+                    {
+                        var list = await _b2cConsultaEmpresasRepository.GetRegistersExists(
                             jobParameter: jobParameter, 
                             registros: listRecords
                                         .Select(x => x.cnpj_emp)
                                         .ToList()
                         );
+
+                        _b2cConsultaEmpresasCache = list.ToList();
+                    }
 
                     var _listSomenteNovos = listRecords.Where(x => !_b2cConsultaEmpresasCache.Any(y => 
                         y == x.recordKey

@@ -1,6 +1,6 @@
 ﻿using Dapper;
 using Domain.AfterSale.Interfaces.Repositorys;
-using Domain.IntegrationsCore.Models.Exceptions;
+using Domain.IntegrationsCore.Entities.Exceptions;
 using Infrastructure.IntegrationsCore.Connections.SQLServer;
 using System.Data;
 using Domain.AfterSale.Entities;
@@ -12,10 +12,10 @@ namespace Infrastructure.AfterSale.Repositorys;
 
 public class AfterSaleRepository : IAfterSaleRepository
 {
-    private readonly ISQLServerConnection? _sqlServerConnection;
-    private readonly IIntegrationsCoreRepository? _integrationsCoreRepository;
+    private readonly ISQLServerConnection _sqlServerConnection;
+    private readonly IIntegrationsCoreRepository _integrationsCoreRepository;
 
-    public AfterSaleRepository(ISQLServerConnection? sqlServerConnection, IIntegrationsCoreRepository? integrationsCoreRepository) =>
+    public AfterSaleRepository(ISQLServerConnection sqlServerConnection, IIntegrationsCoreRepository integrationsCoreRepository) =>
             (_sqlServerConnection, _integrationsCoreRepository) = (sqlServerConnection, integrationsCoreRepository);
 
     public async Task<IEnumerable<Company>> GetCompanys()
@@ -48,32 +48,32 @@ public class AfterSaleRepository : IAfterSaleRepository
         }
     }
 
-    public Task<bool> InsertIntoAfterSaleRefunds()
+    public bool InsertIntoAfterSaleRefunds()
     {
         throw new NotImplementedException();
     }
 
-    public Task<bool> InsertIntoAfterSaleRefundsActions()
+    public bool InsertIntoAfterSaleRefundsActions()
     {
         throw new NotImplementedException();
     }
 
-    public Task<bool> InsertIntoAfterSaleRefundsBanks()
+    public bool InsertIntoAfterSaleRefundsBanks()
     {
         throw new NotImplementedException();
     }
 
-    public Task<bool> InsertIntoAfterSaleRefundsStatus()
+    public bool InsertIntoAfterSaleRefundsStatus()
     {
         throw new NotImplementedException();
     }
 
-    public Task<bool> InsertIntoAfterSaleRefundsTypes()
+    public bool InsertIntoAfterSaleRefundsTypes()
     {
         throw new NotImplementedException();
     }
 
-    public async Task<bool> InsertIntoAfterSaleReverses(List<Domain.AfterSale.Entities.Data> data)
+    public bool InsertIntoAfterSaleReverses(List<Domain.AfterSale.Entities.Data> data)
     {
         var reversesTable = _integrationsCoreRepository.CreateSystemDataTable(entity: new Reverse(), tableName: "AfterSaleReverses");
         var customerTable = _integrationsCoreRepository.CreateSystemDataTable(entity: new Customer(), tableName: "AfterSaleCustomers");
@@ -107,12 +107,12 @@ public class AfterSaleRepository : IAfterSaleRepository
         }
     }
 
-    public Task<bool> InsertIntoAfterSaleReversesCourierAttributes()
+    public bool InsertIntoAfterSaleReversesCourierAttributes()
     {
         throw new NotImplementedException();
     }
 
-    public async Task<bool> InsertIntoAfterSaleStatus(List<Status> statusReverses)
+    public bool InsertIntoAfterSaleStatus(List<Status> statusReverses)
     {
         var statusReversesTable = _integrationsCoreRepository.CreateSystemDataTable(entity: new Status(), tableName: "AfterSaleStatus");
 
@@ -136,7 +136,7 @@ public class AfterSaleRepository : IAfterSaleRepository
         }
     }
 
-    public async Task<bool> InsertIntoAfterSaleTransportations(Transportations transportations)
+    public bool InsertIntoAfterSaleTransportations(Transportations transportations)
     {
         var transportationsTable = _integrationsCoreRepository.CreateSystemDataTable(entity: new Transportations(), tableName: "AfterSaleTransportations");
 
@@ -160,7 +160,7 @@ public class AfterSaleRepository : IAfterSaleRepository
         }
     }
 
-    public async Task<bool> InsertIntoAfterSaleTransportations(List<Transportations> transportations)
+    public bool InsertIntoAfterSaleTransportations(List<Transportations> transportations)
     {
         var transportationsTable = _integrationsCoreRepository.CreateSystemDataTable(entity: new Transportations(), tableName: "AfterSaleTransportations");
 
@@ -184,7 +184,7 @@ public class AfterSaleRepository : IAfterSaleRepository
         }
     }
 
-    public async Task<bool> InsertIntoAfterSaleEcommerce(List<Ecommerce> data)
+    public bool InsertIntoAfterSaleEcommerce(List<Ecommerce> data)
     {
         var ecommercesTable = _integrationsCoreRepository.CreateSystemDataTable(entity: new Ecommerce(), tableName: "AfterSaleEcommerces");
         var addressTable = _integrationsCoreRepository.CreateSystemDataTable(entity: new Address(), tableName: "AfterSaleAddresses");

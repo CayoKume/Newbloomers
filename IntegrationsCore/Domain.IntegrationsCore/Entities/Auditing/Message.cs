@@ -1,4 +1,5 @@
 ﻿using Domain.IntegrationsCore.Enums;
+using Domain.IntegrationsCore.Extensions;
 
 namespace Domain.IntegrationsCore.Entities.Auditing
 {
@@ -7,6 +8,7 @@ namespace Domain.IntegrationsCore.Entities.Auditing
         /// <summary>
         /// 
         /// </summary>
+        [SkipProperty]
         public Int32? IdExecutionMessage { get; private set; }
 
         public EnumStages? IdStage { get; private set; }
@@ -25,7 +27,7 @@ namespace Domain.IntegrationsCore.Entities.Auditing
         /// </summary>
         /// <param name="message"></param>
         /// <param name="guidExecution"></param>
-        public Message(string message, Guid guidExecution)
+        public Message(string message, Guid? guidExecution)
         {
             Msg = message;
             IdLogLevel = EnumMessageLevel.Information;
@@ -39,7 +41,7 @@ namespace Domain.IntegrationsCore.Entities.Auditing
         /// <param name="message"></param>
         /// <param name="exceptionMessage"></param>
         /// <param name="execution"></param>
-        public Message(string message, string exceptionMessage, Guid execution)
+        public Message(string message, string exceptionMessage, Guid? execution)
         {
             Msg = message;
             IsError = true;
@@ -61,7 +63,7 @@ namespace Domain.IntegrationsCore.Entities.Auditing
             EnumError error,
             EnumMessageLevel logLevel,
             string message,
-            Guid execution
+            Guid? execution
         )
         {
             IdStage = stage;
@@ -87,7 +89,7 @@ namespace Domain.IntegrationsCore.Entities.Auditing
             EnumMessageLevel logLevel,
             string message,
             string exceptionMessage,
-            Guid execution
+            Guid? execution
         )
         {
             IdStage = stage;
@@ -116,7 +118,7 @@ namespace Domain.IntegrationsCore.Entities.Auditing
             string message,
             string exceptionMessage,
             string commandSQL,
-            Guid execution
+            Guid? execution
         )
         {
             IdStage = stage;

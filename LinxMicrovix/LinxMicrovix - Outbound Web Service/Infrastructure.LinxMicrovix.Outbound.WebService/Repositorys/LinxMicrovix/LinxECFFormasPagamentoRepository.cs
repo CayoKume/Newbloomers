@@ -16,7 +16,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxMicrovi
             throw new NotImplementedException();
         }
 
-        public Task<List<LinxECFFormasPagamento>> GetRegistersExists(LinxAPIParam jobParameter, List<LinxECFFormasPagamento> registros)
+        public Task<IEnumerable<LinxECFFormasPagamento>> GetRegistersExists(LinxAPIParam jobParameter, List<LinxECFFormasPagamento> registros)
         {
             throw new NotImplementedException();
         }

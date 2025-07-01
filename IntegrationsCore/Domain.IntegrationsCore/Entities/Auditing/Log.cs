@@ -24,9 +24,9 @@ namespace Domain.IntegrationsCore.Entities.Auditing
         [SkipProperty]
         public Guid? IdExecution { get; private set; }
 
-        public DateTime? StartDate { get; private set; }
+        public DateTime StartDate { get; private set; }
 
-        public DateTime? EndDate { get; private set; }
+        public DateTime EndDate { get; private set; }
 
         public Guid? Execution { get; private set; }
 
@@ -40,13 +40,13 @@ namespace Domain.IntegrationsCore.Entities.Auditing
         /// 
         /// </summary>
         [SkipProperty]
-        public List<Record>? Records { get; private set; }
+        public List<Record>? Records { get; private set; } = new List<Record>();
 
         /// <summary>
         /// 
         /// </summary>
         [SkipProperty]
-        public List<Message>? Messages { get; private set; }
+        public List<Message>? Messages { get; private set; } = new List<Message> { };
 
         public Log() { }
 

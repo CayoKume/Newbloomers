@@ -25,8 +25,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.DependencyInjection
         public static IServiceCollection AddScopedB2CLinxMicrovixServices(this IServiceCollection services)
         {
             services.AddScoped<ILinxMicrovixServiceBase, LinxMicrovixServiceBase>();
-            services.AddScoped(typeof(ILinxMicrovixAzureSQLRepositoryBase<>), typeof(LinxMicrovixAzureSQLRepositoryBase<>));
-            services.AddScoped(typeof(ILinxMicrovixSQLServerRepositoryBase<>), typeof(LinxMicrovixSQLServerRepositoryBase<>));
+            services.AddScoped(typeof(ILinxMicrovixRepositoryBase<>), typeof(LinxMicrovixRepositoryBase<>));
             services.AddScoped<IAPICall, APICall>();
 
             services.AddScoped<IB2CConsultaClassificacaoService, B2CConsultaClassificacaoService>();
@@ -224,8 +223,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.DependencyInjection
         public static IServiceCollection AddScopedLinxMicrovixServices(this IServiceCollection services)
         {
             services.AddScoped<ILinxMicrovixServiceBase, LinxMicrovixServiceBase>();
-            services.AddScoped(typeof(ILinxMicrovixAzureSQLRepositoryBase<>), typeof(LinxMicrovixAzureSQLRepositoryBase<>));
-            services.AddScoped(typeof(ILinxMicrovixSQLServerRepositoryBase<>), typeof(LinxMicrovixSQLServerRepositoryBase<>));
+            services.AddScoped(typeof(ILinxMicrovixRepositoryBase<>), typeof(LinxMicrovixRepositoryBase<>));
             services.AddScoped<IAPICall, APICall>();
 
             services.AddScoped<ILinxClientesFornecService, LinxClientesFornecService>();

@@ -13,13 +13,13 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
         private readonly IAPICall _apiCall;
         private readonly ILoggerService _logger;
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
-        private readonly ILinxMicrovixAzureSQLRepositoryBase<LinxMovimentoAcoesPromocionais> _linxMicrovixRepositoryBase;
+        private readonly ILinxMicrovixRepositoryBase<LinxMovimentoAcoesPromocionais> _linxMicrovixRepositoryBase;
 
         public LinxMovimentoAcoesPromocionaisService(
             IAPICall apiCall,
             ILoggerService logger,
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
-            ILinxMicrovixAzureSQLRepositoryBase<LinxMovimentoAcoesPromocionais> linxMicrovixRepositoryBase
+            ILinxMicrovixRepositoryBase<LinxMovimentoAcoesPromocionais> linxMicrovixRepositoryBase
         )
         {
             _apiCall = apiCall;

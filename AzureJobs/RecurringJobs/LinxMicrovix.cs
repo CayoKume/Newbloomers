@@ -819,7 +819,7 @@ namespace AzureJobs.RecurringJobs
         //    try
         //    {
         //        var method = _methods
-        //            .Where(m => m.MethodName == "LinxXmlDocumentos")
+        //            .Where(m => m.MethodName == "LinxXMLDocumentos")
         //        .FirstOrDefault();
 
         //        var result = await _linxXMLDocumentosService.GetRecords(

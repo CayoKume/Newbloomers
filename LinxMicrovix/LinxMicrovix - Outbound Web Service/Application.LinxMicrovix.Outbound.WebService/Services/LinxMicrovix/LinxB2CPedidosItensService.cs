@@ -17,7 +17,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
         private readonly IAPICall _apiCall;
         private readonly ILoggerService _logger;
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
-        private readonly ILinxMicrovixAzureSQLRepositoryBase<LinxB2CPedidosItens> _linxMicrovixRepositoryBase;
+        private readonly ILinxMicrovixRepositoryBase<LinxB2CPedidosItens> _linxMicrovixRepositoryBase;
         private readonly ILinxB2CPedidosItensRepository _linxB2CPedidosItensRepository;
         private static List<string?> _linxB2CPedidosItensCache { get; set; } = new List<string?>();
 
@@ -25,7 +25,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
             IAPICall apiCall,
             ILoggerService logger,
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
-            ILinxMicrovixAzureSQLRepositoryBase<LinxB2CPedidosItens> linxMicrovixRepositoryBase,
+            ILinxMicrovixRepositoryBase<LinxB2CPedidosItens> linxMicrovixRepositoryBase,
             ILinxB2CPedidosItensRepository linxB2CPedidosItensRepository
         )
         {
@@ -117,12 +117,16 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                     var listRecords = DeserializeXMLToObject(jobParameter, xmls);
 
                     if (_linxB2CPedidosItensCache.Count == 0)
-                        _linxB2CPedidosItensCache = await _linxB2CPedidosItensRepository.GetRegistersExists(
+                    {
+                        var list = await _linxB2CPedidosItensRepository.GetRegistersExists(
                             jobParameter: jobParameter, 
                             registros: listRecords
                                         .Select(x => x.id_pedido_item)
                                         .ToList()
                         );
+
+                        _linxB2CPedidosItensCache = list.ToList();
+                    }
 
                     var _listSomenteNovos = listRecords.Where(x => !_linxB2CPedidosItensCache.Any(y => 
                         y == x.recordKey

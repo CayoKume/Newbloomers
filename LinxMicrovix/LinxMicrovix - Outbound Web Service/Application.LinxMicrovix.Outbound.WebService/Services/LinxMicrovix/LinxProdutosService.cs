@@ -17,7 +17,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
         private readonly IAPICall _apiCall;
         private readonly ILoggerService _logger;
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
-        private readonly ILinxMicrovixAzureSQLRepositoryBase<LinxProdutos> _linxMicrovixRepositoryBase;
+        private readonly ILinxMicrovixRepositoryBase<LinxProdutos> _linxMicrovixRepositoryBase;
         private readonly ILinxProdutosRepository _linxProdutosRepository;
         private static List<string?> _linxProdutosCache { get; set; } = new List<string?>();
 
@@ -25,7 +25,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
             IAPICall apiCall,
             ILoggerService logger,
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
-            ILinxMicrovixAzureSQLRepositoryBase<LinxProdutos> linxMicrovixRepositoryBase,
+            ILinxMicrovixRepositoryBase<LinxProdutos> linxMicrovixRepositoryBase,
             ILinxProdutosRepository linxProdutosRepository
         )
         {
@@ -243,12 +243,16 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                     var listRecords = DeserializeXMLToObject(jobParameter, xmls);
 
                     if (_linxProdutosCache.Count == 0)
-                        _linxProdutosCache = await _linxProdutosRepository.GetRegistersExists(
+                    {
+                        var list = await _linxProdutosRepository.GetRegistersExists(
                             jobParameter: jobParameter, 
                             registros: listRecords
                                         .Select(x => x.cod_produto)
                                         .ToList()
                         );
+
+                        _linxProdutosCache = list.ToList();
+                    }
 
                     var _listSomenteNovos = listRecords.Where(x => !_linxProdutosCache.Any(y => 
                         y == x.recordKey

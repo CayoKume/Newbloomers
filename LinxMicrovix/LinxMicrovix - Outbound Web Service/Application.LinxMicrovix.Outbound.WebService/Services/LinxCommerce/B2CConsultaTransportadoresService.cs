@@ -17,7 +17,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
         private readonly IAPICall _apiCall;
         private readonly ILoggerService _logger;
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
-        private readonly ILinxMicrovixAzureSQLRepositoryBase<B2CConsultaTransportadores> _linxMicrovixRepositoryBase;
+        private readonly ILinxMicrovixRepositoryBase<B2CConsultaTransportadores> _linxMicrovixRepositoryBase;
         private readonly IB2CConsultaTransportadoresRepository _b2cConsultaTransportadoresRepository;
         private static List<string?> _b2cConsultaTransportadoresCache { get; set; } = new List<string?>();
 
@@ -25,7 +25,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
             IAPICall apiCall,
             ILoggerService logger,
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
-            ILinxMicrovixAzureSQLRepositoryBase<B2CConsultaTransportadores> linxMicrovixRepositoryBase,
+            ILinxMicrovixRepositoryBase<B2CConsultaTransportadores> linxMicrovixRepositoryBase,
             IB2CConsultaTransportadoresRepository b2cConsultaTransportadoresRepository
         )
         {

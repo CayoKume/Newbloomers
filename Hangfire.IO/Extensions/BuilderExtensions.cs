@@ -10,7 +10,6 @@
             builder.Services.AddSwaggerGen();
             builder.Services.AddCors();
 #endif
-
             return builder;
         }
     }

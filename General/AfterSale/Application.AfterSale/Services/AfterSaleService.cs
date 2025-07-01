@@ -1,27 +1,37 @@
 ﻿using Application.AfterSale.Interfaces;
+using Application.IntegrationsCore.Interfaces;
 using Domain.AfterSale.Entities;
 using Domain.AfterSale.Interfaces.Api;
 using Domain.AfterSale.Interfaces.Repositorys;
+using Domain.IntegrationsCore.Entities.Exceptions;
+using Domain.IntegrationsCore.Enums;
 
 namespace Application.AfterSale.Services
 {
     public class AfterSaleService : IAfterSaleService
     {
         private readonly IAPICall _apiCall;
+        private readonly ILoggerService _logger;
         private readonly IAfterSaleRepository _afterSaleRepository;
 
-        public AfterSaleService(IAPICall apiCall, IAfterSaleRepository afterSaleRepository) =>
-            (_apiCall, _afterSaleRepository) = (apiCall, afterSaleRepository);
+        private static List<string> GetMeJsonCache { get; set; } = new();
+
+        public AfterSaleService(IAPICall apiCall, ILoggerService logger, IAfterSaleRepository afterSaleRepository) =>
+            (_apiCall, _logger, _afterSaleRepository) = (apiCall, logger, afterSaleRepository);
 
         #region Me - Infos about your ecommerce
         /// <summary>
-        /// return infos about ecommerce
+        /// return infos about ecommerce, this method fills the tables: [AfterSaleEcommerces], [AfterSaleAddresses] and [AfterSaleReasons]
         /// </summary>
         public async Task<bool?> GetMe()
         {
             try
             {
-                var list = new List<Ecommerce>();
+                _logger
+                   .Clear()
+                   .AddLog(EnumJob.AfterSaleEcommerces);
+
+                var _listSomenteNovos = new List<Ecommerce>();
                 var companys = await _afterSaleRepository.GetCompanys();
 
                 foreach (var company in companys)
@@ -31,19 +41,77 @@ namespace Application.AfterSale.Services
                         rote: "v3/api/me"
                     );
 
-                    var me = Newtonsoft.Json.JsonConvert.DeserializeObject<Me>(response);
+                    var hash = _logger.ComputeSha256Hash(response);
 
-                    list.Add(me.data);
+                    if (!GetMeJsonCache.Any(x => x == $"{company.doc_company} - {hash}"))
+                    {
+                        var me = Newtonsoft.Json.JsonConvert.DeserializeObject<Me>(response);
+
+                        _listSomenteNovos.Add(me.data);
+
+                        _logger.AddRecord(
+                            key: company.doc_company,
+                            xml: response
+                        );
+
+                        GetMeJsonCache.Add($"{company.doc_company} - {hash}");
+                    }
                 }
 
-                await _afterSaleRepository.InsertIntoAfterSaleEcommerce(list);
+                if (_listSomenteNovos.Count() > 0)
+                {
+                    _afterSaleRepository.InsertIntoAfterSaleEcommerce(_listSomenteNovos);
 
-                return true;
+                    //await _afterSaleRepository 
+
+                    _logger.AddMessage(
+                            $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"
+                        );
+                }
+                else
+                    _logger.AddMessage(
+                            $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"
+                        );
             }
-            catch
+            catch (SQLCommandException ex)
             {
+                _logger.AddMessage(
+                    stage: ex.Stage,
+                    error: ex.Error,
+                    logLevel: ex.MessageLevel,
+                    message: ex.Message,
+                    exceptionMessage: ex.ExceptionMessage,
+                    commandSQL: ex.CommandSQL
+                );
+
                 throw;
             }
+            catch (InternalException ex)
+            {
+                _logger.AddMessage(
+                    stage: ex.stage,
+                    error: ex.Error,
+                    logLevel: ex.MessageLevel,
+                    message: ex.Message,
+                    exceptionMessage: ex.ExceptionMessage
+                );
+
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.AddMessage(
+                    message: "Error when executing GetRecords method",
+                    exceptionMessage: ex.Message
+                );
+            }
+            finally
+            {
+                _logger.SetLogEndDate();
+                await _logger.CommitAllChanges();
+            }
+
+            return true;
         }
         #endregion
 
@@ -219,7 +287,9 @@ namespace Application.AfterSale.Services
                         }
                     }
 
-                    await _afterSaleRepository.InsertIntoAfterSaleReverses(completeReverses); 
+                    _afterSaleRepository.InsertIntoAfterSaleReverses(completeReverses);
+
+
                 }
 
                 return true;
@@ -281,7 +351,7 @@ namespace Application.AfterSale.Services
 
                 var status = Newtonsoft.Json.JsonConvert.DeserializeObject<ResponseStatus>(response);
 
-                await _afterSaleRepository.InsertIntoAfterSaleStatus(status.data);
+                _afterSaleRepository.InsertIntoAfterSaleStatus(status.data);
 
                 return true;
             }
@@ -313,7 +383,7 @@ namespace Application.AfterSale.Services
                     list.Add(new Transportations { description = transportation});
                 }
 
-                await _afterSaleRepository.InsertIntoAfterSaleTransportations(list);
+                _afterSaleRepository.InsertIntoAfterSaleTransportations(list);
 
                 return true;
             }

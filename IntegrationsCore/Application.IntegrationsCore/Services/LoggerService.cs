@@ -2,6 +2,9 @@ using Application.IntegrationsCore.Interfaces;
 using Domain.IntegrationsCore.Entities.Auditing;
 using Domain.IntegrationsCore.Enums;
 using Domain.IntegrationsCore.Interfaces;
+using Org.BouncyCastle.Asn1.Pkcs;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace Application.IntegrationsCore.Services
 {
@@ -143,6 +146,13 @@ namespace Application.IntegrationsCore.Services
         public Guid? GetExecutionGuid()
         {
             return this.log.Execution;
+        }
+
+        public string ComputeSha256Hash(string json)
+        {
+            using var sha256 = SHA256.Create();
+            var bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(json));
+            return Convert.ToHexString(bytes);
         }
     }
 }

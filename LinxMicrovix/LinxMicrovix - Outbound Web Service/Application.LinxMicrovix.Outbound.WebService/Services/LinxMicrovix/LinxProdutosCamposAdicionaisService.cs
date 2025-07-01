@@ -17,7 +17,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
         private readonly IAPICall _apiCall;
         private readonly ILoggerService _logger;
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
-        private readonly ILinxMicrovixAzureSQLRepositoryBase<LinxProdutosCamposAdicionais> _linxMicrovixRepositoryBase;
+        private readonly ILinxMicrovixRepositoryBase<LinxProdutosCamposAdicionais> _linxMicrovixRepositoryBase;
         private readonly ILinxProdutosCamposAdicionaisRepository _linxProdutosCamposAdicionaisRepository;
         private static List<string> _linxProdutosCamposAdicionaisCache { get; set; } = new List<string>();
 
@@ -25,7 +25,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
             IAPICall apiCall,
             ILoggerService logger,
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
-            ILinxMicrovixAzureSQLRepositoryBase<LinxProdutosCamposAdicionais> linxMicrovixRepositoryBase,
+            ILinxMicrovixRepositoryBase<LinxProdutosCamposAdicionais> linxMicrovixRepositoryBase,
             ILinxProdutosCamposAdicionaisRepository linxProdutosCamposAdicionaisRepository
         )
         {
@@ -191,13 +191,17 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                     var listRecords = DeserializeXMLToObject(jobParameter, xmls);
 
                     if (_linxProdutosCamposAdicionaisCache.Count == 0)
-                        _linxProdutosCamposAdicionaisCache = await _linxProdutosCamposAdicionaisRepository.GetRegistersExists(
+                    {
+                        var list = await _linxProdutosCamposAdicionaisRepository.GetRegistersExists(
                             jobParameter: jobParameter,
                             registros: listRecords
                                         .GroupBy(y => y.cod_produto)
                                         .Select(x => x.First())
                                         .ToList()
                         );
+
+                        _linxProdutosCamposAdicionaisCache = list.ToList();
+                    }
 
                     var _listSomenteNovos = listRecords.Where(x => !_linxProdutosCamposAdicionaisCache.Any(y => 
                         y == x.recordKey

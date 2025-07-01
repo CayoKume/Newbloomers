@@ -9,9 +9,9 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxMicrovi
 {
     public class LinxProdutosTabelasRepository : ILinxProdutosTabelasRepository
     {
-        private readonly ILinxMicrovixAzureSQLRepositoryBase<LinxProdutosTabelas> _linxMicrovixRepositoryBase;
+        private readonly ILinxMicrovixRepositoryBase<LinxProdutosTabelas> _linxMicrovixRepositoryBase;
 
-        public LinxProdutosTabelasRepository(ILinxMicrovixAzureSQLRepositoryBase<LinxProdutosTabelas> linxMicrovixRepositoryBase) =>
+        public LinxProdutosTabelasRepository(ILinxMicrovixRepositoryBase<LinxProdutosTabelas> linxMicrovixRepositoryBase) =>
             (_linxMicrovixRepositoryBase) = (linxMicrovixRepositoryBase);
 
         public bool BulkInsertIntoTableRaw(LinxAPIParam jobParameter, IList<LinxProdutosTabelas> records)
@@ -27,8 +27,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxMicrovi
                 }
 
                 _linxMicrovixRepositoryBase.BulkInsertIntoTableRaw(
-                    dataTable: table,
-                    dataTableRowsNumber: table.Rows.Count
+                    dataTable: table
                 );
 
                 return true;
@@ -39,7 +38,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxMicrovi
             }
         }
 
-        public async Task<List<string?>> GetRegistersExists()
+        public async Task<IEnumerable<string?>> GetRegistersExists()
         {
             try
             {

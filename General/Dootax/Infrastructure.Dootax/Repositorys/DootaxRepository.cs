@@ -2,7 +2,7 @@
 using Domain.Dootax.Entities;
 using Domain.Dootax.Interfaces.Repositorys;
 using Domain.IntegrationsCore.Enums;
-using Domain.IntegrationsCore.Models.Exceptions;
+using Domain.IntegrationsCore.Entities.Exceptions;
 using Infrastructure.IntegrationsCore.Connections.SQLServer;
 
 namespace Infrastructure.Dootax.Repositorys

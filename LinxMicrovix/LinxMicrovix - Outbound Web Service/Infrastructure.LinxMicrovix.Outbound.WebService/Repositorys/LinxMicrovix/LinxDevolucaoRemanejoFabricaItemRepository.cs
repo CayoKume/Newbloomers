@@ -16,7 +16,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxMicrovi
             throw new NotImplementedException();
         }
 
-        public Task<List<LinxDevolucaoRemanejoFabricaItem>> GetRegistersExists(LinxAPIParam jobParameter, List<LinxDevolucaoRemanejoFabricaItem> registros)
+        public Task<IEnumerable<LinxDevolucaoRemanejoFabricaItem>> GetRegistersExists(LinxAPIParam jobParameter, List<LinxDevolucaoRemanejoFabricaItem> registros)
         {
             throw new NotImplementedException();
         }

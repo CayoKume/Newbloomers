@@ -17,7 +17,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
         private readonly IAPICall _apiCall;
         private readonly ILoggerService _logger;
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
-        private readonly ILinxMicrovixAzureSQLRepositoryBase<LinxPedidosVenda> _linxMicrovixRepositoryBase;
+        private readonly ILinxMicrovixRepositoryBase<LinxPedidosVenda> _linxMicrovixRepositoryBase;
         private readonly ILinxPedidosVendaRepository _linxPedidosVendaRepository;
         private static List<string?> _linxPedidosVendaCache { get; set; } = new List<string?>();
 
@@ -25,7 +25,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
             IAPICall apiCall,
             ILoggerService logger,
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
-            ILinxMicrovixAzureSQLRepositoryBase<LinxPedidosVenda> linxMicrovixRepositoryBase,
+            ILinxMicrovixRepositoryBase<LinxPedidosVenda> linxMicrovixRepositoryBase,
             ILinxPedidosVendaRepository linxPedidosVendaRepository
         )
         {
@@ -231,7 +231,8 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                     var listRecords = DeserializeXMLToObject(jobParameter, xmls);
 
                     if (_linxPedidosVendaCache.Count == 0)
-                        _linxPedidosVendaCache = await _linxPedidosVendaRepository.GetRegistersExists(
+                    {
+                        var list = await _linxPedidosVendaRepository.GetRegistersExists(
                             jobParameter: jobParameter, 
                             registros: listRecords
                                             .GroupBy(y => y.cod_pedido)
@@ -239,6 +240,9 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                                             .Select(x => x.cod_pedido)
                                             .ToList()
                         );
+
+                        _linxPedidosVendaCache = list.ToList();
+                    }
 
                     var _listSomenteNovos = listRecords.Where(x => !_linxPedidosVendaCache.Any(y => 
                         y == x.recordKey

@@ -17,7 +17,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
         private readonly IAPICall _apiCall;
         private readonly ILoggerService _logger;
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
-        private readonly ILinxMicrovixAzureSQLRepositoryBase<LinxMovimento> _linxMicrovixRepositoryBase;
+        private readonly ILinxMicrovixRepositoryBase<LinxMovimento> _linxMicrovixRepositoryBase;
         private readonly ILinxMovimentoRepository _linxMovimentoRepository;
         private static List<string?> _linxMovimentoCache { get; set; } = new List<string?>();
 
@@ -25,7 +25,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
             IAPICall apiCall,
             ILoggerService logger,
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
-            ILinxMicrovixAzureSQLRepositoryBase<LinxMovimento> linxMicrovixRepositoryBase,
+            ILinxMicrovixRepositoryBase<LinxMovimento> linxMicrovixRepositoryBase,
             ILinxMovimentoRepository linxMovimentoRepository
         )
         {
@@ -300,13 +300,17 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                     var listRecords = DeserializeXMLToObject(jobParameter, xmls);
 
                     if (_linxMovimentoCache.Count == 0)
-                        _linxMovimentoCache = await _linxMovimentoRepository.GetRegistersExists(
+                    {
+                        var list = await _linxMovimentoRepository.GetRegistersExists(
                             jobParameter: jobParameter,
                             registros: listRecords
                                             .GroupBy(y => y.identificador)
                                             .Select(x => x.First())
                                             .ToList()
                         );
+
+                        _linxMovimentoCache = list.ToList();
+                    }
 
                     var _listSomenteNovos = listRecords.Where(x => !_linxMovimentoCache.Any(y =>
                         y == x.recordKey
