@@ -2,7 +2,7 @@
 
 namespace Domain.IntegrationsCore.Entities.Exceptions
 {
-    public class InternalException : Exception
+    public class GeneralException : Exception
     {
         public EnumStages stage { get; private set; }
         public EnumError Error { get; private set; }
@@ -10,9 +10,9 @@ namespace Domain.IntegrationsCore.Entities.Exceptions
         public string Message { get; private set; }
         public string ExceptionMessage { get; private set; }
 
-        public InternalException() { }
+        public GeneralException() { }
 
-        public InternalException(
+        public GeneralException(
             EnumStages stage,
             string message,
             EnumError error,
@@ -25,7 +25,7 @@ namespace Domain.IntegrationsCore.Entities.Exceptions
             Message = message;
         }
 
-        public InternalException(
+        public GeneralException(
             EnumStages stage,
             string message,
             EnumError error,

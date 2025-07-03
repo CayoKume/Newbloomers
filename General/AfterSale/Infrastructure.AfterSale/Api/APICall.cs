@@ -66,18 +66,11 @@ namespace Infrastructure.AfterSale.Api
 
         private HttpClient CreateClient(string? route, string? token)
         {
-            try
-            {
-                var client = _httpClientFactory.CreateClient("AfterSaleAPI");
-                client.DefaultRequestHeaders.Add("Accept", "application/json");
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var client = _httpClientFactory.CreateClient("AfterSaleAPI");
+            client.DefaultRequestHeaders.Add("Accept", "application/json");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-                return client;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"{route} - CreateClient - Erro ao criar HttpClientRequest para o end-point {route} - {ex}");
-            }
+            return client;
         }
     }
 }

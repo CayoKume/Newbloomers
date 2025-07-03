@@ -70,7 +70,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.Base
                     xml.LoadXml(response);
 
                     if (xml.GetElementsByTagName("ResponseSuccess")[0].ChildNodes[0].InnerText == "False")
-                        throw new InternalException(
+                        throw new GeneralException(
                             stage: EnumStages.DeserializeResponseToXML,
                             error: EnumError.EndPointFailOnDeserialize,
                             level: EnumMessageLevel.Error,
@@ -106,7 +106,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.Base
             }
             catch (Exception ex)
             {
-                throw new InternalException(
+                throw new GeneralException(
                     stage: EnumStages.DeserializeResponseToXML,
                     error: EnumError.EndPointFailOnDeserialize,
                     level: EnumMessageLevel.Error,
@@ -129,7 +129,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.Base
                     xml.LoadXml(response);
 
                     if (xml.GetElementsByTagName("ResponseSuccess")[0].ChildNodes[0].InnerText == "False")
-                        throw new InternalException(
+                        throw new GeneralException(
                             stage: EnumStages.DeserializeResponseToXML,
                             error: EnumError.EndPointFailOnDeserialize,
                             level: EnumMessageLevel.Error,
@@ -168,7 +168,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.Base
             }
             catch (Exception ex)
             {
-                throw new InternalException(
+                throw new GeneralException(
                     stage: EnumStages.DeserializeResponseToXML,
                     error: EnumError.EndPointFailOnDeserialize,
                     level: EnumMessageLevel.Error,

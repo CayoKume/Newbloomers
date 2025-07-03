@@ -216,7 +216,7 @@ namespace Infrastructure.LinxCommerce.Repository
             }
             catch (Exception ex)
             {
-                throw new InternalException(
+                throw new GeneralException(
                     stage: EnumStages.GetRegistersExists,
                     error: EnumError.SQLCommand,
                     level: EnumMessageLevel.Error,

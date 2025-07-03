@@ -20,9 +20,8 @@ namespace Hangfire.IO.Extensions
     {
         public static WebApplicationBuilder AddServices(this WebApplicationBuilder builder)
         {
-            builder.Services.AddScopedSQLServerConnection();
+            builder.Services.AddScopedIntegrationsCoreServices();
 
-            builder.Services.AddScopedAuditServices();
             builder.Services.AddScopedLinxCommerceServices();
             builder.Services.AddScopedLinxMicrovixServices();
             builder.Services.AddScopedB2CLinxMicrovixServices();
@@ -52,14 +51,6 @@ namespace Hangfire.IO.Extensions
             //builder.Services.AddDbContextFlashCourierService(databaseType, connectionstring);
             //builder.Services.AddDbContextJadlogService(databaseType, connectionstring);
             //builder.Services.AddDbContextTotalExpressService(databaseType, connectionstring);
-
-            return services;
-        }
-
-        public static IServiceCollection AddScopedAuditServices(this IServiceCollection services)
-        {
-            services.AddScoped<ILogRepository, LogRepository>();
-            services.AddScoped<ILoggerService, LoggerService>();
 
             return services;
         }

@@ -142,7 +142,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
             //}
             //catch (Exception ex)
             //{
-            //    throw new InternalException(
+            //    throw new GeneralException(
             //        stage: EnumStages.GetB2CCompanys,
             //        error: EnumError.SQLCommand,
             //        level: EnumMessageLevel.Error,
@@ -200,7 +200,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
             //}
             //catch (Exception ex)
             //{
-            //    throw new InternalException(
+            //    throw new GeneralException(
             //        stage: EnumStages.GetMicrovixCompanys,
             //        error: EnumError.SQLCommand,
             //        level: EnumMessageLevel.Error,
@@ -248,7 +248,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
             //}
             //catch (Exception ex)
             //{
-            //    throw new InternalException(
+            //    throw new GeneralException(
             //        stage: EnumStages.GetMicrovixGroupCompanys,
             //        error: EnumError.SQLCommand,
             //        level: EnumMessageLevel.Error,
@@ -326,7 +326,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
             //}
             //catch (Exception ex)
             //{
-            //    throw new InternalException(
+            //    throw new GeneralException(
             //        stage: EnumStages.GetLast7DaysMinTimestamp,
             //        error: EnumError.SQLCommand,
             //        level: EnumMessageLevel.Error,
@@ -369,7 +369,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
             //}
             //catch (Exception ex)
             //{
-            //    throw new InternalException(
+            //    throw new GeneralException(
             //        stage: EnumStages.GetLast7DaysMinTimestamp,
             //        error: EnumError.SQLCommand,
             //        level: EnumMessageLevel.Error,
@@ -413,7 +413,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
             //}
             //catch (Exception ex)
             //{
-            //    throw new InternalException(
+            //    throw new GeneralException(
             //        stage: EnumStages.GetLast7DaysMinTimestamp,
             //        error: EnumError.SQLCommand,
             //        level: EnumMessageLevel.Error,
@@ -457,7 +457,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
             //}
             //catch (Exception ex)
             //{
-            //    throw new InternalException(
+            //    throw new GeneralException(
             //        stage: EnumStages.GetLast7DaysMinTimestamp,
             //        error: EnumError.SQLCommand,
             //        level: EnumMessageLevel.Error,
@@ -501,7 +501,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
             //}
             //catch (Exception ex)
             //{
-            //    throw new InternalException(
+            //    throw new GeneralException(
             //        stage: EnumStages.GetLast7DaysMinTimestamp,
             //        error: EnumError.SQLCommand,
             //        level: EnumMessageLevel.Error,
@@ -579,7 +579,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
             //}
             //catch (Exception ex)
             //{
-            //    throw new InternalException(
+            //    throw new GeneralException(
             //        stage: EnumStages.GetRegistersExists,
             //        error: EnumError.SQLCommand,
             //        level: EnumMessageLevel.Error,

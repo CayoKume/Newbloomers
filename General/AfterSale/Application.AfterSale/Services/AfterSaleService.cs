@@ -25,8 +25,8 @@ namespace Application.AfterSale.Services
         /// </summary>
         public async Task<bool?> GetMe()
         {
-            try
-            {
+            //try
+            //{
                 _logger
                    .Clear()
                    .AddLog(EnumJob.AfterSaleEcommerces);
@@ -72,44 +72,44 @@ namespace Application.AfterSale.Services
                     _logger.AddMessage(
                             $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"
                         );
-            }
-            catch (SQLCommandException ex)
-            {
-                _logger.AddMessage(
-                    stage: ex.Stage,
-                    error: ex.Error,
-                    logLevel: ex.MessageLevel,
-                    message: ex.Message,
-                    exceptionMessage: ex.ExceptionMessage,
-                    commandSQL: ex.CommandSQL
-                );
+            //}
+            //catch (SQLCommandException ex)
+            //{
+            //    _logger.AddMessage(
+            //        stage: ex.Stage,
+            //        error: ex.Error,
+            //        logLevel: ex.MessageLevel,
+            //        message: ex.Message,
+            //        exceptionMessage: ex.ExceptionMessage,
+            //        commandSQL: ex.CommandSQL
+            //    );
 
-                throw;
-            }
-            catch (InternalException ex)
-            {
-                _logger.AddMessage(
-                    stage: ex.stage,
-                    error: ex.Error,
-                    logLevel: ex.MessageLevel,
-                    message: ex.Message,
-                    exceptionMessage: ex.ExceptionMessage
-                );
+            //    throw;
+            //}
+            //catch (GeneralException ex)
+            //{
+            //    _logger.AddMessage(
+            //        stage: ex.stage,
+            //        error: ex.Error,
+            //        logLevel: ex.MessageLevel,
+            //        message: ex.Message,
+            //        exceptionMessage: ex.ExceptionMessage
+            //    );
 
-                throw;
-            }
-            catch (Exception ex)
-            {
-                _logger.AddMessage(
-                    message: "Error when executing GetRecords method",
-                    exceptionMessage: ex.Message
-                );
-            }
-            finally
-            {
+            //    throw;
+            //}
+            //catch (Exception ex)
+            //{
+            //    _logger.AddMessage(
+            //        message: "Error when executing GetRecords method",
+            //        exceptionMessage: ex.Message
+            //    );
+            //}
+            //finally
+            //{
                 _logger.SetLogEndDate();
                 await _logger.CommitAllChanges();
-            }
+            //}
 
             return true;
         }
@@ -288,8 +288,6 @@ namespace Application.AfterSale.Services
                     }
 
                     _afterSaleRepository.InsertIntoAfterSaleReverses(completeReverses);
-
-
                 }
 
                 return true;

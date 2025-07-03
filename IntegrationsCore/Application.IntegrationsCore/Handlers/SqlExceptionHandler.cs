@@ -5,26 +5,20 @@ using Microsoft.Extensions.Logging;
 using System.Net;
 using System.Text.Json;
 
-namespace Domain.IntegrationsCore.Handlers
+namespace Application.IntegrationsCore.Handlers
 {
     public class SqlExceptionHandler : IExceptionHandler
     {
         private readonly ILogger<SqlExceptionHandler> _logger;
 
-        public SqlExceptionHandler(ILogger<SqlExceptionHandler> logger)
-        {
+        public SqlExceptionHandler(ILogger<SqlExceptionHandler> logger) =>
             _logger = logger;
-        }
 
-        public bool CanHandle(Exception exception)
-        {
-            return exception is SQLCommandException;
-        }
+        public bool CanHandle(Exception exception) => exception is SQLCommandException;
 
         public async Task HandleAsync(HttpContext context, Exception exception)
         {
             var ex = (SQLCommandException)exception;
-            _logger.LogError(ex, "SQLCommandException capturada: {Message} - Stage: {Stage} - SQL: {CommandSQL}", ex.Message, ex.Stage, ex.CommandSQL);
 
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;

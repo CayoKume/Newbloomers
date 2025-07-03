@@ -84,7 +84,7 @@ namespace Infrastructure.LinxCommerce.Repositorys
             }
             catch (Exception ex)
             {
-                throw new InternalException(
+                throw new GeneralException(
                     stage: EnumStages.BulkInsertIntoTableRaw,
                     error: EnumError.SQLCommand,
                     level: EnumMessageLevel.Error,
@@ -115,7 +115,7 @@ namespace Infrastructure.LinxCommerce.Repositorys
             }
             catch (Exception ex)
             {
-                throw new InternalException(
+                throw new GeneralException(
                     stage: EnumStages.BulkInsertIntoTableRaw,
                     error: EnumError.SQLCommand,
                     level: EnumMessageLevel.Error,
@@ -141,7 +141,7 @@ namespace Infrastructure.LinxCommerce.Repositorys
             }
             catch (Exception ex)
             {
-                throw new InternalException(
+                throw new GeneralException(
                     stage: EnumStages.CallDbProcMerge,
                     error: EnumError.SQLCommand,
                     level: EnumMessageLevel.Error,
@@ -170,7 +170,7 @@ namespace Infrastructure.LinxCommerce.Repositorys
             }
             catch (Exception ex)
             {
-                throw new InternalException(
+                throw new GeneralException(
                     stage: EnumStages.CallDbProcMerge,
                     error: EnumError.SQLCommand,
                     level: EnumMessageLevel.Error,
@@ -205,7 +205,7 @@ namespace Infrastructure.LinxCommerce.Repositorys
             }
             catch (Exception ex)
             {
-                throw new InternalException(
+                throw new GeneralException(
                     stage: EnumStages.ExecuteQueryCommand,
                     error: EnumError.SQLCommand,
                     level: EnumMessageLevel.Error,
@@ -237,7 +237,7 @@ namespace Infrastructure.LinxCommerce.Repositorys
             }
             catch (Exception ex)
             {
-                throw new InternalException(
+                throw new GeneralException(
                     stage: EnumStages.GetParameters,
                     error: EnumError.SQLCommand,
                     level: EnumMessageLevel.Error,
@@ -272,7 +272,7 @@ namespace Infrastructure.LinxCommerce.Repositorys
             }
             catch (Exception ex)
             {
-                throw new InternalException(
+                throw new GeneralException(
                     stage: EnumStages.InsertRecord,
                     error: EnumError.SQLCommand,
                     level: EnumMessageLevel.Error,
@@ -296,7 +296,7 @@ namespace Infrastructure.LinxCommerce.Repositorys
             }
             catch (Exception ex)
             {
-                throw new InternalException(
+                throw new GeneralException(
                     stage: EnumStages.CreateSystemDataTable,
                     error: EnumError.SQLCommand,
                     level: EnumMessageLevel.Error,
@@ -329,7 +329,7 @@ namespace Infrastructure.LinxCommerce.Repositorys
             }
             catch (Exception ex)
             {
-                throw new InternalException(
+                throw new GeneralException(
                     stage: EnumStages.CreateSystemDataTable,
                     error: EnumError.SQLCommand,
                     level: EnumMessageLevel.Error,

@@ -1,4 +1,4 @@
-﻿using Domain.IntegrationsCore.Extensions;
+﻿using Application.IntegrationsCore.Middlewares;
 
 namespace Hangfire.IO.Extensions
 {
@@ -6,12 +6,12 @@ namespace Hangfire.IO.Extensions
     {
         public static IApplicationBuilder UseApplication(this IApplicationBuilder app, string? serverName)
         {
-            app.UseExceptionHandlingMiddleware();
+            app.UseMiddleware<ExceptionHandlingMiddleware>();
 #if DEBUG
             app.UseSwagger();
             app.UseSwaggerUI();
             app.UseHttpsRedirection();
-            //app.UseAuthorization();
+            app.UseAuthorization();
 #else
             app.UseHangfireDashboard();
             LinxMicrovixERPRecurringJobsExtensions.AddRecurringJobs();

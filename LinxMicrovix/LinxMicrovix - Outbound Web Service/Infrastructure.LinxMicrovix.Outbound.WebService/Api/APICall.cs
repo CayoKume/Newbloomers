@@ -24,7 +24,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Api
                 if (response.StatusCode == HttpStatusCode.OK)
                     return new StreamReader(response.GetResponseStream()).ReadToEnd().Replace("'", "");
                 else
-                    throw new InternalException(
+                    throw new GeneralException(
                         stage: EnumStages.PostAsync,
                         error: EnumError.EndPointException,
                         level: EnumMessageLevel.Error,
@@ -35,7 +35,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Api
             }
             catch (Exception ex)
             {
-                throw new InternalException(
+                throw new GeneralException(
                     stage: EnumStages.PostAsync,
                     error: EnumError.Exception,
                     level: EnumMessageLevel.Error,

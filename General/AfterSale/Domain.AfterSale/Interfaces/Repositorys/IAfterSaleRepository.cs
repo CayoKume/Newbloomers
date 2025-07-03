@@ -5,8 +5,8 @@ namespace Domain.AfterSale.Interfaces.Repositorys;
 public interface IAfterSaleRepository
 {
     /*Select in Database*/
-    public Task<IEnumerable<Company>> GetCompanys();
-    public Task<Company> GetCompany(string cnpj_emp);
+    public Task<IEnumerable<Company?>> GetCompanys();
+    public Task<Company?> GetCompany(string cnpj_emp);
 
     /*Insert in Database*/
     public bool InsertIntoAfterSaleEcommerce(List<Ecommerce> data);

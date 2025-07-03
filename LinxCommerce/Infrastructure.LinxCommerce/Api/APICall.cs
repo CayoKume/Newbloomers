@@ -36,7 +36,7 @@ namespace Infrastructure.LinxCommerce.Api
             }
             catch (Exception ex)
             {
-                throw new InternalException(
+                throw new GeneralException(
                     stage: EnumStages.PostAsync,
                     error: EnumError.Exception,
                     level: EnumMessageLevel.Error,
@@ -68,7 +68,7 @@ namespace Infrastructure.LinxCommerce.Api
             }
             catch (Exception ex)
             {
-                throw new InternalException(
+                throw new GeneralException(
                     stage: EnumStages.PostAsync,
                     error: EnumError.Exception,
                     level: EnumMessageLevel.Error,
@@ -100,7 +100,7 @@ namespace Infrastructure.LinxCommerce.Api
             }
             catch (Exception ex)
             {
-                throw new InternalException(
+                throw new GeneralException(
                     stage: EnumStages.PostAsync,
                     error: EnumError.Exception,
                     level: EnumMessageLevel.Error,
@@ -132,7 +132,7 @@ namespace Infrastructure.LinxCommerce.Api
             }
             catch (Exception ex)
             {
-                throw new InternalException(
+                throw new GeneralException(
                     stage: EnumStages.PostAsync,
                     error: EnumError.Exception,
                     level: EnumMessageLevel.Error,

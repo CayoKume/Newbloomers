@@ -397,7 +397,7 @@ namespace Infrastructure.Jadlog.Repositorys
             }
             catch (Exception ex)
             {
-                throw new InternalException(
+                throw new GeneralException(
                     stage: EnumStages.CreateSystemDataTable,
                     error: EnumError.SQLCommand,
                     level: EnumMessageLevel.Error,
@@ -429,7 +429,7 @@ namespace Infrastructure.Jadlog.Repositorys
             }
             catch (Exception ex)
             {
-                throw new InternalException(
+                throw new GeneralException(
                     stage: EnumStages.BulkInsertIntoTableRaw,
                     error: EnumError.SQLCommand,
                     level: EnumMessageLevel.Error,
@@ -458,7 +458,7 @@ namespace Infrastructure.Jadlog.Repositorys
             }
             catch (Exception ex)
             {
-                throw new InternalException(
+                throw new GeneralException(
                     stage: EnumStages.CallDbProcMerge,
                     error: EnumError.SQLCommand,
                     level: EnumMessageLevel.Error,

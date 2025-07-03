@@ -53,9 +53,9 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxMicrovi
 
                 return await _linxMicrovixRepositoryBase.GetParameters(sql);
             }
-            catch (Exception ex) when (ex is not InternalException && ex is not SQLCommandException)
+            catch (Exception ex) when (ex is not GeneralException && ex is not SQLCommandException)
             {
-                throw new InternalException(
+                throw new GeneralException(
                     stage: EnumStages.GetRegistersExists,
                     error: EnumError.Exception,
                     level: EnumMessageLevel.Error,
@@ -86,9 +86,9 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxMicrovi
 
                 return await _linxMicrovixRepositoryBase.GetKeyRegistersAlreadyExists(sql);
             }
-            catch (Exception ex) when (ex is not InternalException && ex is not SQLCommandException)
+            catch (Exception ex) when (ex is not GeneralException && ex is not SQLCommandException)
             {
-                throw new InternalException(
+                throw new GeneralException(
                     stage: EnumStages.GetRegistersExists,
                     error: EnumError.Exception,
                     level: EnumMessageLevel.Error,

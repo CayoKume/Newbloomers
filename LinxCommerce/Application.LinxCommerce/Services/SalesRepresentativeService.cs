@@ -150,7 +150,7 @@ namespace Application.LinxCommerce.Services
 
                 throw;
             }
-            catch (InternalException ex)
+            catch (GeneralException ex)
             {
                 _logger.AddMessage(
                     stage: ex.stage,

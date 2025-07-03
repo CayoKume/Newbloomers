@@ -54,9 +54,9 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 
                 return await _linxMicrovixRepositoryBase.GetKeyRegistersAlreadyExists(sql);
             }
-            catch (Exception ex) when (ex is not InternalException && ex is not SQLCommandException)
+            catch (Exception ex) when (ex is not GeneralException && ex is not SQLCommandException)
             {
-                throw new InternalException(
+                throw new GeneralException(
                     stage: EnumStages.GetRegistersExists,
                     error: EnumError.Exception,
                     level: EnumMessageLevel.Error,

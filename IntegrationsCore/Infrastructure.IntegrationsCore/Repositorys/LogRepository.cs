@@ -43,7 +43,7 @@ namespace Infrastructure.IntegrationsCore.Repositorys
                     await conn.ExecuteAsync(
                             //sql: @$"INSERT INTO [auditing].[Logs] ([IdJob], [StartDate], [EndDate], [Execution])
                             //       VALUES ({(long)log.Job}, '{log.StartDate.ToString("s")}', '{log.EndDate.ToString("s")}', '{log.Execution}')",
-                            sql: @$"INSERT INTO [GENERAL].[Logs] ([IdJob], [StartDate], [EndDate], [Execution])
+                            sql: @$"INSERT INTO [general].[Logs] ([IdJob], [StartDate], [EndDate], [Execution])
                                    VALUES ({(long)log.Job}, '{log.StartDate.ToString("s")}', '{log.EndDate.ToString("s")}', '{log.Execution}')",
                             commandTimeout: 360
                         );
@@ -82,7 +82,7 @@ namespace Infrastructure.IntegrationsCore.Repositorys
             //}
             //catch (Exception ex)
             //{
-            //    throw new InternalException(
+            //    throw new GeneralException(
             //    stage: EnumStages.InsertRecord,
             //    error: EnumError.SQLCommand,
             //        level: EnumMessageLevel.Error,
@@ -106,7 +106,7 @@ namespace Infrastructure.IntegrationsCore.Repositorys
             }
             catch (Exception ex)
             {
-                throw new InternalException(
+                throw new GeneralException(
                     stage: EnumStages.CreateSystemDataTable,
                     error: EnumError.SQLCommand,
                     level: EnumMessageLevel.Error,

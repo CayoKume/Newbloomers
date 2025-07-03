@@ -17,9 +17,8 @@ namespace AzureJobs.Extensions
         {
             builder.ConfigureServices(services =>
             {
-                services.AddScopedSQLServerConnection();
+                services.AddScopedIntegrationsCoreServices();
 
-                services.AddAuditServices();
                 services.AddScopedLinxCommerceServices();
                 services.AddScopedLinxMicrovixServices();
                 services.AddScopedB2CLinxMicrovixServices();
@@ -29,14 +28,6 @@ namespace AzureJobs.Extensions
             });
 
             return builder;
-        }
-
-        public static IServiceCollection AddAuditServices(this IServiceCollection services)
-        {
-            services.AddScoped<ILogRepository, LogRepository>();
-            services.AddScoped<ILoggerService, LoggerService>();
-
-            return services;
         }
     }
 }

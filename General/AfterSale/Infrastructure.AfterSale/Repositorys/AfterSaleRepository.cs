@@ -18,20 +18,17 @@ public class AfterSaleRepository : IAfterSaleRepository
     public AfterSaleRepository(ISQLServerConnection sqlServerConnection, IIntegrationsCoreRepository integrationsCoreRepository) =>
             (_sqlServerConnection, _integrationsCoreRepository) = (sqlServerConnection, integrationsCoreRepository);
 
-    public async Task<IEnumerable<Company>> GetCompanys()
+    public async Task<IEnumerable<Company?>> GetCompanys()
     {
         string? sql = @$"SELECT DISTINCT
                      CNPJ_EMP AS DOC_COMPANY,
                      TOKEN AS TOKEN
                      FROM GENERAL.PARAMETROS_AFTERSALE";
 
-        using (var conn = _sqlServerConnection.GetIDbConnection())
-        {
-            return await conn.QueryAsync<Company>(sql);
-        }
+        return await _integrationsCoreRepository.GetRecords<Company>(sql);
     }
 
-    public async Task<Company> GetCompany(string cnpj_emp)
+    public async Task<Company?> GetCompany(string cnpj_emp)
     {
         string? sql = @$"SELECT DISTINCT
                      CNPJ_EMP AS DOC_COMPANY,
@@ -40,12 +37,7 @@ public class AfterSaleRepository : IAfterSaleRepository
                      WHERE 
                      CNPJ_EMP = {cnpj_emp}";
 
-        using (var conn = _sqlServerConnection.GetIDbConnection())
-        {
-            var result = await conn.QueryAsync<Company>(sql);
-
-            return result.FirstOrDefault();
-        }
+        return await _integrationsCoreRepository.GetRecord<Company>(sql);
     }
 
     public bool InsertIntoAfterSaleRefunds()
@@ -80,31 +72,18 @@ public class AfterSaleRepository : IAfterSaleRepository
         var addressTable = _integrationsCoreRepository.CreateSystemDataTable(entity: new Address(), tableName: "AfterSaleAddresses");
         var trackingHistoryTable = _integrationsCoreRepository.CreateSystemDataTable(entity: new TrackingHistory(), tableName: "AfterSaleTrackingHistories");
 
-        try
-        {
-            _integrationsCoreRepository.FillSystemDataTable(reversesTable, data.Select(x => x.reverse).ToList());
-            _integrationsCoreRepository.FillSystemDataTable(customerTable, data.Select(x => x.customer).ToList());
-            _integrationsCoreRepository.FillSystemDataTable(addressTable, data.Select(x => x.customer.address).ToList());
-            _integrationsCoreRepository.FillSystemDataTable(addressTable, data.Select(x => x.customer.shipping_address).ToList());
-            _integrationsCoreRepository.FillSystemDataTable(trackingHistoryTable, data.SelectMany(x => x.tracking_history).ToList());
+        _integrationsCoreRepository.FillSystemDataTable(reversesTable, data.Select(x => x.reverse).ToList());
+        _integrationsCoreRepository.FillSystemDataTable(customerTable, data.Select(x => x.customer).ToList());
+        _integrationsCoreRepository.FillSystemDataTable(addressTable, data.Select(x => x.customer.address).ToList());
+        _integrationsCoreRepository.FillSystemDataTable(addressTable, data.Select(x => x.customer.shipping_address).ToList());
+        _integrationsCoreRepository.FillSystemDataTable(trackingHistoryTable, data.SelectMany(x => x.tracking_history).ToList());
 
-            _integrationsCoreRepository.BulkInsertIntoTableRaw(reversesTable);
-            _integrationsCoreRepository.BulkInsertIntoTableRaw(customerTable);
-            _integrationsCoreRepository.BulkInsertIntoTableRaw(addressTable);
-            _integrationsCoreRepository.BulkInsertIntoTableRaw(trackingHistoryTable);
+        _integrationsCoreRepository.BulkInsertIntoTableRaw(reversesTable);
+        _integrationsCoreRepository.BulkInsertIntoTableRaw(customerTable);
+        _integrationsCoreRepository.BulkInsertIntoTableRaw(addressTable);
+        _integrationsCoreRepository.BulkInsertIntoTableRaw(trackingHistoryTable);
 
-            return true;
-        }
-        catch (Exception ex)
-        {
-            throw new InternalException(
-                stage: EnumStages.BulkInsertIntoTableRaw,
-                error: EnumError.SQLCommand,
-                level: EnumMessageLevel.Error,
-                message: $"Error when trying to bulk insert records on table raw",
-                exceptionMessage: ex.Message
-            );
-        }
+        return true;
     }
 
     public bool InsertIntoAfterSaleReversesCourierAttributes()
@@ -126,7 +105,7 @@ public class AfterSaleRepository : IAfterSaleRepository
         }
         catch (Exception ex)
         {
-            throw new InternalException(
+            throw new GeneralException(
                 stage: EnumStages.BulkInsertIntoTableRaw,
                 error: EnumError.SQLCommand,
                 level: EnumMessageLevel.Error,
@@ -150,7 +129,7 @@ public class AfterSaleRepository : IAfterSaleRepository
         }
         catch (Exception ex)
         {
-            throw new InternalException(
+            throw new GeneralException(
                 stage: EnumStages.BulkInsertIntoTableRaw,
                 error: EnumError.SQLCommand,
                 level: EnumMessageLevel.Error,
@@ -174,7 +153,7 @@ public class AfterSaleRepository : IAfterSaleRepository
         }
         catch (Exception ex)
         {
-            throw new InternalException(
+            throw new GeneralException(
                 stage: EnumStages.BulkInsertIntoTableRaw,
                 error: EnumError.SQLCommand,
                 level: EnumMessageLevel.Error,
@@ -204,7 +183,7 @@ public class AfterSaleRepository : IAfterSaleRepository
         }
         catch (Exception ex)
         {
-            throw new InternalException(
+            throw new GeneralException(
                 stage: EnumStages.BulkInsertIntoTableRaw,
                 error: EnumError.SQLCommand,
                 level: EnumMessageLevel.Error,

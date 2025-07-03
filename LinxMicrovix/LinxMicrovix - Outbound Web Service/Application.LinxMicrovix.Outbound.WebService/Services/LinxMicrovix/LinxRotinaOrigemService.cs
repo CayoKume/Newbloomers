@@ -76,7 +76,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                 }
                 catch (Exception ex)
                 {
-                    throw new InternalException(
+                    throw new GeneralException(
                         stage: EnumStages.DeserializeXMLToObject,
                         error: EnumError.Exception,
                         level: EnumMessageLevel.Error,
@@ -132,7 +132,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
 
                 throw;
             }
-            catch (InternalException ex)
+            catch (GeneralException ex)
             {
                 _logger.AddMessage(
                     stage: ex.stage,
@@ -233,7 +233,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
 
                 throw;
             }
-            catch (InternalException ex)
+            catch (GeneralException ex)
             {
                 _logger.AddMessage(
                     stage: ex.stage,

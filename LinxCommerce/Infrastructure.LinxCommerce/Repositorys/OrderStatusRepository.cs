@@ -56,9 +56,9 @@ namespace Infrastructure.LinxCommerce.Repositorys
 
             //    return await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
             //}
-            //catch (Exception ex) when (ex is not InternalException && ex is not SQLCommandException)
+            //catch (Exception ex) when (ex is not GeneralException && ex is not SQLCommandException)
             //{
-            //    throw new InternalException(
+            //    throw new GeneralException(
             //        stage: EnumStages.GetRegistersExists,
             //        error: EnumError.Exception,
             //        level: EnumMessageLevel.Error,
