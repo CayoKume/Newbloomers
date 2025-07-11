@@ -1,6 +1,4 @@
-﻿using Application.IntegrationsCore.Interfaces;
-using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
-using Domain.IntegrationsCore.Enums;
+﻿using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
 using Domain.IntegrationsCore.Entities.Exceptions;
 using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
 using System.Xml;
@@ -70,12 +68,10 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.Base
                     xml.LoadXml(response);
 
                     if (xml.GetElementsByTagName("ResponseSuccess")[0].ChildNodes[0].InnerText == "False")
-                        throw new GeneralException(
-                            stage: EnumStages.DeserializeResponseToXML,
-                            error: EnumError.EndPointFailOnDeserialize,
-                            level: EnumMessageLevel.Error,
-                            message: "Error unrealizing XML",
-                            exceptionMessage: xml.GetElementsByTagName("Message")[0].ChildNodes[0].InnerText
+                        throw new APIException(
+                            message: "Error when deserealizing response to xml list",
+                            exceptionMessage: xml.GetElementsByTagName("Message")[0].ChildNodes[0].InnerText,
+                            apiRequestResponse: response
                         );
 
                     if (xml.GetElementsByTagName("R").Count > 0)
@@ -107,73 +103,8 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.Base
             catch (Exception ex)
             {
                 throw new GeneralException(
-                    stage: EnumStages.DeserializeResponseToXML,
-                    error: EnumError.EndPointFailOnDeserialize,
-                    level: EnumMessageLevel.Error,
-                    message: "Error when unrealizing response to records list",
-                    exceptionMessage: ex.Message
-                );
-            }
-        }
-
-        //remover
-        public List<Dictionary<string?, string?>> DeserializeResponseToXML(LinxAPIParam jobParameter, string? response, ICacheBase entityCache)
-        {
-            try
-            {
-                var listRegistros = new List<Dictionary<string?, string?>>();
-                var xml = new XmlDocument();
-
-                if (response != String.Empty)
-                {
-                    xml.LoadXml(response);
-
-                    if (xml.GetElementsByTagName("ResponseSuccess")[0].ChildNodes[0].InnerText == "False")
-                        throw new GeneralException(
-                            stage: EnumStages.DeserializeResponseToXML,
-                            error: EnumError.EndPointFailOnDeserialize,
-                            level: EnumMessageLevel.Error,
-                            message: "Error unrealizing XML",
-                            exceptionMessage: xml.GetElementsByTagName("Message")[0].ChildNodes[0].InnerText
-                        );
-
-                    if (xml.GetElementsByTagName("R").Count > 0)
-                    {
-                        Parallel.For(0, xml.GetElementsByTagName("R").Count, row =>
-                        {
-                            var registro = new Dictionary<string?, string?>();
-                            var c0 = xml.GetElementsByTagName("C")[0];
-                            var rrow = xml.GetElementsByTagName("R")[row];
-                            for (int col = 0; col < c0.ChildNodes.Count; col++)
-                            {
-                                string? key = c0.ChildNodes[col].InnerText;
-                                string? value = rrow.ChildNodes[col].InnerText.Replace("'", "''");
-
-                                registro.Add(key, value);
-                            }
-
-                            var KeyInDictionary = entityCache.GetKeyInDictionary(registro);
-                            string text_xml_row = rrow.InnerXml;
-                            entityCache.AddCacheXml(KeyInDictionary, text_xml_row);
-
-                            listRegistros.Add(registro);
-                        });
-
-                        return listRegistros;
-                    }
-                    else
-                        return listRegistros;
-                }
-                return listRegistros;
-            }
-            catch (Exception ex)
-            {
-                throw new GeneralException(
-                    stage: EnumStages.DeserializeResponseToXML,
-                    error: EnumError.EndPointFailOnDeserialize,
-                    level: EnumMessageLevel.Error,
-                    message: "Error when unrealizing response to records list",
-                    exceptionMessage: ex.Message
+                    message: $"Error when deserealizing response to xml list - {ex.Message}",
+                    exceptionMessage: ex.StackTrace
                 );
             }
         }

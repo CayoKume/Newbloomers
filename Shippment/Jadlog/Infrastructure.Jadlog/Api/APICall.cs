@@ -27,10 +27,11 @@ namespace Infrastructure.Jadlog.Api
             catch
             {
                 throw new GeneralException(
-                    stage: EnumStages.PostAsync,
-                    error: EnumError.Exception,
-                    level: EnumMessageLevel.Error,
-                    message: $"Error when querying endpoint: {rote} on jadlog webservices"
+                    //stage: EnumStages.PostAsync,
+                    //error: EnumError.Exception,
+                    //level: EnumMessageLevel.Error,
+                    message: $"Error when querying endpoint: {rote} on jadlog webservices",
+                    exceptionMessage: ""
                 );
             }
         }
@@ -50,11 +51,12 @@ namespace Infrastructure.Jadlog.Api
             catch
             {
                 throw new GeneralException(
-                    stage: EnumStages.PostAsync,
-                    error: EnumError.Exception,
-                    level: EnumMessageLevel.Error,
+                    //stage: EnumStages.PostAsync,
+                    //error: EnumError.Exception,
+                    //level: EnumMessageLevel.Error,
                     message: $"Error when querying endpoint: {rote} on jadlog webservices\n" +
-                             $"Request: {Newtonsoft.Json.JsonConvert.SerializeObject(jObj)}"
+                             $"Request: {Newtonsoft.Json.JsonConvert.SerializeObject(jObj)}",
+                    exceptionMessage: ""
                 );
             }
         }

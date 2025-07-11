@@ -42,10 +42,15 @@ namespace Domain.IntegrationsCore.Interfaces
         /// <param name="entity"></param>
         public Task<bool> InsertRecord(string? sql, object entity);
         /// <summary>
-        /// Execute bulk insert on Database
+        /// Execute bulk insert on untreated schema from Database
         /// </summary>
         /// <param name="dataTable"></param>
         public bool BulkInsertIntoTableRaw(DataTable dataTable);
+        /// <summary>
+        /// Execute bulk insert on specific schema from Database
+        /// </summary>
+        /// <param name="dataTable"></param>
+        public bool BulkInsertIntoTableRaw(DataTable dataTable, string schema);
         /// <summary>
         /// Call synchronization procedure from Database
         /// </summary>

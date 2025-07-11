@@ -24,23 +24,18 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Api
                 if (response.StatusCode == HttpStatusCode.OK)
                     return new StreamReader(response.GetResponseStream()).ReadToEnd().Replace("'", "");
                 else
-                    throw new GeneralException(
-                        stage: EnumStages.PostAsync,
-                        error: EnumError.EndPointException,
-                        level: EnumMessageLevel.Error,
-                        message: $"Error when querying endpoint: {jobParameter.jobName} on microvix webservice\n" +
-                                 $"API return HttpStatusCode:'{response.StatusCode}' when it was expected '{HttpStatusCode.OK}'\n" +
-                                 $"Request: {body}"
+                    throw new APIException(
+                        message: $"Error when querying endpoint: {jobParameter.jobName} on microvix webservice",
+                        exceptionMessage: $"API return HttpStatusCode:'{response.StatusCode}' when it was expected '{HttpStatusCode.OK}'\n",
+                        apiRequestResponse: $"Request: {body}"
                     );
             }
             catch (Exception ex)
             {
-                throw new GeneralException(
-                    stage: EnumStages.PostAsync,
-                    error: EnumError.Exception,
-                    level: EnumMessageLevel.Error,
-                    message: $"Error when querying endpoint: {jobParameter.jobName} on microvix webservice\n" +
-                                $"Request: {body}"
+                throw new APIException(
+                    message: $"Error when querying endpoint: {jobParameter.jobName} on microvix webservice - {ex.Message}",
+                    exceptionMessage: ex.StackTrace,
+                    apiRequestResponse: body
                 );
             }
         }

@@ -37,37 +37,20 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
             }
         }
 
-        public async Task<IEnumerable<B2CConsultaProdutosDetalhesDepositos>> GetRegistersExists(LinxAPIParam jobParameter, List<B2CConsultaProdutosDetalhesDepositos> registros)
+        public async Task<IEnumerable<string?>> GetRegistersExists(LinxAPIParam jobParameter, List<B2CConsultaProdutosDetalhesDepositos> registros)
         {
-            try
+            var identificadores = String.Empty;
+            for (int i = 0; i < registros.Count(); i++)
             {
-                var identificadores = String.Empty;
-                for (int i = 0; i < registros.Count(); i++)
-                {
-                    if (i == registros.Count() - 1)
-                        identificadores += $"'{registros[i].deposito}'";
-                    else
-                        identificadores += $"'{registros[i].deposito}', ";
-                }
+                if (i == registros.Count() - 1)
+                    identificadores += $"'{registros[i].deposito}'";
+                else
+                    identificadores += $"'{registros[i].deposito}', ";
+            }
 
-                string sql = $"SELECT DEPOSITO, TIMESTAMP FROM B2CCONSULTAPRODUTOSDETALHESDEPOSITOS WHERE DEPOSITO IN ({identificadores})";
+            string sql = $"SELECT CONCAT('[', DEPOSITO, ']', '|', '[', [TIMESTAMP], ']') FROM [linx_microvix_commerce].[B2CCONSULTAPRODUTOSDETALHESDEPOSITOS] WHERE DEPOSITO IN ({identificadores})";
 
-                return await _linxMicrovixRepositoryBase.GetRegistersExists(sql);
-            }
-            catch (Exception ex) when (ex is not GeneralException && ex is not SQLCommandException)
-            {
-                throw new GeneralException(
-                    stage: EnumStages.GetRegistersExists,
-                    error: EnumError.Exception,
-                    level: EnumMessageLevel.Error,
-                    message: "Error when filling identifiers to sql command",
-                    exceptionMessage: ex.Message
-                );
-            }
-            catch
-            {
-                throw;
-            }
+            return await _linxMicrovixRepositoryBase.GetKeyRegistersAlreadyExists(sql);
         }
 
         public async Task<bool> InsertRecord(LinxAPIParam jobParameter, B2CConsultaProdutosDetalhesDepositos? record)
@@ -77,14 +60,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                           "Values " +
                           "(@lastupdateon, @codigoproduto, @empresa, @id_deposito, @saldo, @timestamp, @portal, @deposito, @tempo_preparacao_estoque)";
 
-            try
-            {
-                return await _linxMicrovixRepositoryBase.InsertRecord(jobParameter.tableName, sql: sql, record: record);
-            }
-            catch
-            {
-                throw;
-            }
+            return await _linxMicrovixRepositoryBase.InsertRecord(jobParameter.tableName, sql: sql, record: record);
         }
     }
 }

@@ -16,58 +16,34 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 
         public bool BulkInsertIntoTableRaw(LinxAPIParam jobParameter, IList<B2CConsultaNFeSituacao> records)
         {
-            try
+            var table = _linxMicrovixRepositoryBase.CreateSystemDataTable(jobParameter.tableName, new B2CConsultaNFeSituacao());
+
+            for (int i = 0; i < records.Count(); i++)
             {
-                var table = _linxMicrovixRepositoryBase.CreateSystemDataTable(jobParameter.tableName, new B2CConsultaNFeSituacao());
-
-                for (int i = 0; i < records.Count(); i++)
-                {
-                    table.Rows.Add(records[i].lastupdateon, records[i].id_nfe_situacao, records[i].descricao, records[i].timestamp, records[i].portal);
-                }
-
-                _linxMicrovixRepositoryBase.BulkInsertIntoTableRaw(
-                    dataTable: table
-                );
-
-                return true;
+                table.Rows.Add(records[i].lastupdateon, records[i].id_nfe_situacao, records[i].descricao, records[i].timestamp, records[i].portal);
             }
-            catch
-            {
-                throw;
-            }
+
+            _linxMicrovixRepositoryBase.BulkInsertIntoTableRaw(
+                dataTable: table
+            );
+
+            return true;
         }
 
         public async Task<IEnumerable<string?>> GetRegistersExists(LinxAPIParam jobParameter, List<int?> registros)
         {
-            try
+            var identificadores = String.Empty;
+            for (int i = 0; i < registros.Count(); i++)
             {
-                var identificadores = String.Empty;
-                for (int i = 0; i < registros.Count(); i++)
-                {
-                    if (i == registros.Count() - 1)
-                        identificadores += $"'{registros[i]}'";
-                    else
-                        identificadores += $"'{registros[i]}', ";
-                }
+                if (i == registros.Count() - 1)
+                    identificadores += $"'{registros[i]}'";
+                else
+                    identificadores += $"'{registros[i]}', ";
+            }
 
-                string sql = $"SELECT CONCAT('[', ID_NFE_SITUACAO, ']', '|', '[', [TIMESTAMP], ']') FROM [linx_microvix_commerce].[B2CCONSULTANFESITUACAO] WHERE ID_NFE_SITUACAO IN ({identificadores})";
+            string sql = $"SELECT CONCAT('[', ID_NFE_SITUACAO, ']', '|', '[', [TIMESTAMP], ']') FROM [linx_microvix_commerce].[B2CCONSULTANFESITUACAO] WHERE ID_NFE_SITUACAO IN ({identificadores})";
 
-                return await _linxMicrovixRepositoryBase.GetKeyRegistersAlreadyExists(sql);
-            }
-            catch (Exception ex) when (ex is not GeneralException && ex is not SQLCommandException)
-            {
-                throw new GeneralException(
-                    stage: EnumStages.GetRegistersExists,
-                    error: EnumError.Exception,
-                    level: EnumMessageLevel.Error,
-                    message: "Error when filling identifiers to sql command",
-                    exceptionMessage: ex.Message
-                );
-            }
-            catch
-            {
-                throw;
-            }
+            return await _linxMicrovixRepositoryBase.GetKeyRegistersAlreadyExists(sql);
         }
     }
 }

@@ -23,7 +23,7 @@ namespace Application.IntegrationsCore.Middlewares
             catch (Exception ex)
             {
                 var handler = _exceptionHandlers
-                    .OrderBy(h => h.GetType() == typeof(GenericExceptionHandler) ? 1 : 0) // Garante que o GenericExceptionHandler seja o último
+                    .OrderBy(h => h.GetType() == typeof(ExceptionHandler) ? 1 : 0) // Garante que o ExceptionHandler seja o último
                     .First(h => h.CanHandle(ex));
 
                 await handler.HandleAsync(context, ex);

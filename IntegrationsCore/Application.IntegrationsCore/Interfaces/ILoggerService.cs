@@ -12,37 +12,12 @@ namespace Application.IntegrationsCore.Interfaces
         public ILoggerService AddLog(EnumJob job);
 
         /// <summary>
-        /// Add an message occurred in one repository stage with exception details and command sql tried to execute
-        /// </summary>
-        /// <param name="stage"></param>
-        /// <param name="error"></param>
-        /// <param name="logLevel"></param>
-        /// <param name="message"></param>
-        /// <param name="exceptionMessage"></param>
-        /// <param name="commandSQL"></param>
-        /// <returns>ILoggerService</returns>
-        public ILoggerService AddMessage(
-            EnumStages stage,
-            EnumError error,
-            EnumMessageLevel logLevel,
-            string message,
-            string exceptionMessage,
-            string commandSQL
-        );
-
-        /// <summary>
         /// Add an message occurred in one stage with exception details
         /// </summary>
-        /// <param name="stage"></param>
-        /// <param name="error"></param>
-        /// <param name="logLevel"></param>
         /// <param name="message"></param>
         /// <param name="exceptionMessage"></param>
         /// <returns>ILoggerService</returns>
         public ILoggerService AddMessage(
-            EnumStages stage,
-            EnumError error,
-            EnumMessageLevel logLevel,
             string message,
             string exceptionMessage
         );
@@ -63,12 +38,13 @@ namespace Application.IntegrationsCore.Interfaces
         );
 
         /// <summary>
-        /// Build an error exception message with exception details occurred outside a stage
+        /// Add an message occurred in one repository stage with exception details and command sql tried to execute
         /// </summary>
         /// <param name="message"></param>
         /// <param name="exceptionMessage"></param>
+        /// <param name="sqlCommand"></param>
         /// <returns>ILoggerService</returns>
-        public ILoggerService AddMessage(string message, string exceptionMessage);
+        public ILoggerService AddMessage(string message, string exceptionMessage, string sqlCommand);
 
         /// <summary>
         /// Add an information message

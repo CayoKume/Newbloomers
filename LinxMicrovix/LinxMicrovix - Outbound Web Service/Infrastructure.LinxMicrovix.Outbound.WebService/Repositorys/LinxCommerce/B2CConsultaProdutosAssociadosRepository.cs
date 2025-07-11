@@ -16,58 +16,34 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 
         public bool BulkInsertIntoTableRaw(LinxAPIParam jobParameter, IList<B2CConsultaProdutosAssociados> records)
         {
-            try
+            var table = _linxMicrovixRepositoryBase.CreateSystemDataTable(jobParameter.tableName, new B2CConsultaProdutosAssociados());
+
+            for (int i = 0; i < records.Count(); i++)
             {
-                var table = _linxMicrovixRepositoryBase.CreateSystemDataTable(jobParameter.tableName, new B2CConsultaProdutosAssociados());
-
-                for (int i = 0; i < records.Count(); i++)
-                {
-                    table.Rows.Add(records[i].lastupdateon, records[i].id, records[i].codigoproduto, records[i].codigoproduto_associado, records[i].coeficiente_desconto, records[i].timestamp, records[i].portal, records[i].qtde_item, records[i].item_obrigatorio);
-                }
-
-                _linxMicrovixRepositoryBase.BulkInsertIntoTableRaw(
-                    dataTable: table
-                );
-
-                return true;
+                table.Rows.Add(records[i].lastupdateon, records[i].id, records[i].codigoproduto, records[i].codigoproduto_associado, records[i].coeficiente_desconto, records[i].timestamp, records[i].portal, records[i].qtde_item, records[i].item_obrigatorio);
             }
-            catch
-            {
-                throw;
-            }
+
+            _linxMicrovixRepositoryBase.BulkInsertIntoTableRaw(
+                dataTable: table
+            );
+
+            return true;
         }
 
-        public async Task<IEnumerable<B2CConsultaProdutosAssociados>> GetRegistersExists(LinxAPIParam jobParameter, List<B2CConsultaProdutosAssociados> registros)
+        public async Task<IEnumerable<string?>> GetRegistersExists(LinxAPIParam jobParameter, List<B2CConsultaProdutosAssociados> registros)
         {
-            try
+            var identificadores = String.Empty;
+            for (int i = 0; i < registros.Count(); i++)
             {
-                var identificadores = String.Empty;
-                for (int i = 0; i < registros.Count(); i++)
-                {
-                    if (i == registros.Count() - 1)
-                        identificadores += $"'{registros[i].id}'";
-                    else
-                        identificadores += $"'{registros[i].id}', ";
-                }
+                if (i == registros.Count() - 1)
+                    identificadores += $"'{registros[i].id}'";
+                else
+                    identificadores += $"'{registros[i].id}', ";
+            }
 
-                string sql = $"SELECT ID, TIMESTAMP FROM B2CCONSULTAPRODUTOSASSOCIADOS WHERE ID IN ({identificadores})";
+            string sql = $"SELECT CONCAT('[', ID, ']', '|', '[', [TIMESTAMP], ']') FROM [linx_microvix_commerce].[B2CCONSULTAPRODUTOSASSOCIADOS] WHERE ID IN ({identificadores})";
 
-                return await _linxMicrovixRepositoryBase.GetRegistersExists(sql);
-            }
-            catch (Exception ex) when (ex is not GeneralException && ex is not SQLCommandException)
-            {
-                throw new GeneralException(
-                    stage: EnumStages.GetRegistersExists,
-                    error: EnumError.Exception,
-                    level: EnumMessageLevel.Error,
-                    message: "Error when filling identifiers to sql command",
-                    exceptionMessage: ex.Message
-                );
-            }
-            catch
-            {
-                throw;
-            }
+            return await _linxMicrovixRepositoryBase.GetKeyRegistersAlreadyExists(sql);
         }
 
         public async Task<bool> InsertRecord(LinxAPIParam jobParameter, B2CConsultaProdutosAssociados? record)
@@ -77,14 +53,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
                           "Values " +
                           "(@lastupdateon, @id, @codigoproduto, @codigoproduto_associado, @coeficiente_desconto, @timestamp, @portal, @qtde_item, @item_obrigatorio)";
 
-            try
-            {
-                return await _linxMicrovixRepositoryBase.InsertRecord(jobParameter.tableName, sql: sql, record: record);
-            }
-            catch
-            {
-                throw;
-            }
+            return await _linxMicrovixRepositoryBase.InsertRecord(jobParameter.tableName, sql: sql, record: record);
         }
     }
 }

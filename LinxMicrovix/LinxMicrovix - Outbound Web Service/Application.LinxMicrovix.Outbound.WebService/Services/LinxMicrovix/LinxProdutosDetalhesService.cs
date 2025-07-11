@@ -74,9 +74,6 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                         for (int j = 0; j < validations.Count(); j++)
                         {
                             _logger.AddMessage(
-                                stage: EnumStages.DeserializeXMLToObject,
-                                error: EnumError.Validation,
-                                logLevel: EnumMessageLevel.Warning,
                                 message: $"Error when convert record - cnpj_emp: {records[i].Where(pair => pair.Key == "cnpj_emp").Select(pair => pair.Value).FirstOrDefault()} | cod_produto: {records[i].Where(pair => pair.Key == "cod_produto").Select(pair => pair.Value).FirstOrDefault()}\n" +
                                          $"{validations[j].ErrorMessage}"
                             );
@@ -89,11 +86,8 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                 catch (Exception ex)
                 {
                     throw new GeneralException(
-                        stage: EnumStages.DeserializeXMLToObject,
-                        error: EnumError.Exception,
-                        level: EnumMessageLevel.Error,
                         message: $"Error when convert record - cnpj_emp: {records[i].Where(pair => pair.Key == "cnpj_emp").Select(pair => pair.Value).FirstOrDefault()} | cod_produto: {records[i].Where(pair => pair.Key == "cod_produto").Select(pair => pair.Value).FirstOrDefault()}",
-                        exceptionMessage: ex.Message
+                            exceptionMessage: ex.StackTrace
                     );
                 }
             };
@@ -103,245 +97,137 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
 
         public async Task<bool> GetRecord(LinxAPIParam jobParameter, string? identificador, string? cnpj_emp)
         {
-            try
+            _logger
+               .Clear()
+               .AddLog(EnumJob.LinxProdutosDetalhes);
+
+            string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter.parametersInterval, jobParameter.parametersTableName, jobParameter.jobName);
+
+            var body = _linxMicrovixServiceBase.BuildBodyRequest(
+                parametersList: parameters
+                .Replace("[0]", "0")
+                .Replace("[data_mov_ini]", "2000-01-01")
+                .Replace("[data_mov_fim]", $"{DateTime.Today.ToString("yyyy-MM-dd")}")
+                .Replace("[cod_produto]", identificador),
+                jobParameter: jobParameter,
+                cnpj_emp: cnpj_emp);
+
+            string? response = await _apiCall.PostAsync(jobParameter: jobParameter, body: body);
+            var xmls = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response);
+
+            if (xmls.Count() > 0)
             {
-                _logger
-                   .Clear()
-                   .AddLog(EnumJob.LinxProdutosDetalhes);
+                var listRecords = DeserializeXMLToObject(jobParameter, xmls);
 
-                string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter.parametersInterval, jobParameter.parametersTableName, jobParameter.jobName);
-
-                var body = _linxMicrovixServiceBase.BuildBodyRequest(
-                    parametersList: parameters
-                    .Replace("[0]", "0")
-                    .Replace("[data_mov_ini]", "2000-01-01")
-                    .Replace("[data_mov_fim]", $"{DateTime.Today.ToString("yyyy-MM-dd")}")
-                    .Replace("[cod_produto]", identificador),
-                    jobParameter: jobParameter,
-                    cnpj_emp: cnpj_emp);
-
-                string? response = await _apiCall.PostAsync(jobParameter: jobParameter, body: body);
-                var xmls = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response);
-
-                if (xmls.Count() > 0)
+                foreach (var record in listRecords)
                 {
-                    var listRecords = DeserializeXMLToObject(jobParameter, xmls);
-
-                    foreach (var record in listRecords)
-                    {
-                        await _linxProdutosDetalhesRepository.InsertRecord(record: record, jobParameter: jobParameter);
-                    }
+                    await _linxProdutosDetalhesRepository.InsertRecord(record: record, jobParameter: jobParameter);
+                    _logger.AddRecord(record.recordKey, record.recordXml);
                 }
-            }
-            catch (SQLCommandException ex)
-            {
-                _logger.AddMessage(
-                    stage: ex.Stage,
-                    error: ex.Error,
-                    logLevel: ex.MessageLevel,
-                    message: ex.Message,
-                    exceptionMessage: ex.ExceptionMessage,
-                    commandSQL: ex.CommandSQL
-                );
 
-                throw;
+                await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
             }
-            catch (GeneralException ex)
-            {
-                _logger.AddMessage(
-                    stage: ex.stage,
-                    error: ex.Error,
-                    logLevel: ex.MessageLevel,
-                    message: ex.Message,
-                    exceptionMessage: ex.ExceptionMessage
-                );
 
-                throw;
-            }
-            catch (Exception ex)
-            {
-                _logger.AddMessage(
-                    message: "Error when executing GetRecords method",
-                    exceptionMessage: ex.Message
-                );
-            }
-            finally
-            {
-                _logger.SetLogEndDate();
-                await _logger.CommitAllChanges();
-            }
+            _logger.SetLogEndDate();
+            await _logger.CommitAllChanges();
 
             return true;
         }
 
         public async Task<bool> GetRecords(LinxAPIParam jobParameter)
         {
-            try
+            _logger
+               .Clear()
+               .AddLog(EnumJob.LinxProdutosDetalhes);
+
+            var xmls = new List<Dictionary<string?, string?>>();
+            string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter.parametersInterval, jobParameter.parametersTableName, jobParameter.jobName);
+            var cnpjs_emp = await _linxMicrovixRepositoryBase.GetMicrovixCompanys();
+
+            foreach (var cnpj_emp in cnpjs_emp)
             {
-                _logger
-                   .Clear()
-                   .AddLog(EnumJob.LinxProdutosDetalhes);
-
-                var xmls = new List<Dictionary<string?, string?>>();
-                string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter.parametersInterval, jobParameter.parametersTableName, jobParameter.jobName);
-                var cnpjs_emp = await _linxMicrovixRepositoryBase.GetMicrovixCompanys();
-
-                foreach (var cnpj_emp in cnpjs_emp)
-                {
-                    var body = _linxMicrovixServiceBase.BuildBodyRequest(
-                                parametersList: parameters.Replace("[0]", "0").Replace("[data_mov_ini]", $"2000-01-01").Replace("[data_mov_fim]", $"{DateTime.Today.ToString("yyyy-MM-dd")}"),
-                                jobParameter: jobParameter,
-                                cnpj_emp: cnpj_emp.doc_company
-                            );
-
-                    string? response = await _apiCall.PostAsync(jobParameter: jobParameter, body: body);
-                    var result = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response);
-                    xmls.AddRange(result);
-                }
-
-                if (xmls.Count() > 0)
-                {
-                    var listRecords = DeserializeXMLToObject(jobParameter, xmls);
-
-                    if (listRecords.Count() > 0)
-                    {
-                        _linxProdutosDetalhesRepository.BulkInsertIntoTableRaw(records: listRecords, jobParameter: jobParameter);
-                        await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
-
-                        _logger.AddMessage(
-                            $"Concluída com sucesso: {listRecords.Count} registro(s) novo(s) inserido(s)!"
+                var body = _linxMicrovixServiceBase.BuildBodyRequest(
+                            parametersList: parameters.Replace("[0]", "0").Replace("[data_mov_ini]", $"2000-01-01").Replace("[data_mov_fim]", $"{DateTime.Today.ToString("yyyy-MM-dd")}"),
+                            jobParameter: jobParameter,
+                            cnpj_emp: cnpj_emp.doc_company
                         );
-                    }
-                    else
-                        _logger.AddMessage(
-                            $"Concluída com sucesso: {listRecords.Count} registro(s) novo(s) inserido(s)!"
-                        );
+
+                string? response = await _apiCall.PostAsync(jobParameter: jobParameter, body: body);
+                var result = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response);
+                xmls.AddRange(result);
+            }
+
+            if (xmls.Count() > 0)
+            {
+                var listRecords = DeserializeXMLToObject(jobParameter, xmls);
+
+                if (listRecords.Count() > 0)
+                {
+                    _linxProdutosDetalhesRepository.BulkInsertIntoTableRaw(records: listRecords, jobParameter: jobParameter);
+                    await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
+
+                    _logger.AddMessage(
+                        $"Concluída com sucesso: {listRecords.Count} registro(s) novo(s) inserido(s)!"
+                    );
                 }
+                else
+                    _logger.AddMessage(
+                        $"Concluída com sucesso: {listRecords.Count} registro(s) novo(s) inserido(s)!"
+                    );
             }
-            catch (SQLCommandException ex)
-            {
-                _logger.AddMessage(
-                    stage: ex.Stage,
-                    error: ex.Error,
-                    logLevel: ex.MessageLevel,
-                    message: ex.Message,
-                    exceptionMessage: ex.ExceptionMessage,
-                    commandSQL: ex.CommandSQL
-                );
 
-                throw;
-            }
-            catch (GeneralException ex)
-            {
-                _logger.AddMessage(
-                    stage: ex.stage,
-                    error: ex.Error,
-                    logLevel: ex.MessageLevel,
-                    message: ex.Message,
-                    exceptionMessage: ex.ExceptionMessage
-                );
-
-                throw;
-            }
-            catch (Exception ex)
-            {
-                _logger.AddMessage(
-                    message: "Error when executing GetRecords method",
-                    exceptionMessage: ex.Message
-                );
-            }
-            finally
-            {
-                _logger.SetLogEndDate();
-                await _logger.CommitAllChanges();
-            }
+            _logger.SetLogEndDate();
+            await _logger.CommitAllChanges();
 
             return true;
         }
 
         public async Task<bool> GetZeroStockRecords(LinxAPIParam jobParameter)
         {
-            try
+            _logger
+               .Clear()
+               .AddLog(EnumJob.LinxProdutosDetalhes);
+
+            var xmls = new List<Dictionary<string?, string?>>();
+            var produtos = await _linxProdutosDetalhesRepository.GetRegistersExists(jobParameter);
+            string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter.parametersInterval, jobParameter.parametersTableName, jobParameter.jobName);
+
+            foreach (var produto in produtos)
             {
-                _logger
-                   .Clear()
-                   .AddLog(EnumJob.LinxProdutosDetalhes);
+                var body = _linxMicrovixServiceBase.BuildBodyRequest(
+                                parametersList: parameters
+                                .Replace("[0]", "0")
+                                .Replace("[data_mov_ini]", "2000-01-01")
+                                .Replace("[data_mov_fim]", $"{DateTime.Today.ToString("yyyy-MM-dd")}")
+                                .Replace("[cod_produto]", $"{produto.cod_produto}"),
+                            jobParameter: jobParameter,
+                            cnpj_emp: produto.cnpj_emp);
 
-                var xmls = new List<Dictionary<string?, string?>>();
-                var produtos = await _linxProdutosDetalhesRepository.GetRegistersExists(jobParameter);
-                string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter.parametersInterval, jobParameter.parametersTableName, jobParameter.jobName);
+                string? response = await _apiCall.PostAsync(jobParameter: jobParameter, body: body);
+                var result = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response);
+                xmls.AddRange(result);
+            }
 
-                foreach (var produto in produtos)
+            if (xmls.Count() > 0)
+            {
+                var listRecords = DeserializeXMLToObject(jobParameter, xmls);
+
+                if (listRecords.Count() > 0)
                 {
-                    var body = _linxMicrovixServiceBase.BuildBodyRequest(
-                                    parametersList: parameters
-                                    .Replace("[0]", "0")
-                                    .Replace("[data_mov_ini]", "2000-01-01")
-                                    .Replace("[data_mov_fim]", $"{DateTime.Today.ToString("yyyy-MM-dd")}")
-                                    .Replace("[cod_produto]", $"{produto.cod_produto}"),
-                                jobParameter: jobParameter,
-                                cnpj_emp: produto.cnpj_emp);
+                    _linxProdutosDetalhesRepository.BulkInsertIntoTableRaw(records: listRecords, jobParameter: jobParameter);
 
-                    string? response = await _apiCall.PostAsync(jobParameter: jobParameter, body: body);
-                    var result = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response);
-                    xmls.AddRange(result);
+                    _logger.AddMessage(
+                        $"Concluída com sucesso: {listRecords.Count} registro(s) novo(s) inserido(s)!"
+                    );
                 }
-
-                if (xmls.Count() > 0)
-                {
-                    var listRecords = DeserializeXMLToObject(jobParameter, xmls);
-
-                    if (listRecords.Count() > 0)
-                    {
-                        _linxProdutosDetalhesRepository.BulkInsertIntoTableRaw(records: listRecords, jobParameter: jobParameter);
-
-                        _logger.AddMessage(
-                            $"Concluída com sucesso: {listRecords.Count} registro(s) novo(s) inserido(s)!"
-                        );
-                    }
-                    else
-                        _logger.AddMessage(
-                            $"Concluída com sucesso: {listRecords.Count} registro(s) novo(s) inserido(s)!"
-                        );
-                }
+                else
+                    _logger.AddMessage(
+                        $"Concluída com sucesso: {listRecords.Count} registro(s) novo(s) inserido(s)!"
+                    );
             }
-            catch (SQLCommandException ex)
-            {
-                _logger.AddMessage(
-                    stage: ex.Stage,
-                    error: ex.Error,
-                    logLevel: ex.MessageLevel,
-                    message: ex.Message,
-                    exceptionMessage: ex.ExceptionMessage,
-                    commandSQL: ex.CommandSQL
-                );
 
-                throw;
-            }
-            catch (GeneralException ex)
-            {
-                _logger.AddMessage(
-                    stage: ex.stage,
-                    error: ex.Error,
-                    logLevel: ex.MessageLevel,
-                    message: ex.Message,
-                    exceptionMessage: ex.ExceptionMessage
-                );
-
-                throw;
-            }
-            catch (Exception ex)
-            {
-                _logger.AddMessage(
-                    message: "Error when executing GetRecords method",
-                    exceptionMessage: ex.Message
-                );
-            }
-            finally
-            {
-                _logger.SetLogEndDate();
-                await _logger.CommitAllChanges();
-            }
+            _logger.SetLogEndDate();
+            await _logger.CommitAllChanges();
 
             return true;
         }

@@ -76,12 +76,12 @@ namespace Application.AfterSale.Services
             //catch (SQLCommandException ex)
             //{
             //    _logger.AddMessage(
-            //        stage: ex.Stage,
-            //        error: ex.Error,
-            //        logLevel: ex.MessageLevel,
-            //        message: ex.Message,
-            //        exceptionMessage: ex.ExceptionMessage,
-            //        commandSQL: ex.CommandSQL
+            //        //stage: ex.Stage,
+            //        //error: ex.Error,
+            //        //log//level: ex.MessageLevel,
+            //        //message: ex.Message,
+            //        //exceptionMessage: ex.ExceptionMessage
+            //        //commandSQL: ex.CommandSQL
             //    );
 
             //    throw;
@@ -89,20 +89,20 @@ namespace Application.AfterSale.Services
             //catch (GeneralException ex)
             //{
             //    _logger.AddMessage(
-            //        stage: ex.stage,
-            //        error: ex.Error,
-            //        logLevel: ex.MessageLevel,
-            //        message: ex.Message,
-            //        exceptionMessage: ex.ExceptionMessage
+            //        //stage: ex.stage,
+            //        //error: ex.Error,
+            //        //log//level: ex.MessageLevel,
+            //        //message: ex.Message,
+            //        //exceptionMessage: ex.ExceptionMessage
             //    );
 
             //    throw;
             //}
-            //catch (Exception ex)
+            //catch (ExceptionBase ex)
             //{
             //    _logger.AddMessage(
             //        message: "Error when executing GetRecords method",
-            //        exceptionMessage: ex.Message
+            //        //exceptionMessage: ex.Message
             //    );
             //}
             //finally
@@ -204,8 +204,8 @@ namespace Application.AfterSale.Services
         /// </summary>
         public async Task<bool?> GetReverses()
         {
-            try
-            {
+            //try
+            //{
                 var companys = await _afterSaleRepository.GetCompanys();
 
                 foreach (var company in companys)
@@ -291,11 +291,11 @@ namespace Application.AfterSale.Services
                 }
 
                 return true;
-            }
-            catch
-            {
-                throw;
-            }
+            //}
+            //catch
+            //{
+                //throw;
+            //}
         }
 
         /// <summary>
@@ -304,8 +304,8 @@ namespace Application.AfterSale.Services
         /// <param name="id"></param>
         public async Task<bool?> GetReversesById(Int64 id, string cnpj_emp)
         {
-            try
-            {
+            //try
+            //{
                 var company = await _afterSaleRepository.GetCompany(cnpj_emp);
 
                 var response = await _apiCall.GetAsync(
@@ -318,11 +318,11 @@ namespace Application.AfterSale.Services
                 //await _afterSaleRepository.InsertIntoAfterSaleReversesStatus(); 
 
                 return true;
-            }
-            catch
-            {
-                throw;
-            }
+            //}
+            //catch
+            //{
+                //throw;
+            //}
         }
 
         /// <summary>
@@ -338,8 +338,8 @@ namespace Application.AfterSale.Services
         /// </summary>
         public async Task<bool?> GetReversesStatus()
         {
-            try
-            {
+            //try
+            //{
                 var companys = await _afterSaleRepository.GetCompanys();
 
                 var response = await _apiCall.GetAsync(
@@ -352,11 +352,11 @@ namespace Application.AfterSale.Services
                 _afterSaleRepository.InsertIntoAfterSaleStatus(status.data);
 
                 return true;
-            }
-            catch
-            {
-                throw;
-            }
+            //}
+            //catch
+            //{
+                //throw;
+            //}
         }
 
         /// <summary>
@@ -364,8 +364,8 @@ namespace Application.AfterSale.Services
         /// </summary>
         public async Task<bool?> GetReversesTransportations()
         {
-            try
-            {
+            //try
+            //{
                 var list = new List<Transportations>();
                 var companys = await _afterSaleRepository.GetCompanys();
 
@@ -384,11 +384,11 @@ namespace Application.AfterSale.Services
                 _afterSaleRepository.InsertIntoAfterSaleTransportations(list);
 
                 return true;
-            }
-            catch
-            {
-                throw;
-            }
+            //}
+            //catch
+            //{
+                //throw;
+            //}
         }
 
         /// <summary>

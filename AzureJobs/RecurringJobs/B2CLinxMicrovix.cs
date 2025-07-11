@@ -275,7 +275,7 @@ namespace AzureJobs.RecurringJobs
         //            )
         //        );
         //    }
-        //    catch (Exception ex)
+        //    catch (ExceptionBase ex)
         //    {
         //        throw;
         //    }
@@ -296,7 +296,7 @@ namespace AzureJobs.RecurringJobs
         //            )
         //        );
         //    }
-        //    catch (Exception ex)
+        //    catch (ExceptionBase ex)
         //    {
         //        throw;
         //    }
@@ -317,7 +317,7 @@ namespace AzureJobs.RecurringJobs
         //            )
         //        );
         //    }
-        //    catch (Exception ex)
+        //    catch (ExceptionBase ex)
         //    {
         //        throw;
         //    }
@@ -338,7 +338,7 @@ namespace AzureJobs.RecurringJobs
         //            )
         //        );
         //    }
-        //    catch (Exception ex)
+        //    catch (ExceptionBase ex)
         //    {
         //        throw;
         //    }
@@ -359,7 +359,7 @@ namespace AzureJobs.RecurringJobs
         //            )
         //        );
         //    }
-        //    catch (Exception ex)
+        //    catch (ExceptionBase ex)
         //    {
         //        throw;
         //    }
@@ -380,7 +380,7 @@ namespace AzureJobs.RecurringJobs
         //            )
         //        );
         //    }
-        //    catch (Exception ex)
+        //    catch (ExceptionBase ex)
         //    {
         //        throw;
         //    }
@@ -401,7 +401,7 @@ namespace AzureJobs.RecurringJobs
         //            )
         //        );
         //    }
-        //    catch (Exception ex)
+        //    catch (ExceptionBase ex)
         //    {
         //        throw;
         //    }
@@ -422,7 +422,7 @@ namespace AzureJobs.RecurringJobs
         //            )
         //        );
         //    }
-        //    catch (Exception ex)
+        //    catch (ExceptionBase ex)
         //    {
         //        throw;
         //    }
@@ -443,7 +443,7 @@ namespace AzureJobs.RecurringJobs
         //            )
         //        );
         //    }
-        //    catch (Exception ex)
+        //    catch (ExceptionBase ex)
         //    {
         //        throw;
         //    }
@@ -464,7 +464,7 @@ namespace AzureJobs.RecurringJobs
         //            )
         //        );
         //    }
-        //    catch (Exception ex)
+        //    catch (ExceptionBase ex)
         //    {
         //        throw;
         //    }
@@ -485,7 +485,7 @@ namespace AzureJobs.RecurringJobs
         //            )
         //        );
         //    }
-        //    catch (Exception ex)
+        //    catch (ExceptionBase ex)
         //    {
         //        throw;
         //    }

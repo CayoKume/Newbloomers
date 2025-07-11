@@ -16,93 +16,69 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxMicrovi
 
         public bool BulkInsertIntoTableRaw(LinxAPIParam jobParameter, IList<LinxClientesEnderecosEntrega> records)
         {
-            try
+            var table = _linxMicrovixRepositoryBase.CreateSystemDataTable(jobParameter.tableName, new LinxClientesEnderecosEntrega());
+
+            for (int i = 0; i < records.Count(); i++)
             {
-                var table = _linxMicrovixRepositoryBase.CreateSystemDataTable(jobParameter.tableName, new LinxClientesEnderecosEntrega());
-
-                for (int i = 0; i < records.Count(); i++)
-                {
-                    table.Rows.Add(records[i].lastupdateon, records[i].id_endereco_entrega, records[i].cod_cliente, records[i].endereco_cliente, records[i].numero_rua_cliente,
-                        records[i].complemento_end_cli, records[i].cep_cliente, records[i].bairro_cliente, records[i].cidade_cliente, records[i].uf_cliente, records[i].descricao,
-                        records[i].principal, records[i].fone_cliente, records[i].fone_celular, records[i].timestamp, records[i].portal);
-                }
-
-                _linxMicrovixRepositoryBase.BulkInsertIntoTableRaw(
-                    dataTable: table
-                );
-
-                return true;
+                table.Rows.Add(records[i].lastupdateon, records[i].id_endereco_entrega, records[i].cod_cliente, records[i].endereco_cliente, records[i].numero_rua_cliente,
+                    records[i].complemento_end_cli, records[i].cep_cliente, records[i].bairro_cliente, records[i].cidade_cliente, records[i].uf_cliente, records[i].descricao,
+                    records[i].principal, records[i].fone_cliente, records[i].fone_celular, records[i].timestamp, records[i].portal);
             }
-            catch
-            {
-                throw;
-            }
+
+            _linxMicrovixRepositoryBase.BulkInsertIntoTableRaw(
+                dataTable: table
+            );
+
+            return true;
         }
 
         public async Task<IEnumerable<string?>> GetRegistersExists(LinxAPIParam jobParameter, List<int?> registros)
         {
-            try
+            int indice = registros.Count() / 1000;
+
+            if (indice > 1)
             {
-                int indice = registros.Count() / 1000;
+                var list = new List<string>();
 
-                if (indice > 1)
+                for (int i = 0; i <= indice; i++)
                 {
-                    var list = new List<string>();
-
-                    for (int i = 0; i <= indice; i++)
-                    {
-                        string identificadores = String.Empty;
-                        var top1000List = registros.Skip(i * 1000).Take(1000).ToList();
-
-                        for (int j = 0; j < top1000List.Count(); j++)
-                        {
-
-                            if (j == top1000List.Count() - 1)
-                                identificadores += $"'{top1000List[j]}'";
-                            else
-                                identificadores += $"'{top1000List[j]}', ";
-                        }
-
-                        string sql = $"SELECT CONCAT('[', ID_ENDERECO_ENTREGA, ']', '|', '[', COD_CLIENTE, ']', '|', '[', [TIMESTAMP], ']') FROM [linx_microvix_erp].[LinxClientesEnderecosEntrega] WHERE ID_ENDERECO_ENTREGA IN ({identificadores})";
-                        var result = await _linxMicrovixRepositoryBase.GetKeyRegistersAlreadyExists(sql);
-                        list.AddRange(result);
-                    }
-
-                    return list;
-                }
-                else
-                {
-                    var list = new List<string>();
                     string identificadores = String.Empty;
+                    var top1000List = registros.Skip(i * 1000).Take(1000).ToList();
 
-                    for (int i = 0; i < registros.Count(); i++)
+                    for (int j = 0; j < top1000List.Count(); j++)
                     {
-                        if (i == registros.Count() - 1)
-                            identificadores += $"'{registros[i]}'";
+
+                        if (j == top1000List.Count() - 1)
+                            identificadores += $"'{top1000List[j]}'";
                         else
-                            identificadores += $"'{registros[i]}', ";
+                            identificadores += $"'{top1000List[j]}', ";
                     }
 
                     string sql = $"SELECT CONCAT('[', ID_ENDERECO_ENTREGA, ']', '|', '[', COD_CLIENTE, ']', '|', '[', [TIMESTAMP], ']') FROM [linx_microvix_erp].[LinxClientesEnderecosEntrega] WHERE ID_ENDERECO_ENTREGA IN ({identificadores})";
                     var result = await _linxMicrovixRepositoryBase.GetKeyRegistersAlreadyExists(sql);
                     list.AddRange(result);
-
-                    return list;
                 }
+
+                return list;
             }
-            catch (Exception ex) when (ex is not GeneralException && ex is not SQLCommandException)
+            else
             {
-                throw new GeneralException(
-                    stage: EnumStages.GetRegistersExists,
-                    error: EnumError.Exception,
-                    level: EnumMessageLevel.Error,
-                    message: "Error when filling identifiers to sql command",
-                    exceptionMessage: ex.Message
-                );
-            }
-            catch
-            {
-                throw;
+                var list = new List<string>();
+                string identificadores = String.Empty;
+
+                for (int i = 0; i < registros.Count(); i++)
+                {
+                    if (i == registros.Count() - 1)
+                        identificadores += $"'{registros[i]}'";
+                    else
+                        identificadores += $"'{registros[i]}', ";
+                }
+
+                string sql = $"SELECT CONCAT('[', ID_ENDERECO_ENTREGA, ']', '|', '[', COD_CLIENTE, ']', '|', '[', [TIMESTAMP], ']') FROM [linx_microvix_erp].[LinxClientesEnderecosEntrega] WHERE ID_ENDERECO_ENTREGA IN ({identificadores})";
+                var result = await _linxMicrovixRepositoryBase.GetKeyRegistersAlreadyExists(sql);
+                list.AddRange(result);
+
+                return list;
             }
         }
 
@@ -115,14 +91,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxMicrovi
                             (@lastupdateon,@id_endereco_entrega,@cod_cliente,@endereco_cliente,@numero_rua_cliente,@complemento_end_cli,@cep_cliente,@bairro_cliente,
                              @cidade_cliente,@uf_cliente,@descricao,@principal,@fone_cliente,@fone_celular,@timestamp,@portal)";
 
-            try
-            {
-                return await _linxMicrovixRepositoryBase.InsertRecord(jobParameter.tableName, sql: sql, record: record);
-            }
-            catch
-            {
-                throw;
-            }
+            return await _linxMicrovixRepositoryBase.InsertRecord(jobParameter.tableName, sql: sql, record: record);
         }
     }
 }

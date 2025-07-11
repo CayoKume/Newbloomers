@@ -68,23 +68,23 @@ namespace Infrastructure.Dootax.Repositorys
 
                         ORDER BY DOCUMENTO ASC";
 
-            try
-            {
+            //try
+            //{
                 using (var conn = _conn.GetDbConnection())
                 {
                     return await conn.QueryAsync<XML>(sql, commandTimeout: 360);
                 }
-            }
-            catch (Exception ex)
-            {
-                throw new GeneralException(
-                    stage: EnumStages.GetRegistersExists,
-                    error: EnumError.SQLCommand,
-                    level: EnumMessageLevel.Error,
-                    message: $"Error getting xmls from table GENERAL..IT4_WMS_DOCUMENTO",
-                    exceptionMessage: ex.Message
-                );
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw new GeneralException(
+            //        //stage: EnumStages.GetRegistersExists,
+            //        //error: EnumError.SQLCommand,
+            //        //level: EnumMessageLevel.Error,
+            //        message: $"Error getting xmls from table GENERAL..IT4_WMS_DOCUMENTO",
+            //        //exceptionMessage: ex.Message
+            //    );
+            //}
         }
 
         public async Task InsertSendFilesSuccessfulLog(string cnpjcpf, string documento, string serie, string chavenfe)
@@ -94,8 +94,8 @@ namespace Infrastructure.Dootax.Repositorys
                           VALUES 
                                 (@cnpj_emp, @documento, @serie, @chave_nfe, @dt_insert)";
 
-            try
-            {
+            //try
+            //{
                 using (var conn = _conn.GetDbConnection())
                 {
                     await conn.ExecuteAsync(sql, new
@@ -107,17 +107,17 @@ namespace Infrastructure.Dootax.Repositorys
                         dt_insert = DateTime.Now
                     }, commandTimeout: 360);
                 }
-            }
-            catch (Exception ex)
-            {
-                throw new GeneralException(
-                    stage: EnumStages.GetRegistersExists,
-                    error: EnumError.SQLCommand,
-                    level: EnumMessageLevel.Error,
-                    message: $"Error getting xmls from table GENERAL..IT4_WMS_DOCUMENTO",
-                    exceptionMessage: ex.Message
-                );
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw new GeneralException(
+            //        //stage: EnumStages.GetRegistersExists,
+            //        //error: EnumError.SQLCommand,
+            //        //level: EnumMessageLevel.Error,
+            //        message: $"Error getting xmls from table GENERAL..IT4_WMS_DOCUMENTO",
+            //        //exceptionMessage: ex.Message
+            //    );
+            //}
         }
     }
 }

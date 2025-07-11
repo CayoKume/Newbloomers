@@ -28,27 +28,20 @@ namespace Application.LinxCommerce.Services
 
         public async Task<bool?> GetSalesRepresentative(LinxCommerceJobParameter jobParameter, int? salesRepresentativeId)
         {
-            try
-            {
-                var salesRepresentativeList = new List<SalesRepresentative>();
+            var salesRepresentativeList = new List<SalesRepresentative>();
 
-                var getSaleRepresentativeResponse = await _apiCall.PostRequest(
-                    jobParameter,
-                    new { salesRepresentativeId },
-                    "/v1/Sales/API.svc/web/GetSalesRepresentative"
-                );
+            var getSaleRepresentativeResponse = await _apiCall.PostRequest(
+                jobParameter,
+                new { salesRepresentativeId },
+                "/v1/Sales/API.svc/web/GetSalesRepresentative"
+            );
 
-                var saleRepresentative = Newtonsoft.Json.JsonConvert.DeserializeObject<GetSalesRepresentative.Root>(getSaleRepresentativeResponse);
-                salesRepresentativeList.Add(saleRepresentative.SalesRepresentative);
+            var saleRepresentative = Newtonsoft.Json.JsonConvert.DeserializeObject<GetSalesRepresentative.Root>(getSaleRepresentativeResponse);
+            salesRepresentativeList.Add(saleRepresentative.SalesRepresentative);
 
-                //_salesRepresentativeRepository.BulkInsertIntoTableRaw(jobParameter: jobParameter, registros: salesRepresentativeList);
+            //_salesRepresentativeRepository.BulkInsertIntoTableRaw(jobParameter: jobParameter, registros: salesRepresentativeList);
 
-                return true;
-            }
-            catch
-            {
-                throw;
-            }
+            return true;
         }
 
         public Task<bool?> SaveSalesRepresentative()
@@ -58,122 +51,82 @@ namespace Application.LinxCommerce.Services
 
         public async Task<bool?> SearchSalesRepresentative(LinxCommerceJobParameter jobParameter)
         {
-            try
-            {
-                _logger
-                   .Clear()
-                   .AddLog(EnumJob.LinxCommerceSalesRepresentative);
+            _logger
+               .Clear()
+               .AddLog(EnumJob.LinxCommerceSalesRepresentative);
 
-                var objectRequest = new
+            var objectRequest = new
+            {
+                Page = new { PageIndex = 0, PageSize = 0 },
+                Where = $"",
+                WhereMetadata = "",
+                OrderBy = "SalesRepresentativeID",
+            };
+
+            var response = await _apiCall.PostRequest(
+                jobParameter,
+                objectRequest,
+                "/v1/Sales/API.svc/web/SearchSalesRepresentative"
+            );
+
+            var salesRepresentativeAPIList = new List<SalesRepresentative>();
+            var salesRepresentativeIDs = Newtonsoft.Json.JsonConvert.DeserializeObject<SearchSalesRepresentative.Root>(response);
+
+            foreach (var salesRepresentativeID in salesRepresentativeIDs.Result)
+            {
+                var getSaleRepresentativeObjectRequest = new
                 {
-                    Page = new { PageIndex = 0, PageSize = 0 },
-                    Where = $"",
-                    WhereMetadata = "",
-                    OrderBy = "SalesRepresentativeID",
+                    salesRepresentativeID.SalesRepresentativeID
                 };
 
-                var response = await _apiCall.PostRequest(
+                var getSaleRepresentativeResponse = await _apiCall.PostRequest(
                     jobParameter,
-                    objectRequest,
-                    "/v1/Sales/API.svc/web/SearchSalesRepresentative"
+                    getSaleRepresentativeObjectRequest,
+                    "/v1/Sales/API.svc/web/GetSalesRepresentative"
                 );
 
-                var salesRepresentativeAPIList = new List<SalesRepresentative>();
-                var salesRepresentativeIDs = Newtonsoft.Json.JsonConvert.DeserializeObject<SearchSalesRepresentative.Root>(response);
-                
-                foreach (var salesRepresentativeID in salesRepresentativeIDs.Result)
+                var saleRepresentative = Newtonsoft.Json.JsonConvert.DeserializeObject<GetSalesRepresentative.Root>(getSaleRepresentativeResponse);
+                var validations = _validator.Validate(saleRepresentative.SalesRepresentative);
+
+                if (validations.Errors.Count() > 0)
                 {
-                    var getSaleRepresentativeObjectRequest = new
+                    for (int j = 0; j < validations.Errors.Count(); j++)
                     {
-                        salesRepresentativeID.SalesRepresentativeID
-                    };
-
-                    var getSaleRepresentativeResponse = await _apiCall.PostRequest(
-                        jobParameter,
-                        getSaleRepresentativeObjectRequest,
-                        "/v1/Sales/API.svc/web/GetSalesRepresentative"
-                    );
-
-                    var saleRepresentative = Newtonsoft.Json.JsonConvert.DeserializeObject<GetSalesRepresentative.Root>(getSaleRepresentativeResponse);
-                    var validations = _validator.Validate(saleRepresentative.SalesRepresentative);
-
-                    if (validations.Errors.Count() > 0)
-                    {
-                        for (int j = 0; j < validations.Errors.Count(); j++)
-                        {
-                            _logger.AddMessage(
-                                stage: EnumStages.DeserializeXMLToObject,
-                                error: EnumError.Validation,
-                                logLevel: EnumMessageLevel.Warning,
-                                message: $"Error when convert record - SalesRepresentativeID: {saleRepresentative.SalesRepresentative.SalesRepresentativeID} | Name: {saleRepresentative.SalesRepresentative.Name}\n" +
-                                         $"{validations.Errors[j]}"
-                            );
-                        }
-                    }
-
-                    salesRepresentativeAPIList.Add(new SalesRepresentative(saleRepresentative.SalesRepresentative, getSaleRepresentativeResponse));
-                }
-
-                if (salesRepresentativeAPIList.Count() > 0)
-                {
-                    _salesRepresentativeRepository.BulkInsertIntoTableRaw(jobParameter: jobParameter, registros: salesRepresentativeAPIList, _logger.GetExecutionGuid());
-
-                    salesRepresentativeAPIList.ForEach(s =>
-                        _logger.AddRecord(
-                            s.SalesRepresentativeID.ToString(), 
-                            s.Responses
-                                .Where(pair => pair.Key == s.SalesRepresentativeID)
-                                .Select(pair => pair.Value)
-                                .FirstOrDefault()
-                        )
-                    );
-                    
-                    _logger.AddMessage(
-                            $"Concluída com sucesso: {salesRepresentativeAPIList.Count()} registro(s) novo(s) inserido(s)!"
+                        _logger.AddMessage(
+                            message: $"Error when convert record - SalesRepresentativeID: {saleRepresentative.SalesRepresentative.SalesRepresentativeID} | Name: {saleRepresentative.SalesRepresentative.Name}\n" +
+                                     $"{validations.Errors[j]}"
                         );
+                    }
                 }
-                else
-                    _logger.AddMessage(
+
+                salesRepresentativeAPIList.Add(new SalesRepresentative(saleRepresentative.SalesRepresentative, getSaleRepresentativeResponse));
+            }
+
+            if (salesRepresentativeAPIList.Count() > 0)
+            {
+                _salesRepresentativeRepository.BulkInsertIntoTableRaw(jobParameter: jobParameter, registros: salesRepresentativeAPIList, _logger.GetExecutionGuid());
+
+                salesRepresentativeAPIList.ForEach(s =>
+                    _logger.AddRecord(
+                        s.SalesRepresentativeID.ToString(),
+                        s.Responses
+                            .Where(pair => pair.Key == s.SalesRepresentativeID)
+                            .Select(pair => pair.Value)
+                            .FirstOrDefault()
+                    )
+                );
+
+                _logger.AddMessage(
                         $"Concluída com sucesso: {salesRepresentativeAPIList.Count()} registro(s) novo(s) inserido(s)!"
                     );
             }
-            catch (SQLCommandException ex)
-            {
+            else
                 _logger.AddMessage(
-                    stage: ex.Stage,
-                    error: ex.Error,
-                    logLevel: ex.MessageLevel,
-                    message: ex.Message,
-                    exceptionMessage: ex.ExceptionMessage,
-                    commandSQL: ex.CommandSQL
+                    $"Concluída com sucesso: {salesRepresentativeAPIList.Count()} registro(s) novo(s) inserido(s)!"
                 );
 
-                throw;
-            }
-            catch (GeneralException ex)
-            {
-                _logger.AddMessage(
-                    stage: ex.stage,
-                    error: ex.Error,
-                    logLevel: ex.MessageLevel,
-                    message: ex.Message,
-                    exceptionMessage: ex.ExceptionMessage
-                );
-
-                throw;
-            }
-            catch (Exception ex)
-            {
-                _logger.AddMessage(
-                    message: "Error when executing GetRecords method",
-                    exceptionMessage: ex.Message
-                );
-            }
-            finally
-            {
-                _logger.SetLogEndDate();
-                await _logger.CommitAllChanges();
-            }
+            _logger.SetLogEndDate();
+            await _logger.CommitAllChanges();
 
             return true;
         }

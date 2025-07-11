@@ -1,4 +1,5 @@
-﻿using Domain.IntegrationsCore.Entities.Exceptions;
+﻿using Application.IntegrationsCore.Interfaces;
+using Domain.IntegrationsCore.Entities.Exceptions;
 using Domain.IntegrationsCore.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -9,10 +10,10 @@ namespace Application.IntegrationsCore.Handlers
 {
     public class SqlExceptionHandler : IExceptionHandler
     {
-        private readonly ILogger<SqlExceptionHandler> _logger;
+        private readonly ILoggerService _logger;
 
-        public SqlExceptionHandler(ILogger<SqlExceptionHandler> logger) =>
-            _logger = logger;
+        public SqlExceptionHandler(ILoggerService logger) =>
+            (_logger) = (logger);
 
         public bool CanHandle(Exception exception) => exception is SQLCommandException;
 
@@ -20,16 +21,25 @@ namespace Application.IntegrationsCore.Handlers
         {
             var ex = (SQLCommandException)exception;
 
+            _logger.AddMessage(
+                message: ex.Message,
+                exceptionMessage: ex.ExceptionMessage,
+                sqlCommand: ex.CommandSQL
+            );
+
+            _logger.SetLogEndDate();
+            await _logger.CommitAllChanges();
+
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
             var errorDetails = new
             {
                 StatusCode = context.Response.StatusCode,
-                Message = "Ocorreu um erro ao executar um comando SQL.",
+                Title = "Ocorreu um erro ao executar um comando SQL.",
                 ErrorCode = "SQL_ERROR",
-                Details = ex.Message,
-                Stage = ex.Stage.ToString(),
+                Message = ex.Message,
+                ExceptionMessage = ex.ExceptionMessage,
                 Command = ex.CommandSQL
             };
             await context.Response.WriteAsync(JsonSerializer.Serialize(errorDetails));

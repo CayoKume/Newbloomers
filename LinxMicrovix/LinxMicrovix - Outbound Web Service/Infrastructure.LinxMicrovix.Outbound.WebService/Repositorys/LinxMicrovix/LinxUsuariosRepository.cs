@@ -90,16 +90,16 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxMicrovi
                     return list;
                 }
             }
-            catch (Exception ex) when (ex is not GeneralException && ex is not SQLCommandException)
-            {
-                throw new GeneralException(
-                    stage: EnumStages.GetRegistersExists,
-                    error: EnumError.Exception,
-                    level: EnumMessageLevel.Error,
-                    message: "Error when filling identifiers to sql command",
-                    exceptionMessage: ex.Message
-                );
-            }
+            //catch (Exception ex) when (ex is not GeneralException && ex is not SQLCommandException)
+            //{
+            //    throw new GeneralException(
+            //        //stage: EnumStages.GetRegistersExists,
+            //        //error: EnumError.Exception,
+            //        //level: EnumMessageLevel.Error,
+            //        message: "Error when filling identifiers to sql command",
+            //        //exceptionMessage: ex.Message
+            //    );
+            //}
             catch
             {
                 throw;

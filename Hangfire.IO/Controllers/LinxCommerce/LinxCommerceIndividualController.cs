@@ -114,10 +114,10 @@ namespace HangfireDashboard.UI.Controllers.LinxCommerce
             //    else
             //        return Ok($"Record: {orderId} integrated successfully.");
             //}
-            //catch (Exception ex)
+            //catch (ExceptionBase ex)
             //{
             //    Response.StatusCode = 400;
-            //    return Content($"Unable to integrate the record: {orderId}.\nError: {ex.Message}");
+            //    return Content($"Unable to integrate the record: {orderId}.\n//error: {ex.Message}");
             //}
         }
 
@@ -146,7 +146,7 @@ namespace HangfireDashboard.UI.Controllers.LinxCommerce
             catch (Exception ex)
             {
                 Response.StatusCode = 400;
-                return Content($"Unable to integrate the record: {customerId}.\nError: {ex.Message}");
+                return Content($"Unable to integrate the record: {customerId}.\n//error: {ex.Message}");
             }
         }
 
@@ -175,7 +175,7 @@ namespace HangfireDashboard.UI.Controllers.LinxCommerce
             catch (Exception ex)
             {
                 Response.StatusCode = 400;
-                return Content($"Unable to integrate the record: {productId}.\nError: {ex.Message}");
+                return Content($"Unable to integrate the record: {productId}.\n//error: {ex.Message}");
             }
         }
     }

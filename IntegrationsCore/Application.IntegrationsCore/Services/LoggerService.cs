@@ -2,7 +2,6 @@ using Application.IntegrationsCore.Interfaces;
 using Domain.IntegrationsCore.Entities.Auditing;
 using Domain.IntegrationsCore.Enums;
 using Domain.IntegrationsCore.Interfaces;
-using Org.BouncyCastle.Asn1.Pkcs;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -10,10 +9,10 @@ namespace Application.IntegrationsCore.Services
 {
     public class LoggerService : ILoggerService
     {
-        private readonly ILogRepository _logRepository;
+        private readonly IIntegrationsCoreRepository _logRepository;
         public Log? log { get; private set; }
 
-        public LoggerService(ILogRepository logRepository) =>
+        public LoggerService(IIntegrationsCoreRepository logRepository) =>
             _logRepository = logRepository;
 
         public ILoggerService AddLog(EnumJob job)
@@ -24,9 +23,6 @@ namespace Application.IntegrationsCore.Services
         }
 
         public ILoggerService AddMessage(
-            EnumStages stage,
-            EnumError error,
-            EnumMessageLevel logLevel,
             string message,
             string exceptionMessage,
             string commandSQL
@@ -34,12 +30,9 @@ namespace Application.IntegrationsCore.Services
         {
             this.log?.Messages.Add(
                 new Message(
-                    stage: stage,
-                    error: error,
-                    logLevel: logLevel,
                     message: message,
                     exceptionMessage: exceptionMessage,
-                    commandSQL: commandSQL,
+                    sqlCommand: commandSQL,
                     execution: this.log.Execution
                 )
             );
@@ -48,18 +41,12 @@ namespace Application.IntegrationsCore.Services
         }
 
         public ILoggerService AddMessage(
-            EnumStages stage,
-            EnumError error,
-            EnumMessageLevel logLevel,
             string message,
             string exceptionMessage
         )
         {
             this.log?.Messages.Add(
                 new Message(
-                    stage: stage,
-                    error: error,
-                    logLevel: logLevel,
                     message: message,
                     exceptionMessage: exceptionMessage,
                     execution: this.log.Execution
@@ -78,24 +65,11 @@ namespace Application.IntegrationsCore.Services
         {
             this.log?.Messages.Add(
                 new Message(
-                    stage: stage,
-                    error: error,
-                    logLevel: logLevel,
-                    message: message,
-                    execution: this.log.Execution
-                )
-            );
-
-            return this;
-        }
-
-        public ILoggerService AddMessage(string message, string exceptionMessage)
-        {
-            this.log?.Messages.Add(
-                new Message(
-                    message: message,
-                    exceptionMessage: exceptionMessage,
-                    execution: this.log.Execution
+                    //stage: stage,
+                    //error: error,
+                    //log//level: logLevel,
+                    Msg: message,
+                    this.log.Execution
                 )
             );
 
@@ -106,8 +80,8 @@ namespace Application.IntegrationsCore.Services
         {
             this.log?.Messages.Add(
                 new Message(
-                    message: message,
-                    guidExecution: this.log.Execution
+                    message,
+                    this.log.Execution
                 )
             );
 

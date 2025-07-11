@@ -20,8 +20,8 @@ namespace Application.Movidesk.Services
 
         public async Task<bool> GetPersons()
         {
-            try
-            {
+            //try
+            //{
                 var token = await _movideskRepository.GetTokenAsync();
 
                 var response = await _apiCall.GetAsync(
@@ -32,11 +32,11 @@ namespace Application.Movidesk.Services
                 var persons = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Person>>(response);
 
                 return true;
-            }
-            catch
-            {
-                throw;
-            }
+            //}
+            //catch
+            //{
+                //throw;
+            //}
         }
 
         public Task<bool> GetService()
@@ -46,8 +46,8 @@ namespace Application.Movidesk.Services
 
         public async Task<bool> GetServices()
         {
-            try
-            {
+            //try
+            //{
                 var token = await _movideskRepository.GetTokenAsync();
 
                 var response = await _apiCall.GetAsync(
@@ -58,11 +58,11 @@ namespace Application.Movidesk.Services
                 var services = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Service>>(response);
 
                 return true;
-            }
-            catch
-            {
-                throw;
-            }
+            //}
+            //catch
+            //{
+            //    throw;
+            //}
         }
 
         public Task<bool> GetTicket()
@@ -72,8 +72,8 @@ namespace Application.Movidesk.Services
 
         public async Task<bool> GetTickets()
         {
-            try
-            {
+            //try
+            //{
                 var token = await _movideskRepository.GetTokenAsync();
 
                 var filters = "createdDate ge 2016-10-10T00:00:00.00z and createdDate le 2016-10-17T00:00:00.00z";
@@ -104,11 +104,11 @@ namespace Application.Movidesk.Services
                 var tickets = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Ticket>>(response);
 
                 return true;
-            }
-            catch
-            {
-                throw;
-            }
+            //}
+            //catch
+            //{
+            //    throw;
+            //}
         }
     }
 }

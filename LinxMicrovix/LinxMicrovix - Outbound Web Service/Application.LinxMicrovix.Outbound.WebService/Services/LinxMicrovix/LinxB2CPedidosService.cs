@@ -87,9 +87,6 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                         for (int j = 0; j < validations.Count(); j++)
                         {
                             _logger.AddMessage(
-                                stage: EnumStages.DeserializeXMLToObject,
-                                error: EnumError.Validation,
-                                logLevel: EnumMessageLevel.Warning,
                                 message: $"Error when convert record - id_pedido: {records[i].Where(pair => pair.Key == "id_pedido").Select(pair => pair.Value).FirstOrDefault()} | order_id: {records[i].Where(pair => pair.Key == "order_id").Select(pair => pair.Value).FirstOrDefault()}\n" +
                                          $"{validations[j].ErrorMessage}"
                             );
@@ -102,11 +99,8 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                 catch (Exception ex)
                 {
                     throw new GeneralException(
-                        stage: EnumStages.DeserializeXMLToObject,
-                        error: EnumError.Exception,
-                        level: EnumMessageLevel.Error,
                         message: $"Error when convert record - id_pedido: {records[i].Where(pair => pair.Key == "id_pedido").Select(pair => pair.Value).FirstOrDefault()} | order_id: {records[i].Where(pair => pair.Key == "order_id").Select(pair => pair.Value).FirstOrDefault()}",
-                        exceptionMessage: ex.Message
+                        exceptionMessage: ex.StackTrace
                     );
                 }
             };
@@ -116,107 +110,69 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
 
         public async Task<bool> GetRecords(LinxAPIParam jobParameter)
         {
-            try
+            _logger
+               .Clear()
+               .AddLog(EnumJob.LinxB2CPedidos);
+
+            string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter.parametersInterval, jobParameter.parametersTableName, jobParameter.jobName);
+
+            var timestamp = await _linxMicrovixRepositoryBase.GetLast7DaysMaxTimestamp(
+                jobParameter.schema,
+                jobParameter.tableName
+            );
+
+            var body = _linxMicrovixServiceBase.BuildBodyRequest(
+                        parametersList: parameters.Replace("[0]", timestamp),
+                        jobParameter: jobParameter,
+                        cnpj_emp: jobParameter.docMainCompany
+                    );
+
+            string? response = await _apiCall.PostAsync(jobParameter: jobParameter, body: body);
+            var xmls = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response);
+
+            if (xmls.Count() > 0)
             {
-                _logger
-                   .Clear()
-                   .AddLog(EnumJob.LinxB2CPedidos);
+                var listRecords = DeserializeXMLToObject(jobParameter, xmls);
 
-                string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter.parametersInterval, jobParameter.parametersTableName, jobParameter.jobName);
-
-                var timestamp = await _linxMicrovixRepositoryBase.GetLast7DaysMaxTimestamp(
-                    jobParameter.schema, 
-                    jobParameter.tableName
-                );
-
-                var body = _linxMicrovixServiceBase.BuildBodyRequest(
-                            parametersList: parameters.Replace("[0]", timestamp),
-                            jobParameter: jobParameter,
-                            cnpj_emp: jobParameter.docMainCompany
-                        );
-
-                string? response = await _apiCall.PostAsync(jobParameter: jobParameter, body: body);
-                var xmls = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response);
-
-                if (xmls.Count() > 0)
+                if (_linxB2CPedidosCache.Count == 0)
                 {
-                    var listRecords = DeserializeXMLToObject(jobParameter, xmls);
+                    var list = await _linxB2CPedidosRepository.GetRegistersExists(
+                        jobParameter: jobParameter,
+                        registros: listRecords
+                                    .Select(x => x.id_pedido)
+                                    .ToList()
+                    );
 
-                    if (_linxB2CPedidosCache.Count == 0)
-                    {
-                        var list = await _linxB2CPedidosRepository.GetRegistersExists(
-                            jobParameter: jobParameter, 
-                            registros: listRecords
-                                        .Select(x => x.id_pedido)
-                                        .ToList()
-                        );
-
-                        _linxB2CPedidosCache = list.ToList();
-                    }
-
-                    var _listSomenteNovos = listRecords.Where(x => !_linxB2CPedidosCache.Any(y => 
-                        y == x.recordKey
-                    )).ToList();
-
-                    if (_listSomenteNovos.Count() > 0)
-                    {
-                        _linxB2CPedidosRepository.BulkInsertIntoTableRaw(records: _listSomenteNovos, jobParameter: jobParameter);
-                        await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
-
-                        for (int i = 0; i < _listSomenteNovos.Count; i++)
-                        {
-                            _logger.AddRecord(_listSomenteNovos[i].recordKey, _listSomenteNovos[i].recordXml);
-                        }
-
-                        _linxB2CPedidosCache.AddRange(_listSomenteNovos.Select(x => x.recordKey));
-
-                        _logger.AddMessage(
-                            $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"
-                        );
-                    }
-                    else
-                        _logger.AddMessage(
-                            $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"
-                        );
+                    _linxB2CPedidosCache = list.ToList();
                 }
-            }
-            catch (SQLCommandException ex)
-            {
-                _logger.AddMessage(
-                    stage: ex.Stage,
-                    error: ex.Error,
-                    logLevel: ex.MessageLevel,
-                    message: ex.Message,
-                    exceptionMessage: ex.ExceptionMessage,
-                    commandSQL: ex.CommandSQL
-                );
 
-                throw;
-            }
-            catch (GeneralException ex)
-            {
-                _logger.AddMessage(
-                    stage: ex.stage,
-                    error: ex.Error,
-                    logLevel: ex.MessageLevel,
-                    message: ex.Message,
-                    exceptionMessage: ex.ExceptionMessage
-                );
+                var _listSomenteNovos = listRecords.Where(x => !_linxB2CPedidosCache.Any(y =>
+                    y == x.recordKey
+                )).ToList();
 
-                throw;
+                if (_listSomenteNovos.Count() > 0)
+                {
+                    _linxB2CPedidosRepository.BulkInsertIntoTableRaw(records: _listSomenteNovos, jobParameter: jobParameter);
+                    await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
+
+                    for (int i = 0; i < _listSomenteNovos.Count; i++)
+                    {
+                        _logger.AddRecord(_listSomenteNovos[i].recordKey, _listSomenteNovos[i].recordXml);
+                    }
+
+                    _linxB2CPedidosCache.AddRange(_listSomenteNovos.Select(x => x.recordKey));
+
+                    _logger.AddMessage(
+                        $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"
+                    );
+                }
+                else
+                    _logger.AddMessage(
+                        $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"
+                    );
             }
-            catch (Exception ex)
-            {
-                _logger.AddMessage(
-                    message: "Error when executing GetRecords method",
-                    exceptionMessage: ex.Message
-                );
-            }
-            finally
-            {
-                _logger.SetLogEndDate();
-                await _logger.CommitAllChanges();
-            }
+            _logger.SetLogEndDate();
+            await _logger.CommitAllChanges();
 
             return true;
         }

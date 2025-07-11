@@ -7,6 +7,8 @@ using Domain.AfterSale.Entities;
 using Reverse = Domain.AfterSale.Entities.Reverse;
 using Domain.IntegrationsCore.Interfaces;
 using Domain.IntegrationsCore.Enums;
+using Newtonsoft.Json;
+using System.Reflection;
 
 namespace Infrastructure.AfterSale.Repositorys;
 
@@ -20,12 +22,28 @@ public class AfterSaleRepository : IAfterSaleRepository
 
     public async Task<IEnumerable<Company?>> GetCompanys()
     {
-        string? sql = @$"SELECT DISTINCT
+        try
+        {
+            string? sql = @$"SELECT DISTINCT
                      CNPJ_EMP AS DOC_COMPANY,
                      TOKEN AS TOKEN
                      FROM GENERAL.PARAMETROS_AFTERSALE";
 
-        return await _integrationsCoreRepository.GetRecords<Company>(sql);
+            return await _integrationsCoreRepository.GetRecords<Company>(sql);
+        }
+        catch (Exception ex)
+        {
+            /////que merda é essa cayo????
+            var message = JsonConvert.SerializeObject(new
+            {
+                project = ex.Source,
+                method = MethodBase.GetCurrentMethod()?.Name,//ex.TargetSite?.ReflectedType?.Name,
+                message = ex.Message,
+            });
+
+            //ex.AddMessage(message);
+            throw;
+        }
     }
 
     public async Task<Company?> GetCompany(string cnpj_emp)
@@ -95,72 +113,72 @@ public class AfterSaleRepository : IAfterSaleRepository
     {
         var statusReversesTable = _integrationsCoreRepository.CreateSystemDataTable(entity: new Status(), tableName: "AfterSaleStatus");
 
-        try
-        {
+        //try
+        //{
             _integrationsCoreRepository.FillSystemDataTable(statusReversesTable, statusReverses);
 
             _integrationsCoreRepository.BulkInsertIntoTableRaw(statusReversesTable);
 
             return true;
-        }
-        catch (Exception ex)
-        {
-            throw new GeneralException(
-                stage: EnumStages.BulkInsertIntoTableRaw,
-                error: EnumError.SQLCommand,
-                level: EnumMessageLevel.Error,
-                message: $"Error when trying to bulk insert records on table raw",
-                exceptionMessage: ex.Message
-            );
-        }
+        //}
+        //catch (Exception ex)
+        //{
+        //    throw new GeneralException(
+        //        //stage: EnumStages.BulkInsertIntoTableRaw,
+        //        //error: EnumError.SQLCommand,
+        //        //level: EnumMessageLevel.Error,
+        //        message: $"Error when trying to bulk insert records on table raw"//,
+        //        //exceptionMessage: ex.Message
+        //    );
+        //}
     }
 
     public bool InsertIntoAfterSaleTransportations(Transportations transportations)
     {
         var transportationsTable = _integrationsCoreRepository.CreateSystemDataTable(entity: new Transportations(), tableName: "AfterSaleTransportations");
 
-        try
-        {
+        //try
+        //{
             _integrationsCoreRepository.FillSystemDataTable(transportationsTable, transportations.data);
 
             _integrationsCoreRepository.BulkInsertIntoTableRaw(transportationsTable);
 
             return true;
-        }
-        catch (Exception ex)
-        {
-            throw new GeneralException(
-                stage: EnumStages.BulkInsertIntoTableRaw,
-                error: EnumError.SQLCommand,
-                level: EnumMessageLevel.Error,
-                message: $"Error when trying to bulk insert records on table raw",
-                exceptionMessage: ex.Message
-            );
-        }
+        //}
+        //catch (Exception ex)
+        //{
+        //    throw new GeneralException(
+        //        //stage: EnumStages.BulkInsertIntoTableRaw,
+        //        //error: EnumError.SQLCommand,
+        //        //level: EnumMessageLevel.Error,
+        //        message: $"Error when trying to bulk insert records on table raw"//,
+        //        //exceptionMessage: ex.Message
+        //    );
+        //}
     }
 
     public bool InsertIntoAfterSaleTransportations(List<Transportations> transportations)
     {
         var transportationsTable = _integrationsCoreRepository.CreateSystemDataTable(entity: new Transportations(), tableName: "AfterSaleTransportations");
 
-        try
-        {
+        //try
+        //{
             _integrationsCoreRepository.FillSystemDataTable(transportationsTable, transportations);
 
             _integrationsCoreRepository.BulkInsertIntoTableRaw(transportationsTable);
 
             return true;
-        }
-        catch (Exception ex)
-        {
-            throw new GeneralException(
-                stage: EnumStages.BulkInsertIntoTableRaw,
-                error: EnumError.SQLCommand,
-                level: EnumMessageLevel.Error,
-                message: $"Error when trying to bulk insert records on table raw",
-                exceptionMessage: ex.Message
-            );
-        }
+        //}
+        //catch (Exception ex)
+        //{
+        //    throw new GeneralException(
+        //        //stage: EnumStages.BulkInsertIntoTableRaw,
+        //        //error: EnumError.SQLCommand,
+        //        //level: EnumMessageLevel.Error,
+        //        message: $"Error when trying to bulk insert records on table raw"//,
+        //        //exceptionMessage: ex.Message
+        //    );
+        //}
     }
 
     public bool InsertIntoAfterSaleEcommerce(List<Ecommerce> data)
@@ -169,8 +187,8 @@ public class AfterSaleRepository : IAfterSaleRepository
         var addressTable = _integrationsCoreRepository.CreateSystemDataTable(entity: new Address(), tableName: "AfterSaleAddresses");
         var reasonTable = _integrationsCoreRepository.CreateSystemDataTable(entity: new Reason(), tableName: "AfterSaleReasons");
 
-        try
-        {
+        //try
+        //{
             _integrationsCoreRepository.FillSystemDataTable(ecommercesTable, data);
             _integrationsCoreRepository.FillSystemDataTable(addressTable, data.Select(x => x.address).ToList());
             _integrationsCoreRepository.FillSystemDataTable(reasonTable, data.SelectMany(x => x.reasons).ToList());
@@ -180,16 +198,16 @@ public class AfterSaleRepository : IAfterSaleRepository
             _integrationsCoreRepository.BulkInsertIntoTableRaw(reasonTable);
 
             return true;
-        }
-        catch (Exception ex)
-        {
-            throw new GeneralException(
-                stage: EnumStages.BulkInsertIntoTableRaw,
-                error: EnumError.SQLCommand,
-                level: EnumMessageLevel.Error,
-                message: $"Error when trying to bulk insert records on table raw",
-                exceptionMessage: ex.Message
-            );
-        }
+        //}
+        //catch (Exception ex)
+        //{
+        //    throw new GeneralException(
+        //        //stage: EnumStages.BulkInsertIntoTableRaw,
+        //        //error: EnumError.SQLCommand,
+        //        //level: EnumMessageLevel.Error,
+        //        message: $"Error when trying to bulk insert records on table raw"//,
+        //        //exceptionMessage: ex.Message
+        //    );
+        //}
     }
 }

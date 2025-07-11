@@ -6,7 +6,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxCom
     public interface IB2CConsultaLegendasCadastrosAuxiliaresRepository
     {
         public bool BulkInsertIntoTableRaw(LinxAPIParam jobParameter, IList<B2CConsultaLegendasCadastrosAuxiliares> records);
-        public Task<IEnumerable<B2CConsultaLegendasCadastrosAuxiliares>> GetRegistersExists(LinxAPIParam jobParameter, List<B2CConsultaLegendasCadastrosAuxiliares> registros);
+        public Task<IEnumerable<string?>> GetRegistersExists(LinxAPIParam jobParameter, List<B2CConsultaLegendasCadastrosAuxiliares> registros);
 
     }
 }

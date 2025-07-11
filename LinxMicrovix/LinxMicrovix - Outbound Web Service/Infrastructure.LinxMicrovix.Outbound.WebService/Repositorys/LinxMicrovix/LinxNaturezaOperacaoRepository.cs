@@ -16,54 +16,30 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxMicrovi
 
         public bool BulkInsertIntoTableRaw(LinxAPIParam jobParameter, IList<LinxNaturezaOperacao> records)
         {
-            try
+            var table = _linxMicrovixRepositoryBase.CreateSystemDataTable(jobParameter.tableName, new LinxNaturezaOperacao());
+
+            for (int i = 0; i < records.Count(); i++)
             {
-                var table = _linxMicrovixRepositoryBase.CreateSystemDataTable(jobParameter.tableName, new LinxNaturezaOperacao());
-
-                for (int i = 0; i < records.Count(); i++)
-                {
-                    table.Rows.Add(records[i].lastupdateon, records[i].portal, records[i].cod_natureza_operacao, records[i].descricao, records[i].soma_relatorios, records[i].operacao,
-                        records[i].inativa, records[i].timestamp, records[i].calcula_ipi, records[i].calcula_iss, records[i].calcula_irrf, records[i].tipo_preco,
-                        records[i].atualiza_custo, records[i].transferencia, records[i].baixar_estoque, records[i].consumo_proprio, records[i].contabiliza_cmv, records[i].despesa, records[i].atualiza_custo_medio, records[i].exige_nf_origem,
-                        records[i].integra_contabilidade, records[i].id_obs, records[i].venda_futura, records[i].base_icms_considera_ipi, records[i].permite_escolha_historico, records[i].import_produtos, records[i].deposito_reserva_venda,
-                        records[i].exibe_nfe, records[i].faturamento_antecipado, records[i].exibir_informacoes_imposto, records[i].gera_garantia_nacional, records[i].transferencia_deposito, records[i].venda_diferencial_aliquota,
-                        records[i].insere_obs_pis_cofins, records[i].diferencial_ativo_consumo, records[i].recusa_de, records[i].codigo_ws);
-                }
-
-                _linxMicrovixRepositoryBase.BulkInsertIntoTableRaw(
-                    dataTable: table
-                );
-
-                return true;
+                table.Rows.Add(records[i].lastupdateon, records[i].portal, records[i].cod_natureza_operacao, records[i].descricao, records[i].soma_relatorios, records[i].operacao,
+                    records[i].inativa, records[i].timestamp, records[i].calcula_ipi, records[i].calcula_iss, records[i].calcula_irrf, records[i].tipo_preco,
+                    records[i].atualiza_custo, records[i].transferencia, records[i].baixar_estoque, records[i].consumo_proprio, records[i].contabiliza_cmv, records[i].despesa, records[i].atualiza_custo_medio, records[i].exige_nf_origem,
+                    records[i].integra_contabilidade, records[i].id_obs, records[i].venda_futura, records[i].base_icms_considera_ipi, records[i].permite_escolha_historico, records[i].import_produtos, records[i].deposito_reserva_venda,
+                    records[i].exibe_nfe, records[i].faturamento_antecipado, records[i].exibir_informacoes_imposto, records[i].gera_garantia_nacional, records[i].transferencia_deposito, records[i].venda_diferencial_aliquota,
+                    records[i].insere_obs_pis_cofins, records[i].diferencial_ativo_consumo, records[i].recusa_de, records[i].codigo_ws);
             }
-            catch
-            {
-                throw;
-            }
+
+            _linxMicrovixRepositoryBase.BulkInsertIntoTableRaw(
+                dataTable: table
+            );
+
+            return true;
         }
 
         public async Task<IEnumerable<string?>> GetRegistersExists()
         {
-            try
-            {
-                string sql = $"SELECT CONCAT('[', TRIM(COD_NATUREZA_OPERACAO), ']', '|', '[', [TIMESTAMP], ']') FROM [linx_microvix_erp].[LinxNaturezaOperacao]";
+            string sql = $"SELECT CONCAT('[', TRIM(COD_NATUREZA_OPERACAO), ']', '|', '[', [TIMESTAMP], ']') FROM [linx_microvix_erp].[LinxNaturezaOperacao]";
 
-                return await _linxMicrovixRepositoryBase.GetKeyRegistersAlreadyExists(sql);
-            }
-            catch (Exception ex) when (ex is not GeneralException && ex is not SQLCommandException)
-            {
-                throw new GeneralException(
-                    stage: EnumStages.GetRegistersExists,
-                    error: EnumError.Exception,
-                    level: EnumMessageLevel.Error,
-                    message: "Error when filling identifiers to sql command",
-                    exceptionMessage: ex.Message
-                );
-            }
-            catch
-            {
-                throw;
-            }
+            return await _linxMicrovixRepositoryBase.GetKeyRegistersAlreadyExists(sql);
         }
 
         public async Task<bool> InsertRecord(LinxAPIParam jobParameter, LinxNaturezaOperacao? record)
@@ -81,14 +57,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxMicrovi
                              @exibir_informacoes_imposto,@gera_garantia_nacional,@transferencia_deposito,@venda_diferencial_aliquota,@insere_obs_pis_cofins,@diferencial_ativo_consumo,
                              @recusa_de,@codigo_ws)";
 
-            try
-            {
-                return await _linxMicrovixRepositoryBase.InsertRecord(jobParameter.tableName, sql: sql, record: record);
-            }
-            catch
-            {
-                throw;
-            }
+            return await _linxMicrovixRepositoryBase.InsertRecord(jobParameter.tableName, sql: sql, record: record);
         }
     }
 }

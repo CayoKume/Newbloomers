@@ -2,29 +2,16 @@
 
 namespace Domain.IntegrationsCore.Entities.Exceptions
 {
-    public class SQLCommandException : Exception
+    public class SQLCommandException : ExceptionBase
     {
-        public EnumStages Stage { get; private set; }
-        public EnumError Error { get; private set; }
-        public EnumMessageLevel MessageLevel { get; private set; }
-        public string Message { get; private set; }
-        public string ExceptionMessage { get; private set; }
-        public string CommandSQL { get; private set; }
-
-        public SQLCommandException() { }
+        public string? CommandSQL { get; private set; }
 
         public SQLCommandException(
-            EnumStages stage,
             string message,
             string exceptionMessage,
             string commandSQL
-        )
+        ) : base(Error: EnumError.SQLCommand, MessageLevel: EnumMessageLevel.Error, Message: message, ExceptionMessage: exceptionMessage)
         {
-            Stage = stage;
-            Error = EnumError.SQLCommand;
-            MessageLevel = EnumMessageLevel.Error;
-            Message = message;
-            ExceptionMessage = exceptionMessage;
             CommandSQL = commandSQL;
         }
     }

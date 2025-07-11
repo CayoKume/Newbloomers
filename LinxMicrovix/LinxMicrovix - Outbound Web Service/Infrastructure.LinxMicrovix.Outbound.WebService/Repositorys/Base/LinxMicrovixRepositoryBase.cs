@@ -72,26 +72,12 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
                            "WHERE " +
                           $"METHOD = '{jobName}'";
 
-            try
-            {
-                return await _integrationsCoreRepository.GetRecord<string>(sql: sql);
-            }
-            catch
-            {
-                throw;
-            }
+            return await _integrationsCoreRepository.GetRecord<string>(sql: sql);
         }
 
         public async Task<IEnumerable<string?>> GetParameters(string sql)
         {
-            try
-            {
-                return await _integrationsCoreRepository.GetRecords<string>(sql: sql);
-            }
-            catch
-            {
-                throw;
-            }
+            return await _integrationsCoreRepository.GetRecords<string>(sql: sql);
         }
 
         public async Task<IEnumerable<Company?>> GetB2CCompanys()
@@ -115,41 +101,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
                            FROM 
                            [LINX_MICROVIX_COMMERCE].[B2CCONSULTAEMPRESAS] (NOLOCK)";
 
-            try
-            {
-                return await _integrationsCoreRepository.GetRecords<Company>(sql: sql);
-            }
-            catch
-            {
-                throw;
-            }
-
-            //try
-            //{
-            //    using (var conn = _sqlServerConnection.GetIDbConnection())
-            //    {
-            //        return await conn.QueryAsync<Company>(sql: sql);
-            //    }
-            //}
-            //catch (SqlException ex)
-            //{
-            //    throw new SQLCommandException(
-            //        stage: EnumStages.GetParameters,
-            //        message: $"Error when trying to get companys from database",
-            //        exceptionMessage: ex.Message,
-            //        commandSQL: sql
-            //    );
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw new GeneralException(
-            //        stage: EnumStages.GetB2CCompanys,
-            //        error: EnumError.SQLCommand,
-            //        level: EnumMessageLevel.Error,
-            //        message: $"Error when trying to get companys from database",
-            //        exceptionMessage: ex.Message
-            //    );
-            //}
+            return await _integrationsCoreRepository.GetRecords<Company>(sql: sql);
         }
 
         public async Task<IEnumerable<Company?>> GetMicrovixCompanys()
@@ -173,41 +125,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
                            FROM 
                            [LINX_MICROVIX_ERP].[LINXLOJAS] (NOLOCK)";
 
-            try
-            {
-                return await _integrationsCoreRepository.GetRecords<Company>(sql: sql);
-            }
-            catch
-            {
-                throw;
-            }
-
-            //try
-            //{
-            //    using (var conn = _sqlServerConnection.GetIDbConnection())
-            //    {
-            //        return await conn.QueryAsync<Company>(sql: sql);
-            //    }
-            //}
-            //catch (SqlException ex)
-            //{
-            //    throw new SQLCommandException(
-            //        stage: EnumStages.GetMicrovixCompanys,
-            //        message: $"Error when trying to get companys from database",
-            //        exceptionMessage: ex.Message,
-            //        commandSQL: sql
-            //    );
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw new GeneralException(
-            //        stage: EnumStages.GetMicrovixCompanys,
-            //        error: EnumError.SQLCommand,
-            //        level: EnumMessageLevel.Error,
-            //        message: $"Error when trying to get companys from database",
-            //        exceptionMessage: ex.Message
-            //    );
-            //}
+            return await _integrationsCoreRepository.GetRecords<Company>(sql: sql);
         }
 
         public async Task<IEnumerable<Company?>> GetMicrovixGroupCompanys()
@@ -221,77 +139,22 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
                            [LINX_MICROVIX_ERP].[LINXGRUPOLOJAS] (NOLOCK)
                            WHERE CNPJ <> ''";
 
-            try
-            {
-                return await _integrationsCoreRepository.GetRecords<Company>(sql: sql);
-            }
-            catch
-            {
-                throw;
-            }
-
-            //try
-            //{
-            //    using (var conn = _sqlServerConnection.GetIDbConnection())
-            //    {
-            //        return await conn.QueryAsync<Company>(sql: sql);
-            //    }
-            //}
-            //catch (SqlException ex)
-            //{
-            //    throw new SQLCommandException(
-            //        stage: EnumStages.GetMicrovixCompanys,
-            //        message: $"Error when trying to get companys from database",
-            //        exceptionMessage: ex.Message,
-            //        commandSQL: sql
-            //    );
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw new GeneralException(
-            //        stage: EnumStages.GetMicrovixGroupCompanys,
-            //        error: EnumError.SQLCommand,
-            //        level: EnumMessageLevel.Error,
-            //        message: $"Error when trying to get companys from database",
-            //        exceptionMessage: ex.Message
-            //    );
-            //}
+            return await _integrationsCoreRepository.GetRecords<Company>(sql: sql);
         }
 
         public async Task<bool> CallDbProcMerge(string schemaName, string tableName, Guid? parentExecutionGUID)
         {
-            try
-            {
-                return await _integrationsCoreRepository.CallDbProcMerge(schemaName, tableName, parentExecutionGUID);
-            }
-            catch
-            {
-                throw;
-            }
+            return await _integrationsCoreRepository.CallDbProcMerge(schemaName, tableName, parentExecutionGUID);
         }
 
         public async Task<bool> InsertRecord(string tableName, string? sql, object record)
         {
-            try
-            {
-                return await _integrationsCoreRepository.InsertRecord(sql, record);
-            }
-            catch
-            {
-                throw;
-            }
+            return await _integrationsCoreRepository.InsertRecord(sql, record);
         }
 
         public DataTable CreateSystemDataTable(string? tableName, TEntity entity)
         {
-            try
-            {
-                return _integrationsCoreRepository.CreateSystemDataTable(tableName, entity);
-            }
-            catch
-            {
-                throw;
-            }
+            return _integrationsCoreRepository.CreateSystemDataTable(tableName, entity);
         }
 
         public async Task<string?> GetLast7DaysMaxTimestamp(string? schema, string? tableName)
@@ -299,41 +162,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
             string? sql = "SELECT ISNULL(MAX(TIMESTAMP), 0) " +
                          $"FROM [{schema}].[{tableName}] (NOLOCK)";
 
-            try
-            {
-                return await _integrationsCoreRepository.GetRecord<string>(sql: sql);
-            }
-            catch
-            {
-                throw;
-            }
-
-            //try
-            //{
-            //    using (var conn = _sqlServerConnection.GetIDbConnection())
-            //    {
-            //        return await conn.QueryFirstOrDefaultAsync<string?>(sql: sql, commandTimeout: 360);
-            //    }
-            //}
-            //catch (SqlException ex)
-            //{
-            //    throw new SQLCommandException(
-            //        stage: EnumStages.GetLast7DaysMinTimestamp,
-            //        message: $"Error when trying to get last timestamp from database",
-            //        exceptionMessage: ex.Message,
-            //        commandSQL: sql
-            //    );
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw new GeneralException(
-            //        stage: EnumStages.GetLast7DaysMinTimestamp,
-            //        error: EnumError.SQLCommand,
-            //        level: EnumMessageLevel.Error,
-            //        message: $"Error when trying to get last timestamp from database",
-            //        exceptionMessage: ex.Message
-            //    );
-            //}
+            return await _integrationsCoreRepository.GetRecord<string>(sql: sql);
         }
 
         public async Task<string?> GetLastMaxTimestamp(string? schema, string? tableName, string? columnCompany, string? companyValue)
@@ -342,41 +171,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
                          $"FROM [{schema}].[{tableName}] (NOLOCK)" +
                          $"WHERE [{columnCompany}] = '{companyValue}'";
 
-            try
-            {
-                return await _integrationsCoreRepository.GetRecord<string>(sql: sql);
-            }
-            catch
-            {
-                throw;
-            }
-
-            //try
-            //{
-            //    using (var conn = _sqlServerConnection.GetIDbConnection())
-            //    {
-            //        return await conn.QueryFirstOrDefaultAsync<string?>(sql: sql, commandTimeout: 360);
-            //    }
-            //}
-            //catch (SqlException ex)
-            //{
-            //    throw new SQLCommandException(
-            //        stage: EnumStages.GetLast7DaysMinTimestamp,
-            //        message: $"Error when trying to get last timestamp from database",
-            //        exceptionMessage: ex.Message,
-            //        commandSQL: sql
-            //    );
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw new GeneralException(
-            //        stage: EnumStages.GetLast7DaysMinTimestamp,
-            //        error: EnumError.SQLCommand,
-            //        level: EnumMessageLevel.Error,
-            //        message: $"Error when trying to get last timestamp from database",
-            //        exceptionMessage: ex.Message
-            //    );
-            //}
+            return await _integrationsCoreRepository.GetRecord<string>(sql: sql);
         }
 
         public async Task<string?> GetLastMaxTimestampByCnpjAndIdentificador(string? schema, string? tableName, string? columnCompany, string? companyValue, string? columnIdentificador, string? columnIdentificadorValue)
@@ -386,41 +181,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
                          $"WHERE [{columnCompany}] = '{companyValue}'" +
                          $"AND [{columnIdentificador}] = '{columnIdentificadorValue}'";
 
-            try
-            {
-                return await _integrationsCoreRepository.GetRecord<string>(sql: sql);
-            }
-            catch
-            {
-                throw;
-            }
-
-            //try
-            //{
-            //    using (var conn = _sqlServerConnection.GetIDbConnection())
-            //    {
-            //        return await conn.QueryFirstOrDefaultAsync<string?>(sql: sql, commandTimeout: 360);
-            //    }
-            //}
-            //catch (SqlException ex)
-            //{
-            //    throw new SQLCommandException(
-            //        stage: EnumStages.GetLast7DaysMinTimestamp,
-            //        message: $"Error when trying to get last timestamp from database",
-            //        exceptionMessage: ex.Message,
-            //        commandSQL: sql
-            //    );
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw new GeneralException(
-            //        stage: EnumStages.GetLast7DaysMinTimestamp,
-            //        error: EnumError.SQLCommand,
-            //        level: EnumMessageLevel.Error,
-            //        message: $"Error when trying to get last timestamp from database",
-            //        exceptionMessage: ex.Message
-            //    );
-            //}
+            return await _integrationsCoreRepository.GetRecord<string>(sql: sql);
         }
 
         public async Task<string?> GetLast7DaysMinTimestamp(string? schema, string? tableName, string? columnDate)
@@ -430,41 +191,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
                           "WHERE " +
                          $"{columnDate} > GETDATE() - 7";
 
-            try
-            {
-                return await _integrationsCoreRepository.GetRecord<string>(sql: sql);
-            }
-            catch
-            {
-                throw;
-            }
-
-            //try
-            //{
-            //    using (var conn = _sqlServerConnection.GetIDbConnection())
-            //    {
-            //        return await conn.QueryFirstOrDefaultAsync<string?>(sql: sql, commandTimeout: 360);
-            //    }
-            //}
-            //catch (SqlException ex)
-            //{
-            //    throw new SQLCommandException(
-            //        stage: EnumStages.GetLast7DaysMinTimestamp,
-            //        message: $"Error when trying to get last timestamp from database",
-            //        exceptionMessage: ex.Message,
-            //        commandSQL: sql
-            //    );
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw new GeneralException(
-            //        stage: EnumStages.GetLast7DaysMinTimestamp,
-            //        error: EnumError.SQLCommand,
-            //        level: EnumMessageLevel.Error,
-            //        message: $"Error when trying to get last timestamp from database",
-            //        exceptionMessage: ex.Message
-            //    );
-            //}
+            return await _integrationsCoreRepository.GetRecord<string>(sql: sql);
         }
 
         public async Task<string?> GetLast7DaysMinTimestamp(string? schema, string? tableName, string? columnDate, string? columnCompany, string? companyValue)
@@ -474,119 +201,27 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repositorys.Base
                           "WHERE " +
                          $"{columnDate} > GETDATE() - 7 AND {columnCompany} = '{companyValue}'";
 
-            try
-            {
-                return await _integrationsCoreRepository.GetRecord<string>(sql: sql);
-            }
-            catch
-            {
-                throw;
-            }
-
-            //try
-            //{
-            //    using (var conn = _sqlServerConnection.GetIDbConnection())
-            //    {
-            //        return await conn.QueryFirstOrDefaultAsync<string?>(sql: sql, commandTimeout: 360);
-            //    }
-            //}
-            //catch (SqlException ex)
-            //{
-            //    throw new SQLCommandException(
-            //        stage: EnumStages.GetLast7DaysMinTimestamp,
-            //        message: $"Error when trying to get last timestamp from database",
-            //        exceptionMessage: ex.Message,
-            //        commandSQL: sql
-            //    );
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw new GeneralException(
-            //        stage: EnumStages.GetLast7DaysMinTimestamp,
-            //        error: EnumError.SQLCommand,
-            //        level: EnumMessageLevel.Error,
-            //        message: $"Error when trying to get last timestamp from database",
-            //        exceptionMessage: ex.Message
-            //    );
-            //}
+            return await _integrationsCoreRepository.GetRecord<string>(sql: sql); 
         }
 
         public async Task<bool> ExecuteQueryCommand(string? sql)
         {
-            try
-            {
-                return await _integrationsCoreRepository.ExecuteCommand(sql);
-            }
-            catch
-            {
-                throw;
-            }
+            return await _integrationsCoreRepository.ExecuteCommand(sql);
         }
 
         public bool BulkInsertIntoTableRaw(DataTable dataTable)
         {
-            try
-            {
-                _integrationsCoreRepository.BulkInsertIntoTableRaw(dataTable);
-
-                return true;
-            }
-            catch
-            {
-                throw;
-            }
+            return _integrationsCoreRepository.BulkInsertIntoTableRaw(dataTable);
         }
 
         public async Task<IEnumerable<TEntity?>> GetRegistersExists(string sql)
         {
-            try
-            {
-                return await _integrationsCoreRepository.GetRecords<TEntity>(sql: sql);
-            }
-            catch
-            {
-                throw;
-            }
+            return await _integrationsCoreRepository.GetRecords<TEntity>(sql: sql);
         }
 
         public async Task<IEnumerable<string?>> GetKeyRegistersAlreadyExists(string sql)
         {
-            try
-            {
-                return await _integrationsCoreRepository.GetRecords<string>(sql: sql);
-            }
-            catch
-            {
-                throw;
-            }
-
-            //try
-            //{
-            //    using (var conn = _sqlServerConnection.GetDbConnection())
-            //    {
-            //        var result = await conn.QueryAsync<string>(sql: sql, commandTimeout: 360);
-            //        return result.ToList();
-            //    }
-            //}
-            //catch (SqlException ex)
-            //{
-            //    throw new SQLCommandException(
-            //        stage: EnumStages.GetRegistersExists,
-            //        message: $"Error when trying to get records that already exist in trusted table",
-            //        exceptionMessage: ex.Message,
-            //        commandSQL: sql
-            //    );
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw new GeneralException(
-            //        stage: EnumStages.GetRegistersExists,
-            //        error: EnumError.SQLCommand,
-            //        level: EnumMessageLevel.Error,
-            //        message: $"Error when trying to get records that already exist in trusted table",
-            //        exceptionMessage: ex.Message
-            //    );
-            //}
+            return await _integrationsCoreRepository.GetRecords<string>(sql: sql);
         }
     }
 }

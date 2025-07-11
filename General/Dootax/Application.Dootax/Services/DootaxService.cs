@@ -14,8 +14,8 @@ namespace Application.Dootax.Services
 
         public async Task<bool> ImportFilesUpload()
         {
-            try
-            {
+            //try
+            //{
                 var xmls = await _dootaxRepository.GetXMLs();
 
                 if (xmls.Count() > 0)
@@ -32,11 +32,11 @@ namespace Application.Dootax.Services
                 }
 
                 return true;
-            }
-            catch
-            {
-                throw;
-            }
+            //}
+            //catch
+            //{
+                //throw;
+            //}
         }
     }
 }

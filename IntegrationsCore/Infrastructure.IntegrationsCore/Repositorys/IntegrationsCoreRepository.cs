@@ -1,6 +1,5 @@
 ﻿using Dapper;
 using Domain.IntegrationsCore.Entities.Auditing;
-using Domain.IntegrationsCore.Enums;
 using Domain.IntegrationsCore.Entities.Exceptions;
 using Domain.IntegrationsCore.Extensions;
 using Domain.IntegrationsCore.Interfaces;
@@ -40,11 +39,36 @@ namespace Infrastructure.IntegrationsCore.Repositorys
             catch (Exception ex)
             {
                 throw new GeneralException(
-                    stage: EnumStages.BulkInsertIntoTableRaw,
-                    error: EnumError.SQLCommand,
-                    level: EnumMessageLevel.Error,
-                    message: $"Error when trying to bulk insert records on table raw",
-                    exceptionMessage: ex.Message
+                    message: $"Error when trying to bulk insert records on database - {ex.Message}",
+                    exceptionMessage: ex.StackTrace
+                );
+            }
+        }
+
+        public bool BulkInsertIntoTableRaw(DataTable dataTable, string schema)
+        {
+            try
+            {
+                using (var conn = _sqlServerConnection.GetDbConnection())
+                {
+                    using var bulkCopy = new SqlBulkCopy(conn);
+                    bulkCopy.DestinationTableName = $"[{schema}].[{dataTable.TableName}]";
+                    bulkCopy.BatchSize = dataTable.Rows.Count;
+                    bulkCopy.BulkCopyTimeout = 360;
+                    foreach (DataColumn c in dataTable.Columns)
+                    {
+                        bulkCopy.ColumnMappings.Add(c.ColumnName, c.ColumnName);
+                    }
+                    bulkCopy.WriteToServer(dataTable);
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new GeneralException(
+                    message: $"Error when trying to bulk insert records on database - {ex.Message}",
+                    exceptionMessage: ex.StackTrace
                 );
             }
         }
@@ -64,11 +88,8 @@ namespace Infrastructure.IntegrationsCore.Repositorys
             catch (Exception ex)
             {
                 throw new GeneralException(
-                    stage: EnumStages.CreateSystemDataTable,
-                    error: EnumError.SQLCommand,
-                    level: EnumMessageLevel.Error,
-                    message: $"Error when convert system datatable to bulkinsert",
-                    exceptionMessage: ex.Message
+                    message: $"error trying to create system datatable - {ex.Message}",
+                    exceptionMessage: ex.StackTrace
                 );
             }
         }
@@ -96,7 +117,10 @@ namespace Infrastructure.IntegrationsCore.Repositorys
             }
             catch (Exception ex)
             {
-                throw;
+                throw new GeneralException(
+                    message: $"error when trying to fill the system datatable - {ex.Message}",
+                    exceptionMessage: ex.StackTrace
+                );
             }
         }
 
@@ -120,68 +144,40 @@ namespace Infrastructure.IntegrationsCore.Repositorys
             catch (Exception ex)
             {
                 throw new GeneralException(
-                    stage: EnumStages.CallDbProcMerge,
-                    error: EnumError.SQLCommand,
-                    level: EnumMessageLevel.Error,
-                    message: $"Error when trying to run the merge procedure: P_{tableName}_Sincronizacao",
-                    exceptionMessage: ex.Message
+                    message: $"error when trying to run sync proc on database - {ex.Message}",
+                    exceptionMessage: ex.StackTrace
                 );
             }
         }
 
         public async Task<bool> LogInsert(Log log)
         {
-            try
+            var recordsTable = CreateSystemDataTable("Records", new Record());
+            var messagesTable = CreateSystemDataTable("Messages", new Message());
+
+            //adicionar FillSystemDataTable
+            foreach (var record in log.Records)
             {
-                var recordsTable = CreateSystemDataTable("Records", new Record());
-                var messagesTable = CreateSystemDataTable("Messages", new Message());
+                //adicionar fluent validations
+                var text = record.RecordText.Length > 8000 ? record.RecordText.Substring(0, 8000) : record.RecordText;
 
-                foreach (var record in log.Records)
-                {
-                    var text = record.RecordText.Length > 8000 ? record.RecordText.Substring(0, 8000) : record.RecordText;
-
-                    recordsTable.Rows.Add(record.FieldKeyValue, text, log.Execution);
-                }
-
-                foreach (var message in log.Messages)
-                {
-                    messagesTable.Rows.Add(message.IdStage, message.IdLogLevel, message.IsError, message.IdError, message.Execution, message.Msg, message.ExceptionMessage, message.CommandSQL);
-                }
-
-                using (var conn = _sqlServerConnection.GetDbConnection())
-                {
-                    await conn.ExecuteAsync(
-                            sql: @$"INSERT INTO [auditing].[Logs] ([IdJob], [StartDate], [EndDate], [Execution])
-                                   VALUES ({(long)log.Job}, '{log.StartDate.ToString("s")}', '{log.EndDate.ToString("s")}', '{log.Execution}')",
-                            commandTimeout: 360
-                        );
-
-                    BulkInsertIntoTableRaw(recordsTable);
-
-                    BulkInsertIntoTableRaw(messagesTable);
-
-                    return true;
-                }
+                recordsTable.Rows.Add(record.FieldKeyValue, text, log.Execution);
             }
-            catch (SqlException ex)
+
+            //adicionar FillSystemDataTable
+            foreach (var message in log.Messages)
             {
-                throw new SQLCommandException(
-                    stage: EnumStages.InsertRecord,
-                    message: $"Error when trying to insert record in database table: [auditing].[Messages]",
-                    exceptionMessage: ex.Message,
-                    commandSQL: ""
-                );
+                messagesTable.Rows.Add(message.IdStage, message.IdLogLevel, message.IsError, message.IdError, message.Execution, message.Msg, message.ExceptionMessage, message.ExceptionMessage);
             }
-            catch (Exception ex)
-            {
-                throw new GeneralException(
-                stage: EnumStages.InsertRecord,
-                error: EnumError.SQLCommand,
-                    level: EnumMessageLevel.Error,
-                    message: $"Error when trying to insert record in database table: [auditing].[Messages]",
-                    exceptionMessage: ex.Message
-                );
-            }
+
+            await ExecuteCommand(@$"INSERT INTO [auditing].[Logs] ([IdJob], [StartDate], [EndDate], [Execution])
+                            VALUES ({(long)log.Job}, '{log.StartDate.ToString("s")}', '{log.EndDate.ToString("s")}', '{log.Execution}')");
+
+            BulkInsertIntoTableRaw(recordsTable, "auditing");
+
+            BulkInsertIntoTableRaw(messagesTable, "auditing");
+
+            return true;
         }
 
         public async Task<TEntity?> GetRecord<TEntity>(string? sql)
@@ -196,20 +192,16 @@ namespace Infrastructure.IntegrationsCore.Repositorys
             catch (SqlException ex)
             {
                 throw new SQLCommandException(
-                    stage: EnumStages.GetParameters,
-                    message: $"Error when trying to get parameters from database",
-                    exceptionMessage: ex.Message,
+                    message: $"Error when trying to get record from database - {ex.Message}",
+                    exceptionMessage: ex.StackTrace,
                     commandSQL: sql
                 );
             }
             catch (Exception ex)
             {
                 throw new GeneralException(
-                    stage: EnumStages.GetParameters,
-                    error: EnumError.SQLCommand,
-                    level: EnumMessageLevel.Error,
-                    message: $"Error when trying to get parameters from database",
-                    exceptionMessage: ex.Message
+                    message: $"Error when trying to get record from database - {ex.Message}",
+                    exceptionMessage: ex.StackTrace
                 );
             }
         }
@@ -227,20 +219,16 @@ namespace Infrastructure.IntegrationsCore.Repositorys
             catch (SqlException ex)
             {
                 throw new SQLCommandException(
-                    stage: EnumStages.GetRegistersExists,
-                    message: $"Error when trying to get records that already exist in trusted table",
-                    exceptionMessage: ex.Message,
+                    message: $"Error when trying to get records from database - {ex.Message}",
+                    exceptionMessage: ex.StackTrace,
                     commandSQL: sql
                 );
             }
             catch (Exception ex)
             {
                 throw new GeneralException(
-                    stage: EnumStages.GetRegistersExists,
-                    error: EnumError.SQLCommand,
-                    level: EnumMessageLevel.Error,
-                    message: $"Error when trying to get records that already exist in trusted table",
-                    exceptionMessage: ex.Message
+                    message: $"Error when trying to get records from database - {ex.Message}",
+                    exceptionMessage: ex.StackTrace
                 );
             }
         }
@@ -262,20 +250,18 @@ namespace Infrastructure.IntegrationsCore.Repositorys
             catch (SqlException ex)
             {
                 throw new SQLCommandException(
-                stage: EnumStages.InsertRecord,
-                    message: $"Error when trying to insert record in database table: tableNameHere",
-                    exceptionMessage: ex.Message,
+                    //message: $"Error when trying to insert record: {JsonSerializer.Serialize(entity)} on database - {ex.Message}",
+                    message: $"Error when trying to insert record on database - {ex.Message}",
+                    exceptionMessage: ex.StackTrace,
                     commandSQL: sql
                 );
             }
             catch (Exception ex)
             {
                 throw new GeneralException(
-                    stage: EnumStages.InsertRecord,
-                    error: EnumError.SQLCommand,
-                level: EnumMessageLevel.Error,
-                    message: $"Error when trying to insert record in database table: tableNameHere",
-                    exceptionMessage: ex.Message
+                    //message: $"Error when trying to insert record: {JsonSerializer.Serialize(entity)} on database - {ex.Message}",
+                    message: $"Error when trying to insert record on database - {ex.Message}",
+                    exceptionMessage: ex.StackTrace
                 );
             }
         }
@@ -297,20 +283,16 @@ namespace Infrastructure.IntegrationsCore.Repositorys
             catch (SqlException ex)
             {
                 throw new SQLCommandException(
-                    stage: EnumStages.ExecuteQueryCommand,
-                    message: $"Error when trying to execute command sql",
-                    exceptionMessage: ex.Message,
+                    message: $"error when trying to execute sql command on database - {ex.Message}",
+                    exceptionMessage: ex.StackTrace,
                     commandSQL: sql
                 );
             }
             catch (Exception ex)
             {
                 throw new GeneralException(
-                    stage: EnumStages.ExecuteQueryCommand,
-                    error: EnumError.SQLCommand,
-                    level: EnumMessageLevel.Error,
-                    message: $"Error when trying to execute command sql",
-                    exceptionMessage: ex.Message
+                    message: $"error when trying to execute sql command on database - {ex.Message}",
+                    exceptionMessage: ex.StackTrace
                 );
             }
         }

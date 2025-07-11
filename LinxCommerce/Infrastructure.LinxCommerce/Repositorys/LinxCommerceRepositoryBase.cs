@@ -64,8 +64,8 @@ namespace Infrastructure.LinxCommerce.Repositorys
 
         public bool BulkInsertIntoTableRaw(string? jobName, string? dataTableName, string? databaseName, DataTable dataTable, int dataTableRowsNumber)
         {
-            try
-            {
+            //try
+            //{
                 using (var conn = _sqlServerConnection.GetDbConnection())
                 {
                     using var bulkCopy = new SqlBulkCopy(conn);
@@ -81,23 +81,23 @@ namespace Infrastructure.LinxCommerce.Repositorys
                 }
 
                 return true;
-            }
-            catch (Exception ex)
-            {
-                throw new GeneralException(
-                    stage: EnumStages.BulkInsertIntoTableRaw,
-                    error: EnumError.SQLCommand,
-                    level: EnumMessageLevel.Error,
-                    message: $"Error when trying to bulk insert records on table raw",
-                    exceptionMessage: ex.Message
-                );
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw new GeneralException(
+            //        //stage: EnumStages.BulkInsertIntoTableRaw,
+            //        //error: EnumError.SQLCommand,
+            //        //level: EnumMessageLevel.Error,
+            //        message: $"Error when trying to bulk insert records on table raw",
+            //        //exceptionMessage: ex.Message
+            //    );
+            //}
         }
 
         public bool BulkInsertIntoTableTrusted(string? jobName, string? dataTableName, string? databaseName, DataTable dataTable, int dataTableRowsNumber)
         {
-            try
-            {
+            //try
+            //{
                 using (var conn = _sqlServerConnection.GetDbConnection())
                 {
                     using var bulkCopy = new SqlBulkCopy(conn);
@@ -112,23 +112,23 @@ namespace Infrastructure.LinxCommerce.Repositorys
                 }
 
                 return true;
-            }
-            catch (Exception ex)
-            {
-                throw new GeneralException(
-                    stage: EnumStages.BulkInsertIntoTableRaw,
-                    error: EnumError.SQLCommand,
-                    level: EnumMessageLevel.Error,
-                    message: $"Error when trying to bulk insert records on table raw",
-                    exceptionMessage: ex.Message
-                );
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw new GeneralException(
+            //        //stage: EnumStages.BulkInsertIntoTableRaw,
+            //        //error: EnumError.SQLCommand,
+            //        //level: EnumMessageLevel.Error,
+            //        message: $"Error when trying to bulk insert records on table raw",
+            //        //exceptionMessage: ex.Message
+            //    );
+            //}
         }
 
         public async Task<bool> CallDbProcMerge(LinxCommerceJobParameter jobParameter)
         {
-            try
-            {
+            //try
+            //{
                 using (var conn = _sqlServerConnection.GetDbConnection())
                 {
                     var result = await conn.ExecuteAsync($"P_{jobParameter.tableName}_Sync", commandType: CommandType.StoredProcedure, commandTimeout: 2700);
@@ -138,23 +138,23 @@ namespace Infrastructure.LinxCommerce.Repositorys
 
                     return false;
                 }
-            }
-            catch (Exception ex)
-            {
-                throw new GeneralException(
-                    stage: EnumStages.CallDbProcMerge,
-                    error: EnumError.SQLCommand,
-                    level: EnumMessageLevel.Error,
-                    message: $"Error when trying to run the merge procedure: P_{jobParameter.tableName}_Sync",
-                    exceptionMessage: ex.Message
-                );
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw new GeneralException(
+            //        //stage: EnumStages.CallDbProcMerge,
+            //        //error: EnumError.SQLCommand,
+            //        //level: EnumMessageLevel.Error,
+            //        message: $"Error when trying to run the merge procedure: P_{jobParameter.tableName}_Sync",
+            //        //exceptionMessage: ex.Message
+            //    );
+            //}
         }
 
         public async Task<bool> CallDbProcMerge(string schemaName, string tableName, Guid? parentExecutionGUID)
         {
-            try
-            {
+            //try
+            //{
                 using (var conn = _sqlServerConnection.GetDbConnection())
                 {
                     var parameters = new DynamicParameters();
@@ -167,23 +167,23 @@ namespace Infrastructure.LinxCommerce.Repositorys
 
                     return false;
                 }
-            }
-            catch (Exception ex)
-            {
-                throw new GeneralException(
-                    stage: EnumStages.CallDbProcMerge,
-                    error: EnumError.SQLCommand,
-                    level: EnumMessageLevel.Error,
-                    message: $"Error when trying to run the merge procedure: P_{tableName}_Sincronizacao",
-                    exceptionMessage: ex.Message
-                );
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw new GeneralException(
+            //        //stage: EnumStages.CallDbProcMerge,
+            //        //error: EnumError.SQLCommand,
+            //        //level: EnumMessageLevel.Error,
+            //        message: $"Error when trying to run the merge procedure: P_{tableName}_Sincronizacao",
+            //        //exceptionMessage: ex.Message
+            //    );
+            //}
         }
 
         public async Task<bool> ExecuteQueryCommand(LinxCommerceJobParameter jobParameter, string? sql)
         {
-            try
-            {
+            //try
+            //{
                 using (var conn = _sqlServerConnection.GetDbConnection())
                 {
                     var result = await conn.ExecuteAsync(sql: sql, commandTimeout: 360);
@@ -193,64 +193,64 @@ namespace Infrastructure.LinxCommerce.Repositorys
 
                     return false;
                 }
-            }
-            catch (SqlException ex)
-            {
-                throw new SQLCommandException(
-                    stage: EnumStages.ExecuteQueryCommand,
-                    message: $"Error when trying to execute command sql",
-                    exceptionMessage: ex.Message,
-                    commandSQL: sql
-                );
-            }
-            catch (Exception ex)
-            {
-                throw new GeneralException(
-                    stage: EnumStages.ExecuteQueryCommand,
-                    error: EnumError.SQLCommand,
-                    level: EnumMessageLevel.Error,
-                    message: $"Error when trying to execute command sql",
-                    exceptionMessage: ex.Message
-                );
-            }
+            //}
+            //catch (SqlException ex)
+            //{
+            //    throw new SQLCommandException(
+            //        //stage: EnumStages.ExecuteQueryCommand,
+            //        message: $"Error when trying to execute command sql"//,
+            //        //exceptionMessage: ex.Message//,
+            //        //commandSQL: sql
+            //    );
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw new GeneralException(
+            //        //stage: EnumStages.ExecuteQueryCommand,
+            //        //error: EnumError.SQLCommand,
+            //        //level: EnumMessageLevel.Error,
+            //        message: $"Error when trying to execute command sql",
+            //        //exceptionMessage: ex.Message
+            //    );
+            //}
         }
 
         public async Task<string?> GetParameters(LinxCommerceJobParameter jobParameter)
         {
             string sql = $@"SELECT NUMBEROFDAYS FROM [BLOOMERS_LINX].[dbo].[LINXAPIPARAM] WHERE METHOD = '{jobParameter.tableName}'";
 
-            try
-            {
+            //try
+            //{
                 using (var conn = _sqlServerConnection.GetDbConnection())
                 {
                     return await conn.QueryFirstAsync<string>(sql: sql, commandTimeout: 360);
                 }
-            }
-            catch (SqlException ex)
-            {
-                throw new SQLCommandException(
-                    stage: EnumStages.GetParameters,
-                    message: $"Error when trying to get parameters from database",
-                    exceptionMessage: ex.Message,
-                    commandSQL: sql
-                );
-            }
-            catch (Exception ex)
-            {
-                throw new GeneralException(
-                    stage: EnumStages.GetParameters,
-                    error: EnumError.SQLCommand,
-                    level: EnumMessageLevel.Error,
-                    message: $"Error when trying to get parameters from database",
-                    exceptionMessage: ex.Message
-                );
-            }
+            //}
+            //catch (SqlException ex)
+            //{
+            //    throw new SQLCommandException(
+            //        //stage: EnumStages.GetParameters,
+            //        message: $"Error when trying to get parameters from database"//,
+            //        //exceptionMessage: ex.Message//,
+            //        //commandSQL: sql
+            //    );
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw new GeneralException(
+            //        //stage: EnumStages.GetParameters,
+            //        //error: EnumError.SQLCommand,
+            //        //level: EnumMessageLevel.Error,
+            //        message: $"Error when trying to get parameters from database",
+            //        //exceptionMessage: ex.Message
+            //    );
+            //}
         }
 
         public async Task<bool> InsertRecord(LinxCommerceJobParameter jobParameter, string? sql, object record)
         {
-            try
-            {
+            //try
+            //{
                 using (var conn = _sqlServerConnection.GetDbConnection())
                 {
                     var result = await conn.ExecuteAsync(sql: sql, param: record, commandTimeout: 360);
@@ -260,32 +260,32 @@ namespace Infrastructure.LinxCommerce.Repositorys
 
                     return false;
                 }
-            }
-            catch (SqlException ex)
-            {
-                throw new SQLCommandException(
-                    stage: EnumStages.InsertRecord,
-                    message: $"Error when trying to insert record in database table: {jobParameter.tableName}",
-                    exceptionMessage: ex.Message,
-                    commandSQL: sql
-                );
-            }
-            catch (Exception ex)
-            {
-                throw new GeneralException(
-                    stage: EnumStages.InsertRecord,
-                    error: EnumError.SQLCommand,
-                    level: EnumMessageLevel.Error,
-                    message: $"Error when trying to insert record in database table: {jobParameter.tableName}",
-                    exceptionMessage: ex.Message
-                );
-            }
+            //}
+            //catch (SqlException ex)
+            //{
+            //    throw new SQLCommandException(
+            //        //stage: EnumStages.InsertRecord,
+            //        message: $"Error when trying to insert record in database table: {jobParameter.tableName}"//,
+            //        //exceptionMessage: ex.Message//,
+            //        //commandSQL: sql
+            //    );
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw new GeneralException(
+            //        //stage: EnumStages.InsertRecord,
+            //        //error: EnumError.SQLCommand,
+            //        //level: EnumMessageLevel.Error,
+            //        message: $"Error when trying to insert record in database table: {jobParameter.tableName}",
+            //        //exceptionMessage: ex.Message
+            //    );
+            //}
         }
 
         public DataTable CreateSystemDataTable<TEntity>(LinxCommerceJobParameter jobParameter, TEntity entity)
         {
-            try
-            {
+            //try
+            //{
                 var properties = entity.GetType().GetFilteredProperties();
                 var dataTable = new DataTable(jobParameter.tableName);
                 foreach (PropertyInfo prop in properties)
@@ -293,23 +293,23 @@ namespace Infrastructure.LinxCommerce.Repositorys
                     dataTable.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
                 }
                 return dataTable;
-            }
-            catch (Exception ex)
-            {
-                throw new GeneralException(
-                    stage: EnumStages.CreateSystemDataTable,
-                    error: EnumError.SQLCommand,
-                    level: EnumMessageLevel.Error,
-                    message: $"Error when convert system datatable to bulkinsert",
-                    exceptionMessage: ex.Message
-                );
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw new GeneralException(
+            //        //stage: EnumStages.CreateSystemDataTable,
+            //        //error: EnumError.SQLCommand,
+            //        //level: EnumMessageLevel.Error,
+            //        message: $"Error when convert system datatable to bulkinsert",
+            //        //exceptionMessage: ex.Message
+            //    );
+            //}
         }
 
         public DataTable CreateSystemDataTable<TEntity>(LinxCommerceJobParameter jobParameter, TEntity entity, string[] columnNames, Type[] columnTypes)
         {
-            try
-            {
+            //try
+            //{
                 var properties = entity.GetType().GetFilteredProperties();
                 var dataTable = new DataTable(jobParameter.tableName);
 
@@ -326,17 +326,17 @@ namespace Infrastructure.LinxCommerce.Repositorys
                 }
 
                 return dataTable;
-            }
-            catch (Exception ex)
-            {
-                throw new GeneralException(
-                    stage: EnumStages.CreateSystemDataTable,
-                    error: EnumError.SQLCommand,
-                    level: EnumMessageLevel.Error,
-                    message: $"Error when convert system datatable to bulkinsert",
-                    exceptionMessage: ex.Message
-                );
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw new GeneralException(
+            //        //stage: EnumStages.CreateSystemDataTable,
+            //        //error: EnumError.SQLCommand,
+            //        //level: EnumMessageLevel.Error,
+            //        message: $"Error when convert system datatable to bulkinsert",
+            //        //exceptionMessage: ex.Message
+            //    );
+            //}
         }
     }
 }

@@ -599,22 +599,21 @@ namespace Infrastructure.LinxCommerce.Repositorys
             catch (SqlException ex)
             {
                 throw new SQLCommandException(
-                    stage: EnumStages.GetRegistersExists,
-                    message: $"Error when trying to get records that already exist in trusted table",
-                    exceptionMessage: ex.Message,
+                    message: $"Error when trying to get records that already exist in trusted table - {ex.Message}",
+                    exceptionMessage: ex.StackTrace,
                     commandSQL: sql
                 );
             }
-            catch (Exception ex)
-            {
-                throw new GeneralException(
-                    stage: EnumStages.GetRegistersExists,
-                    error: EnumError.SQLCommand,
-                    level: EnumMessageLevel.Error,
-                    message: $"Error when trying to get records that already exist in trusted table",
-                    exceptionMessage: ex.Message
-                );
-            }
+            //catch (Exception ex)
+            //{
+            //    throw new GeneralException(
+            //        //stage: EnumStages.GetRegistersExists,
+            //        //error: EnumError.SQLCommand,
+            //        //level: EnumMessageLevel.Error,
+            //        message: $"Error when trying to get records that already exist in trusted table",
+            //        //exceptionMessage: ex.Message
+            //    );
+            //}
         }
 
         public async Task<List<OrderTrackingNumber>> GetTrackingNumbersToUpdate()
@@ -639,33 +638,33 @@ namespace Infrastructure.LinxCommerce.Repositorys
 							 D.[STATUS] != 'ENTREGUE' AND
                              E.ORDERID IS NULL";
 
-            try
-            {
+            //try
+            //{
                 using (var conn = _sqlServerConnection.GetIDbConnection())
                 {
                     var result =  await conn.QueryAsync<OrderTrackingNumber>(sql);
                     return result.ToList();
                 }
-            }
-            catch (SqlException ex)
-            {
-                throw new SQLCommandException(
-                    stage: EnumStages.GetRegistersExists,
-                    message: $"Error when trying to get records that already exist in trusted table",
-                    exceptionMessage: ex.Message,
-                    commandSQL: sql
-                );
-            }
-            catch (Exception ex)
-            {
-                throw new GeneralException(
-                    stage: EnumStages.GetRegistersExists,
-                    error: EnumError.SQLCommand,
-                    level: EnumMessageLevel.Error,
-                    message: $"Error when trying to get records that already exist in trusted table",
-                    exceptionMessage: ex.Message
-                );
-            }
+            //}
+            //catch (SqlException ex)
+            //{
+            //    throw new SQLCommandException(
+            //        //stage: EnumStages.GetRegistersExists,
+            //        message: $"Error when trying to get records that already exist in trusted table"//,
+            //        //exceptionMessage: ex.Message//,
+            //        //commandSQL: sql
+            //    );
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw new GeneralException(
+            //        //stage: EnumStages.GetRegistersExists,
+            //        //error: EnumError.SQLCommand,
+            //        //level: EnumMessageLevel.Error,
+            //        message: $"Error when trying to get records that already exist in trusted table",
+            //        //exceptionMessage: ex.Message
+            //    );
+            //}
         }
     }
 }

@@ -18,7 +18,7 @@ namespace AzureJobs.RecurringJobs
         //    {
         //        var result = await _jadlogService.SearchTrackingHistory();
         //    }
-        //    catch (Exception ex)
+        //    catch (ExceptionBase ex)
         //    {
         //        throw;
         //    }

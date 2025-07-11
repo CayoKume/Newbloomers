@@ -1,0 +1,18 @@
+﻿using Domain.IntegrationsCore.Enums;
+
+namespace Domain.IntegrationsCore.Entities.Exceptions
+{
+    public class APIException : ExceptionBase
+    {
+        public string? APIRequestResponse { get; private set; }
+
+        public APIException(
+            string message,
+            string exceptionMessage,
+            string apiRequestResponse
+        ) : base(Error: EnumError.EndPointException, MessageLevel: EnumMessageLevel.Error, Message: message, ExceptionMessage: exceptionMessage)
+        {
+            APIRequestResponse = apiRequestResponse;
+        }
+    }
+}

@@ -125,7 +125,7 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
             catch (Exception ex)
             {
                 Response.StatusCode = 400;
-                return Content($"Unable to integrate the record: {codigo_classificacao}.\nError: {ex.Message}");
+                return Content($"Unable to integrate the record: {codigo_classificacao}.\n//error: {ex.Message}");
             }
         }
 
@@ -154,7 +154,7 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
             catch (Exception ex)
             {
                 Response.StatusCode = 400;
-                return Content($"Unable to integrate the record: {doc_cliente}.\nError: {ex.Message}");
+                return Content($"Unable to integrate the record: {doc_cliente}.\n//error: {ex.Message}");
             }
         }
 
@@ -183,7 +183,7 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
             catch (Exception ex)
             {
                 Response.StatusCode = 400;
-                return Content($"Unable to integrate the record: {id_pedido}.\nError: {ex.Message}");
+                return Content($"Unable to integrate the record: {id_pedido}.\n//error: {ex.Message}");
             }
         }
 
@@ -213,7 +213,7 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
             catch (Exception ex)
             {
                 Response.StatusCode = 400;
-                return Content($"Unable to integrate the record: {id_pedido}.\nError: {ex.Message}");
+                return Content($"Unable to integrate the record: {id_pedido}.\n//error: {ex.Message}");
             }
         }
 
@@ -242,7 +242,7 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
             catch (Exception ex)
             {
                 Response.StatusCode = 400;
-                return Content($"Unable to integrate the record: {id_pedido}.\nError: {ex.Message}");
+                return Content($"Unable to integrate the record: {id_pedido}.\n//error: {ex.Message}");
             }
         }
 
@@ -271,7 +271,7 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
             catch (Exception ex)
             {
                 Response.StatusCode = 400;
-                return Content($"Unable to integrate the record: {id_pedido}.\nError: {ex.Message}");
+                return Content($"Unable to integrate the record: {id_pedido}.\n//error: {ex.Message}");
             }
         }
 
@@ -301,7 +301,7 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
             catch (Exception ex)
             {
                 Response.StatusCode = 400;
-                return Content($"Unable to integrate the record: {id_parentesco}.\nError: {ex.Message}");
+                return Content($"Unable to integrate the record: {id_parentesco}.\n//error: {ex.Message}");
             }
         }
 
@@ -331,7 +331,7 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
             catch (Exception ex)
             {
                 Response.StatusCode = 400;
-                return Content($"Unable to integrate the record: {id_imagem}.\nError: {ex.Message}");
+                return Content($"Unable to integrate the record: {id_imagem}.\n//error: {ex.Message}");
             }
         }
     }

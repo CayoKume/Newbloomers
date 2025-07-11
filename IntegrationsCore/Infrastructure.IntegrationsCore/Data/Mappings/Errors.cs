@@ -38,14 +38,14 @@ namespace Infrastructure.IntegrationsCore.Data.Mappings
 
             builder.HasData(
                 new Error ( IdError: 1, _Error: "Undefined", Resolution: null, RequireUserAction: null, EmergencyLevel: null, ActionInf: null, EnumErrorName: null ),
-                new Error ( IdError: 2, _Error: "Exception", Resolution: null , RequireUserAction: null, EmergencyLevel: null, ActionInf: null, EnumErrorName: null ),
+                new Error ( IdError: 2, _Error: "ExceptionBase", Resolution: null , RequireUserAction: null, EmergencyLevel: null, ActionInf: null, EnumErrorName: null ),
                 new Error ( IdError: 3, _Error: "Validation", Resolution: null, RequireUserAction: null, EmergencyLevel: null, ActionInf: null, EnumErrorName: null ),
                 new Error ( IdError: 4, _Error: "LegthValidation", Resolution: null, RequireUserAction: null, EmergencyLevel: null, ActionInf: null, EnumErrorName: null ),
                 new Error ( IdError: 5, _Error: "ConvertValidation", Resolution: null, RequireUserAction: null, EmergencyLevel: null, ActionInf: null, EnumErrorName: null ),
                 new Error ( IdError: 6, _Error: "ArgumentConectionStringIsNull", Resolution: null, RequireUserAction: null, EmergencyLevel: null, ActionInf: null, EnumErrorName: null ),
                 new Error ( IdError: 7, _Error: "ArgumentoInvalido", Resolution: null, RequireUserAction: null, EmergencyLevel: null, ActionInf: null, EnumErrorName: null ),
                 new Error ( IdError: 8, _Error: "SQLCommand", Resolution: null, RequireUserAction: null, EmergencyLevel: null, ActionInf: null, EnumErrorName: null ),
-                new Error ( IdError: 9, _Error: "EndPointException", Resolution: null, RequireUserAction: null, EmergencyLevel: null, ActionInf: null, EnumErrorName: null ),
+                new Error ( IdError: 9, _Error: "APIException", Resolution: null, RequireUserAction: null, EmergencyLevel: null, ActionInf: null, EnumErrorName: null ),
                 new Error ( IdError: 10, _Error: "EndPointReturnEmpty", Resolution: null, RequireUserAction: null, EmergencyLevel: null, ActionInf: null, EnumErrorName: null ),
                 new Error ( IdError: 11, _Error: "EndPointFailOnDeserialize", Resolution: null, RequireUserAction: null, EmergencyLevel: null, ActionInf: null, EnumErrorName: null ),
                 new Error ( IdError: 12, _Error: "CreateClientException", Resolution: null, RequireUserAction: null, EmergencyLevel: null, ActionInf: null, EnumErrorName: null ),

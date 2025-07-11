@@ -37,11 +37,12 @@ namespace Infrastructure.LinxCommerce.Api
             catch (Exception ex)
             {
                 throw new GeneralException(
-                    stage: EnumStages.PostAsync,
-                    error: EnumError.Exception,
-                    level: EnumMessageLevel.Error,
+                    //stage: EnumStages.PostAsync,
+                    //error: EnumError.Exception,
+                    //level: EnumMessageLevel.Error,
                     message: $"Error when querying endpoint: {jobParameter.jobName} on microvix webservice\n" +
-                                $"Request: {Newtonsoft.Json.JsonConvert.SerializeObject(objRequest)}"
+                                $"Request: {Newtonsoft.Json.JsonConvert.SerializeObject(objRequest)}",
+                    exceptionMessage: ""
                 );
             }
         }
@@ -69,11 +70,12 @@ namespace Infrastructure.LinxCommerce.Api
             catch (Exception ex)
             {
                 throw new GeneralException(
-                    stage: EnumStages.PostAsync,
-                    error: EnumError.Exception,
-                    level: EnumMessageLevel.Error,
+                    //stage: EnumStages.PostAsync,
+                    //error: EnumError.Exception,
+                    //level: EnumMessageLevel.Error,
                     message: $"Error when querying endpoint: {jobParameter.jobName} on microvix webservice\n" +
-                                $"Request: {Newtonsoft.Json.JsonConvert.SerializeObject(objRequest)}"
+                                $"Request: {Newtonsoft.Json.JsonConvert.SerializeObject(objRequest)}",
+                    exceptionMessage: ""
                 );
             }
         }
@@ -101,11 +103,12 @@ namespace Infrastructure.LinxCommerce.Api
             catch (Exception ex)
             {
                 throw new GeneralException(
-                    stage: EnumStages.PostAsync,
-                    error: EnumError.Exception,
-                    level: EnumMessageLevel.Error,
+                    //stage: EnumStages.PostAsync,
+                    //error: EnumError.Exception,
+                    //level: EnumMessageLevel.Error,
                     message: $"Error when querying endpoint: {jobParameter.jobName} on microvix webservice\n" +
-                                $"Request: {identifier}"
+                                $"Request: {identifier}",
+                    exceptionMessage: ""
                 );
             }
         }
@@ -133,11 +136,12 @@ namespace Infrastructure.LinxCommerce.Api
             catch (Exception ex)
             {
                 throw new GeneralException(
-                    stage: EnumStages.PostAsync,
-                    error: EnumError.Exception,
-                    level: EnumMessageLevel.Error,
+                    //stage: EnumStages.PostAsync,
+                    //error: EnumError.Exception,
+                    //level: EnumMessageLevel.Error,
                     message: $"Error when querying endpoint: {jobParameter.jobName} on microvix webservice\n" +
-                                $"Request: {identifier}"
+                                $"Request: {identifier}",
+                    exceptionMessage: ""
                 );
             }
         }

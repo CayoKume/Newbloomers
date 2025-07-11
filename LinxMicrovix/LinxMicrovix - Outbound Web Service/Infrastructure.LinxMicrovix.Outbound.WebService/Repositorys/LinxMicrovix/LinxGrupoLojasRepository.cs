@@ -16,50 +16,26 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxMicrovi
 
         public bool BulkInsertIntoTableRaw(LinxAPIParam jobParameter, IList<LinxGrupoLojas> records)
         {
-            try
+            var table = _linxMicrovixRepositoryBase.CreateSystemDataTable(jobParameter.tableName, new LinxGrupoLojas());
+
+            for (int i = 0; i < records.Count(); i++)
             {
-                var table = _linxMicrovixRepositoryBase.CreateSystemDataTable(jobParameter.tableName, new LinxGrupoLojas());
-
-                for (int i = 0; i < records.Count(); i++)
-                {
-                    table.Rows.Add(records[i].lastupdateon, records[i].cnpj, records[i].nome_empresa, records[i].id_empresas_rede, records[i].rede, records[i].portal,
-                        records[i].nome_portal, records[i].empresa, records[i].classificacao_portal);
-                }
-
-                _linxMicrovixRepositoryBase.BulkInsertIntoTableRaw(
-                    dataTable: table
-                );
-
-                return true;
+                table.Rows.Add(records[i].lastupdateon, records[i].cnpj, records[i].nome_empresa, records[i].id_empresas_rede, records[i].rede, records[i].portal,
+                    records[i].nome_portal, records[i].empresa, records[i].classificacao_portal);
             }
-            catch
-            {
-                throw;
-            }
+
+            _linxMicrovixRepositoryBase.BulkInsertIntoTableRaw(
+                dataTable: table
+            );
+
+            return true;
         }
 
         public async Task<IEnumerable<string?>> GetRegistersExists()
         {
-            try
-            {
-                string sql = $"SELECT CONCAT('[', CNPJ, ']', '|', '[', NOME_EMPRESA, ']', '|', '[', ID_EMPRESAS_REDE, ']', '|', '[', REDE, ']', '|', '[', PORTAL, ']', '|', '[', NOME_PORTAL, ']' , '|', '[', EMPRESA, ']', '|', '[', CLASSIFICACAO_PORTAL, ']') FROM [linx_microvix_erp].[LinxGrupoLojas]";
+            string sql = $"SELECT CONCAT('[', CNPJ, ']', '|', '[', NOME_EMPRESA, ']', '|', '[', ID_EMPRESAS_REDE, ']', '|', '[', REDE, ']', '|', '[', PORTAL, ']', '|', '[', NOME_PORTAL, ']' , '|', '[', EMPRESA, ']', '|', '[', CLASSIFICACAO_PORTAL, ']') FROM [linx_microvix_erp].[LinxGrupoLojas]";
 
-                return await _linxMicrovixRepositoryBase.GetKeyRegistersAlreadyExists(sql);
-            }
-            catch (Exception ex) when (ex is not GeneralException && ex is not SQLCommandException)
-            {
-                throw new GeneralException(
-                    stage: EnumStages.GetRegistersExists,
-                    error: EnumError.Exception,
-                    level: EnumMessageLevel.Error,
-                    message: "Error when filling identifiers to sql command",
-                    exceptionMessage: ex.Message
-                );
-            }
-            catch
-            {
-                throw;
-            }
+            return await _linxMicrovixRepositoryBase.GetKeyRegistersAlreadyExists(sql);
         }
 
         public async Task<bool> InsertRecord(LinxAPIParam jobParameter, LinxGrupoLojas? record)
@@ -69,14 +45,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxMicrovi
                             Values
                             (@lastupdateon,@cnpj,@nome_empresa,@id_empresas_rede,@rede,@portal,@nome_portal,@empresa,@classificacao_portal)";
 
-            try
-            {
-                return await _linxMicrovixRepositoryBase.InsertRecord(jobParameter.tableName, sql: sql, record: record);
-            }
-            catch
-            {
-                throw;
-            }
+            return await _linxMicrovixRepositoryBase.InsertRecord(jobParameter.tableName, sql: sql, record: record);
         }
     }
 }

@@ -9,6 +9,5 @@ namespace Application.LinxMicrovix.Outbound.WebService.Interfaces.Base
         public string? BuildBodyRequest(LinxAPIParam jobParameter, string? parametersList);
         public string? BuildBodyRequest(LinxAPIParam jobParameter);
         public List<Dictionary<string?, string?>> DeserializeResponseToXML(LinxAPIParam jobParameter, string? response);
-        public List<Dictionary<string?, string?>> DeserializeResponseToXML(LinxAPIParam jobParameter, string? response, ICacheBase entityCache);
     }
 }

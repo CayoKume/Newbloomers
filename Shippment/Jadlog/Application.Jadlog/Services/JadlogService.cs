@@ -28,12 +28,12 @@ namespace Application.Jadlog.Services
             catch (SQLCommandException ex)
             {
                 _logger.AddMessage(
-                    stage: ex.Stage,
-                    error: ex.Error,
-                    logLevel: ex.MessageLevel,
-                    message: ex.Message,
-                    exceptionMessage: ex.ExceptionMessage,
-                    commandSQL: ex.CommandSQL
+                    //stage: ex.Stage,
+                    //error: ex.Error,
+                    //log//level: ex.MessageLevel,
+                    message: ex.Message
+                    //exceptionMessage: ex.ExceptionMessage
+                    //commandSQL: ex.CommandSQL
                 );
 
                 throw;
@@ -41,11 +41,11 @@ namespace Application.Jadlog.Services
             catch (GeneralException ex)
             {
                 _logger.AddMessage(
-                    stage: ex.stage,
-                    error: ex.Error,
-                    logLevel: ex.MessageLevel,
-                    message: ex.Message,
-                    exceptionMessage: ex.ExceptionMessage
+                    //stage: ex.stage,
+                    //error: ex.Error,
+                    //log//level: ex.MessageLevel,
+                    message: ex.Message
+                    //exceptionMessage: ex.ExceptionMessage
                 );
 
                 throw;
@@ -53,8 +53,8 @@ namespace Application.Jadlog.Services
             catch (Exception ex)
             {
                 _logger.AddMessage(
-                    message: "Error when executing GetRecords method",
-                    exceptionMessage: ex.Message
+                    message: "Error when executing GetRecords method"
+                    //exceptionMessage: ex.Message
                 );
             }
             finally
@@ -75,12 +75,12 @@ namespace Application.Jadlog.Services
             catch (SQLCommandException ex)
             {
                 _logger.AddMessage(
-                    stage: ex.Stage,
-                    error: ex.Error,
-                    logLevel: ex.MessageLevel,
-                    message: ex.Message,
-                    exceptionMessage: ex.ExceptionMessage,
-                    commandSQL: ex.CommandSQL
+                    //stage: ex.Stage,
+                    //error: ex.Error,
+                    //log//level: ex.MessageLevel,
+                    message: ex.Message//,
+                    //exceptionMessage: ex.ExceptionMessage
+                    //commandSQL: ex.CommandSQL
                 );
 
                 throw;
@@ -88,11 +88,11 @@ namespace Application.Jadlog.Services
             catch (GeneralException ex)
             {
                 _logger.AddMessage(
-                    stage: ex.stage,
-                    error: ex.Error,
-                    logLevel: ex.MessageLevel,
-                    message: ex.Message,
-                    exceptionMessage: ex.ExceptionMessage
+                    //stage: ex.stage,
+                    //error: ex.Error,
+                    //log//level: ex.MessageLevel,
+                    message: ex.Message
+                    //exceptionMessage: ex.ExceptionMessage
                 );
 
                 throw;
@@ -100,8 +100,8 @@ namespace Application.Jadlog.Services
             catch (Exception ex)
             {
                 _logger.AddMessage(
-                    message: "Error when executing GetRecords method",
-                    exceptionMessage: ex.Message
+                    message: "Error when executing GetRecords method"
+                    //exceptionMessage: ex.Message
                 );
             }
             finally
@@ -192,9 +192,9 @@ namespace Application.Jadlog.Services
                     foreach (var error in validations.Errors)
                     {
                         _logger.AddMessage(
-                            stage: EnumStages.DeserializeXMLToObject,
-                            error: EnumError.Validation,
-                            logLevel: EnumMessageLevel.Warning,
+                            //stage: EnumStages.DeserializeXMLToObject,
+                            //error: EnumError.Validation,
+                            //log//level: EnumMessageLevel.Warning,
                             message: $"Error when convert record - shipmentId: {consulta.shipmentId} | tracking_code: {consulta.tracking.codigo}\n{error}"
                         );
                     }
@@ -230,12 +230,12 @@ namespace Application.Jadlog.Services
             catch (SQLCommandException ex)
             {
                 _logger.AddMessage(
-                    stage: ex.Stage,
-                    error: ex.Error,
-                    logLevel: ex.MessageLevel,
-                    message: ex.Message,
-                    exceptionMessage: ex.ExceptionMessage,
-                    commandSQL: ex.CommandSQL
+                    //stage: ex.Stage,
+                    //error: ex.Error,
+                    //log//level: ex.MessageLevel,
+                    message: ex.Message
+                    //exceptionMessage: ex.ExceptionMessage
+                    //commandSQL: ex.CommandSQL
                 );
 
                 throw;
@@ -243,11 +243,11 @@ namespace Application.Jadlog.Services
             catch (GeneralException ex)
             {
                 _logger.AddMessage(
-                    stage: ex.stage,
-                    error: ex.Error,
-                    logLevel: ex.MessageLevel,
-                    message: ex.Message,
-                    exceptionMessage: ex.ExceptionMessage
+                    //stage: ex.stage,
+                    //error: ex.Error,
+                    //log//level: ex.MessageLevel,
+                    message: ex.Message
+                    //exceptionMessage: ex.ExceptionMessage
                 );
 
                 throw;
@@ -255,8 +255,8 @@ namespace Application.Jadlog.Services
             catch (Exception ex)
             {
                 _logger.AddMessage(
-                    message: "Error when executing GetRecords method",
-                    exceptionMessage: ex.Message
+                    message: "Error when executing GetRecords method"
+                    //exceptionMessage: ex.Message
                 );
             }
             finally

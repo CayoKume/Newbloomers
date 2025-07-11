@@ -56,14 +56,14 @@ namespace Infrastructure.LinxCommerce.Repositorys
 
             //    return await _linxMicrovixRepositoryBase.GetRegistersExists(jobParameter, sql);
             //}
-            //catch (Exception ex) when (ex is not GeneralException && ex is not SQLCommandException)
+            //catch (ExceptionBase ex) when (ex is not GeneralException && ex is not SQLCommandException)
             //{
             //    throw new GeneralException(
-            //        stage: EnumStages.GetRegistersExists,
-            //        error: EnumError.Exception,
-            //        level: EnumMessageLevel.Error,
+            //        //stage: EnumStages.GetRegistersExists,
+            //        //error: EnumError.ExceptionBase,
+            //        //level: EnumMessageLevel.Error,
             //        message: "Error when filling identifiers to sql command",
-            //        exceptionMessage: ex.Message
+            //        //exceptionMessage: ex.Message
             //    );
             //}
             //catch

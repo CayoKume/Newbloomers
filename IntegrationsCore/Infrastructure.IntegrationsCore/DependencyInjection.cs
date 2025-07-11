@@ -15,11 +15,12 @@ namespace Infrastructure.IntegrationsCore.DependencyInjection
             services.AddScoped<ISQLServerConnection, SQLServerConnection>();
             services.AddScoped<IIntegrationsCoreRepository, IntegrationsCoreRepository>();
 
-            services.AddScoped<ILogRepository, LogRepository>();
             services.AddScoped<ILoggerService, LoggerService>();
 
+            services.AddScoped<IExceptionHandler, APIExceptionHandler>();
             services.AddScoped<IExceptionHandler, SqlExceptionHandler>();
-            services.AddScoped<IExceptionHandler, GenericExceptionHandler>();
+            services.AddScoped<IExceptionHandler, GeneralExceptionHandler>();
+            services.AddScoped<IExceptionHandler, ExceptionHandler>();
 
             return services;
         }

@@ -376,24 +376,17 @@ namespace Application.LinxCommerce.Services
 
         public async Task<bool?> GetSKU(LinxCommerceJobParameter jobParameter, int productID)
         {
-            try
-            {
-                var response = await _apiCall.PostRequest(
-                    jobParameter: jobParameter,
-                    intIdentifier: productID,
-                    route: "/v1/Catalog/API.svc/web/GetSKU"
-                );
+            var response = await _apiCall.PostRequest(
+                jobParameter: jobParameter,
+                intIdentifier: productID,
+                route: "/v1/Catalog/API.svc/web/GetSKU"
+            );
 
-                var skus = Newtonsoft.Json.JsonConvert.DeserializeObject<Sku>(response);
+            var skus = Newtonsoft.Json.JsonConvert.DeserializeObject<Sku>(response);
 
-                //await _skuRepository.InsertRecord(jobParameter, skus);
+            //await _skuRepository.InsertRecord(jobParameter, skus);
 
-                return true;
-            }
-            catch
-            {
-                throw;
-            }
+            return true;
         }
 
         public Task<bool?> GetSKU(LinxCommerceJobParameter jobParameter)
@@ -768,266 +761,182 @@ namespace Application.LinxCommerce.Services
 
         public async Task<bool?> SearchProductByDateInterval(LinxCommerceJobParameter jobParameter)
         {
-            try
+            _logger
+               .Clear()
+               .AddLog(EnumJob.LinxCommerceProduct);
+
+            var objectRequest = new
             {
-                _logger
-                   .Clear()
-                   .AddLog(EnumJob.LinxCommerceProduct);
+                Page = new { PageIndex = 0, PageSize = 10000 },
+                Where = $"(CreatedDate>=\"{DateTime.Now.Date:yyyy-MM-dd}T00:00:00\" && CreatedDate<=\"{DateTime.Now.Date:yyyy-MM-dd}T23:59:59\")",
+                WhereMetadata = "",
+                OrderBy = "ProductID",
+            };
 
-                var objectRequest = new
-                {
-                    Page = new { PageIndex = 0, PageSize = 10000 },
-                    Where = $"(CreatedDate>=\"{DateTime.Now.Date:yyyy-MM-dd}T00:00:00\" && CreatedDate<=\"{DateTime.Now.Date:yyyy-MM-dd}T23:59:59\")",
-                    WhereMetadata = "",
-                    OrderBy = "ProductID",
-                };
+            var response = await _apiCall.PostRequest(
+                jobParameter,
+                objectRequest,
+                "/v1/Catalog/API.svc/web/SearchProduct"
+            );
 
-                var response = await _apiCall.PostRequest(
-                    jobParameter,
-                    objectRequest,
-                    "/v1/Catalog/API.svc/web/SearchProduct"
+            var productAPIList = new List<Product>();
+            var productsIDs = Newtonsoft.Json.JsonConvert.DeserializeObject<SearchProducts.Root>(response);
+            var groupedIDs = productsIDs.Result.GroupBy(x => x.ProductID).Select(g => g.First()).ToList();
+
+            foreach (var productID in groupedIDs)
+            {
+                string route = String.Empty;
+
+                var getProductResponse = await _apiCall.PostRequest(
+                    jobParameter: jobParameter,
+                    intIdentifier: productID.ProductID,
+                    route: "/v1/Catalog/API.svc/web/GetProduct"
                 );
 
-                var productAPIList = new List<Product>();
-                var productsIDs = Newtonsoft.Json.JsonConvert.DeserializeObject<SearchProducts.Root>(response);
-                var groupedIDs = productsIDs.Result.GroupBy(x => x.ProductID).Select(g => g.First()).ToList();
+                var product = Newtonsoft.Json.JsonConvert.DeserializeObject<Product>(getProductResponse);
+                var validations = _productValidator.Validate(product);
 
-                foreach (var productID in groupedIDs)
+                if (validations.Errors.Count() > 0)
                 {
-                    string route = String.Empty;
-
-                    var getProductResponse = await _apiCall.PostRequest(
-                        jobParameter: jobParameter,
-                        intIdentifier: productID.ProductID,
-                        route: "/v1/Catalog/API.svc/web/GetProduct"
-                    );
-
-                    var product = Newtonsoft.Json.JsonConvert.DeserializeObject<Product>(getProductResponse);
-                    var validations = _productValidator.Validate(product);
-
-                    if (validations.Errors.Count() > 0)
+                    for (int j = 0; j < validations.Errors.Count(); j++)
                     {
-                        for (int j = 0; j < validations.Errors.Count(); j++)
-                        {
-                            _logger.AddMessage(
-                                stage: EnumStages.DeserializeXMLToObject,
-                                error: EnumError.Validation,
-                                logLevel: EnumMessageLevel.Warning,
-                                message: $"Error when convert record - ProductID: {product.ProductID} | Name: {product.Name}\n" +
-                                         $"{validations.Errors[j]}"
-                            );
-                        }
+                        _logger.AddMessage(
+                            message: $"Error when convert record - ProductID: {product.ProductID} | Name: {product.Name}\n" +
+                                     $"{validations.Errors[j]}"
+                        );
                     }
-
-                    productAPIList.Add(new Product(product, getProductResponse));
                 }
 
-                if (productAPIList.Count() > 0)
-                {
-                    _skuRepository.BulkInsertIntoTableRaw(jobParameter, productAPIList, _logger.GetExecutionGuid());
-
-                    productAPIList.ForEach(p =>
-                        _logger.AddRecord(
-                            p.ProductID.ToString(),
-                            p.Responses
-                                .Where(pair => pair.Key == p.ProductID)
-                                .Select(pair => pair.Value)
-                                .FirstOrDefault()
-                        )
-                    );
-
-                    _logger.AddMessage(
-                        $"Concluída com sucesso: {productAPIList.Count()} registro(s) novo(s) inserido(s)!"
-                    );
-                }
-                else
-                    _logger.AddMessage(
-                        $"Concluída com sucesso: {productAPIList.Count()} registro(s) novo(s) inserido(s)!"
-                    );
-
-                return true;
+                productAPIList.Add(new Product(product, getProductResponse));
             }
-            catch (SQLCommandException ex)
+
+            if (productAPIList.Count() > 0)
             {
-                _logger.AddMessage(
-                    stage: ex.Stage,
-                    error: ex.Error,
-                    logLevel: ex.MessageLevel,
-                    message: ex.Message,
-                    exceptionMessage: ex.ExceptionMessage,
-                    commandSQL: ex.CommandSQL
+                _skuRepository.BulkInsertIntoTableRaw(jobParameter, productAPIList, _logger.GetExecutionGuid());
+
+                productAPIList.ForEach(p =>
+                    _logger.AddRecord(
+                        p.ProductID.ToString(),
+                        p.Responses
+                            .Where(pair => pair.Key == p.ProductID)
+                            .Select(pair => pair.Value)
+                            .FirstOrDefault()
+                    )
                 );
 
-                throw;
-            }
-            catch (GeneralException ex)
-            {
                 _logger.AddMessage(
-                    stage: ex.stage,
-                    error: ex.Error,
-                    logLevel: ex.MessageLevel,
-                    message: ex.Message,
-                    exceptionMessage: ex.ExceptionMessage
+                    $"Concluída com sucesso: {productAPIList.Count()} registro(s) novo(s) inserido(s)!"
+                );
+            }
+            else
+                _logger.AddMessage(
+                    $"Concluída com sucesso: {productAPIList.Count()} registro(s) novo(s) inserido(s)!"
                 );
 
-                throw;
-            }
-            catch (Exception ex)
-            {
-                _logger.AddMessage(
-                    message: "Error when executing GetRecords method",
-                    exceptionMessage: ex.Message
-                );
-            }
-            finally
-            {
-                _logger.SetLogEndDate();
-                await _logger.CommitAllChanges();
-            }
+            _logger.SetLogEndDate();
+            await _logger.CommitAllChanges();
 
             return true;
         }
 
         public async Task<bool?> SearchProductByQueue(LinxCommerceJobParameter jobParameter)
         {
-            try
+            _logger
+               .Clear()
+               .AddLog(EnumJob.LinxCommerceProduct);
+
+            var objectRequest = new
             {
-                _logger
-                   .Clear()
-                   .AddLog(EnumJob.LinxCommerceProduct);
+                QueueID = 21,
+                Page = new { PageIndex = 0, PageSize = 1000 },
+                Where = $"EntityKeyName==\"CatalogItemID\" && EntityTypeName==\"EZ.Store.Model.Catalog.Product\"",
+                WhereMetadata = "",
+                OrderBy = "QueueItemID",
+            };
 
-                var objectRequest = new
+            var response = await _apiCall.PostRequest(
+                jobParameter,
+                objectRequest,
+                "/v1/Queue/API.svc/web/SearchQueueItems"
+            );
+
+            var productAPIList = new List<Product>();
+            var enqueuedItens = Newtonsoft.Json.JsonConvert.DeserializeObject<SearchQueuedItem.Root>(response);
+            var enqueuedProducts = enqueuedItens
+                                .Result
+                                .Where(x => x.EntityKeyName == "CatalogItemID")
+                                .GroupBy(y => y.EntityKeyValue)
+                                .Select(g => g.First())
+                                .ToList();
+
+            foreach (var enqueuedProduct in enqueuedProducts)
+            {
+                string route = String.Empty;
+
+                var getProductResponse = await _apiCall.PostRequest(
+                    jobParameter: jobParameter,
+                    intIdentifier: Convert.ToInt32(enqueuedProduct.EntityKeyValue),
+                    route: "/v1/Catalog/API.svc/web/GetProduct"
+                );
+
+                var product = Newtonsoft.Json.JsonConvert.DeserializeObject<Product>(getProductResponse);
+                var validations = _productValidator.Validate(product);
+
+                if (validations.Errors.Count() > 0)
                 {
-                    QueueID = 21,
-                    Page = new { PageIndex = 0, PageSize = 1000 },
-                    Where = $"EntityKeyName==\"CatalogItemID\" && EntityTypeName==\"EZ.Store.Model.Catalog.Product\"",
-                    WhereMetadata = "",
-                    OrderBy = "QueueItemID",
-                };
+                    for (int j = 0; j < validations.Errors.Count(); j++)
+                    {
+                        _logger.AddMessage(
+                            message: $"Error when convert record - ProductID: {product.ProductID} | Name: {product.Name}\n" +
+                                     $"{validations.Errors[j]}"
+                        );
+                    }
+                }
 
-                var response = await _apiCall.PostRequest(
+                productAPIList.Add(new Product(product, getProductResponse));
+            }
+
+            if (productAPIList.Count() > 0)
+            {
+                _skuRepository.BulkInsertIntoTableRaw(jobParameter, productAPIList, _logger.GetExecutionGuid());
+
+                productAPIList.ForEach(p =>
+                    _logger.AddRecord(
+                        p.ProductID.ToString(),
+                        p.Responses
+                            .Where(pair => pair.Key == p.ProductID)
+                            .Select(pair => pair.Value)
+                            .FirstOrDefault()
+                    )
+                );
+
+                _logger.AddMessage(
+                    $"Concluída com sucesso: {productAPIList.Count()} registro(s) novo(s) inserido(s)!"
+                );
+
+                //remover da fila de integração apenas se o registro for inserido no banco de dados
+                var listQueueItemID = new List<string>();
+
+                foreach (var enqueuedproduct in enqueuedProducts)
+                {
+                    listQueueItemID.Add(enqueuedproduct.QueueItemID);
+                }
+
+                var dequeueObjectRequest = new { QueueItems = listQueueItemID };
+
+                var dequeueResponse = await _apiCall.PostRequest(
                     jobParameter,
-                    objectRequest,
-                    "/v1/Queue/API.svc/web/SearchQueueItems"
+                    dequeueObjectRequest,
+                    "/v1/Queue/API.svc/web/DequeueQueueItems"
                 );
-
-                var productAPIList = new List<Product>();
-                var enqueuedItens = Newtonsoft.Json.JsonConvert.DeserializeObject<SearchQueuedItem.Root>(response);
-                var enqueuedProducts = enqueuedItens
-                                    .Result
-                                    .Where(x => x.EntityKeyName == "CatalogItemID")
-                                    .GroupBy(y => y.EntityKeyValue)
-                                    .Select(g => g.First())
-                                    .ToList();
-
-                foreach (var enqueuedProduct in enqueuedProducts)
-                {
-                    string route = String.Empty;
-
-                    var getProductResponse = await _apiCall.PostRequest(
-                        jobParameter: jobParameter,
-                        intIdentifier: Convert.ToInt32(enqueuedProduct.EntityKeyValue),
-                        route: "/v1/Catalog/API.svc/web/GetProduct"
-                    );
-
-                    var product = Newtonsoft.Json.JsonConvert.DeserializeObject<Product>(getProductResponse);
-                    var validations = _productValidator.Validate(product);
-
-                    if (validations.Errors.Count() > 0)
-                    {
-                        for (int j = 0; j < validations.Errors.Count(); j++)
-                        {
-                            _logger.AddMessage(
-                                stage: EnumStages.DeserializeXMLToObject,
-                                error: EnumError.Validation,
-                                logLevel: EnumMessageLevel.Warning,
-                                message: $"Error when convert record - ProductID: {product.ProductID} | Name: {product.Name}\n" +
-                                         $"{validations.Errors[j]}"
-                            );
-                        }
-                    }
-
-                    productAPIList.Add(new Product(product, getProductResponse));
-                }
-
-                if (productAPIList.Count() > 0)
-                {
-                    _skuRepository.BulkInsertIntoTableRaw(jobParameter, productAPIList, _logger.GetExecutionGuid());
-
-                    productAPIList.ForEach(p =>
-                        _logger.AddRecord(
-                            p.ProductID.ToString(),
-                            p.Responses
-                                .Where(pair => pair.Key == p.ProductID)
-                                .Select(pair => pair.Value)
-                                .FirstOrDefault()
-                        )
-                    );
-
-                    _logger.AddMessage(
-                        $"Concluída com sucesso: {productAPIList.Count()} registro(s) novo(s) inserido(s)!"
-                    );
-
-                    //remover da fila de integração apenas se o registro for inserido no banco de dados
-                    var listQueueItemID = new List<string>();
-
-                    foreach (var enqueuedproduct in enqueuedProducts)
-                    {
-                        listQueueItemID.Add(enqueuedproduct.QueueItemID);
-                    }
-
-                    var dequeueObjectRequest = new { QueueItems = listQueueItemID };
-
-                    var dequeueResponse = await _apiCall.PostRequest(
-                        jobParameter,
-                        dequeueObjectRequest,
-                        "/v1/Queue/API.svc/web/DequeueQueueItems"
-                    );
-                }
-                else
-                    _logger.AddMessage(
-                        $"Concluída com sucesso: {productAPIList.Count()} registro(s) novo(s) inserido(s)!"
-                    );
-
-                return true;
             }
-            catch (SQLCommandException ex)
-            {
+            else
                 _logger.AddMessage(
-                    stage: ex.Stage,
-                    error: ex.Error,
-                    logLevel: ex.MessageLevel,
-                    message: ex.Message,
-                    exceptionMessage: ex.ExceptionMessage,
-                    commandSQL: ex.CommandSQL
+                    $"Concluída com sucesso: {productAPIList.Count()} registro(s) novo(s) inserido(s)!"
                 );
 
-                throw;
-            }
-            catch (GeneralException ex)
-            {
-                _logger.AddMessage(
-                    stage: ex.stage,
-                    error: ex.Error,
-                    logLevel: ex.MessageLevel,
-                    message: ex.Message,
-                    exceptionMessage: ex.ExceptionMessage
-                );
-
-                throw;
-            }
-            catch (Exception ex)
-            {
-                _logger.AddMessage(
-                    message: "Error when executing GetRecords method",
-                    exceptionMessage: ex.Message
-                );
-            }
-            finally
-            {
-                _logger.SetLogEndDate();
-                await _logger.CommitAllChanges();
-            }
+            _logger.SetLogEndDate();
+            await _logger.CommitAllChanges();
 
             return true;
         }
@@ -1079,265 +988,181 @@ namespace Application.LinxCommerce.Services
 
         public async Task<bool?> SearchSKUByDateInterval(LinxCommerceJobParameter jobParameter)
         {
-            try
+            _logger
+               .Clear()
+               .AddLog(EnumJob.LinxCommerceSku);
+
+            var objectRequest = new
             {
-                _logger
-                   .Clear()
-                   .AddLog(EnumJob.LinxCommerceSku);
+                Page = new { PageIndex = 0, PageSize = 1000 },
+                Where = $"(CreatedDate>=\"{DateTime.Now.AddDays(-1).Date:yyyy-MM-dd}T00:00:00\" && CreatedDate<=\"{DateTime.Now.Date:yyyy-MM-dd}T23:59:59\")",
+                WhereMetadata = "",
+                OrderBy = "ProductID",
+            };
 
-                var objectRequest = new
-                {
-                    Page = new { PageIndex = 0, PageSize = 1000 },
-                    Where = $"(CreatedDate>=\"{DateTime.Now.AddDays(-1).Date:yyyy-MM-dd}T00:00:00\" && CreatedDate<=\"{DateTime.Now.Date:yyyy-MM-dd}T23:59:59\")",
-                    WhereMetadata = "",
-                    OrderBy = "ProductID",
-                };
+            var response = await _apiCall.PostRequest(
+                jobParameter,
+                objectRequest,
+                "/v1/Catalog/API.svc/web/SearchSKU"
+            );
 
-                var response = await _apiCall.PostRequest(
-                    jobParameter,
-                    objectRequest,
-                    "/v1/Catalog/API.svc/web/SearchSKU"
+            var skuAPIList = new List<Sku>();
+            var productsIDs = Newtonsoft.Json.JsonConvert.DeserializeObject<SearchSKU.Root>(response);
+
+            foreach (var productID in productsIDs.Result)
+            {
+                string route = String.Empty;
+
+                var getSkuResponse = await _apiCall.PostRequest(
+                    jobParameter: jobParameter,
+                    intIdentifier: productID.ProductID,
+                    route: "/v1/Catalog/API.svc/web/GetSKU"
                 );
 
-                var skuAPIList = new List<Sku>();
-                var productsIDs = Newtonsoft.Json.JsonConvert.DeserializeObject<SearchSKU.Root>(response);
+                var sku = Newtonsoft.Json.JsonConvert.DeserializeObject<Sku>(getSkuResponse);
+                var validations = _validator.Validate(sku);
 
-                foreach (var productID in productsIDs.Result)
+                if (validations.Errors.Count() > 0)
                 {
-                    string route = String.Empty;
-
-                    var getSkuResponse = await _apiCall.PostRequest(
-                        jobParameter: jobParameter,
-                        intIdentifier: productID.ProductID,
-                        route: "/v1/Catalog/API.svc/web/GetSKU"
-                    );
-
-                    var sku = Newtonsoft.Json.JsonConvert.DeserializeObject<Sku>(getSkuResponse);
-                    var validations = _validator.Validate(sku);
-
-                    if (validations.Errors.Count() > 0)
+                    for (int j = 0; j < validations.Errors.Count(); j++)
                     {
-                        for (int j = 0; j < validations.Errors.Count(); j++)
-                        {
-                            _logger.AddMessage(
-                                stage: EnumStages.DeserializeXMLToObject,
-                                error: EnumError.Validation,
-                                logLevel: EnumMessageLevel.Warning,
-                                message: $"Error when convert record - ProductID: {sku.ProductID} | Name: {sku.Name}\n" +
-                                         $"{validations.Errors[j]}"
-                            );
-                        }
+                        _logger.AddMessage(
+                            message: $"Error when convert record - ProductID: {sku.ProductID} | Name: {sku.Name}\n" +
+                                     $"{validations.Errors[j]}"
+                        );
                     }
-
-                    skuAPIList.Add(new Sku(sku, getSkuResponse));
                 }
 
-                if (skuAPIList.Count() > 0)
-                {
-                    _skuRepository.BulkInsertIntoTableRaw(jobParameter, skuAPIList, _logger.GetExecutionGuid());
-
-                    skuAPIList.ForEach(p =>
-                        _logger.AddRecord(
-                            p.ProductID.ToString(),
-                            p.Responses
-                                .Where(pair => pair.Key == p.ProductID)
-                                .Select(pair => pair.Value)
-                                .FirstOrDefault()
-                        )
-                    );
-
-                    _logger.AddMessage(
-                        $"Concluída com sucesso: {skuAPIList.Count()} registro(s) novo(s) inserido(s)!"
-                    );
-                }
-                else
-                    _logger.AddMessage(
-                        $"Concluída com sucesso: {skuAPIList.Count()} registro(s) novo(s) inserido(s)!"
-                    );
-
-                return true;
+                skuAPIList.Add(new Sku(sku, getSkuResponse));
             }
-            catch (SQLCommandException ex)
+
+            if (skuAPIList.Count() > 0)
             {
-                _logger.AddMessage(
-                    stage: ex.Stage,
-                    error: ex.Error,
-                    logLevel: ex.MessageLevel,
-                    message: ex.Message,
-                    exceptionMessage: ex.ExceptionMessage,
-                    commandSQL: ex.CommandSQL
+                _skuRepository.BulkInsertIntoTableRaw(jobParameter, skuAPIList, _logger.GetExecutionGuid());
+
+                skuAPIList.ForEach(p =>
+                    _logger.AddRecord(
+                        p.ProductID.ToString(),
+                        p.Responses
+                            .Where(pair => pair.Key == p.ProductID)
+                            .Select(pair => pair.Value)
+                            .FirstOrDefault()
+                    )
                 );
 
-                throw;
-            }
-            catch (GeneralException ex)
-            {
                 _logger.AddMessage(
-                    stage: ex.stage,
-                    error: ex.Error,
-                    logLevel: ex.MessageLevel,
-                    message: ex.Message,
-                    exceptionMessage: ex.ExceptionMessage
+                    $"Concluída com sucesso: {skuAPIList.Count()} registro(s) novo(s) inserido(s)!"
+                );
+            }
+            else
+                _logger.AddMessage(
+                    $"Concluída com sucesso: {skuAPIList.Count()} registro(s) novo(s) inserido(s)!"
                 );
 
-                throw;
-            }
-            catch (Exception ex)
-            {
-                _logger.AddMessage(
-                    message: "Error when executing GetRecords method",
-                    exceptionMessage: ex.Message
-                );
-            }
-            finally
-            {
-                _logger.SetLogEndDate();
-                await _logger.CommitAllChanges();
-            }
+            _logger.SetLogEndDate();
+            await _logger.CommitAllChanges();
 
             return true;
         }
 
         public async Task<bool?> SearchSKUByQueue(LinxCommerceJobParameter jobParameter)
         {
-            try
+            _logger
+               .Clear()
+               .AddLog(EnumJob.LinxCommerceSku);
+
+            var objectRequest = new
             {
-                _logger
-                   .Clear()
-                   .AddLog(EnumJob.LinxCommerceSku);
+                QueueID = 21,
+                Page = new { PageIndex = 0, PageSize = 1000 },
+                Where = $"EntityKeyName==\"CatalogItemID\" && EntityTypeName==\"EZ.Store.Model.Catalog.StockKeepUnit\"",
+                WhereMetadata = "",
+                OrderBy = "QueueItemID",
+            };
 
-                var objectRequest = new
+            var response = await _apiCall.PostRequest(
+                jobParameter,
+                objectRequest,
+                "/v1/Queue/API.svc/web/SearchQueueItems"
+            );
+
+            var skuAPIList = new List<Sku>();
+            var enqueuedItens = Newtonsoft.Json.JsonConvert.DeserializeObject<SearchQueuedItem.Root>(response);
+            var enqueuedSKU = enqueuedItens
+                                .Result
+                                .Where(x => x.EntityKeyName == "CatalogItemID")
+                                .GroupBy(y => y.EntityKeyValue)
+                                .Select(g => g.First())
+                                .ToList();
+
+            foreach (var productID in enqueuedSKU)
+            {
+                string route = String.Empty;
+
+                var getSkuResponse = await _apiCall.PostRequest(
+                    jobParameter: jobParameter,
+                    intIdentifier: Convert.ToInt32(productID.EntityKeyValue),
+                    route: "/v1/Catalog/API.svc/web/GetSKU"
+                );
+
+                var sku = Newtonsoft.Json.JsonConvert.DeserializeObject<Sku>(getSkuResponse);
+                var validations = _validator.Validate(sku);
+
+                if (validations.Errors.Count() > 0)
                 {
-                    QueueID = 21,
-                    Page = new { PageIndex = 0, PageSize = 1000 },
-                    Where = $"EntityKeyName==\"CatalogItemID\" && EntityTypeName==\"EZ.Store.Model.Catalog.StockKeepUnit\"",
-                    WhereMetadata = "",
-                    OrderBy = "QueueItemID",
-                };
+                    for (int j = 0; j < validations.Errors.Count(); j++)
+                    {
+                        _logger.AddMessage(
+                            message: $"Error when convert record - ProductID: {sku.ProductID} | Name: {sku.Name}\n" +
+                                     $"{validations.Errors[j]}"
+                        );
+                    }
+                }
 
-                var response = await _apiCall.PostRequest(
+                skuAPIList.Add(new Sku(sku, getSkuResponse));
+            }
+
+            if (skuAPIList.Count() > 0)
+            {
+                _skuRepository.BulkInsertIntoTableRaw(jobParameter, skuAPIList, _logger.GetExecutionGuid());
+
+                skuAPIList.ForEach(p =>
+                    _logger.AddRecord(
+                        p.ProductID.ToString(),
+                        p.Responses
+                            .Where(pair => pair.Key == p.ProductID)
+                            .Select(pair => pair.Value)
+                            .FirstOrDefault()
+                    )
+                );
+
+                _logger.AddMessage(
+                    $"Concluída com sucesso: {skuAPIList.Count()} registro(s) novo(s) inserido(s)!"
+                );
+
+                //remover da fila de integração apenas se o registro for inserido no banco de dados
+                var listQueueItemID = new List<string>();
+
+                foreach (var enqueuedsku in enqueuedSKU)
+                {
+                    listQueueItemID.Add(enqueuedsku.QueueItemID);
+                }
+
+                var dequeueObjectRequest = new { QueueItems = listQueueItemID };
+
+                var dequeueResponse = await _apiCall.PostRequest(
                     jobParameter,
-                    objectRequest,
-                    "/v1/Queue/API.svc/web/SearchQueueItems"
+                    dequeueObjectRequest,
+                    "/v1/Queue/API.svc/web/DequeueQueueItems"
                 );
-
-                var skuAPIList = new List<Sku>();
-                var enqueuedItens = Newtonsoft.Json.JsonConvert.DeserializeObject<SearchQueuedItem.Root>(response);
-                var enqueuedSKU = enqueuedItens
-                                    .Result
-                                    .Where(x => x.EntityKeyName == "CatalogItemID")
-                                    .GroupBy(y => y.EntityKeyValue)
-                                    .Select(g => g.First())
-                                    .ToList();
-
-                foreach (var productID in enqueuedSKU)
-                {
-                    string route = String.Empty;
-
-                    var getSkuResponse = await _apiCall.PostRequest(
-                        jobParameter: jobParameter,
-                        intIdentifier: Convert.ToInt32(productID.EntityKeyValue),
-                        route: "/v1/Catalog/API.svc/web/GetSKU"
-                    );
-
-                    var sku = Newtonsoft.Json.JsonConvert.DeserializeObject<Sku>(getSkuResponse);
-                    var validations = _validator.Validate(sku);
-
-                    if (validations.Errors.Count() > 0)
-                    {
-                        for (int j = 0; j < validations.Errors.Count(); j++)
-                        {
-                            _logger.AddMessage(
-                                stage: EnumStages.DeserializeXMLToObject,
-                                error: EnumError.Validation,
-                                logLevel: EnumMessageLevel.Warning,
-                                message: $"Error when convert record - ProductID: {sku.ProductID} | Name: {sku.Name}\n" +
-                                         $"{validations.Errors[j]}"
-                            );
-                        }
-                    }
-
-                    skuAPIList.Add(new Sku(sku, getSkuResponse));
-                }
-
-                if (skuAPIList.Count() > 0)
-                {
-                    _skuRepository.BulkInsertIntoTableRaw(jobParameter, skuAPIList, _logger.GetExecutionGuid());
-
-                    skuAPIList.ForEach(p =>
-                        _logger.AddRecord(
-                            p.ProductID.ToString(),
-                            p.Responses
-                                .Where(pair => pair.Key == p.ProductID)
-                                .Select(pair => pair.Value)
-                                .FirstOrDefault()
-                        )
-                    );
-
-                    _logger.AddMessage(
-                        $"Concluída com sucesso: {skuAPIList.Count()} registro(s) novo(s) inserido(s)!"
-                    );
-
-                    //remover da fila de integração apenas se o registro for inserido no banco de dados
-                    var listQueueItemID = new List<string>();
-
-                    foreach (var enqueuedsku in enqueuedSKU)
-                    {
-                        listQueueItemID.Add(enqueuedsku.QueueItemID);
-                    }
-
-                    var dequeueObjectRequest = new { QueueItems = listQueueItemID };
-
-                    var dequeueResponse = await _apiCall.PostRequest(
-                        jobParameter,
-                        dequeueObjectRequest,
-                        "/v1/Queue/API.svc/web/DequeueQueueItems"
-                    );
-                }
-                else
-                    _logger.AddMessage(
-                        $"Concluída com sucesso: {skuAPIList.Count()} registro(s) novo(s) inserido(s)!"
-                    );
-
-                return true;
             }
-            catch (SQLCommandException ex)
-            {
+            else
                 _logger.AddMessage(
-                    stage: ex.Stage,
-                    error: ex.Error,
-                    logLevel: ex.MessageLevel,
-                    message: ex.Message,
-                    exceptionMessage: ex.ExceptionMessage,
-                    commandSQL: ex.CommandSQL
+                    $"Concluída com sucesso: {skuAPIList.Count()} registro(s) novo(s) inserido(s)!"
                 );
 
-                throw;
-            }
-            catch (GeneralException ex)
-            {
-                _logger.AddMessage(
-                    stage: ex.stage,
-                    error: ex.Error,
-                    logLevel: ex.MessageLevel,
-                    message: ex.Message,
-                    exceptionMessage: ex.ExceptionMessage
-                );
-
-                throw;
-            }
-            catch (Exception ex)
-            {
-                _logger.AddMessage(
-                    message: "Error when executing GetRecords method",
-                    exceptionMessage: ex.Message
-                );
-            }
-            finally
-            {
-                _logger.SetLogEndDate();
-                await _logger.CommitAllChanges();
-            }
+            _logger.SetLogEndDate();
+            await _logger.CommitAllChanges();
 
             return true;
         }

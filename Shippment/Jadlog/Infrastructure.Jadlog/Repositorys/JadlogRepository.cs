@@ -385,8 +385,8 @@ namespace Infrastructure.Jadlog.Repositorys
         #region REFATORAR: MOVER PARA A BIBLIOTECA CORE
         private DataTable CreateSystemDataTable<TEntity>(TEntity entity, string tableName)
         {
-            try
-            {
+            //try
+            //{
                 var properties = entity.GetType().GetFilteredProperties();
                 var dataTable = new DataTable(tableName);
                 foreach (PropertyInfo prop in properties)
@@ -394,23 +394,23 @@ namespace Infrastructure.Jadlog.Repositorys
                     dataTable.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
                 }
                 return dataTable;
-            }
-            catch (Exception ex)
-            {
-                throw new GeneralException(
-                    stage: EnumStages.CreateSystemDataTable,
-                    error: EnumError.SQLCommand,
-                    level: EnumMessageLevel.Error,
-                    message: $"Error when convert system datatable to bulkinsert",
-                    exceptionMessage: ex.Message
-                );
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw new GeneralException(
+            //        //stage: EnumStages.CreateSystemDataTable,
+            //        //error: EnumError.SQLCommand,
+            //        //level: EnumMessageLevel.Error,
+            //        message: $"Error when convert system datatable to bulkinsert",
+            //        //exceptionMessage: ex.Message
+            //    );
+            //}
         }
 
         private bool BulkInsertIntoTableRaw(string? dataTableName, DataTable dataTable, int dataTableRowsNumber)
         {
-            try
-            {
+            //try
+            //{
                 using (var conn = _conn.GetDbConnection())
                 {
                     using var bulkCopy = new SqlBulkCopy(conn);
@@ -426,23 +426,23 @@ namespace Infrastructure.Jadlog.Repositorys
                 }
 
                 return true;
-            }
-            catch (Exception ex)
-            {
-                throw new GeneralException(
-                    stage: EnumStages.BulkInsertIntoTableRaw,
-                    error: EnumError.SQLCommand,
-                    level: EnumMessageLevel.Error,
-                    message: $"Error when trying to bulk insert records on table raw",
-                    exceptionMessage: ex.Message
-                );
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw new GeneralException(
+            //        //stage: EnumStages.BulkInsertIntoTableRaw,
+            //        //error: EnumError.SQLCommand,
+            //        //level: EnumMessageLevel.Error,
+            //        message: $"Error when trying to bulk insert records on table raw",
+            //        //exceptionMessage: ex.Message
+            //    );
+            //}
         }
 
         private async Task<bool> CallDbProcMerge(string schemaName, string tableName, Guid? parentExecutionGUID)
         {
-            try
-            {
+            //try
+            //{
                 using (var conn = _conn.GetDbConnection())
                 {
                     var parameters = new DynamicParameters();
@@ -455,17 +455,17 @@ namespace Infrastructure.Jadlog.Repositorys
 
                     return false;
                 }
-            }
-            catch (Exception ex)
-            {
-                throw new GeneralException(
-                    stage: EnumStages.CallDbProcMerge,
-                    error: EnumError.SQLCommand,
-                    level: EnumMessageLevel.Error,
-                    message: $"Error when trying to run the merge procedure: P_{tableName}_Sincronizacao",
-                    exceptionMessage: ex.Message
-                );
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw new GeneralException(
+            //        //stage: EnumStages.CallDbProcMerge,
+            //        //error: EnumError.SQLCommand,
+            //        //level: EnumMessageLevel.Error,
+            //        message: $"Error when trying to run the merge procedure: P_{tableName}_Sincronizacao",
+            //        //exceptionMessage: ex.Message
+            //    );
+            //}
         }
         #endregion
     }
