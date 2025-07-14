@@ -11,6 +11,7 @@ namespace Domain.TotalExpress.Interfaces.Repository
         public Task<List<Order>> GetInvoicedOrders();
         public Task<Parameters> GetParameters(string? docCompany, string? method);
         public Task<IEnumerable<Parameters>> GetSenderIds();
+        public Task<IEnumerable<Parameters>> GetSenderAwbs();
 
         public Task<bool> UpdateDeliveryDates(string? deliveryMadeDate, string? collectionDate, string? deliveryForecastDate, string? lastStatusDate, string? lastStatusDescription, string? orderNumber);
     }

@@ -102,237 +102,149 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
         [HttpPost("B2CConsultaClassificacaoIndividual")]
         public async Task<ActionResult> B2CConsultaClassificacaoIndividual([Required][FromQuery] string? codigo_classificacao, [Required][FromQuery] string? cnpj_emp)
         {
-            try
-            {
-                var method = _methods
-                    .Where(m => m.MethodName == "B2CConsultaClassificacao")
-                    .FirstOrDefault();
+            var method = _methods
+                .Where(m => m.MethodName == "B2CConsultaClassificacao")
+                .FirstOrDefault();
 
-                var result = await _b2cConsultaClassificacaoService.GetRecord(
-                    _linxMicrovixJobParameter.SetParameters(
-                        jobName: method.MethodName,
-                        tableName: method.MethodName
-                    ),
-                    cnpj_emp: cnpj_emp,
-                    identificador: codigo_classificacao
-                );
+            var result = await _b2cConsultaClassificacaoService.GetRecord(
+                _linxMicrovixJobParameter.SetParameters(
+                    jobName: method.MethodName,
+                    tableName: method.MethodName
+                ),
+                cnpj_emp: cnpj_emp,
+                identificador: codigo_classificacao
+            );
 
-                if (result != true)
-                    return BadRequest($"Unable to find record: {codigo_classificacao} on endpoint.");
-                else
-                    return Ok($"Record: {codigo_classificacao} integrated successfully.");
-            }
-            catch (Exception ex)
-            {
-                Response.StatusCode = 400;
-                return Content($"Unable to integrate the record: {codigo_classificacao}.\n//error: {ex.Message}");
-            }
+            return Ok($"Record: {codigo_classificacao} integrated successfully.");
         }
 
         [HttpPost("B2CConsultaClientesIndividual")]
         public async Task<ActionResult> B2CConsultaClientesIndividual([Required][FromQuery] string? doc_cliente)
         {
-            try
-            {
-                var method = _methods
-                    .Where(m => m.MethodName == "B2CConsultaClientes")
-                    .FirstOrDefault();
+            var method = _methods
+                .Where(m => m.MethodName == "B2CConsultaClientes")
+                .FirstOrDefault();
 
-                var result = await _b2cConsultaClientesService.GetRecord(
-                    _linxMicrovixJobParameter.SetParameters(
-                        jobName: method.MethodName,
-                        tableName: method.MethodName
-                    ),
-                    identificador: doc_cliente
-                );
+            var result = await _b2cConsultaClientesService.GetRecord(
+                _linxMicrovixJobParameter.SetParameters(
+                    jobName: method.MethodName,
+                    tableName: method.MethodName
+                ),
+                identificador: doc_cliente
+            );
 
-                if (result != true)
-                    return BadRequest($"Unable to find record: {doc_cliente} on endpoint.");
-                else
-                    return Ok();
-            }
-            catch (Exception ex)
-            {
-                Response.StatusCode = 400;
-                return Content($"Unable to integrate the record: {doc_cliente}.\n//error: {ex.Message}");
-            }
+            return Ok();
         }
 
         [HttpPost("B2CConsultaNFeIndividual")]
         public async Task<ActionResult> B2CConsultaNFeIndividual([Required][FromQuery] string? id_pedido)
         {
-            try
-            {
-                var method = _methods
-                    .Where(m => m.MethodName == "B2CConsultaNFe")
-                    .FirstOrDefault();
+            var method = _methods
+                .Where(m => m.MethodName == "B2CConsultaNFe")
+                .FirstOrDefault();
 
-                var result = await _b2cConsultaNFeService.GetRecord(
-                    _linxMicrovixJobParameter.SetParameters(
-                        jobName: method.MethodName,
-                        tableName: method.MethodName
-                    ),
-                    identificador: id_pedido
-                );
+            var result = await _b2cConsultaNFeService.GetRecord(
+                _linxMicrovixJobParameter.SetParameters(
+                    jobName: method.MethodName,
+                    tableName: method.MethodName
+                ),
+                identificador: id_pedido
+            );
 
-                if (result != true)
-                    return BadRequest($"Unable to find record: {id_pedido} on endpoint.");
-                else
-                    return Ok();
-            }
-            catch (Exception ex)
-            {
-                Response.StatusCode = 400;
-                return Content($"Unable to integrate the record: {id_pedido}.\n//error: {ex.Message}");
-            }
+            return Ok();
         }
 
 
         [HttpPost("B2CConsultaPedidosIndividual")]
         public async Task<ActionResult> B2CConsultaPedidosIndividual([Required][FromQuery] string? id_pedido)
         {
-            try
-            {
-                var method = _methods
-                    .Where(m => m.MethodName == "B2CConsultaPedidos")
-                    .FirstOrDefault();
+            var method = _methods
+                .Where(m => m.MethodName == "B2CConsultaPedidos")
+                .FirstOrDefault();
 
-                var result = await _b2cConsultaClientesService.GetRecord(
-                    _linxMicrovixJobParameter.SetParameters(
-                        jobName: method.MethodName,
-                        tableName: method.MethodName
-                    ),
-                    identificador: id_pedido
-                );
+            var result = await _b2cConsultaClientesService.GetRecord(
+                _linxMicrovixJobParameter.SetParameters(
+                    jobName: method.MethodName,
+                    tableName: method.MethodName
+                ),
+                identificador: id_pedido
+            );
 
-                if (result != true)
-                    return BadRequest($"Unable to find record: {id_pedido} on endpoint.");
-                else
-                    return Ok();
-            }
-            catch (Exception ex)
-            {
-                Response.StatusCode = 400;
-                return Content($"Unable to integrate the record: {id_pedido}.\n//error: {ex.Message}");
-            }
+            return Ok();
         }
 
         [HttpPost("B2CConsultaPedidosItensIndividual")]
         public async Task<ActionResult> B2CConsultaPedidosItensIndividual([Required][FromQuery] string? id_pedido, [Required][FromQuery] string? cnpj_emp)
         {
-            try
-            {
-                var method = _methods
-                    .Where(m => m.MethodName == "B2CConsultaPedidosItens")
-                    .FirstOrDefault();
+            var method = _methods
+                .Where(m => m.MethodName == "B2CConsultaPedidosItens")
+                .FirstOrDefault();
 
-                var result = await _b2cConsultaPedidosItensService.GetRecord(
-                    _linxMicrovixJobParameter.SetParameters(
-                        jobName: method.MethodName,
-                        tableName: method.MethodName
-                    ),
-                    identificador: id_pedido
-                );
+            var result = await _b2cConsultaPedidosItensService.GetRecord(
+                _linxMicrovixJobParameter.SetParameters(
+                    jobName: method.MethodName,
+                    tableName: method.MethodName
+                ),
+                identificador: id_pedido
+            );
 
-                if (result != true)
-                    return BadRequest($"Unable to find record: {id_pedido} on endpoint.");
-                else
-                    return Ok();
-            }
-            catch (Exception ex)
-            {
-                Response.StatusCode = 400;
-                return Content($"Unable to integrate the record: {id_pedido}.\n//error: {ex.Message}");
-            }
+            return Ok();
         }
 
         [HttpPost("B2CConsultaPedidosStatusIndividual")]
         public async Task<ActionResult> B2CConsultaPedidosStatusIndividual([Required][FromQuery] string? id_pedido, [Required][FromQuery] string? cnpj_emp)
         {
-            try
-            {
-                var method = _methods
-                    .Where(m => m.MethodName == "B2CConsultaPedidosStatus")
-                    .FirstOrDefault();
+            var method = _methods
+                .Where(m => m.MethodName == "B2CConsultaPedidosStatus")
+                .FirstOrDefault();
 
-                var result = await _b2cConsultaPedidosStatusService.GetRecord(
-                    _linxMicrovixJobParameter.SetParameters(
-                        jobName: method.MethodName,
-                        tableName: method.MethodName
-                    ),
-                    identificador: id_pedido
-                );
+            var result = await _b2cConsultaPedidosStatusService.GetRecord(
+                _linxMicrovixJobParameter.SetParameters(
+                    jobName: method.MethodName,
+                    tableName: method.MethodName
+                ),
+                identificador: id_pedido
+            );
 
-                if (result != true)
-                    return BadRequest($"Unable to find record: {id_pedido} on endpoint.");
-                else
-                    return Ok();
-            }
-            catch (Exception ex)
-            {
-                Response.StatusCode = 400;
-                return Content($"Unable to integrate the record: {id_pedido}.\n//error: {ex.Message}");
-            }
+            return Ok();
         }
 
         [HttpPost("B2CConsultaClientesContatosParentescoIndividual")]
         public async Task<ActionResult> B2CConsultaClientesContatosParentescoIndividual([Required][FromQuery] string? id_parentesco, [Required][FromQuery] string? cnpj_emp)
         {
-            try
-            {
-                var method = _methods
-                    .Where(m => m.MethodName == "B2CConsultaClientesContatosParentesco")
-                    .FirstOrDefault();
+            var method = _methods
+                .Where(m => m.MethodName == "B2CConsultaClientesContatosParentesco")
+                .FirstOrDefault();
 
-                var result = await _b2cConsultaClientesContatosParentescoService.GetRecord(
-                    _linxMicrovixJobParameter.SetParameters(
-                        jobName: method.MethodName,
-                        tableName: method.MethodName
-                    ),
-                    cnpj_emp: cnpj_emp,
-                    identificador: id_parentesco
-                );
+            var result = await _b2cConsultaClientesContatosParentescoService.GetRecord(
+                _linxMicrovixJobParameter.SetParameters(
+                    jobName: method.MethodName,
+                    tableName: method.MethodName
+                ),
+                cnpj_emp: cnpj_emp,
+                identificador: id_parentesco
+            );
 
-                if (result != true)
-                    return BadRequest($"Unable to find record: {id_parentesco} on endpoint.");
-                else
-                    return Ok();
-            }
-            catch (Exception ex)
-            {
-                Response.StatusCode = 400;
-                return Content($"Unable to integrate the record: {id_parentesco}.\n//error: {ex.Message}");
-            }
+            return Ok();
         }
 
         [HttpPost("B2CConsultaImagensIndividual")]
         public async Task<ActionResult> B2CConsultaImagensIndividual([Required][FromQuery] string? id_imagem, [Required][FromQuery] string? cnpj_emp)
         {
-            try
-            {
-                var method = _methods
-                    .Where(m => m.MethodName == "B2CConsultaImagens")
-                    .FirstOrDefault();
+            var method = _methods
+                .Where(m => m.MethodName == "B2CConsultaImagens")
+                .FirstOrDefault();
 
-                var result = await _b2cConsultaImagensService.GetRecord(
-                    _linxMicrovixJobParameter.SetParameters(
-                        jobName: method.MethodName,
-                        tableName: method.MethodName
-                    ),
-                    cnpj_emp: cnpj_emp,
-                    identificador: id_imagem
-                );
+            var result = await _b2cConsultaImagensService.GetRecord(
+                _linxMicrovixJobParameter.SetParameters(
+                    jobName: method.MethodName,
+                    tableName: method.MethodName
+                ),
+                cnpj_emp: cnpj_emp,
+                identificador: id_imagem
+            );
 
-                if (result != true)
-                    return BadRequest($"Unable to find record: {id_imagem} on endpoint.");
-                else
-                    return Ok();
-            }
-            catch (Exception ex)
-            {
-                Response.StatusCode = 400;
-                return Content($"Unable to integrate the record: {id_imagem}.\n//error: {ex.Message}");
-            }
+            return Ok();
         }
     }
 }

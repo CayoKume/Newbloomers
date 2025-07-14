@@ -1,5 +1,7 @@
 ﻿using Domain.IntegrationsCore.Extensions;
 using Domain.LinxCommerce.Entities.Order;
+using Domain.LinxCommerce.Entities.Parameters;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.LinxCommerce.Entities.Responses
 {
@@ -7,7 +9,15 @@ namespace Domain.LinxCommerce.Entities.Responses
     {
         public class Root
         {
+            public Page Page { get; set; }
             public List<Result> Result { get; set; }
+
+            //public static void BuildRecordKey(List<Result> result)
+            //{
+            //    result.ForEach(s =>
+            //        s.RecordKey = $"[{s.OrderID}]|[{s.ModifiedDate}]"
+            //    );
+            //}
         }
 
         public class Result

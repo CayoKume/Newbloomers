@@ -1,29 +1,27 @@
-﻿using Dapper;
-using Domain.IntegrationsCore.Interfaces;
+﻿using Domain.IntegrationsCore.Interfaces;
 using Domain.LinxCommerce.Entities.Customer;
 using Domain.LinxCommerce.Entities.Parameters;
 using Domain.LinxCommerce.Interfaces.Repositorys;
 using Infrastructure.IntegrationsCore.Connections.SQLServer;
-using Infrastructure.IntegrationsCore.Repositorys;
 
 namespace Infrastructure.LinxCommerce.Repository
 {
     public class CustomerRepository : ICustomerRepository
     {
         private readonly IIntegrationsCoreRepository _integrationsCoreRepository;
-        private readonly ILinxCommerceRepositoryBase _linxCommerceRepositoryBase;
         private readonly ISQLServerConnection? _sqlServerConnection;
 
-        public CustomerRepository(IIntegrationsCoreRepository integrationsCoreRepository, ILinxCommerceRepositoryBase linxCommerceRepositoryBase, ISQLServerConnection? sqlServerConnection) =>
-            (_integrationsCoreRepository, _linxCommerceRepositoryBase, _sqlServerConnection) = (integrationsCoreRepository, linxCommerceRepositoryBase, sqlServerConnection);
+        public CustomerRepository(IIntegrationsCoreRepository integrationsCoreRepository, ISQLServerConnection? sqlServerConnection) =>
+            (_integrationsCoreRepository, _sqlServerConnection) = (integrationsCoreRepository, sqlServerConnection);
 
-        public bool BulkInsertIntoTableRaw(LinxCommerceJobParameter jobParameter, List<Person> records, Guid? parentExecutionGUID)
+        public async Task<bool> BulkInsertIntoTableRaw(LinxCommerceJobParameter jobParameter, List<Person> records, Guid? parentExecutionGUID)
         {
             var customerTable = _integrationsCoreRepository.CreateSystemDataTable("Customer", new Person());
             var customerContactTable = _integrationsCoreRepository.CreateSystemDataTable("CustomerContact", new Contact());
             var customerAddressTable = _integrationsCoreRepository.CreateSystemDataTable("CustomerAddress", new PersonAddress());
             var customerEmailConfirmationTable = _integrationsCoreRepository.CreateSystemDataTable("CustomerEmailConfirmation", new EmailConfirmation());
 
+            //Adicionar Fill DataTable com os dados dos registros
             for (int i = 0; i < records.Count(); i++)
             {
                 try
@@ -62,139 +60,22 @@ namespace Infrastructure.LinxCommerce.Repository
             }
 
             _integrationsCoreRepository.BulkInsertIntoTableRaw(customerTable);
-            _integrationsCoreRepository.CallDbProcMerge(jobParameter.schema, customerTable.TableName, parentExecutionGUID);
+            await _integrationsCoreRepository.CallDbProcMerge(jobParameter.schema, customerTable.TableName, parentExecutionGUID);
 
             _integrationsCoreRepository.BulkInsertIntoTableRaw(customerEmailConfirmationTable);
-            _integrationsCoreRepository.CallDbProcMerge(jobParameter.schema, customerEmailConfirmationTable.TableName, parentExecutionGUID);
+            await _integrationsCoreRepository.CallDbProcMerge(jobParameter.schema, customerEmailConfirmationTable.TableName, parentExecutionGUID);
 
             _integrationsCoreRepository.BulkInsertIntoTableRaw(customerAddressTable);
-            _integrationsCoreRepository.CallDbProcMerge(jobParameter.schema, customerAddressTable.TableName, parentExecutionGUID);
+            await _integrationsCoreRepository.CallDbProcMerge(jobParameter.schema, customerAddressTable.TableName, parentExecutionGUID);
 
             _integrationsCoreRepository.BulkInsertIntoTableRaw(customerContactTable);
-            _integrationsCoreRepository.CallDbProcMerge(jobParameter.schema, customerContactTable.TableName, parentExecutionGUID);
+            await _integrationsCoreRepository.CallDbProcMerge(jobParameter.schema, customerContactTable.TableName, parentExecutionGUID);
 
             return true;
         }
 
-        public async Task<List<Person>> GetRegistersExists(IEnumerable<int> customerIds)
-        {
-            string? identifiers = String.Empty;
-
-            for (int i = 0; i < customerIds.Count(); i++)
-            {
-
-                if (i == customerIds.Count() - 1)
-                    identifiers += $"{customerIds.ElementAt(i)}";
-                else
-                    identifiers += $"{customerIds.ElementAt(i)}, ";
-            }
-
-            string? sql = $@"SELECT DISTINCT
-	                         A.[Surname],
-                             A.[BirthDate],
-                             A.[Gender],
-                             A.[RG],
-                             A.[Cpf],
-                             A.[CreatedDate],
-                             A.[CustomerID],
-                             A.[CustomerStatusID],
-                             A.[WebSiteID],
-                             A.[Name],
-                             A.[Email],
-                             A.[CustomerHash],
-                             A.[Password],
-                             A.[CustomerType],
-                             A.[Cnpj],
-                             A.[TradingName],
-                             A.[CustomerGroupID] As CustomerGroupID,
-
-                             B.[Phone],
-                             B.[Phone2],
-                             B.[CellPhone],
-                             TRIM(B.[Fax]) As Fax,
-                             B.[CustomerID],
-
-	                         C.[Status],
-                             C.[ConfirmationDate],
-                             C.[CustomerID],
-
-                             D.[ID],
-                             D.[Name],
-                             D.[ContactName],
-                             TRIM(D.[PostalCode]) As PostalCode,
-                             D.[AddressLine],
-                             D.[City],
-                             D.[Neighbourhood],
-                             D.[Number],
-                             D.[State],
-                             D.[AddressNotes],
-                             D.[Landmark],
-                             D.[MainAddress],
-                             D.[CustomerID]
-
-                             FROM [linx_commerce].[Customer] A (NOLOCK)
-                             LEFT JOIN [linx_commerce].[CustomerContact] B (NOLOCK) ON A.CustomerID = B.CustomerID
-                             LEFT JOIN [linx_commerce].[CustomerEmailConfirmation] C (NOLOCK) ON A.CustomerID = C.CustomerID
-                             LEFT JOIN [linx_commerce].[CustomerAddress] D (NOLOCK) ON A.CustomerID = D.CustomerID
-                             WHERE
-                             A.CustomerID IN ({identifiers})";
-
-            //try
-            //{
-            using (var conn = _sqlServerConnection.GetIDbConnection())
-            {
-                var result = await conn.QueryAsync<
-                    Domain.LinxCommerce.Entities.Customer.Person,
-                    Domain.LinxCommerce.Entities.Customer.Contact,
-                    Domain.LinxCommerce.Entities.Customer.EmailConfirmation,
-                    Domain.LinxCommerce.Entities.Customer.PersonAddress,
-                    Domain.LinxCommerce.Entities.Customer.Person
-                >(sql, (person, contact, emailConfirmation, personAddress) =>
-                {
-                    person.Contact = contact;
-                    person.EmailConfirmation = emailConfirmation;
-                    person.Address.Add(personAddress);
-
-                    return person;
-                }, splitOn: "Phone, Status, ID", commandTimeout: 360);
-
-                return result
-                    .GroupBy(p => p.CustomerID)
-                    .Select(g =>
-                    {
-                        var groupedResult = g.First();
-                        groupedResult.Address = g.Select(p => p.Address.Single()).ToList();
-
-                        return groupedResult;
-                    })
-                    .ToList();
-            }
-            //}
-            //catch (SqlException ex)
-            //{
-            //    throw new SQLCommandException(
-            //        //stage: EnumStages.GetRegistersExists,
-            //        message: $"Error when trying to get records that already exist in trusted table"//,
-            //        //exceptionMessage: ex.Message//,
-            //        //commandSQL: sql
-            //    );
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw new GeneralException(
-            //        //stage: EnumStages.GetRegistersExists,
-            //        //error: EnumError.SQLCommand,
-            //        //level: EnumMessageLevel.Error,
-            //        message: $"Error when trying to get records that already exist in trusted table",
-            //        //exceptionMessage: ex.Message
-            //    );
-            //}
-        }
-
         public async Task<bool> InsertRecord(LinxCommerceJobParameter jobParameter, Person registro, Guid? parentExecutionGUID)
         {
-            //try
-            //{
             string? sql = @$"INSERT INTO [untreated].[Customer]
                             ([Surname],[BirthDate],[Gender],[RG],[Cpf],[CreatedDate],[CustomerID],[CustomerStatusID],[WebSiteID],[Name],[Email],[CustomerHash],[Password],
                              [CustomerType],[Cnpj],[TradingName],[CustomerGroupID])
@@ -202,18 +83,16 @@ namespace Infrastructure.LinxCommerce.Repository
                             (@Surname, @BirthDate, @Gender, @RG, @Cpf, @CreatedDate, @CustomerID,@CustomerStatusID,@WebSiteID,@Name,@Email,@CustomerHash,
                              @Password,@CustomerType,@Cnpj,@TradingName,@CustomerGroupID)";
 
-            await _linxCommerceRepositoryBase.InsertRecord(jobParameter, sql: sql, record: registro);
-
-            _linxCommerceRepositoryBase.CallDbProcMerge(jobParameter.schema, "Customer", parentExecutionGUID);
+            await _integrationsCoreRepository.InsertRecord(sql: sql, entity: registro);
+            await _integrationsCoreRepository.CallDbProcMerge(jobParameter.schema, "Customer", parentExecutionGUID);
 
             string? _sql = @$"INSERT INTO [untreated].[CustomerEmailConfirmation]
                             ([Status],[ConfirmationDate],[CustomerID])
                             Values
                             (@Status, @ConfirmationDate, @CustomerID)";
 
-            await _linxCommerceRepositoryBase.InsertRecord(jobParameter, sql: _sql, record: registro.EmailConfirmation);
-
-            _linxCommerceRepositoryBase.CallDbProcMerge(jobParameter.schema, "CustomerEmailConfirmation", parentExecutionGUID);
+            await _integrationsCoreRepository.InsertRecord(sql: _sql, entity: registro.EmailConfirmation);
+            await _integrationsCoreRepository.CallDbProcMerge(jobParameter.schema, "CustomerEmailConfirmation", parentExecutionGUID);
 
             foreach (var address in registro.Address)
             {
@@ -222,26 +101,20 @@ namespace Infrastructure.LinxCommerce.Repository
                             Values
                             (@ID, @Name, @ContactName, @PostalCode, @AddressLine, @City, @Neighbourhood, @Number, @State, @AddressNotes, @Landmark, @MainAddress, @CustomerID)";
 
-                await _linxCommerceRepositoryBase.InsertRecord(jobParameter, sql: __sql, record: address);
+                await _integrationsCoreRepository.InsertRecord(sql: __sql, entity: address);
             }
 
-            _linxCommerceRepositoryBase.CallDbProcMerge(jobParameter.schema, "CustomerAddress", parentExecutionGUID);
+            await _integrationsCoreRepository.CallDbProcMerge(jobParameter.schema, "CustomerAddress", parentExecutionGUID);
 
             string? ___sql = @$"INSERT INTO [untreated].[CustomerContact]
                             ([Phone],[Phone2],[CellPhone],[Fax],[CustomerID])
                             Values
                             (@Phone, @Phone2, @CellPhone, @Fax, @CustomerID)";
 
-            await _linxCommerceRepositoryBase.InsertRecord(jobParameter, sql: ___sql, record: registro.Contact);
-
-            _linxCommerceRepositoryBase.CallDbProcMerge(jobParameter.schema, "CustomerContact", parentExecutionGUID);
+            await _integrationsCoreRepository.InsertRecord(sql: ___sql, entity: registro.Contact);
+            await _integrationsCoreRepository.CallDbProcMerge(jobParameter.schema, "CustomerContact", parentExecutionGUID);
 
             return true;
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw;
-            //}
         }
     }
 }

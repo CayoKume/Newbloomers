@@ -1,6 +1,5 @@
 ﻿using Application.IntegrationsCore.Interfaces;
 using Application.LinxCommerce.Interfaces;
-using Domain.IntegrationsCore.Entities.Exceptions;
 using Domain.IntegrationsCore.Enums;
 using Domain.LinxCommerce.Entities.Customer;
 using Domain.LinxCommerce.Entities.Parameters;
@@ -17,6 +16,8 @@ namespace Application.LinxCommerce.Services
         private readonly ILoggerService _logger;
         private readonly ICustomerRepository _customerRepository;
         private readonly IValidator<Person> _validator;
+
+        private static string SearchCustomerByDateIntervalJsonCache { get; set; } = String.Empty;
 
         public CustomerService(IAPICall apiCall, ILoggerService logger, ICustomerRepository customerRepository, IValidator<Person> validator) =>
             (_apiCall, _logger, _customerRepository, _validator) = (apiCall, logger, customerRepository, validator);
@@ -231,6 +232,8 @@ namespace Application.LinxCommerce.Services
                .Clear()
                .AddLog(EnumJob.LinxCommerceCustomers);
 
+            var _listSomenteNovos = new List<Person>();
+
             var objectRequest = new
             {
                 Page = new { PageIndex = 0, PageSize = 1000 },
@@ -245,46 +248,50 @@ namespace Application.LinxCommerce.Services
                 "/v1/Profile/API.svc/web/SearchCustomer"
             );
 
-            var customersAPIList = new List<Person>();
-            var customersIDs = Newtonsoft.Json.JsonConvert.DeserializeObject<SearchCustomer.Root>(response);
+            var hash = _logger.ComputeSha256Hash(response);
 
-            foreach (var customerID in customersIDs.Result)
+            if (!SearchCustomerByDateIntervalJsonCache.Equals(hash))
             {
-                string route = String.Empty;
+                var customersIDs = Newtonsoft.Json.JsonConvert.DeserializeObject<SearchCustomer.Root>(response);
 
-                if (customerID.CustomerType == "P")
-                    route = "GetPerson";
-                else
-                    route = "GetCompany";
-
-                var getCustomerResponse = await _apiCall.PostRequest(
-                    jobParameter: jobParameter,
-                    intIdentifier: customerID.CustomerID,
-                    route: "/v1/Profile/API.svc/web/" + route
-                );
-
-                var customer = Newtonsoft.Json.JsonConvert.DeserializeObject<Person>(getCustomerResponse);
-                var validations = _validator.Validate(customer);
-
-                if (validations.Errors.Count() > 0)
+                foreach (var customerID in customersIDs.Result)
                 {
-                    for (int j = 0; j < validations.Errors.Count(); j++)
-                    {
-                        _logger.AddMessage(
-                            message: $"Error when convert record - cod_cliente: {customer.CustomerID} | doc_cliente: {(String.IsNullOrEmpty(customer.Cpf) ? customer.Cnpj : customer.Cpf)}\n" +
-                                     $"{validations.Errors[j]}"
-                        );
-                    }
-                }
+                    string route = String.Empty;
 
-                customersAPIList.Add(new Person(customer, getCustomerResponse));
+                    if (customerID.CustomerType == "P")
+                        route = "GetPerson";
+                    else
+                        route = "GetCompany";
+
+                    var getCustomerResponse = await _apiCall.PostRequest(
+                        jobParameter: jobParameter,
+                        intIdentifier: customerID.CustomerID,
+                        route: "/v1/Profile/API.svc/web/" + route
+                    );
+
+                    var customer = Newtonsoft.Json.JsonConvert.DeserializeObject<Person>(getCustomerResponse);
+                    var validations = _validator.Validate(customer);
+
+                    if (validations.Errors.Count() > 0)
+                    {
+                        for (int j = 0; j < validations.Errors.Count(); j++)
+                        {
+                            _logger.AddMessage(
+                                message: $"Error when convert record - cod_cliente: {customer.CustomerID} | doc_cliente: {(String.IsNullOrEmpty(customer.Cpf) ? customer.Cnpj : customer.Cpf)}\n" +
+                                         $"{validations.Errors[j]}"
+                            );
+                        }
+                    }
+
+                    _listSomenteNovos.Add(new Person(customer, getCustomerResponse));
+                }
             }
 
-            if (customersAPIList.Count() > 0)
+            if (_listSomenteNovos.Count() > 0)
             {
-                _customerRepository.BulkInsertIntoTableRaw(jobParameter, customersAPIList, _logger.GetExecutionGuid());
+                await _customerRepository.BulkInsertIntoTableRaw(jobParameter, _listSomenteNovos, _logger.GetExecutionGuid());
 
-                customersAPIList.ForEach(p =>
+                _listSomenteNovos.ForEach(p =>
                     _logger.AddRecord(
                         p.CustomerID.ToString(),
                         p.Responses
@@ -294,14 +301,12 @@ namespace Application.LinxCommerce.Services
                     )
                 );
 
-                _logger.AddMessage(
-                    $"Concluída com sucesso: {customersAPIList.Count()} registro(s) novo(s) inserido(s)!"
-                );
+                SearchCustomerByDateIntervalJsonCache = hash;
             }
-            else
-                _logger.AddMessage(
-                    $"Concluída com sucesso: {customersAPIList.Count()} registro(s) novo(s) inserido(s)!"
-                );
+
+            _logger.AddMessage(
+                $"Concluída com sucesso: {_listSomenteNovos.Count()} registro(s) novo(s) inserido(s)!"
+            );
 
             _logger.SetLogEndDate();
             await _logger.CommitAllChanges();
@@ -373,7 +378,7 @@ namespace Application.LinxCommerce.Services
 
             if (customersAPIList.Count() > 0)
             {
-                _customerRepository.BulkInsertIntoTableRaw(jobParameter, customersAPIList, _logger.GetExecutionGuid());
+                await _customerRepository.BulkInsertIntoTableRaw(jobParameter, customersAPIList, _logger.GetExecutionGuid());
 
                 customersAPIList.ForEach(p =>
                     _logger.AddRecord(

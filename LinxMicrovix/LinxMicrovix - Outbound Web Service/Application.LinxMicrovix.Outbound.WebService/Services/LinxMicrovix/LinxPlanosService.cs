@@ -127,6 +127,10 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                 }
 
                 await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
+
+                _logger.AddMessage(
+                    $"Concluída com sucesso: {listRecords.Count} registro(s) novo(s) inserido(s)!"
+                );
             }
 
             _logger.SetLogEndDate();
@@ -183,15 +187,11 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                     }
 
                     _linxPlanosCache.AddRange(_listSomenteNovos.Select(x => x.recordKey));
-
-                    _logger.AddMessage(
-                        $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"
-                    );
                 }
-                else
-                    _logger.AddMessage(
-                        $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"
-                    );
+
+                _logger.AddMessage(
+                    $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"
+                );
             }
 
             _logger.SetLogEndDate();

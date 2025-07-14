@@ -16,70 +16,32 @@ namespace Hangfire.IO.Controllers.Carries
         [HttpPost("SendOrders")]
         public async Task<ActionResult<string?>> TotalExpressSendOrders()
         {
-            try
-            {
-                await _totalExpressService.SendOrders();
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                Response.StatusCode = 400;
-                return Content($"Erro: {ex.Message}");
-            }
+            await _totalExpressService.SendOrders();
+            return Ok();
         }
 
         [HttpPost("SendOrder")]
         public async Task<ActionResult<string?>> TotalExpressSendOrder([Required][FromQuery] string? orderNumber)
         {
-            try
-            {
-                var result = await _totalExpressService.SendOrder(orderNumber.Trim().ToUpper());
+            var result = await _totalExpressService.SendOrder(orderNumber.Trim().ToUpper());
 
-                if (result != true)
-                    return BadRequest($"A API FlashCourier não conseguiu enviar o pedido: {orderNumber}.");
-                else
-                    return Ok($"Pedido: {orderNumber} enviado com sucesso.");
-            }
-            catch (Exception ex)
-            {
-                Response.StatusCode = 400;
-                return Content($"Nao foi possivel enviar o pedido: {orderNumber}. Erro: {ex.Message}");
-            }
+            return Ok($"Pedido: {orderNumber} enviado com sucesso.");
         }
 
         [HttpPost("SendOrderAsETUR")]
         public async Task<ActionResult<string?>> TotalExpressSendOrderAsETUR([Required][FromQuery] string? orderNumber)
         {
-            try
-            {
-                var result = await _totalExpressService.SendOrderAsEtur(orderNumber.Trim().ToUpper());
+            var result = await _totalExpressService.SendOrderAsEtur(orderNumber.Trim().ToUpper());
 
-                if (result != true)
-                    return BadRequest($"A API FlashCourier não conseguiu enviar o pedido: {orderNumber}.");
-                else
-                    return Ok($"Pedido: {orderNumber} enviado com sucesso.");
-            }
-            catch (Exception ex)
-            {
-                Response.StatusCode = 400;
-                return Content($"Nao foi possivel enviar o pedido: {orderNumber}. Erro: {ex.Message}");
-            }
+            return Ok($"Pedido: {orderNumber} enviado com sucesso.");
         }
 
         [HttpPost("UpdateLogOrders")]
         public async Task<ActionResult<string?>> TotalExpressUpdateLogOrders()
         {
-            try
-            {
-                await _totalExpressService.UpdateLogOrders();
+            await _totalExpressService.UpdateLogOrders();
 
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                Response.StatusCode = 400;
-                return Content($"Erro: {ex.Message}");
-            }
+            return Ok();
         }
     }
 }

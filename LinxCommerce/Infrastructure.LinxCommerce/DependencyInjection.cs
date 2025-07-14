@@ -34,7 +34,6 @@ namespace Infrastructure.LinxCommerce.DependencyInjection
 
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IOrderRepository, OrderRepository>();
-            services.AddScoped<IOrderStatusRepository, OrderStatusRepository>();
 
             //services.AddScoped<IProductService<SearchProductResponse.Root>, ProductService<SearchProductResponse.Root>>();
             //services.AddScoped<IProductRepository, ProductRepository>();
@@ -82,6 +81,7 @@ namespace Infrastructure.LinxCommerce.DependencyInjection
             services.AddValidatorsFromAssemblyContaining<OrderSellerValidator>();
             services.AddValidatorsFromAssemblyContaining<OrderMultiSiteTenantValidator>();
             services.AddValidatorsFromAssemblyContaining<OrderTypeValidator>();
+            services.AddValidatorsFromAssemblyContaining<OrderStatusValidator>();
 
             services.AddValidatorsFromAssemblyContaining<SalesRepresentativeValidator>();
             services.AddValidatorsFromAssemblyContaining<SalesRepresentativeAddressValidator>();

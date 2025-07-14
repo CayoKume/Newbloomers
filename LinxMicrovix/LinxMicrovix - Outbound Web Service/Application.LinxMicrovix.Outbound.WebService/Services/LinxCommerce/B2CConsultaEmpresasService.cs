@@ -144,15 +144,11 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                     }
 
                     _b2cConsultaEmpresasCache.AddRange(_listSomenteNovos.Select(x => x.recordKey));
-
-                    _logger.AddMessage(
-                        $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"
-                    );
                 }
-                else
-                    _logger.AddMessage(
-                        $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"
-                    );
+
+                _logger.AddMessage(
+                    $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"
+                );
             }
 
             _logger.SetLogEndDate();

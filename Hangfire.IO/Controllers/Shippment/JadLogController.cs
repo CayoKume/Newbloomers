@@ -15,17 +15,9 @@ namespace Hangfire.IO.Controllers.Shippment
         [HttpPost("SearchTrackingHistory")]
         public async Task<ActionResult<string?>> SearchTrackingHistory()
         {
-            try
-            {
-                await _jadlogService.SearchTrackingHistory();
+            await _jadlogService.SearchTrackingHistory();
 
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                Response.StatusCode = 400;
-                return Content($"Erro: {ex.Message}");
-            }
+            return Ok();
         }
     }
 }

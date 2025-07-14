@@ -1,4 +1,5 @@
 ﻿using Domain.IntegrationsCore.Extensions;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.LinxCommerce.Entities.Order
 {
@@ -204,7 +205,7 @@ namespace Domain.LinxCommerce.Entities.Order
                 this.OrderTypeEmitFiscalTicket = this.OrderType.EmitFiscalTicket;
                 this.OrderTypeRequirePayment = this.OrderType.RequirePayment;
                 this.OrderTypeRequireInventory = this.OrderType.RequireInventory;
-                
+
                 this.Responses.Add(order.OrderID, getOrderResponse);
                 
                 foreach (OrderItem item in order.Items)

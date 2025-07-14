@@ -16,51 +16,25 @@ namespace Hangfire.IO.Controllers.Carries
         [HttpPost("SendOrders")]
         public async Task<ActionResult<string?>> FlashCourierSendOrders()
         {
-            try
-            {
-                await _flashCourierService.SendOrders();
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                Response.StatusCode = 400;
-                return Content($"Erro: {ex.Message}");
-            }
+            await _flashCourierService.SendOrders();
+            return Ok();
         }
 
         [HttpPost("SendOrder")]
         public async Task<ActionResult<string?>> FlashCourierSendOrder([Required][FromQuery] string? orderNumber)
         {
-            try
-            {
-                var result = await _flashCourierService.SendOrder(orderNumber.Trim().ToUpper());
+            var result = await _flashCourierService.SendOrder(orderNumber.Trim().ToUpper());
 
-                if (result != true)
-                    return BadRequest($"A API FlashCourier não conseguiu enviar o pedido: {orderNumber}.");
-                else
-                    return Ok($"Pedido: {orderNumber} enviado com sucesso.");
-            }
-            catch (Exception ex)
-            {
-                Response.StatusCode = 400;
-                return Content($"Nao foi possivel enviar o pedido: {orderNumber}. Erro: {ex.Message}");
-            }
+            //return BadRequest($"A API FlashCourier não conseguiu enviar o pedido: {orderNumber}.");
+            return Ok($"Pedido: {orderNumber} enviado com sucesso.");
         }
 
         [HttpPost("UpdateLogOrders")]
         public async Task<ActionResult<string?>> FlashCourierUpdateLogOrders()
         {
-            try
-            {
-                await _flashCourierService.UpdateLogOrders();
+            await _flashCourierService.UpdateLogOrders();
 
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                Response.StatusCode = 400;
-                return Content($"Erro: {ex.Message}");
-            }
+            return Ok();
         }
     }
 }

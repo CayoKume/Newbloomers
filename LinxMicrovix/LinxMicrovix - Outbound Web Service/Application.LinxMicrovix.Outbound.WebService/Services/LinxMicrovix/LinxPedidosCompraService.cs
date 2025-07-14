@@ -101,7 +101,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                     list.Add(entity);
                 }
                 catch (Exception ex)
-                { 
+                {
                     throw new GeneralException(
                         message: $"Error when convert record - cnpj_emp: {records[i].Where(pair => pair.Key == "cnpj_emp").Select(pair => pair.Value).FirstOrDefault()} | cod_pedido: {records[i].Where(pair => pair.Key == "cod_pedido").Select(pair => pair.Value).FirstOrDefault()} | cod_produto: {records[i].Where(pair => pair.Key == "cod_produto").Select(pair => pair.Value).FirstOrDefault()}",
                         exceptionMessage: ex.StackTrace
@@ -168,15 +168,11 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                     }
 
                     _linxPedidosCompraCache.AddRange(_listSomenteNovos.Select(x => x.recordKey));
-
-                    _logger.AddMessage(
-                        $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"
-                    );
                 }
-                else
-                    _logger.AddMessage(
-                        $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"
-                    );
+
+                _logger.AddMessage(
+                    $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"
+                );
             }
 
             _logger.SetLogEndDate();

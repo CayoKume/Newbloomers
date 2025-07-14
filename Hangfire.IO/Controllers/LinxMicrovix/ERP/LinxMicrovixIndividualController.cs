@@ -142,594 +142,374 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
         [HttpPost("LinxClientesFornecIndividual")]
         public async Task<ActionResult> LinxClientesFornecIndividual([Required][FromQuery] string? doc_cliente)
         {
-            try
-            {
-                var method = _methods
-                    .Where(m => m.MethodName == "LinxClientesFornec")
-                    .FirstOrDefault();
+            var method = _methods
+                .Where(m => m.MethodName == "LinxClientesFornec")
+                .FirstOrDefault();
 
-                var result = await _linxClientesFornecService.GetRecord(
-                    _linxMicrovixJobParameter.SetParameters(
-                        jobName: method.MethodName,
-                        tableName: method.MethodName
-                    ),
-                    identificador: doc_cliente
-                );
+            var result = await _linxClientesFornecService.GetRecord(
+                _linxMicrovixJobParameter.SetParameters(
+                    jobName: method.MethodName,
+                    tableName: method.MethodName
+                ),
+                identificador: doc_cliente
+            );
 
-                if (result != true)
-                    return BadRequest($"Unable to find records on endpoint.");
-                else
-                    return Ok($"Records integrated successfully.");
-            }
-            catch (Exception ex)
-            {
-                Response.StatusCode = 400;
-                return Content($"Unable to integrate the records.\n//error: {ex.Message}");
-            }
+            return Ok($"Records integrated successfully.");
         }
 
         [HttpPost("LinxMovimentoIndividual")]
         public async Task<ActionResult> LinxMovimentoIndividual([Required][FromQuery] string? documento, [Required][FromQuery] string? cnpj_emp)
         {
-            try
-            {
-                var method = _methods
-                    .Where(m => m.MethodName == "LinxMovimento")
-                    .FirstOrDefault();
+            var method = _methods
+                .Where(m => m.MethodName == "LinxMovimento")
+                .FirstOrDefault();
 
-                var result = await _linxMovimentoService.GetRecord(
-                    _linxMicrovixJobParameter.SetParameters(
-                        jobName: method.MethodName,
-                        tableName: method.MethodName
-                    ),
-                    identificador: documento,
-                    cnpj_emp: cnpj_emp
-                );
+            var result = await _linxMovimentoService.GetRecord(
+                _linxMicrovixJobParameter.SetParameters(
+                    jobName: method.MethodName,
+                    tableName: method.MethodName
+                ),
+                identificador: documento,
+                cnpj_emp: cnpj_emp
+            );
 
-                if (result != true)
-                    return BadRequest($"Unable to find records on endpoint.");
-                else
-                    return Ok($"Records integrated successfully.");
-            }
-            catch (Exception ex)
-            {
-                Response.StatusCode = 400;
-                return Content($"Unable to integrate the records.\n//error: {ex.Message}");
-            }
+            return Ok($"Records integrated successfully.");
         }
 
         [HttpPost("LinxMovimentoCartoesIndividual")]
         public async Task<ActionResult> LinxMovimentoCartoesIndividual([Required][FromQuery] string? identificador, [Required][FromQuery] string? cnpj_emp)
         {
-            try
-            {
-                var method = _methods
-                    .Where(m => m.MethodName == "LinxMovimentoCartoes")
-                    .FirstOrDefault();
+            var method = _methods
+                .Where(m => m.MethodName == "LinxMovimentoCartoes")
+                .FirstOrDefault();
 
-                var result = await _linxMovimentoCartoesService.GetRecord(
-                    _linxMicrovixJobParameter.SetParameters(
-                        jobName: method.MethodName,
-                        tableName: method.MethodName
-                    ),
-                    identificador: identificador,
-                    cnpj_emp: cnpj_emp
-                );
+            var result = await _linxMovimentoCartoesService.GetRecord(
+                _linxMicrovixJobParameter.SetParameters(
+                    jobName: method.MethodName,
+                    tableName: method.MethodName
+                ),
+                identificador: identificador,
+                cnpj_emp: cnpj_emp
+            );
 
-                if (result != true)
-                    return BadRequest($"Unable to find records on endpoint.");
-                else
-                    return Ok($"Records integrated successfully.");
-            }
-            catch (Exception ex)
-            {
-                Response.StatusCode = 400;
-                return Content($"Unable to integrate the records.\n//error: {ex.Message}");
-            }
+            return Ok($"Records integrated successfully.");
         }
 
         [HttpPost("LinxMovimentoPlanosIndividual")]
         public async Task<ActionResult> LinxMovimentoPlanosIndividual([Required][FromQuery] string? identificador, [Required][FromQuery] string? cnpj_emp)
         {
-            try
-            {
-                var method = _methods
-                    .Where(m => m.MethodName == "LinxMovimentoPlanos")
-                    .FirstOrDefault();
+            var method = _methods
+                .Where(m => m.MethodName == "LinxMovimentoPlanos")
+                .FirstOrDefault();
 
-                var result = await _linxMovimentoPlanosService.GetRecord(
-                    _linxMicrovixJobParameter.SetParameters(
-                        jobName: method.MethodName,
-                        tableName: method.MethodName
-                    ),
-                    identificador: identificador,
-                    cnpj_emp: cnpj_emp
-                );
+            var result = await _linxMovimentoPlanosService.GetRecord(
+                _linxMicrovixJobParameter.SetParameters(
+                    jobName: method.MethodName,
+                    tableName: method.MethodName
+                ),
+                identificador: identificador,
+                cnpj_emp: cnpj_emp
+            );
 
-                if (result != true)
-                    return BadRequest($"Unable to find records on endpoint.");
-                else
-                    return Ok($"Records integrated successfully.");
-            }
-            catch (Exception ex)
-            {
-                Response.StatusCode = 400;
-                return Content($"Unable to integrate the records.\n//error: {ex.Message}");
-            }
+            return Ok($"Records integrated successfully.");
         }
 
         [HttpPost("LinxMovimentoTrocasIndividual")]
         public async Task<ActionResult> LinxMovimentoTrocasIndividual([Required][FromQuery] string? doc_origem, [Required][FromQuery] string? cnpj_emp)
         {
-            try
-            {
-                var method = _methods
-                    .Where(m => m.MethodName == "LinxMovimentoTrocas")
-                    .FirstOrDefault();
+            var method = _methods
+                .Where(m => m.MethodName == "LinxMovimentoTrocas")
+                .FirstOrDefault();
 
-                var result = await _linxMovimentoTrocasService.GetRecord(
-                    _linxMicrovixJobParameter.SetParameters(
-                        jobName: method.MethodName,
-                        tableName: method.MethodName
-                    ),
-                    identificador: doc_origem,
-                    cnpj_emp: cnpj_emp
-                );
+            var result = await _linxMovimentoTrocasService.GetRecord(
+                _linxMicrovixJobParameter.SetParameters(
+                    jobName: method.MethodName,
+                    tableName: method.MethodName
+                ),
+                identificador: doc_origem,
+                cnpj_emp: cnpj_emp
+            );
 
-                if (result != true)
-                    return BadRequest($"Unable to find records on endpoint.");
-                else
-                    return Ok($"Records integrated successfully.");
-            }
-            catch (Exception ex)
-            {
-                Response.StatusCode = 400;
-                return Content($"Unable to integrate the records.\n//error: {ex.Message}");
-            }
+            return Ok($"Records integrated successfully.");
         }
 
         [HttpPost("LinxPlanosIndividual")]
         public async Task<ActionResult> LinxPlanosIndividual([Required][FromQuery] string? plano)
         {
-            try
-            {
-                var method = _methods
-                    .Where(m => m.MethodName == "LinxPlanos")
-                    .FirstOrDefault();
+            var method = _methods
+                .Where(m => m.MethodName == "LinxPlanos")
+                .FirstOrDefault();
 
-                var result = await _linxPlanosService.GetRecord(
-                    _linxMicrovixJobParameter.SetParameters(
-                        jobName: method.MethodName,
-                        tableName: method.MethodName
-                    ),
-                    identificador: plano
-                );
+            var result = await _linxPlanosService.GetRecord(
+                _linxMicrovixJobParameter.SetParameters(
+                    jobName: method.MethodName,
+                    tableName: method.MethodName
+                ),
+                identificador: plano
+            );
 
-                if (result != true)
-                    return BadRequest($"Unable to find records on endpoint.");
-                else
-                    return Ok($"Records integrated successfully.");
-            }
-            catch (Exception ex)
-            {
-                Response.StatusCode = 400;
-                return Content($"Unable to integrate the records.\n//error: {ex.Message}");
-            }
+            return Ok($"Records integrated successfully.");
         }
 
         [HttpPost("LinxNaturezaOperacaoIndividual")]
         public async Task<ActionResult> LinxNaturezaOperacaoIndividual([Required][FromQuery] string? cod_natureza_operacao)
         {
-            try
-            {
-                var method = _methods
-                    .Where(m => m.MethodName == "LinxNaturezaOperacao")
-                    .FirstOrDefault();
+            var method = _methods
+                .Where(m => m.MethodName == "LinxNaturezaOperacao")
+                .FirstOrDefault();
 
-                var result = await _linxNaturezaOperacaoService.GetRecord(
-                    _linxMicrovixJobParameter.SetParameters(
-                        jobName: method.MethodName,
-                        tableName: method.MethodName
-                    ),
-                    identificador: cod_natureza_operacao
-                );
+            var result = await _linxNaturezaOperacaoService.GetRecord(
+                _linxMicrovixJobParameter.SetParameters(
+                    jobName: method.MethodName,
+                    tableName: method.MethodName
+                ),
+                identificador: cod_natureza_operacao
+            );
 
-                if (result != true)
-                    return BadRequest($"Unable to find records on endpoint.");
-                else
-                    return Ok($"Records integrated successfully.");
-            }
-            catch (Exception ex)
-            {
-                Response.StatusCode = 400;
-                return Content($"Unable to integrate the records.\n//error: {ex.Message}");
-            }
+            return Ok($"Records integrated successfully.");
         }
 
         [HttpPost("LinxProdutosCodBarIndividual")]
         public async Task<ActionResult> LinxProdutosCodBarIndividual([Required][FromQuery] string? cod_produto)
         {
-            try
-            {
-                var method = _methods
-                    .Where(m => m.MethodName == "LinxProdutosCodBar")
-                    .FirstOrDefault();
+            var method = _methods
+                .Where(m => m.MethodName == "LinxProdutosCodBar")
+                .FirstOrDefault();
 
-                var result = await _linxProdutosCodBarService.GetRecord(
-                    _linxMicrovixJobParameter.SetParameters(
-                        jobName: method.MethodName,
-                        tableName: method.MethodName
-                    ),
-                    identificador: cod_produto
-                );
+            var result = await _linxProdutosCodBarService.GetRecord(
+                _linxMicrovixJobParameter.SetParameters(
+                    jobName: method.MethodName,
+                    tableName: method.MethodName
+                ),
+                identificador: cod_produto
+            );
 
-                if (result != true)
-                    return BadRequest($"Unable to find records on endpoint.");
-                else
-                    return Ok($"Records integrated successfully.");
-            }
-            catch (Exception ex)
-            {
-                Response.StatusCode = 400;
-                return Content($"Unable to integrate the records.\n//error: {ex.Message}");
-            }
+            return Ok($"Records integrated successfully.");
         }
 
         [HttpPost("LinxProdutosTabelasIndividual")]
         public async Task<ActionResult> LinxProdutosTabelasIndividual([Required][FromQuery] string? id_tabela, [Required][FromQuery] string? cnpj_emp)
         {
-            try
-            {
-                var method = _methods
-                    .Where(m => m.MethodName == "LinxProdutosTabelas")
-                    .FirstOrDefault();
+            var method = _methods
+                .Where(m => m.MethodName == "LinxProdutosTabelas")
+                .FirstOrDefault();
 
-                var result = await _linxProdutosTabelasService.GetRecord(
-                    _linxMicrovixJobParameter.SetParameters(
-                        jobName: method.MethodName,
-                        tableName: method.MethodName
-                    ),
-                    identificador: id_tabela,
-                    cnpj_emp: cnpj_emp
-                );
+            var result = await _linxProdutosTabelasService.GetRecord(
+                _linxMicrovixJobParameter.SetParameters(
+                    jobName: method.MethodName,
+                    tableName: method.MethodName
+                ),
+                identificador: id_tabela,
+                cnpj_emp: cnpj_emp
+            );
 
-                if (result != true)
-                    return BadRequest($"Unable to find records on endpoint.");
-                else
-                    return Ok($"Records integrated successfully.");
-            }
-            catch (Exception ex)
-            {
-                Response.StatusCode = 400;
-                return Content($"Unable to integrate the records.\n//error: {ex.Message}");
-            }
+            return Ok($"Records integrated successfully.");
         }
 
         [HttpPost("LinxProdutosTabelasPrecosIndividual")]
         public async Task<ActionResult> LinxProdutosTabelasPrecosIndividual([Required][FromQuery] string? id_tabela, [Required][FromQuery] string? cod_produto, [Required][FromQuery] string? cnpj_emp)
         {
-            try
-            {
-                var method = _methods
-                    .Where(m => m.MethodName == "LinxProdutosTabelasPrecos")
-                    .FirstOrDefault();
+            var method = _methods
+                .Where(m => m.MethodName == "LinxProdutosTabelasPrecos")
+                .FirstOrDefault();
 
-                var result = await _linxProdutosTabelasPrecosService.GetRecord(
-                    _linxMicrovixJobParameter.SetParameters(
-                        jobName: method.MethodName,
-                        tableName: method.MethodName
-                    ),
-                    identificador: cod_produto,
-                    identificador2: id_tabela,
-                    cnpj_emp: cnpj_emp
-                );
+            var result = await _linxProdutosTabelasPrecosService.GetRecord(
+                _linxMicrovixJobParameter.SetParameters(
+                    jobName: method.MethodName,
+                    tableName: method.MethodName
+                ),
+                identificador: cod_produto,
+                identificador2: id_tabela,
+                cnpj_emp: cnpj_emp
+            );
 
-                if (result != true)
-                    return BadRequest($"Unable to find records on endpoint.");
-                else
-                    return Ok($"Records integrated successfully.");
-            }
-            catch (Exception ex)
-            {
-                Response.StatusCode = 400;
-                return Content($"Unable to integrate the records.\n//error: {ex.Message}");
-            }
+            return Ok($"Records integrated successfully.");
         }
 
         [HttpPost("LinxProdutosDepositosIndividual")]
         public async Task<ActionResult> LinxProdutosDepositosIndividual([Required][FromQuery] string? cod_produto)
         {
-            try
-            {
-                var method = _methods
-                    .Where(m => m.MethodName == "LinxProdutosDepositos")
-                    .FirstOrDefault();
+            var method = _methods
+                .Where(m => m.MethodName == "LinxProdutosDepositos")
+                .FirstOrDefault();
 
-                var result = await _linxProdutosDepositosService.GetRecord(
-                    _linxMicrovixJobParameter.SetParameters(
-                        jobName: method.MethodName,
-                        tableName: method.MethodName
-                    ),
-                    identificador: cod_produto
-                );
+            var result = await _linxProdutosDepositosService.GetRecord(
+                _linxMicrovixJobParameter.SetParameters(
+                    jobName: method.MethodName,
+                    tableName: method.MethodName
+                ),
+                identificador: cod_produto
+            );
 
-                if (result != true)
-                    return BadRequest($"Unable to find records on endpoint.");
-                else
-                    return Ok($"Records integrated successfully.");
-            }
-            catch (Exception ex)
-            {
-                Response.StatusCode = 400;
-                return Content($"Unable to integrate the records.\n//error: {ex.Message}");
-            }
+            return Ok($"Records integrated successfully.");
         }
 
         [HttpPost("LinxProdutosInventarioIndividual")]
         public async Task<ActionResult> LinxProdutosInventarioIndividual([Required][FromQuery] string? cod_produto, [Required][FromQuery] string? data_inventario, [Required][FromQuery] string? cod_deposito, [Required][FromQuery] string? cnpj_emp)
         {
-            try
-            {
-                var method = _methods
-                    .Where(m => m.MethodName == "LinxProdutosInventario")
-                    .FirstOrDefault();
+            var method = _methods
+                .Where(m => m.MethodName == "LinxProdutosInventario")
+                .FirstOrDefault();
 
-                var result = await _linxProdutosInventarioService.GetRecord(
-                    _linxMicrovixJobParameter.SetParameters(
-                        jobName: method.MethodName,
-                        tableName: method.MethodName
-                    ),
-                    identificador: cod_produto,
-                    identificador2: data_inventario,
-                    identificador3: cod_deposito,
-                    cnpj_emp: cnpj_emp
-                );
+            var result = await _linxProdutosInventarioService.GetRecord(
+                _linxMicrovixJobParameter.SetParameters(
+                    jobName: method.MethodName,
+                    tableName: method.MethodName
+                ),
+                identificador: cod_produto,
+                identificador2: data_inventario,
+                identificador3: cod_deposito,
+                cnpj_emp: cnpj_emp
+            );
 
-                if (result != true)
-                    return BadRequest($"Unable to find records on endpoint.");
-                else
-                    return Ok($"Records integrated successfully.");
-            }
-            catch (Exception ex)
-            {
-                Response.StatusCode = 400;
-                return Content($"Unable to integrate the records.\n//error: {ex.Message}");
-            }
+            return Ok($"Records integrated successfully.");
         }
 
         [HttpPost("LinxProdutosDetalhesIndividual")]
         public async Task<ActionResult> LinxProdutosDetalhesIndividual([Required][FromQuery] string? cod_produto, [Required][FromQuery] string? cnpj_emp)
         {
-            try
-            {
-                var method = _methods
-                    .Where(m => m.MethodName == "LinxProdutosDetalhes")
-                    .FirstOrDefault();
+            var method = _methods
+                .Where(m => m.MethodName == "LinxProdutosDetalhes")
+                .FirstOrDefault();
 
-                var result = await _linxProdutosDetalhesService.GetRecord(
-                    _linxMicrovixJobParameter.SetParameters(
-                        jobName: method.MethodName,
-                        tableName: method.MethodName
-                    ),
-                    identificador: cod_produto,
-                    cnpj_emp: cnpj_emp
-                );
+            var result = await _linxProdutosDetalhesService.GetRecord(
+                _linxMicrovixJobParameter.SetParameters(
+                    jobName: method.MethodName,
+                    tableName: method.MethodName
+                ),
+                identificador: cod_produto,
+                cnpj_emp: cnpj_emp
+            );
 
-                if (result != true)
-                    return BadRequest($"Unable to find records on endpoint.");
-                else
-                    return Ok($"Records integrated successfully.");
-            }
-            catch (Exception ex)
-            {
-                Response.StatusCode = 400;
-                return Content($"Unable to integrate the records.\n//error: {ex.Message}");
-            }
+            return Ok($"Records integrated successfully.");
         }
 
         [HttpPost("LinxProdutosDetalhesWithZeroStock")]
         public async Task<ActionResult> LinxProdutosDetalhesWithZeroStock()
         {
-            try
-            {
-                var method = _methods
-                    .Where(m => m.MethodName == "LinxProdutosDetalhes")
-                    .FirstOrDefault();
+            var method = _methods
+                .Where(m => m.MethodName == "LinxProdutosDetalhes")
+                .FirstOrDefault();
 
-                var result = await _linxProdutosDetalhesService.GetZeroStockRecords(
-                    _linxMicrovixJobParameter.SetParameters(
-                        jobName: method.MethodName,
-                        tableName: method.MethodName
-                    )
-                );
+            var result = await _linxProdutosDetalhesService.GetZeroStockRecords(
+                _linxMicrovixJobParameter.SetParameters(
+                    jobName: method.MethodName,
+                    tableName: method.MethodName
+                )
+            );
 
-                if (result != true)
-                    return BadRequest($"Unable to find records on endpoint.");
-                else
-                    return Ok($"Records integrated successfully.");
-            }
-            catch (Exception ex)
-            {
-                Response.StatusCode = 400;
-                return Content($"Unable to integrate the records.\n//error: {ex.Message}");
-            }
+            return Ok($"Records integrated successfully.");
         }
 
         [HttpPost("LinxProdutosCamposAdicionaisIndividual")]
         public async Task<ActionResult> LinxProdutosCamposAdicionaisIndividual([Required][FromQuery] string? cod_produto)
         {
-            try
-            {
-                var method = _methods
-                    .Where(m => m.MethodName == "LinxProdutosCamposAdicionais")
-                    .FirstOrDefault();
+            var method = _methods
+                .Where(m => m.MethodName == "LinxProdutosCamposAdicionais")
+                .FirstOrDefault();
 
-                var result = await _linxProdutosCamposAdicionaisService.GetRecord(
-                    _linxMicrovixJobParameter.SetParameters(
-                        jobName: method.MethodName,
-                        tableName: method.MethodName
-                    ),
-                    identificador: cod_produto
-                );
+            var result = await _linxProdutosCamposAdicionaisService.GetRecord(
+                _linxMicrovixJobParameter.SetParameters(
+                    jobName: method.MethodName,
+                    tableName: method.MethodName
+                ),
+                identificador: cod_produto
+            );
 
-                if (result != true)
-                    return BadRequest($"Unable to find records on endpoint.");
-                else
-                    return Ok($"Records integrated successfully.");
-            }
-            catch (Exception ex)
-            {
-                Response.StatusCode = 400;
-                return Content($"Unable to integrate the records.\n//error: {ex.Message}");
-            }
+            return Ok($"Records integrated successfully.");
         }
 
         [HttpPost("LinxProdutosIndividual")]
         public async Task<ActionResult> LinxProdutosIndividual([Required][FromQuery] string? cod_produto)
         {
-            try
-            {
-                var method = _methods
-                    .Where(m => m.MethodName == "LinxProdutos")
-                    .FirstOrDefault();
+            var method = _methods
+                .Where(m => m.MethodName == "LinxProdutos")
+                .FirstOrDefault();
 
-                var result = await _linxProdutosService.GetRecord(
-                    _linxMicrovixJobParameter.SetParameters(
-                        jobName: method.MethodName,
-                        tableName: method.MethodName
-                    ),
-                    identificador: cod_produto
-                );
+            var result = await _linxProdutosService.GetRecord(
+                _linxMicrovixJobParameter.SetParameters(
+                    jobName: method.MethodName,
+                    tableName: method.MethodName
+                ),
+                identificador: cod_produto
+            );
 
-                if (result != true)
-                    return BadRequest($"Unable to find records on endpoint.");
-                else
-                    return Ok($"Records integrated successfully.");
-            }
-            catch (Exception ex)
-            {
-                Response.StatusCode = 400;
-                return Content($"Unable to integrate the records.\n//error: {ex.Message}");
-            }
+            return Ok($"Records integrated successfully.");
         }
 
         [HttpPost("LinxPedidosVendaIndividual")]
         public async Task<ActionResult> LinxPedidosVendaIndividual([Required][FromQuery] string? cod_pedido, [Required][FromQuery] string? cnpj_emp)
         {
-            try
-            {
-                var method = _methods
-                    .Where(m => m.MethodName == "LinxPedidosVendaIndividual")
-                    .FirstOrDefault();
+            var method = _methods
+                .Where(m => m.MethodName == "LinxPedidosVendaIndividual")
+                .FirstOrDefault();
 
-                var result = await _linxPedidosVendaService.GetRecord(
-                    _linxMicrovixJobParameter.SetParameters(
-                        jobName: method.MethodName,
-                        tableName: method.MethodName
-                    ),
-                    identificador: cod_pedido,
-                    cnpj_emp: cnpj_emp
-                );
+            var result = await _linxPedidosVendaService.GetRecord(
+                _linxMicrovixJobParameter.SetParameters(
+                    jobName: method.MethodName,
+                    tableName: method.MethodName
+                ),
+                identificador: cod_pedido,
+                cnpj_emp: cnpj_emp
+            );
 
-                if (result != true)
-                    return BadRequest($"Unable to find records on endpoint.");
-                else
-                    return Ok($"Records integrated successfully.");
-            }
-            catch (Exception ex)
-            {
-                Response.StatusCode = 400;
-                return Content($"Unable to integrate the records.\n//error: {ex.Message}");
-            }
+            return Ok($"Records integrated successfully.");
         }
 
         [HttpPost("LinxSetoresIndividual")]
         public async Task<ActionResult> LinxSetoresIndividual([Required][FromQuery] string? id_setor)
         {
-            try
-            {
-                var method = _methods
-                    .Where(m => m.MethodName == "LinxSetores")
-                    .FirstOrDefault();
+            var method = _methods
+                .Where(m => m.MethodName == "LinxSetores")
+                .FirstOrDefault();
 
-                var result = await _linxSetoresService.GetRecord(
-                    _linxMicrovixJobParameter.SetParameters(
-                        jobName: method.MethodName,
-                        tableName: method.MethodName
-                    ), 
-                    identificador: id_setor
-                );
+            var result = await _linxSetoresService.GetRecord(
+                _linxMicrovixJobParameter.SetParameters(
+                    jobName: method.MethodName,
+                    tableName: method.MethodName
+                ),
+                identificador: id_setor
+            );
 
-                if (result != true)
-                    return BadRequest($"Unable to find records on endpoint.");
-                else
-                    return Ok($"Records integrated successfully.");
-            }
-            catch (Exception ex)
-            {
-                Response.StatusCode = 400;
-                return Content($"Unable to integrate the records.\n//error: {ex.Message}");
-            }
+            return Ok($"Records integrated successfully.");
         }
 
         [HttpPost("LinxXMLDocumentosIndividual")]
         public async Task<ActionResult> LinxXMLDocumentosIndividual([Required][FromQuery] string? documento, [Required][FromQuery] string? cnpj_emp)
         {
-            try
-            {
-                var method = _methods
-                    .Where(m => m.MethodName == "LinxXMLDocumentos")
-                    .FirstOrDefault();
+            var method = _methods
+                .Where(m => m.MethodName == "LinxXMLDocumentos")
+                .FirstOrDefault();
 
-                var result = await _linxXMLDocumentosService.GetRecord(
-                    _linxMicrovixJobParameter.SetParameters(
-                        jobName: method.MethodName,
-                        tableName: method.MethodName
-                    ),
-                    identificador: documento,
-                    cnpj_emp: cnpj_emp
-                );
+            var result = await _linxXMLDocumentosService.GetRecord(
+                _linxMicrovixJobParameter.SetParameters(
+                    jobName: method.MethodName,
+                    tableName: method.MethodName
+                ),
+                identificador: documento,
+                cnpj_emp: cnpj_emp
+            );
 
-                if (result != true)
-                    return BadRequest($"Unable to find records on endpoint.");
-                else
-                    return Ok($"Records integrated successfully.");
-            }
-            catch (Exception ex)
-            {
-                Response.StatusCode = 400;
-                return Content($"Unable to integrate the records.\n//error: {ex.Message}");
-            }
+            return Ok($"Records integrated successfully.");
         }
 
         [HttpPost("LinxVendedoresIndividual")]
         public async Task<ActionResult> LinxVendedoresIndividual([Required][FromQuery] string? cod_vendedor, [Required][FromQuery] string? cnpj_emp)
         {
-            try
-            {
-                var method = _methods
-                    .Where(m => m.MethodName == "LinxVendedores")
-                    .FirstOrDefault();
+            var method = _methods
+                .Where(m => m.MethodName == "LinxVendedores")
+                .FirstOrDefault();
 
-                var result = await _linxVendedoresService.GetRecord(
-                    _linxMicrovixJobParameter.SetParameters(
-                        jobName: method.MethodName,
-                        tableName: method.MethodName
-                    ),
-                    identificador: cod_vendedor,
-                    cnpj_emp: cnpj_emp
-                );
+            var result = await _linxVendedoresService.GetRecord(
+                _linxMicrovixJobParameter.SetParameters(
+                    jobName: method.MethodName,
+                    tableName: method.MethodName
+                ),
+                identificador: cod_vendedor,
+                cnpj_emp: cnpj_emp
+            );
 
-                if (result != true)
-                    return BadRequest($"Unable to find records on endpoint.");
-                else
-                    return Ok($"Records integrated successfully.");
-            }
-            catch (Exception ex)
-            {
-                Response.StatusCode = 400;
-                return Content($"Unable to integrate the records.\n//error: {ex.Message}");
-            }
+            return Ok($"Records integrated successfully.");
         }
     }
 }

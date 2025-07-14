@@ -18,6 +18,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxMicrovi
         {
             var table = _linxMicrovixRepositoryBase.CreateSystemDataTable(jobParameter.tableName, new LinxClientesFornec());
 
+            //Adicionar Fill DataTable com os dados dos registros
             for (int i = 0; i < records.Count(); i++)
             {
                 table.Rows.Add(records[i].lastupdateon, records[i].portal, records[i].cod_cliente, records[i].razao_cliente, records[i].nome_cliente, records[i].doc_cliente,

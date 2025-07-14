@@ -163,7 +163,7 @@ namespace Application.TotalExpress.Services
             }
         }
 
-        public async Task<bool> UpdateLogOrders()
+        public async Task<bool> InsertLogOrdersByDateInterval()
         {
             try
             {
@@ -175,11 +175,11 @@ namespace Application.TotalExpress.Services
                     {
                         var jObject = new JObject
                         {
-                            { "remetenteId", parameter.sender_id },
-                            //{ "data_inicial", "2000-01-01" }
-                            //{ "data_inicial", DateTime.Now.AddDays(-2).Date.ToString("yyyy-MM-dd") }
-                            //{ "remetenteId", "" },
-                            { "pedido", "MI-31494" }
+                            { "remetenteId", 47812 },
+                            //{ "data_inicial", DateTime.Now.Date.ToString("yyyy-MM-dd") }
+                            //{ "remetenteId", "remetenteId" },
+                            //{ "pedido", "OA-35289" }
+                            { "awb", "TXAS614593325tx" }
                         };
 
                         var headers = new Dictionary<string?, string?>
@@ -200,37 +200,119 @@ namespace Application.TotalExpress.Services
                             var statusList = JsonConvert.DeserializeObject<IEnumerable<Status>>(response);
                             //var status = JsonConvert.DeserializeObject<Status>(response);
 
-                            foreach (var status in statusList)
-                            {
-                                if (status.detalhes != null)
-                                {
-                                    var lastStatus = status.detalhes.statusDeEncomenda.LastOrDefault();
+                            //foreach (var status in statusList)
+                            //{
+                            //    if (status.detalhes != null)
+                            //    {
+                            //        var lastStatus = status.detalhes.statusDeEncomenda.LastOrDefault();
 
-                                    var lastStatusDescription = lastStatus == null ?
-                                                                null : $"{lastStatus.statusid} - {lastStatus.status}";
+                            //        var lastStatusDescription = lastStatus == null ?
+                            //                                    null : $"{lastStatus.statusid} - {lastStatus.status}";
 
-                                    var lastStatusDate = lastStatus == null ?
-                                                         null : $"{lastStatus.data}";
+                            //        var lastStatusDate = lastStatus == null ?
+                            //                             null : $"{lastStatus.data}";
 
-                                    var deliveryForecastDate = status.detalhes.dataPrev == null ?
-                                                       null : status.detalhes.dataPrev.PrevEntrega;
+                            //        var deliveryForecastDate = status.detalhes.dataPrev == null ?
+                            //                           null : status.detalhes.dataPrev.PrevEntrega;
 
-                                    var collectionDate = status.detalhes.statusDeEncomenda.Where(p => p.status == "COLETA REALIZADA").FirstOrDefault() == null ?
-                                                     null : status.detalhes.statusDeEncomenda.Where(p => p.status == "COLETA REALIZADA").FirstOrDefault().data;
+                            //        var collectionDate = status.detalhes.statusDeEncomenda.Where(p => p.status == "COLETA REALIZADA").FirstOrDefault() == null ?
+                            //                         null : status.detalhes.statusDeEncomenda.Where(p => p.status == "COLETA REALIZADA").FirstOrDefault().data;
 
-                                    var deliveryMadeDate = status.detalhes.statusDeEncomenda.Where(p => p.status == "ENTREGA REALIZADA").FirstOrDefault() == null ?
-                                                     null : status.detalhes.statusDeEncomenda.Where(p => p.status == "ENTREGA REALIZADA").FirstOrDefault().data;
+                            //        var deliveryMadeDate = status.detalhes.statusDeEncomenda.Where(p => p.status == "ENTREGA REALIZADA").FirstOrDefault() == null ?
+                            //                         null : status.detalhes.statusDeEncomenda.Where(p => p.status == "ENTREGA REALIZADA").FirstOrDefault().data;
 
-                                    await _totalExpressRepository.UpdateDeliveryDates(
-                                        deliveryMadeDate,
-                                        collectionDate,
-                                        deliveryForecastDate,
-                                        lastStatusDate,
-                                        lastStatusDescription,
-                                        status.pedido
-                                    );
-                                }
-                            }
+                            //        await _totalExpressRepository.UpdateDeliveryDates(
+                            //            deliveryMadeDate,
+                            //            collectionDate,
+                            //            deliveryForecastDate,
+                            //            lastStatusDate,
+                            //            lastStatusDescription,
+                            //            status.pedido
+                            //        );
+                            //    }
+                            //}
+                        }
+                        catch (Exception ex) when (ex.Message.Contains("BadRequest"))
+                        {
+                            continue;
+                        }
+                    }
+
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        public async Task<bool> InsertLogOrdersByAWBs()
+        {
+            try
+            {
+                var parameters = await _totalExpressRepository.GetSenderIds();
+
+                if (parameters.Count() > 0)
+                {
+                    foreach (var parameter in parameters)
+                    {
+                        var jObject = new JObject
+                        {
+                            { "remetenteId", 47812 },
+                            { "awb", "TXAS614593325tx" }
+                        };
+
+                        var headers = new Dictionary<string?, string?>
+                        {
+                            { "ContentType", "application/xml" },
+                            { "Authorization", "Basic " + Convert.ToBase64String(Encoding.Default.GetBytes("apistatusnew-prod:GttTBS8x")) } //transformar em variável
+                        };
+
+                        try
+                        {
+                            string? response = await _apiCall.PostAsync(
+                                                jObject,
+                                                "previsao_entrega_atualizada.php",
+                                                headers,
+                                                "TotalExpressEdiAPI"
+                                             );
+
+                            var statusList = JsonConvert.DeserializeObject<IEnumerable<Status>>(response);
+                            //var status = JsonConvert.DeserializeObject<Status>(response);
+
+                            //foreach (var status in statusList)
+                            //{
+                            //    if (status.detalhes != null)
+                            //    {
+                            //        var lastStatus = status.detalhes.statusDeEncomenda.LastOrDefault();
+
+                            //        var lastStatusDescription = lastStatus == null ?
+                            //                                    null : $"{lastStatus.statusid} - {lastStatus.status}";
+
+                            //        var lastStatusDate = lastStatus == null ?
+                            //                             null : $"{lastStatus.data}";
+
+                            //        var deliveryForecastDate = status.detalhes.dataPrev == null ?
+                            //                           null : status.detalhes.dataPrev.PrevEntrega;
+
+                            //        var collectionDate = status.detalhes.statusDeEncomenda.Where(p => p.status == "COLETA REALIZADA").FirstOrDefault() == null ?
+                            //                         null : status.detalhes.statusDeEncomenda.Where(p => p.status == "COLETA REALIZADA").FirstOrDefault().data;
+
+                            //        var deliveryMadeDate = status.detalhes.statusDeEncomenda.Where(p => p.status == "ENTREGA REALIZADA").FirstOrDefault() == null ?
+                            //                         null : status.detalhes.statusDeEncomenda.Where(p => p.status == "ENTREGA REALIZADA").FirstOrDefault().data;
+
+                            //        await _totalExpressRepository.UpdateDeliveryDates(
+                            //            deliveryMadeDate,
+                            //            collectionDate,
+                            //            deliveryForecastDate,
+                            //            lastStatusDate,
+                            //            lastStatusDescription,
+                            //            status.pedido
+                            //        );
+                            //    }
+                            //}
                         }
                         catch (Exception ex) when (ex.Message.Contains("BadRequest"))
                         {

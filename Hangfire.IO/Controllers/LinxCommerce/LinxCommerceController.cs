@@ -87,309 +87,188 @@ namespace HangfireDashboard.UI.Controllers.LinxCommerce
         [HttpPost("SearchSkusByDateInterval")]
         public async Task<ActionResult> SearchSkusByDateInterval()
         {
-            try
-            {
-                var method = _methods
-                    .Where(m => m.MethodName == "SearchSKU")
-                    .FirstOrDefault();
+            var method = _methods
+                .Where(m => m.MethodName == "SearchSKU")
+                .FirstOrDefault();
 
-                var result = await _skuService.SearchSKUByDateInterval(
-                    _linxCommerceJobParameter.SetParameters(
-                        jobName: method.MethodName,
-                        tableName: method.MethodName
-                    )
-                );
+            var result = await _skuService.SearchSKUByDateInterval(
+                _linxCommerceJobParameter.SetParameters(
+                    jobName: method.MethodName,
+                    tableName: method.MethodName
+                )
+            );
 
-                if (result != true)
-                    return BadRequest($"Unable to find records on endpoint.");
-                else
-                    return Ok($"Records integrated successfully.");
-            }
-            catch (Exception ex)
-            {
-                Response.StatusCode = 400;
-                return Content($"Unable to integrate the records.\n//error: {ex.Message}");
-            }
+            return Ok($"Records integrated successfully.");
         }
 
         [HttpPost("SearchSkusByQueue")]
         public async Task<ActionResult> SearchSkusByQueue()
         {
-            try
-            {
-                var method = _methods
-                    .Where(m => m.MethodName == "SearchSKU")
-                    .FirstOrDefault();
+            var method = _methods
+                .Where(m => m.MethodName == "SearchSKU")
+                .FirstOrDefault();
 
-                var result = await _skuService.SearchSKUByQueue(
-                    _linxCommerceJobParameter.SetParameters(
-                        jobName: method.MethodName,
-                        tableName: method.MethodName
-                    )
-                );
+            var result = await _skuService.SearchSKUByQueue(
+                _linxCommerceJobParameter.SetParameters(
+                    jobName: method.MethodName,
+                    tableName: method.MethodName
+                )
+            );
 
-                if (result != true)
-                    return BadRequest($"Unable to find records on endpoint.");
-                else
-                    return Ok($"Records integrated successfully.");
-            }
-            catch (Exception ex)
-            {
-                Response.StatusCode = 400;
-                return Content($"Unable to integrate the records.\n//error: {ex.Message}");
-            }
+            return Ok($"Records integrated successfully.");
         }
 
         [HttpPost("SearchProductsByDateInterval")]
         public async Task<ActionResult> SearchProductsByDateInterval()
         {
-            try
-            {
-                var method = _methods
-                    .Where(m => m.MethodName == "SearchProducts")
-                    .FirstOrDefault();
+            var method = _methods
+                .Where(m => m.MethodName == "SearchProducts")
+                .FirstOrDefault();
 
-                var result = await _skuService.SearchProductByDateInterval(
-                    _linxCommerceJobParameter.SetParameters(
-                        jobName: method.MethodName,
-                        tableName: method.MethodName
-                    )
-                );
+            var result = await _skuService.SearchProductByDateInterval(
+                _linxCommerceJobParameter.SetParameters(
+                    jobName: method.MethodName,
+                    tableName: method.MethodName
+                )
+            );
 
-                if (result != true)
-                    return BadRequest($"Unable to find records on endpoint.");
-                else
-                    return Ok($"Records integrated successfully.");
-            }
-            catch (Exception ex)
-            {
-                Response.StatusCode = 400;
-                return Content($"Unable to integrate the records.\n//error: {ex.Message}");
-            }
+            return Ok($"Records integrated successfully.");
         }
 
         [HttpPost("SearchProductsByQueue")]
         public async Task<ActionResult> SearchProductsByQueue()
         {
-            try
-            {
-                var method = _methods
-                    .Where(m => m.MethodName == "SearchProducts")
-                    .FirstOrDefault();
+            var method = _methods
+                .Where(m => m.MethodName == "SearchProducts")
+                .FirstOrDefault();
 
-                var result = await _skuService.SearchProductByQueue(
-                    _linxCommerceJobParameter.SetParameters(
-                        jobName: method.MethodName,
-                        tableName: method.MethodName
-                    )
-                );
+            var result = await _skuService.SearchProductByQueue(
+                _linxCommerceJobParameter.SetParameters(
+                    jobName: method.MethodName,
+                    tableName: method.MethodName
+                )
+            );
 
-                if (result != true)
-                    return BadRequest($"Unable to find records on endpoint.");
-                else
-                    return Ok($"Records integrated successfully.");
-            }
-            catch (Exception ex)
-            {
-                Response.StatusCode = 400;
-                return Content($"Unable to integrate the records.\n//error: {ex.Message}");
-            }
+            return Ok($"Records integrated successfully.");
         }
 
         [HttpPost("SearchOrdersByDateInterval")]
         public async Task<ActionResult> SearchOrdersByDateInterval()
         {
-            try
-            {
-                var method = _methods
-                    .Where(m => m.MethodName == "SearchOrders")
-                    .FirstOrDefault();
+            var method = _methods
+                .Where(m => m.MethodName == "SearchOrders")
+                .FirstOrDefault();
 
-                var result = await _orderService.SearchOrdersByDateInterval(
-                    _linxCommerceJobParameter.SetParameters(
-                        jobName: method.MethodName,
-                        tableName: method.MethodName
-                    )
-                );
+            var result = await _orderService.SearchOrdersByDateInterval(
+                _linxCommerceJobParameter.SetParameters(
+                    jobName: method.MethodName,
+                    tableName: method.MethodName
+                )
+            );
 
-                if (result != true)
-                    return BadRequest($"Unable to find records on endpoint.");
-                else
-                    return Ok($"Records integrated successfully.");
-            }
-            catch (Exception ex)
-            {
-                Response.StatusCode = 400;
-                return Content($"Unable to integrate the records.\n//error: {ex.Message}");
-            }
+            return Ok($"Records integrated successfully.");
         }
 
         [HttpPost("SearchOrdersByQueue")]
         public async Task<ActionResult> SearchOrdersByQueue()
         {
-            try
-            {
-                var method = _methods
-                    .Where(m => m.MethodName == "SearchOrders")
-                    .FirstOrDefault();
+            var method = _methods
+                .Where(m => m.MethodName == "SearchOrders")
+                .FirstOrDefault();
 
-                var result = await _orderService.SearchOrdersByQueue(
-                    _linxCommerceJobParameter.SetParameters(
-                        jobName: method.MethodName,
-                        tableName: method.MethodName
-                    )
-                );
+            var result = await _orderService.SearchOrdersByQueue(
+                _linxCommerceJobParameter.SetParameters(
+                    jobName: method.MethodName,
+                    tableName: method.MethodName
+                )
+            );
 
-                if (result != true)
-                    return BadRequest($"Unable to find records on endpoint.");
-                else
-                    return Ok($"Records integrated successfully.");
-            }
-            catch (Exception ex)
-            {
-                Response.StatusCode = 400;
-                return Content($"Unable to integrate the records.\n//error: {ex.Message}");
-            }
+            return Ok($"Records integrated successfully.");
         }
 
         [HttpPost("SearchOrderStatus")]
         public async Task<ActionResult> SearchOrderStatus()
         {
-            try
-            {
-                var method = _methods
-                    .Where(m => m.MethodName == "SearchOrderStatus")
-                    .FirstOrDefault();
+            var method = _methods
+                .Where(m => m.MethodName == "SearchOrderStatus")
+                .FirstOrDefault();
 
-                var result = await _orderService.SearchOrderStatus(
-                    _linxCommerceJobParameter.SetParameters(
-                        jobName: method.MethodName,
-                        tableName: "OrderStatus"
-                    )
-                );
+            var result = await _orderService.SearchOrderStatus(
+                _linxCommerceJobParameter.SetParameters(
+                    jobName: method.MethodName,
+                    tableName: "OrderStatus"
+                )
+            );
 
-                if (result == "true")
-                    return BadRequest($"Unable to find records on endpoint.");
-                else
-                    return Ok($"Records integrated successfully.");
-            }
-            catch (Exception ex)
-            {
-                Response.StatusCode = 400;
-                return Content($"Unable to integrate the records.\n//error: {ex.Message}");
-            }
+            return Ok($"Records integrated successfully.");
         }
 
         [HttpPost("SearchSalesRepresentative")]
         public async Task<ActionResult> SearchSalesRepresentative()
         {
-            try
-            {
-                var method = _methods
-                    .Where(m => m.MethodName == "SearchSalesRepresentative")
-                    .FirstOrDefault();
+            var method = _methods
+                .Where(m => m.MethodName == "SearchSalesRepresentative")
+                .FirstOrDefault();
 
-                var result = await _salesRepresentativeService.SearchSalesRepresentative(
-                    _linxCommerceJobParameter.SetParameters(
-                        jobName: method.MethodName,
-                        tableName: "SaleRepresentative"
-                    )
-                );
+            var result = await _salesRepresentativeService.SearchSalesRepresentative(
+                _linxCommerceJobParameter.SetParameters(
+                    jobName: method.MethodName,
+                    tableName: "SaleRepresentative"
+                )
+            );
 
-                if (result == true)
-                    return BadRequest($"Unable to find records on endpoint.");
-                else
-                    return Ok($"Records integrated successfully.");
-            }
-            catch (Exception ex)
-            {
-                Response.StatusCode = 400;
-                return Content($"Unable to integrate the records.\n//error: {ex.Message}");
-            }
+            return Ok($"Records integrated successfully.");
         }
 
         [HttpPost("SearchCustomerByDateInterval")]
         public async Task<ActionResult> SearchCustomerByDateInterval()
         {
-            try
-            {
-                var method = _methods
-                    .Where(m => m.MethodName == "SearchCustomer")
-                    .FirstOrDefault();
+            var method = _methods
+                .Where(m => m.MethodName == "SearchCustomer")
+                .FirstOrDefault();
 
-                var result = await _customerService.SearchCustomerByDateInterval(
-                    _linxCommerceJobParameter.SetParameters(
-                        jobName: method.MethodName,
-                        tableName: "Customer"
-                    )
-                );
+            var result = await _customerService.SearchCustomerByDateInterval(
+                _linxCommerceJobParameter.SetParameters(
+                    jobName: method.MethodName,
+                    tableName: "Customer"
+                )
+            );
 
-                if (result != true)
-                    return BadRequest($"Unable to find records on endpoint.");
-                else
-                    return Ok($"Records integrated successfully.");
-            }
-            catch (Exception ex)
-            {
-                Response.StatusCode = 400;
-                return Content($"Unable to integrate the records.\n//error: {ex.Message}");
-            }
+            return Ok($"Records integrated successfully.");
         }
 
         [HttpPost("SearchCustomerByQueue")]
         public async Task<ActionResult> SearchCustomerByQueue()
         {
-            try
-            {
-                var method = _methods
-                    .Where(m => m.MethodName == "SearchCustomer")
-                    .FirstOrDefault();
+            var method = _methods
+                .Where(m => m.MethodName == "SearchCustomer")
+                .FirstOrDefault();
 
-                var result = await _customerService.SearchCustomerByQueue(
-                    _linxCommerceJobParameter.SetParameters(
-                        jobName: method.MethodName,
-                        tableName: "Customer"
-                    )
-                );
+            var result = await _customerService.SearchCustomerByQueue(
+                _linxCommerceJobParameter.SetParameters(
+                    jobName: method.MethodName,
+                    tableName: "Customer"
+                )
+            );
 
-                if (result != true)
-                    return BadRequest($"Unable to find records on endpoint.");
-                else
-                    return Ok($"Records integrated successfully.");
-            }
-            catch (Exception ex)
-            {
-                Response.StatusCode = 400;
-                return Content($"Unable to integrate the records.\n//error: {ex.Message}");
-            }
+            return Ok($"Records integrated successfully.");
         }
 
         [HttpPost("UpdateTrackingNumberOrder")]
         public async Task<ActionResult> UpdateTrackingNumberOrder()
         {
-            try
-            {
-                var method = _methods
-                    .Where(m => m.MethodName == "UpdateTrackingNumberOrder")
-                    .FirstOrDefault();
+            var method = _methods
+                .Where(m => m.MethodName == "UpdateTrackingNumberOrder")
+                .FirstOrDefault();
 
-                var result = await _orderService.UpdateTrackingNumberOrder(
-                    _linxCommerceJobParameter.SetParameters(
-                        jobName: method.MethodName,
-                        tableName: "UpdateTrackingNumberOrder"
-                    )
-                );
+            var result = await _orderService.UpdateTrackingNumberOrder(
+                _linxCommerceJobParameter.SetParameters(
+                    jobName: method.MethodName,
+                    tableName: "UpdateTrackingNumberOrder"
+                )
+            );
 
-                if (result != true)
-                    return BadRequest($"Unable to find records on endpoint.");
-                else
-                    return Ok($"Records integrated successfully.");
-            }
-            catch (Exception ex)
-            {
-                Response.StatusCode = 400;
-                return Content($"Unable to integrate the records.\n//error: {ex.Message}");
-            }
+            return Ok($"Records integrated successfully.");
         }
     }
 }

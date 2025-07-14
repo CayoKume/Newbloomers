@@ -102,6 +102,7 @@
         LinxCommerceSalesRepresentative = 912,
         LinxCommerceCustomers = 916,
         LinxCommerceOrders = 900,
+        LinxCommerceOrdersStatus = 908,
         LinxCommerceUpdateTrackingNumberOrder = 917,
         LinxCommerceSku = 913,
         LinxCommerceProduct = 909,

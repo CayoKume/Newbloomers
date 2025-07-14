@@ -124,59 +124,37 @@ namespace HangfireDashboard.UI.Controllers.LinxCommerce
         [HttpPost("GetCustomer")]
         public async Task<ActionResult> GetCustomer([Required][FromQuery] string? customerId)
         {
-            try
-            {
-                var method = _methods
-                    .Where(m => m.MethodName == "SearchCustomer")
-                    .FirstOrDefault();
+            var method = _methods
+                .Where(m => m.MethodName == "SearchCustomer")
+                .FirstOrDefault();
 
-                var result = await _customerService.GetCustomer(
-                    _linxCommerceJobParameter.SetParameters(
-                        jobName: method.MethodName,
-                        tableName: "Customer"
-                    ),
-                    Identifier: customerId
-                );
+            var result = await _customerService.GetCustomer(
+                _linxCommerceJobParameter.SetParameters(
+                    jobName: method.MethodName,
+                    tableName: "Customer"
+                ),
+                Identifier: customerId
+            );
 
-                if (result != true)
-                    return BadRequest($"Unable to find record: {customerId} on endpoint.");
-                else
-                    return Ok($"Record: {customerId} integrated successfully.");
-            }
-            catch (Exception ex)
-            {
-                Response.StatusCode = 400;
-                return Content($"Unable to integrate the record: {customerId}.\n//error: {ex.Message}");
-            }
+            return Ok($"Record: {customerId} integrated successfully.");
         }
 
         [HttpPost("GetSKU")]
         public async Task<ActionResult> GetSKU([Required][FromQuery] int productId)
         {
-            try
-            {
-                var method = _methods
-                    .Where(m => m.MethodName == "SKU")
-                    .FirstOrDefault();
+            var method = _methods
+                .Where(m => m.MethodName == "SKU")
+                .FirstOrDefault();
 
-                var result = await _skuService.GetSKU(
-                    _linxCommerceJobParameter.SetParameters(
-                        jobName: method.MethodName,
-                        tableName: method.MethodName
-                    ),
-                    productID: productId
-                );
+            var result = await _skuService.GetSKU(
+                _linxCommerceJobParameter.SetParameters(
+                    jobName: method.MethodName,
+                    tableName: method.MethodName
+                ),
+                productID: productId
+            );
 
-                if (result != true)
-                    return BadRequest($"Unable to find record: {productId} on endpoint.");
-                else
-                    return Ok($"Record: {productId} integrated successfully.");
-            }
-            catch (Exception ex)
-            {
-                Response.StatusCode = 400;
-                return Content($"Unable to integrate the record: {productId}.\n//error: {ex.Message}");
-            }
+            return Ok($"Record: {productId} integrated successfully.");
         }
     }
 }

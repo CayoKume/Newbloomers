@@ -18,10 +18,7 @@ namespace Hangfire.IO.Controllers.General
         {
             var result = await _afterSaleService.GetMe();
 
-            if (result == true)
-                return Ok($"Records integrated successfully.");
-            else
-                return BadRequest($"Unable to find records on endpoint.");
+            return Ok($"Records integrated successfully.");
         }
 
         [HttpPost("Reverses")]
@@ -29,10 +26,7 @@ namespace Hangfire.IO.Controllers.General
         {
             var result = await _afterSaleService.GetReverses();
 
-            if (result == true)
-                return Ok($"Records integrated successfully.");
-            else
-                return BadRequest($"Unable to find records on endpoint.");
+            return Ok($"Records integrated successfully.");
         }
 
         [HttpPost("ReversesById")]
@@ -40,10 +34,7 @@ namespace Hangfire.IO.Controllers.General
         {
             var result = await _afterSaleService.GetReversesById(cnpj_emp: cnpj_emp, id: id);
 
-            if (result == true)
-                return Ok($"Records integrated successfully.");
-            else
-                return BadRequest($"Unable to find records on endpoint.");
+            return Ok($"Records integrated successfully.");
         }
 
         [HttpPost("ReversesStatus")]
@@ -51,10 +42,7 @@ namespace Hangfire.IO.Controllers.General
         {
             var result = await _afterSaleService.GetReversesStatus();
 
-            if (result == true)
-                return Ok($"Records integrated successfully.");
-            else
-                return BadRequest($"Unable to find records on endpoint.");
+            return Ok($"Records integrated successfully.");
         }
 
         [HttpPost("Transportations")]
@@ -62,10 +50,7 @@ namespace Hangfire.IO.Controllers.General
         {
             var result = await _afterSaleService.GetReversesTransportations();
 
-            if (result == true)
-                return Ok($"Records integrated successfully.");
-            else
-                return BadRequest($"Unable to find records on endpoint.");
+            return Ok($"Records integrated successfully.");
         }
     }
 }

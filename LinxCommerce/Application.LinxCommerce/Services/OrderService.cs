@@ -1,6 +1,5 @@
 ﻿using Application.IntegrationsCore.Interfaces;
 using Application.LinxCommerce.Interfaces;
-using Domain.IntegrationsCore.Entities.Exceptions;
 using Domain.IntegrationsCore.Enums;
 using Domain.LinxCommerce.Entities.Order;
 using Domain.LinxCommerce.Entities.Parameters;
@@ -8,7 +7,7 @@ using Domain.LinxCommerce.Entities.Responses;
 using Domain.LinxCommerce.Interfaces.Api;
 using Domain.LinxCommerce.Interfaces.Repositorys;
 using FluentValidation;
-using System.Data.Common;
+using static Domain.LinxCommerce.Entities.Responses.SearchOrder;
 
 namespace Application.LinxCommerce.Services
 {
@@ -16,24 +15,20 @@ namespace Application.LinxCommerce.Services
     {
         private readonly IAPICall _apiCall;
         private readonly ILoggerService _logger;
-        private readonly IOrderStatusRepository _orderStatusRepository;
         private readonly IOrderRepository _orderRepository;
+
         private readonly IValidator<Order.Root> _validator;
+        private readonly IValidator<SearchOrderStatus.Result> _statusValidator;
 
-        public OrderService(IAPICall apiCall, ILoggerService logger, IOrderRepository orderRepository, IOrderStatusRepository orderStatusRepository, IValidator<Order.Root> validator) =>
-            (_apiCall, _logger, _orderRepository, _orderStatusRepository, _validator) = (apiCall, logger, orderRepository, orderStatusRepository, validator);
+        private static List<Order.Root?> SearchOrdersByDateIntervalCache { get; set; } = new List<Order.Root?>();
+        private static string SearchOrderStatusJsonCache { get; set; } = String.Empty;
 
-        public async Task<bool?> GetOrder(LinxCommerceJobParameter jobParameter, string? orderId)
+        public OrderService(IAPICall apiCall, ILoggerService logger, IOrderRepository orderRepository, IValidator<Order.Root> validator, IValidator<SearchOrderStatus.Result> statusValidator) =>
+            (_apiCall, _logger, _orderRepository, _validator, _statusValidator) = (apiCall, logger, orderRepository, validator, statusValidator);
+
+        public Task<bool?> GetOrder(LinxCommerceJobParameter jobParameter, string? orderId)
         {
-            var response = await _apiCall.PostRequest(
-                jobParameter: jobParameter,
-                stringIdentifier: orderId,
-                route: "/v1/Sales/API.svc/web/GetOrder"
-            );
-
-            var order = Newtonsoft.Json.JsonConvert.DeserializeObject<Order>(response);
-
-            return true;
+            throw new NotImplementedException();
         }
 
         public Task<string?> GetOrderByNumber()
@@ -117,70 +112,102 @@ namespace Application.LinxCommerce.Services
                .Clear()
                .AddLog(EnumJob.LinxCommerceOrders);
 
-            var objectRequest = new
+            int pageIndex = 0, pageCount = 0;
+            var ordersResults = new List<Result>();
+
+            while (pageIndex <= pageCount)
             {
-                Page = new { PageIndex = 0, PageSize = 1000 },
-                Where = $"(ModifiedDate>=\"{DateTime.Now.AddDays(-2).Date:yyyy-MM-dd}T00:00:00\" && ModifiedDate<=\"{DateTime.Now.Date:yyyy-MM-dd}T23:59:59\")",
-                WhereMetadata = "",
-                OrderBy = "OrderNumber",
-            };
+                var objectRequest = new
+                {
+                    Page = new { PageIndex = pageIndex, PageSize = 500 },
+                    Where = $"(ModifiedDate>=\"{DateTime.Now.AddDays(-2).Date:yyyy-MM-dd}T00:00:00\" && ModifiedDate<=\"{DateTime.Now.Date:yyyy-MM-dd}T23:59:59\")",
+                    WhereMetadata = "",
+                    OrderBy = "OrderNumber",
+                };
 
-            var response = await _apiCall.PostRequest(
-                jobParameter,
-                objectRequest,
-                "/v1/Sales/API.svc/web/SearchOrders"
-            );
-
-            var ordersAPIList = new List<Order.Root>();
-            var ordersResults = Newtonsoft.Json.JsonConvert.DeserializeObject<SearchOrder.Root>(response);
-
-            foreach (var orderID in ordersResults.Result)
-            {
-                var getOrderResponse = await _apiCall.PostRequest(
-                    jobParameter: jobParameter,
-                    stringIdentifier: orderID.OrderID.ToString(),
-                    route: "/v1/Sales/API.svc/web/GetOrder"
+                var response = await _apiCall.PostRequest(
+                    jobParameter,
+                    objectRequest,
+                    "/v1/Sales/API.svc/web/SearchOrders"
                 );
 
-                var order = Newtonsoft.Json.JsonConvert.DeserializeObject<Order.Root>(getOrderResponse);
-                var validations = _validator.Validate(order);
+                var result = Newtonsoft.Json.JsonConvert.DeserializeObject<SearchOrder.Root>(response);
 
-                if (validations.Errors.Count() > 0)
+                if (pageCount == 0)
+                    pageCount = result.Page.PageCount;
+
+                pageIndex++;
+
+                ordersResults.AddRange(result.Result);
+            }
+
+            if (SearchOrdersByDateIntervalCache.Count == 0)
+            {
+                var list = await _orderRepository.GetRegistersExists(
+                    ordersResults
+                        .Select(x => x.OrderID)
+                        .ToList()
+                );
+
+                SearchOrdersByDateIntervalCache = list.ToList();
+            }
+
+            var _listSomenteNovos = ordersResults.Where(x => SearchOrdersByDateIntervalCache.Any(y =>
+               x.OrderID == y.OrderID && x.ModifiedDate > y.ModifiedDate
+            )).ToList();
+
+            if (_listSomenteNovos.Count() > 0)
+            {
+                var ordersAPIList = new List<Order.Root>();
+
+                foreach (var orderID in _listSomenteNovos)
                 {
-                    for (int j = 0; j < validations.Errors.Count(); j++)
+                    var getOrderResponse = await _apiCall.PostRequest(
+                        jobParameter: jobParameter,
+                        stringIdentifier: orderID.OrderID.ToString(),
+                        route: "/v1/Sales/API.svc/web/GetOrder"
+                    );
+
+                    var order = Newtonsoft.Json.JsonConvert.DeserializeObject<Order.Root>(getOrderResponse);
+                    var validations = _validator.Validate(order);
+
+                    if (validations.Errors.Count() > 0)
                     {
-                        _logger.AddMessage(
-                            message: $"Error when convert record - order: {order.OrderNumber} | order_id: {order.OrderID}\n" +
-                                     $"{validations.Errors[j]}"
-                        );
+                        for (int j = 0; j < validations.Errors.Count(); j++)
+                        {
+                            _logger.AddMessage(
+                                message: $"Error when convert record - order: {order.OrderNumber} | order_id: {order.OrderID}\n" +
+                                            $"{validations.Errors[j]}"
+                            );
+                        }
                     }
+
+                    ordersAPIList.Add(new Order.Root(order, getOrderResponse));
                 }
 
-                ordersAPIList.Add(new Order.Root(order, getOrderResponse));
+                if (ordersAPIList.Count() > 0)
+                {
+                    await _orderRepository.BulkInsertIntoTableRaw(jobParameter, ordersAPIList, _logger.GetExecutionGuid());
+
+                    ordersAPIList.ForEach(s =>
+                        _logger.AddRecord(
+                            s.OrderID.ToString(),
+                            s.Responses
+                                .Where(pair => pair.Key == s.OrderID)
+                                .Select(pair => pair.Value)
+                                .FirstOrDefault()
+                        )
+                    );
+
+                    ordersAPIList.ForEach(s =>
+                        SearchOrdersByDateIntervalCache.AddRange(ordersAPIList)
+                    );
+                }
             }
 
-            if (ordersAPIList.Count() > 0)
-            {
-                _orderRepository.BulkInsertIntoTableRaw(jobParameter, ordersAPIList, _logger.GetExecutionGuid());
-
-                ordersAPIList.ForEach(s =>
-                    _logger.AddRecord(
-                        s.OrderID.ToString(),
-                        s.Responses
-                            .Where(pair => pair.Key == s.OrderID)
-                            .Select(pair => pair.Value)
-                            .FirstOrDefault()
-                    )
-                );
-
-                _logger.AddMessage(
-                            $"Concluída com sucesso: {ordersAPIList.Count()} registro(s) novo(s) inserido(s)!"
-                        );
-            }
-            else
-                _logger.AddMessage(
-                    $"Concluída com sucesso: {ordersResults.Result.Count()} registro(s) novo(s) inserido(s)!"
-                );
+            _logger.AddMessage(
+                $"Concluída com sucesso: {_listSomenteNovos.Count()} registro(s) novo(s) inserido(s)!"
+            );
 
             _logger.SetLogEndDate();
             await _logger.CommitAllChanges();
@@ -245,7 +272,7 @@ namespace Application.LinxCommerce.Services
 
             if (ordersAPIList.Count() > 0)
             {
-                _orderRepository.BulkInsertIntoTableRaw(jobParameter, ordersAPIList, _logger.GetExecutionGuid());
+                await _orderRepository.BulkInsertIntoTableRaw(jobParameter, ordersAPIList, _logger.GetExecutionGuid());
 
                 ordersAPIList.ForEach(s =>
                     _logger.AddRecord(
@@ -298,8 +325,14 @@ namespace Application.LinxCommerce.Services
             throw new NotImplementedException();
         }
 
-        public async Task<string?> SearchOrderStatus(LinxCommerceJobParameter jobParameter)
+        public async Task<bool?> SearchOrderStatus(LinxCommerceJobParameter jobParameter)
         {
+            _logger
+                   .Clear()
+                   .AddLog(EnumJob.LinxCommerceOrdersStatus);
+
+            var _listSomenteNovos = new List<SearchOrderStatus.Result>();
+
             var objectRequest = new
             {
                 Page = new { PageIndex = 0, PageSize = 0 },
@@ -314,11 +347,64 @@ namespace Application.LinxCommerce.Services
                 "/v1/Sales/API.svc/web/SearchOrderStatus"
             );
 
-            var orderStatus = Newtonsoft.Json.JsonConvert.DeserializeObject<SearchOrderStatus.Root>(response);
+            var hash = _logger.ComputeSha256Hash(response);
 
-            _orderStatusRepository.BulkInsertIntoTableRaw(jobParameter: jobParameter, registros: orderStatus);
+            if (!SearchOrderStatusJsonCache.Equals(hash))
+            {
+                var orderStatusResult = Newtonsoft.Json.JsonConvert.DeserializeObject<SearchOrderStatus.Root>(response);
 
-            return "true";
+                foreach (var status in orderStatusResult.Result)
+                {
+                    var validations = _statusValidator.Validate(status);
+
+                    if (validations.Errors.Count() > 0)
+                    {
+                        for (int j = 0; j < validations.Errors.Count(); j++)
+                        {
+                            _logger.AddMessage(
+                                message: $"Error when convert record - OrderStatusID: {status.OrderStatusID} | Status: {status.Status}\n" +
+                                         $"{validations.Errors[j]}"
+                            );
+                        }
+                    }
+
+                    var getOrderStatusResponse = await _apiCall.PostRequest(
+                        jobParameter: jobParameter,
+                        intIdentifier: status.OrderStatusID,
+                        route: "/v1/Sales/API.svc/web/GetOrderStatus"
+                    );
+
+                    var orderStatus = Newtonsoft.Json.JsonConvert.DeserializeObject<SearchOrderStatus.Result>(getOrderStatusResponse);
+
+                    _listSomenteNovos.Add(new SearchOrderStatus.Result(status, getOrderStatusResponse));
+                }
+            }
+
+            if (_listSomenteNovos.Count() > 0)
+            {
+                await _orderRepository.BulkInsertIntoOrdersStatusTable(jobParameter: jobParameter, registros: _listSomenteNovos, parentExecutionGUID: _logger.GetExecutionGuid());
+
+                _listSomenteNovos.ForEach(p =>
+                    _logger.AddRecord(
+                        p.OrderStatusID.ToString(),
+                        p.Responses
+                            .Where(pair => pair.Key == p.OrderStatusID)
+                            .Select(pair => pair.Value)
+                            .FirstOrDefault()
+                    )
+                );
+
+                SearchOrderStatusJsonCache = hash;
+            }
+
+            _logger.AddMessage(
+                $"Concluída com sucesso: {_listSomenteNovos.Count()} registro(s) novo(s) inserido(s)!"
+            );
+
+            _logger.SetLogEndDate();
+            await _logger.CommitAllChanges();
+
+            return true;
         }
 
         public Task<bool?> UpdateOrder()
@@ -368,7 +454,8 @@ namespace Application.LinxCommerce.Services
 
                         if (result)
                         {
-                            await _orderRepository.InsertIntoUpdateTrackingNumberOrderTable(jobParameter, item);
+                            await _orderRepository.InsertIntoUpdateTrackingNumberOrderTable(jobParameter, item, _logger.GetExecutionGuid());
+
                             _logger.AddRecord(
                                 item.OrderID.ToString(),
                                 Newtonsoft.Json.JsonConvert.SerializeObject(objectRequest)
@@ -378,15 +465,11 @@ namespace Application.LinxCommerce.Services
 
                     Thread.Sleep(5 * 1000);
                 }
-
-                _logger.AddMessage(
-                    $"Concluída com sucesso: {successfulTrackingNumber.Count()} registro(s) atualizados(s)!"
-                );
             }
-            else
-                _logger.AddMessage(
-                    $"Concluída com sucesso: {successfulTrackingNumber.Count()} registro(s) atualizados(s)!"
-                );
+
+            _logger.AddMessage(
+                $"Concluída com sucesso: {successfulTrackingNumber.Count()} registro(s) atualizados(s)!"
+            );
 
             _logger.SetLogEndDate();
             await _logger.CommitAllChanges();

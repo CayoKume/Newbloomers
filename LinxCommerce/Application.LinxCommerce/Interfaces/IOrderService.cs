@@ -26,7 +26,7 @@ namespace Application.LinxCommerce.Interfaces
         public Task<bool?> SearchOrdersByQueue(LinxCommerceJobParameter jobParameter);
         public Task<string?> SearchOrdersBySeller();
         public Task<string?> SearchOrdersCandidates();
-        public Task<string?> SearchOrderStatus(LinxCommerceJobParameter jobParameter);
+        public Task<bool?> SearchOrderStatus(LinxCommerceJobParameter jobParameter);
         public Task<string?> SearchFinancialOrderInfo();
 
         public Task<string?> UpdateOrderInvoice();
