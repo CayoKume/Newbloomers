@@ -25,91 +25,50 @@ namespace Application.AfterSale.Services
         /// </summary>
         public async Task<bool?> GetMe()
         {
-            //try
-            //{
-                _logger
-                   .Clear()
-                   .AddLog(EnumJob.AfterSaleEcommerces);
+            _logger
+               .Clear()
+               .AddLog(EnumJob.AfterSaleEcommerces);
 
-                var _listSomenteNovos = new List<Ecommerce>();
-                var companys = await _afterSaleRepository.GetCompanys();
+            var _listSomenteNovos = new List<Ecommerce>();
+            var companys = await _afterSaleRepository.GetCompanys();
 
-                foreach (var company in companys)
+            foreach (var company in companys)
+            {
+                var response = await _apiCall.GetAsync(
+                    token: company.Token.ToString(),
+                    rote: "v3/api/me"
+                );
+
+                var hash = _logger.ComputeSha256Hash(response);
+
+                if (!GetMeJsonCache.Any(x => x == $"{company.doc_company} - {hash}"))
                 {
-                    var response = await _apiCall.GetAsync(
-                        token: company.Token.ToString(),
-                        rote: "v3/api/me"
+                    var me = Newtonsoft.Json.JsonConvert.DeserializeObject<Me>(response);
+
+                    _listSomenteNovos.Add(me.data);
+
+                    _logger.AddRecord(
+                        key: company.doc_company,
+                        xml: response
                     );
 
-                    var hash = _logger.ComputeSha256Hash(response);
-
-                    if (!GetMeJsonCache.Any(x => x == $"{company.doc_company} - {hash}"))
-                    {
-                        var me = Newtonsoft.Json.JsonConvert.DeserializeObject<Me>(response);
-
-                        _listSomenteNovos.Add(me.data);
-
-                        _logger.AddRecord(
-                            key: company.doc_company,
-                            xml: response
-                        );
-
-                        GetMeJsonCache.Add($"{company.doc_company} - {hash}");
-                    }
+                    GetMeJsonCache.Add($"{company.doc_company} - {hash}");
                 }
+            }
 
-                if (_listSomenteNovos.Count() > 0)
-                {
-                    _afterSaleRepository.InsertIntoAfterSaleEcommerce(_listSomenteNovos);
+            if (_listSomenteNovos.Count() > 0)
+            {
+                _afterSaleRepository.InsertIntoAfterSaleEcommerce(_listSomenteNovos);
 
-                    //await _afterSaleRepository 
+                //await _afterSaleRepository 
+            }
 
-                    _logger.AddMessage(
-                            $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"
-                        );
-                }
-                else
-                    _logger.AddMessage(
-                            $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"
-                        );
-            //}
-            //catch (SQLCommandException ex)
-            //{
-            //    _logger.AddMessage(
-            //        //stage: ex.Stage,
-            //        //error: ex.Error,
-            //        //log//level: ex.MessageLevel,
-            //        //message: ex.Message,
-            //        //exceptionMessage: ex.ExceptionMessage
-            //        //commandSQL: ex.CommandSQL
-            //    );
+            _logger.AddMessage(
+                    $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"
+                );
 
-            //    throw;
-            //}
-            //catch (GeneralException ex)
-            //{
-            //    _logger.AddMessage(
-            //        //stage: ex.stage,
-            //        //error: ex.Error,
-            //        //log//level: ex.MessageLevel,
-            //        //message: ex.Message,
-            //        //exceptionMessage: ex.ExceptionMessage
-            //    );
-
-            //    throw;
-            //}
-            //catch (ExceptionBase ex)
-            //{
-            //    _logger.AddMessage(
-            //        message: "Error when executing GetRecords method",
-            //        //exceptionMessage: ex.Message
-            //    );
-            //}
-            //finally
-            //{
-                _logger.SetLogEndDate();
-                await _logger.CommitAllChanges();
-            //}
+            _logger.SetLogEndDate();
+            await _logger.CommitAllChanges();
 
             return true;
         }
@@ -204,79 +163,58 @@ namespace Application.AfterSale.Services
         /// </summary>
         public async Task<bool?> GetReverses()
         {
-            //try
-            //{
-                var companys = await _afterSaleRepository.GetCompanys();
+            var companys = await _afterSaleRepository.GetCompanys();
 
-                foreach (var company in companys)
-                {
-                    var simplifiedReverses = new List<Reverse>();
-                    var completeReverses = new List<Data>();
+            foreach (var company in companys)
+            {
+                var simplifiedReverses = new List<Reverse>();
+                var completeReverses = new List<Data>();
 
-                    var parameters = new Dictionary<string, string>
+                var parameters = new Dictionary<string, string>
                     {
                         { "start_date", $"{DateTime.Now.AddMonths(-2).ToString("yyyy-MM-dd")}" },
                         { "end_date", $"{DateTime.Now.ToString("yyyy-MM-dd")}" }
                     };
-                    var encodedParameters = await new FormUrlEncodedContent(parameters).ReadAsStringAsync();
+                var encodedParameters = await new FormUrlEncodedContent(parameters).ReadAsStringAsync();
 
-                    var response = await _apiCall.GetAsync(
-                        token: company.Token.ToString(),
-                        rote: "v3/api/reverses",
-                        encodedParameters: encodedParameters
-                    );
+                var response = await _apiCall.GetAsync(
+                    token: company.Token.ToString(),
+                    rote: "v3/api/reverses",
+                    encodedParameters: encodedParameters
+                );
 
-                    var page = Newtonsoft.Json.JsonConvert.DeserializeObject<ResponseReverses>(response);
-                    simplifiedReverses.AddRange(page.data);
-                    string? rote = page.next_page_url;
+                var page = Newtonsoft.Json.JsonConvert.DeserializeObject<ResponseReverses>(response);
+                simplifiedReverses.AddRange(page.data);
+                string? rote = page.next_page_url;
 
-                    if (page.last_page > 1)
+                if (page.last_page > 1)
+                {
+                    while (!String.IsNullOrEmpty(rote))
                     {
-                        while (!String.IsNullOrEmpty(rote))
+                        var responseByPage = await _apiCall.GetAsync(
+                            token: company.Token.ToString(),
+                            rote: rote.Replace("https://api.send4.com.br/", "")
+                        );
+
+                        var nextPage = Newtonsoft.Json.JsonConvert.DeserializeObject<ResponseReverses>(responseByPage);
+                        simplifiedReverses.AddRange(nextPage.data);
+                        rote = nextPage.next_page_url;
+                    }
+
+                    int indice = simplifiedReverses.Count() / 30;
+
+                    if (indice > 1)
+                    {
+                        for (int i = 0; i <= indice; i++)
                         {
-                            var responseByPage = await _apiCall.GetAsync(
-                                token: company.Token.ToString(),
-                                rote: rote.Replace("https://api.send4.com.br/", "")
-                            );
+                            string identificadores = String.Empty;
+                            var top30List = simplifiedReverses.Skip(i * 30).Take(30).ToList();
 
-                            var nextPage = Newtonsoft.Json.JsonConvert.DeserializeObject<ResponseReverses>(responseByPage);
-                            simplifiedReverses.AddRange(nextPage.data);
-                            rote = nextPage.next_page_url; 
-                        }
-
-                        int indice = simplifiedReverses.Count() / 30;
-
-                        if (indice > 1)
-                        {
-                            for (int i = 0; i <= indice; i++)
-                            {
-                                string identificadores = String.Empty;
-                                var top30List = simplifiedReverses.Skip(i * 30).Take(30).ToList();
-
-                                for (int j = 0; j < top30List.Count(); j++)
-                                {
-                                    var _response = await _apiCall.GetAsync(
-                                        token: company.Token.ToString(),
-                                        rote: $"v3/api/reverses/{top30List[j].id}"
-                                    );
-
-                                    var completeReverse = Newtonsoft.Json.JsonConvert.DeserializeObject<Root>(_response);
-                                    completeReverse.data.reverse.customer_id = completeReverse.data.customer.id;
-
-                                    completeReverses.Add(completeReverse.data);
-                                }
-
-                                //API da AfterSale lança Too Many Requests após 30 consultas
-                                Thread.Sleep(60 * 1000);
-                            }
-                        }
-                        else
-                        {
-                            foreach (var reverse in simplifiedReverses)
+                            for (int j = 0; j < top30List.Count(); j++)
                             {
                                 var _response = await _apiCall.GetAsync(
                                     token: company.Token.ToString(),
-                                    rote: $"v3/api/reverses/{reverse.id}"
+                                    rote: $"v3/api/reverses/{top30List[j].id}"
                                 );
 
                                 var completeReverse = Newtonsoft.Json.JsonConvert.DeserializeObject<Root>(_response);
@@ -284,18 +222,32 @@ namespace Application.AfterSale.Services
 
                                 completeReverses.Add(completeReverse.data);
                             }
+
+                            //API da AfterSale lança Too Many Requests após 30 consultas
+                            Thread.Sleep(60 * 1000);
                         }
                     }
+                    else
+                    {
+                        foreach (var reverse in simplifiedReverses)
+                        {
+                            var _response = await _apiCall.GetAsync(
+                                token: company.Token.ToString(),
+                                rote: $"v3/api/reverses/{reverse.id}"
+                            );
 
-                    _afterSaleRepository.InsertIntoAfterSaleReverses(completeReverses);
+                            var completeReverse = Newtonsoft.Json.JsonConvert.DeserializeObject<Root>(_response);
+                            completeReverse.data.reverse.customer_id = completeReverse.data.customer.id;
+
+                            completeReverses.Add(completeReverse.data);
+                        }
+                    }
                 }
 
-                return true;
-            //}
-            //catch
-            //{
-                //throw;
-            //}
+                _afterSaleRepository.InsertIntoAfterSaleReverses(completeReverses);
+            }
+
+            return true;
         }
 
         /// <summary>
@@ -304,25 +256,18 @@ namespace Application.AfterSale.Services
         /// <param name="id"></param>
         public async Task<bool?> GetReversesById(Int64 id, string cnpj_emp)
         {
-            //try
-            //{
-                var company = await _afterSaleRepository.GetCompany(cnpj_emp);
+            var company = await _afterSaleRepository.GetCompany(cnpj_emp);
 
-                var response = await _apiCall.GetAsync(
-                    token: company.Token.ToString(),
-                    rote: $"v3/api/reverses/{id}"
-                );
+            var response = await _apiCall.GetAsync(
+                token: company.Token.ToString(),
+                rote: $"v3/api/reverses/{id}"
+            );
 
-                var page = Newtonsoft.Json.JsonConvert.DeserializeObject<Root>(response);
+            var page = Newtonsoft.Json.JsonConvert.DeserializeObject<Root>(response);
 
-                //await _afterSaleRepository.InsertIntoAfterSaleReversesStatus(); 
+            //await _afterSaleRepository.InsertIntoAfterSaleReversesStatus(); 
 
-                return true;
-            //}
-            //catch
-            //{
-                //throw;
-            //}
+            return true;
         }
 
         /// <summary>
@@ -338,25 +283,18 @@ namespace Application.AfterSale.Services
         /// </summary>
         public async Task<bool?> GetReversesStatus()
         {
-            //try
-            //{
-                var companys = await _afterSaleRepository.GetCompanys();
+            var companys = await _afterSaleRepository.GetCompanys();
 
-                var response = await _apiCall.GetAsync(
-                    token: companys.FirstOrDefault().Token.ToString(),
-                    rote: "v3/api/reverses/status"
-                );
+            var response = await _apiCall.GetAsync(
+                token: companys.FirstOrDefault().Token.ToString(),
+                rote: "v3/api/reverses/status"
+            );
 
-                var status = Newtonsoft.Json.JsonConvert.DeserializeObject<ResponseStatus>(response);
+            var status = Newtonsoft.Json.JsonConvert.DeserializeObject<ResponseStatus>(response);
 
-                _afterSaleRepository.InsertIntoAfterSaleStatus(status.data);
+            _afterSaleRepository.InsertIntoAfterSaleStatus(status.data);
 
-                return true;
-            //}
-            //catch
-            //{
-                //throw;
-            //}
+            return true;
         }
 
         /// <summary>
@@ -364,31 +302,24 @@ namespace Application.AfterSale.Services
         /// </summary>
         public async Task<bool?> GetReversesTransportations()
         {
-            //try
-            //{
-                var list = new List<Transportations>();
-                var companys = await _afterSaleRepository.GetCompanys();
+            var list = new List<Transportations>();
+            var companys = await _afterSaleRepository.GetCompanys();
 
-                var response = await _apiCall.GetAsync(
-                    token: companys.FirstOrDefault().Token.ToString(),
-                    rote: "v3/api/transportations"
-                );
+            var response = await _apiCall.GetAsync(
+                token: companys.FirstOrDefault().Token.ToString(),
+                rote: "v3/api/transportations"
+            );
 
-                var transportations = Newtonsoft.Json.JsonConvert.DeserializeObject<Transportations>(response);
+            var transportations = Newtonsoft.Json.JsonConvert.DeserializeObject<Transportations>(response);
 
-                foreach(var transportation in transportations.data)
-                {
-                    list.Add(new Transportations { description = transportation});
-                }
+            foreach (var transportation in transportations.data)
+            {
+                list.Add(new Transportations { description = transportation });
+            }
 
-                _afterSaleRepository.InsertIntoAfterSaleTransportations(list);
+            _afterSaleRepository.InsertIntoAfterSaleTransportations(list);
 
-                return true;
-            //}
-            //catch
-            //{
-                //throw;
-            //}
+            return true;
         }
 
         /// <summary>

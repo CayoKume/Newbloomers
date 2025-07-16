@@ -12,6 +12,20 @@ namespace Infrastructure.TotalExpress.Api
         public APICall(IHttpClientFactory httpClientFactory) =>
             (_httpClientFactory) = (httpClientFactory);
 
+        public async Task<HttpResponseMessage?> PostAsync(string? rote, Dictionary<string?, string?> parameters, string? clientName, JObject jObject)
+        {
+            var client = CreateClient(clientName, parameters);
+
+            if (rote == "previsao_entrega_atualizada.php")
+                Thread.Sleep(1000);
+
+            return await client.PostAsync(
+                client.BaseAddress + rote,
+                new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(jObject),
+                Encoding.UTF8, "application/json")
+            );
+        }
+
         public async Task<string?> PostAsync(JObject jObject, string? rote, Dictionary<string?, string?> parameters, string? clientName)
         {
             var client = CreateClient(clientName, parameters);

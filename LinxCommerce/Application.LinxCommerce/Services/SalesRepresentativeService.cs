@@ -55,6 +55,10 @@ namespace Application.LinxCommerce.Services
                .Clear()
                .AddLog(EnumJob.LinxCommerceSalesRepresentative);
 
+            int pageIndex = 0, pageCount = 0;
+            var salesRepresentativeResults = new List<SearchSalesRepresentative.Result>();
+
+            //while aqui
             var objectRequest = new
             {
                 Page = new { PageIndex = 0, PageSize = 0 },
@@ -70,6 +74,8 @@ namespace Application.LinxCommerce.Services
             );
 
             var salesRepresentativeAPIList = new List<SalesRepresentative>();
+            
+            //cache aqui
             var salesRepresentativeIDs = Newtonsoft.Json.JsonConvert.DeserializeObject<SearchSalesRepresentative.Root>(response);
 
             foreach (var salesRepresentativeID in salesRepresentativeIDs.Result)
@@ -115,15 +121,11 @@ namespace Application.LinxCommerce.Services
                             .FirstOrDefault()
                     )
                 );
-
-                _logger.AddMessage(
-                        $"Concluída com sucesso: {salesRepresentativeAPIList.Count()} registro(s) novo(s) inserido(s)!"
-                    );
             }
-            else
-                _logger.AddMessage(
-                    $"Concluída com sucesso: {salesRepresentativeAPIList.Count()} registro(s) novo(s) inserido(s)!"
-                );
+
+            _logger.AddMessage(
+                $"Concluída com sucesso: {salesRepresentativeAPIList.Count()} registro(s) novo(s) inserido(s)!"
+            );
 
             _logger.SetLogEndDate();
             await _logger.CommitAllChanges();

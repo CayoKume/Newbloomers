@@ -1,27 +1,36 @@
 ﻿using Dapper;
+using Domain.IntegrationsCore.Interfaces;
 using Domain.TotalExpress.Entities;
 using Domain.TotalExpress.Interfaces.Repository;
 using Infrastructure.IntegrationsCore.Connections.MySQL;
 using Infrastructure.IntegrationsCore.Connections.PostgreSQL;
 using Infrastructure.IntegrationsCore.Connections.SQLServer;
 using System.Data;
+using System.Data.Common;
 
 namespace Infrastructure.TotalExpress.Repository
 {
     public class TotalExpressRepository : ITotalExpressRepository
     {
         private readonly ISQLServerConnection _sqlServerConnection;
-        private readonly IMySQLConnection _mysqlConnection;
-        private readonly IPostgreSQLConnection _postgreSQLConnection;
+        //private readonly IMySQLConnection _mysqlConnection;
+        //private readonly IPostgreSQLConnection _postgreSQLConnection;
+        private readonly IIntegrationsCoreRepository _integrationsCoreRepository;
 
-        public TotalExpressRepository(ISQLServerConnection sqlServerConnection) =>
-            (_sqlServerConnection) = (sqlServerConnection);
+        public TotalExpressRepository(IIntegrationsCoreRepository integrationsCoreRepository, ISQLServerConnection sqlServerConnection)
+        {
+            _integrationsCoreRepository = integrationsCoreRepository;
+            _sqlServerConnection = sqlServerConnection;
+        }
 
-        public TotalExpressRepository(IMySQLConnection mysqlConnection) =>
-            (_mysqlConnection) = (mysqlConnection);
+        //public TotalExpressRepository(ISQLServerConnection sqlServerConnection) =>
+        //    (_sqlServerConnection) = (sqlServerConnection);
 
-        public TotalExpressRepository(IPostgreSQLConnection postgreSQLConnection) =>
-            (_postgreSQLConnection) = (postgreSQLConnection);
+        //public TotalExpressRepository(IMySQLConnection mysqlConnection) =>
+        //    (_mysqlConnection) = (mysqlConnection);
+
+        //public TotalExpressRepository(IPostgreSQLConnection postgreSQLConnection) =>
+        //    (_postgreSQLConnection) = (postgreSQLConnection);
 
         public async Task<bool> GenerateRequestLog(string? orderNumber, string? request)
         {
@@ -444,6 +453,48 @@ namespace Infrastructure.TotalExpress.Repository
             }
         }
 
+        public async Task<IEnumerable<Awb>> GetSenderAwbs()
+        {
+            string? sql = $@"SELECT TOP 1000
+                             A.PEDIDO,
+                             A.REMETENTEID,
+                             B.AWB
+                             FROM [GENERAL].[TOTALEXPRESSPEDIDOS] A (NOLOCK)
+                             LEFT JOIN [GENERAL].[TOTALEXPRESSVOLUMES] B (NOLOCK) ON A.PEDIDO = B.PEDIDO
+                             LEFT JOIN [GENERAL].[TOTALEXPRESSTRACKINGS] C (NOLOCK) ON A.PEDIDO = C.PEDIDO
+                             LEFT JOIN [GENERAL].[TOTALEXPRESSERROS] D (NOLOCK) ON A.PEDIDO = D.PEDIDO
+							 LEFT JOIN [GENERAL].[TOTALEXPRESSEVENTOS] E (NOLOCK) ON C.AWB = E.AWB AND E.STATUSID = 1
+                             WHERE
+							 D.PEDIDO IS NULL
+							 AND (
+								(C.PEDIDO IS NULL) OR 
+								(C.PEDIDO IS NOT NULL AND E.AWB IS NULL)
+							 )";
+
+            try
+            {
+                using (var conn = _sqlServerConnection.GetIDbConnection(""))
+                {
+                    var result = await conn.QueryAsync<Awb, string, Awb>(sql, (awb, codigo) =>
+                    {
+                        awb.awb.Add(codigo);
+                        return awb;
+                    }, splitOn: "AWB", commandTimeout: 360);
+
+                    return result.GroupBy(p => p.pedido).Select(g =>
+                    {
+                        var groupedOrder = g.FirstOrDefault();
+                        groupedOrder.awb = g.Select(p => p.awb.Single()).ToList();
+                        return groupedOrder;
+                    }).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
         public async Task<bool> UpdateDeliveryDates(string? deliveryMadeDate, string? collectionDate, string? deliveryForecastDate, string? lastStatusDate, string? lastStatusDescription, string? orderNumber)
         {
             string? sql = @$"UPDATE [GENERAL].[dbo].[IT4_WMS_DOCUMENTO] SET 
@@ -489,6 +540,39 @@ namespace Infrastructure.TotalExpress.Repository
                 //    exception = ex.Message
                 //};
             }
+        }
+
+        public bool InsertStatus(List<Status> listStatus, List<Error> listErrors)
+        {
+            var statusTable = _integrationsCoreRepository.CreateSystemDataTable("TotalExpressTrackings", new Status());
+            var eventsTable = _integrationsCoreRepository.CreateSystemDataTable("TotalExpressEventos", new statusDeEncomenda());
+            var errorTable = _integrationsCoreRepository.CreateSystemDataTable("TotalExpressErros", new Error());
+
+            if (listStatus.Count() > 0)
+            {
+                _integrationsCoreRepository.FillSystemDataTable(data: listStatus, dataTable: statusTable);
+                _integrationsCoreRepository.FillSystemDataTable(data: listStatus.SelectMany(x => x.statusDeEncomenda).ToList(), dataTable: eventsTable);
+            }
+            
+            if(listErrors.Count() > 0)
+                _integrationsCoreRepository.FillSystemDataTable(data: listErrors, dataTable: errorTable);
+
+            _integrationsCoreRepository.BulkInsertIntoTableRaw(
+                schema: "general",
+                dataTable: errorTable
+            );
+
+            _integrationsCoreRepository.BulkInsertIntoTableRaw(
+                schema: "general",
+                dataTable: statusTable
+            );
+
+            _integrationsCoreRepository.BulkInsertIntoTableRaw(
+                schema: "general",
+                dataTable: eventsTable
+            );
+
+            return true;
         }
     }
 }

@@ -250,7 +250,6 @@ namespace Infrastructure.IntegrationsCore.Repositorys
             catch (SqlException ex)
             {
                 throw new SQLCommandException(
-                    //message: $"Error when trying to insert record: {JsonSerializer.Serialize(entity)} on database - {ex.Message}",
                     message: $"Error when trying to insert record on database - {ex.Message}",
                     exceptionMessage: ex.StackTrace,
                     commandSQL: sql
@@ -259,7 +258,6 @@ namespace Infrastructure.IntegrationsCore.Repositorys
             catch (Exception ex)
             {
                 throw new GeneralException(
-                    //message: $"Error when trying to insert record: {JsonSerializer.Serialize(entity)} on database - {ex.Message}",
                     message: $"Error when trying to insert record on database - {ex.Message}",
                     exceptionMessage: ex.StackTrace
                 );

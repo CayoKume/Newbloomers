@@ -39,7 +39,7 @@ namespace Hangfire.IO.Controllers.Carries
         [HttpPost("UpdateLogOrders")]
         public async Task<ActionResult<string?>> TotalExpressUpdateLogOrders()
         {
-            await _totalExpressService.UpdateLogOrders();
+            await _totalExpressService.InsertLogOrdersByAWBs();
 
             return Ok();
         }

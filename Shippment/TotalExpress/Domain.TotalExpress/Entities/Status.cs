@@ -1,4 +1,7 @@
-﻿namespace Domain.TotalExpress.Entities
+﻿using Domain.IntegrationsCore.Extensions;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Domain.TotalExpress.Entities
 {
     public class Status
     {
@@ -9,10 +12,53 @@
         public string? nfiscalserie { get; set; }
         public string? cod_barra { get; set; }
         public string? rota { get; set; }
+        public DateTime? prev_entrega { get; set; }
+        public DateTime? prev_entrega_atualizada { get; set; }
 
+        [NotMapped]
+        [SkipProperty]
+        /// <summary>
+        /// 
+        ///</summary>
+        public List<statusDeEncomenda> statusDeEncomenda { get; set; } = new List<statusDeEncomenda>();
+
+        [NotMapped]
+        [SkipProperty]
+        /// <summary>
+        /// 
+        ///</summary>
         public detalhes detalhes { get; set; }
 
+        [NotMapped]
+        [SkipProperty]
+        /// <summary>
+        /// 
+        ///</summary>
         public string? json { get; set; }
+
+        public Status() { }
+
+        public Status(Status status)
+        {
+            pedido = status.pedido;
+            id_cliente = status.id_cliente;
+            awb = status.awb;
+            nfiscal = status.nfiscal;
+            nfiscalserie = status.nfiscalserie;
+            cod_barra = status.cod_barra;
+            rota = status.rota;
+            
+            if (status.detalhes is not null)
+            {
+                prev_entrega = status.detalhes.dataPrev != null ? status.detalhes.dataPrev.PrevEntrega : null;
+                prev_entrega_atualizada = status.detalhes.dataPrev != null ? status.detalhes.dataPrev.PrevEntregaAtualizada : null;
+
+                foreach (var statusEncomenda in status.detalhes.statusDeEncomenda)
+                {
+                    statusDeEncomenda.Add(new statusDeEncomenda(statusEncomenda, status.awb));
+                } 
+            }
+        }
     }
 
     public class detalhes
@@ -23,14 +69,25 @@
 
     public class dataPrev
     {
-        public string? PrevEntrega { get; set; }
-        public string? PrevEntregaAtualizada { get; set; }
+        public DateTime? PrevEntrega { get; set; }
+        public DateTime? PrevEntregaAtualizada { get; set; }
     }
 
     public class statusDeEncomenda
     {
+        public string? awb { get; set; }
         public string? statusid { get; set; }
         public string? status { get; set; }
         public string? data { get; set; }
+
+        public statusDeEncomenda() { }
+
+        public statusDeEncomenda(statusDeEncomenda statusEncomenda, string awb)
+        {
+            this.awb = awb;
+            statusid = statusEncomenda.statusid;
+            status = statusEncomenda.status;
+            data = statusEncomenda.data;
+        }
     }
 }
