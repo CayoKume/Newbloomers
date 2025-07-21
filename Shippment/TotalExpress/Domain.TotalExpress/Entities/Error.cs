@@ -14,12 +14,20 @@ namespace Domain.TotalExpress.Entities
         public string pedido { get; set; }
         public string erro { get; set; }
 
+        [NotMapped]
+        [SkipProperty]
+        /// <summary>
+        /// 
+        ///</summary>
+        public Dictionary<string?, string> Responses { get; set; } = new Dictionary<string?, string>();
+
         public Error() { }
 
         public Error(string pedido, string erro)
         {
             this.pedido = pedido;
             this.erro = erro;
+            this.Responses.Add(pedido, erro);
         }
     }
 }

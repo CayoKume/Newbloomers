@@ -3,7 +3,6 @@ using Application.IntegrationsCore.Interfaces;
 using Domain.AfterSale.Entities;
 using Domain.AfterSale.Interfaces.Api;
 using Domain.AfterSale.Interfaces.Repositorys;
-using Domain.IntegrationsCore.Entities.Exceptions;
 using Domain.IntegrationsCore.Enums;
 
 namespace Application.AfterSale.Services
@@ -14,7 +13,10 @@ namespace Application.AfterSale.Services
         private readonly ILoggerService _logger;
         private readonly IAfterSaleRepository _afterSaleRepository;
 
+        private static List<Reverse?> GetReversesCache { get; set; } = new();
         private static List<string> GetMeJsonCache { get; set; } = new();
+        private static string GetReversesTransportationsJsonCache = String.Empty;
+        private static string GetReversesStatusJsonCache = String.Empty;
 
         public AfterSaleService(IAPICall apiCall, ILoggerService logger, IAfterSaleRepository afterSaleRepository) =>
             (_apiCall, _logger, _afterSaleRepository) = (apiCall, logger, afterSaleRepository);
@@ -45,12 +47,7 @@ namespace Application.AfterSale.Services
                 {
                     var me = Newtonsoft.Json.JsonConvert.DeserializeObject<Me>(response);
 
-                    _listSomenteNovos.Add(me.data);
-
-                    _logger.AddRecord(
-                        key: company.doc_company,
-                        xml: response
-                    );
+                    _listSomenteNovos.Add(new Ecommerce(ecommerce: me.data, json: response));
 
                     GetMeJsonCache.Add($"{company.doc_company} - {hash}");
                 }
@@ -58,9 +55,17 @@ namespace Application.AfterSale.Services
 
             if (_listSomenteNovos.Count() > 0)
             {
-                _afterSaleRepository.InsertIntoAfterSaleEcommerce(_listSomenteNovos);
+                await _afterSaleRepository.InsertIntoAfterSaleEcommerce(_listSomenteNovos, _logger.GetExecutionGuid());
 
-                //await _afterSaleRepository 
+                _listSomenteNovos.ForEach(s =>
+                    _logger.AddRecord(
+                        s.uuid.ToString(),
+                        s.Responses
+                            .Where(pair => pair.Key == s.uuid)
+                            .Select(pair => pair.Value)
+                            .FirstOrDefault()
+                    )
+                );
             }
 
             _logger.AddMessage(
@@ -163,18 +168,24 @@ namespace Application.AfterSale.Services
         /// </summary>
         public async Task<bool?> GetReverses()
         {
+            _logger
+               .Clear()
+               .AddLog(EnumJob.AfterSaleReverses);
+
+            var teste = new List<string?>();
+
+            var simplifiedReverses = new List<Reverse>();
+            var completeReverses = new List<Data>();
             var companys = await _afterSaleRepository.GetCompanys();
 
             foreach (var company in companys)
             {
-                var simplifiedReverses = new List<Reverse>();
-                var completeReverses = new List<Data>();
-
                 var parameters = new Dictionary<string, string>
-                    {
-                        { "start_date", $"{DateTime.Now.AddMonths(-2).ToString("yyyy-MM-dd")}" },
-                        { "end_date", $"{DateTime.Now.ToString("yyyy-MM-dd")}" }
-                    };
+                {
+                    { "start_date", $"{DateTime.Now.AddMonths(-2).ToString("yyyy-MM-dd")}" },
+                    { "end_date", $"{DateTime.Now.ToString("yyyy-MM-dd")}" }
+                };
+
                 var encodedParameters = await new FormUrlEncodedContent(parameters).ReadAsStringAsync();
 
                 var response = await _apiCall.GetAsync(
@@ -184,7 +195,11 @@ namespace Application.AfterSale.Services
                 );
 
                 var page = Newtonsoft.Json.JsonConvert.DeserializeObject<ResponseReverses>(response);
-                simplifiedReverses.AddRange(page.data);
+
+                page.data.ForEach(x =>
+                    simplifiedReverses.Add(new Reverse(reverse: x, token: company.Token.ToString()))
+                );
+
                 string? rote = page.next_page_url;
 
                 if (page.last_page > 1)
@@ -197,55 +212,107 @@ namespace Application.AfterSale.Services
                         );
 
                         var nextPage = Newtonsoft.Json.JsonConvert.DeserializeObject<ResponseReverses>(responseByPage);
-                        simplifiedReverses.AddRange(nextPage.data);
+
+                        nextPage.data.ForEach(r =>
+                            simplifiedReverses.Add(new Reverse(reverse: r, token: company.Token.ToString()))
+                        );
+
                         rote = nextPage.next_page_url;
                     }
+                }
+            }
 
-                    int indice = simplifiedReverses.Count() / 30;
+            if (GetReversesCache.Count() == 0)
+                GetReversesCache = await _afterSaleRepository.GetReversesByIds(
+                    simplifiedReverses.Select(x => x.id).ToList()
+                );
 
-                    if (indice > 1)
+            var _listSomenteNovos = simplifiedReverses.Where(x => GetReversesCache.Any(y =>
+               x.id == y.id && x.updated_at > y.updated_at
+            )).ToList();
+
+            if (_listSomenteNovos.Count() > 0)
+            {
+                //API da AfterSale lança Too Many Requests após 30 consultas, por isso dividimos a lista simplifiedReverses em indices de 30 consultas
+                int indice = simplifiedReverses.Count() / 30;
+
+                if (indice > 1)
+                {
+                    for (int i = 0; i <= indice; i++)
                     {
-                        for (int i = 0; i <= indice; i++)
-                        {
-                            string identificadores = String.Empty;
-                            var top30List = simplifiedReverses.Skip(i * 30).Take(30).ToList();
+                        string identificadores = String.Empty;
+                        var top30List = simplifiedReverses.Skip(i * 30).Take(30).ToList();
 
-                            for (int j = 0; j < top30List.Count(); j++)
-                            {
-                                var _response = await _apiCall.GetAsync(
-                                    token: company.Token.ToString(),
-                                    rote: $"v3/api/reverses/{top30List[j].id}"
-                                );
-
-                                var completeReverse = Newtonsoft.Json.JsonConvert.DeserializeObject<Root>(_response);
-                                completeReverse.data.reverse.customer_id = completeReverse.data.customer.id;
-
-                                completeReverses.Add(completeReverse.data);
-                            }
-
-                            //API da AfterSale lança Too Many Requests após 30 consultas
-                            Thread.Sleep(60 * 1000);
-                        }
-                    }
-                    else
-                    {
-                        foreach (var reverse in simplifiedReverses)
+                        for (int j = 0; j < top30List.Count(); j++)
                         {
                             var _response = await _apiCall.GetAsync(
-                                token: company.Token.ToString(),
-                                rote: $"v3/api/reverses/{reverse.id}"
+                                token: top30List[j].token,
+                                rote: $"v3/api/reverses/{top30List[j].id}"
                             );
 
-                            var completeReverse = Newtonsoft.Json.JsonConvert.DeserializeObject<Root>(_response);
+                            var completeReverse = new Root();
+
+                            try
+                            {
+                                completeReverse = Newtonsoft.Json.JsonConvert.DeserializeObject<Root>(_response);
+                            }
+                            catch
+                            {
+                                teste.Add(_response);
+                                continue;
+                            }
+
                             completeReverse.data.reverse.customer_id = completeReverse.data.customer.id;
 
-                            completeReverses.Add(completeReverse.data);
+                            completeReverses.Add(new Data(completeReverse.data, _response));
                         }
+
+                        //Espera 1 minuto após primeiro indice de 30 consultas
+                        Thread.Sleep(60 * 1000);
+                    }
+                }
+                else
+                {
+                    foreach (var reverse in simplifiedReverses)
+                    {
+                        var _response = await _apiCall.GetAsync(
+                            token: reverse.token,
+                            rote: $"v3/api/reverses/{reverse.id}"
+                        );
+
+                        var completeReverse = Newtonsoft.Json.JsonConvert.DeserializeObject<Root>(_response);
+                        completeReverse.data.reverse.customer_id = completeReverse.data.customer.id;
+
+                        completeReverses.Add(new Data (completeReverse.data, _response));
                     }
                 }
 
-                _afterSaleRepository.InsertIntoAfterSaleReverses(completeReverses);
+                if (completeReverses.Count() > 0)
+                {
+                    await _afterSaleRepository.InsertIntoAfterSaleReverses(completeReverses, _logger.GetExecutionGuid());
+
+                    completeReverses.ForEach(s =>
+                        _logger.AddRecord(
+                            s.reverse.id.ToString(),
+                            s.Responses
+                                .Where(pair => pair.Key == s.reverse.id)
+                                .Select(pair => pair.Value)
+                                .FirstOrDefault()
+                        )
+                    );
+
+                    completeReverses.ForEach(s =>
+                        GetReversesCache.Add(s.reverse)
+                    );
+                }
             }
+
+            _logger.AddMessage(
+                $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"
+            );
+
+            _logger.SetLogEndDate();
+            await _logger.CommitAllChanges();
 
             return true;
         }
@@ -283,16 +350,56 @@ namespace Application.AfterSale.Services
         /// </summary>
         public async Task<bool?> GetReversesStatus()
         {
+            _logger
+               .Clear()
+               .AddLog(EnumJob.AfterSaleStatus);
+
+            var _listSomenteNovos = new List<Status>();
             var companys = await _afterSaleRepository.GetCompanys();
 
-            var response = await _apiCall.GetAsync(
-                token: companys.FirstOrDefault().Token.ToString(),
-                rote: "v3/api/reverses/status"
-            );
+            foreach (var company in companys)
+            {
+                var response = await _apiCall.GetAsync(
+                        token: company.Token.ToString(),
+                        rote: "v3/api/reverses/status"
+                    );
 
-            var status = Newtonsoft.Json.JsonConvert.DeserializeObject<ResponseStatus>(response);
+                var hash = _logger.ComputeSha256Hash(response);
 
-            _afterSaleRepository.InsertIntoAfterSaleStatus(status.data);
+                if (!GetReversesStatusJsonCache.Equals(hash))
+                {
+                    var status = Newtonsoft.Json.JsonConvert.DeserializeObject<ResponseStatus>(response);
+
+                    foreach (var _status in status.data)
+                    {
+                        _listSomenteNovos.Add(new Status(status: _status, json: response));
+                    }
+
+                    GetReversesStatusJsonCache = hash;
+                }
+            }
+
+            if (_listSomenteNovos.Count() > 0)
+            {
+                await _afterSaleRepository.InsertIntoAfterSaleStatus(_listSomenteNovos, _logger.GetExecutionGuid());
+
+                _listSomenteNovos.ForEach(s =>
+                    _logger.AddRecord(
+                        s.id.ToString(),
+                        s.Responses
+                            .Where(pair => pair.Key == s.id)
+                            .Select(pair => pair.Value)
+                            .FirstOrDefault()
+                    )
+                );
+            }
+
+            _logger.AddMessage(
+                    $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"
+                );
+
+            _logger.SetLogEndDate();
+            await _logger.CommitAllChanges();
 
             return true;
         }
@@ -302,22 +409,56 @@ namespace Application.AfterSale.Services
         /// </summary>
         public async Task<bool?> GetReversesTransportations()
         {
-            var list = new List<Transportations>();
+            _logger
+               .Clear()
+               .AddLog(EnumJob.AfterSaleTransportations);
+
+            var _listSomenteNovos = new List<Transportations>();
             var companys = await _afterSaleRepository.GetCompanys();
 
-            var response = await _apiCall.GetAsync(
-                token: companys.FirstOrDefault().Token.ToString(),
-                rote: "v3/api/transportations"
-            );
-
-            var transportations = Newtonsoft.Json.JsonConvert.DeserializeObject<Transportations>(response);
-
-            foreach (var transportation in transportations.data)
+            foreach (var company in companys)
             {
-                list.Add(new Transportations { description = transportation });
+                var response = await _apiCall.GetAsync(
+                        token: company.Token.ToString(),
+                        rote: "v3/api/transportations"
+                );
+
+                var hash = _logger.ComputeSha256Hash(response);
+
+                if (!GetReversesTransportationsJsonCache.Equals(hash))
+                {
+                    var transportations = Newtonsoft.Json.JsonConvert.DeserializeObject<Transportations>(response);
+
+                    foreach (var transportation in transportations.data)
+                    {
+                        _listSomenteNovos.Add(new Transportations(transportation: transportation, recordKey: $"{company.doc_company} - {hash}", json: response));
+                    }
+
+                    GetReversesTransportationsJsonCache = hash;
+                }
             }
 
-            _afterSaleRepository.InsertIntoAfterSaleTransportations(list);
+            if (_listSomenteNovos.Count() > 0)
+            {
+                await _afterSaleRepository.InsertIntoAfterSaleTransportations(_listSomenteNovos, _logger.GetExecutionGuid());
+
+                _listSomenteNovos.ForEach(s =>
+                    _logger.AddRecord(
+                        s.RecordKey.ToString(),
+                        s.Responses
+                            .Where(pair => pair.Key == s.RecordKey)
+                            .Select(pair => pair.Value)
+                            .FirstOrDefault()
+                    )
+                );
+            }
+
+            _logger.AddMessage(
+                    $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"
+                );
+
+            _logger.SetLogEndDate();
+            await _logger.CommitAllChanges();
 
             return true;
         }

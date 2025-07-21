@@ -119,6 +119,7 @@ namespace Domain.LinxCommerce.Entities.Order
             public SalesRepresentative.SalesRepresentative SalesRepresentative { get; set; }
 
             [SkipProperty]
+            [NotMapped]
             public Dictionary<Guid?, string> Responses { get; set; } = new Dictionary<Guid?, string>();
 
             public Root() { }

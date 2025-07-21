@@ -6,9 +6,7 @@ using System.Data;
 using Domain.AfterSale.Entities;
 using Reverse = Domain.AfterSale.Entities.Reverse;
 using Domain.IntegrationsCore.Interfaces;
-using Domain.IntegrationsCore.Enums;
-using Newtonsoft.Json;
-using System.Reflection;
+using Microsoft.Win32;
 
 namespace Infrastructure.AfterSale.Repositorys;
 
@@ -20,30 +18,60 @@ public class AfterSaleRepository : IAfterSaleRepository
     public AfterSaleRepository(ISQLServerConnection sqlServerConnection, IIntegrationsCoreRepository integrationsCoreRepository) =>
             (_sqlServerConnection, _integrationsCoreRepository) = (sqlServerConnection, integrationsCoreRepository);
 
+    public async Task<List<Reverse?>> GetReversesByIds(List<int?> reversesIds)
+    {
+        var list = new List<Reverse?>();
+        string identificadores = String.Empty;
+        int indice = reversesIds.Count() / 1000;
+
+        if (indice > 1)
+        {
+            for (int i = 0; i <= indice; i++)
+            {
+                var top1000List = reversesIds.Skip(i * 1000).Take(1000).ToList();
+
+                for (int j = 0; j < top1000List.Count(); j++)
+                {
+
+                    if (j == top1000List.Count() - 1)
+                        identificadores += $"'{top1000List[j]}'";
+                    else
+                        identificadores += $"'{top1000List[j]}', ";
+                }
+
+                string sql = $"SELECT ID, UPDATED_AT FROM [GENERAL].[AFTERSALEREVERSES] WHERE ID IN ({identificadores})";
+                var result = await _integrationsCoreRepository.GetRecords<Reverse>(sql);
+                list.AddRange(result);
+            }
+
+            return list;
+        }
+        else
+        {
+            for (int i = 0; i < reversesIds.Count(); i++)
+            {
+                if (i == reversesIds.Count() - 1)
+                    identificadores += $"'{reversesIds[i]}'";
+                else
+                    identificadores += $"'{reversesIds[i]}', ";
+            }
+
+            string sql = $"SELECT ID, UPDATED_AT FROM [GENERAL].[AFTERSALEREVERSES] WHERE ID IN ({identificadores})";
+            var AddRange = await _integrationsCoreRepository.GetRecords<Reverse>(sql);
+            list.AddRange(AddRange);
+
+            return list;
+        }
+    }
+
     public async Task<IEnumerable<Company?>> GetCompanys()
     {
-        try
-        {
-            string? sql = @$"SELECT DISTINCT
-                     CNPJ_EMP AS DOC_COMPANY,
-                     TOKEN AS TOKEN
-                     FROM GENERAL.PARAMETROS_AFTERSALE";
+        string? sql = @$"SELECT DISTINCT
+                    CNPJ_EMP AS DOC_COMPANY,
+                    TOKEN AS TOKEN
+                    FROM GENERAL.PARAMETROS_AFTERSALE";
 
-            return await _integrationsCoreRepository.GetRecords<Company>(sql);
-        }
-        catch (Exception ex)
-        {
-            /////que merda é essa cayo????
-            var message = JsonConvert.SerializeObject(new
-            {
-                project = ex.Source,
-                method = MethodBase.GetCurrentMethod()?.Name,//ex.TargetSite?.ReflectedType?.Name,
-                message = ex.Message,
-            });
-
-            //ex.AddMessage(message);
-            throw;
-        }
+        return await _integrationsCoreRepository.GetRecords<Company>(sql);
     }
 
     public async Task<Company?> GetCompany(string cnpj_emp)
@@ -58,156 +86,123 @@ public class AfterSaleRepository : IAfterSaleRepository
         return await _integrationsCoreRepository.GetRecord<Company>(sql);
     }
 
-    public bool InsertIntoAfterSaleRefunds()
+    public Task<bool> InsertIntoAfterSaleRefunds()
     {
         throw new NotImplementedException();
     }
 
-    public bool InsertIntoAfterSaleRefundsActions()
+    public Task<bool> InsertIntoAfterSaleRefundsActions()
     {
         throw new NotImplementedException();
     }
 
-    public bool InsertIntoAfterSaleRefundsBanks()
+    public Task<bool> InsertIntoAfterSaleRefundsBanks()
     {
         throw new NotImplementedException();
     }
 
-    public bool InsertIntoAfterSaleRefundsStatus()
+    public Task<bool> InsertIntoAfterSaleRefundsStatus()
     {
         throw new NotImplementedException();
     }
 
-    public bool InsertIntoAfterSaleRefundsTypes()
+    public Task<bool> InsertIntoAfterSaleRefundsTypes()
     {
         throw new NotImplementedException();
     }
 
-    public bool InsertIntoAfterSaleReverses(List<Domain.AfterSale.Entities.Data> data)
+    public async Task<bool> InsertIntoAfterSaleReverses(List<Domain.AfterSale.Entities.Data> data, Guid? parentExecutionGUID)
     {
         var reversesTable = _integrationsCoreRepository.CreateSystemDataTable(entity: new Reverse(), tableName: "AfterSaleReverses");
         var customerTable = _integrationsCoreRepository.CreateSystemDataTable(entity: new Customer(), tableName: "AfterSaleCustomers");
         var addressTable = _integrationsCoreRepository.CreateSystemDataTable(entity: new Address(), tableName: "AfterSaleAddresses");
+        var trackingTable = _integrationsCoreRepository.CreateSystemDataTable(entity: new Tracking(), tableName: "AfterSaleTrackings");
         var trackingHistoryTable = _integrationsCoreRepository.CreateSystemDataTable(entity: new TrackingHistory(), tableName: "AfterSaleTrackingHistories");
 
         _integrationsCoreRepository.FillSystemDataTable(reversesTable, data.Select(x => x.reverse).ToList());
         _integrationsCoreRepository.FillSystemDataTable(customerTable, data.Select(x => x.customer).ToList());
         _integrationsCoreRepository.FillSystemDataTable(addressTable, data.Select(x => x.customer.address).ToList());
         _integrationsCoreRepository.FillSystemDataTable(addressTable, data.Select(x => x.customer.shipping_address).ToList());
+        _integrationsCoreRepository.FillSystemDataTable(trackingTable, data.Where(x => x.reverse.tracking != null).Select(x => x.reverse.tracking).ToList());
         _integrationsCoreRepository.FillSystemDataTable(trackingHistoryTable, data.SelectMany(x => x.tracking_history).ToList());
 
         _integrationsCoreRepository.BulkInsertIntoTableRaw(reversesTable);
         _integrationsCoreRepository.BulkInsertIntoTableRaw(customerTable);
         _integrationsCoreRepository.BulkInsertIntoTableRaw(addressTable);
+        _integrationsCoreRepository.BulkInsertIntoTableRaw(trackingTable);
         _integrationsCoreRepository.BulkInsertIntoTableRaw(trackingHistoryTable);
+
+        await _integrationsCoreRepository.CallDbProcMerge("general", addressTable.TableName, parentExecutionGUID);
+        await _integrationsCoreRepository.CallDbProcMerge("general", customerTable.TableName, parentExecutionGUID);
+        await _integrationsCoreRepository.CallDbProcMerge("general", reversesTable.TableName, parentExecutionGUID);
+        await _integrationsCoreRepository.CallDbProcMerge("general", trackingTable.TableName, parentExecutionGUID);
+        await _integrationsCoreRepository.CallDbProcMerge("general", trackingHistoryTable.TableName, parentExecutionGUID);
 
         return true;
     }
 
-    public bool InsertIntoAfterSaleReversesCourierAttributes()
+    public Task<bool> InsertIntoAfterSaleReversesCourierAttributes()
     {
         throw new NotImplementedException();
     }
 
-    public bool InsertIntoAfterSaleStatus(List<Status> statusReverses)
+    public async Task<bool> InsertIntoAfterSaleStatus(List<Status> statusReverses, Guid? parentExecutionGUID)
     {
         var statusReversesTable = _integrationsCoreRepository.CreateSystemDataTable(entity: new Status(), tableName: "AfterSaleStatus");
 
-        //try
-        //{
-            _integrationsCoreRepository.FillSystemDataTable(statusReversesTable, statusReverses);
+        _integrationsCoreRepository.FillSystemDataTable(statusReversesTable, statusReverses);
 
-            _integrationsCoreRepository.BulkInsertIntoTableRaw(statusReversesTable);
+        _integrationsCoreRepository.BulkInsertIntoTableRaw(statusReversesTable);
 
-            return true;
-        //}
-        //catch (Exception ex)
-        //{
-        //    throw new GeneralException(
-        //        //stage: EnumStages.BulkInsertIntoTableRaw,
-        //        //error: EnumError.SQLCommand,
-        //        //level: EnumMessageLevel.Error,
-        //        message: $"Error when trying to bulk insert records on table raw"//,
-        //        //exceptionMessage: ex.Message
-        //    );
-        //}
+        await _integrationsCoreRepository.CallDbProcMerge("general", statusReversesTable.TableName, parentExecutionGUID);
+
+        return true;
     }
 
-    public bool InsertIntoAfterSaleTransportations(Transportations transportations)
+    public async Task<bool> InsertIntoAfterSaleTransportations(Transportations transportations, Guid? parentExecutionGUID)
     {
         var transportationsTable = _integrationsCoreRepository.CreateSystemDataTable(entity: new Transportations(), tableName: "AfterSaleTransportations");
 
-        //try
-        //{
-            _integrationsCoreRepository.FillSystemDataTable(transportationsTable, transportations.data);
+        _integrationsCoreRepository.FillSystemDataTable(transportationsTable, transportations.data);
 
-            _integrationsCoreRepository.BulkInsertIntoTableRaw(transportationsTable);
+        _integrationsCoreRepository.BulkInsertIntoTableRaw(transportationsTable);
 
-            return true;
-        //}
-        //catch (Exception ex)
-        //{
-        //    throw new GeneralException(
-        //        //stage: EnumStages.BulkInsertIntoTableRaw,
-        //        //error: EnumError.SQLCommand,
-        //        //level: EnumMessageLevel.Error,
-        //        message: $"Error when trying to bulk insert records on table raw"//,
-        //        //exceptionMessage: ex.Message
-        //    );
-        //}
+        await _integrationsCoreRepository.CallDbProcMerge("general", transportationsTable.TableName, parentExecutionGUID);
+
+        return true;
     }
 
-    public bool InsertIntoAfterSaleTransportations(List<Transportations> transportations)
+    public async Task<bool> InsertIntoAfterSaleTransportations(List<Transportations> transportations, Guid? parentExecutionGUID)
     {
         var transportationsTable = _integrationsCoreRepository.CreateSystemDataTable(entity: new Transportations(), tableName: "AfterSaleTransportations");
 
-        //try
-        //{
-            _integrationsCoreRepository.FillSystemDataTable(transportationsTable, transportations);
+        _integrationsCoreRepository.FillSystemDataTable(transportationsTable, transportations);
 
-            _integrationsCoreRepository.BulkInsertIntoTableRaw(transportationsTable);
+        _integrationsCoreRepository.BulkInsertIntoTableRaw(transportationsTable);
 
-            return true;
-        //}
-        //catch (Exception ex)
-        //{
-        //    throw new GeneralException(
-        //        //stage: EnumStages.BulkInsertIntoTableRaw,
-        //        //error: EnumError.SQLCommand,
-        //        //level: EnumMessageLevel.Error,
-        //        message: $"Error when trying to bulk insert records on table raw"//,
-        //        //exceptionMessage: ex.Message
-        //    );
-        //}
+        await _integrationsCoreRepository.CallDbProcMerge("general", transportationsTable.TableName, parentExecutionGUID);
+
+        return true;
     }
 
-    public bool InsertIntoAfterSaleEcommerce(List<Ecommerce> data)
+    public async Task<bool> InsertIntoAfterSaleEcommerce(List<Ecommerce> data, Guid? parentExecutionGUID)
     {
         var ecommercesTable = _integrationsCoreRepository.CreateSystemDataTable(entity: new Ecommerce(), tableName: "AfterSaleEcommerces");
         var addressTable = _integrationsCoreRepository.CreateSystemDataTable(entity: new Address(), tableName: "AfterSaleAddresses");
         var reasonTable = _integrationsCoreRepository.CreateSystemDataTable(entity: new Reason(), tableName: "AfterSaleReasons");
 
-        //try
-        //{
-            _integrationsCoreRepository.FillSystemDataTable(ecommercesTable, data);
-            _integrationsCoreRepository.FillSystemDataTable(addressTable, data.Select(x => x.address).ToList());
-            _integrationsCoreRepository.FillSystemDataTable(reasonTable, data.SelectMany(x => x.reasons).ToList());
+        _integrationsCoreRepository.FillSystemDataTable(ecommercesTable, data);
+        _integrationsCoreRepository.FillSystemDataTable(addressTable, data.Select(x => x.address).ToList());
+        _integrationsCoreRepository.FillSystemDataTable(reasonTable, data.SelectMany(x => x.reasons).ToList());
 
-            _integrationsCoreRepository.BulkInsertIntoTableRaw(ecommercesTable);
-            _integrationsCoreRepository.BulkInsertIntoTableRaw(addressTable);
-            _integrationsCoreRepository.BulkInsertIntoTableRaw(reasonTable);
+        _integrationsCoreRepository.BulkInsertIntoTableRaw(ecommercesTable);
+        _integrationsCoreRepository.BulkInsertIntoTableRaw(addressTable);
+        _integrationsCoreRepository.BulkInsertIntoTableRaw(reasonTable);
 
-            return true;
-        //}
-        //catch (Exception ex)
-        //{
-        //    throw new GeneralException(
-        //        //stage: EnumStages.BulkInsertIntoTableRaw,
-        //        //error: EnumError.SQLCommand,
-        //        //level: EnumMessageLevel.Error,
-        //        message: $"Error when trying to bulk insert records on table raw"//,
-        //        //exceptionMessage: ex.Message
-        //    );
-        //}
+        await _integrationsCoreRepository.CallDbProcMerge("general", addressTable.TableName, parentExecutionGUID);
+        await _integrationsCoreRepository.CallDbProcMerge("general", ecommercesTable.TableName, parentExecutionGUID);
+        await _integrationsCoreRepository.CallDbProcMerge("general", reasonTable.TableName, parentExecutionGUID);
+
+        return true;
     }
 }

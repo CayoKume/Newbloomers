@@ -5,7 +5,6 @@ var configuration = new ConfigurationBuilder()
                 .Build();
 
 var builder = Host.CreateDefaultBuilder();
-
 builder
     .ConfigureWebJobs(b =>
     {

@@ -1,9 +1,8 @@
-﻿using Application.IntegrationsCore.Interfaces;
-using Application.IntegrationsCore.Services;
+﻿using Application.IntegrationsCore.Handlers;
 using Domain.IntegrationsCore.Interfaces;
+using Infrastructure.AfterSale.DependencyInjection;
 using Infrastructure.FlashCourier.DependencyInjection;
 using Infrastructure.IntegrationsCore.DependencyInjection;
-using Infrastructure.IntegrationsCore.Repositorys;
 using Infrastructure.Jadlog.DependencyInjection;
 using Infrastructure.LinxCommerce.DependencyInjection;
 using Infrastructure.LinxMicrovix.Outbound.WebService.DependencyInjection;
@@ -25,6 +24,7 @@ namespace AzureJobs.Extensions
                 services.AddScopedFlashCourierServices();
                 services.AddScopedTotalExpressServices();
                 services.AddScopedJadlogServices();
+                services.AddScopedAfterSaleServices();
             });
 
             return builder;

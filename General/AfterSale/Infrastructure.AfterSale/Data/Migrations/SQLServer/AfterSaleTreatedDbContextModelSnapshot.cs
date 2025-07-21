@@ -22,169 +22,6 @@ namespace Infrastructure.AfterSale.Data.Migrations.SQLServer
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Domain.AfterSale.Entities.Address", b =>
-                {
-                    b.Property<int>("id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("address")
-                        .HasColumnType("varchar(250)");
-
-                    b.Property<string>("city")
-                        .HasColumnType("varchar(40)");
-
-                    b.Property<string>("complement")
-                        .HasColumnType("varchar(60)");
-
-                    b.Property<DateTime?>("deleted_at")
-                        .HasColumnType("datetime2")
-                        .HasAnnotation("Custom:ColumnTypeMapper", "DateTime");
-
-                    b.Property<string>("lat")
-                        .HasColumnType("varchar(60)");
-
-                    b.Property<string>("long")
-                        .HasColumnType("varchar(60)");
-
-                    b.Property<string>("neighborhood")
-                        .HasColumnType("varchar(60)");
-
-                    b.Property<string>("number")
-                        .HasColumnType("varchar(20)");
-
-                    b.Property<string>("state")
-                        .HasColumnType("varchar(20)");
-
-                    b.Property<DateTime?>("updated_at")
-                        .HasColumnType("datetime2")
-                        .HasAnnotation("Custom:ColumnTypeMapper", "DateTime");
-
-                    b.Property<string>("zip_code")
-                        .HasColumnType("char(9)");
-
-                    b.HasKey("id");
-
-                    b.ToTable("AfterSaleAddresses", "general");
-                });
-
-            modelBuilder.Entity("Domain.AfterSale.Entities.Customer", b =>
-                {
-                    b.Property<int>("id")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("address_id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("contact_email")
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<string>("document")
-                        .HasColumnType("varchar(14)");
-
-                    b.Property<string>("email")
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<string>("first_name")
-                        .HasColumnType("varchar(60)");
-
-                    b.Property<string>("last_name")
-                        .HasColumnType("varchar(60)");
-
-                    b.Property<string>("phone")
-                        .HasColumnType("varchar(30)");
-
-                    b.Property<int?>("shipping_address_id")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("shipping_addressid")
-                        .HasColumnType("int");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("shipping_address_id");
-
-                    b.HasIndex("shipping_addressid");
-
-                    b.ToTable("AfterSaleCustomers", "general");
-                });
-
-            modelBuilder.Entity("Domain.AfterSale.Entities.Ecommerce", b =>
-                {
-                    b.Property<int>("id")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("address_id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("app_name")
-                        .HasColumnType("varchar(60)");
-
-                    b.Property<string>("brand_id")
-                        .HasColumnType("varchar(60)");
-
-                    b.Property<string>("company_name")
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<string>("display_name")
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<string>("document")
-                        .HasColumnType("varchar(20)");
-
-                    b.Property<int?>("ecommerce_group_id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("email")
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<bool?>("is_active")
-                        .HasColumnType("bit")
-                        .HasAnnotation("Custom:ColumnTypeMapper", "Bool");
-
-                    b.Property<bool?>("is_test")
-                        .HasColumnType("bit")
-                        .HasAnnotation("Custom:ColumnTypeMapper", "Bool");
-
-                    b.Property<DateTime?>("last_order_report_date")
-                        .HasColumnType("datetime2")
-                        .HasAnnotation("Custom:ColumnTypeMapper", "DateTime");
-
-                    b.Property<bool?>("maintenance_mode_global")
-                        .HasColumnType("bit")
-                        .HasAnnotation("Custom:ColumnTypeMapper", "Bool");
-
-                    b.Property<string>("oauth_client_id")
-                        .HasColumnType("varchar(60)");
-
-                    b.Property<string>("phone")
-                        .HasColumnType("varchar(30)");
-
-                    b.Property<string>("provider_id")
-                        .HasColumnType("varchar(60)");
-
-                    b.Property<string>("registration_origin")
-                        .HasColumnType("varchar(60)");
-
-                    b.Property<string>("segment")
-                        .HasColumnType("varchar(60)");
-
-                    b.Property<string>("trade_name")
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<string>("url")
-                        .HasColumnType("varchar(4000)");
-
-                    b.Property<Guid?>("uuid")
-                        .HasColumnType("uniqueidentifier")
-                        .HasAnnotation("Custom:ColumnTypeMapper", "UUID");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("address_id");
-
-                    b.ToTable("AfterSaleEcommerces", "general");
-                });
-
             modelBuilder.Entity("Domain.AfterSale.Entities.Parameters", b =>
                 {
                     b.Property<string>("doc_company")
@@ -212,311 +49,82 @@ namespace Infrastructure.AfterSale.Data.Migrations.SQLServer
                         });
                 });
 
-            modelBuilder.Entity("Domain.AfterSale.Entities.Reason", b =>
+            modelBuilder.Entity("Domain.AfterSale.Entities.Tracking", b =>
                 {
                     b.Property<int>("id")
                         .HasColumnType("int");
 
-                    b.Property<string>("action")
+                    b.Property<string>("authorization_code")
                         .HasColumnType("varchar(60)");
 
-                    b.Property<DateTime?>("created_at")
+                    b.Property<DateTime?>("collect_date")
                         .HasColumnType("datetime2")
                         .HasAnnotation("Custom:ColumnTypeMapper", "DateTime");
-
-                    b.Property<DateTime?>("deleted_at")
-                        .HasColumnType("datetime2")
-                        .HasAnnotation("Custom:ColumnTypeMapper", "DateTime");
-
-                    b.Property<string>("description")
-                        .HasColumnType("varchar(60)");
-
-                    b.Property<int?>("ecommerce_id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ord")
-                        .HasColumnType("varchar(60)");
-
-                    b.Property<string>("reason_category_id")
-                        .HasColumnType("varchar(60)");
-
-                    b.Property<bool?>("should_approve")
-                        .HasColumnType("bit")
-                        .HasAnnotation("Custom:ColumnTypeMapper", "Bool");
-
-                    b.Property<bool?>("show_product_grid")
-                        .HasColumnType("bit")
-                        .HasAnnotation("Custom:ColumnTypeMapper", "Bool");
-
-                    b.Property<DateTime?>("updated_at")
-                        .HasColumnType("datetime2")
-                        .HasAnnotation("Custom:ColumnTypeMapper", "DateTime");
-
-                    b.Property<string>("upload_image")
-                        .HasColumnType("varchar(60)");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("ecommerce_id");
-
-                    b.ToTable("AfterSaleReasons", "general");
-                });
-
-            modelBuilder.Entity("Domain.AfterSale.Entities.Reverse", b =>
-                {
-                    b.Property<int>("id")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("billing_date")
-                        .HasColumnType("datetime2")
-                        .HasAnnotation("Custom:ColumnTypeMapper", "DateTime");
-
-                    b.Property<string>("billing_item_id")
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<int?>("brand_id")
-                        .HasColumnType("int");
-
-                    b.Property<bool?>("can_generate_voucher")
-                        .HasColumnType("bit")
-                        .HasAnnotation("Custom:ColumnTypeMapper", "Bool");
-
-                    b.Property<bool?>("can_send_correction_letter")
-                        .HasColumnType("bit")
-                        .HasAnnotation("Custom:ColumnTypeMapper", "Bool");
-
-                    b.Property<string>("collect_scheduling_link")
-                        .HasColumnType("varchar(4000)");
-
-                    b.Property<string>("correction_letter_link")
-                        .HasColumnType("varchar(4000)");
-
-                    b.Property<bool?>("could_cancel")
-                        .HasColumnType("bit")
-                        .HasAnnotation("Custom:ColumnTypeMapper", "Bool");
-
-                    b.Property<bool?>("courier_collect")
-                        .HasColumnType("bit")
-                        .HasAnnotation("Custom:ColumnTypeMapper", "Bool");
 
                     b.Property<int?>("courier_contract_id")
                         .HasColumnType("int");
 
-                    b.Property<string>("courier_service_type")
-                        .HasColumnType("varchar(50)");
+                    b.Property<string>("courier_name")
+                        .HasColumnType("varchar(60)");
 
-                    b.Property<DateTime?>("created_at")
-                        .HasColumnType("datetime2")
-                        .HasAnnotation("Custom:ColumnTypeMapper", "DateTime");
-
-                    b.Property<string>("created_by")
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<int?>("customer_id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("customer_url")
-                        .HasColumnType("varchar(4000)");
+                    b.Property<string>("cte")
+                        .HasColumnType("varchar(60)");
 
                     b.Property<DateTime?>("deleted_at")
                         .HasColumnType("datetime2")
                         .HasAnnotation("Custom:ColumnTypeMapper", "DateTime");
 
-                    b.Property<string>("destination_seller_id")
-                        .HasColumnType("varchar(50)");
+                    b.Property<string>("delivery_deadline")
+                        .HasColumnType("varchar(60)");
 
-                    b.Property<string>("dot_id")
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<int?>("ecommerce_id")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ecommerce_order_id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("external_source")
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<bool?>("freight_by_customer")
-                        .HasColumnType("bit")
-                        .HasAnnotation("Custom:ColumnTypeMapper", "Bool");
-
-                    b.Property<int?>("invoice")
-                        .HasColumnType("int");
-
-                    b.Property<bool?>("is_erased")
-                        .HasColumnType("bit")
-                        .HasAnnotation("Custom:ColumnTypeMapper", "Bool");
-
-                    b.Property<bool?>("is_generic_courier")
-                        .HasColumnType("bit")
-                        .HasAnnotation("Custom:ColumnTypeMapper", "Bool");
-
-                    b.Property<bool?>("is_store_seller_contract")
-                        .HasColumnType("bit")
-                        .HasAnnotation("Custom:ColumnTypeMapper", "Bool");
-
-                    b.Property<string>("locker_reference")
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<bool?>("must_treat_refund")
-                        .HasColumnType("bit")
-                        .HasAnnotation("Custom:ColumnTypeMapper", "Bool");
-
-                    b.Property<string>("order_id")
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<string>("order_sequence_number")
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<string>("origin")
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<string>("origin_seller_id")
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<string>("partner_store")
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<string>("posting_card")
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<decimal?>("refunds_count")
-                        .HasColumnType("decimal(10,2)");
-
-                    b.Property<string>("returned_invoice")
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<string>("reverse_type")
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<string>("reverse_type_name")
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<int?>("service_type_change")
-                        .HasColumnType("int");
-
-                    b.Property<string>("service_type_changed")
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<bool?>("skip_process_step")
-                        .HasColumnType("bit")
-                        .HasAnnotation("Custom:ColumnTypeMapper", "Bool");
-
-                    b.Property<int?>("status_id")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("store_expire_date")
+                    b.Property<DateTime?>("expire_date")
                         .HasColumnType("datetime2")
                         .HasAnnotation("Custom:ColumnTypeMapper", "DateTime");
 
-                    b.Property<int?>("store_id")
-                        .HasColumnType("int");
+                    b.Property<string>("extra_fields")
+                        .HasColumnType("varchar(60)");
 
-                    b.Property<string>("timeline_url")
-                        .HasColumnType("varchar(4000)");
+                    b.Property<bool?>("is_change_collect_to_post")
+                        .HasColumnType("bit")
+                        .HasAnnotation("Custom:ColumnTypeMapper", "Bool");
 
-                    b.Property<decimal?>("total_amount")
+                    b.Property<string>("message")
+                        .HasColumnType("varchar(60)");
+
+                    b.Property<decimal?>("package_amount")
                         .HasColumnType("decimal(10,2)");
 
-                    b.Property<string>("tracking_error")
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<string>("type")
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<DateTime?>("updated_at")
-                        .HasColumnType("datetime2")
-                        .HasAnnotation("Custom:ColumnTypeMapper", "DateTime");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("customer_id");
-
-                    b.HasIndex("ecommerce_id");
-
-                    b.HasIndex("status_id");
-
-                    b.ToTable("AfterSaleReverses", "general");
-                });
-
-            modelBuilder.Entity("Domain.AfterSale.Entities.Status", b =>
-                {
-                    b.Property<int>("id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("description")
+                    b.Property<string>("qr_code")
                         .HasColumnType("varchar(60)");
 
-                    b.Property<string>("name")
-                        .HasColumnType("varchar(60)");
-
-                    b.HasKey("id");
-
-                    b.ToTable("AfterSaleStatus", "general");
-                });
-
-            modelBuilder.Entity("Domain.AfterSale.Entities.StatusHistories", b =>
-                {
-                    b.Property<int>("id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("comments")
-                        .HasColumnType("varchar(60)");
-
-                    b.Property<int?>("customer_id")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("date")
+                    b.Property<DateTime?>("requested_collect_date")
                         .HasColumnType("datetime2")
                         .HasAnnotation("Custom:ColumnTypeMapper", "DateTime");
 
                     b.Property<int?>("reverse_id")
                         .HasColumnType("int");
 
-                    b.Property<int?>("status_id")
-                        .HasColumnType("int");
+                    b.Property<string>("service_type")
+                        .HasColumnType("varchar(60)");
 
-                    b.Property<int>("statusid")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("user_id")
-                        .HasColumnType("int");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("reverse_id");
-
-                    b.HasIndex("statusid");
-
-                    b.ToTable("AfterSaleStatusHistories", "general");
-                });
-
-            modelBuilder.Entity("Domain.AfterSale.Entities.TrackingHistory", b =>
-                {
-                    b.Property<int>("id")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("created_at")
-                        .HasColumnType("datetime2")
-                        .HasAnnotation("Custom:ColumnTypeMapper", "DateTime");
-
-                    b.Property<DateTime?>("deleted_at")
-                        .HasColumnType("datetime2")
-                        .HasAnnotation("Custom:ColumnTypeMapper", "DateTime");
-
-                    b.Property<string>("message")
-                        .HasColumnType("varchar(3000)");
+                    b.Property<decimal?>("shipping_amount")
+                        .HasColumnType("decimal(10,2)");
 
                     b.Property<string>("status")
-                        .HasColumnType("varchar(60)");
+                        .HasColumnType("varchar(50)");
 
                     b.Property<DateTime?>("status_updated_at")
                         .HasColumnType("datetime2")
                         .HasAnnotation("Custom:ColumnTypeMapper", "DateTime");
 
-                    b.Property<int?>("tracking_id")
-                        .HasColumnType("int");
+                    b.Property<string>("tracking_code")
+                        .HasColumnType("varchar(60)");
+
+                    b.Property<string>("tracking_url")
+                        .HasColumnType("varchar(4000)");
+
+                    b.Property<string>("type")
+                        .HasColumnType("varchar(60)");
 
                     b.Property<DateTime?>("updated_at")
                         .HasColumnType("datetime2")
@@ -524,119 +132,7 @@ namespace Infrastructure.AfterSale.Data.Migrations.SQLServer
 
                     b.HasKey("id");
 
-                    b.HasIndex("tracking_id");
-
-                    b.ToTable("AfterSaleTrackingHistories", "general");
-                });
-
-            modelBuilder.Entity("Domain.AfterSale.Entities.Transportations", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
-
-                    b.Property<string>("description")
-                        .HasColumnType("varchar(60)");
-
-                    b.HasKey("id");
-
-                    b.ToTable("AfterSaleTransportations", "general");
-                });
-
-            modelBuilder.Entity("Domain.AfterSale.Entities.Customer", b =>
-                {
-                    b.HasOne("Domain.AfterSale.Entities.Address", "address")
-                        .WithMany()
-                        .HasForeignKey("shipping_address_id")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.HasOne("Domain.AfterSale.Entities.Address", "shipping_address")
-                        .WithMany()
-                        .HasForeignKey("shipping_addressid");
-
-                    b.Navigation("address");
-
-                    b.Navigation("shipping_address");
-                });
-
-            modelBuilder.Entity("Domain.AfterSale.Entities.Ecommerce", b =>
-                {
-                    b.HasOne("Domain.AfterSale.Entities.Address", "address")
-                        .WithMany()
-                        .HasForeignKey("address_id")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.Navigation("address");
-                });
-
-            modelBuilder.Entity("Domain.AfterSale.Entities.Reason", b =>
-                {
-                    b.HasOne("Domain.AfterSale.Entities.Ecommerce", null)
-                        .WithMany("reasons")
-                        .HasForeignKey("ecommerce_id")
-                        .OnDelete(DeleteBehavior.NoAction);
-                });
-
-            modelBuilder.Entity("Domain.AfterSale.Entities.Reverse", b =>
-                {
-                    b.HasOne("Domain.AfterSale.Entities.Customer", "customer")
-                        .WithMany()
-                        .HasForeignKey("customer_id")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.HasOne("Domain.AfterSale.Entities.Ecommerce", "ecommerce")
-                        .WithMany()
-                        .HasForeignKey("ecommerce_id")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.HasOne("Domain.AfterSale.Entities.Status", "status")
-                        .WithMany()
-                        .HasForeignKey("status_id")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.Navigation("customer");
-
-                    b.Navigation("ecommerce");
-
-                    b.Navigation("status");
-                });
-
-            modelBuilder.Entity("Domain.AfterSale.Entities.StatusHistories", b =>
-                {
-                    b.HasOne("Domain.AfterSale.Entities.Reverse", null)
-                        .WithMany("status_histories")
-                        .HasForeignKey("reverse_id")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.HasOne("Domain.AfterSale.Entities.Status", "status")
-                        .WithMany()
-                        .HasForeignKey("statusid")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("status");
-                });
-
-            modelBuilder.Entity("Domain.AfterSale.Entities.TrackingHistory", b =>
-                {
-                    b.HasOne("Domain.AfterSale.Entities.Reverse", null)
-                        .WithMany("tracking_history")
-                        .HasForeignKey("tracking_id")
-                        .OnDelete(DeleteBehavior.NoAction);
-                });
-
-            modelBuilder.Entity("Domain.AfterSale.Entities.Ecommerce", b =>
-                {
-                    b.Navigation("reasons");
-                });
-
-            modelBuilder.Entity("Domain.AfterSale.Entities.Reverse", b =>
-                {
-                    b.Navigation("status_histories");
-
-                    b.Navigation("tracking_history");
+                    b.ToTable("AfterSaleTrackings", "general");
                 });
 #pragma warning restore 612, 618
         }

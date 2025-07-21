@@ -1,12 +1,14 @@
-﻿using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxCommerce;
+﻿using Application.IntegrationsCore.Middlewares;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxCommerce;
 using Application.LinxMicrovix.Outbound.WebService.Services;
 using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
 using Microsoft.Azure.WebJobs;
 
-namespace AzureJobs.RecurringJobs
+namespace AzureJobs.RecurringJobs.LinxMicrovix.LinxMicrovix.B2C
 {
     public class B2CLinxMicrovix
     {
+        private readonly WebJobExceptionHandlingMiddleware _webJobExceptionHandlingMiddleware;
         private readonly LinxAPIParam _linxMicrovixJobParameter;
         private readonly List<LinxMethods>? _methods;
         private readonly IConfiguration _configuration;
@@ -78,6 +80,7 @@ namespace AzureJobs.RecurringJobs
         public B2CLinxMicrovix
         (
             IConfiguration configuration,
+            IServiceProvider services,
             IB2CConsultaClassificacaoService b2cConsultaClassificacaoService,
             IB2CConsultaClientesService b2cConsultaClientesService,
             IB2CConsultaClientesContatosService b2cConsultaClientesContatosService,
@@ -258,6 +261,8 @@ namespace AzureJobs.RecurringJobs
                             .GetSection("B2CLinxMicrovix")
                             .GetSection("Methods")
                             .Get<List<LinxMethods>>();
+
+            _webJobExceptionHandlingMiddleware = new WebJobExceptionHandlingMiddleware(services);
         }
 
         //public async Task B2CConsultaPedidos([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)

@@ -1,12 +1,14 @@
-﻿using Application.LinxCommerce.Interfaces;
+﻿using Application.IntegrationsCore.Middlewares;
+using Application.LinxCommerce.Interfaces;
 using Domain.LinxCommerce.Entities.Parameters;
 using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
 using Microsoft.Azure.WebJobs;
 
-namespace AzureJobs.RecurringJobs
+namespace AzureJobs.RecurringJobs.LinxCommerce
 {
     public class LinxCommerce
     {
+        private readonly WebJobExceptionHandlingMiddleware _webJobExceptionHandlingMiddleware;
         private readonly LinxCommerceJobParameter _linxCommerceJobParameter;
         private readonly List<LinxMethods>? _methods;
         private readonly IConfiguration _configuration;
@@ -18,6 +20,7 @@ namespace AzureJobs.RecurringJobs
 
         public LinxCommerce(
             IConfiguration configuration,
+            IServiceProvider services,
             IOrderService orderService,
             ICustomerService customerService,
             ISalesRepresentativeService salesRepresentativeService,
@@ -80,6 +83,8 @@ namespace AzureJobs.RecurringJobs
                             .GetSection("LinxCommerce")
                             .GetSection("Methods")
                             .Get<List<LinxMethods>>();
+
+            _webJobExceptionHandlingMiddleware = new WebJobExceptionHandlingMiddleware(services);
         }
 
         //public async Task SearchOrders([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)

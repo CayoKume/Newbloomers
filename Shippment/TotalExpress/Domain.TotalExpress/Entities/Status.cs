@@ -34,11 +34,11 @@ namespace Domain.TotalExpress.Entities
         /// <summary>
         /// 
         ///</summary>
-        public string? json { get; set; }
+        public Dictionary<string?, string> Responses { get; set; } = new Dictionary<string?, string>();
 
         public Status() { }
 
-        public Status(Status status)
+        public Status(Status status, string json)
         {
             pedido = status.pedido;
             id_cliente = status.id_cliente;
@@ -47,7 +47,8 @@ namespace Domain.TotalExpress.Entities
             nfiscalserie = status.nfiscalserie;
             cod_barra = status.cod_barra;
             rota = status.rota;
-            
+            this.Responses.Add(status.pedido, json);
+
             if (status.detalhes is not null)
             {
                 prev_entrega = status.detalhes.dataPrev != null ? status.detalhes.dataPrev.PrevEntrega : null;

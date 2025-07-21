@@ -15,6 +15,6 @@ namespace Domain.TotalExpress.Interfaces.Repository
 
         public Task<bool> UpdateDeliveryDates(string? deliveryMadeDate, string? collectionDate, string? deliveryForecastDate, string? lastStatusDate, string? lastStatusDescription, string? orderNumber);
         
-        public bool InsertStatus(List<Status> listStatus, List<Error> listErrors);
+        public Task<bool> InsertStatus(List<Status> listStatus, List<Error> listErrors, Guid? parentExecutionGuid);
     }
 }

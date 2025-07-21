@@ -2,11 +2,8 @@
 using Domain.IntegrationsCore.Interfaces;
 using Domain.TotalExpress.Entities;
 using Domain.TotalExpress.Interfaces.Repository;
-using Infrastructure.IntegrationsCore.Connections.MySQL;
-using Infrastructure.IntegrationsCore.Connections.PostgreSQL;
 using Infrastructure.IntegrationsCore.Connections.SQLServer;
 using System.Data;
-using System.Data.Common;
 
 namespace Infrastructure.TotalExpress.Repository
 {
@@ -455,7 +452,7 @@ namespace Infrastructure.TotalExpress.Repository
 
         public async Task<IEnumerable<Awb>> GetSenderAwbs()
         {
-            string? sql = $@"SELECT TOP 1000
+            string? sql = $@"SELECT TOP 100
                              A.PEDIDO,
                              A.REMETENTEID,
                              B.AWB
@@ -542,7 +539,7 @@ namespace Infrastructure.TotalExpress.Repository
             }
         }
 
-        public bool InsertStatus(List<Status> listStatus, List<Error> listErrors)
+        public async Task<bool> InsertStatus(List<Status> listStatus, List<Error> listErrors, Guid? parentExecutionGuid)
         {
             var statusTable = _integrationsCoreRepository.CreateSystemDataTable("TotalExpressTrackings", new Status());
             var eventsTable = _integrationsCoreRepository.CreateSystemDataTable("TotalExpressEventos", new statusDeEncomenda());
@@ -563,14 +560,16 @@ namespace Infrastructure.TotalExpress.Repository
             );
 
             _integrationsCoreRepository.BulkInsertIntoTableRaw(
-                schema: "general",
                 dataTable: statusTable
             );
 
+            await _integrationsCoreRepository.CallDbProcMerge("general", statusTable.TableName, parentExecutionGuid);
+
             _integrationsCoreRepository.BulkInsertIntoTableRaw(
-                schema: "general",
                 dataTable: eventsTable
             );
+
+            await _integrationsCoreRepository.CallDbProcMerge("general", eventsTable.TableName, parentExecutionGuid);
 
             return true;
         }

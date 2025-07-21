@@ -1,12 +1,14 @@
-﻿using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxMicrovix;
+﻿using Application.IntegrationsCore.Middlewares;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxMicrovix;
 using Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix;
 using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
 using Microsoft.Azure.WebJobs;
 
-namespace AzureJobs.RecurringJobs
+namespace AzureJobs.RecurringJobs.LinxMicrovix.ERP
 {
     public class LinxMicrovix
     {
+        private readonly WebJobExceptionHandlingMiddleware _webJobExceptionHandlingMiddleware;
         private readonly LinxAPIParam _linxMicrovixJobParameter;
         private readonly List<LinxMethods>? _methods;
         private readonly IConfiguration _configuration;
@@ -44,7 +46,8 @@ namespace AzureJobs.RecurringJobs
         private readonly ILinxProdutosCodBarService _linxProdutosCodBarService;
 
         public LinxMicrovix(
-            IConfiguration configuration,
+            IConfiguration configuration, 
+            IServiceProvider services,
             ILinxProdutosTabelasPrecosService linxProdutosTabelasPrecosService,
             ILinxClientesFornecService linxClientesFornecService,
             ILinxClientesEnderecosEntregaService linxClientesEnderecosEntregaService,
@@ -161,6 +164,8 @@ namespace AzureJobs.RecurringJobs
                             .GetSection("LinxMicrovix")
                             .GetSection("Methods")
                             .Get<List<LinxMethods>>();
+
+            _webJobExceptionHandlingMiddleware = new WebJobExceptionHandlingMiddleware(services);
         }
 
         //public async Task LinxB2CPedidos([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)

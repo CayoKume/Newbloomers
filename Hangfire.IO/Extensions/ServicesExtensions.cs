@@ -11,7 +11,6 @@ using Infrastructure.AfterSale.DependencyInjection;
 using Infrastructure.Jadlog.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Infrastructure.Dootax;
-using Infrastructure.IntegrationsCore.Repositorys;
 using Infrastructure.Movidesk;
 
 namespace Hangfire.IO.Extensions

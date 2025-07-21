@@ -1,4 +1,6 @@
-﻿using Application.TotalExpress.Interfaces;
+﻿using Application.IntegrationsCore.Interfaces;
+using Application.TotalExpress.Interfaces;
+using Domain.IntegrationsCore.Enums;
 using Domain.TotalExpress.Entities;
 using Domain.TotalExpress.Interfaces.Api;
 using Domain.TotalExpress.Interfaces.Repository;
@@ -12,10 +14,11 @@ namespace Application.TotalExpress.Services
     public class TotalExpressService : ITotalExpressService
     {
         private readonly IAPICall _apiCall;
+        private readonly ILoggerService _logger;
         private readonly ITotalExpressRepository _totalExpressRepository;
 
-        public TotalExpressService(IAPICall apiCall, ITotalExpressRepository totalExpressRepository) =>
-            (_apiCall, _totalExpressRepository) = (apiCall, totalExpressRepository);
+        public TotalExpressService(IAPICall apiCall, ITotalExpressRepository totalExpressRepository, ILoggerService logger) =>
+            (_apiCall, _totalExpressRepository, _logger) = (apiCall, totalExpressRepository, logger);
 
         public async Task<bool> SendOrder(string? orderNumber)
         {
@@ -251,6 +254,10 @@ namespace Application.TotalExpress.Services
 
         public async Task<bool> InsertLogOrdersByAWBs()
         {
+            _logger
+               .Clear()
+               .AddLog(EnumJob.TotalExpressTrackingHistory);
+
             var listStatus = new List<Status>();
             var listErrors = new List<Error>();
 
@@ -286,7 +293,7 @@ namespace Application.TotalExpress.Services
                         if (res.IndexOf("{") == 0)
                         {
                             var status = JsonConvert.DeserializeObject<Status>(res);
-                            listStatus.Add(new Status(status));
+                            listStatus.Add(new Status(status, res));
                         }
                         else
                         {
@@ -294,16 +301,46 @@ namespace Application.TotalExpress.Services
 
                             statusList
                                 .ForEach(status => 
-                                    listStatus.Add(new Status(status))
+                                    listStatus.Add(new Status(status, res))
                             );
                         }
                     }
                     else
                         listErrors.Add(new Error(pedido: pedido.pedido, erro: await response.Content.ReadAsStringAsync()));
                 }
-
-                _totalExpressRepository.InsertStatus(listStatus, listErrors);
             }
+
+            if (listStatus.Count() > 0 || listErrors.Count() > 0)
+            {
+                await _totalExpressRepository.InsertStatus(listStatus, listErrors, new Guid());
+
+                listStatus.ForEach(s =>
+                    _logger.AddRecord(
+                        s.pedido.ToString(),
+                        s.Responses
+                            .Where(pair => pair.Key == s.pedido)
+                            .Select(pair => pair.Value)
+                            .FirstOrDefault()
+                    )
+                );
+
+                listErrors.ForEach(s =>
+                    _logger.AddRecord(
+                        s.pedido.ToString(),
+                        s.Responses
+                            .Where(pair => pair.Key == s.pedido)
+                            .Select(pair => pair.Value)
+                            .FirstOrDefault()
+                    )
+                );
+            }
+
+            _logger.AddMessage(
+                    $"Concluída com sucesso: {listStatus.Count} registro(s) novo(s) inserido(s), {listErrors.Count} erro(s) inserido(s)!"
+                );
+
+            _logger.SetLogEndDate();
+            await _logger.CommitAllChanges();
 
             return true;
         }

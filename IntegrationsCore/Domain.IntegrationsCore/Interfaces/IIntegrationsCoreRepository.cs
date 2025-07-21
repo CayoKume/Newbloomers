@@ -58,6 +58,12 @@ namespace Domain.IntegrationsCore.Interfaces
         /// <param name="tableName"></param>
         /// <param name="parentExecutionGUID"></param>
         public Task<bool> CallDbProcMerge(string schemaName, string tableName, Guid? parentExecutionGUID);
+        /// <summary>
+        /// Call synchronization procedure from Database
+        /// </summary>
+        /// <param name="schemaName"></param>
+        /// <param name="tableName"></param>
+        public bool CallDbProcMerge(string schemaName, string tableName);
 
         public Task<bool> LogInsert(Log log);
     }

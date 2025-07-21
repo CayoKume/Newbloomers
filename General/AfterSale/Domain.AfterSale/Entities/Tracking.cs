@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Domain.IntegrationsCore.Extensions;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.AfterSale.Entities
 {
@@ -30,6 +31,7 @@ namespace Domain.AfterSale.Entities
         public DateTime? deleted_at { get; set; }
 
         [NotMapped]
+        [SkipProperty]
         public Reverse reverse { get; set; }
     }
 }

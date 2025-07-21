@@ -109,6 +109,16 @@
 
         JadlogSearchTrackingHistory = 1100,
 
-        AfterSaleEcommerces = 1200
+        TotalExpressTrackingHistory = 1300,
+
+        AfterSaleEcommerces = 1200,
+        AfterSaleReverses = 1201,
+        AfterSaleAddresses = 1202,
+        AfterSaleCustomers = 1203,
+        AfterSaleReasons = 1204,
+        AfterSaleStatus = 1205,
+        AfterSaleStatusHistories = 1206,
+        AfterSaleTrackingHistories = 1207,
+        AfterSaleTransportations = 1208
     }
 }

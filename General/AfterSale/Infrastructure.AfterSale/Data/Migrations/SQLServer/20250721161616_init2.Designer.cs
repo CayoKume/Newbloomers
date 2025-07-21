@@ -4,16 +4,19 @@ using Infrastructure.AfterSale.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Infrastructure.AfterSale.Data.Migrations.SQLServer
+namespace Infrastructure.AfterSale.Data.Migrations.SqlServer
 {
-    [DbContext(typeof(AfterSaleUntreatedDbContext))]
-    partial class AfterSaleUntreatedDbContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(AfterSaleTreatedDbContext))]
+    [Migration("20250721161616_init2")]
+    partial class init2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,7 +37,7 @@ namespace Infrastructure.AfterSale.Data.Migrations.SQLServer
 
                     b.HasKey("doc_company");
 
-                    b.ToTable("Parametros_AfterSale", "untreated");
+                    b.ToTable("Parametros_AfterSale", "general");
 
                     b.HasData(
                         new
@@ -132,7 +135,7 @@ namespace Infrastructure.AfterSale.Data.Migrations.SQLServer
 
                     b.HasKey("id");
 
-                    b.ToTable("AfterSaleTrackings", "untreated");
+                    b.ToTable("AfterSaleTrackings", "general");
                 });
 #pragma warning restore 612, 618
         }
