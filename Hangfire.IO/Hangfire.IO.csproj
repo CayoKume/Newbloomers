@@ -30,6 +30,8 @@
     <ProjectReference Include="..\Shippment\FlashCourier\Infrastructure.FlashCourier\Infrastructure.FlashCourier.csproj" />
     <ProjectReference Include="..\Shippment\Jadlog\Application.Jadlog\Application.Jadlog.csproj" />
     <ProjectReference Include="..\Shippment\Jadlog\Infrastructure.Jadlog\Infrastructure.Jadlog.csproj" />
+    <ProjectReference Include="..\Shippment\Stone\Application.Stone\Application.Stone.csproj" />
+    <ProjectReference Include="..\Shippment\Stone\Infrastructure.Stone\Infrastructure.Stone.csproj" />
     <ProjectReference Include="..\Shippment\TotalExpress\Application.TotalExpress\Application.TotalExpress.csproj" />
     <ProjectReference Include="..\Shippment\TotalExpress\Infrastructure.TotalExpress\Infrastructure.TotalExpress.csproj" />
   </ItemGroup>

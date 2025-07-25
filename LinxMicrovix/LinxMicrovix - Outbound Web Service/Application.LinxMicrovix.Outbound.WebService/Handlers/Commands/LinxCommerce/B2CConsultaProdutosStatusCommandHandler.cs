@@ -1,0 +1,24 @@
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Handlers.Commands.LinxCommerce;
+using Domain.LinxMicrovix.Outbound.WebService.Models.LinxCommerce;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Application.LinxMicrovix.Outbound.WebService.Handlers.Commands.LinxCommerce
+{
+    public class B2CConsultaProdutosStatusCommandHandler : IB2CConsultaProdutosStatusCommandHandler
+    {
+        public string CreateGetRegistersExistsQuery(IList<B2CConsultaProdutosStatus> registros)
+        {
+            string identificadores = string.Join(", ", registros.Select(r => $"'{r.codigoproduto}'"));
+            return $"SELECT CONCAT('[', CODIGOPRODUTO, ']', '|', '[', [TIMESTAMP], ']') FROM [linx_microvix_commerce].[B2CCONSULTAPRODUTOSSTATUS] WHERE CODIGOPRODUTO IN ({identificadores})";
+        }
+
+        public string CreateInsertRecordQuery(string tableName)
+        {
+            return @$"INSERT INTO {tableName} 
+                          ([lastupdateon], [codigoproduto], [referencia], [ativo], [b2c], [timestamp], [portal]) 
+                          Values 
+                          (@lastupdateon, @codigoproduto, @referencia, @ativo, @b2c, @timestamp, @portal)";
+        }
+    }
+}

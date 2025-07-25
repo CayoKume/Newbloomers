@@ -1,12 +1,13 @@
 ﻿using Application.IntegrationsCore.Interfaces;
-using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
-using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxMicrovix;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Handlers.Commands;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Services;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Services.LinxMicrovix;
 using Domain.IntegrationsCore.Entities.Exceptions;
 using Domain.IntegrationsCore.Enums;
-using Domain.LinxMicrovix.Outbound.WebService.Entities.LinxMicrovix;
+using Domain.IntegrationsCore.Interfaces;
+using Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix;
 using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Api;
-using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxMicrovix;
 using System.ComponentModel.DataAnnotations;
 
@@ -17,23 +18,26 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
         private readonly IAPICall _apiCall;
         private readonly ILoggerService _logger;
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
-        private readonly ILinxMicrovixRepositoryBase<LinxClientesFornec> _linxMicrovixRepositoryBase;
+        private readonly IIntegrationsCoreRepository _integrationsCoreRepository;
         private readonly ILinxClientesFornecRepository _linxClientesFornecRepository;
+        private readonly ILinxMicrovixCommandHandler _linxMicrovixCommandHandler;
         private static List<string?> _linxClientesFornecCache { get; set; } = new List<string?>();
 
         public LinxClientesFornecService(
             IAPICall apiCall,
             ILoggerService logger,
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
-            ILinxMicrovixRepositoryBase<LinxClientesFornec> linxMicrovixRepositoryBase,
-            ILinxClientesFornecRepository linxClientesFornecRepository
+            IIntegrationsCoreRepository integrationsCoreRepository,
+            ILinxClientesFornecRepository linxClientesFornecRepository,
+            ILinxMicrovixCommandHandler linxMicrovixCommandHandler
         )
         {
             _apiCall = apiCall;
             _logger = logger;
             _linxMicrovixServiceBase = linxMicrovixServiceBase;
-            _linxMicrovixRepositoryBase = linxMicrovixRepositoryBase;
+            _integrationsCoreRepository = integrationsCoreRepository;
             _linxClientesFornecRepository = linxClientesFornecRepository;
+            _linxMicrovixCommandHandler = linxMicrovixCommandHandler;
         }
 
         public List<LinxClientesFornec?> DeserializeXMLToObject(LinxAPIParam jobParameter, List<Dictionary<string?, string?>> records)
@@ -127,7 +131,8 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                .Clear()
                .AddLog(EnumJob.LinxClientesFornec);
 
-            string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter.parametersInterval, jobParameter.parametersTableName, jobParameter.jobName);
+            string sql = _linxMicrovixCommandHandler.CreateGetParametersQuery(jobParameter.parametersInterval, jobParameter.parametersTableName, jobParameter.jobName);
+            string? parameters = await _integrationsCoreRepository.GetRecord<string>(sql);
 
             var body = _linxMicrovixServiceBase.BuildBodyRequest(
                 parametersList: parameters.Replace("[0]", "0").Replace("[doc_cliente]", identificador).Replace("[data_inicial]", "2000-01-01").Replace("[data_fim]", $"{DateTime.Today.ToString("yyyy-MM-dd")}"),
@@ -147,7 +152,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                     _logger.AddRecord(record.recordKey, record.recordXml);
                 }
 
-                await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
+                await _integrationsCoreRepository.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
 
                 _logger.AddMessage(
                     $"Concluída com sucesso: {listRecords.Count} registro(s) novo(s) inserido(s)!"
@@ -166,8 +171,11 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                .Clear()
                .AddLog(EnumJob.LinxClientesFornec);
 
-            string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter.parametersInterval, jobParameter.parametersTableName, jobParameter.jobName);
-            string? timestamp = await _linxMicrovixRepositoryBase.GetLast7DaysMinTimestamp(jobParameter.schema, jobParameter.tableName, "dt_update");
+            string sql = _linxMicrovixCommandHandler.CreateGetParametersQuery(jobParameter.parametersInterval, jobParameter.parametersTableName, jobParameter.jobName);
+            string? parameters = await _integrationsCoreRepository.GetRecord<string>(sql);
+
+            string sqlTimestamp = _linxMicrovixCommandHandler.CreateGetLast7DaysMinTimestampQuery(jobParameter.schema, jobParameter.tableName, "dt_update");
+            string? timestamp = await _integrationsCoreRepository.GetRecord<string>(sqlTimestamp);
 
             var body = _linxMicrovixServiceBase.BuildBodyRequest(
                         parametersList: parameters.Replace("[0]", timestamp).Replace("[data_inicial]", $"{DateTime.Today.AddDays(-7).ToString("yyyy-MM-dd")}").Replace("[data_fim]", $"{DateTime.Today.ToString("yyyy-MM-dd")}").Replace("[dt_update_inicial]", $"{DateTime.Today.AddDays(-7).ToString("yyyy-MM-dd")}").Replace("[dt_update_fim]", $"{DateTime.Today.ToString("yyyy-MM-dd")}"),
@@ -201,7 +209,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                 if (_listSomenteNovos.Count() > 0)
                 {
                     _linxClientesFornecRepository.BulkInsertIntoTableRaw(records: _listSomenteNovos, jobParameter: jobParameter);
-                    await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
+                    await _integrationsCoreRepository.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
 
                     for (int i = 0; i < _listSomenteNovos.Count; i++)
                     {

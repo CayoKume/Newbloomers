@@ -1,14 +1,15 @@
 ﻿using Application.IntegrationsCore.Interfaces;
-using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
-using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxCommerce;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Handlers.Commands;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Services;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Services.LinxCommerce;
 using Domain.IntegrationsCore.Entities.Exceptions;
 using Domain.IntegrationsCore.Enums;
 using Domain.IntegrationsCore.Interfaces;
-using Domain.LinxMicrovix.Outbound.WebService.Entities.LinxCommerce;
+using Domain.LinxMicrovix.Outbound.WebService.Models.LinxCommerce;
 using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Api;
-using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxCommerce;
+using Domain.LinxMicrovix.Outbound.WebService.Models.Base;
 using System.ComponentModel.DataAnnotations;
 
 namespace Application.LinxMicrovix.Outbound.WebService.Services
@@ -18,8 +19,9 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
         private readonly IAPICall _apiCall;
         private readonly ILoggerService _logger;
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
-        private readonly ILinxMicrovixRepositoryBase<B2CConsultaCodigoRastreio> _linxMicrovixRepositoryBase;
+        private readonly IIntegrationsCoreRepository _integrationsCoreRepository;
         private readonly IB2CConsultaCodigoRastreioRepository _b2cConsultaCodigoRastreioRepository;
+        private readonly ILinxMicrovixCommandHandler _linxMicrovixCommandHandler;
         private static List<string?> _b2cConsultaCodigoRastreioCache { get; set; } = new List<string?>();
 
         public B2CConsultaCodigoRastreioService(
@@ -27,14 +29,16 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
             ILoggerService logger,
             IB2CConsultaCodigoRastreioRepository b2cConsultaCodigoRastreioRepository,
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
-            ILinxMicrovixRepositoryBase<B2CConsultaCodigoRastreio> linxMicrovixRepositoryBase
+            IIntegrationsCoreRepository integrationsCoreRepository,
+            ILinxMicrovixCommandHandler linxMicrovixCommandHandler
         )
         {
             _apiCall = apiCall;
             _logger = logger;
             _b2cConsultaCodigoRastreioRepository = b2cConsultaCodigoRastreioRepository;
             _linxMicrovixServiceBase = linxMicrovixServiceBase;
-            _linxMicrovixRepositoryBase = linxMicrovixRepositoryBase;
+            _integrationsCoreRepository = integrationsCoreRepository;
+            _linxMicrovixCommandHandler = linxMicrovixCommandHandler;
         }
 
         public List<B2CConsultaCodigoRastreio?> DeserializeXMLToObject(LinxAPIParam jobParameter, List<Dictionary<string?, string?>> records)
@@ -94,10 +98,11 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                .Clear()
                .AddLog(EnumJob.B2CConsultaCodigoRastreio);
 
-            string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter.parametersInterval, jobParameter.tableName, jobParameter.jobName);
+            var sql = _linxMicrovixCommandHandler.CreateGetParametersQuery(jobParameter.jobName, identificador, cnpj_emp);
+            var result = await _integrationsCoreRepository.GetRecord<string>(sql);
 
             var body = _linxMicrovixServiceBase.BuildBodyRequest(
-                parametersList: parameters.Replace("[0]", "0").Replace("[id_pedido]", identificador),
+                parametersList: result.Replace("[0]", "0").Replace("[id_pedido]", identificador),
                 jobParameter: jobParameter,
                 cnpj_emp: cnpj_emp);
 
@@ -114,7 +119,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                     _logger.AddRecord(record.recordKey, record.recordXml);
                 }
 
-                await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
+                await _integrationsCoreRepository.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
 
                 _logger.AddMessage(
                     $"Concluída com sucesso: {listRecords.Count} registro(s) novo(s) inserido(s)!"
@@ -133,8 +138,11 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                .Clear()
                .AddLog(EnumJob.B2CConsultaCodigoRastreio);
 
-            string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter.parametersInterval, jobParameter.tableName, jobParameter.jobName);
-            var cnpjs_emp = await _linxMicrovixRepositoryBase.GetB2CCompanys();
+            string sql = _linxMicrovixCommandHandler.CreateGetParametersQuery(jobParameter.parametersInterval, jobParameter.parametersTableName, jobParameter.jobName);
+            string? parameters = await _integrationsCoreRepository.GetRecord<string>(sql);
+
+            string sqlCnpjsEmp = _linxMicrovixCommandHandler.CreateGetB2CCompanysQuery();
+            var cnpjs_emp = await _integrationsCoreRepository.GetRecords<Company?>(sql);
 
             foreach (var cnpj_emp in cnpjs_emp)
             {
@@ -164,7 +172,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                     if (_listSomenteNovos.Count() > 0)
                     {
                         _b2cConsultaCodigoRastreioRepository.BulkInsertIntoTableRaw(records: _listSomenteNovos, jobParameter: jobParameter);
-                        await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
+                        await _integrationsCoreRepository.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
 
                         for (int i = 0; i < _listSomenteNovos.Count; i++)
                         {

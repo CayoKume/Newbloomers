@@ -150,29 +150,6 @@ namespace Infrastructure.IntegrationsCore.Repositorys
             }
         }
 
-        public bool CallDbProcMerge(string schemaName, string tableName)
-        {
-            try
-            {
-                using (var conn = _sqlServerConnection.GetIDbConnection())
-                {
-                    var result = conn.Execute($"[{schemaName}].[P_{tableName}_Sincronizacao]", commandType: CommandType.StoredProcedure, commandTimeout: 2700);
-
-                    if (result > 0)
-                        return true;
-
-                    return false;
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new GeneralException(
-                    message: $"error when trying to run sync proc on database - {ex.Message}",
-                    exceptionMessage: ex.StackTrace
-                );
-            }
-        }
-
         public async Task<bool> LogInsert(Log log)
         {
             var recordsTable = CreateSystemDataTable("Records", new Record());

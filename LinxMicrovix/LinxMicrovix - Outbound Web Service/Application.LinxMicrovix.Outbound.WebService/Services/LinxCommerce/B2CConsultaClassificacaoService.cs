@@ -1,13 +1,14 @@
 ﻿using Application.IntegrationsCore.Interfaces;
-using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
-using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxCommerce;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Handlers.Commands;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Services;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Services.LinxCommerce;
 using Domain.IntegrationsCore.Entities.Exceptions;
 using Domain.IntegrationsCore.Enums;
 using Domain.IntegrationsCore.Interfaces;
-using Domain.LinxMicrovix.Outbound.WebService.Entities.LinxCommerce;
+using Domain.LinxMicrovix.Outbound.WebService.Models.LinxCommerce;
 using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Api;
-using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
+
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxCommerce;
 using System.ComponentModel.DataAnnotations;
 
@@ -23,7 +24,8 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
         private readonly IAPICall _apiCall;
         private readonly ILoggerService _logger;
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
-        private readonly ILinxMicrovixRepositoryBase<B2CConsultaClassificacao> _linxMicrovixRepositoryBase;
+        private readonly ILinxMicrovixCommandHandler _linxMicrovixCommandHandler;
+        private readonly IIntegrationsCoreRepository _integrationsCoreRepository;
         private readonly IB2CConsultaClassificacaoRepository _b2cConsultaClassificacaoRepository;
         private static List<string?> _b2cConsultaClassificacaoCache { get; set; } = new List<string?>();
 
@@ -32,14 +34,16 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
             ILoggerService logger,
             IB2CConsultaClassificacaoRepository b2cConsultaClassificacaoRepository,
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
-            ILinxMicrovixRepositoryBase<B2CConsultaClassificacao> linxMicrovixRepositoryBase
+            ILinxMicrovixCommandHandler linxMicrovixCommandHandler,
+            IIntegrationsCoreRepository integrationsCoreRepository
         )
         {
             _apiCall = apiCall;
             _logger = logger;
             _b2cConsultaClassificacaoRepository = b2cConsultaClassificacaoRepository;
             _linxMicrovixServiceBase = linxMicrovixServiceBase;
-            _linxMicrovixRepositoryBase = linxMicrovixRepositoryBase;
+            _linxMicrovixCommandHandler = linxMicrovixCommandHandler;
+            _integrationsCoreRepository = integrationsCoreRepository;
         }
 
         public async Task<bool> GetRecords(LinxAPIParam jobParameter)
@@ -48,7 +52,13 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                .Clear()
                .AddLog(EnumJob.B2CConsultaClassificacao);
 
-            string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter.parametersInterval, jobParameter.tableName, jobParameter.jobName);
+            string sql = _linxMicrovixCommandHandler.CreateGetParametersQuery(
+                jobParameter.parametersInterval,
+                jobParameter.tableName,
+                jobParameter.jobName
+            );
+
+            string? parameters = await _integrationsCoreRepository.GetRecord<string>(sql);
 
             var body = _linxMicrovixServiceBase.BuildBodyRequest(
                 parametersList: parameters.Replace("[0]", "0"),
@@ -76,7 +86,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                 if (_listSomenteNovos.Count() > 0)
                 {
                     _b2cConsultaClassificacaoRepository.BulkInsertIntoTableRaw(records: _listSomenteNovos, jobParameter: jobParameter);
-                    await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
+                    await _integrationsCoreRepository.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
 
                     for (int i = 0; i < _listSomenteNovos.Count; i++)
                     {
@@ -103,7 +113,13 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                .Clear()
                .AddLog(EnumJob.B2CConsultaClassificacao);
 
-            string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter.parametersInterval, jobParameter.tableName, jobParameter.jobName);
+            string sql = _linxMicrovixCommandHandler.CreateGetParametersQuery(
+                jobParameter.parametersInterval,
+                jobParameter.tableName,
+                jobParameter.jobName
+            );
+
+            string? parameters = await _integrationsCoreRepository.GetRecord<string>(sql);
 
             var body = _linxMicrovixServiceBase.BuildBodyRequest(
                 parametersList: parameters.Replace("[0]", "0").Replace("[codigo_classificacao]", identificador),
@@ -123,7 +139,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                     _logger.AddRecord(record.recordKey, record.recordXml);
                 }
 
-                await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
+                await _integrationsCoreRepository.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
 
                 _logger.AddMessage(
                     $"Concluída com sucesso: {listRecords.Count} registro(s) novo(s) inserido(s)!"

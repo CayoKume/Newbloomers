@@ -1,66 +1,49 @@
-﻿using Domain.IntegrationsCore.Entities.Exceptions;
-using Domain.IntegrationsCore.Enums;
-using Domain.LinxMicrovix.Outbound.WebService.Entities.LinxCommerce;
+﻿using Application.LinxMicrovix.Outbound.WebService.Interfaces.Handlers.Commands.LinxCommerce;
+using Domain.IntegrationsCore.Interfaces;
+using Domain.LinxMicrovix.Outbound.WebService.Models.LinxCommerce;
 using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
-using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
+
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxCommerce;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerce
 {
     public class B2CConsultaProdutosDetalhesDepositosRepository : IB2CConsultaProdutosDetalhesDepositosRepository
     {
-        private readonly ILinxMicrovixRepositoryBase<B2CConsultaProdutosDetalhesDepositos> _linxMicrovixRepositoryBase;
+        private readonly IIntegrationsCoreRepository _integrationsCoreRepository;
+        private readonly IB2CConsultaProdutosDetalhesDepositosCommandHandler _commandHandler;
 
-        public B2CConsultaProdutosDetalhesDepositosRepository(ILinxMicrovixRepositoryBase<B2CConsultaProdutosDetalhesDepositos> linxMicrovixRepositoryBase) =>
-            (_linxMicrovixRepositoryBase) = (linxMicrovixRepositoryBase);
+        public B2CConsultaProdutosDetalhesDepositosRepository(IIntegrationsCoreRepository integrationsCoreRepository, IB2CConsultaProdutosDetalhesDepositosCommandHandler commandHandler)
+        {
+            _integrationsCoreRepository = integrationsCoreRepository;
+            _commandHandler = commandHandler;
+        }
 
         public bool BulkInsertIntoTableRaw(LinxAPIParam jobParameter, IList<B2CConsultaProdutosDetalhesDepositos> records)
         {
-            try
-            {
-                var table = _linxMicrovixRepositoryBase.CreateSystemDataTable(jobParameter.tableName, new B2CConsultaProdutosDetalhesDepositos());
+            var table = _integrationsCoreRepository.CreateSystemDataTable(jobParameter.tableName, new B2CConsultaProdutosDetalhesDepositos());
 
-                for (int i = 0; i < records.Count(); i++)
-                {
-                    table.Rows.Add(records[i].lastupdateon, records[i].codigoproduto, records[i].empresa, records[i].id_deposito, records[i].saldo, records[i].timestamp, records[i].portal, records[i].deposito, records[i].tempo_preparacao_estoque);
-                }
+            _integrationsCoreRepository.FillSystemDataTable(table, records.ToList());
 
-                _linxMicrovixRepositoryBase.BulkInsertIntoTableRaw(
-                    dataTable: table
-                );
+            _integrationsCoreRepository.BulkInsertIntoTableRaw(
+                dataTable: table
+            );
 
-                return true;
-            }
-            catch
-            {
-                throw;
-            }
+            return true;
         }
 
         public async Task<IEnumerable<string?>> GetRegistersExists(LinxAPIParam jobParameter, List<B2CConsultaProdutosDetalhesDepositos> registros)
         {
-            var identificadores = String.Empty;
-            for (int i = 0; i < registros.Count(); i++)
-            {
-                if (i == registros.Count() - 1)
-                    identificadores += $"'{registros[i].deposito}'";
-                else
-                    identificadores += $"'{registros[i].deposito}', ";
-            }
-
-            string sql = $"SELECT CONCAT('[', DEPOSITO, ']', '|', '[', [TIMESTAMP], ']') FROM [linx_microvix_commerce].[B2CCONSULTAPRODUTOSDETALHESDEPOSITOS] WHERE DEPOSITO IN ({identificadores})";
-
-            return await _linxMicrovixRepositoryBase.GetKeyRegistersAlreadyExists(sql);
+            string sql = _commandHandler.CreateGetRegistersExistsQuery(registros);
+            return await _integrationsCoreRepository.GetRecords<string>(sql);
         }
 
         public async Task<bool> InsertRecord(LinxAPIParam jobParameter, B2CConsultaProdutosDetalhesDepositos? record)
         {
-            string? sql = $"INSERT INTO {jobParameter.tableName} " +
-                          "([lastupdateon], [codigoproduto], [empresa], [id_deposito], [saldo], [timestamp], [portal], [deposito], [tempo_preparacao_estoque]) " +
-                          "Values " +
-                          "(@lastupdateon, @codigoproduto, @empresa, @id_deposito, @saldo, @timestamp, @portal, @deposito, @tempo_preparacao_estoque)";
-
-            return await _linxMicrovixRepositoryBase.InsertRecord(jobParameter.tableName, sql: sql, record: record);
+            string sql = _commandHandler.CreateInsertRecordQuery(jobParameter.tableName);
+            return await _integrationsCoreRepository.InsertRecord(sql: sql, entity: record);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxCommerce;
+﻿using Application.LinxMicrovix.Outbound.WebService.Interfaces.Services.LinxCommerce;
 using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
 using Microsoft.AspNetCore.Mvc;
 

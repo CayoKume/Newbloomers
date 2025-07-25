@@ -1,30 +1,33 @@
-﻿using Domain.IntegrationsCore.Entities.Exceptions;
-using Domain.IntegrationsCore.Enums;
-using Domain.LinxMicrovix.Outbound.WebService.Entities.LinxCommerce;
+﻿using Application.LinxMicrovix.Outbound.WebService.Interfaces.Handlers.Commands.LinxCommerce;
+using Domain.IntegrationsCore.Interfaces;
+using Domain.LinxMicrovix.Outbound.WebService.Models.LinxCommerce;
 using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
-using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
+
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxCommerce;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerce
 {
     public class B2CConsultaPlanosRepository : IB2CConsultaPlanosRepository
     {
-        private readonly ILinxMicrovixRepositoryBase<B2CConsultaPlanos> _linxMicrovixRepositoryBase;
+        private readonly IIntegrationsCoreRepository _integrationsCoreRepository;
+        private readonly IB2CConsultaPlanosCommandHandler _commandHandler;
 
-        public B2CConsultaPlanosRepository(ILinxMicrovixRepositoryBase<B2CConsultaPlanos> linxMicrovixRepositoryBase) =>
-            (_linxMicrovixRepositoryBase) = (linxMicrovixRepositoryBase);
+        public B2CConsultaPlanosRepository(IIntegrationsCoreRepository integrationsCoreRepository, IB2CConsultaPlanosCommandHandler commandHandler)
+        {
+            _integrationsCoreRepository = integrationsCoreRepository;
+            _commandHandler = commandHandler;
+        }
 
         public bool BulkInsertIntoTableRaw(LinxAPIParam jobParameter, IList<B2CConsultaPlanos> records)
         {
-            var table = _linxMicrovixRepositoryBase.CreateSystemDataTable(jobParameter.tableName, new B2CConsultaPlanos());
+            var table = _integrationsCoreRepository.CreateSystemDataTable(jobParameter.tableName, new B2CConsultaPlanos());
 
-            for (int i = 0; i < records.Count(); i++)
-            {
-                table.Rows.Add(records[i].lastupdateon, records[i].plano, records[i].nome_plano, records[i].forma_pagamento, records[i].qtde_parcelas, records[i].valor_minimo_parcela, records[i].indice, records[i].timestamp,
-                    records[i].desativado, records[i].tipo_plano, records[i].portal);
-            }
+            _integrationsCoreRepository.FillSystemDataTable(table, records.ToList());
 
-            _linxMicrovixRepositoryBase.BulkInsertIntoTableRaw(
+            _integrationsCoreRepository.BulkInsertIntoTableRaw(
                 dataTable: table
             );
 
@@ -33,28 +36,14 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 
         public async Task<IEnumerable<string?>> GetRegistersExists(LinxAPIParam jobParameter, List<B2CConsultaPlanos> registros)
         {
-            var identificadores = String.Empty;
-            for (int i = 0; i < registros.Count(); i++)
-            {
-                if (i == registros.Count() - 1)
-                    identificadores += $"'{registros[i].plano}'";
-                else
-                    identificadores += $"'{registros[i].plano}', ";
-            }
-
-            string sql = $"SELECT CONCAT('[', PLANO, ']', '|', '[', [TIMESTAMP], ']') FROM [linx_microvix_commerce].[B2CCONSULTAPLANOS] WHERE PLANO IN ({identificadores})";
-
-            return await _linxMicrovixRepositoryBase.GetKeyRegistersAlreadyExists(sql);
+            string sql = _commandHandler.CreateGetRegistersExistsQuery(registros);
+            return await _integrationsCoreRepository.GetRecords<string>(sql);
         }
 
         public async Task<bool> InsertRecord(LinxAPIParam jobParameter, B2CConsultaPlanos? record)
         {
-            string? sql = $"INSERT INTO {jobParameter.tableName} " +
-                          "([lastupdateon], [plano], [nome_plano], [forma_pagamento], [qtde_parcelas], [valor_minimo_parcela], [indice], [timestamp], [desativado], [tipo_plano], [portal]) " +
-                          "Values " +
-                          "(@lastupdateon, @plano, @nome_plano, @forma_pagamento, @qtde_parcelas, @valor_minimo_parcela, @indice, @timestamp, @desativado, @tipo_plano, @portal)";
-
-            return await _linxMicrovixRepositoryBase.InsertRecord(jobParameter.tableName, sql: sql, record: record);
+            string sql = _commandHandler.CreateInsertRecordQuery(jobParameter.tableName);
+            return await _integrationsCoreRepository.InsertRecord(sql: sql, entity: record);
         }
     }
 }

@@ -1,30 +1,32 @@
-﻿using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
-using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
+﻿using Application.LinxMicrovix.Outbound.WebService.Interfaces.Handlers.Commands.LinxMicrovix;
+using Domain.IntegrationsCore.Interfaces;
+using Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix;
+using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxMicrovix;
-using Domain.LinxMicrovix.Outbound.WebService.Entities.LinxMicrovix;
-using Domain.IntegrationsCore.Enums;
-using Domain.IntegrationsCore.Entities.Exceptions;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxMicrovix
 {
     public class LinxProdutosTabelasRepository : ILinxProdutosTabelasRepository
     {
-        private readonly ILinxMicrovixRepositoryBase<LinxProdutosTabelas> _linxMicrovixRepositoryBase;
+        private readonly IIntegrationsCoreRepository _integrationsCoreRepository;
+        private readonly ILinxProdutosTabelasCommandHandler _commandHandler;
 
-        public LinxProdutosTabelasRepository(ILinxMicrovixRepositoryBase<LinxProdutosTabelas> linxMicrovixRepositoryBase) =>
-            (_linxMicrovixRepositoryBase) = (linxMicrovixRepositoryBase);
+        public LinxProdutosTabelasRepository(IIntegrationsCoreRepository integrationsCoreRepository, ILinxProdutosTabelasCommandHandler commandHandler)
+        {
+            _integrationsCoreRepository = integrationsCoreRepository;
+            _commandHandler = commandHandler;
+        }
 
         public bool BulkInsertIntoTableRaw(LinxAPIParam jobParameter, IList<LinxProdutosTabelas> records)
         {
-            var table = _linxMicrovixRepositoryBase.CreateSystemDataTable(jobParameter.tableName, new LinxProdutosTabelas());
+            var table = _integrationsCoreRepository.CreateSystemDataTable(jobParameter.tableName, new LinxProdutosTabelas());
 
-            for (int i = 0; i < records.Count(); i++)
-            {
-                table.Rows.Add(records[i].lastupdateon, records[i].id_tabela, records[i].portal, records[i].cnpj_emp, records[i].nome_tabela, records[i].ativa,
-                    records[i].timestamp, records[i].tipo_tabela, records[i].codigo_integracao_ws);
-            }
+            _integrationsCoreRepository.FillSystemDataTable(table, records.ToList());
 
-            _linxMicrovixRepositoryBase.BulkInsertIntoTableRaw(
+            _integrationsCoreRepository.BulkInsertIntoTableRaw(
                 dataTable: table
             );
 
@@ -33,19 +35,14 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxMicrovi
 
         public async Task<IEnumerable<string?>> GetRegistersExists()
         {
-            string sql = $"SELECT CONCAT('[', CNPJ_EMP, ']', '|', '[', ID_TABELA, ']', '|', '[', TIPO_TABELA, ']', '|',  '[', [TIMESTAMP], ']') FROM [linx_microvix_erp].[LinxProdutosTabelas]";
-
-            return await _linxMicrovixRepositoryBase.GetKeyRegistersAlreadyExists(sql);
+            string sql = _commandHandler.CreateGetRegistersExistsQuery();
+            return await _integrationsCoreRepository.GetRecords<string>(sql);
         }
 
         public async Task<bool> InsertRecord(LinxAPIParam jobParameter, LinxProdutosTabelas? record)
         {
-            string? sql = @$"INSERT INTO [untreated].[{jobParameter.tableName}] 
-                            ([lastupdateon],[id_tabela],[portal],[cnpj_emp],[nome_tabela],[ativa],[timestamp],[tipo_tabela],[codigo_integracao_ws])
-                            Values
-                            (@lastupdateon,@id_tabela,@portal,@cnpj_emp,@nome_tabela,@ativa,@timestamp,@tipo_tabela,@codigo_integracao_ws)";
-
-            return await _linxMicrovixRepositoryBase.InsertRecord(jobParameter.tableName, sql: sql, record: record);
+            string sql = _commandHandler.CreateInsertRecordQuery(jobParameter.tableName);
+            return await _integrationsCoreRepository.InsertRecord(sql: sql, entity: record);
         }
     }
 }

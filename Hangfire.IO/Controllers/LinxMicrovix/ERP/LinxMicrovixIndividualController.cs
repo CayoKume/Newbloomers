@@ -1,4 +1,4 @@
-﻿using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxMicrovix;
+﻿using Application.LinxMicrovix.Outbound.WebService.Interfaces.Services.LinxMicrovix;
 using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;

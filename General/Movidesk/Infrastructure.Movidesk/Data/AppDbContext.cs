@@ -1,108 +1,57 @@
-﻿using Domain.IntegrationsCore.Entities.Parameters;
+using Domain.IntegrationsCore.Entities.Parameters;
 using Infrastructure.IntegrationsCore.Data.Extensions;
-using Infrastructure.IntegrationsCore.Data.Schemas;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using System.Reflection;
 
 namespace Infrastructure.Movidesk.Data
 {
-    public class MovideskTreatedDbContext : DbContext
+    public abstract class BaseMovideskContext : DbContext
     {
         private readonly IConfiguration _configuration;
+        private readonly string _schema;
 
-        public MovideskTreatedDbContext(DbContextOptions<MovideskTreatedDbContext> options, IConfiguration configuration)
-        : base(options) =>
+        protected BaseMovideskContext(DbContextOptions options, IConfiguration configuration, string schema)
+            : base(options)
+        {
             _configuration = configuration;
+            _schema = schema;
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            var entitiesToIgnore = new List<string>();
+            base.OnModelCreating(modelBuilder);
 
-            var methods = _configuration
-                .GetSection("Movidesk:Methods")
-                .Get<List<Methods>>() ?? new List<Methods>();
-
-            entitiesToIgnore.AddRange(methods
+            var methods = _configuration.GetSection("Movidesk:Methods").Get<List<Methods>>() ?? new List<Methods>();
+            var entitiesToIgnore = methods
                 .Where(x => !x.IsActive)
-                .Select(x => $"Domain.Movidesk.Entities.{x.MethodName}"));
-
-            var configTypes = typeof(MovideskTreatedDbContext).Assembly.GetTypes()
-                .Where(t => !t.IsAbstract && !t.IsInterface)
-                .SelectMany(t => t.GetInterfaces()
-                    .Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEntityTypeConfiguration<>))
-                    .Select(i => new { ConfigType = t, EntityType = i.GetGenericArguments()[0] }))
+                .Select(x => $"Domain.Movidesk.Entities.{x.MethodName}")
                 .ToList();
 
-            foreach (var config in configTypes)
-            {
-                SchemaContext.RegisterSchema(config.EntityType, "general");
-            }
-
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(Infrastructure.Movidesk.DependencyInjection).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(
+                Assembly.GetExecutingAssembly(),
+                (type) => type.Namespace != null && type.Namespace.EndsWith(_schema)
+            );
 
             modelBuilder.ApplyCustomColumnTypeMappings(this);
-
             modelBuilder.IgnoreEntitiesBasedOnConfiguration("Domain.Movidesk", entitiesToIgnore);
-
-            foreach (var config in configTypes)
-            {
-                SchemaContext.RegisterSchema(config.EntityType, "general");
-            }
 
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
-                entityType.SetSchema("general");
+                entityType.SetSchema(_schema);
             }
         }
     }
 
-    public class MovideskUntreatedDbContext : DbContext
+    public class GeneralMovideskContext : BaseMovideskContext
     {
-        private readonly IConfiguration _configuration;
+        public GeneralMovideskContext(DbContextOptions<GeneralMovideskContext> options, IConfiguration configuration)
+            : base(options, configuration, "general") { }
+    }
 
-        public MovideskUntreatedDbContext(DbContextOptions<MovideskUntreatedDbContext> options, IConfiguration configuration)
-        : base(options) =>
-            _configuration = configuration;
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            var entitiesToIgnore = new List<string>();
-
-            var methods = _configuration
-                .GetSection("Movidesk:Methods")
-                .Get<List<Methods>>() ?? new List<Methods>();
-
-            entitiesToIgnore.AddRange(methods
-                .Where(x => !x.IsActive)
-                .Select(x => $"Domain.Movidesk.Entities.{x.MethodName}"));
-
-            var configTypes = typeof(MovideskUntreatedDbContext).Assembly.GetTypes()
-                .Where(t => !t.IsAbstract && !t.IsInterface)
-                .SelectMany(t => t.GetInterfaces()
-                    .Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEntityTypeConfiguration<>))
-                    .Select(i => new { ConfigType = t, EntityType = i.GetGenericArguments()[0] }))
-                .ToList();
-
-            foreach (var config in configTypes)
-            {
-                SchemaContext.RegisterSchema(config.EntityType, "untreated");
-            }
-
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(Infrastructure.Movidesk.DependencyInjection).Assembly);
-
-            modelBuilder.ApplyCustomColumnTypeMappings(this);
-
-            modelBuilder.IgnoreEntitiesBasedOnConfiguration("Domain.Movidesk", entitiesToIgnore);
-
-            foreach (var config in configTypes)
-            {
-                SchemaContext.RegisterSchema(config.EntityType, "untreated");
-            }
-
-            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
-            {
-                entityType.SetSchema("untreated");
-            }
-        }
+    public class UntreatedMovideskContext : BaseMovideskContext
+    {
+        public UntreatedMovideskContext(DbContextOptions<UntreatedMovideskContext> options, IConfiguration configuration)
+            : base(options, configuration, "untreated") { }
     }
 }

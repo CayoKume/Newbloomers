@@ -1,29 +1,32 @@
-﻿using Domain.IntegrationsCore.Entities.Exceptions;
-using Domain.IntegrationsCore.Enums;
-using Domain.LinxMicrovix.Outbound.WebService.Entities.LinxCommerce;
+﻿using Application.LinxMicrovix.Outbound.WebService.Interfaces.Handlers.Commands.LinxCommerce;
+using Domain.IntegrationsCore.Interfaces;
+using Domain.LinxMicrovix.Outbound.WebService.Models.LinxCommerce;
 using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
-using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxCommerce;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerce
 {
     public class B2CConsultaMarcasRepository : IB2CConsultaMarcasRepository
     {
-        private readonly ILinxMicrovixRepositoryBase<B2CConsultaMarcas> _linxMicrovixRepositoryBase;
+        private readonly IIntegrationsCoreRepository _integrationsCoreRepository;
+        private readonly IB2CConsultaMarcasCommandHandler _commandHandler;
 
-        public B2CConsultaMarcasRepository(ILinxMicrovixRepositoryBase<B2CConsultaMarcas> linxMicrovixRepositoryBase) =>
-            (_linxMicrovixRepositoryBase) = (linxMicrovixRepositoryBase);
+        public B2CConsultaMarcasRepository(IIntegrationsCoreRepository integrationsCoreRepository, IB2CConsultaMarcasCommandHandler commandHandler)
+        {
+            _integrationsCoreRepository = integrationsCoreRepository;
+            _commandHandler = commandHandler;
+        }
 
         public bool BulkInsertIntoTableRaw(LinxAPIParam jobParameter, IList<B2CConsultaMarcas> records)
         {
-            var table = _linxMicrovixRepositoryBase.CreateSystemDataTable(jobParameter.tableName, new B2CConsultaMarcas());
+            var table = _integrationsCoreRepository.CreateSystemDataTable(jobParameter.tableName, new B2CConsultaMarcas());
 
-            for (int i = 0; i < records.Count(); i++)
-            {
-                table.Rows.Add(records[i].lastupdateon, records[i].codigo_marca, records[i].nome_marca, records[i].timestamp, records[i].linhas, records[i].portal);
-            }
+            _integrationsCoreRepository.FillSystemDataTable(table, records.ToList());
 
-            _linxMicrovixRepositoryBase.BulkInsertIntoTableRaw(
+            _integrationsCoreRepository.BulkInsertIntoTableRaw(
                 dataTable: table
             );
 
@@ -32,28 +35,14 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxCommerc
 
         public async Task<IEnumerable<string?>> GetRegistersExists(LinxAPIParam jobParameter, List<B2CConsultaMarcas> registros)
         {
-            var identificadores = String.Empty;
-            for (int i = 0; i < registros.Count(); i++)
-            {
-                if (i == registros.Count() - 1)
-                    identificadores += $"'{registros[i].codigo_marca}'";
-                else
-                    identificadores += $"'{registros[i].codigo_marca}', ";
-            }
-
-            string sql = $"SELECT CONCAT('[', CODIGO_MARCA, ']', '|', '[', [TIMESTAMP], ']') FROM [linx_microvix_commerce].[B2CCONSULTAMARCAS] WHERE CODIGO_MARCA IN ({identificadores})";
-
-            return await _linxMicrovixRepositoryBase.GetKeyRegistersAlreadyExists(sql);
+            string sql = _commandHandler.CreateGetRegistersExistsQuery(registros);
+            return await _integrationsCoreRepository.GetRecords<string>(sql);
         }
 
         public async Task<bool> InsertRecord(LinxAPIParam jobParameter, B2CConsultaMarcas? record)
         {
-            string? sql = $"INSERT INTO {jobParameter.tableName} " +
-                          "([lastupdateon], [codigo_marca], [nome_marca], [timestamp], [linhas], [portal]) " +
-                          "Values " +
-                          "(@lastupdateon, @codigo_marca, @nome_marca, @timestamp, @linhas, @portal)";
-
-            return await _linxMicrovixRepositoryBase.InsertRecord(jobParameter.tableName, sql: sql, record: record);
+            string sql = _commandHandler.CreateInsertRecordQuery(jobParameter.tableName);
+            return await _integrationsCoreRepository.InsertRecord(sql: sql, entity: record);
         }
     }
 }

@@ -1,30 +1,33 @@
-﻿using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
-using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
+﻿using Application.LinxMicrovix.Outbound.WebService.Interfaces.Handlers.Commands.LinxMicrovix;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Handlers.Commands.LinxMicrovix;
+using Domain.IntegrationsCore.Interfaces;
+using Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix;
+using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxMicrovix;
-using Domain.LinxMicrovix.Outbound.WebService.Entities.LinxMicrovix;
-using Domain.IntegrationsCore.Enums;
-using Domain.IntegrationsCore.Entities.Exceptions;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxMicrovix
 {
     public class LinxGrupoLojasRepository : ILinxGrupoLojasRepository
     {
-        private readonly ILinxMicrovixRepositoryBase<LinxGrupoLojas> _linxMicrovixRepositoryBase;
+        private readonly IIntegrationsCoreRepository _integrationsCoreRepository;
+        private readonly ILinxGrupoLojasCommandHandler _commandHandler;
 
-        public LinxGrupoLojasRepository(ILinxMicrovixRepositoryBase<LinxGrupoLojas> linxMicrovixRepositoryBase) =>
-            (_linxMicrovixRepositoryBase) = (linxMicrovixRepositoryBase);
+        public LinxGrupoLojasRepository(IIntegrationsCoreRepository integrationsCoreRepository, ILinxGrupoLojasCommandHandler commandHandler)
+        {
+            _integrationsCoreRepository = integrationsCoreRepository;
+            _commandHandler = commandHandler;
+        }
 
         public bool BulkInsertIntoTableRaw(LinxAPIParam jobParameter, IList<LinxGrupoLojas> records)
         {
-            var table = _linxMicrovixRepositoryBase.CreateSystemDataTable(jobParameter.tableName, new LinxGrupoLojas());
+            var table = _integrationsCoreRepository.CreateSystemDataTable(jobParameter.tableName, new LinxGrupoLojas());
 
-            for (int i = 0; i < records.Count(); i++)
-            {
-                table.Rows.Add(records[i].lastupdateon, records[i].cnpj, records[i].nome_empresa, records[i].id_empresas_rede, records[i].rede, records[i].portal,
-                    records[i].nome_portal, records[i].empresa, records[i].classificacao_portal);
-            }
+            _integrationsCoreRepository.FillSystemDataTable(table, records.ToList());
 
-            _linxMicrovixRepositoryBase.BulkInsertIntoTableRaw(
+            _integrationsCoreRepository.BulkInsertIntoTableRaw(
                 dataTable: table
             );
 
@@ -33,19 +36,14 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxMicrovi
 
         public async Task<IEnumerable<string?>> GetRegistersExists()
         {
-            string sql = $"SELECT CONCAT('[', CNPJ, ']', '|', '[', NOME_EMPRESA, ']', '|', '[', ID_EMPRESAS_REDE, ']', '|', '[', REDE, ']', '|', '[', PORTAL, ']', '|', '[', NOME_PORTAL, ']' , '|', '[', EMPRESA, ']', '|', '[', CLASSIFICACAO_PORTAL, ']') FROM [linx_microvix_erp].[LinxGrupoLojas]";
-
-            return await _linxMicrovixRepositoryBase.GetKeyRegistersAlreadyExists(sql);
+            string sql = _commandHandler.CreateGetRegistersExistsQuery();
+            return await _integrationsCoreRepository.GetRecords<string>(sql);
         }
 
         public async Task<bool> InsertRecord(LinxAPIParam jobParameter, LinxGrupoLojas? record)
         {
-            string? sql = @$"INSERT INTO [untreated].[{jobParameter.tableName}]
-                            ([lastupdateon],[cnpj],[nome_empresa],[id_empresas_rede],[rede],[portal],[nome_portal],[empresa],[classificacao_portal])
-                            Values
-                            (@lastupdateon,@cnpj,@nome_empresa,@id_empresas_rede,@rede,@portal,@nome_portal,@empresa,@classificacao_portal)";
-
-            return await _linxMicrovixRepositoryBase.InsertRecord(jobParameter.tableName, sql: sql, record: record);
+            string sql = _commandHandler.CreateInsertRecordQuery(jobParameter.tableName);
+            return await _integrationsCoreRepository.InsertRecord(sql: sql, entity: record);
         }
     }
 }

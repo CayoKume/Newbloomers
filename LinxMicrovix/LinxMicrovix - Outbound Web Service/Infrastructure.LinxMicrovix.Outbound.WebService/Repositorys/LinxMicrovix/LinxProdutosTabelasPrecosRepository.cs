@@ -1,29 +1,33 @@
-﻿using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
-using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
+﻿using Application.LinxMicrovix.Outbound.WebService.Interfaces.Handlers.Commands.LinxMicrovix;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Handlers.Commands.LinxMicrovix;
+using Domain.IntegrationsCore.Interfaces;
+using Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix;
+using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxMicrovix;
-using Domain.LinxMicrovix.Outbound.WebService.Entities.LinxMicrovix;
-using Domain.IntegrationsCore.Enums;
-using Domain.IntegrationsCore.Entities.Exceptions;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxMicrovix
 {
     public class LinxProdutosTabelasPrecosRepository : ILinxProdutosTabelasPrecosRepository
     {
-        private readonly ILinxMicrovixRepositoryBase<LinxProdutosTabelasPrecos> _linxMicrovixRepositoryBase;
+        private readonly IIntegrationsCoreRepository _integrationsCoreRepository;
+        private readonly ILinxProdutosTabelasPrecosCommandHandler _commandHandler;
 
-        public LinxProdutosTabelasPrecosRepository(ILinxMicrovixRepositoryBase<LinxProdutosTabelasPrecos> linxMicrovixRepositoryBase) =>
-            (_linxMicrovixRepositoryBase) = (linxMicrovixRepositoryBase);
+        public LinxProdutosTabelasPrecosRepository(IIntegrationsCoreRepository integrationsCoreRepository, ILinxProdutosTabelasPrecosCommandHandler commandHandler)
+        {
+            _integrationsCoreRepository = integrationsCoreRepository;
+            _commandHandler = commandHandler;
+        }
 
         public bool BulkInsertIntoTableRaw(LinxAPIParam jobParameter, IList<LinxProdutosTabelasPrecos> records)
         {
-            var table = _linxMicrovixRepositoryBase.CreateSystemDataTable(jobParameter.tableName, new LinxProdutosTabelasPrecos());
+            var table = _integrationsCoreRepository.CreateSystemDataTable(jobParameter.tableName, new LinxProdutosTabelasPrecos());
 
-            for (int i = 0; i < records.Count(); i++)
-            {
-                table.Rows.Add(records[i].lastupdateon, records[i].cod_produto, records[i].portal, records[i].cnpj_emp, records[i].id_tabela, records[i].precovenda, records[i].timestamp);
-            }
+            _integrationsCoreRepository.FillSystemDataTable(table, records.ToList());
 
-            _linxMicrovixRepositoryBase.BulkInsertIntoTableRaw(
+            _integrationsCoreRepository.BulkInsertIntoTableRaw(
                 dataTable: table
             );
 
@@ -32,35 +36,21 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxMicrovi
 
         public async Task<IEnumerable<string?>> GetProductsTablesIds(LinxAPIParam jobParameter)
         {
-            string sql = $"SELECT distinct id_tabela FROM [linx_microvix_erp].[LinxProdutosTabelas] where ativa = 'S'";
-
-            return await _linxMicrovixRepositoryBase.GetParameters(sql);
+            string sql = _commandHandler.CreateGetProductsTablesIdsQuery();
+            return await _integrationsCoreRepository.GetRecords<string>(sql);
         }
 
-        public async Task<IEnumerable<string?>> GetRegistersExists(LinxAPIParam jobParameter, List<Int64?> registros)
+        public async Task<IEnumerable<string?>> GetRegistersExists(LinxAPIParam jobParameter, List<long?> registros)
         {
-            var identificadores = String.Empty;
-            for (int i = 0; i < registros.Count(); i++)
-            {
-                if (i == registros.Count() - 1)
-                    identificadores += $"'{registros[i]}'";
-                else
-                    identificadores += $"'{registros[i]}', ";
-            }
-
-            string sql = $"SELECT CONCAT('[', CNPJ_EMP, ']', '|', '[', COD_PRODUTO, ']', '|', '[', ID_TABELA, ']', '|', '[', [TIMESTAMP], ']') FROM [linx_microvix_erp].[LinxProdutosTabelasPrecos] WHERE cod_produto IN ({identificadores})";
-
-            return await _linxMicrovixRepositoryBase.GetKeyRegistersAlreadyExists(sql);
+            string sql = _commandHandler.CreateGetRegistersExistsQuery(registros);
+            return await _integrationsCoreRepository.GetRecords<string>(sql);
         }
 
         public async Task<bool> InsertRecord(LinxAPIParam jobParameter, LinxProdutosTabelasPrecos? record)
         {
-            string? sql = @$"INSERT INTO [untreated].[{jobParameter.tableName}] 
-                            ([lastupdateon],[cod_produto],[portal],[cnpj_emp],[id_tabela],[precovenda],[timestamp])
-                            Values
-                            (@lastupdateon,@cod_produto,@portal,@cnpj_emp,@id_tabela,@precovenda,@timestamp)";
-
-            return await _linxMicrovixRepositoryBase.InsertRecord(jobParameter.tableName, sql: sql, record: record);
+            string sql = _commandHandler.CreateInsertRecordQuery(jobParameter.tableName);
+            return await _integrationsCoreRepository.InsertRecord(sql: sql, entity: record);
         }
     }
 }
+

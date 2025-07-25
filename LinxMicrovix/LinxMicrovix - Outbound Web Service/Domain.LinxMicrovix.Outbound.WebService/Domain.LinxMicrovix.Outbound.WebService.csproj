@@ -10,4 +10,9 @@
     <ProjectReference Include="..\..\..\IntegrationsCore\Domain.IntegrationsCore\Domain.IntegrationsCore.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Entities\LinxCommerce\" />
+    <Folder Include="Entities\LinxMicrovix\" />
+  </ItemGroup>
+
 </Project>

@@ -1,32 +1,32 @@
-﻿using Domain.IntegrationsCore.Entities.Exceptions;
-using Domain.IntegrationsCore.Enums;
-using Domain.LinxMicrovix.Outbound.WebService.Entities.LinxMicrovix;
+﻿using Application.LinxMicrovix.Outbound.WebService.Interfaces.Handlers.Commands.LinxMicrovix;
+using Domain.IntegrationsCore.Interfaces;
+using Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix;
 using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
-using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxMicrovix;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxMicrovix
 {
     public class LinxXMLDocumentosRepository : ILinxXMLDocumentosRepository
     {
-        private readonly ILinxMicrovixRepositoryBase<LinxXMLDocumentos> _linxMicrovixRepositoryBase;
+        private readonly IIntegrationsCoreRepository _integrationsCoreRepository;
+        private readonly ILinxXMLDocumentosCommandHandler _commandHandler;
 
-        public LinxXMLDocumentosRepository(ILinxMicrovixRepositoryBase<LinxXMLDocumentos> linxMicrovixRepositoryBase) =>
-            (_linxMicrovixRepositoryBase) = (linxMicrovixRepositoryBase);
+        public LinxXMLDocumentosRepository(IIntegrationsCoreRepository integrationsCoreRepository, ILinxXMLDocumentosCommandHandler commandHandler)
+        {
+            _integrationsCoreRepository = integrationsCoreRepository;
+            _commandHandler = commandHandler;
+        }
 
         public bool BulkInsertIntoTableRaw(LinxAPIParam jobParameter, IList<LinxXMLDocumentos> records)
         {
-            var table = _linxMicrovixRepositoryBase.CreateSystemDataTable(jobParameter.tableName, new LinxXMLDocumentos());
+            var table = _integrationsCoreRepository.CreateSystemDataTable(jobParameter.tableName, new LinxXMLDocumentos());
 
-            for (int i = 0; i < records.Count(); i++)
-            {
-                table.Rows.Add(records[i].lastupdateon, records[i].portal, records[i].cnpj_emp, records[i].documento, records[i].serie, records[i].data_emissao,
-                    records[i].chave_nfe, records[i].situacao, records[i].xml, records[i].excluido, records[i].identificador_microvix, records[i].dt_insert,
-                    records[i].timestamp, records[i].nProtCanc, records[i].nProtInut, records[i].xmlDistribuicao, records[i].nProtDeneg, records[i].cStat,
-                    records[i].id_nfe, records[i].cod_cliente);
-            }
+            _integrationsCoreRepository.FillSystemDataTable(table, records.ToList());
 
-            _linxMicrovixRepositoryBase.BulkInsertIntoTableRaw(
+            _integrationsCoreRepository.BulkInsertIntoTableRaw(
                 dataTable: table
             );
 
@@ -35,65 +35,27 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxMicrovi
 
         public async Task<IEnumerable<string>> GetRegistersExists(LinxAPIParam jobParameter, List<string?> registros)
         {
-            int indice = registros.Count() / 1000;
+            const int batchSize = 1000;
+            var resultList = new List<string>();
 
-            if (indice > 1)
+            for (int i = 0; i < registros.Count; i += batchSize)
             {
-                var list = new List<string>();
-
-                for (int i = 0; i <= indice; i++)
+                var batch = registros.Skip(i).Take(batchSize).ToList();
+                if (batch.Any())
                 {
-                    string identificadores = String.Empty;
-                    var top1000List = registros.Skip(i * 1000).Take(1000).ToList();
-
-                    for (int j = 0; j < top1000List.Count(); j++)
-                    {
-
-                        if (j == top1000List.Count() - 1)
-                            identificadores += $"'{top1000List[j]}'";
-                        else
-                            identificadores += $"'{top1000List[j]}', ";
-                    }
-
-                    string sql = $"SELECT CONCAT('[', CNPJ_EMP, ']', '|', '[', DOCUMENTO, ']', '|', '[', CHAVE_NFE, ']', '|', '[', [TIMESTAMP], ']') FROM [linx_microvix_erp].[LinxXMLDocumentos] WHERE CHAVE_NFE IN ({identificadores})";
-                    var result = await _linxMicrovixRepositoryBase.GetKeyRegistersAlreadyExists(sql);
-                    list.AddRange(result);
+                    string sql = _commandHandler.CreateGetRegistersExistsQuery(batch);
+                    var result = await _integrationsCoreRepository.GetRecords<string>(sql);
+                    resultList.AddRange(result);
                 }
-
-                return list;
             }
-            else
-            {
-                var list = new List<string>();
-                string identificadores = String.Empty;
 
-                for (int i = 0; i < registros.Count(); i++)
-                {
-
-                    if (i == registros.Count() - 1)
-                        identificadores += $"'{registros[i]}'";
-                    else
-                        identificadores += $"'{registros[i]}', ";
-                }
-
-                string sql = $"SELECT CONCAT('[', CNPJ_EMP, ']', '|', '[', DOCUMENTO, ']', '|', '[', CHAVE_NFE, ']', '|', '[', [TIMESTAMP], ']') FROM [linx_microvix_erp].[LinxXMLDocumentos] WHERE CHAVE_NFE IN ({identificadores})";
-                var result = await _linxMicrovixRepositoryBase.GetKeyRegistersAlreadyExists(sql);
-                list.AddRange(result);
-
-                return list;
-            }
+            return resultList;
         }
 
         public async Task<bool> InsertRecord(LinxAPIParam jobParameter, LinxXMLDocumentos? record)
         {
-            string? sql = @$"INSERT INTO {jobParameter.tableName} 
-                            ([lastupdateon],[portal],[cnpj_emp],[documento],[serie],[data_emissao],[chave_nfe],[situacao],[xml],[excluido],[identificador_microvix],[dt_insert],[timestamp],
-                             [nProtCanc],[nProtInut],[xmlDistribuicao],[nProtDeneg],[cStat],[id_nfe],[cod_cliente])
-                            Values
-                            (@lastupdateon,@portal,@cnpj_emp,@documento,@serie,@data_emissao,@chave_nfe,@situacao,@xml,@excluido,@identificador_microvix,@dt_insert,@timestamp,@nProtCanc,
-                             @nProtInut,@xmlDistribuicao,@nProtDeneg,@cStat,@id_nfe,@cod_cliente)";
-
-            return await _linxMicrovixRepositoryBase.InsertRecord(jobParameter.tableName, sql: sql, record: record);
+            string sql = _commandHandler.CreateInsertRecordQuery(jobParameter.tableName);
+            return await _integrationsCoreRepository.InsertRecord(sql: sql, entity: record);
         }
     }
 }

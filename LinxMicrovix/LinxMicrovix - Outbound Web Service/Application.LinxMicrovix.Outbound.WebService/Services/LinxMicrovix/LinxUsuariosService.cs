@@ -1,14 +1,15 @@
 ﻿using Application.IntegrationsCore.Interfaces;
-using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
-using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxMicrovix;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Services;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Services.LinxMicrovix;
+using Domain.IntegrationsCore.Entities.Exceptions;
+using Domain.IntegrationsCore.Enums;
+using Domain.IntegrationsCore.Interfaces;
+using Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix;
 using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
-using Domain.LinxMicrovix.Outbound.WebService.Entities.LinxMicrovix;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Api;
-using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxMicrovix;
 using System.ComponentModel.DataAnnotations;
-using Domain.IntegrationsCore.Enums;
-using Domain.IntegrationsCore.Entities.Exceptions;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Handlers.Commands;
 
 namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
 {
@@ -17,23 +18,26 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
         private readonly IAPICall _apiCall;
         private readonly ILoggerService _logger;
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
-        private readonly ILinxMicrovixRepositoryBase<LinxUsuarios> _linxMicrovixRepositoryBase;
+        private readonly IIntegrationsCoreRepository _integrationsCoreRepository;
         private readonly ILinxUsuariosRepository _linxUsuariosRepository;
+        private readonly ILinxMicrovixCommandHandler _linxMicrovixCommandHandler;
         private static List<string?> _linxUsuariosCache { get; set; } = new List<string?>();
 
         public LinxUsuariosService(
             IAPICall apiCall,
             ILoggerService logger,
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
-            ILinxMicrovixRepositoryBase<LinxUsuarios> linxMicrovixRepositoryBase,
-            ILinxUsuariosRepository linxUsuariosRepository
+            IIntegrationsCoreRepository integrationsCoreRepository,
+            ILinxUsuariosRepository linxUsuariosRepository,
+            ILinxMicrovixCommandHandler linxMicrovixCommandHandler
         )
         {
             _apiCall = apiCall;
             _logger = logger;
             _linxMicrovixServiceBase = linxMicrovixServiceBase;
-            _linxMicrovixRepositoryBase = linxMicrovixRepositoryBase;
+            _integrationsCoreRepository = integrationsCoreRepository;
             _linxUsuariosRepository = linxUsuariosRepository;
+            _linxMicrovixCommandHandler = linxMicrovixCommandHandler;
         }
 
         public List<LinxUsuarios?> DeserializeXMLToObject(LinxAPIParam jobParameter, List<Dictionary<string?, string?>> records)
@@ -99,7 +103,9 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                .Clear()
                .AddLog(EnumJob.LinxUsuarios);
 
-            string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter.parametersInterval, jobParameter.parametersTableName, jobParameter.jobName);
+            string sql = _linxMicrovixCommandHandler.CreateGetParametersQuery(jobParameter.parametersInterval, jobParameter.parametersTableName, jobParameter.jobName);
+            string? parameters = await _integrationsCoreRepository.GetRecord<string>(sql);
+            
             var body = _linxMicrovixServiceBase.BuildBodyRequest(
                     parametersList: parameters.Replace("[0]", "0"),
                     jobParameter: jobParameter
@@ -131,7 +137,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                 if (_listSomenteNovos.Count() > 0)
                 {
                     _linxUsuariosRepository.BulkInsertIntoTableRaw(records: _listSomenteNovos, jobParameter: jobParameter);
-                    await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
+                    await _integrationsCoreRepository.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
 
                     for (int i = 0; i < _listSomenteNovos.Count; i++)
                     {

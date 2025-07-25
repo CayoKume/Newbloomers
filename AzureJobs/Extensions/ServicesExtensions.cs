@@ -1,5 +1,4 @@
-﻿using Application.IntegrationsCore.Handlers;
-using Domain.IntegrationsCore.Interfaces;
+﻿using Domain.IntegrationsCore.Interfaces;
 using Infrastructure.AfterSale.DependencyInjection;
 using Infrastructure.FlashCourier.DependencyInjection;
 using Infrastructure.IntegrationsCore.DependencyInjection;

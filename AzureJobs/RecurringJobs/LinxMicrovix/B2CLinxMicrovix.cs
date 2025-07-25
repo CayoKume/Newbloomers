@@ -1,5 +1,5 @@
 ﻿using Application.IntegrationsCore.Middlewares;
-using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxCommerce;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Services.LinxCommerce;
 using Application.LinxMicrovix.Outbound.WebService.Services;
 using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
 using Microsoft.Azure.WebJobs;
@@ -265,235 +265,191 @@ namespace AzureJobs.RecurringJobs.LinxMicrovix.LinxMicrovix.B2C
             _webJobExceptionHandlingMiddleware = new WebJobExceptionHandlingMiddleware(services);
         }
 
-        //public async Task B2CConsultaPedidos([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
-        //{
-        //    try
-        //    {
-        //        var method = _methods
-        //            .Where(m => m.MethodName == "B2CConsultaPedidos")
-        //        .FirstOrDefault();
+        // public async Task B2CConsultaPedidos([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        // {
+        //     await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
+        //     {
+        //         var method = _methods
+        //             .Where(m => m.MethodName == "B2CConsultaPedidos")
+        //         .FirstOrDefault();
 
-        //        var result = await _b2cConsultaPedidosService.GetRecords(
-        //            _linxMicrovixJobParameter.SetParameters(
-        //                jobName: method.MethodName,
-        //                tableName: method.MethodName
-        //            )
-        //        );
-        //    }
-        //    catch (ExceptionBase ex)
-        //    {
-        //        throw;
-        //    }
-        //}
+        //         var result = await _b2cConsultaPedidosService.GetRecords(
+        //             _linxMicrovixJobParameter.SetParameters(
+        //                 jobName: method.MethodName,
+        //                 tableName: method.MethodName
+        //             )
+        //         );
+        //     });
+        // }
 
-        //public async Task B2CConsultaPedidosIdentificador([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
-        //{
-        //    try
-        //    {
-        //        var method = _methods
-        //            .Where(m => m.MethodName == "B2CConsultaPedidosIdentificador")
-        //        .FirstOrDefault();
+        // public async Task B2CConsultaPedidosIdentificador([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        // {
+        //     await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
+        //     {
+        //         var method = _methods
+        //             .Where(m => m.MethodName == "B2CConsultaPedidosIdentificador")
+        //         .FirstOrDefault();
 
-        //        var result = await _b2cConsultaPedidosIdentificadorService.GetRecords(
-        //            _linxMicrovixJobParameter.SetParameters(
-        //                jobName: method.MethodName,
-        //                tableName: method.MethodName
-        //            )
-        //        );
-        //    }
-        //    catch (ExceptionBase ex)
-        //    {
-        //        throw;
-        //    }
-        //}
+        //         var result = await _b2cConsultaPedidosIdentificadorService.GetRecords(
+        //             _linxMicrovixJobParameter.SetParameters(
+        //                 jobName: method.MethodName,
+        //                 tableName: method.MethodName
+        //             )
+        //         );
+        //     });
+        // }
 
-        //public async Task B2CConsultaPedidosItens([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
-        //{
-        //    try
-        //    {
-        //        var method = _methods
-        //            .Where(m => m.MethodName == "B2CConsultaPedidosItens")
-        //        .FirstOrDefault();
+        // public async Task B2CConsultaPedidosItens([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        // {
+        //     await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
+        //     {
+        //         var method = _methods
+        //             .Where(m => m.MethodName == "B2CConsultaPedidosItens")
+        //         .FirstOrDefault();
 
-        //        var result = await _b2cConsultaPedidosItensService.GetRecords(
-        //            _linxMicrovixJobParameter.SetParameters(
-        //                jobName: method.MethodName,
-        //                tableName: method.MethodName
-        //            )
-        //        );
-        //    }
-        //    catch (ExceptionBase ex)
-        //    {
-        //        throw;
-        //    }
-        //}
+        //         var result = await _b2cConsultaPedidosItensService.GetRecords(
+        //             _linxMicrovixJobParameter.SetParameters(
+        //                 jobName: method.MethodName,
+        //                 tableName: method.MethodName
+        //             )
+        //         );
+        //     });
+        // }
 
-        //public async Task B2CConsultaPedidosStatus([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
-        //{
-        //    try
-        //    {
-        //        var method = _methods
-        //            .Where(m => m.MethodName == "B2CConsultaPedidosStatus")
-        //        .FirstOrDefault();
+        // public async Task B2CConsultaPedidosStatus([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        // {
+        //     await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
+        //     {
+        //         var method = _methods
+        //             .Where(m => m.MethodName == "B2CConsultaPedidosStatus")
+        //         .FirstOrDefault();
 
-        //        var result = await _b2cConsultaPedidosStatusService.GetRecords(
-        //            _linxMicrovixJobParameter.SetParameters(
-        //                jobName: method.MethodName,
-        //                tableName: method.MethodName
-        //            )
-        //        );
-        //    }
-        //    catch (ExceptionBase ex)
-        //    {
-        //        throw;
-        //    }
-        //}
+        //         var result = await _b2cConsultaPedidosStatusService.GetRecords(
+        //             _linxMicrovixJobParameter.SetParameters(
+        //                 jobName: method.MethodName,
+        //                 tableName: method.MethodName
+        //             )
+        //         );
+        //     });
+        // }
 
-        //public async Task B2CConsultaClientes([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
-        //{
-        //    try
-        //    {
-        //        var method = _methods
-        //            .Where(m => m.MethodName == "B2CConsultaClientes")
-        //        .FirstOrDefault();
+        // public async Task B2CConsultaClientes([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        // {
+        //     await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
+        //     {
+        //         var method = _methods
+        //             .Where(m => m.MethodName == "B2CConsultaClientes")
+        //         .FirstOrDefault();
 
-        //        var result = await _b2cConsultaClientesService.GetRecords(
-        //            _linxMicrovixJobParameter.SetParameters(
-        //                jobName: method.MethodName,
-        //                tableName: method.MethodName
-        //            )
-        //        );
-        //    }
-        //    catch (ExceptionBase ex)
-        //    {
-        //        throw;
-        //    }
-        //}
+        //         var result = await _b2cConsultaClientesService.GetRecords(
+        //             _linxMicrovixJobParameter.SetParameters(
+        //                 jobName: method.MethodName,
+        //                 tableName: method.MethodName
+        //             )
+        //         );
+        //     });
+        // }
 
-        //public async Task B2CConsultaClientesEnderecosEntrega([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
-        //{
-        //    try
-        //    {
-        //        var method = _methods
-        //            .Where(m => m.MethodName == "B2CConsultaClientesEnderecosEntrega")
-        //        .FirstOrDefault();
+        // public async Task B2CConsultaClientesEnderecosEntrega([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        // {
+        //     await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
+        //     {
+        //         var method = _methods
+        //             .Where(m => m.MethodName == "B2CConsultaClientesEnderecosEntrega")
+        //         .FirstOrDefault();
 
-        //        var result = await _b2cConsultaClientesEnderecosEntregaService.GetRecords(
-        //            _linxMicrovixJobParameter.SetParameters(
-        //                jobName: method.MethodName,
-        //                tableName: method.MethodName
-        //            )
-        //        );
-        //    }
-        //    catch (ExceptionBase ex)
-        //    {
-        //        throw;
-        //    }
-        //}
+        //         var result = await _b2cConsultaClientesEnderecosEntregaService.GetRecords(
+        //             _linxMicrovixJobParameter.SetParameters(
+        //                 jobName: method.MethodName,
+        //                 tableName: method.MethodName
+        //             )
+        //         );
+        //     });
+        // }
 
-        //public async Task B2CConsultaEmpresas([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
-        //{
-        //    try
-        //    {
-        //        var method = _methods
-        //            .Where(m => m.MethodName == "B2CConsultaEmpresas")
-        //        .FirstOrDefault();
+        // public async Task B2CConsultaEmpresas([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        // {
+        //     await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
+        //     {
+        //         var method = _methods
+        //             .Where(m => m.MethodName == "B2CConsultaEmpresas")
+        //         .FirstOrDefault();
 
-        //        var result = await _b2cConsultaEmpresasService.GetRecords(
-        //            _linxMicrovixJobParameter.SetParameters(
-        //                jobName: method.MethodName,
-        //                tableName: method.MethodName
-        //            )
-        //        );
-        //    }
-        //    catch (ExceptionBase ex)
-        //    {
-        //        throw;
-        //    }
-        //}
+        //         var result = await _b2cConsultaEmpresasService.GetRecords(
+        //             _linxMicrovixJobParameter.SetParameters(
+        //                 jobName: method.MethodName,
+        //                 tableName: method.MethodName
+        //             )
+        //         );
+        //     });
+        // }
 
-        //public async Task B2CConsultaNFe([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
-        //{
-        //    try
-        //    {
-        //        var method = _methods
-        //            .Where(m => m.MethodName == "B2CConsultaNFe")
-        //        .FirstOrDefault();
+        // public async Task B2CConsultaNFe([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        // {
+        //     await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
+        //     {
+        //         var method = _methods
+        //             .Where(m => m.MethodName == "B2CConsultaNFe")
+        //         .FirstOrDefault();
 
-        //        var result = await _b2cConsultaNFeService.GetRecords(
-        //            _linxMicrovixJobParameter.SetParameters(
-        //                jobName: method.MethodName,
-        //                tableName: method.MethodName
-        //            )
-        //        );
-        //    }
-        //    catch (ExceptionBase ex)
-        //    {
-        //        throw;
-        //    }
-        //}
+        //         var result = await _b2cConsultaNFeService.GetRecords(
+        //             _linxMicrovixJobParameter.SetParameters(
+        //                 jobName: method.MethodName,
+        //                 tableName: method.MethodName
+        //             )
+        //         );
+        //     });
+        // }
 
-        //public async Task B2CConsultaNFeSituacao([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
-        //{
-        //    try
-        //    {
-        //        var method = _methods
-        //            .Where(m => m.MethodName == "B2CConsultaNFeSituacao")
-        //        .FirstOrDefault();
+        // public async Task B2CConsultaNFeSituacao([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        // {
+        //     await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
+        //     {
+        //         var method = _methods
+        //             .Where(m => m.MethodName == "B2CConsultaNFeSituacao")
+        //         .FirstOrDefault();
 
-        //        var result = await _b2cConsultaNFeSituacaoService.GetRecords(
-        //            _linxMicrovixJobParameter.SetParameters(
-        //                jobName: method.MethodName,
-        //                tableName: method.MethodName
-        //            )
-        //        );
-        //    }
-        //    catch (ExceptionBase ex)
-        //    {
-        //        throw;
-        //    }
-        //}
+        //         var result = await _b2cConsultaNFeSituacaoService.GetRecords(
+        //             _linxMicrovixJobParameter.SetParameters(
+        //                 jobName: method.MethodName,
+        //                 tableName: method.MethodName
+        //             )
+        //         );
+        //     });
+        // }
 
-        //public async Task B2CConsultaStatus([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
-        //{
-        //    try
-        //    {
-        //        var method = _methods
-        //            .Where(m => m.MethodName == "B2CConsultaStatus")
-        //            .FirstOrDefault();
+        // public async Task B2CConsultaStatus([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        // {
+        //     await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
+        //     {
+        //         var method = _methods
+        //             .Where(m => m.MethodName == "B2CConsultaStatus")
+        //             .FirstOrDefault();
 
-        //        var result = await _b2cConsultaStatusService.GetRecords(
-        //            _linxMicrovixJobParameter.SetParameters(
-        //                jobName: method.MethodName,
-        //                tableName: method.MethodName
-        //            )
-        //        );
-        //    }
-        //    catch (ExceptionBase ex)
-        //    {
-        //        throw;
-        //    }
-        //}
+        //         var result = await _b2cConsultaStatusService.GetRecords(
+        //             _linxMicrovixJobParameter.SetParameters(
+        //                 jobName: method.MethodName,
+        //                 tableName: method.MethodName
+        //             )
+        //         );
+        //     });
+        // }
 
-        //public async Task B2CConsultaClassificacao([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
-        //{
-        //    try
-        //    {
-        //        var method = _methods
-        //            .Where(m => m.MethodName == "B2CConsultaClassificacao")
-        //            .FirstOrDefault();
+        // public async Task B2CConsultaClassificacao([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        // {
+        //     await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
+        //     {
+        //         var method = _methods
+        //             .Where(m => m.MethodName == "B2CConsultaClassificacao")
+        //             .FirstOrDefault();
 
-        //        var result = await _b2cConsultaClassificacaoService.GetRecords(
-        //            _linxMicrovixJobParameter.SetParameters(
-        //                jobName: method.MethodName,
-        //                tableName: method.MethodName
-        //            )
-        //        );
-        //    }
-        //    catch (ExceptionBase ex)
-        //    {
-        //        throw;
-        //    }
-        //}
+        //         var result = await _b2cConsultaClassificacaoService.GetRecords(
+        //             _linxMicrovixJobParameter.SetParameters(
+        //                 jobName: method.MethodName,
+        //                 tableName: method.MethodName
+        //             )
+        //         );
+        //     });
+        // }
     }
 }

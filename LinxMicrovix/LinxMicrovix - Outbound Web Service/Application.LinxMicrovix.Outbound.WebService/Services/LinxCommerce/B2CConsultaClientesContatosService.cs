@@ -1,45 +1,44 @@
 ﻿using Application.IntegrationsCore.Interfaces;
-using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
-using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxCommerce;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Services;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Services.LinxCommerce;
 using Domain.IntegrationsCore.Entities.Exceptions;
 using Domain.IntegrationsCore.Enums;
 using Domain.IntegrationsCore.Interfaces;
-using Domain.LinxMicrovix.Outbound.WebService.Entities.LinxCommerce;
+using Domain.LinxMicrovix.Outbound.WebService.Models.LinxCommerce;
 using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Api;
-using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxCommerce;
 using System.ComponentModel.DataAnnotations;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Handlers.Commands;
+using Domain.LinxMicrovix.Outbound.WebService.Models.Base;
 
 namespace Application.LinxMicrovix.Outbound.WebService.Services
 {
-    /// <summary>
-    /// A tabela de clientes contatos originados da linx commerce, geralmente é muito grande e o endpoint da microvix não possui parametros de 
-    /// busca entre intevalos de datas, então efetuamos a busca do menor timestamp da tabela nos ultimos 7 dias então efetuamos a busca
-    /// a partir dele, buscando assim todos os contatos de clientes novos e atualizados dos ultimos 7 dias 
-    /// </summary>
     public class B2CConsultaClientesContatosService : IB2CConsultaClientesContatosService
     {
         private readonly IAPICall _apiCall;
         private readonly ILoggerService _logger;
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
-        private readonly ILinxMicrovixRepositoryBase<B2CConsultaClientesContatos> _linxMicrovixRepositoryBase;
+        private readonly IIntegrationsCoreRepository _integrationsCoreRepository;
         private readonly IB2CConsultaClientesContatosRepository _b2cConsultaClientesContatosRepository;
+        private readonly ILinxMicrovixCommandHandler _linxMicrovixCommandHandler;
         private static List<string?> _b2cConsultaClientesContatosCache { get; set; } = new List<string?>();
 
         public B2CConsultaClientesContatosService(
             IAPICall apiCall,
             ILoggerService logger,
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
-            ILinxMicrovixRepositoryBase<B2CConsultaClientesContatos> linxMicrovixRepositoryBase,
-            IB2CConsultaClientesContatosRepository b2cConsultaClientesContatosRepository
+            IIntegrationsCoreRepository integrationsCoreRepository,
+            IB2CConsultaClientesContatosRepository b2cConsultaClientesContatosRepository,
+            ILinxMicrovixCommandHandler linxMicrovixCommandHandler
         )
         {
             _apiCall = apiCall;
             _logger = logger;
             _b2cConsultaClientesContatosRepository = b2cConsultaClientesContatosRepository;
             _linxMicrovixServiceBase = linxMicrovixServiceBase;
-            _linxMicrovixRepositoryBase = linxMicrovixRepositoryBase;
+            _integrationsCoreRepository = integrationsCoreRepository;
+            _linxMicrovixCommandHandler = linxMicrovixCommandHandler;
         }
 
         public List<B2CConsultaClientesContatos?> DeserializeXMLToObject(LinxAPIParam jobParameter, List<Dictionary<string?, string?>> records)
@@ -104,12 +103,15 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                .Clear()
                .AddLog(EnumJob.B2CConsultaClientesContatos);
 
-            string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter.parametersInterval, jobParameter.tableName, jobParameter.jobName);
-            var cnpjs_emp = await _linxMicrovixRepositoryBase.GetB2CCompanys();
+            string sql = _linxMicrovixCommandHandler.CreateGetParametersQuery(jobParameter.parametersInterval, jobParameter.tableName, jobParameter.jobName);
+            string? parameters = await _integrationsCoreRepository.GetRecord<string>(sql);
+            
+            var cnpjs_emp = await _integrationsCoreRepository.GetRecords<Company>(_linxMicrovixCommandHandler.CreateGetB2CCompanysQuery());
 
             foreach (var cnpj_emp in cnpjs_emp)
             {
-                string? timestamp = await _linxMicrovixRepositoryBase.GetLast7DaysMinTimestamp(jobParameter.schema, jobParameter.tableName, columnDate: "LASTUPDATEON");
+                string sqlTimestamp = _linxMicrovixCommandHandler.CreateGetLast7DaysMinTimestampQuery(jobParameter.schema, jobParameter.tableName, "LASTUPDATEON");
+                string? timestamp = await _integrationsCoreRepository.GetRecord<string>(sqlTimestamp);
 
                 var body = _linxMicrovixServiceBase.BuildBodyRequest(
                     parametersList: parameters.Replace("[0]", timestamp),
@@ -137,7 +139,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                     if (_listSomenteNovos.Count() > 0)
                     {
                         _b2cConsultaClientesContatosRepository.BulkInsertIntoTableRaw(records: _listSomenteNovos, jobParameter: jobParameter);
-                        await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
+                        await _integrationsCoreRepository.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
 
                         for (int i = 0; i < _listSomenteNovos.Count; i++)
                         {

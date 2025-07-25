@@ -1,4 +1,4 @@
-﻿using Domain.LinxMicrovix.Outbound.WebService.Entities.LinxCommerce;
+﻿using Domain.LinxMicrovix.Outbound.WebService.Models.LinxCommerce;
 using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxCommerce

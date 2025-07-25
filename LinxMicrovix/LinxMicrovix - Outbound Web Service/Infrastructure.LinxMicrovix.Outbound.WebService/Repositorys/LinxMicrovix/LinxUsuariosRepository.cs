@@ -1,109 +1,50 @@
-﻿using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
-using Domain.LinxMicrovix.Outbound.WebService.Entities.LinxMicrovix;
-using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
+﻿using Application.LinxMicrovix.Outbound.WebService.Interfaces.Handlers.Commands.LinxMicrovix;
+using Domain.IntegrationsCore.Interfaces;
+using Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix;
+using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxMicrovix;
-using Domain.IntegrationsCore.Enums;
-using Domain.IntegrationsCore.Entities.Exceptions;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxMicrovix
 {
     public class LinxUsuariosRepository : ILinxUsuariosRepository
     {
-        private readonly ILinxMicrovixRepositoryBase<LinxUsuarios> _linxMicrovixRepositoryBase;
+        private readonly IIntegrationsCoreRepository _integrationsCoreRepository;
+        private readonly ILinxUsuariosCommandHandler _commandHandler;
 
-        public LinxUsuariosRepository(ILinxMicrovixRepositoryBase<LinxUsuarios> linxMicrovixRepositoryBase) =>
-            (_linxMicrovixRepositoryBase) = (linxMicrovixRepositoryBase);
+        public LinxUsuariosRepository(IIntegrationsCoreRepository integrationsCoreRepository, ILinxUsuariosCommandHandler commandHandler)
+        {
+            _integrationsCoreRepository = integrationsCoreRepository;
+            _commandHandler = commandHandler;
+        }
 
         public bool BulkInsertIntoTableRaw(LinxAPIParam jobParameter, IList<LinxUsuarios> records)
         {
-            try
-            {
-                var table = _linxMicrovixRepositoryBase.CreateSystemDataTable(jobParameter.tableName, new LinxUsuarios());
-
-                for (int i = 0; i < records.Count(); i++)
-                {
-                    table.Rows.Add(records[i].lastupdateon, records[i].usuario_id, records[i].usuario_login, records[i].usuario_nome, records[i].usuario_email, records[i].usuario_grupo_id,
-                        records[i].grupo_usuarios, records[i].usuario_supervisor, records[i].usuario_doc, records[i].vendedor, records[i].data_criacao, records[i].desativado,
-                        records[i].empresas, records[i].portal, records[i].timestamp);
-                }
-
-                _linxMicrovixRepositoryBase.BulkInsertIntoTableRaw(
-                    dataTable: table
-                );
-
-                return true;
-            }
-            catch
-            {
-                throw;
-            }
+            var table = _integrationsCoreRepository.CreateSystemDataTable(jobParameter.tableName, new LinxUsuarios());
+            _integrationsCoreRepository.FillSystemDataTable(table, records.ToList());
+            _integrationsCoreRepository.BulkInsertIntoTableRaw(dataTable: table);
+            return true;
         }
 
         public async Task<IEnumerable<string?>> GetRegistersExists(LinxAPIParam jobParameter, List<int?> registros)
         {
-            try
+            const int batchSize = 1000;
+            var resultList = new List<string?>();
+
+            for (int i = 0; i < registros.Count; i += batchSize)
             {
-                int indice = registros.Count() / 1000;
-
-                if (indice > 1)
+                var batch = registros.Skip(i).Take(batchSize).ToList();
+                if (batch.Any())
                 {
-                    var list = new List<string>();
-
-                    for (int i = 0; i <= indice; i++)
-                    {
-                        string identificadores = String.Empty;
-                        var top1000List = registros.Skip(i * 1000).Take(1000).ToList();
-
-                        for (int j = 0; j < top1000List.Count(); j++)
-                        {
-
-                            if (j == top1000List.Count() - 1)
-                                identificadores += $"'{top1000List[j]}'";
-                            else
-                                identificadores += $"'{top1000List[j]}', ";
-                        }
-
-                        string sql = $"SELECT CONCAT('[', usuario_id, ']', '|', '[', usuario_doc, ']', '|', '[', [TIMESTAMP], ']') FROM [linx_microvix_erp].[LinxUsuarios] WHERE usuario_id IN ({identificadores})";
-                        var result = await _linxMicrovixRepositoryBase.GetKeyRegistersAlreadyExists(sql);
-                        list.AddRange(result);
-                    }
-
-                    return list;
-                }
-                else
-                {
-                    var list = new List<string>();
-                    string identificadores = String.Empty;
-
-                    for (int i = 0; i < registros.Count(); i++)
-                    {
-                        if (i == registros.Count() - 1)
-                            identificadores += $"'{registros[i]}'";
-                        else
-                            identificadores += $"'{registros[i]}', ";
-                    }
-
-                    string sql = $"SELECT CONCAT('[', usuario_id, ']', '|', '[', usuario_doc, ']', '|', '[', [TIMESTAMP], ']') FROM [linx_microvix_erp].[LinxUsuarios] WHERE usuario_id IN ({identificadores})";
-                    var result = await _linxMicrovixRepositoryBase.GetKeyRegistersAlreadyExists(sql);
-                    list.AddRange(result);
-
-                    return list;
+                    string sql = _commandHandler.CreateGetRegistersExistsQuery(batch);
+                    var result = await _integrationsCoreRepository.GetRecords<string>(sql);
+                    resultList.AddRange(result);
                 }
             }
-            //catch (Exception ex) when (ex is not GeneralException && ex is not SQLCommandException)
-            //{
-            //    throw new GeneralException(
-            //        //stage: EnumStages.GetRegistersExists,
-            //        //error: EnumError.Exception,
-            //        //level: EnumMessageLevel.Error,
-            //        message: "Error when filling identifiers to sql command",
-            //        //exceptionMessage: ex.Message
-            //    );
-            //}
-            catch
-            {
-                throw;
-            }
+
+            return resultList;
         }
     }
 }

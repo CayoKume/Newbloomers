@@ -8,6 +8,8 @@ using Infrastructure.Movidesk.Repositorys;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using FluentValidation;
+using Application.Movidesk.CustomValidations.Person;
 
 namespace Infrastructure.Movidesk
 {
@@ -15,6 +17,8 @@ namespace Infrastructure.Movidesk
     {
         public static IServiceCollection AddScopedMovideskServices(this IServiceCollection services)
         {
+            services.AddScopedMovideskValidations();
+
             services.AddScoped<IAPICall, APICall>();
             services.AddHttpClient("MovideskAPI", client =>
             {
@@ -28,17 +32,28 @@ namespace Infrastructure.Movidesk
             return services;
         }
 
+        private static IServiceCollection AddScopedMovideskValidations(this IServiceCollection services)
+        {
+            services.AddValidatorsFromAssemblyContaining<PersonValidator>();
+            services.AddValidatorsFromAssemblyContaining<ContactValidator>();
+            services.AddValidatorsFromAssemblyContaining<EmailValidator>();
+            services.AddValidatorsFromAssemblyContaining<AddressValidator>();
+            services.AddValidatorsFromAssemblyContaining<RelationshipValidator>();
+
+            return services;
+        }
+        
         public static IServiceCollection AddDbContextMovideskService(this IServiceCollection services, string databaseType, string connectionstring)
         {
             if (databaseType == "SQLServer")
             {
-                services.AddDbContext<MovideskTreatedDbContext>((serviceProvider, options) =>
+                services.AddDbContext<GeneralMovideskContext>((serviceProvider, options) =>
                 {
                     var configuration = serviceProvider.GetRequiredService<IConfiguration>();
                     options.UseSqlServer(connectionstring);
                 });
 
-                services.AddDbContext<MovideskUntreatedDbContext>((serviceProvider, options) =>
+                services.AddDbContext<UntreatedMovideskContext>((serviceProvider, options) =>
                 {
                     var configuration = serviceProvider.GetRequiredService<IConfiguration>();
                     options.UseSqlServer(connectionstring);
@@ -47,13 +62,13 @@ namespace Infrastructure.Movidesk
 
             if (databaseType == "MySql")
             {
-                services.AddDbContext<MovideskTreatedDbContext>((serviceProvider, options) =>
+                services.AddDbContext<GeneralMovideskContext>((serviceProvider, options) =>
                 {
                     var configuration = serviceProvider.GetRequiredService<IConfiguration>();
                     options.UseMySQL(connectionstring);
                 });
 
-                services.AddDbContext<MovideskUntreatedDbContext>((serviceProvider, options) =>
+                services.AddDbContext<UntreatedMovideskContext>((serviceProvider, options) =>
                 {
                     var configuration = serviceProvider.GetRequiredService<IConfiguration>();
                     options.UseMySQL(connectionstring);
@@ -62,13 +77,13 @@ namespace Infrastructure.Movidesk
 
             if (databaseType == "Postgree")
             {
-                services.AddDbContext<MovideskTreatedDbContext>((serviceProvider, options) =>
+                services.AddDbContext<GeneralMovideskContext>((serviceProvider, options) =>
                 {
                     var configuration = serviceProvider.GetRequiredService<IConfiguration>();
                     options.UseNpgsql(connectionstring);
                 });
 
-                services.AddDbContext<MovideskUntreatedDbContext>((serviceProvider, options) =>
+                services.AddDbContext<UntreatedMovideskContext>((serviceProvider, options) =>
                 {
                     var configuration = serviceProvider.GetRequiredService<IConfiguration>();
                     options.UseNpgsql(connectionstring);

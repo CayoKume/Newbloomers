@@ -12,9 +12,18 @@ namespace AzureJobs.RecurringJobs.Procedures
         public Operacoes(IIntegrationsCoreRepository integrationsCoreRepository) =>
             _integrationsCoreRepository = integrationsCoreRepository;
 
-        //public async Task AfterSaleEcommerces([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        public Task P_Canal_Movimentacoes([TimerTrigger("0 */5 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        {
+            _integrationsCoreRepository.ExecuteCommand("exec [operations].[P_Canal_Movimentacoes]");
+
+            return Task.CompletedTask;
+        }
+
+        //public Task P_Snapshot_Estoque([TimerTrigger("57 23 * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
         //{
-        //    var result = _integrationsCoreRepository.CallDbProcMerge();
+        //    _integrationsCoreRepository.ExecuteCommand("exec [operations].[P_Snapshot_Estoque]");
+
+        //    return Task.CompletedTask;
         //}
     }
 }

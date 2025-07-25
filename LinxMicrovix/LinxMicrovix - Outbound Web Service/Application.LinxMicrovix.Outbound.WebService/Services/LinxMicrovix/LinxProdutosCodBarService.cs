@@ -1,14 +1,17 @@
 ﻿using Application.IntegrationsCore.Interfaces;
-using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
-using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxMicrovix;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Services;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Services.LinxMicrovix;
 using Domain.IntegrationsCore.Entities.Exceptions;
 using Domain.IntegrationsCore.Enums;
-using Domain.LinxMicrovix.Outbound.WebService.Entities.LinxMicrovix;
+using Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix;
 using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Api;
-using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
+
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxMicrovix;
 using System.ComponentModel.DataAnnotations;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Handlers.Commands;
+using Domain.IntegrationsCore.Interfaces;
+using Application.LinxMicrovix.Outbound.WebService.Handlers.Commands;
 
 namespace LinxMicrovix.Outbound.Web.Service.Application.Services.LinxMicrovix
 {
@@ -17,23 +20,28 @@ namespace LinxMicrovix.Outbound.Web.Service.Application.Services.LinxMicrovix
         private readonly IAPICall _apiCall;
         private readonly ILoggerService _logger;
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
-        private readonly ILinxMicrovixRepositoryBase<LinxProdutosCodBar> _linxMicrovixRepositoryBase;
         private readonly ILinxProdutosCodBarRepository _linxProdutosCodBarRepository;
+        private readonly IIntegrationsCoreRepository _integrationsCoreRepository;
+        private readonly ILinxMicrovixCommandHandler _linxMicrovixCommandHandler;
+
         private static List<string?> _linxProdutosCodBarCache { get; set; } = new List<string?>();
 
         public LinxProdutosCodBarService(
             IAPICall apiCall,
             ILoggerService logger,
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
-            ILinxMicrovixRepositoryBase<LinxProdutosCodBar> linxMicrovixRepositoryBase,
-            ILinxProdutosCodBarRepository linxProdutosCodBarRepository
+            ILinxProdutosCodBarRepository linxProdutosCodBarRepository,
+            IIntegrationsCoreRepository integrationsCoreRepository,
+            ILinxMicrovixCommandHandler linxMicrovixCommandHandler
         )
         {
             _apiCall = apiCall;
             _logger = logger;
             _linxMicrovixServiceBase = linxMicrovixServiceBase;
-            _linxMicrovixRepositoryBase = linxMicrovixRepositoryBase;
             _linxProdutosCodBarRepository = linxProdutosCodBarRepository;
+            _integrationsCoreRepository = integrationsCoreRepository;
+            _linxMicrovixCommandHandler = linxMicrovixCommandHandler;
+
         }
 
         public List<LinxProdutosCodBar?> DeserializeXMLToObject(LinxAPIParam jobParameter, List<Dictionary<string?, string?>> records)
@@ -89,7 +97,8 @@ namespace LinxMicrovix.Outbound.Web.Service.Application.Services.LinxMicrovix
                .Clear()
                .AddLog(EnumJob.LinxProdutosCodBar);
 
-            string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter.parametersInterval, jobParameter.parametersTableName, jobParameter.jobName);
+            string sql = _linxMicrovixCommandHandler.CreateGetParametersQuery(jobParameter.parametersInterval, jobParameter.parametersTableName, jobParameter.jobName);
+            string? parameters = await _integrationsCoreRepository.GetRecord<string>(sql);
 
             var body = _linxMicrovixServiceBase.BuildBodyRequest(
                 parametersList: parameters.Replace("[0]", "0").Replace("[cod_produto]", identificador),
@@ -109,7 +118,7 @@ namespace LinxMicrovix.Outbound.Web.Service.Application.Services.LinxMicrovix
                     _logger.AddRecord(record.recordKey, record.recordXml);
                 }
 
-                await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
+                await _integrationsCoreRepository.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
 
                 _logger.AddMessage(
                     $"Concluída com sucesso: {listRecords.Count} registro(s) novo(s) inserido(s)!"
@@ -129,16 +138,21 @@ namespace LinxMicrovix.Outbound.Web.Service.Application.Services.LinxMicrovix
                .AddLog(EnumJob.LinxProdutosCodBar);
 
             var xmls = new List<Dictionary<string?, string?>>();
-            string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter.parametersInterval, jobParameter.parametersTableName, jobParameter.jobName);
+            
+            string sql = _linxMicrovixCommandHandler.CreateGetParametersQuery(jobParameter.parametersInterval, jobParameter.parametersTableName, jobParameter.jobName);
+            string? parameters = await _integrationsCoreRepository.GetRecord<string>(sql);
+            
             var ids_setor = await _linxProdutosCodBarRepository.GetProductsSetorIds(jobParameter);
 
             foreach (var id_setor in ids_setor)
             {
-                string? timestamp = await _linxMicrovixRepositoryBase.GetLast7DaysMinTimestamp(
+                string? sqlTimestamp = _linxMicrovixCommandHandler.CreateGetLast7DaysMinTimestampQuery(
                     jobParameter.schema,
                     jobParameter.tableName,
                     columnDate: "lastupdateon"
                 );
+
+                string? timestamp = await _integrationsCoreRepository.GetRecord<string>(sqlTimestamp);
 
                 var body = _linxMicrovixServiceBase.BuildBodyRequest(
                         parametersList: parameters.Replace("[0]", timestamp).Replace("[id_setor]", id_setor),
@@ -174,7 +188,7 @@ namespace LinxMicrovix.Outbound.Web.Service.Application.Services.LinxMicrovix
                 if (_listSomenteNovos.Count() > 0)
                 {
                     _linxProdutosCodBarRepository.BulkInsertIntoTableRaw(records: _listSomenteNovos, jobParameter: jobParameter);
-                    await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
+                    await _integrationsCoreRepository.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
 
                     for (int i = 0; i < _listSomenteNovos.Count; i++)
                     {

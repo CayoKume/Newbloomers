@@ -1,15 +1,16 @@
 ﻿using Application.IntegrationsCore.Interfaces;
-using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
-using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxCommerce;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Services;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Services.LinxCommerce;
 using Domain.IntegrationsCore.Entities.Exceptions;
 using Domain.IntegrationsCore.Enums;
 using Domain.IntegrationsCore.Interfaces;
-using Domain.LinxMicrovix.Outbound.WebService.Entities.LinxCommerce;
+using Domain.LinxMicrovix.Outbound.WebService.Models.LinxCommerce;
 using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Api;
-using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxCommerce;
 using System.ComponentModel.DataAnnotations;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Handlers.Commands;
+using Domain.LinxMicrovix.Outbound.WebService.Models.Base;
 
 namespace Application.LinxMicrovix.Outbound.WebService.Services
 {
@@ -18,23 +19,26 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
         private readonly IAPICall _apiCall;
         private readonly ILoggerService _logger;
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
-        private readonly ILinxMicrovixRepositoryBase<B2CConsultaClientesContatosParentesco> _linxMicrovixRepositoryBase;
+        private readonly IIntegrationsCoreRepository _integrationsCoreRepository;
         private readonly IB2CConsultaClientesContatosParentescoRepository _b2cConsultaClientesContatosParentescoRepository;
+        private readonly ILinxMicrovixCommandHandler _linxMicrovixCommandHandler;
         private static List<string?> _b2cConsultaClientesContatosParentescoCache { get; set; } = new List<string?>();
 
         public B2CConsultaClientesContatosParentescoService(
             IAPICall apiCall,
             ILoggerService logger,
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
-            ILinxMicrovixRepositoryBase<B2CConsultaClientesContatosParentesco> linxMicrovixRepositoryBase,
-            IB2CConsultaClientesContatosParentescoRepository b2cConsultaClientesContatosParentescoRepository
+            IIntegrationsCoreRepository integrationsCoreRepository,
+            IB2CConsultaClientesContatosParentescoRepository b2cConsultaClientesContatosParentescoRepository,
+            ILinxMicrovixCommandHandler linxMicrovixCommandHandler
         )
         {
             _apiCall = apiCall;
             _logger = logger;
             _linxMicrovixServiceBase = linxMicrovixServiceBase;
-            _linxMicrovixRepositoryBase = linxMicrovixRepositoryBase;
+            _integrationsCoreRepository = integrationsCoreRepository;
             _b2cConsultaClientesContatosParentescoRepository = b2cConsultaClientesContatosParentescoRepository;
+            _linxMicrovixCommandHandler = linxMicrovixCommandHandler;
         }
 
         public List<B2CConsultaClientesContatosParentesco?> DeserializeXMLToObject(LinxAPIParam jobParameter, List<Dictionary<string?, string?>> records)
@@ -91,7 +95,8 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                .Clear()
                .AddLog(EnumJob.B2CConsultaClientesContatosParentesco);
 
-            string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter.parametersInterval, jobParameter.tableName, jobParameter.jobName);
+            string sql = _linxMicrovixCommandHandler.CreateGetParametersQuery(jobParameter.parametersInterval, jobParameter.tableName, jobParameter.jobName);
+            string? parameters = await _integrationsCoreRepository.GetRecord<string>(sql);
 
             var body = _linxMicrovixServiceBase.BuildBodyRequest(
                 parametersList: parameters.Replace("[0]", "0").Replace("[id_parentesco]", identificador),
@@ -111,7 +116,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                     _logger.AddRecord(record.recordKey, record.recordXml);
                 }
 
-                await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
+                await _integrationsCoreRepository.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
 
                 _logger.AddMessage(
                     $"Concluída com sucesso: {listRecords.Count} registro(s) novo(s) inserido(s)!"
@@ -130,12 +135,15 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                .Clear()
                .AddLog(EnumJob.B2CConsultaClientesContatosParentesco);
 
-            string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter.parametersInterval, jobParameter.tableName, jobParameter.jobName);
-            var cnpjs_emp = await _linxMicrovixRepositoryBase.GetB2CCompanys();
+            string sql = _linxMicrovixCommandHandler.CreateGetParametersQuery(jobParameter.parametersInterval, jobParameter.tableName, jobParameter.jobName);
+            string? parameters = await _integrationsCoreRepository.GetRecord<string>(sql);
+            
+            var cnpjs_emp = await _integrationsCoreRepository.GetRecords<Company>(_linxMicrovixCommandHandler.CreateGetB2CCompanysQuery());
 
             foreach (var cnpj_emp in cnpjs_emp)
             {
-                string? timestamp = await _linxMicrovixRepositoryBase.GetLast7DaysMinTimestamp(jobParameter.schema, jobParameter.tableName, columnDate: "LASTUPDATEON");
+                string sqlTimestamp = _linxMicrovixCommandHandler.CreateGetLast7DaysMinTimestampQuery(jobParameter.schema, jobParameter.tableName, "LASTUPDATEON");
+                string? timestamp = await _integrationsCoreRepository.GetRecord<string>(sqlTimestamp);
 
                 var body = _linxMicrovixServiceBase.BuildBodyRequest(
                     parametersList: parameters.Replace("[0]", timestamp),
@@ -163,7 +171,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                     if (_listSomenteNovos.Count() > 0)
                     {
                         _b2cConsultaClientesContatosParentescoRepository.BulkInsertIntoTableRaw(records: _listSomenteNovos, jobParameter: jobParameter);
-                        await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
+                        await _integrationsCoreRepository.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
 
                         for (int i = 0; i < _listSomenteNovos.Count; i++)
                         {

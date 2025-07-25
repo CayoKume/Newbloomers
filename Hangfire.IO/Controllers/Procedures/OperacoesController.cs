@@ -11,9 +11,15 @@ namespace Hangfire.IO.Controllers.Procedures
             (_integrationsCoreRepository) = (integrationsCoreRepository);
 
         [HttpPost("CanalMovimentacao")]
-        public void CanalMovimentacao()
+        public void P_Canal_Movimentacoes()
         {
-            _integrationsCoreRepository.CallDbProcMerge("operations", "[p_Canal_Movimentacoes]");
+            var result = _integrationsCoreRepository.ExecuteCommand("exec [operations].[P_Canal_Movimentacoes]");
+        }
+
+        [HttpPost("SnapshotEstoque")]
+        public void P_Snapshot_Estoque()
+        {
+            var result = _integrationsCoreRepository.ExecuteCommand("exec [operations].[P_Snapshot_Estoque]");
         }
     }
 }

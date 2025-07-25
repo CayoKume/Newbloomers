@@ -1,34 +1,32 @@
-﻿using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
-using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
+﻿using Application.LinxMicrovix.Outbound.WebService.Interfaces.Handlers.Commands.LinxMicrovix;
+using Domain.IntegrationsCore.Interfaces;
+using Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix;
+using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxMicrovix;
-using Domain.LinxMicrovix.Outbound.WebService.Entities.LinxMicrovix;
-using Domain.IntegrationsCore.Enums;
-using Domain.IntegrationsCore.Entities.Exceptions;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxMicrovix
 {
     public class LinxPedidosVendaRepository : ILinxPedidosVendaRepository
     {
-        private readonly ILinxMicrovixRepositoryBase<LinxPedidosVenda> _linxMicrovixRepositoryBase;
+        private readonly IIntegrationsCoreRepository _integrationsCoreRepository;
+        private readonly ILinxPedidosVendaCommandHandler _commandHandler;
 
-        public LinxPedidosVendaRepository(ILinxMicrovixRepositoryBase<LinxPedidosVenda> linxMicrovixRepositoryBase) =>
-            (_linxMicrovixRepositoryBase) = (linxMicrovixRepositoryBase);
+        public LinxPedidosVendaRepository(IIntegrationsCoreRepository integrationsCoreRepository, ILinxPedidosVendaCommandHandler commandHandler)
+        {
+            _integrationsCoreRepository = integrationsCoreRepository;
+            _commandHandler = commandHandler;
+        }
 
         public bool BulkInsertIntoTableRaw(LinxAPIParam jobParameter, IList<LinxPedidosVenda> records)
         {
-            var table = _linxMicrovixRepositoryBase.CreateSystemDataTable(jobParameter.tableName, new LinxPedidosVenda());
+            var table = _integrationsCoreRepository.CreateSystemDataTable(jobParameter.tableName, new LinxPedidosVenda());
 
-            for (int i = 0; i < records.Count(); i++)
-            {
-                table.Rows.Add(records[i].lastupdateon, records[i].portal, records[i].cnpj_emp, records[i].cod_pedido, records[i].data_lancamento, records[i].hora_lancamento,
-                    records[i].transacao, records[i].usuario, records[i].codigo_cliente, records[i].cod_produto, records[i].quantidade, records[i].valor_unitario,
-                    records[i].cod_vendedor, records[i].valor_frete, records[i].valor_total, records[i].desconto_item, records[i].cod_plano_pagamento, records[i].plano_pagamento, records[i].obs, records[i].aprovado,
-                    records[i].cancelado, records[i].data_aprovacao, records[i].data_alteracao, records[i].tipo_frete, records[i].natureza_operacao, records[i].tabela_preco, records[i].nome_tabela_preco, records[i].previsao_entrega,
-                    records[i].realizado_por, records[i].pontuacao_ser, records[i].venda_externa, records[i].nf_gerada, records[i].status, records[i].numero_projeto_officina, records[i].cod_natureza_operacao, records[i].margem_contribuicao,
-                    records[i].doc_origem, records[i].posicao_item, records[i].orcamento_origem, records[i].transacao_origem, records[i].timestamp, records[i].desconto, records[i].transacao_ws, records[i].empresa, records[i].transportador, records[i].deposito);
-            }
+            _integrationsCoreRepository.FillSystemDataTable(table, records.ToList());
 
-            _linxMicrovixRepositoryBase.BulkInsertIntoTableRaw(
+            _integrationsCoreRepository.BulkInsertIntoTableRaw(
                 dataTable: table
             );
 
@@ -37,69 +35,27 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Repository.LinxMicrovi
 
         public async Task<IEnumerable<string?>> GetRegistersExists(LinxAPIParam jobParameter, List<int?> registros)
         {
-            int indice = registros.Count() / 1000;
+            const int batchSize = 1000;
+            var resultList = new List<string?>();
 
-            if (indice > 1)
+            for (int i = 0; i < registros.Count; i += batchSize)
             {
-                var list = new List<string>();
-
-                for (int i = 0; i <= indice; i++)
+                var batch = registros.Skip(i).Take(batchSize).ToList();
+                if (batch.Any())
                 {
-                    string identificadores = String.Empty;
-                    var top1000List = registros.Skip(i * 1000).Take(1000).ToList();
-
-                    for (int j = 0; j < top1000List.Count(); j++)
-                    {
-
-                        if (j == top1000List.Count() - 1)
-                            identificadores += $"'{top1000List[j]}'";
-                        else
-                            identificadores += $"'{top1000List[j]}', ";
-                    }
-
-                    string sql = $"SELECT CONCAT('[', CNPJ_EMP, ']', '|', '[', COD_PEDIDO, ']', '|', '[', COD_PRODUTO, ']', '|', '[', CODIGO_CLIENTE, ']', '|',  '[', [TIMESTAMP], ']') FROM [linx_microvix_erp].[LinxPedidosVenda] WHERE COD_PEDIDO IN ({identificadores})";
-                    var result = await _linxMicrovixRepositoryBase.GetKeyRegistersAlreadyExists(sql);
-                    list.AddRange(result);
+                    string sql = _commandHandler.CreateGetRegistersExistsQuery(batch);
+                    var result = await _integrationsCoreRepository.GetRecords<string>(sql);
+                    resultList.AddRange(result);
                 }
-
-                return list;
             }
-            else
-            {
-                var list = new List<string>();
-                var identificadores = String.Empty;
 
-                for (int i = 0; i < registros.Count(); i++)
-                {
-                    if (i == registros.Count() - 1)
-                        identificadores += $"'{registros[i]}'";
-                    else
-                        identificadores += $"'{registros[i]}', ";
-                }
-
-                string sql = $"SELECT CONCAT('[', CNPJ_EMP, ']', '|', '[', COD_PEDIDO, ']', '|', '[', COD_PRODUTO, ']', '|', '[', CODIGO_CLIENTE, ']', '|',  '[', [TIMESTAMP], ']') FROM [linx_microvix_erp].[LinxPedidosVenda] WHERE COD_PEDIDO IN ({identificadores})";
-                var result = await _linxMicrovixRepositoryBase.GetKeyRegistersAlreadyExists(sql);
-                list.AddRange(result);
-
-                return list;
-            }
+            return resultList;
         }
 
         public async Task<bool> InsertRecord(LinxAPIParam jobParameter, LinxPedidosVenda? record)
         {
-            string? sql = @$"INSERT INTO [untreated].[{jobParameter.tableName}]
-                            ([lastupdateon],[portal],[cnpj_emp],[cod_pedido],[data_lancamento],[hora_lancamento],[transacao],[usuario],[codigo_cliente],[cod_produto],[quantidade],
-                             [valor_unitario],[cod_vendedor],[valor_frete],[valor_total],[desconto_item],[cod_plano_pagamento],[plano_pagamento],[obs],[aprovado],[cancelado],[data_aprovacao],
-                             [data_alteracao],[tipo_frete],[natureza_operacao],[tabela_preco],[nome_tabela_preco],[previsao_entrega],[realizado_por],[pontuacao_ser],[venda_externa],
-                             [nf_gerada],[status],[numero_projeto_officina],[cod_natureza_operacao],[margem_contribuicao],[doc_origem],[posicao_item],[orcamento_origem],[transacao_origem],
-                             [timestamp],[desconto],[transacao_ws],[empresa],[transportador],[deposito])
-                            Values
-                            (@lastupdateon,@portal,@cnpj_emp,@cod_pedido,@data_lancamento,@hora_lancamento,@transacao,@usuario,@codigo_cliente,@cod_produto,@quantidade,@valor_unitario,@cod_vendedor,
-                             @valor_frete,@valor_total,@desconto_item,@cod_plano_pagamento,@plano_pagamento,@obs,@aprovado,@cancelado,@data_aprovacao,@data_alteracao,@tipo_frete,@natureza_operacao,
-                             @tabela_preco,@nome_tabela_preco,@previsao_entrega,@realizado_por,@pontuacao_ser,@venda_externa,@nf_gerada,@status,@numero_projeto_officina,@cod_natureza_operacao,
-                             @margem_contribuicao,@doc_origem,@posicao_item,@orcamento_origem,@transacao_origem,@timestamp,@desconto,@transacao_ws,@empresa,@transportador,@deposito)";
-
-            return await _linxMicrovixRepositoryBase.InsertRecord(jobParameter.tableName, sql: sql, record: record);
+            string sql = _commandHandler.CreateInsertRecordQuery(jobParameter.tableName);
+            return await _integrationsCoreRepository.InsertRecord(sql: sql, entity: record);
         }
     }
 }

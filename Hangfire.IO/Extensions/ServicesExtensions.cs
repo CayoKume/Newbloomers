@@ -12,6 +12,8 @@ using Infrastructure.Jadlog.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Infrastructure.Dootax;
 using Infrastructure.Movidesk;
+using FluentValidation;
+using System.Reflection;
 
 namespace Hangfire.IO.Extensions
 {
@@ -30,6 +32,8 @@ namespace Hangfire.IO.Extensions
             builder.Services.AddScopedJadlogServices();
             builder.Services.AddScopedDootaxServices();
             builder.Services.AddScopedMovideskServices();
+
+            builder.Services.AddValidatorsFromAssembly(Assembly.Load("Application.LinxMicrovix.Outbound.WebService"));
 
             builder.Services.AddDbContextService(builder);
             //builder.Services.AddHangfireService(builder);

@@ -10,4 +10,11 @@
     <ProjectReference Include="..\..\..\IntegrationsCore\Domain.IntegrationsCore\Domain.IntegrationsCore.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Entities\Tickets\" />
+    <Folder Include="Entities\Services\" />
+    <Folder Include="Entities\Person\" />
+    <Folder Include="Models\Services\" />
+  </ItemGroup>
+
 </Project>

@@ -1,14 +1,17 @@
 ﻿using Application.IntegrationsCore.Interfaces;
-using Application.LinxMicrovix.Outbound.WebService.Interfaces.Base;
-using Application.LinxMicrovix.Outbound.WebService.Interfaces.LinxMicrovix;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Services;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Services.LinxMicrovix;
 using Domain.IntegrationsCore.Entities.Exceptions;
 using Domain.IntegrationsCore.Enums;
-using Domain.LinxMicrovix.Outbound.WebService.Entities.LinxMicrovix;
+using Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix;
 using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Api;
-using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.Base;
+
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxMicrovix;
 using System.ComponentModel.DataAnnotations;
+using Domain.IntegrationsCore.Interfaces;
+using Domain.LinxMicrovix.Outbound.WebService.Models.Base;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Handlers.Commands;
 
 namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
 {
@@ -17,22 +20,25 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
         private readonly IAPICall _apiCall;
         private readonly ILoggerService _logger;
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
-        private readonly ILinxMicrovixRepositoryBase<LinxMovimentoPlanos> _linxMicrovixRepositoryBase;
+        private readonly ILinxMicrovixCommandHandler _linxMicrovixCommandHandler;
+        private readonly IIntegrationsCoreRepository _integrationsCoreRepository;
         private readonly ILinxMovimentoPlanosRepository _linxMovimentoPlanosRepository;
         private static List<string?> _linxMovimentoPlanosCache { get; set; } = new List<string?>();
 
         public LinxMovimentoPlanosService(
             IAPICall apiCall,
             ILoggerService logger,
+            ILinxMicrovixCommandHandler linxMicrovixCommandHandler,
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
-            ILinxMicrovixRepositoryBase<LinxMovimentoPlanos> linxMicrovixRepositoryBase,
+            IIntegrationsCoreRepository integrationsCoreRepository,
             ILinxMovimentoPlanosRepository linxMovimentoPlanosRepository
         )
         {
             _apiCall = apiCall;
             _logger = logger;
+            _integrationsCoreRepository = integrationsCoreRepository;
+            _linxMicrovixCommandHandler = linxMicrovixCommandHandler;
             _linxMicrovixServiceBase = linxMicrovixServiceBase;
-            _linxMicrovixRepositoryBase = linxMicrovixRepositoryBase;
             _linxMovimentoPlanosRepository = linxMovimentoPlanosRepository;
         }
 
@@ -100,7 +106,8 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                .Clear()
                .AddLog(EnumJob.LinxMovimentoPlanos);
 
-            string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter.parametersInterval, jobParameter.parametersTableName, jobParameter.jobName);
+            string sql = _linxMicrovixCommandHandler.CreateGetParametersQuery(jobParameter.parametersInterval, jobParameter.parametersTableName, jobParameter.jobName);
+            string? parameters = await _integrationsCoreRepository.GetRecord<string>(sql);
 
             var body = _linxMicrovixServiceBase.BuildBodyRequest(
                 parametersList: parameters.Replace("[0]", "0").Replace("[identificador]", identificador),
@@ -120,7 +127,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                     _logger.AddRecord(record.recordKey, record.recordXml);
                 }
 
-                await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
+                await _integrationsCoreRepository.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
 
                 _logger.AddMessage(
                     $"Concluída com sucesso: {listRecords.Count} registro(s) novo(s) inserido(s)!"
@@ -140,12 +147,16 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                .AddLog(EnumJob.LinxMovimentoPlanos);
 
             var xmls = new List<Dictionary<string?, string?>>();
-            string? parameters = await _linxMicrovixRepositoryBase.GetParameters(jobParameter.parametersInterval, jobParameter.parametersTableName, jobParameter.jobName);
-            var cnpjs_emp = await _linxMicrovixRepositoryBase.GetMicrovixCompanys();
+
+            string sql = _linxMicrovixCommandHandler.CreateGetParametersQuery(jobParameter.parametersInterval, jobParameter.parametersTableName, jobParameter.jobName);
+            string? parameters = await _integrationsCoreRepository.GetRecord<string>(sql);
+
+            string sqlCnpjsEmp = _linxMicrovixCommandHandler.CreateGetB2CCompanysQuery();
+            var cnpjs_emp = await _integrationsCoreRepository.GetRecords<Company?>(sql);
 
             foreach (var cnpj_emp in cnpjs_emp)
             {
-                string? timestamp = await _linxMicrovixRepositoryBase.GetLast7DaysMinTimestamp(
+                string? timestamp = _linxMicrovixCommandHandler.CreateGetLast7DaysMinTimestampWithCompanyQuery(
                     jobParameter.schema,
                     jobParameter.tableName,
                     columnDate: "lastupdateon",
@@ -185,7 +196,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                 if (_listSomenteNovos.Count() > 0)
                 {
                     _linxMovimentoPlanosRepository.BulkInsertIntoTableRaw(records: _listSomenteNovos, jobParameter: jobParameter);
-                    await _linxMicrovixRepositoryBase.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
+                    await _integrationsCoreRepository.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
 
                     for (int i = 0; i < _listSomenteNovos.Count; i++)
                     {

@@ -119,6 +119,9 @@
         AfterSaleStatus = 1205,
         AfterSaleStatusHistories = 1206,
         AfterSaleTrackingHistories = 1207,
-        AfterSaleTransportations = 1208
+        AfterSaleTransportations = 1208,
+
+        MovideskGetTickets = 1400,
+        MovideskGetPersons = 1401
     }
 }

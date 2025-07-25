@@ -2,7 +2,7 @@
 {
     public interface IAPICall
     {
-        public Task<string> GetAsync(string rote, Guid? token);
-        public Task<string> GetAsync(string rote, Guid? token, string filters, string selectItens, string expandItens);
+        public Task<string> GetAsync(string rote, string? token);
+        public Task<string> GetAsync(string rote, string? token, string filters, string selectItens, string expandItens);
     }
 }
