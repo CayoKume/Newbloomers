@@ -2,19 +2,23 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix
 {
     public class LinxEspessuras
     {
-        public string? codigo_espessura { get; set; }
-        public string? nome_espessura { get; set; }
+        public string? id_espessura { get; set; }
+        public string? desc_espessura { get; set; }
         public string? timestamp { get; set; }
-        public string? portal { get; set; }
+        public string? codigo_integracao_ws { get; set; }
+        public string? ativo { get; set; }
 
-        public LinxEspessuras() { }
-
-        public LinxEspessuras(string? codigo_espessura, string? nome_espessura, string? timestamp, string? portal)
+        public LinxEspessuras()
         {
-            this.codigo_espessura = codigo_espessura;
-            this.nome_espessura = nome_espessura;
+        }
+
+        public LinxEspessuras(string? id_espessura, string? desc_espessura, string? timestamp, string? codigo_integracao_ws, string? ativo)
+        {
+            this.id_espessura = id_espessura;
+            this.desc_espessura = desc_espessura;
             this.timestamp = timestamp;
-            this.portal = portal;
+            this.codigo_integracao_ws = codigo_integracao_ws;
+            this.ativo = ativo;
         }
     }
 }

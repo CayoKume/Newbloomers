@@ -1,29 +1,24 @@
+using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
+
 namespace Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix
 {
     public class LinxMovimentoObservacaoCF
     {
-        public string? id_movimento_observacao_cf { get; set; }
-        public string? id_movimento { get; set; }
-        public string? observacao { get; set; }
-        public string? timestamp { get; set; }
-        public string? portal { get; set; }
+        public string? identificador { get; private set; }
+        public string? documento_cliente { get; private set; }
+        public string? timestamp { get; private set; }
 
-        public LinxMovimentoObservacaoCF()
-        {
-        }
+        public LinxMovimentoObservacaoCF() { }
 
         public LinxMovimentoObservacaoCF(
-            string? id_movimento_observacao_cf,
-            string? id_movimento,
-            string? observacao,
-            string? timestamp,
-            string? portal)
+            string? identificador,
+            string? documento_cliente,
+            string? timestamp
+        )
         {
-            this.id_movimento_observacao_cf = id_movimento_observacao_cf;
-            this.id_movimento = id_movimento;
-            this.observacao = observacao;
-            this.timestamp = timestamp;
-            this.portal = portal;
+            this.identificador = this.identificador;
+            this.documento_cliente = this.documento_cliente;
+            this.timestamp = this.timestamp;
         }
     }
 }

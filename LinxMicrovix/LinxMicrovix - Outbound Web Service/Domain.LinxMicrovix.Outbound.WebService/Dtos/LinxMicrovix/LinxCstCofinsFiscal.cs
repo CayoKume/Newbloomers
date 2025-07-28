@@ -2,19 +2,25 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix
 {
     public class LinxCstCofinsFiscal
     {
-        public string? codigo_cst_cofins { get; set; }
-        public string? descricao_cst_cofins { get; set; }
-        public string? timestamp { get; set; }
         public string? portal { get; set; }
+        public string? id_csosn_fiscal { get; set; }
+        public string? csosn_fiscal { get; set; }
+        public string? descricao { get; set; }
+        public string? id_csosn_fiscal_substitutiva { get; set; }
+        public string? timestamp { get; set; }
 
-        public LinxCstCofinsFiscal() { }
-
-        public LinxCstCofinsFiscal(string? codigo_cst_cofins, string? descricao_cst_cofins, string? timestamp, string? portal)
+        public LinxCstCofinsFiscal()
         {
-            this.codigo_cst_cofins = codigo_cst_cofins;
-            this.descricao_cst_cofins = descricao_cst_cofins;
-            this.timestamp = timestamp;
+        }
+
+        public LinxCstCofinsFiscal(string? portal, string? id_csosn_fiscal, string? csosn_fiscal, string? descricao, string? id_csosn_fiscal_substitutiva, string? timestamp)
+        {
             this.portal = portal;
+            this.id_csosn_fiscal = id_csosn_fiscal;
+            this.csosn_fiscal = csosn_fiscal;
+            this.descricao = descricao;
+            this.id_csosn_fiscal_substitutiva = id_csosn_fiscal_substitutiva;
+            this.timestamp = timestamp;
         }
     }
 }

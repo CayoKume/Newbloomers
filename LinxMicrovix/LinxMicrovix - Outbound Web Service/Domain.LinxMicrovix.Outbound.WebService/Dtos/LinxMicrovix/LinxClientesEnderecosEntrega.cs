@@ -3,8 +3,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix
     public class LinxClientesEnderecosEntrega
     {
         public string? id_endereco_entrega { get; set; }
-        public string? cod_cliente_erp { get; set; }
-        public string? cod_cliente_b2c { get; set; }
+        public string? cod_cliente { get; set; }
         public string? endereco_cliente { get; set; }
         public string? numero_rua_cliente { get; set; }
         public string? complemento_end_cli { get; set; }
@@ -14,17 +13,19 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix
         public string? uf_cliente { get; set; }
         public string? descricao { get; set; }
         public string? principal { get; set; }
-        public string? id_cidade { get; set; }
+        public string? fone_cliente { get; set; }
+        public string? fone_celular { get; set; }
         public string? timestamp { get; set; }
         public string? portal { get; set; }
 
-        public LinxClientesEnderecosEntrega() { }
+        public LinxClientesEnderecosEntrega()
+        {
+        }
 
-        public LinxClientesEnderecosEntrega(string? id_endereco_entrega, string? cod_cliente_erp, string? cod_cliente_b2c, string? endereco_cliente, string? numero_rua_cliente, string? complemento_end_cli, string? cep_cliente, string? bairro_cliente, string? cidade_cliente, string? uf_cliente, string? descricao, string? principal, string? id_cidade, string? timestamp, string? portal)
+        public LinxClientesEnderecosEntrega(string? id_endereco_entrega, string? cod_cliente, string? endereco_cliente, string? numero_rua_cliente, string? complemento_end_cli, string? cep_cliente, string? bairro_cliente, string? cidade_cliente, string? uf_cliente, string? descricao, string? principal, string? fone_cliente, string? fone_celular, string? timestamp, string? portal)
         {
             this.id_endereco_entrega = id_endereco_entrega;
-            this.cod_cliente_erp = cod_cliente_erp;
-            this.cod_cliente_b2c = cod_cliente_b2c;
+            this.cod_cliente = cod_cliente;
             this.endereco_cliente = endereco_cliente;
             this.numero_rua_cliente = numero_rua_cliente;
             this.complemento_end_cli = complemento_end_cli;
@@ -34,7 +35,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix
             this.uf_cliente = uf_cliente;
             this.descricao = descricao;
             this.principal = principal;
-            this.id_cidade = id_cidade;
+            this.fone_cliente = fone_cliente;
+            this.fone_celular = fone_celular;
             this.timestamp = timestamp;
             this.portal = portal;
         }

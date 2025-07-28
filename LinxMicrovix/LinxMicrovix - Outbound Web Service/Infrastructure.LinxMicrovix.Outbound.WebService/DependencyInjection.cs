@@ -1,7 +1,7 @@
 ﻿using Application.LinxMicrovix.Outbound.WebService.Handlers.Commands;
 using Application.LinxMicrovix.Outbound.WebService.Services;
 using Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix;
-using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Api;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Api;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxCommerce;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxMicrovix;
 using Infrastructure.LinxMicrovix.Outbound.WebService.Api;

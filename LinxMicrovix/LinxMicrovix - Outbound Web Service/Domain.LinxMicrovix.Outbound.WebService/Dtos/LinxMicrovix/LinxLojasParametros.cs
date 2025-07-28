@@ -2,25 +2,21 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix
 {
     public class LinxLojasParametros
     {
-        public string? id_loja_parametro { get; set; }
-        public string? empresa { get; set; }
-        public string? parametro { get; set; }
-        public string? valor { get; set; }
-        public string? timestamp { get; set; }
         public string? portal { get; set; }
+        public string? empresa { get; set; }
+        public string? percentual_minimo_antecipacao { get; set; }
+        public string? timestamp { get; set; }
 
-        public LinxLojasParametros() { }
-
-        public LinxLojasParametros(string? id_loja_parametro, string? empresa, string? parametro,
-                                   string? valor, string? timestamp, string? portal)
+        public LinxLojasParametros()
         {
-            this.id_loja_parametro = id_loja_parametro;
-            this.empresa = empresa;
-            this.parametro = parametro;
-            this.valor = valor;
-            this.timestamp = timestamp;
-            this.portal = portal;
         }
 
+        public LinxLojasParametros(string? portal, string? empresa, string? percentual_minimo_antecipacao, string? timestamp)
+        {
+            this.portal = portal;
+            this.empresa = empresa;
+            this.percentual_minimo_antecipacao = percentual_minimo_antecipacao;
+            this.timestamp = timestamp;
+        }
     }
 }

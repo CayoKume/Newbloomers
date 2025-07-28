@@ -2,19 +2,27 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix
 {
     public class LinxCest
     {
-        public string? codigo_cest { get; set; }
-        public string? descricao_cest { get; set; }
-        public string? timestamp { get; set; }
         public string? portal { get; set; }
+        public string? id_cest { get; set; }
+        public string? descricao { get; set; }
+        public string? cest { get; set; }
+        public string? id_segmento_mercadoria_bem { get; set; }
+        public string? ativo { get; set; }
+        public string? timestamp { get; set; }
 
-        public LinxCest() { }
-
-        public LinxCest(string? codigo_cest, string? descricao_cest, string? timestamp, string? portal)
+        public LinxCest()
         {
-            this.codigo_cest = codigo_cest;
-            this.descricao_cest = descricao_cest;
-            this.timestamp = timestamp;
+        }
+
+        public LinxCest(string? portal, string? id_cest, string? descricao, string? cest, string? id_segmento_mercadoria_bem, string? ativo, string? timestamp)
+        {
             this.portal = portal;
+            this.id_cest = id_cest;
+            this.descricao = descricao;
+            this.cest = cest;
+            this.id_segmento_mercadoria_bem = id_segmento_mercadoria_bem;
+            this.ativo = ativo;
+            this.timestamp = timestamp;
         }
     }
 }

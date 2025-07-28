@@ -2,27 +2,31 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix
 {
     public class LinxLotesProdutos
     {
-        public string? id_lote_produto { get; set; }
-        public string? codigoproduto { get; set; }
-        public string? numero_lote { get; set; }
-        public string? data_validade { get; set; }
-        public string? quantidade { get; set; }
-        public string? timestamp { get; set; }
+        public string? id_lote { get; set; }
+        public string? codigo_produto { get; set; }
+        public string? lote { get; set; }
+        public string? identificador { get; set; }
+        public string? transacao { get; set; }
+        public string? data_fabricacao { get; set; }
+        public string? data_vencimento { get; set; }
         public string? portal { get; set; }
+        public string? timestamp { get; set; }
 
-        public LinxLotesProdutos() { }
-
-        public LinxLotesProdutos(string? id_lote_produto, string? codigoproduto, string? numero_lote,
-                                 string? data_validade, string? quantidade, string? timestamp, string? portal)
+        public LinxLotesProdutos()
         {
-            this.id_lote_produto = id_lote_produto;
-            this.codigoproduto = codigoproduto;
-            this.numero_lote = numero_lote;
-            this.data_validade = data_validade;
-            this.quantidade = quantidade;
-            this.timestamp = timestamp;
-            this.portal = portal;
         }
 
+        public LinxLotesProdutos(string? id_lote, string? codigo_produto, string? lote, string? identificador, string? transacao, string? data_fabricacao, string? data_vencimento, string? portal, string? timestamp)
+        {
+            this.id_lote = id_lote;
+            this.codigo_produto = codigo_produto;
+            this.lote = lote;
+            this.identificador = identificador;
+            this.transacao = transacao;
+            this.data_fabricacao = data_fabricacao;
+            this.data_vencimento = data_vencimento;
+            this.portal = portal;
+            this.timestamp = timestamp;
+        }
     }
 }

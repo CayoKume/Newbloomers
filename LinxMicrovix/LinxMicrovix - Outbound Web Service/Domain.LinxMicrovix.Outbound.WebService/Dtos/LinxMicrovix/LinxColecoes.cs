@@ -2,21 +2,21 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix
 {
     public class LinxColecoes
     {
-        public string? codigo_colecao { get; set; }
-        public string? nome_colecao { get; set; }
+        public string? id_colecao { get; set; }
+        public string? desc_colecao { get; set; }
         public string? timestamp { get; set; }
-        public string? marcas { get; set; }
-        public string? portal { get; set; }
+        public string? codigo_integracao_ws { get; set; }
 
-        public LinxColecoes() { }
-
-        public LinxColecoes(string? codigo_colecao, string? nome_colecao, string? timestamp, string? marcas, string? portal)
+        public LinxColecoes()
         {
-            this.codigo_colecao = codigo_colecao;
-            this.nome_colecao = nome_colecao;
+        }
+
+        public LinxColecoes(string? id_colecao, string? desc_colecao, string? timestamp, string? codigo_integracao_ws)
+        {
+            this.id_colecao = id_colecao;
+            this.desc_colecao = desc_colecao;
             this.timestamp = timestamp;
-            this.marcas = marcas;
-            this.portal = portal;
+            this.codigo_integracao_ws = codigo_integracao_ws;
         }
     }
 }

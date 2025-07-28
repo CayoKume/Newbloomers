@@ -2,21 +2,27 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix
 {
     public class LinxMovimentoAcoesPromocionais
     {
-        public string? id_movimento_acao_promocional { get; set; }
-        public string? id_movimento { get; set; }
-        public string? codigo_acao_promocional { get; set; }
-        public string? timestamp { get; set; }
+        public string? identificador { get; set; }
         public string? portal { get; set; }
+        public string? cnpj_emp { get; set; }
+        public string? transacao { get; set; }
+        public string? id_acoes_promocionais { get; set; }
+        public string? desconto_item { get; set; }
+        public string? quantidade { get; set; }
 
-        public LinxMovimentoAcoesPromocionais() { }
-
-        public LinxMovimentoAcoesPromocionais(string? id_movimento_acao_promocional, string? id_movimento, string? codigo_acao_promocional, string? timestamp, string? portal)
+        public LinxMovimentoAcoesPromocionais()
         {
-            this.id_movimento_acao_promocional = id_movimento_acao_promocional;
-            this.id_movimento = id_movimento;
-            this.codigo_acao_promocional = codigo_acao_promocional;
-            this.timestamp = timestamp;
+        }
+
+        public LinxMovimentoAcoesPromocionais(string? identificador, string? portal, string? cnpj_emp, string? transacao, string? id_acoes_promocionais, string? desconto_item, string? quantidade)
+        {
+            this.identificador = identificador;
             this.portal = portal;
+            this.cnpj_emp = cnpj_emp;
+            this.transacao = transacao;
+            this.id_acoes_promocionais = id_acoes_promocionais;
+            this.desconto_item = desconto_item;
+            this.quantidade = quantidade;
         }
     }
 }

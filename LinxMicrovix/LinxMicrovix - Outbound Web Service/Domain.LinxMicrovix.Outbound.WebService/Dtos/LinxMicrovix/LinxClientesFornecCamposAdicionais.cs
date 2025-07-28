@@ -2,21 +2,21 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix
 {
     public class LinxClientesFornecCamposAdicionais
     {
-        public string? id_campo_valor { get; set; }
-        public string? cod_cliente_fornec { get; set; }
-        public string? id_campo_detalhe { get; set; }
-        public string? timestamp { get; set; }
         public string? portal { get; set; }
+        public string? cod_cliente { get; set; }
+        public string? campo { get; set; }
+        public string? valor { get; set; }
 
-        public LinxClientesFornecCamposAdicionais() { }
-
-        public LinxClientesFornecCamposAdicionais(string? id_campo_valor, string? cod_cliente_fornec, string? id_campo_detalhe, string? timestamp, string? portal)
+        public LinxClientesFornecCamposAdicionais()
         {
-            this.id_campo_valor = id_campo_valor;
-            this.cod_cliente_fornec = cod_cliente_fornec;
-            this.id_campo_detalhe = id_campo_detalhe;
-            this.timestamp = timestamp;
+        }
+
+        public LinxClientesFornecCamposAdicionais(string? portal, string? cod_cliente, string? campo, string? valor)
+        {
             this.portal = portal;
+            this.cod_cliente = cod_cliente;
+            this.campo = campo;
+            this.valor = valor;
         }
     }
 }

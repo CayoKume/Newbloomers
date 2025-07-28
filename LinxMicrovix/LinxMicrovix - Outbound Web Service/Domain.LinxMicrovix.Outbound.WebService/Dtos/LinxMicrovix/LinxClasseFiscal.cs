@@ -2,19 +2,23 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix
 {
     public class LinxClasseFiscal
     {
-        public string? codigo_classe_fiscal { get; set; }
-        public string? descricao_classe_fiscal { get; set; }
-        public string? timestamp { get; set; }
         public string? portal { get; set; }
+        public string? id_classe_fiscal { get; set; }
+        public string? descricao { get; set; }
+        public string? excluido { get; set; }
+        public string? timestamp { get; set; }
 
-        public LinxClasseFiscal() { }
-
-        public LinxClasseFiscal(string? codigo_classe_fiscal, string? descricao_classe_fiscal, string? timestamp, string? portal)
+        public LinxClasseFiscal()
         {
-            this.codigo_classe_fiscal = codigo_classe_fiscal;
-            this.descricao_classe_fiscal = descricao_classe_fiscal;
-            this.timestamp = timestamp;
+        }
+
+        public LinxClasseFiscal(string? portal, string? id_classe_fiscal, string? descricao, string? excluido, string? timestamp)
+        {
             this.portal = portal;
+            this.id_classe_fiscal = id_classe_fiscal;
+            this.descricao = descricao;
+            this.excluido = excluido;
+            this.timestamp = timestamp;
         }
     }
 }

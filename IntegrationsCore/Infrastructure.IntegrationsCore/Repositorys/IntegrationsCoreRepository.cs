@@ -270,7 +270,7 @@ namespace Infrastructure.IntegrationsCore.Repositorys
             {
                 using (var conn = _sqlServerConnection.GetIDbConnection())
                 {
-                    var result = await conn.ExecuteAsync(sql: sql, commandTimeout: 360);
+                    var result = await conn.ExecuteAsync(sql: sql, commandTimeout: 3600);
 
                     if (result > 0)
                         return true;

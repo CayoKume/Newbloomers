@@ -1,35 +1,48 @@
+using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
+
 namespace Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix
 {
     public class LinxMovimentoPrincipal
     {
-        public string? id_movimento_principal { get; set; }
-        public string? id_movimento { get; set; }
-        public string? codigoproduto { get; set; }
-        public string? quantidade { get; set; }
-        public string? valor_unitario { get; set; }
-        public string? timestamp { get; set; }
-        public string? portal { get; set; }
+        public string? id_movimento_principal { get; private set; }
+        public string? identificador { get; private set; }
+        public string? codigoproduto_manutencao { get; private set; }
+        public string? timestamp { get; private set; }
+        public string? id_pergunta_venda { get; private set; }
+        public string? id_resposta_venda { get; private set; }
+        public string? total_fidelidade_cashback { get; private set; }
+        public string? plano_fidelidade_cashback { get; private set; }
+        public string? remessa_pedido_compra { get; private set; }
+        public string? id_motivo_desconto { get; private set; }
+        public string? valor_nota { get; private set; }
 
-        public LinxMovimentoPrincipal()
-        {
-        }
+        public LinxMovimentoPrincipal() { }
 
         public LinxMovimentoPrincipal(
             string? id_movimento_principal,
-            string? id_movimento,
-            string? codigoproduto,
-            string? quantidade,
-            string? valor_unitario,
+            string? identificador,
+            string? codigoproduto_manutencao,
             string? timestamp,
-            string? portal)
+            string? id_pergunta_venda,
+            string? id_resposta_venda,
+            string? total_fidelidade_cashback,
+            string? plano_fidelidade_cashback,
+            string? remessa_pedido_compra,
+            string? id_motivo_desconto,
+            string? valor_nota
+        )
         {
-            this.id_movimento_principal = id_movimento_principal;
-            this.id_movimento = id_movimento;
-            this.codigoproduto = codigoproduto;
-            this.quantidade = quantidade;
-            this.valor_unitario = valor_unitario;
+            this.id_movimento_principal =  id_movimento_principal;
+            this.identificador = identificador;
+            this.codigoproduto_manutencao = codigoproduto_manutencao;
             this.timestamp = timestamp;
-            this.portal = portal;
+            this.id_pergunta_venda = id_pergunta_venda;
+            this.id_resposta_venda = id_resposta_venda;
+            this.total_fidelidade_cashback = total_fidelidade_cashback;
+            this.plano_fidelidade_cashback = plano_fidelidade_cashback;
+            this.remessa_pedido_compra = remessa_pedido_compra;
+            this.id_motivo_desconto = id_motivo_desconto;
+            this.valor_nota = valor_nota;
         }
     }
 }

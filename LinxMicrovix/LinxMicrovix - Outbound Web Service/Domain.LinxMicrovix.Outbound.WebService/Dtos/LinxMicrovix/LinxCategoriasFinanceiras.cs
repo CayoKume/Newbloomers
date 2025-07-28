@@ -2,21 +2,23 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix
 {
     public class LinxCategoriasFinanceiras
     {
-        public string? codigo_categoria { get; set; }
-        public string? nome_categoria { get; set; }
-        public string? tipo_categoria { get; set; }
+        public string? id_categorias_financeiras { get; set; }
+        public string? descricao { get; set; }
+        public string? ativo { get; set; }
+        public string? historico { get; set; }
         public string? timestamp { get; set; }
-        public string? portal { get; set; }
 
-        public LinxCategoriasFinanceiras() { }
-
-        public LinxCategoriasFinanceiras(string? codigo_categoria, string? nome_categoria, string? tipo_categoria, string? timestamp, string? portal)
+        public LinxCategoriasFinanceiras()
         {
-            this.codigo_categoria = codigo_categoria;
-            this.nome_categoria = nome_categoria;
-            this.tipo_categoria = tipo_categoria;
+        }
+
+        public LinxCategoriasFinanceiras(string? id_categorias_financeiras, string? descricao, string? ativo, string? historico, string? timestamp)
+        {
+            this.id_categorias_financeiras = id_categorias_financeiras;
+            this.descricao = descricao;
+            this.ativo = ativo;
+            this.historico = historico;
             this.timestamp = timestamp;
-            this.portal = portal;
         }
     }
 }

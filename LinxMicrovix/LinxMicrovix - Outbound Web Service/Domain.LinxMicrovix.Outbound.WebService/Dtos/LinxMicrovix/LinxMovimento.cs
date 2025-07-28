@@ -1,234 +1,123 @@
-using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
-
 namespace Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix
 {
     public class LinxMovimento
     {
-        public string? portal { get; private set; }
-        public string? cnpj_emp { get; private set; }
-        public string? transacao { get; private set; }
-        public string? usuario { get; private set; }
-        public string? documento { get; private set; }
-        public string? chave_nf { get; private set; }
-        public string? ecf { get; private set; }
-        public string? numero_serie_ecf { get; private set; }
-        public string? modelo_nf { get; private set; }
-        public string? data_documento { get; private set; }
-        public string? data_lancamento { get; private set; }
-        public string? codigo_cliente { get; private set; }
-        public string? serie { get; private set; }
-        public string? desc_cfop { get; private set; }
-        public string? id_cfop { get; private set; }
-        public string? cod_vendedor { get; private set; }
-        public string? quantidade { get; private set; }
-        public string? preco_custo { get; private set; }
-        public string? valor_liquido { get; private set; }
-        public string? desconto { get; private set; }
-        public string? cst_icms { get; private set; }
-        public string? cst_pis { get; private set; }
-        public string? cst_cofins { get; private set; }
-        public string? cst_ipi { get; private set; }
-        public string? valor_icms { get; private set; }
-        public string? aliquota_icms { get; private set; }
-        public string? base_icms { get; private set; }
-        public string? valor_pis { get; private set; }
-        public string? aliquota_pis { get; private set; }
-        public string? base_pis { get; private set; }
-        public string? valor_cofins { get; private set; }
-        public string? aliquota_cofins { get; private set; }
-        public string? base_cofins { get; private set; }
-        public string? valor_icms_st { get; private set; }
-        public string? aliquota_icms_st { get; private set; }
-        public string? base_icms_st { get; private set; }
-        public string? valor_ipi { get; private set; }
-        public string? aliquota_ipi { get; private set; }
-        public string? base_ipi { get; private set; }
-        public string? valor_total { get; private set; }
-        public string? forma_dinheiro { get; private set; }
-        public string? total_dinheiro { get; private set; }
-        public string? forma_cheque { get; private set; }
-        public string? total_cheque { get; private set; }
-        public string? forma_cartao { get; private set; }
-        public string? total_cartao { get; private set; }
-        public string? forma_crediario { get; private set; }
-        public string? total_crediario { get; private set; }
-        public string? forma_convenio { get; private set; }
-        public string? total_convenio { get; private set; }
-        public string? frete { get; private set; }
-        public string? operacao { get; private set; }
-        public string? tipo_transacao { get; private set; }
-        public string? cod_produto { get; private set; }        
-        public string? cod_barra { get; private set; }        
-        public string? cancelado { get; private set; }        
-        public string? excluido { get; private set; }        
-        public string? soma_relatorio { get; private set; }
-        public string? identificador { get; private set; }        
-        public string? deposito { get; private set; }
-        public string? obs { get; private set; }
-        public string? preco_unitario { get; private set; }        
-        public string? hora_lancamento { get; private set; }       
-        public string? natureza_operacao { get; private set; }
-        public string? tabela_preco { get; private set; }
-        public string? nome_tabela_preco { get; private set; }
-        public string? cod_sefaz_situacao { get; private set; }
-        public string? desc_sefaz_situacao { get; private set; }
-        public string? protocolo_aut_nfe { get; private set; }
-        public string? dt_update { get; private set; }
-        public string? forma_cheque_prazo { get; private set; }
-        public string? total_cheque_prazo { get; private set; }
-        public string? cod_natureza_operacao { get; private set; }
-        public string? preco_tabela_epoca { get; private set; }
-        public string? desconto_total_item { get; private set; }
-        public string? conferido { get; private set; }
-        public string? transacao_pedido_venda { get; private set; }
-        public string? codigo_modelo_nf { get; private set; }
-        public string? acrescimo { get; private set; }
-        public string? mob_checkout { get; private set; }
-        public string? aliquota_iss { get; private set; }
-        public string? base_iss { get; private set; }
-        public string? ordem { get; private set; }
-        public string? codigo_rotina_origem { get; private set; }
-        public string? timestamp { get; private set; }
-        public string? troco { get; private set; }
-        public string? transportador { get; private set; }
-        public string? icms_aliquota_desonerado { get; private set; }
-        public string? icms_valor_desonerado_item { get; private set; }
-        public string? empresa { get; private set; }
-        public string? desconto_item { get; private set; }
-        public string? aliq_iss { get; private set; }
-        public string? iss_base_item { get; private set; }
-        public string? despesas { get; private set; }
-        public string? seguro_total_item { get; private set; }
-        public string? acrescimo_total_item { get; private set; }
-        public string? despesas_total_item { get; private set; }
-        public string? forma_pix { get; private set; }
-        public string? total_pix { get; private set; }
-        public string? forma_deposito_bancario { get; private set; }
-        public string? total_deposito_bancario { get; private set; }
-        public string? id_venda_produto_b2c { get; private set; }
-        public string? item_promocional { get; private set; }
-        public string? acrescimo_item { get; private set; }
-        public string? icms_st_antecipado_aliquota { get; private set; }
-        public string? icms_st_antecipado_margem { get; private set; }
-        public string? icms_st_antecipado_percentual_reducao { get; private set; }
-        public string? icms_st_antecipado_valor_item { get; private set; }
-        public string? icms_base_desonerado_item { get; private set; }
-        public string? codigo_status_nfe { get; private set; }
+        public string? portal { get; set; }
+        public string? cnpj_emp { get; set; }
+        public string? transacao { get; set; }
+        public string? usuario { get; set; }
+        public string? documento { get; set; }
+        public string? chave_nf { get; set; }
+        public string? ecf { get; set; }
+        public string? numero_serie_ecf { get; set; }
+        public string? modelo_nf { get; set; }
+        public string? data_documento { get; set; }
+        public string? data_lancamento { get; set; }
+        public string? codigo_cliente { get; set; }
+        public string? serie { get; set; }
+        public string? desc_cfop { get; set; }
+        public string? id_cfop { get; set; }
+        public string? cod_vendedor { get; set; }
+        public string? quantidade { get; set; }
+        public string? preco_custo { get; set; }
+        public string? valor_liquido { get; set; }
+        public string? desconto { get; set; }
+        public string? cst_icms { get; set; }
+        public string? cst_pis { get; set; }
+        public string? cst_cofins { get; set; }
+        public string? cst_ipi { get; set; }
+        public string? valor_icms { get; set; }
+        public string? aliquota_icms { get; set; }
+        public string? base_icms { get; set; }
+        public string? valor_pis { get; set; }
+        public string? aliquota_pis { get; set; }
+        public string? base_pis { get; set; }
+        public string? valor_cofins { get; set; }
+        public string? aliquota_cofins { get; set; }
+        public string? base_cofins { get; set; }
+        public string? valor_icms_st { get; set; }
+        public string? aliquota_icms_st { get; set; }
+        public string? base_icms_st { get; set; }
+        public string? valor_ipi { get; set; }
+        public string? aliquota_ipi { get; set; }
+        public string? base_ipi { get; set; }
+        public string? valor_total { get; set; }
+        public string? forma_dinheiro { get; set; }
+        public string? total_dinheiro { get; set; }
+        public string? forma_cheque { get; set; }
+        public string? total_cheque { get; set; }
+        public string? forma_cartao { get; set; }
+        public string? total_cartao { get; set; }
+        public string? forma_crediario { get; set; }
+        public string? total_crediario { get; set; }
+        public string? forma_convenio { get; set; }
+        public string? total_convenio { get; set; }
+        public string? frete { get; set; }
+        public string? operacao { get; set; }
+        public string? tipo_transacao { get; set; }
+        public string? cod_produto { get; set; }
+        public string? cod_barra { get; set; }
+        public string? cancelado { get; set; }
+        public string? excluido { get; set; }
+        public string? soma_relatorio { get; set; }
+        public string? identificador { get; set; }
+        public string? deposito { get; set; }
+        public string? obs { get; set; }
+        public string? preco_unitario { get; set; }
+        public string? hora_lancamento { get; set; }
+        public string? natureza_operacao { get; set; }
+        public string? tabela_preco { get; set; }
+        public string? nome_tabela_preco { get; set; }
+        public string? cod_sefaz_situacao { get; set; }
+        public string? desc_sefaz_situacao { get; set; }
+        public string? protocolo_aut_nfe { get; set; }
+        public string? dt_update { get; set; }
+        public string? forma_cheque_prazo { get; set; }
+        public string? total_cheque_prazo { get; set; }
+        public string? cod_natureza_operacao { get; set; }
+        public string? preco_tabela_epoca { get; set; }
+        public string? desconto_total_item { get; set; }
+        public string? conferido { get; set; }
+        public string? transacao_pedido_venda { get; set; }
+        public string? codigo_modelo_nf { get; set; }
+        public string? acrescimo { get; set; }
+        public string? mob_checkout { get; set; }
+        public string? aliquota_iss { get; set; }
+        public string? base_iss { get; set; }
+        public string? ordem { get; set; }
+        public string? codigo_rotina_origem { get; set; }
+        public string? timestamp { get; set; }
+        public string? troco { get; set; }
+        public string? transportador { get; set; }
+        public string? icms_aliquota_desonerado { get; set; }
+        public string? icms_valor_desonerado_item { get; set; }
+        public string? empresa { get; set; }
+        public string? desconto_item { get; set; }
+        public string? aliq_iss { get; set; }
+        public string? iss_base_item { get; set; }
+        public string? despesas { get; set; }
+        public string? seguro_total_item { get; set; }
+        public string? acrescimo_total_item { get; set; }
+        public string? despesas_total_item { get; set; }
+        public string? forma_pix { get; set; }
+        public string? total_pix { get; set; }
+        public string? forma_deposito_bancario { get; set; }
+        public string? total_deposito_bancario { get; set; }
+        public string? id_venda_produto_b2c { get; set; }
+        public string? item_promocional { get; set; }
+        public string? acrescimo_item { get; set; }
+        public string? icms_st_antecipado_aliquota { get; set; }
+        public string? icms_st_antecipado_margem { get; set; }
+        public string? icms_st_antecipado_percentual_reducao { get; set; }
+        public string? icms_st_antecipado_valor_item { get; set; }
+        public string? icms_base_desonerado_item { get; set; }
+        public string? codigo_status_nfe { get; set; }
 
-        public LinxMovimento() { }
+        public LinxMovimento()
+        {
+        }
 
-        public LinxMovimento(
-            string? portal,
-            string? cnpj_emp,
-            string? transacao,
-            string? usuario,
-            string? documento,
-            string? chave_nf,
-            string? ecf,
-            string? numero_serie_ecf,
-            string? modelo_nf,
-            string? data_documento,
-            string? data_lancamento,
-            string? codigo_cliente,
-            string? serie,
-            string? desc_cfop,
-            string? id_cfop,
-            string? cod_vendedor,
-            string? quantidade,
-            string? preco_custo,
-            string? valor_liquido,
-            string? desconto,
-            string? cst_icms,
-            string? cst_pis,
-            string? cst_cofins,
-            string? cst_ipi,
-            string? valor_icms,
-            string? aliquota_icms,
-            string? base_icms,
-            string? valor_pis,
-            string? aliquota_pis,
-            string? base_pis,
-            string? valor_cofins,
-            string? aliquota_cofins,
-            string? base_cofins,
-            string? valor_icms_st,
-            string? aliquota_icms_st,
-            string? base_icms_st,
-            string? valor_ipi,
-            string? aliquota_ipi,
-            string? base_ipi,
-            string? valor_total,
-            string? forma_dinheiro,
-            string? total_dinheiro,
-            string? forma_cheque,
-            string? total_cheque,
-            string? forma_cartao,
-            string? total_cartao,
-            string? total_crediario,
-            string? forma_crediario,
-            string? forma_convenio,
-            string? total_convenio,
-            string? frete,
-            string? operacao,
-            string? tipo_transacao,
-            string? cod_produto,
-            string? cod_barra,
-            string? cancelado,
-            string? excluido,
-            string? soma_relatorio,
-            string? identificador,
-            string? deposito,
-            string? obs,
-            string? preco_unitario,
-            string? hora_lancamento,
-            string? natureza_operacao,
-            string? tabela_preco,
-            string? nome_tabela_preco,
-            string? cod_sefaz_situacao,
-            string? desc_sefaz_situacao,
-            string? protocolo_aut_nfe,
-            string? dt_update,
-            string? forma_cheque_prazo,
-            string? total_cheque_prazo,
-            string? cod_natureza_operacao,
-            string? preco_tabela_epoca,
-            string? desconto_total_item,
-            string? conferido,
-            string? transacao_pedido_venda,
-            string? codigo_modelo_nf,
-            string? acrescimo,
-            string? mob_checkout,
-            string? aliquota_iss,
-            string? base_iss,
-            string? ordem,
-            string? codigo_rotina_origem,
-            string? timestamp,
-            string? troco,
-            string? transportador,
-            string? icms_aliquota_desonerado,
-            string? icms_valor_desonerado_item,
-            string? empresa,
-            string? desconto_item,
-            string? aliq_iss,
-            string? iss_base_item,
-            string? despesas,
-            string? seguro_total_item,
-            string? acrescimo_total_item,
-            string? despesas_total_item,
-            string? forma_pix,
-            string? total_pix,
-            string? forma_deposito_bancario,
-            string? total_deposito_bancario,
-            string? id_venda_produto_b2c,
-            string? item_promocional,
-            string? acrescimo_item,
-            string? icms_st_antecipado_aliquota,
-            string? icms_st_antecipado_margem,
-            string? icms_st_antecipado_percentual_reducao,
-            string? icms_st_antecipado_valor_item,
-            string? icms_base_desonerado_item,
-            string? codigo_status_nfe
-        )
+        public LinxMovimento(string? portal, string? cnpj_emp, string? transacao, string? usuario, string? documento, string? chave_nf, string? ecf, string? numero_serie_ecf, string? modelo_nf, string? data_documento, string? data_lancamento, string? codigo_cliente, string? serie, string? desc_cfop, string? id_cfop, string? cod_vendedor, string? quantidade, string? preco_custo, string? valor_liquido, string? desconto, string? cst_icms, string? cst_pis, string? cst_cofins, string? cst_ipi, string? valor_icms, string? aliquota_icms, string? base_icms, string? valor_pis, string? aliquota_pis, string? base_pis, string? valor_cofins, string? aliquota_cofins, string? base_cofins, string? valor_icms_st, string? aliquota_icms_st, string? base_icms_st, string? valor_ipi, string? aliquota_ipi, string? base_ipi, string? valor_total, string? forma_dinheiro, string? total_dinheiro, string? forma_cheque, string? total_cheque, string? forma_cartao, string? total_cartao, string? forma_crediario, string? total_crediario, string? forma_convenio, string? total_convenio, string? frete, string? operacao, string? tipo_transacao, string? cod_produto, string? cod_barra, string? cancelado, string? excluido, string? soma_relatorio, string? identificador, string? deposito, string? obs, string? preco_unitario, string? hora_lancamento, string? natureza_operacao, string? tabela_preco, string? nome_tabela_preco, string? cod_sefaz_situacao, string? desc_sefaz_situacao, string? protocolo_aut_nfe, string? dt_update, string? forma_cheque_prazo, string? total_cheque_prazo, string? cod_natureza_operacao, string? preco_tabela_epoca, string? desconto_total_item, string? conferido, string? transacao_pedido_venda, string? codigo_modelo_nf, string? acrescimo, string? mob_checkout, string? aliquota_iss, string? base_iss, string? ordem, string? codigo_rotina_origem, string? timestamp, string? troco, string? transportador, string? icms_aliquota_desonerado, string? icms_valor_desonerado_item, string? empresa, string? desconto_item, string? aliq_iss, string? iss_base_item, string? despesas, string? seguro_total_item, string? acrescimo_total_item, string? despesas_total_item, string? forma_pix, string? total_pix, string? forma_deposito_bancario, string? total_deposito_bancario, string? id_venda_produto_b2c, string? item_promocional, string? acrescimo_item, string? icms_st_antecipado_aliquota, string? icms_st_antecipado_margem, string? icms_st_antecipado_percentual_reducao, string? icms_st_antecipado_valor_item, string? icms_base_desonerado_item, string? codigo_status_nfe)
         {
             this.portal = portal;
             this.cnpj_emp = cnpj_emp;
@@ -276,8 +165,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix
             this.total_cheque = total_cheque;
             this.forma_cartao = forma_cartao;
             this.total_cartao = total_cartao;
-            this.total_crediario = total_crediario;
             this.forma_crediario = forma_crediario;
+            this.total_crediario = total_crediario;
             this.forma_convenio = forma_convenio;
             this.total_convenio = total_convenio;
             this.frete = frete;

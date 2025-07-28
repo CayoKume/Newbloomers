@@ -4,7 +4,7 @@ using Application.LinxMicrovix.Outbound.WebService.Interfaces.Services;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Services.LinxMicrovix;
 using Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix;
 using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
-using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Api;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Api;
 
 
 namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix

@@ -2,19 +2,23 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix
 {
     public class LinxClientesFornecClasses
     {
-        public string? id_classe { get; set; }
-        public string? descricao_classe { get; set; }
-        public string? timestamp { get; set; }
         public string? portal { get; set; }
+        public string? cod_cliente { get; set; }
+        public string? cod_classe { get; set; }
+        public string? nome_classe { get; set; }
+        public string? timestamp { get; set; }
 
-        public LinxClientesFornecClasses() { }
-
-        public LinxClientesFornecClasses(string? id_classe, string? descricao_classe, string? timestamp, string? portal)
+        public LinxClientesFornecClasses()
         {
-            this.id_classe = id_classe;
-            this.descricao_classe = descricao_classe;
-            this.timestamp = timestamp;
+        }
+
+        public LinxClientesFornecClasses(string? portal, string? cod_cliente, string? cod_classe, string? nome_classe, string? timestamp)
+        {
             this.portal = portal;
+            this.cod_cliente = cod_cliente;
+            this.cod_classe = cod_classe;
+            this.nome_classe = nome_classe;
+            this.timestamp = timestamp;
         }
     }
 }

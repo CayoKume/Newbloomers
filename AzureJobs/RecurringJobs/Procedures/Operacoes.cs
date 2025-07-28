@@ -12,12 +12,47 @@ namespace AzureJobs.RecurringJobs.Procedures
         public Operacoes(IIntegrationsCoreRepository integrationsCoreRepository) =>
             _integrationsCoreRepository = integrationsCoreRepository;
 
-        public Task P_Canal_Movimentacoes([TimerTrigger("0 */5 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
-        {
-            _integrationsCoreRepository.ExecuteCommand("exec [operations].[P_Canal_Movimentacoes]");
+        //public async Task P_Canal_Movimentacao_Periodo_Entrada([TimerTrigger("0 */5 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    await _integrationsCoreRepository.ExecuteCommand("exec [operations].[P_Canal_Movimentacao_Periodo_Entrada]");
 
-            return Task.CompletedTask;
-        }
+        //    return;
+        //}
+
+        //public async Task P_Canal_Movimentacao_Periodo_Ecommerce([TimerTrigger("0 */5 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    await _integrationsCoreRepository.ExecuteCommand("exec [operations].[P_Canal_Movimentacao_Periodo_Ecommerce]");
+
+        //    return;
+        //}
+
+        //public async Task P_Canal_Movimentacao_Periodo_Loja([TimerTrigger("0 */5 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    await _integrationsCoreRepository.ExecuteCommand("exec [operations].[P_Canal_Movimentacao_Periodo_Loja]");
+
+        //    return;
+        //}
+
+        //public async Task P_Canal_Movimentacao_Captado_Periodo_Entrada([TimerTrigger("0 */5 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    await _integrationsCoreRepository.ExecuteCommand("exec [operations].[P_Canal_Movimentacao_Captado_Periodo_Entrada]");
+
+        //    return;
+        //}
+
+        //public async Task P_Canal_Movimentacao_Captado_Periodo_Ecommerce([TimerTrigger("0 */5 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    await _integrationsCoreRepository.ExecuteCommand("exec [operations].[P_Canal_Movimentacao_Captado_Periodo_Ecommerce]");
+
+        //    return;
+        //}
+
+        //public async Task P_Canal_Movimentacao_Captado_Periodo_Loja([TimerTrigger("0 */5 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    await _integrationsCoreRepository.ExecuteCommand("exec [operations].[P_Canal_Movimentacao_Captado_Periodo_Loja]");
+
+        //    return;
+        //}
 
         //public Task P_Snapshot_Estoque([TimerTrigger("57 23 * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
         //{

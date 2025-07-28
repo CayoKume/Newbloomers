@@ -1,7 +1,6 @@
-﻿using Domain.IntegrationsCore.Enums;
-using Domain.IntegrationsCore.Entities.Exceptions;
+﻿using Domain.IntegrationsCore.Entities.Exceptions;
 using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
-using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Api;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Api;
 using System.Net;
 
 namespace Infrastructure.LinxMicrovix.Outbound.WebService.Api

@@ -2,22 +2,25 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix
 {
     public class LinxLinhas
     {
-        public string? codigo_linha { get; set; }
-        public string? nome_linha { get; set; }
+        public string? id_linha { get; set; }
+        public string? desc_linha { get; set; }
         public string? timestamp { get; set; }
-        public string? setores { get; set; }
+        public string? codigo_integracao_ws { get; set; }
         public string? portal { get; set; }
+        public string? coeficiente_comissao { get; set; }
 
-        public LinxLinhas() { }
-
-        public LinxLinhas(string? codigo_linha, string? nome_linha, string? timestamp, string? setores, string? portal)
+        public LinxLinhas()
         {
-            this.codigo_linha = codigo_linha;
-            this.nome_linha = nome_linha;
-            this.timestamp = timestamp;
-            this.setores = setores;
-            this.portal = portal;
         }
 
+        public LinxLinhas(string? id_linha, string? desc_linha, string? timestamp, string? codigo_integracao_ws, string? portal, string? coeficiente_comissao)
+        {
+            this.id_linha = id_linha;
+            this.desc_linha = desc_linha;
+            this.timestamp = timestamp;
+            this.codigo_integracao_ws = codigo_integracao_ws;
+            this.portal = portal;
+            this.coeficiente_comissao = coeficiente_comissao;
+        }
     }
 }

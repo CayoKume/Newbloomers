@@ -7,7 +7,9 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix
         public string? timestamp { get; set; }
         public string? portal { get; set; }
 
-        public LinxB2CStatus() { }
+        public LinxB2CStatus()
+        {
+        }
 
         public LinxB2CStatus(string? id_status, string? descricao_status, string? timestamp, string? portal)
         {

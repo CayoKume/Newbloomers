@@ -11,8 +11,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Entities\Base\LinxCommerce\" />
+    <Folder Include="Entities\Base\LinxMicrovix\" />
     <Folder Include="Entities\LinxCommerce\" />
     <Folder Include="Entities\LinxMicrovix\" />
+    <Folder Include="Entities\Untreated\LinxMicrovix\" />
+    <Folder Include="Entities\Untreated\LinxCommerce\" />
   </ItemGroup>
 
 </Project>

@@ -2,19 +2,23 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix
 {
     public class LinxCores
     {
-        public string? codigo_cor { get; set; }
-        public string? nome_cor { get; set; }
+        public string? id_cor { get; set; }
+        public string? desc_cor { get; set; }
         public string? timestamp { get; set; }
-        public string? portal { get; set; }
+        public string? codigo_integracao_ws { get; set; }
+        public string? ativo { get; set; }
 
-        public LinxCores() { }
-
-        public LinxCores(string? codigo_cor, string? nome_cor, string? timestamp, string? portal)
+        public LinxCores()
         {
-            this.codigo_cor = codigo_cor;
-            this.nome_cor = nome_cor;
+        }
+
+        public LinxCores(string? id_cor, string? desc_cor, string? timestamp, string? codigo_integracao_ws, string? ativo)
+        {
+            this.id_cor = id_cor;
+            this.desc_cor = desc_cor;
             this.timestamp = timestamp;
-            this.portal = portal;
+            this.codigo_integracao_ws = codigo_integracao_ws;
+            this.ativo = ativo;
         }
     }
 }

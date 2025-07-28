@@ -10,7 +10,9 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix
         public string? timestamp { get; set; }
         public string? portal { get; set; }
 
-        public LinxB2CPedidosItens() { }
+        public LinxB2CPedidosItens()
+        {
+        }
 
         public LinxB2CPedidosItens(string? id_pedido_item, string? id_pedido, string? codigoproduto, string? quantidade, string? vl_unitario, string? timestamp, string? portal)
         {

@@ -7,7 +7,7 @@ using Domain.IntegrationsCore.Enums;
 using Domain.IntegrationsCore.Interfaces;
 using Domain.LinxMicrovix.Outbound.WebService.Models.LinxCommerce;
 using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
-using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Api;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Api;
 
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxCommerce;
 using Domain.LinxMicrovix.Outbound.WebService.Models.Base;

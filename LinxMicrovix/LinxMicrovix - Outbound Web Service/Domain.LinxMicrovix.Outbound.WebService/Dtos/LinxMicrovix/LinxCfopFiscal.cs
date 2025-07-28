@@ -2,19 +2,25 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix
 {
     public class LinxCfopFiscal
     {
-        public string? codigo_cfop { get; set; }
-        public string? descricao_cfop { get; set; }
-        public string? timestamp { get; set; }
         public string? portal { get; set; }
+        public string? id_cfop_fiscal { get; set; }
+        public string? cfop_fiscal { get; set; }
+        public string? descricao { get; set; }
+        public string? excluido { get; set; }
+        public string? timestamp { get; set; }
 
-        public LinxCfopFiscal() { }
-
-        public LinxCfopFiscal(string? codigo_cfop, string? descricao_cfop, string? timestamp, string? portal)
+        public LinxCfopFiscal()
         {
-            this.codigo_cfop = codigo_cfop;
-            this.descricao_cfop = descricao_cfop;
-            this.timestamp = timestamp;
+        }
+
+        public LinxCfopFiscal(string? portal, string? id_cfop_fiscal, string? cfop_fiscal, string? descricao, string? excluido, string? timestamp)
+        {
             this.portal = portal;
+            this.id_cfop_fiscal = id_cfop_fiscal;
+            this.cfop_fiscal = cfop_fiscal;
+            this.descricao = descricao;
+            this.excluido = excluido;
+            this.timestamp = timestamp;
         }
     }
 }
