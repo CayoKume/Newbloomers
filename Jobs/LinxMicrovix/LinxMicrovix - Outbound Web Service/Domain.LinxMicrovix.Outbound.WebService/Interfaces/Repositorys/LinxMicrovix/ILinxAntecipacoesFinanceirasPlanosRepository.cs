@@ -1,0 +1,12 @@
+﻿using Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix;
+using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
+
+namespace Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxMicrovix
+{
+    public interface ILinxAntecipacoesFinanceirasPlanosRepository
+    {
+        public Task<bool> InsertRecord(LinxAPIParam jobParameter, LinxAntecipacoesFinanceirasPlanos? record);
+        public bool BulkInsertIntoTableRaw(LinxAPIParam jobParameter, IList<LinxAntecipacoesFinanceirasPlanos> records);
+        public Task<IEnumerable<LinxAntecipacoesFinanceirasPlanos>> GetRegistersExists(LinxAPIParam jobParameter, List<LinxAntecipacoesFinanceirasPlanos> registros);
+    }
+}

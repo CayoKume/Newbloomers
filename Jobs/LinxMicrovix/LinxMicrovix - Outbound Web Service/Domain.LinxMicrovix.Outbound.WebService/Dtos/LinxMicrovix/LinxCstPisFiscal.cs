@@ -1,0 +1,30 @@
+namespace Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix
+{
+    public class LinxCstPisFiscal
+    {
+        public string? portal { get; set; }
+        public string? id_cst_pis_fiscal { get; set; }
+        public string? cst_pis_fiscal { get; set; }
+        public string? descricao { get; set; }
+        public string? excluido { get; set; }
+        public string? inicio_vigencia { get; set; }
+        public string? termino_vigencia { get; set; }
+        public string? timestamp { get; set; }
+
+        public LinxCstPisFiscal()
+        {
+        }
+
+        public LinxCstPisFiscal(string? portal, string? id_cst_pis_fiscal, string? cst_pis_fiscal, string? descricao, string? excluido, string? inicio_vigencia, string? termino_vigencia, string? timestamp)
+        {
+            this.portal = portal;
+            this.id_cst_pis_fiscal = id_cst_pis_fiscal;
+            this.cst_pis_fiscal = cst_pis_fiscal;
+            this.descricao = descricao;
+            this.excluido = excluido;
+            this.inicio_vigencia = inicio_vigencia;
+            this.termino_vigencia = termino_vigencia;
+            this.timestamp = timestamp;
+        }
+    }
+}

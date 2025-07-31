@@ -1,0 +1,19 @@
+﻿<MudOverlay Visible="Visible" DarkBackground="true" Absolute="true">
+    <MudContainer Class="d-flex flex-column align-center justify-center py-8">
+        <MudProgressCircular Indeterminate="true"
+                             Size="Size.Large"
+                             Color="Color.Primary" />
+        <MudText Typo="Typo.subtitle1"
+                 Class="mt-4">
+            @Message
+        </MudText>
+    </MudContainer>
+</MudOverlay>
+
+@code {
+    [Parameter]
+    public bool Visible { get; set; }
+
+    [Parameter]
+    public string Message { get; set; } = "Carregando Dados...";
+}

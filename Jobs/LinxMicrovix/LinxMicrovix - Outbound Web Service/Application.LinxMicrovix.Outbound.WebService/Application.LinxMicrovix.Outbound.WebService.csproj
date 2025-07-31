@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Services\LinxCommerce\ctwrzoso.apw~" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Core\Application.Core\Application.Core.csproj" />
+    <ProjectReference Include="..\Domain.LinxMicrovix.Outbound.WebService\Domain.LinxMicrovix.Outbound.WebService.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="CustomValidations\LinxCommerce\" />
+  </ItemGroup>
+
+</Project>

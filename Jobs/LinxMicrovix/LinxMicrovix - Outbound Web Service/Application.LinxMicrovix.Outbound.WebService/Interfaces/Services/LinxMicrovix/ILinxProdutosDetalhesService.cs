@@ -1,0 +1,13 @@
+﻿using Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix;
+using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
+
+namespace Application.LinxMicrovix.Outbound.WebService.Interfaces.Services.LinxMicrovix
+{
+    public interface ILinxProdutosDetalhesService
+    {
+        public List<LinxProdutosDetalhes?> DeserializeXMLToObject(LinxAPIParam jobParameter, List<Dictionary<string?, string?>> records);
+        public Task<bool> GetRecords(LinxAPIParam jobParameter);
+        public Task<bool> GetZeroStockRecords(LinxAPIParam jobParameter);
+        public Task<bool> GetRecord(LinxAPIParam jobParameter, string? identificador, string? cnpj_emp);
+    }
+}

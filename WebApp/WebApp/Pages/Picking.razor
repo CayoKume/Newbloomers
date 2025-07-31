@@ -1,0 +1,70 @@
+﻿@page "/Picking"
+
+<PageTitle>Picking</PageTitle>
+
+<GridsToolbar @bind-DataInicial="_initialDate"
+              @bind-DataFinal="_finalDate"
+              @bind-TextoPedido="orderNumber"
+              OnAtualizar="HandleAtualizar"
+              BotaoDesabilitado="_carregando"
+              BotaoCarregando="_carregando" />
+
+<MudDataGrid Items="@employees" Filterable="false" SortMode="@SortMode.None" Groupable="false">
+    <Columns>
+        <PropertyColumn Property="x => x.Name" />
+        <PropertyColumn Property="x => x.Position" />
+        <PropertyColumn Property="x => x.YearsEmployed" Title="Years Employed" />
+        <PropertyColumn Property="x => x.Salary" Format="C" />
+        <PropertyColumn Property="x => x.Salary * x.YearsEmployed" Title="Total Earned" Format="C" />
+        <TemplateColumn CellClass="d-flex">
+            <CellTemplate>
+                <MudButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Primary">Hire</MudButton>
+                <MudSpacer></MudSpacer>
+                <MudButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Primary">Hire</MudButton>
+            </CellTemplate>
+        </TemplateColumn>
+    </Columns>
+    <PagerContent>
+        <MudDataGridPager T="Employee" />
+    </PagerContent>
+</MudDataGrid>
+
+@code {
+    private string? doc_company;
+    private string? serie_order;
+    private string? orderNumber;
+
+    private bool _carregando;
+
+    private DateTime? _initialDate = DateTime.Now;
+    private DateTime? _finalDate = DateTime.Now;
+
+    public record Employee(string Name, string Position, int YearsEmployed, int Salary, int Rating);
+    public IEnumerable<Employee> employees;
+
+    protected override void OnInitialized()
+    {
+        employees = new List<Employee>
+        {
+            new Employee("Sam", "CPA", 23, 87_000, 4),
+            new Employee("Alicia", "Product Manager", 11, 143_000, 5),
+            new Employee("Ira", "Developer", 4, 92_000, 3),
+            new Employee("John", "IT Director", 17, 229_000, 4),
+        };
+    }
+
+    private async Task HandleAtualizar()
+    {
+        _carregando = true;
+        try
+        {
+            // Simula operação assíncrona
+            await Task.Delay(1500);
+            Console.WriteLine($"Data: {_initialDate} até {_finalDate}, Pedido: {orderNumber}");
+        }
+        finally
+        {
+            _carregando = false;
+        }
+    }
+}

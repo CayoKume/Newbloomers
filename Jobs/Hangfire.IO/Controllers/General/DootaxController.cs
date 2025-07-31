@@ -1,0 +1,23 @@
+﻿using Application.Dootax.Interfaces;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Hangfire.IO.Controllers.General
+{
+    [ApiController]
+    [Route("DootaxJobs/Dootax")]
+    public class DootaxController : Controller
+    {
+        private readonly IDootaxService _dootaxService;
+
+        public DootaxController(IDootaxService dootaxService) =>
+            _dootaxService = dootaxService;
+
+        [HttpPost("ImportFiles")]
+        public async Task<ActionResult> ImportFiles()
+        {
+            var result = await _dootaxService.ImportFilesUpload();
+
+            return Ok($"Records integrated successfully.");
+        }
+    }
+}
