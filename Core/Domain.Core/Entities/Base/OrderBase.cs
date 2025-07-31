@@ -5,12 +5,13 @@
         public string? number { get; set; }
         public string? cfop { get; set; }
         public int volumes { get; set; }
-        private List<ProductBase> _itens = new List<ProductBase>();
 
-        public ClientBase? client { get; set; }
-        public CompanyBase? company { get; set; }
-        public ShippingCompanyBase? shippingCompany { get; set; }
-        public InvoiceBase? invoice { get; set; }
-        public List<ProductBase> itens { get { return _itens; } set { _itens = value; } }
+        //private List<Product> _itens = new List<Product>();
+
+        //public Client? client { get; set; }
+        //public Company? company { get; set; }
+        //public ShippingCompany? shippingCompany { get; set; }
+        //public Invoice? invoice { get; set; }
+        //public List<Product> itens { get { return _itens; } set { _itens = value; } }
     }
 }

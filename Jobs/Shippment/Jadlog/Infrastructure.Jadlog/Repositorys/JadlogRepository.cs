@@ -155,7 +155,7 @@ namespace Infrastructure.Jadlog.Repositorys
             {
                 using (var conn = _conn.GetDbConnection())
                 {
-                    var result = await conn.QueryAsync<Order, Product, ClientBase, ShippingCompanyBase, CompanyBase, CompanyBase, InvoiceBase, Order>(sql, (order, product, client, shippingCompany, company, tomador, invoice) =>
+                    var result = await conn.QueryAsync<Order, Product, Client, ShippingCompany, Company, Company, Invoice, Order>(sql, (order, product, client, shippingCompany, company, tomador, invoice) =>
                     {
                         order.itens.Add(product);
                         order.client = client;

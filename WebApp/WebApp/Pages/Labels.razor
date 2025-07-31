@@ -105,15 +105,25 @@ else
 
     private async Task ImprimeEtiqueta(Order pedido)
     {
+        isLoading = false;
+        visible = true;
+
         await _etiquetasService.PrintLabels(pedido);
 
+        var links = new List<string>();
         for (int i = 0; i < pedido.volumes + 1; i++)
         {
             var fileName = pedido.number + " - " + (i + 1) + ".pdf";
             var base64String = await _etiquetasService.GetLabelToPrint(fileName);
-
-            await jsRuntime.InvokeVoidAsync("downloadFile", "application/pdf", base64String, fileName);
+            var dataUrl = $"data:application/pdf;base64,{base64String}";
+            links.Add(dataUrl);
         }
+
+        await jsRuntime.InvokeVoidAsync("abrirAbas", links);
+        await _etiquetasService.UpdateFlagPrinted(this.orderNumber);
+
+        isLoading = true;
+        visible = false;
     }
 
     private async Task ImprimeEtiquetaIndividual(Enter evento)
