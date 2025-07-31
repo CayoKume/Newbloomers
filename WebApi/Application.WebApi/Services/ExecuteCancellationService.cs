@@ -1,0 +1,52 @@
+﻿using Domain.WebApi.Interfaces.Repositorys;
+using Application.WebApi.Interfaces.Services;
+using Newtonsoft.Json;
+
+namespace Application.WebApi.Services
+{
+    public class ExecuteCancellationService : IExecuteCancellationService
+    {
+        private readonly IExecuteCancellationRepository _executeCancellationRepository;
+
+        public ExecuteCancellationService(IExecuteCancellationRepository executeCancellationRepository) =>
+            _executeCancellationRepository = executeCancellationRepository;
+
+        public async Task<string> GetOrdersToCancel(string serie, string doc_company)
+        {
+            try
+            {
+                var orders = await _executeCancellationRepository.GetOrdersToCancel(serie, doc_company);
+                return JsonConvert.SerializeObject(orders);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<string> GetReasons()
+        {
+            try
+            {
+                var reasons = await _executeCancellationRepository.GetReasons();
+                return JsonConvert.SerializeObject(reasons);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<bool> UpdateDateCanceled(string number, string suporte, string inputObs, int motivo)
+        {
+            try
+            {
+                return await _executeCancellationRepository.UpdateDateCanceled(number, suporte, inputObs, motivo);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+    }
+}

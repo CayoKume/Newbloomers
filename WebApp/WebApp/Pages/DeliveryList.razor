@@ -1,0 +1,55 @@
+﻿@page "/DeliveryLists"
+
+<PageTitle>DeliveryLists</PageTitle>
+
+<MudGrid Spacing="5" Justify="Justify.SpaceAround">
+    <MudItem>
+        <MudDatePicker Label="Data Inicial" @bind-Date="_date" />
+    </MudItem>
+
+    <MudItem>
+        <MudDatePicker Label="Data Final" @bind-Date="_date" />
+    </MudItem>
+
+    <MudItem>
+        <MudTextField Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Search" @bind-Value="TextValue" Label="Pedido" Variant="Variant.Outlined"></MudTextField>
+    </MudItem>
+</MudGrid>
+
+<MudDataGrid Items="@employees" Filterable="false" SortMode="@SortMode.None" Groupable="false">
+    <Columns>
+        <PropertyColumn Property="x => x.Name" />
+        <PropertyColumn Property="x => x.Position" />
+        <PropertyColumn Property="x => x.YearsEmployed" Title="Years Employed" />
+        <PropertyColumn Property="x => x.Salary" Format="C" />
+        <PropertyColumn Property="x => x.Salary * x.YearsEmployed" Title="Total Earned" Format="C" />
+        <TemplateColumn CellClass="d-flex">
+            <CellTemplate>
+                <MudButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Primary">Hire</MudButton>
+                <MudSpacer></MudSpacer>
+                <MudButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Primary">Hire</MudButton>
+            </CellTemplate>
+        </TemplateColumn>
+    </Columns>
+    <PagerContent>
+        <MudDataGridPager T="Employee" />
+    </PagerContent>
+</MudDataGrid>
+
+@code {
+    public record Employee(string Name, string Position, int YearsEmployed, int Salary, int Rating);
+    public IEnumerable<Employee> employees;
+    private DateTime? _date = DateTime.Now;
+    public string? TextValue { get; set; }
+
+    protected override void OnInitialized()
+    {
+        employees = new List<Employee>
+        {
+            new Employee("Sam", "CPA", 23, 87_000, 4),
+            new Employee("Alicia", "Product Manager", 11, 143_000, 5),
+            new Employee("Ira", "Developer", 4, 92_000, 3),
+            new Employee("John", "IT Director", 17, 229_000, 4),
+        };
+    }
+}

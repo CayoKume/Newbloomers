@@ -1,0 +1,120 @@
+﻿@page "/Home"
+@inject IJSRuntime jsRuntime;
+@inject IHomeService _homeService;
+@using Order = Application.App.ViewModels.Home.Order
+
+<PageTitle>Home</PageTitle>
+
+@if (isLoading)
+{
+    <MudText HtmlTag="h1">Empresa: @name_company - @doc_company</MudText>
+
+    <MudDivider DividerType="DividerType.Middle" Class="my-6" />
+
+    <MudGrid Spacing="20" Justify="Justify.SpaceAround">
+        <MudItem>
+            <MudCard>
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h6">The Story Book</MudText>
+                    </CardHeaderContent>
+                </MudCardHeader>
+                <MudCardContent>
+                    <MudText>This day everything happened.</MudText>
+                    <MudText Typo="Typo.body2">The quick, brown fox jumps over a lazy dog.</MudText>
+                </MudCardContent>
+                <MudCardActions>
+                    <MudButton Variant="Variant.Text" Color="Color.Primary">Read more</MudButton>
+                </MudCardActions>
+            </MudCard>
+        </MudItem>
+
+        <MudItem>
+            <MudCard>
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h6">The Story Book</MudText>
+                    </CardHeaderContent>
+                </MudCardHeader>
+                <MudCardContent>
+                    <MudText>This day everything happened.</MudText>
+                    <MudText Typo="Typo.body2">The quick, brown fox jumps over a lazy dog.</MudText>
+                </MudCardContent>
+                <MudCardActions>
+                    <MudButton Variant="Variant.Text" Color="Color.Primary">Read more</MudButton>
+                </MudCardActions>
+            </MudCard>
+        </MudItem>
+
+        <MudItem>
+            <MudCard>
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h6">The Story Book</MudText>
+                    </CardHeaderContent>
+                </MudCardHeader>
+                <MudCardContent>
+                    <MudText>This day everything happened.</MudText>
+                    <MudText Typo="Typo.body2">The quick, brown fox jumps over a lazy dog.</MudText>
+                </MudCardContent>
+                <MudCardActions>
+                    <MudButton Variant="Variant.Text" Color="Color.Primary">Read more</MudButton>
+                </MudCardActions>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+
+    <MudDivider DividerType="DividerType.Middle" Class="my-6" />
+
+    <MudChart ChartType="ChartType.Bar" ChartSeries="@_series" XAxisLabels="@_xAxisLabels" Width="100%" Height="350px" AxisChartOptions="_axisChartOptions">
+        <CustomGraphics>
+
+        </CustomGraphics>
+    </MudChart>
+}
+else
+{
+    <div class="my-custom-container">
+        <LoadingOverlay Visible="@visible" />
+    </div>
+}
+
+
+@code {
+    private bool visible = true;
+    private bool isLoading = false;
+
+    private string? name_company { get; set; }
+    private string? doc_company;
+    private List<Order>? orders { get; set; } = new List<Order>();
+
+    private int _index = -1; //default value cannot be 0 -> first selectedindex is 0.
+    private string _width = "650px";
+    private string _height = "350px";
+    private AxisChartOptions _axisChartOptions = new AxisChartOptions();
+    
+    // _axisChartOptions.XAxisLabelRotation = 45;
+    
+    private List<ChartSeries> _series = new List<ChartSeries>()
+    {
+        new ChartSeries() { Name = "United States", Data = new double[] { 40, 20, 25, 27, 46, 60, 48, 80, 15 } },
+        new ChartSeries() { Name = "Germany", Data = new double[] { 19, 24, 35, 13, 28, 15, 13, 16, 31 } },
+        new ChartSeries() { Name = "Sweden", Data = new double[] { 8, 6, 11, 13, 4, 16, 10, 16, 18 } },
+    };
+
+    private string[] _xAxisLabels = { "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo" };
+
+    protected override async Task OnInitializedAsync()
+    {
+        doc_company = await GetText("doc_company");
+        name_company = await GetText("name_company");
+        orders = await _homeService.GetPickupOrders(doc_company);
+        isLoading = true;
+        visible = false;
+    }
+
+    private async Task<string> GetText(string key)
+    {
+        return await jsRuntime.InvokeAsync<string>("localStorage.getItem", key);
+    }
+}

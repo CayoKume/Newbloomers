@@ -1,0 +1,60 @@
+﻿<MudGrid Spacing="5" Justify="Justify.SpaceAround">
+    <MudItem>
+        <MudDatePicker Label="Data Inicial" @bind-Date="DataInicial" />
+    </MudItem>
+    <MudItem>
+        <MudDatePicker Label="Data Final" @bind-Date="DataFinal" />
+    </MudItem>
+    <MudItem>
+        <MudTextField 
+            Adornment="Adornment.End" 
+            AdornmentIcon="@Icons.Material.Filled.Search"
+            @bind-Value="TextoPedido"
+            Label="Pedido" 
+            Variant="Variant.Outlined"
+            @onkeyup="InvokeOnKeyUpEvent">
+        </MudTextField>
+    </MudItem>
+    <MudItem>
+        <MudButton Size="@Size.Large"
+                   Variant="@Variant.Filled"
+                   Color="@Color.Primary"
+                   OnClick="OnAtualizarClicked"
+                   Disabled="@BotaoDesabilitado"
+                   Loading="@BotaoCarregando">
+            Atualizar
+        </MudButton>
+    </MudItem>
+</MudGrid>
+
+<MudDivider DividerType="DividerType.Middle" Class="my-6" />
+
+@code {
+    [Parameter] public DateTime? DataInicial { get; set; }
+    [Parameter] public EventCallback<DateTime?> DataInicialChanged { get; set; }
+
+    [Parameter] public DateTime? DataFinal { get; set; }
+    [Parameter] public EventCallback<DateTime?> DataFinalChanged { get; set; }
+
+    [Parameter] public string? TextoPedido { get; set; }
+    [Parameter] public EventCallback<string> TextoPedidoChanged { get; set; }
+
+    [Parameter] public EventCallback<Enter> OnKeyUpEvent { get; set; }
+    [Parameter] public EventCallback OnAtualizar { get; set; }
+
+    [Parameter] public bool BotaoDesabilitado { get; set; } = false;
+    [Parameter] public bool BotaoCarregando { get; set; } = false;
+
+    private Task OnAtualizarClicked() => OnAtualizar.InvokeAsync();
+
+    private async Task InvokeOnKeyUpEvent(KeyboardEventArgs e)
+    {
+        if (e.Code == "Enter" || e.Code == "NumpadEnter")
+        {
+            var pedido = TextoPedido?.Trim().ToUpper();
+            TextoPedido = string.Empty;
+
+            await OnKeyUpEvent.InvokeAsync(new Enter { e = e, orderNumber = pedido });
+        }
+    }
+}

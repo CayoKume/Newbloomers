@@ -1,0 +1,93 @@
+﻿@page "/Empresas"
+@layout BlankLayout
+@inject IJSRuntime jsRuntime;
+@inject ICompanyService _empresasService;
+@inject NavigationManager NavigationManager
+
+<PageTitle>Empresas</PageTitle>
+
+<div class="my-custom-container">
+    @if (isLoading)
+    {
+        <MudGrid Class="align-self-center" Justify="Justify.Center">
+            <MudItem sm="4" xs="6">
+                <MudText>ESCOLHA A EMPRESA</MudText>
+                <MudAutocomplete @bind-Value="_value"
+                                 SearchFunc="@Search"
+                                 Variant="Variant.Outlined"
+                                 Label="Empresas"
+                                 Margin="Margin.Normal"
+                                 Dense="true"
+                                 Disabled="false"
+                                 ReadOnly="false"
+                                 Placeholder="@(null)"
+                                 HelperText="@(null)"
+                                 HelperTextOnFocus="true"
+                                 Clearable="true"
+                                 Modal="true"
+                                 ShowProgressIndicator="true" />
+                <MudButton FullWidth="true" Size="Size.Large" Href="/Home" Variant="Variant.Filled" DropShadow="true" Color="Color.Warning" OnClick="selecionarEmpresa">SELECIONAR</MudButton>
+            </MudItem>
+        </MudGrid>
+    }
+    else
+    {
+        <LoadingOverlay Visible="@visible" />
+    }
+</div>
+
+@code {
+    private bool visible = true;
+    private bool isLoading = false;
+    private string? _value;
+    private string[]? _companies;
+    private List<Company>? companies;
+
+    protected override async Task OnInitializedAsync()
+    {
+        companies = await _empresasService.GetCompanies();
+        _companies = companies?.Select(c => $"{c.cod_company} - {c.name_company}").ToArray();
+        isLoading = true;
+        visible = false;
+    }
+
+    private Task<IEnumerable<string>?> Search(string value, CancellationToken token)
+    {
+        if (string.IsNullOrEmpty(value))
+            return Task.FromResult<IEnumerable<string>?>(_companies);
+
+        var result = _companies?
+            .Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
+
+        return Task.FromResult<IEnumerable<string>?>(result);
+    }
+
+    private async Task selecionarEmpresa()
+    {
+        try
+        {
+            var empresa = companies?.Where(e => $"{e.cod_company} - {e.name_company}" == _value).First();
+            await SaveTextInLocalStorage("cod_company", empresa.cod_company);
+            await SaveTextInLocalStorage("name_company", empresa.name_company);
+            await SaveTextInLocalStorage("doc_company", empresa.doc_company);
+
+            //refatorar aqui
+            if (empresa.name_company.ToUpper().Contains("MISHA"))
+                await SaveTextInLocalStorage("serie_order", "MI-");
+
+            else if (empresa.name_company.ToUpper().Contains("OPEN ERA"))
+                await SaveTextInLocalStorage("serie_order", "OA-");
+
+            NavigationManager.NavigateTo("Home");
+        }
+        catch
+        {
+            throw;
+        }
+    }
+
+    private async Task SaveTextInLocalStorage(string key, string value)
+    {
+        await jsRuntime.InvokeVoidAsync("localStorage.setItem", key, value);
+    }
+}
