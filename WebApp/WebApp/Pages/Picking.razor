@@ -1,70 +1,286 @@
 ﻿@page "/Picking"
+@inject IJSRuntime jsRuntime;
+@inject IDialogService _dialogService
+@inject IPickingService _conferenciaService
+@using Order = Application.App.ViewModels.Picking.Order
+@using Product = Application.App.ViewModels.Picking.Product
 
 <PageTitle>Picking</PageTitle>
 
-<GridsToolbar @bind-DataInicial="_initialDate"
-              @bind-DataFinal="_finalDate"
-              @bind-TextoPedido="orderNumber"
-              OnAtualizar="HandleAtualizar"
-              BotaoDesabilitado="_carregando"
-              BotaoCarregando="_carregando" />
+@if (isLoading)
+{
+    <GridsToolbar @bind-DataInicial="_initialDate"
+                  @bind-DataFinal="_finalDate"
+                  @bind-TextoPedido="orderNumber"
+                  OnAtualizar="HandleAtualizar"
+                  OnKeyUpEvent="ConferirPedidoIndividual"
+                  BotaoDesabilitado="_carregando"
+                  BotaoCarregando="_carregando" />
 
-<MudDataGrid Items="@employees" Filterable="false" SortMode="@SortMode.None" Groupable="false">
-    <Columns>
-        <PropertyColumn Property="x => x.Name" />
-        <PropertyColumn Property="x => x.Position" />
-        <PropertyColumn Property="x => x.YearsEmployed" Title="Years Employed" />
-        <PropertyColumn Property="x => x.Salary" Format="C" />
-        <PropertyColumn Property="x => x.Salary * x.YearsEmployed" Title="Total Earned" Format="C" />
-        <TemplateColumn CellClass="d-flex">
-            <CellTemplate>
-                <MudButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Primary">Hire</MudButton>
-                <MudSpacer></MudSpacer>
-                <MudButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Primary">Hire</MudButton>
-            </CellTemplate>
-        </TemplateColumn>
-    </Columns>
-    <PagerContent>
-        <MudDataGridPager T="Employee" />
-    </PagerContent>
-</MudDataGrid>
+    <MudDataGrid Items="@orders" Bordered="true">
+        <Columns>
+            <PropertyColumn Property="x => x.number" Title="Pedido" />
+            <TemplateColumn Title="Conferir">
+                <CellTemplate>
+                    <MudButton @onclick="@(() => ConferirPedido(context.Item))" Size="@Size.Small" Variant="@Variant.Filled" Color="@(context.Item.buttonClass ? Color.Success : Color.Primary)">@(context.Item.buttonText)</MudButton>
+                </CellTemplate>
+            </TemplateColumn>
+            <TemplateColumn Title="Romaneio">
+                <CellTemplate>
+                    <MudButton @onclick="@(() => ImprimeRomaneio(context.Item))" Size="@Size.Small" Variant="@Variant.Filled" Color="@(context.Item.buttonPrintedClass == true ? Color.Success : Color.Primary)">@(context.Item.buttonPrintedText)</MudButton>
+                </CellTemplate>
+            </TemplateColumn>
+            <PropertyColumn Property="x => x.client.cod_client" Title="Cliente" />
+            <PropertyColumn Property="x => x.client.reason_client" Title="Nome" />
+            <PropertyColumn Property="x => x.client.address_client" Title="Endereço" />
+            <PropertyColumn Property="x => x.client.street_number_client" Title="Número" />
+            <PropertyColumn Property="x => x.client.complement_address_client" Title="Complemento" />
+            <PropertyColumn Property="x => x.invoice.amount_nf" Title="Valor Total" Format="C" />
+        </Columns>
+
+        <PagerContent>
+            <MudDataGridPager T="Order" />
+        </PagerContent>
+    </MudDataGrid>
+}
+else
+{
+    <div class="my-custom-container">
+        <LoadingOverlay Visible="@visible" />
+    </div>
+}
+
+<script src="js/Utils.js"></script>
 
 @code {
+    private bool visible = true;
+    private bool isLoading = false;
+    private bool _carregando;
+
+    private string? nr_pedido;
     private string? doc_company;
     private string? serie_order;
     private string? orderNumber;
-
-    private bool _carregando;
+    private string? inputValueProduto { get; set; }
+    private int inputValueVolumes { get; set; } = 1;
 
     private DateTime? _initialDate = DateTime.Now;
     private DateTime? _finalDate = DateTime.Now;
 
-    public record Employee(string Name, string Position, int YearsEmployed, int Salary, int Rating);
-    public IEnumerable<Employee> employees;
+    private IEnumerable<Order>? orders = new List<Order>();
+    private IEnumerable<Product>? itens = new List<Product>();
 
-    protected override void OnInitialized()
+    private RenderFragment PickingDialogBody => 
+    @<div>
+        <MudGrid Spacing="1" Justify="Justify.SpaceAround">
+            <MudItem>
+                <MudTextField @bind-Value="@inputValueVolumes" HelperText="Volume" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentText="pct/cx" Style="height:2.5rem" />
+            </MudItem>
+            <MudItem>
+                <MudTextField @bind-Value="@inputValueProduto" OnKeyUp="AddItemAsPicked" TextUpdateSuppression="false" Clearable="true" HelperText="Produto" Variant="Variant.Outlined" Style="height:2.5rem" />
+            </MudItem>
+            <MudItem>
+                <MudIconButton @onclick="@RemoveQtde" Color="Color.Primary" Size="@Size.Large" Variant="@Variant.Filled" Icon="@Icons.Material.Filled.Delete"></MudIconButton>
+            </MudItem>
+        </MudGrid>
+
+        <MudDivider DividerType="DividerType.Middle" Class="my-2"></MudDivider>
+
+        <MudDataGrid Items="@itens" Bordered="true">
+            <Columns>
+                <PropertyColumn Property="@(item => $"{item.cod_product} - {item.description_product}")" Title="Descrição" />
+                <PropertyColumn Property="@(item => item.sku_product)" Title="Referência" />
+                <PropertyColumn Property="@(item => item.quantity_product)" Title="Qtde" />
+                <PropertyColumn Property="@(item => item.picked_quantity)" Title="Conferido" />
+            </Columns>
+        </MudDataGrid>
+    </div>
+    ;
+
+    protected override async Task OnInitializedAsync()
     {
-        employees = new List<Employee>
+        doc_company = await GetTextInLocalStorage("doc_company");
+        serie_order = await GetTextInLocalStorage("serie_order");
+        await LoadOrders();
+        isLoading = true;
+        visible = false;
+    }
+
+    private async Task LoadOrders()
+    {
+        if (_initialDate.HasValue && _finalDate.HasValue)
         {
-            new Employee("Sam", "CPA", 23, 87_000, 4),
-            new Employee("Alicia", "Product Manager", 11, 143_000, 5),
-            new Employee("Ira", "Developer", 4, 92_000, 3),
-            new Employee("John", "IT Director", 17, 229_000, 4),
-        };
+            if (_initialDate.Value > _finalDate.Value)
+            {
+                await _dialogService.ShowMessageBox("Erro", "A data inicial não pode ser maior que a data final.");
+                return;
+            }
+
+            orders = await _conferenciaService.GetUnpickedOrders(doc_company, serie_order, _initialDate.Value.ToString("yyyy-MM-dd"), _finalDate.Value.ToString("yyyy-MM-dd"));
+            AssigningButtonProperties(orders?.ToList());
+        }
     }
 
     private async Task HandleAtualizar()
     {
+        isLoading = false;
+        visible = true;
         _carregando = true;
-        try
+
+        await LoadOrders();
+
+        _carregando = false;
+        isLoading = true;
+        visible = false;
+    }
+
+    private Task ConferirPedido(Order pedido)
+    {
+        this.nr_pedido = pedido.number;
+        itens = pedido.itens.ToList();
+
+        var options = new DialogOptions() { CloseButton = true, FullScreen = true };
+
+        var parameters = new DialogParameters
         {
-            // Simula operação assíncrona
-            await Task.Delay(1500);
-            Console.WriteLine($"Data: {_initialDate} até {_finalDate}, Pedido: {orderNumber}");
-        }
-        finally
+            { "_icon", @Icons.Material.Filled.QrCodeScanner },
+            { "_closeButtonText", "Close" },
+            { "_clickButtonText", "Conferir" },
+            { "_titleContentText", "CONFERIR" },
+            { "_onClickEvent", (Func<Task>)(() => ShowConfirmationDialog()) },
+            { "_bodyContent", PickingDialogBody }
+        };
+
+        return _dialogService.ShowAsync<ConfirmationDialogWithFocusById>("", parameters, options);
+    }
+
+    private async Task ConferirPedidoIndividual(Enter evento)
+    {
+        if (evento.e.Code == "Enter" || evento.e.Code == "NumpadEnter")
         {
-            _carregando = false;
+            isLoading = false;
+            visible = true;
+
+            isLoading = true;
+            visible = false;
         }
+    }
+
+    private async Task RemoveQtde()
+    {
+        var item = orders
+                        .Where(p => p.number == this.nr_pedido)
+                        .First()
+                   .itens
+                        .Where(p => p.cod_product == Convert.ToInt32(inputValueProduto?.Trim()))
+                        .First();
+
+        if (item.picked_quantity <= 0)
+        {
+            var options = new DialogOptions() { CloseButton = true };
+
+            var parameters = new DialogParameters
+                {
+                    { "_titleContentText", "ATENÇÃO" },
+                    { "_dialogContentText", "Você está tentando remover uma quantidade menor do que a mínima necessária para este produto, deseja continuar?" }
+                };
+
+            await _dialogService.ShowAsync<AlertDialog>("", parameters, options);
+        }
+        else
+        {
+            item.picked_quantity = item.picked_quantity - 1;
+            inputValueProduto = String.Empty;
+            await Task.Delay(200);
+            StateHasChanged();
+        };
+    }
+
+    private Task ShowConfirmationDialog()
+    {
+        return _dialogService.ShowAsync<ConfirmationDialog>("CONFERIR");
+    }
+
+    private async Task AddItemAsPicked(KeyboardEventArgs e)
+    {
+        if (e.Code == "Enter" || e.Code == "NumpadEnter")
+        {
+            var item = orders
+                            .Where(p => p.number == this.nr_pedido)
+                            .First()
+                       .itens
+                            .Where(p => p.cod_product == Convert.ToInt32(inputValueProduto?.Trim()))
+                            .First();
+
+            if (item.picked_quantity >= item.quantity_product)
+            {
+                var options = new DialogOptions() { CloseButton = true };
+
+                var parameters = new DialogParameters
+                {
+                    { "_titleContentText", "ATENÇÃO" },
+                    { "_dialogContentText", "Você está tentando conferir uma quantidade maior do que a necessária deste produto, deseja continuar?" }
+                };
+
+                await _dialogService.ShowAsync<AlertDialog>("", parameters, options);
+            }
+            else
+            {
+                item.picked_quantity = item.picked_quantity + 1;
+                inputValueProduto = String.Empty;
+                StateHasChanged();
+            }
+        }
+    }
+
+    private void AssigningButtonProperties(List<Order>? orders)
+    {
+        foreach (var pedido in orders)
+        {
+            if (pedido.retorno != null)
+            {
+                pedido.buttonText = "Conferido";
+                pedido.buttonClass = true;
+            }
+            else
+            {
+                pedido.buttonText = "Conferir";
+                pedido.buttonClass = false;
+            }
+
+            if (pedido.buttonPrintedClass)
+            {
+                pedido.buttonPrintedText = "Impresso";
+                pedido.buttonPrintedClass = true;
+            }
+            else
+            {
+                pedido.buttonPrintedText = "Imprimir";
+                pedido.buttonPrintedClass = false;
+            }
+        }
+    }
+
+    private async Task ImprimeRomaneio(Order pedido)
+    {
+        isLoading = false;
+        visible = true;
+
+        var links = new List<string>();
+
+        var base64String = await _conferenciaService.PrintCoupon(doc_company, serie_order, pedido.number);
+        await jsRuntime.InvokeVoidAsync("downloadFile", "application/pdf", base64String, pedido.number);
+        var dataUrl = $"data:application/pdf;base64,{base64String}";
+        links.Add(dataUrl);
+
+        await jsRuntime.InvokeVoidAsync("abrirAbas", links);
+
+        isLoading = true;
+        visible = false;
+    }
+
+    private async Task<string> GetTextInLocalStorage(string key)
+    {
+        return await jsRuntime.InvokeAsync<string>("localStorage.getItem", key);
     }
 }

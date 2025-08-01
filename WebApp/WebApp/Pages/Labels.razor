@@ -92,15 +92,33 @@ else
 
     private async Task HandleAtualizar()
     {
+        isLoading = false;
+        visible = true;
+
         _carregando = true;
         await LoadOrders();
         _carregando = false;
+
+        isLoading = true;
+        visible = false;
     }
 
     private async Task ImprimeCompTroca(Order pedido)
     {
+        isLoading = false;
+        visible = true;
+
+        var links = new List<string>();
+
         var base64String = await _etiquetasService.PrintCoupon(doc_company, serie_order, pedido.number);
         await jsRuntime.InvokeVoidAsync("downloadFile", "application/pdf", base64String, pedido.number);
+        var dataUrl = $"data:application/pdf;base64,{base64String}";
+        links.Add(dataUrl);
+
+        await jsRuntime.InvokeVoidAsync("abrirAbas", links);
+
+        isLoading = true;
+        visible = false;
     }
 
     private async Task ImprimeEtiqueta(Order pedido)

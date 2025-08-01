@@ -13,10 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Components\Dialogs\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Application.App\Application.App.csproj" />
     <ProjectReference Include="..\Infrastructure.App\Infrastructure.App.csproj" />
   </ItemGroup>

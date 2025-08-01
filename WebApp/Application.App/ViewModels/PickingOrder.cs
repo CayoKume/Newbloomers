@@ -5,7 +5,10 @@
         private List<Product> _itens = new List<Product>();
 
         public string? buttonText { get; set; }
-        public string? buttonClass { get; set; }
+        public bool buttonClass { get; set; }
+
+        public string? buttonPrintedText { get; set; }
+        public bool buttonPrintedClass { get; set; }
 
         public DateTime? retorno { get; set; }
 

@@ -13,8 +13,8 @@ namespace Infrastructure.WebApi.Repositorys
         private readonly ISQLServerConnection _conn;
         private readonly IPickingCommandHandler _pickingCommandHandler;
 
-        public PickingRepository(ISQLServerConnection conn) =>
-            _conn = conn;
+        public PickingRepository(ISQLServerConnection conn, IPickingCommandHandler pickingCommandHandler) =>
+            (_conn, _pickingCommandHandler) = (conn, pickingCommandHandler);
 
         public async Task<List<ShippingCompany>?> GetShippingCompanys()
         {

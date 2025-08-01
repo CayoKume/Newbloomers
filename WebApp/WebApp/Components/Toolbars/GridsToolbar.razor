@@ -1,9 +1,9 @@
 ﻿<MudGrid Spacing="5" Justify="Justify.SpaceAround">
     <MudItem>
-        <MudDatePicker Label="Data Inicial" @bind-Date="DataInicial" />
+        <MudDatePicker Label="Data Inicial" Date="@DataInicial" DateChanged="@DataInicialChanged" />
     </MudItem>
     <MudItem>
-        <MudDatePicker Label="Data Final" @bind-Date="DataFinal" />
+        <MudDatePicker Label="Data Final" Date="@DataFinal" DateChanged="@DataFinalChanged" />
     </MudItem>
     <MudItem>
         <MudTextField 
@@ -56,5 +56,29 @@
 
             await OnKeyUpEvent.InvokeAsync(new Enter { e = e, orderNumber = pedido });
         }
+    }
+
+    private DateTime? DataInicialLocal
+    {
+        get => DataInicial;
+        set => OnDataInicialChanged(value);
+    }
+
+    private async Task OnDataInicialChanged(DateTime? novaData)
+    {
+        DataInicial = novaData;
+        await DataInicialChanged.InvokeAsync(novaData);
+    }
+
+    private DateTime? DataFinalLocal
+    {
+        get => DataFinal;
+        set => OnDataFinalChanged(value);
+    }
+
+    private async Task OnDataFinalChanged(DateTime? novaData)
+    {
+        DataFinal = novaData;
+        await DataFinalChanged.InvokeAsync(novaData);
     }
 }
