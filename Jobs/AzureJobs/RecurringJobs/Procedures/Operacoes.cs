@@ -6,7 +6,6 @@ namespace AzureJobs.RecurringJobs.Procedures
 {
     public class Operacoes
     {
-        private readonly WebJobExceptionHandlingMiddleware _webJobExceptionHandlingMiddleware;
         private readonly ICoreRepository _coreRepository;
 
         public Operacoes(ICoreRepository coreRepository) =>

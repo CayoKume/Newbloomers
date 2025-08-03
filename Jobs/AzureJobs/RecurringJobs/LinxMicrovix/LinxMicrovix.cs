@@ -168,22 +168,22 @@ namespace AzureJobs.RecurringJobs.LinxMicrovix.ERP
             _webJobExceptionHandlingMiddleware = new WebJobExceptionHandlingMiddleware(services);
         }
 
-        // public async Task LinxB2CPedidos([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
-        // {
-        //     await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
-        //     {
-        //         var method = _methods
-        //             .Where(m => m.MethodName == "LinxB2CPedidos")
-        //             .FirstOrDefault();
+        //public async Task LinxB2CPedidos([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
+        //    {
+        //        var method = _methods
+        //            .Where(m => m.MethodName == "LinxB2CPedidos")
+        //            .FirstOrDefault();
 
-        //         var result = await _linxB2CPedidosService.GetRecords(
-        //             _linxMicrovixJobParameter.SetParameters(
-        //                 jobName: method.MethodName,
-        //                 tableName: method.MethodName
-        //             )
-        //         );
-        //     });
-        // }
+        //        var result = await _linxB2CPedidosService.GetRecords(
+        //            _linxMicrovixJobParameter.SetParameters(
+        //                jobName: method.MethodName,
+        //                tableName: method.MethodName
+        //            )
+        //        );
+        //    });
+        //}
 
         // public async Task LinxB2CPedidosItens([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
         // {

@@ -1,4 +1,4 @@
-﻿namespace Application.Movidesk.Interfaces
+﻿namespace Application.Movidesk.Interfaces.Services
 {
     public interface IMovideskService
     {
