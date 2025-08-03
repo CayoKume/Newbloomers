@@ -30,7 +30,7 @@ namespace Application.WebApi.Handlers.Commands
                          INSCRICAO_ESTADUAL AS STATE_REGISTRATION_SHIPPINGCOMPANY,
                          INCRICAO_MUNICIPAL AS MUNICIPAL_REGISTRATION_SHIPPINGCOMPANY
                          FROM BLOOMERS_LINX..LINXCLIENTESFORNEC_TRUSTED (NOLOCK)
-                         WHERE TIPO_CADASTRO = 'T'
+                         WHERE TIPO_CADASTRO = 'T' AND ATIVO = 'S'
                          ORDER BY COD_CLIENTE";
         }
 

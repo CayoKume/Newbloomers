@@ -1,27 +1,26 @@
 ﻿<MudGrid Spacing="5" Justify="Justify.SpaceAround">
-    <MudItem>
+    <MudItem Class="align-self-center">
         <MudDatePicker Label="Data Inicial" Date="@DataInicial" DateChanged="@DataInicialChanged" />
     </MudItem>
-    <MudItem>
+    <MudItem Class="align-self-center">
         <MudDatePicker Label="Data Final" Date="@DataFinal" DateChanged="@DataFinalChanged" />
     </MudItem>
-    <MudItem>
-        <MudTextField 
-            Adornment="Adornment.End" 
-            AdornmentIcon="@Icons.Material.Filled.Search"
-            @bind-Value="TextoPedido"
-            Label="Pedido" 
-            Variant="Variant.Outlined"
-            @onkeyup="InvokeOnKeyUpEvent">
+    <MudItem Class="align-self-center">
+        <MudTextField Adornment="Adornment.End"
+                        AdornmentIcon="@Icons.Material.Filled.Search"
+                        @bind-Value="TextoPedido"
+                        Label="Pedido"
+                        Variant="Variant.Outlined"
+                        @onkeyup="InvokeOnKeyUpEvent">
         </MudTextField>
     </MudItem>
-    <MudItem>
+    <MudItem Class="align-self-center">
         <MudButton Size="@Size.Large"
-                   Variant="@Variant.Filled"
-                   Color="@Color.Primary"
-                   OnClick="OnAtualizarClicked"
-                   Disabled="@BotaoDesabilitado"
-                   Loading="@BotaoCarregando">
+                    Variant="@Variant.Filled"
+                    Color="@Color.Primary"
+                    OnClick="OnAtualizarClicked"
+                    Disabled="@BotaoDesabilitado"
+                    Loading="@BotaoCarregando">
             Atualizar
         </MudButton>
     </MudItem>

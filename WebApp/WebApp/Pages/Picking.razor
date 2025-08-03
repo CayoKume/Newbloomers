@@ -106,6 +106,12 @@ else
         visible = false;
     }
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender) //Refatorar aqui
+            await valueProdutoReference.FocusAsync();
+    }
+
     private async Task LoadOrders()
     {
         if (_initialDate.HasValue && _finalDate.HasValue)

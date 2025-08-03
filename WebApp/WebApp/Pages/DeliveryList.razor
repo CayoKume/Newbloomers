@@ -1,55 +1,258 @@
 ﻿@page "/DeliveryLists"
+@inject IJSRuntime jsRuntime;
+@inject IDialogService _dialogService
+@inject IDeliveryListService _romaneioService
+@inject IPickingService _pickingService;
+@using Order = Application.App.ViewModels.DeliveryList.Order
 
 <PageTitle>DeliveryLists</PageTitle>
 
-<MudGrid Spacing="5" Justify="Justify.SpaceAround">
-    <MudItem>
-        <MudDatePicker Label="Data Inicial" @bind-Date="_date" />
-    </MudItem>
+@if (isLoading)
+{
+    <MudGrid Spacing="5" Justify="Justify.SpaceAround">
+        <MudItem Class="align-self-center">
+            <MudDatePicker Label="Data Inicial" @bind-Date="@_initialDate" />
+        </MudItem>
+        <MudItem Class="align-self-center">
+            <MudDatePicker Label="Data Final" @bind-Date="@_finalDate" />
+        </MudItem>
+        <MudItem Class="align-self-center">
+            <MudTextField Adornment="Adornment.End"
+                          AdornmentIcon="@Icons.Material.Filled.Search"
+                          @ref="valueOrderNumberReference"
+                          T="string"
+                          Label="Pedido"
+                          Variant="Variant.Outlined"
+                          @onkeyup="AdicionaPedido">
+            </MudTextField>
+        </MudItem>
+        <MudItem Class="align-self-center">
+            <MudButton Size="@Size.Large"
+                       Variant="@Variant.Filled"
+                       Color="@Color.Primary"
+                       OnClick="HandleAtualizar"
+                       Disabled="@_carregando"
+                       Loading="@_carregando">
+                Atualizar
+            </MudButton>
+        </MudItem>
+    </MudGrid>
 
-    <MudItem>
-        <MudDatePicker Label="Data Final" @bind-Date="_date" />
-    </MudItem>
+    <MudDivider DividerType="DividerType.Middle" Class="my-2" />
 
-    <MudItem>
-        <MudTextField Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Search" @bind-Value="TextValue" Label="Pedido" Variant="Variant.Outlined"></MudTextField>
-    </MudItem>
-</MudGrid>
+    <MudGrid Spacing="3" Justify="Justify.FlexStart">
+        <MudItem Class="align-self-center">
+            <MudAutocomplete @bind-Value="inputValueTransportadoras"
+                             SearchFunc="@Search"
+                             Variant="Variant.Outlined"
+                             Label="Transportadora"
+                             Margin="Margin.Normal"
+                             Dense="true"
+                             Disabled="false"
+                             ReadOnly="false"
+                             Placeholder="@(null)"
+                             HelperText="@(null)"
+                             HelperTextOnFocus="true"
+                             Clearable="true"
+                             Modal="true"
+                             ShowProgressIndicator="true" 
+                             FullWidth="true"
+                             Class="align-self-center"/>
+        </MudItem>
+        <MudItem Class="align-self-center">
+            <MudButton Size="@Size.Large"
+                       StartIcon="@Icons.Material.TwoTone.Close"
+                       Variant="@Variant.Outlined"
+                       Color="@Color.Error"
+                       OnClick="RemovePedido"
+                       Disabled="@_carregando"
+                       Loading="@_carregando">
+                Remover
+            </MudButton>
+        </MudItem>
+        <MudItem Class="align-self-center">
+            <MudButton Size="@Size.Large"
+                       StartIcon="@Icons.Material.TwoTone.CleaningServices"
+                       Variant="@Variant.Outlined"
+                       Color="@Color.Info"
+                       OnClick="LimpaGrid"
+                       Disabled="@_carregando"
+                       Loading="@_carregando">
+                Limpar
+            </MudButton>
+        </MudItem>
+        <MudItem Class="align-self-center">
+            <MudButton Size="@Size.Large"
+                       StartIcon="@Icons.Material.TwoTone.Print"
+                       Variant="@Variant.Outlined"
+                       Color="@Color.Success"
+                       OnClick="ImprimeRomaneio"
+                       Disabled="@_carregando"
+                       Loading="@_carregando">
+                Imprimir
+            </MudButton>
+        </MudItem>
+    </MudGrid>
 
-<MudDataGrid Items="@employees" Filterable="false" SortMode="@SortMode.None" Groupable="false">
-    <Columns>
-        <PropertyColumn Property="x => x.Name" />
-        <PropertyColumn Property="x => x.Position" />
-        <PropertyColumn Property="x => x.YearsEmployed" Title="Years Employed" />
-        <PropertyColumn Property="x => x.Salary" Format="C" />
-        <PropertyColumn Property="x => x.Salary * x.YearsEmployed" Title="Total Earned" Format="C" />
-        <TemplateColumn CellClass="d-flex">
-            <CellTemplate>
-                <MudButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Primary">Hire</MudButton>
-                <MudSpacer></MudSpacer>
-                <MudButton Size="@Size.Small" Variant="@Variant.Filled" Color="@Color.Primary">Hire</MudButton>
-            </CellTemplate>
-        </TemplateColumn>
-    </Columns>
-    <PagerContent>
-        <MudDataGridPager T="Employee" />
-    </PagerContent>
-</MudDataGrid>
+    <MudDivider DividerType="DividerType.Middle" Class="my-6" />
+
+    <MudDataGrid T="Order" MultiSelection="true" Items="@orders" Filterable="true" Bordered="true" Hideable="true" SelectedItemsChanged="@RemovePedidoFromList">
+        <Columns>
+            <SelectColumn T="Order" />
+            <PropertyColumn Property="x => x.number" Title="Pedido" />
+            <PropertyColumn Property="x => x.client.cod_client" Title="Cliente" />
+            <PropertyColumn Property="x => x.client.reason_client" Title="Nome" />
+            <PropertyColumn Property="x => x.client.address_client" Title="Endereço" />
+            <PropertyColumn Property="x => x.client.street_number_client" Title="Número" />
+            <PropertyColumn Property="x => x.client.complement_address_client" Title="Complemento" />
+            <PropertyColumn Property="x => x.invoice.amount_nf" Title="Valor Total" Format="C" />
+        </Columns>
+
+        <PagerContent>
+            <MudDataGridPager T="Order" />
+        </PagerContent>
+    </MudDataGrid>
+}
+else
+{
+    <div class="my-custom-container">
+        <LoadingOverlay Visible="@visible" />
+    </div>
+}
+
+<script src="js/Utils.js"></script>
 
 @code {
-    public record Employee(string Name, string Position, int YearsEmployed, int Salary, int Rating);
-    public IEnumerable<Employee> employees;
-    private DateTime? _date = DateTime.Now;
-    public string? TextValue { get; set; }
+    private bool visible = true;
+    private bool isLoading = false;
+    private bool _carregando;
 
-    protected override void OnInitialized()
+    private string? doc_company;
+    private string? serie_order;
+    private string? inputValueTransportadoras;
+
+    private string[]? _shippmentCompanies;
+    private List<ShippingCompany>? shippmentCompanies;
+    private MudTextField<string>? valueOrderNumberReference;
+
+    private DateTime? _initialDate = DateTime.Now;
+    private DateTime? _finalDate = DateTime.Now;
+
+    private List<Order>? orders = new List<Order>();
+    private List<Order>? pedidosMarcadosParaSeremRemovidos = new List<Order>();
+
+    protected override async Task OnInitializedAsync()
     {
-        employees = new List<Employee>
+        doc_company = await GetTextInLocalStorage("doc_company");
+        serie_order = await GetTextInLocalStorage("serie_order");
+
+        shippmentCompanies = await _pickingService.GetShippingCompanys();
+        _shippmentCompanies = shippmentCompanies?.Select(c => $"{c.cod_shippingCompany} - {c.reason_shippingCompany}").ToArray();
+
+        isLoading = true;
+        visible = false;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender) //Refatorar aqui
+            await valueOrderNumberReference.FocusAsync();
+    }
+
+    private async Task LoadOrders()
+    {
+        if (_initialDate.HasValue && _finalDate.HasValue)
         {
-            new Employee("Sam", "CPA", 23, 87_000, 4),
-            new Employee("Alicia", "Product Manager", 11, 143_000, 5),
-            new Employee("Ira", "Developer", 4, 92_000, 3),
-            new Employee("John", "IT Director", 17, 229_000, 4),
-        };
+            if (_initialDate.Value > _finalDate.Value)
+            {
+                await _dialogService.ShowMessageBox("Erro", "A data inicial não pode ser maior que a data final.");
+                return;
+            }
+
+            string transportadora = inputValueTransportadoras?.Split(" - ").FirstOrDefault()?.Trim() ?? string.Empty;
+            orders = await _romaneioService.GetOrdersShipped(transportadora, doc_company, serie_order, _initialDate.Value.ToString("yyyy-MM-dd"), _finalDate.Value.ToString("yyyy-MM-dd"));
+        }
+    }
+
+    private async Task AdicionaPedido(KeyboardEventArgs e)
+    {
+        if (e.Code == "Enter" || e.Code == "NumpadEnter")
+        {
+            isLoading = false;
+            visible = true;
+
+            string transportadora = inputValueTransportadoras?.Split(" - ").FirstOrDefault()?.Trim() ?? string.Empty;
+            var _pedido = await _romaneioService.GetOrderShipped(valueOrderNumberReference.Value.Trim(), serie_order, doc_company, transportadora);
+            orders.Add(_pedido);
+            await valueOrderNumberReference.Clear();
+            StateHasChanged();
+
+            isLoading = true;
+            visible = false;
+        }
+    }
+
+    private async Task HandleAtualizar()
+    {
+        isLoading = false;
+        visible = true;
+        _carregando = true;
+
+        await LoadOrders();
+
+        _carregando = false;
+        isLoading = true;
+        visible = false;
+    }
+
+    private void RemovePedido()
+    {
+        foreach (var pedido in pedidosMarcadosParaSeremRemovidos)
+        {
+            orders?.Remove(pedido);
+        }
+
+        pedidosMarcadosParaSeremRemovidos.Clear();
+    }
+
+    private void RemovePedidoFromList(HashSet<Order> items) => pedidosMarcadosParaSeremRemovidos = items?.ToList();
+
+    private async Task LimpaGrid()
+    {
+        orders?.Clear();
+    }
+
+    private async Task ImprimeRomaneio()
+    {
+        // try
+        // {
+        //     await _romaneioService.PrintOrder(pedidos);
+
+        //     var fileName = $@"deliverylists{pedidos.First().company.doc_company.Substring(pedidos.First().company.doc_company.Length - 3)} - {DateTime.Now.Date.ToString("yyyy-mm-dd")}.pdf";
+        //     var base64String = await _romaneioService.GetDeliveryListToPrint(fileName);
+
+        //     await jsRuntime.InvokeVoidAsync("downloadFile", "application/pdf", base64String, fileName);
+
+        // }
+        // catch (Exception ex)
+        // {
+        //     throw;
+        // }
+    }
+
+    private Task<IEnumerable<string>?> Search(string value, CancellationToken token)
+    {
+        if (string.IsNullOrEmpty(value))
+            return Task.FromResult<IEnumerable<string>?>(_shippmentCompanies);
+
+        var result = _shippmentCompanies?
+            .Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
+
+        return Task.FromResult<IEnumerable<string>?>(result);
+    }
+
+    private async Task<string> GetTextInLocalStorage(string key)
+    {
+        return await jsRuntime.InvokeAsync<string>("localStorage.getItem", key);
     }
 }

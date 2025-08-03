@@ -56,7 +56,7 @@ namespace Application.WebApi.Handlers.Commands
                       WHERE
                       A.SERIE = '{serie}'
                       AND A.NB_DOC_REMETENTE = '{cnpj_emp}' 
-					AN A.DOCUMENTO = '{nr_pedido}'
+					  AND A.DOCUMENTO = '{nr_pedido}'
                       AND A.CHAVE_NFE IS NOT NULL
                       AND A.XML_FATURAMENTO IS NOT NULL
                       AND A.NF_SAIDA IS NOT NULL

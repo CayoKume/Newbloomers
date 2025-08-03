@@ -2,7 +2,7 @@
 
 namespace Application.App.ViewModels.DeliveryList
 {
-    public class Order : OrderBase
+    public class Order : Domain.App.Entities.Order
     {
     }
 }
