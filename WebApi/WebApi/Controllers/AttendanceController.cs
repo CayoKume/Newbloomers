@@ -52,6 +52,7 @@ namespace WmsApi.Controllers
         }
     }
 
+    //Refatorar Aqui
     public class UpdateDateContactedRequest
     {
         public string? number { get; set; }

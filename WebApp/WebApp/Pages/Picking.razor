@@ -64,8 +64,8 @@ else
     private MudTextField<string> valueProdutoReference;
     private int inputValueVolumes { get; set; } = 1;
 
-    private DateTime? _initialDate = DateTime.Now;
-    private DateTime? _finalDate = DateTime.Now;
+    private DateTime? _initialDate = DateTime.Now; //Refatorar Aqui (essa variavel precisa se date only, para não dar b.o na query do select)
+    private DateTime? _finalDate = DateTime.Now; //Refatorar Aqui (essa variavel precisa se date only, para não dar b.o na query do select)
 
     private IEnumerable<Order>? orders = new List<Order>();
     private IEnumerable<Product>? itens = new List<Product>();
@@ -104,12 +104,6 @@ else
         await LoadOrders();
         isLoading = true;
         visible = false;
-    }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (!firstRender) //Refatorar aqui
-            await valueProdutoReference.FocusAsync();
     }
 
     private async Task LoadOrders()

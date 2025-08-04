@@ -135,8 +135,8 @@ else
     private List<ShippingCompany>? shippmentCompanies;
     private MudTextField<string>? valueOrderNumberReference;
 
-    private DateTime? _initialDate = DateTime.Now;
-    private DateTime? _finalDate = DateTime.Now;
+    private DateTime? _initialDate = DateTime.Now; //Refatorar Aqui (essa variavel precisa se date only, para não dar b.o na query do select)
+    private DateTime? _finalDate = DateTime.Now; //Refatorar Aqui (essa variavel precisa se date only, para não dar b.o na query do select)
 
     private List<Order>? orders = new List<Order>();
     private List<Order>? pedidosMarcadosParaSeremRemovidos = new List<Order>();
@@ -161,6 +161,8 @@ else
 
     private async Task LoadOrders()
     {
+        //Refatorar Aqui
+        //if código transportadora is null aparece mensagem
         if (_initialDate.HasValue && _finalDate.HasValue)
         {
             if (_initialDate.Value > _finalDate.Value)
@@ -181,7 +183,7 @@ else
             isLoading = false;
             visible = true;
 
-            string transportadora = inputValueTransportadoras?.Split(" - ").FirstOrDefault()?.Trim() ?? string.Empty;
+            string transportadora = inputValueTransportadoras?.Split(" - ").FirstOrDefault()?.Trim() ?? string.Empty; //Refatorar Aqui
             var _pedido = await _romaneioService.GetOrderShipped(valueOrderNumberReference.Value.Trim(), serie_order, doc_company, transportadora);
             orders.Add(_pedido);
             await valueOrderNumberReference.Clear();
@@ -224,20 +226,34 @@ else
 
     private async Task ImprimeRomaneio()
     {
-        // try
+        isLoading = false;
+        visible = true;
+
+        var links = new List<string>();
+
+        await _romaneioService.PrintOrder(orders);
+
+        string transportadora = inputValueTransportadoras?.Split(" - ").FirstOrDefault()?.Trim() ?? string.Empty;
+        var fileName = $@"deliverylists{orders?.First()?.company?.doc_company?.Substring(orders.First().company.doc_company.Length - 3)} - {transportadora} - {DateTime.Now.Date.ToString("yyyy-MM-dd")}.pdf";
+        var base64String = await _romaneioService.GetDeliveryListToPrint(fileName);
+
+        //Refatorar Aqui
+        // var options = new DialogOptions() { CloseButton = true, FullScreen = true };
+        // var parameters = new DialogParameters
         // {
-        //     await _romaneioService.PrintOrder(pedidos);
+        //     { "base64FileString", dataUrl }
+        // };
+        //await _dialogService.ShowAsync<PdfViewerDialog>("", parameters, options);
 
-        //     var fileName = $@"deliverylists{pedidos.First().company.doc_company.Substring(pedidos.First().company.doc_company.Length - 3)} - {DateTime.Now.Date.ToString("yyyy-mm-dd")}.pdf";
-        //     var base64String = await _romaneioService.GetDeliveryListToPrint(fileName);
+        await jsRuntime.InvokeVoidAsync("downloadFile", "application/pdf", base64String, fileName);
+        var dataUrl = $"data:application/pdf;base64,{base64String}";
+        links.Add(dataUrl);
 
-        //     await jsRuntime.InvokeVoidAsync("downloadFile", "application/pdf", base64String, fileName);
+        await jsRuntime.InvokeVoidAsync("abrirAbas", links);
 
-        // }
-        // catch (Exception ex)
-        // {
-        //     throw;
-        // }
+        isLoading = true;
+        visible = false;
+
     }
 
     private Task<IEnumerable<string>?> Search(string value, CancellationToken token)

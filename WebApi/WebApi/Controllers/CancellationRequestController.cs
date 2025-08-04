@@ -1,4 +1,5 @@
 using Application.WebApi.Interfaces.Services;
+using Domain.Wms.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
@@ -68,8 +69,9 @@ namespace WmsApi.Controllers
         }
     }
 
+    //Refatorar Aqui
     public class OrderToCancellationRequest
     {
-        public object? serializeOrder { get; set; }
+        public Order serializeOrder { get; set; }
     }
 }

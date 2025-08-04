@@ -1,5 +1,4 @@
-﻿
-using Domain.WebApi.Interfaces.Repositorys;
+﻿using Domain.WebApi.Interfaces.Repositorys;
 using Application.WebApi.Interfaces.Services;
 using Newtonsoft.Json;
 using QuestPDF.Fluent;
@@ -12,6 +11,7 @@ namespace Application.WebApi.Services
 {
     public class DeliveryListService : IDeliveryListService
     {
+        //Refatorar Aqui (Refatore os nomes dos métodos, deixe mais claro o que cada um deles faz, está confuso de mais)
         private readonly string path = @"C:\printer";
         private readonly string pathDeliveryLists = @"C:\printer\deliverylists";
         private readonly IDeliveryListRepository _deliveryListRepository;
@@ -40,6 +40,32 @@ namespace Application.WebApi.Services
             }
         }
 
+        public async Task<string> GetDeliveryList(string identificador)
+        {
+            try
+            {
+                var list = await _deliveryListRepository.GetDeliveryList(identificador);
+                return JsonConvert.SerializeObject(list);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public async Task<string> GetDeliveryLists(string cnpj_emp, string data_inicial, string data_final)
+        {
+            try
+            {
+                var list = await _deliveryListRepository.GetDeliveryLists(cnpj_emp, data_inicial, data_final);
+                return JsonConvert.SerializeObject(list);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
         public async Task<string> GetOrderShipped(string nr_pedido, string serie, string cnpj_emp, string transportadora)
         {
             var list = await _deliveryListRepository.GetOrderShipped(nr_pedido, serie, cnpj_emp, transportadora);
@@ -52,7 +78,12 @@ namespace Application.WebApi.Services
             return JsonConvert.SerializeObject(list);
         }
 
-        public async Task<bool> PrintOrder(string serializePedidosList)
+        public async Task SetColletedAtDate(string identificador)
+        {
+            await _deliveryListRepository.SetColletedAtDate(identificador);
+        }
+
+        public async Task<bool> PrintOrder(string serializePedidosList) //Refatorar Aqui (Você tá passando todos os dados direto em um unico json para usar no InsertPickedsDates)
         {
             try
             {
@@ -61,17 +92,21 @@ namespace Application.WebApi.Services
                 if (!Directory.Exists(pathDeliveryLists))
                     Directory.CreateDirectory(pathDeliveryLists);
 
+                //Refatorar Aqui (Organiza melhor essas variaveis mano)
                 var pedidosList = JsonConvert.DeserializeObject<List<Order>>(serializePedidosList);
-                var guid = Guid.NewGuid();
                 var transportadora = pedidosList.First().shippingCompany.cod_shippingCompany;
                 var volumes = pedidosList.GroupBy(x => x.volumes).Select(g => new { soma = g.Sum(x => x.volumes) }).First();
                 var name = $"deliverylists{pedidosList.First().company.doc_company.Substring(pedidosList.First().company.doc_company.Length - 3)} - {transportadora} - {DateTime.Now.Date.ToString("yyyy-MM-dd")}";
                 var fileName = $@"{pathDeliveryLists}\{name}.pdf";
 
-                await _deliveryListRepository.InsertPickedsDates(deliveryListName: name, orders: pedidosList, guid: guid, carrier: transportadora);
+                //Refatorar Aqui
+                var guid = Guid.NewGuid();
+                var doc_company = pedidosList.First().company.doc_company;
+                await _deliveryListRepository.InsertPickedsDates(deliveryListName: name, doc_company: doc_company, orders: pedidosList, guid: guid, carrier: transportadora);
 
                 QuestPDF.Settings.License = LicenseType.Community;
 
+                //Refatorar Aqui
                 QuestPDF.Fluent.Document.Create(container =>
                 {
                     container.Page(page =>

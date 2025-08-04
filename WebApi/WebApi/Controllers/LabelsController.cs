@@ -1,4 +1,5 @@
 using Application.WebApi.Interfaces.Services;
+using Domain.Wms.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
@@ -147,6 +148,7 @@ namespace WmsApi.Controllers
         }
     }
 
+    //Refatorar Aqui
     public class SendZPLToAPIRequest
     {
         public string? zpl { get; set; }
@@ -154,13 +156,15 @@ namespace WmsApi.Controllers
         public int volumes { get; set; }
     }
 
+    //Refatorar Aqui
     public class UpdateFlagPrintedRequest
     {
         public string? number { get; set; }
     }
 
+    //Refatorar Aqui
     public class PrintOrderToPresentRequest
     {
-        public object? serializePedido { get; set; }
+        public Order serializePedido { get; set; }
     }
 }

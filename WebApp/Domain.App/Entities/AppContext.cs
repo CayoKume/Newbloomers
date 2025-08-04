@@ -2,6 +2,7 @@
 
 namespace Domain.App.Entities
 {
+    //Refatorar Aqui (acho que pode deletar essa classe)
     public class AppContext
     {
         public class DateInterval

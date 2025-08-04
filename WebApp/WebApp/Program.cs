@@ -9,6 +9,7 @@ builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddMudServices();
+builder.Services.AddMudBlazorPdfViewer();
 builder.Services.AddScopedAppServices();
 
 await builder.Build().RunAsync();

@@ -1,4 +1,5 @@
 using Application.WebApi.Interfaces.Services;
+using Domain.Wms.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
@@ -168,6 +169,7 @@ namespace WmsApi.Controllers
         }
     }
 
+    //Refatorar Aqui
     public class UpdateRetornoRequest
     {
         public string? nr_pedido { get; set; }
@@ -175,14 +177,16 @@ namespace WmsApi.Controllers
         public object? itens { get; set; }
     }
 
+    //Refatorar Aqui
     public class UpdateShippingCompanyRequest
     {
         public string? orderNumber { get; set; }
         public string? cod_shippingCompany { get; set; }
     }
 
+    //Refatorar Aqui
     public class PrintOrderRequest
     {
-        public object? serializePedido { get; set; }
+        public Order? serializePedido { get; set; }
     }
 }

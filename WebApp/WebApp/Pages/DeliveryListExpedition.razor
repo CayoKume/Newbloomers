@@ -1,0 +1,127 @@
+﻿@page "/DeliveryListsExpedition"
+@inject IJSRuntime jsRuntime;
+@inject IDialogService _dialogService
+@inject IDeliveryListService _romaneioService
+@using Order = Application.App.ViewModels.DeliveryList.Order
+
+<PageTitle>DeliveryLists</PageTitle>
+
+@if (isLoading)
+{
+    <GridsToolbar @bind-DataInicial="_initialDate"
+                  @bind-DataFinal="_finalDate"
+                  @bind-TextoPedido="identificador"
+                  OnAtualizar="HandleAtualizar"
+                  OnKeyUpEvent="ExpediteIndividualDeliveryList"
+                  BotaoDesabilitado="_carregando"
+                  BotaoCarregando="_carregando" />
+
+    <MudDataGrid T="Domain.App.Entities.DeliveryList" Items="@deliveryLists" Filterable="true" Bordered="true">
+        <Columns>
+            <PropertyColumn Property="x => x.uniqueidentifier" Title="Identificador" />
+            <TemplateColumn Title="Expedir">
+                <CellTemplate>
+                    <MudButton @onclick="@(() => ExpediteDeliveryList(context.Item))" Size="@Size.Small" Variant="@Variant.Filled" Color="Color.Primary">Expedir</MudButton>
+                </CellTemplate>
+            </TemplateColumn>
+            <PropertyColumn Property="x => x.name" Title="Nome" />
+            <PropertyColumn Property="x => x.carrier" Title="Transportadora" />
+            <PropertyColumn Property="x => x.printedAt" Title="Impresso As" />
+        </Columns>
+
+        <PagerContent>
+            <MudDataGridPager T="Domain.App.Entities.DeliveryList" />
+        </PagerContent>
+    </MudDataGrid>
+}
+else
+{
+    <div class="my-custom-container">
+        <LoadingOverlay Visible="@visible" />
+    </div>
+}
+
+<script src="js/Utils.js"></script>
+
+@code {
+    private bool visible = true;
+    private bool isLoading = false;
+    private bool _carregando;
+
+    private string? doc_company;
+    private string? serie_order;
+    private string? identificador;
+
+    private DateTime? _initialDate = DateTime.Now; //Refatorar Aqui (essa variavel precisa se date only, para não dar b.o na query do select)
+    private DateTime? _finalDate = DateTime.Now; //Refatorar Aqui (essa variavel precisa se date only, para não dar b.o na query do select)
+
+    private List<Domain.App.Entities.DeliveryList>? deliveryLists = new List<Domain.App.Entities.DeliveryList>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        doc_company = await GetTextInLocalStorage("doc_company");
+        serie_order = await GetTextInLocalStorage("serie_order");
+
+        deliveryLists = await _romaneioService.GetDeliveryLists(doc_company, _initialDate, _finalDate);
+
+        isLoading = true;
+        visible = false;
+    }
+
+    private async Task LoadOrders() //Refatorar Aqui (Renomear para LoadData)
+    {
+        if (_initialDate.HasValue && _finalDate.HasValue)
+        {
+            if (_initialDate.Value > _finalDate.Value)
+            {
+                await _dialogService.ShowMessageBox("Erro", "A data inicial não pode ser maior que a data final.");
+                return;
+            }
+
+            deliveryLists = await _romaneioService.GetDeliveryLists(doc_company, _initialDate, _finalDate);
+        }
+    }
+
+    private async Task ExpediteDeliveryList(Domain.App.Entities.DeliveryList deliveryList)
+    {
+        isLoading = false;
+        visible = true;
+
+        await _romaneioService.SetColletedAtDate(deliveryList);
+
+        isLoading = true;
+        visible = false;
+    }
+
+    private async Task ExpediteIndividualDeliveryList(Enter e) //Refatorar Aqui (tentar trocar por KeyboardEventArgs e)
+    {
+        // if (e.Code == "Enter" || e.Code == "NumpadEnter")
+        // {
+        //     isLoading = false;
+        //     visible = true;
+
+        //     var pedido = await _etiquetasService.PrintLabel(doc_company, serie_order, this.orderNumber);
+
+        //     isLoading = true;
+        //     visible = false;
+        // }
+    }
+
+    private async Task HandleAtualizar()
+    {
+        isLoading = false;
+        visible = true;
+        _carregando = true;
+
+        await LoadOrders();
+
+        _carregando = false;
+        isLoading = true;
+        visible = false;
+    }
+
+    private async Task<string> GetTextInLocalStorage(string key)
+    {
+        return await jsRuntime.InvokeAsync<string>("localStorage.getItem", key);
+    }
+}

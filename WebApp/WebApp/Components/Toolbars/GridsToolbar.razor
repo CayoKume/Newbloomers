@@ -9,9 +9,10 @@
         <MudTextField Adornment="Adornment.End"
                         AdornmentIcon="@Icons.Material.Filled.Search"
                         @bind-Value="TextoPedido"
-                        Label="Pedido"
+                        Label="Pedido" 
                         Variant="Variant.Outlined"
                         @onkeyup="InvokeOnKeyUpEvent">
+            @*Rafatorar Aqui (Adicionar Variavel Texto Label como Parameter)*@
         </MudTextField>
     </MudItem>
     <MudItem Class="align-self-center">
@@ -21,7 +22,7 @@
                     OnClick="OnAtualizarClicked"
                     Disabled="@BotaoDesabilitado"
                     Loading="@BotaoCarregando">
-            Atualizar
+            Atualizar @*Rafatorar Aqui (Adicionar Variavel Texto Botão como Parameter)*@
         </MudButton>
     </MudItem>
 </MudGrid>

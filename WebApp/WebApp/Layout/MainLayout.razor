@@ -11,7 +11,7 @@
         <MudButton Variant="Variant.Text" Color="Color.Inherit">Newbloomers</MudButton>
         <MudSpacer />
         <MudButton Variant="Variant.Text" Color="Color.Inherit">
-            <MudIcon Icon="@Icons.Material.Filled.Build"></MudIcon>
+            <MudIcon Icon="@Icons.Material.Filled.Factory"></MudIcon>
             <MudText Style="margin-left: .4rem">Empresa</MudText>
         </MudButton>
         <MudButton Variant="Variant.Text" Color="Color.Inherit">
@@ -29,7 +29,10 @@
                 <MudNavLink Href="/Labels" Icon="@Icons.Material.Filled.LocalOffer">Imprimir Etiquetas</MudNavLink>
                 <MudNavLink Href="/Picking" Icon="@Icons.Material.Filled.QrCodeScanner">Conferir Pedidos</MudNavLink>
                 <MudNavLink Href="/DeliveryLists" Icon="@Icons.Material.Filled.PictureAsPdf">Imprimir Romaneio</MudNavLink>
-                <MudNavLink Href="/" Icon="@Icons.Material.Filled.Edit">Alterar Transp.</MudNavLink>
+                <MudNavLink Href="/DeliveryListsExpedition" Icon="@Icons.Material.Filled.DeliveryDining">Expedir Romaneio</MudNavLink>
+                <MudNavGroup Title="Alterar Pedido" Icon="@Icons.Material.Filled.Edit" Expanded="false">
+                    <MudNavLink Href="/" Icon="@Icons.Material.Filled.LocalShipping">Alterar Transp.</MudNavLink>
+                </MudNavGroup>
             </MudNavGroup>
 
             <MudNavGroup Title="Solicitações" Icon="@Icons.Material.Filled.HeadsetMic" Expanded="false">

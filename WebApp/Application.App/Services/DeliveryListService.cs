@@ -1,6 +1,7 @@
 ﻿using Application.App.Interfaces.Api;
 using Application.App.Interfaces.Services;
 using Application.App.ViewModels.DeliveryList;
+using DeliveryList = Domain.App.Entities.DeliveryList;
 using Newtonsoft.Json;
 
 namespace Application.App.Services
@@ -21,6 +22,50 @@ namespace Application.App.Services
             var encodedParameters = await new FormUrlEncodedContent(parameters).ReadAsStringAsync();
 
             return await _apiCall.GetAsync($"GetDeliveryListToPrint", encodedParameters);
+        }
+
+        public async Task<DeliveryList?> GetDeliveryList(string identificador)
+        {
+            try
+            {
+                var parameters = new Dictionary<string, string>
+                {
+                    { "identificador", identificador }
+                };
+                var encodedParameters = await new FormUrlEncodedContent(parameters).ReadAsStringAsync();
+                var result = await _apiCall.GetAsync("GetDeliveryList", encodedParameters);
+
+                return System.Text.Json.JsonSerializer.Deserialize<DeliveryList>(result);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        public async Task<List<DeliveryList>?> GetDeliveryLists(string cnpj_emp, DateTime? data_inicial, DateTime? data_final)
+        {
+            try
+            {
+                //Refatorar Aqui (quando corrigir a declaração das variavéis para date only na page, remover essa conversão que ficou uma bosta)
+                DateTime dataInicial = (DateTime)data_inicial; 
+                DateTime dataFinal = (DateTime)data_final;
+
+                var parameters = new Dictionary<string, string>
+                {
+                    { "doc_company", cnpj_emp },
+                    { "data_inicial", dataInicial.ToString("yyyy-MM-dd") },
+                    { "data_final", dataFinal.ToString("yyyy-MM-dd") }
+                };
+                var encodedParameters = await new FormUrlEncodedContent(parameters).ReadAsStringAsync();
+                var result = await _apiCall.GetAsync("GetDeliveryLists", encodedParameters);
+
+                return System.Text.Json.JsonSerializer.Deserialize<List<DeliveryList>>(result);
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public async Task<Order?> GetOrderShipped(string nr_pedido, string serie, string cnpj_emp, string transportadora)
@@ -61,6 +106,18 @@ namespace Application.App.Services
                 var result = await _apiCall.GetAsync("GetOrdersShipped", encodedParameters);
 
                 return System.Text.Json.JsonSerializer.Deserialize<List<Order>>(result);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public async Task SetColletedAtDate(DeliveryList deliveryList)
+        {
+            try
+            {
+                var response = await _apiCall.PostAsync($"SetColletedAtDate", JsonConvert.SerializeObject(new { deliveryList.uniqueidentifier }));
             }
             catch
             {

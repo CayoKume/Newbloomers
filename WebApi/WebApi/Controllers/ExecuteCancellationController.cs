@@ -69,6 +69,7 @@ namespace WmsApi.Controllers
         }
     }
 
+    //Refatorar Aqui
     public class UpdateDateCanceledRequest
     {
         public string? number { get; set; }

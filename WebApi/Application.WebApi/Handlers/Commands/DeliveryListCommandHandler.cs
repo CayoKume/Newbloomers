@@ -10,20 +10,37 @@ namespace Application.WebApi.Handlers.Commands
 {
     public class DeliveryListCommandHandler : IDeliveryListCommandHandler
     {
-        public string CreateGetDeliveryListsQuery(string cod_transportadora, string cnpj_emp, string data_inicial, string data_final)
+        public string CreateGetDeliveryListQuery(string identificador)
         {
             return $@"SELECT DISTINCT
-                      A.[uniqueidentifier] as identificador,
-                      A.[name] as deliveryListName,
-                      A.[carrier] as transportadora
+                      A.[uniqueidentifier],
+                      A.[doc_company],
+                      A.[name],
+                      A.[carrier],
+                      A.[printedAt],
+                      A.[colletedAt]
 
                       FROM azure.newbloomers.[webapplication].[DeliveryLists] A (NOLOCK)
                       WHERE
-                      AND A.NB_DOC_REMETENTE = '{cnpj_emp}' 
-                      AND A.colletedAt IS NOT NULL
-                      AND A.carrier = '{cod_transportadora}'
-                      AND A.printedAt >= CONVERT(DATE, '{data_inicial.Trim()}')
-                      AND A.printedAt <= CONCAT (CONVERT(DATE, '{data_final.Trim()}'),' 23:59:59')";
+                      A.uniqueidentifier = '{identificador}'";
+        }
+
+        public string CreateGetDeliveryListsQuery(string cnpj_emp, string data_inicial, string data_final)
+        {
+            return $@"SELECT DISTINCT
+                      A.[uniqueidentifier],
+                      A.[doc_company],
+                      A.[name],
+                      A.[carrier],
+                      A.[printedAt],
+                      A.[colletedAt]
+
+                      FROM azure.newbloomers.[webapplication].[DeliveryLists] A (NOLOCK)
+                      WHERE
+                      A.doc_company = '{cnpj_emp}' 
+                      AND A.colletedAt IS NULL
+                      AND A.printedAt >= '{data_inicial.Trim()} 00:00:00'
+                      AND A.printedAt <= '{data_final.Trim()} 23:59:59'";
         }
 
         public string CreateGetOrderShippedQuery(string nr_pedido, string serie, string cnpj_emp, string transportadora)

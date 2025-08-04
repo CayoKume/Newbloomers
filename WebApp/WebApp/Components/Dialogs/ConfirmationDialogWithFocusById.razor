@@ -29,6 +29,12 @@
     [Parameter] public RenderFragment? _bodyContent { get; set; }
     [Parameter] public Func<Task>? _onClickEvent { get; set; }
 
+    // protected override async Task OnAfterRenderAsync(bool firstRender)
+    // {
+    //     if (!firstRender) //Refatorar aqui
+    //         await valueProdutoReference.FocusAsync();
+    // }
+
     protected async override Task OnAfterRenderAsync(bool firstRender)
     {
         await jsRuntime.InvokeVoidAsync("focusById", "inputSeparaProdutos");
