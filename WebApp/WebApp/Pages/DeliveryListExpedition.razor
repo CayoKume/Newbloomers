@@ -85,7 +85,19 @@ else
     private async Task ExpediteDeliveryList(Domain.App.Entities.DeliveryList deliveryList)
     {
         isLoading = false;
-        visible = true;
+        visible = true; 
+
+        //abre modal e depois seta a data
+        // var options = new DialogOptions() { CloseButton = true, CloseOnEscapeKey = true }; //Refatorar Aqui (deixar essa classe fixa com essa propriedades)
+
+        // var parameters = new DialogParameters
+        //         {
+        //             { "_titleContentText", "ATENÇÃO" },
+        //             { "_dialogContentText", "Você está tentando conferir uma quantidade maior do que a necessária deste produto, deseja continuar?" },
+        //             { "_onClickEvent", (Func<Task>)(() => AddItemAsPicked(item)) },
+        //         };
+
+        // await _dialogService.ShowAsync<ConfirmationDialog>("", parameters, options);
 
         await _romaneioService.SetColletedAtDate(deliveryList);
 

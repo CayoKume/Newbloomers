@@ -6,10 +6,12 @@
         </MudText>
     </TitleContent>
     <DialogContent>
-        <MudTextField Value="@_dialogContentText" ReadOnly="true" />
+        <MudText Typo="Typo.h5">
+            @_dialogContentText
+        </MudText>
     </DialogContent>
     <DialogActions>
-        <MudButton Color="Color.Success">OK</MudButton>
+        <MudButton Color="Color.Success" OnClick="Submit">OK</MudButton>
     </DialogActions>
 </MudDialog>
 
@@ -19,4 +21,6 @@
     [Parameter] public string _icon { get; set; } = Icons.Material.Filled.AddAlert;
     [Parameter] public string _titleContentText { get; set; } = "Dialog";
     [Parameter] public string _dialogContentText { get; set; } = "";
+
+    private void Submit() => MudDialog.Close(DialogResult.Ok(true));
 }

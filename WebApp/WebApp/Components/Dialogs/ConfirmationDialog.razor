@@ -6,41 +6,34 @@
         </MudText>
     </TitleContent>
     <DialogContent>
-        @BodyContent
+        <MudText Typo="Typo.h5">
+            @_dialogContentText
+        </MudText>
     </DialogContent>
     <DialogActions>
-        <MudButton OnClick="Cancel">_closeButtonText</MudButton>
-        <MudButton Color="Color.Success">_clickButtonText</MudButton>
+        <MudButton OnClick="Cancel">Close</MudButton>
+        <MudButton Color="Color.Success" OnClick="InvokeOnClickEvent">Continue</MudButton>
     </DialogActions>
 </MudDialog>
 
 @code {
     [CascadingParameter]
-    private IMudDialogInstance MudDialog { get; set; }
+    private IMudDialogInstance? MudDialog { get; set; }
 
     [Parameter] public string _icon { get; set; } = Icons.Material.Filled.AddAlert;
     [Parameter] public string _titleContentText { get; set; } = "Dialog";
+    [Parameter] public string? _dialogContentText { get; set; }
 
-    [Parameter] public string? _closeButtonText { get; set; }
-    [Parameter] public string? _clickButtonText { get; set; }
-
-    [Parameter] public bool opened { get; set; }
-
-    [Parameter] public RenderFragment? BodyContent { get; set; }
-    [Parameter] public EventCallback OnClickEvent { get; set; }
-    [Parameter] public EventCallback OnCloseEvent { get; set; }
+    [Parameter] public Func<Task>? _onClickEvent { get; set; }
 
     private async Task InvokeOnClickEvent()
     {
-        opened = false;
-        await OnClickEvent.InvokeAsync();
+        if (_onClickEvent != null)
+        {
+            await _onClickEvent.Invoke();
+            MudDialog?.Cancel();
+        }
     }
 
-    private async Task InvokeOnCloseEvent()
-    {
-        opened = false;
-        await OnCloseEvent.InvokeAsync();
-    }
-
-    private void Cancel() => MudDialog.Cancel();
+    private void Cancel() => MudDialog?.Cancel();
 }
