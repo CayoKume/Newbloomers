@@ -19,5 +19,17 @@ namespace Application.LinxMicrovix.Outbound.WebService.Handlers.Commands.LinxCom
                           Values 
                           (@lastupdateon, @id_pedido_item, @id_pedido, @codigoproduto, @quantidade, @vl_unitario, @timestamp, @portal)";
         }
+
+        public string CreateIntegrityLockQuery()
+        {
+            return @$"select distinct top 500 
+                      'B2CConsultaPedidosItens' as [table], 
+                      'id_pedido' as recordKey, 
+                      a.id_pedido as identifier 
+                      from linx_microvix_commerce.b2cconsultapedidos a (nolock)
+                      left join linx_microvix_commerce.B2CConsultaPedidosItens b (nolock) on a.id_pedido = b.id_pedido
+                      left join linx_microvix.IntegrityLockTablesRegisters c (nolock) on a.id_pedido = c.identifier and c.[table] = 'B2CConsultaPedidosItens'
+                      where b.id_pedido is null and c.identifier is null and a.dt_pedido > '2025-01-01'";
+        }
     }
 }

@@ -689,5 +689,23 @@ namespace Hangfire.IO.Controllers.LinxMicrovix.ERP
 
             return Ok($"Records integrated successfully.");
         }
+
+        [HttpPost("IntegrityLockLinxClientesFornecRegisters")]
+        public async Task<ActionResult> IntegrityLockLinxClientesFornecRegisters()
+        {
+            var method = _methods
+                .Where(m => m.MethodName == "LinxClientesFornec")
+                .FirstOrDefault();
+
+            var result = await _linxClientesFornecService.IntegrityLockLinxClientesFornecRegisters(
+                _linxMicrovixJobParameter.SetParameters(
+                    jobName: method.MethodName,
+                    tableName: method.MethodName,
+                    parametersInterval: "parameters_individual"
+                )
+            );
+
+            return Ok($"Records integrated successfully.");
+        }
     }
 }

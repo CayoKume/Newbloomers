@@ -7,6 +7,7 @@ using Domain.LinxCommerce.Entities.Responses;
 using Domain.LinxCommerce.Interfaces.Api;
 using Domain.LinxCommerce.Interfaces.Repositorys;
 using FluentValidation;
+using System.Data.Common;
 using static Domain.LinxCommerce.Entities.Responses.SearchOrder;
 
 namespace Application.LinxCommerce.Services
@@ -485,6 +486,30 @@ namespace Application.LinxCommerce.Services
         public Task<string?> UpdateOrderPackageTrackingNumber()
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<bool?> IntegrityLockOrdersRegisters(LinxCommerceJobParameter jobParameter)
+        {
+            var lostOrderItemList = await _orderRepository.GetLostOrdersRegisters();
+            var ordersAPIList = new List<Order.Root>();
+
+            foreach (var order in lostOrderItemList)
+            {
+                var response = await _apiCall.PostRequest(
+                    jobParameter: jobParameter,
+                    stringIdentifier: order.OrderID.ToString(),
+                    route: "/v1/Sales/API.svc/web/GetOrder"
+                );
+
+                var _order = Newtonsoft.Json.JsonConvert.DeserializeObject<Order.Root>(response);
+
+                ordersAPIList.Add(new Order.Root(_order, response));
+            }
+
+            if (ordersAPIList.Count() > 0)
+                await _orderRepository.BulkInsertIntoTableRaw(jobParameter, ordersAPIList);
+
+            return true;
         }
     }
 }

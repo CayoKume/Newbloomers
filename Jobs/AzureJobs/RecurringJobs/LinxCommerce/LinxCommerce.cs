@@ -188,5 +188,18 @@ namespace AzureJobs.RecurringJobs.LinxCommerce
         //         );
         //     });
         // }
+
+        //public async Task IntegrityLockOrdersRegisters([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
+        //    {
+        //        var result = await _orderService.IntegrityLockOrdersRegisters(
+        //            _linxCommerceJobParameter.SetParameters(
+        //                jobName: "IntegrityLockOrdersRegisters",
+        //                tableName: "Orders"
+        //            )
+        //        );
+        //    });
+        //}
     }
 }

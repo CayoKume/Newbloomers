@@ -401,22 +401,22 @@ namespace AzureJobs.RecurringJobs.LinxMicrovix.LinxMicrovix.B2C
         //     });
         // }
 
-        // public async Task B2CConsultaNFeSituacao([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
-        // {
-        //     await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
-        //     {
-        //         var method = _methods
-        //             .Where(m => m.MethodName == "B2CConsultaNFeSituacao")
-        //         .FirstOrDefault();
+        //public async Task B2CConsultaNFeSituacao([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
+        //    {
+        //        var method = _methods
+        //            .Where(m => m.MethodName == "B2CConsultaNFeSituacao")
+        //        .FirstOrDefault();
 
-        //         var result = await _b2cConsultaNFeSituacaoService.GetRecords(
-        //             _linxMicrovixJobParameter.SetParameters(
-        //                 jobName: method.MethodName,
-        //                 tableName: method.MethodName
-        //             )
-        //         );
-        //     });
-        // }
+        //        var result = await _b2cConsultaNFeSituacaoService.GetRecords(
+        //            _linxMicrovixJobParameter.SetParameters(
+        //                jobName: method.MethodName,
+        //                tableName: method.MethodName
+        //            )
+        //        );
+        //    });
+        //}
 
         // public async Task B2CConsultaStatus([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
         // {
@@ -451,5 +451,104 @@ namespace AzureJobs.RecurringJobs.LinxMicrovix.LinxMicrovix.B2C
         //         );
         //     });
         // }
+
+        //public async Task IntegrityLockB2CConsultaClientesRegisters([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
+        //    {
+        //        var method = _methods
+        //        .Where(m => m.MethodName == "B2CConsultaClientes")
+        //        .FirstOrDefault();
+
+        //        var result = await _b2cConsultaClientesService.IntegrityLockB2CConsultaClientesRegisters(
+        //            _linxMicrovixJobParameter.SetParameters(
+        //                jobName: method.MethodName,
+        //                tableName: method.MethodName,
+        //                parametersInterval: "parameters_individual"
+        //            )
+        //        );
+        //    });
+        //}
+
+        //public async Task IntegrityLockB2CConsultaPedidosRegisters([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
+        //    {
+        //        var method = _methods
+        //        .Where(m => m.MethodName == "B2CConsultaPedidos")
+        //        .FirstOrDefault();
+
+        //        var result = await _b2cConsultaPedidosService.IntegrityLockRegisters(
+        //            _linxMicrovixJobParameter.SetParameters(
+        //                jobName: method.MethodName,
+        //                tableName: method.MethodName,
+        //                parametersInterval: "parameters_individual"
+        //            )
+        //        );
+        //    });
+        //}
+
+        //public async Task IntegrityLockB2CConsultaPedidosIdentificadorRegisters([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
+        //    {
+        //        var method = _methods
+        //        .Where(m => m.MethodName == "B2CConsultaPedidosIdentificador")
+        //        .FirstOrDefault();
+
+        //        var result = await _b2cConsultaPedidosIdentificadorService.IntegrityLockRegisters(
+        //            _linxMicrovixJobParameter.SetParameters(
+        //                jobName: method.MethodName,
+        //                tableName: method.MethodName,
+        //                parametersInterval: "parameters_individual"
+        //            )
+        //        );
+        //    });
+        //}
+
+        //public async Task IntegrityLockB2CConsultaPedidosStatusRegisters([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    var method = _methods
+        //        .Where(m => m.MethodName == "B2CConsultaPedidosStatus")
+        //        .FirstOrDefault();
+
+        //    var result = await _b2cConsultaPedidosStatusService.IntegrityLockRegisters(
+        //        _linxMicrovixJobParameter.SetParameters(
+        //            jobName: method.MethodName,
+        //            tableName: method.MethodName,
+        //            parametersInterval: "parameters_individual"
+        //        )
+        //    );
+        //}
+
+        //public async Task IntegrityLockB2CConsultaNFeRegisters([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    var method = _methods
+        //        .Where(m => m.MethodName == "B2CConsultaNFe")
+        //        .FirstOrDefault();
+
+        //    var result = await _b2cConsultaNFeService.IntegrityLockRegisters(
+        //        _linxMicrovixJobParameter.SetParameters(
+        //            jobName: method.MethodName,
+        //            tableName: method.MethodName,
+        //            parametersInterval: "parameters_individual"
+        //        )
+        //    );
+        //}
+
+        public async Task IntegrityLockB2CConsultaPedidosItensRegisters([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        {
+            var method = _methods
+                .Where(m => m.MethodName == "B2CConsultaPedidosItens")
+                .FirstOrDefault();
+
+            var result = await _b2cConsultaPedidosItensService.IntegrityLockRegisters(
+                _linxMicrovixJobParameter.SetParameters(
+                    jobName: method.MethodName,
+                    tableName: method.MethodName,
+                    parametersInterval: "parameters_individual"
+                )
+            );
+        }
     }
 }

@@ -270,5 +270,18 @@ namespace HangfireDashboard.UI.Controllers.LinxCommerce
 
             return Ok($"Records integrated successfully.");
         }
+
+        [HttpPost("IntegrityLockOrderItem")]
+        public async Task<ActionResult> IntegrityLockOrdersRegisters()
+        {
+            var result = await _orderService.IntegrityLockOrdersRegisters(
+                _linxCommerceJobParameter.SetParameters(
+                    jobName: "IntegrityLockOrdersRegisters",
+                    tableName: "Orders"
+                )
+            );
+
+            return Ok($"Records integrated successfully.");
+        }
     }
 }

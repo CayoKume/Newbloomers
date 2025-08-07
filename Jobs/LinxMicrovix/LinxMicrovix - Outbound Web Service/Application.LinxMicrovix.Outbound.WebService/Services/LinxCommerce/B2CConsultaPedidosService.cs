@@ -1,15 +1,16 @@
 ﻿using Application.Core.Interfaces;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Api;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Handlers.Commands;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Handlers.Commands.LinxCommerce;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Services;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Services.LinxCommerce;
 using Domain.Core.Entities.Exceptions;
 using Domain.Core.Enums;
 using Domain.Core.Interfaces;
-using Domain.LinxMicrovix.Outbound.WebService.Models.LinxCommerce;
 using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
-using Application.LinxMicrovix.Outbound.WebService.Interfaces.Api;
-
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxCommerce;
+using Domain.LinxMicrovix.Outbound.WebService.Models.LinxCommerce;
+using Domain.LinxMicrovix.Outbound.WebService.Models.Parameters;
 using System.ComponentModel.DataAnnotations;
 
 namespace Application.LinxMicrovix.Outbound.WebService.Services
@@ -21,6 +22,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
         private readonly ICoreRepository _coreRepository;
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
         private readonly ILinxMicrovixCommandHandler _linxMicrovixCommandHandler;
+        private readonly IB2CConsultaPedidosCommandHandler _b2cConsultaPedidosCommandHandler;
         private readonly IB2CConsultaPedidosRepository _b2cConsultaPedidosRepository;
         private static List<string?> _b2cConsultaPedidosCache { get; set; } = new List<string?>();
 
@@ -29,6 +31,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
             ILoggerService logger,
             ICoreRepository coreRepository,
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
+            IB2CConsultaPedidosCommandHandler b2cConsultaPedidosCommandHandler,
             ILinxMicrovixCommandHandler linxMicrovixCommandHandler,
             IB2CConsultaPedidosRepository b2cConsultaPedidosRepository
         )
@@ -37,6 +40,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
             _logger = logger;
             _coreRepository = coreRepository;
             _linxMicrovixServiceBase = linxMicrovixServiceBase;
+            _b2cConsultaPedidosCommandHandler = b2cConsultaPedidosCommandHandler;
             _linxMicrovixCommandHandler = linxMicrovixCommandHandler;
             _b2cConsultaPedidosRepository = b2cConsultaPedidosRepository;
         }
@@ -213,6 +217,71 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
             await _logger.CommitAllChanges();
 
             return true;
+        }
+
+        public async Task<bool> IntegrityLockRegisters(LinxAPIParam jobParameter)
+        {
+            try
+            {
+                var _listSomenteNovos = new List<B2CConsultaPedidos>();
+
+                string sql = _linxMicrovixCommandHandler.CreateGetParametersQuery(jobParameter.parametersInterval, jobParameter.parametersTableName, jobParameter.jobName);
+                string? parameters = await _coreRepository.GetRecord<string>(sql);
+
+                string integritySql = _b2cConsultaPedidosCommandHandler.CreateIntegrityLockQuery();
+                var _listRegistrosConsultados = await _coreRepository.GetRecords<IntegrityLockTablesRegister>(integritySql);
+
+                foreach (var pedido in _listRegistrosConsultados)
+                {
+                    var bodyLists = new List<string?>();
+                    
+                    bodyLists.Add(_linxMicrovixServiceBase.BuildBodyRequest(
+                                    parametersList: parameters.Replace("[0]", "0").Replace("[order_id]", pedido.identifier),
+                                    jobParameter: jobParameter,
+                                    cnpj_emp: jobParameter.docMainCompany
+                                ));
+
+                    bodyLists.Add(_linxMicrovixServiceBase.BuildBodyRequest(
+                                    parametersList: parameters.Replace("[0]", "0").Replace("[order_id]", $"{pedido.identifier}-CANCELLED"),
+                                    jobParameter: jobParameter,
+                                    cnpj_emp: jobParameter.docMainCompany
+                                ));
+
+                    foreach (var body in bodyLists)
+                    {
+                        string? response = await _apiCall.PostAsync(jobParameter: jobParameter, body: body);
+                        var xmls = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response);
+
+                        if (xmls.Count() > 0)
+                        {
+                            var listRecords = DeserializeXMLToObject(jobParameter, xmls);
+                            _listSomenteNovos.AddRange(listRecords);
+                            pedido.is_present_in_erp = true;
+                        } 
+                    }
+                }
+
+                if (_listSomenteNovos.Count() > 0)
+                {
+                    _b2cConsultaPedidosRepository.BulkInsertIntoTableRaw(records: _listSomenteNovos, jobParameter: jobParameter);
+                    await _coreRepository.CallDbProcMerge(jobParameter.schema, jobParameter.tableName);
+                }
+
+                if (_listRegistrosConsultados.Count() > 0)
+                {
+                    _coreRepository.BulkInsertIntoTableRaw<IntegrityLockTablesRegister>(
+                                recordsList: _listRegistrosConsultados.ToList(),
+                                entity: new IntegrityLockTablesRegister(),
+                                tableName: "IntegrityLockTablesRegisters"
+                            ); 
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
     }
 }

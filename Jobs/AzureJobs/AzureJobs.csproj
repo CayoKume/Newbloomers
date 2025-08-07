@@ -30,4 +30,10 @@
     <ProjectReference Include="..\Shippment\TotalExpress\Application.TotalExpress\Application.TotalExpress.csproj" />
     <ProjectReference Include="..\Shippment\TotalExpress\Infrastructure.TotalExpress\Infrastructure.TotalExpress.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Update="settings.job">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>

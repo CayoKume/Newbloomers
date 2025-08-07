@@ -1,5 +1,6 @@
 ﻿using Domain.Core.Entities.Auditing;
 using System.Data;
+using static Dapper.SqlMapper;
 
 namespace Domain.Core.Interfaces
 {
@@ -52,12 +53,23 @@ namespace Domain.Core.Interfaces
         /// <param name="dataTable"></param>
         public bool BulkInsertIntoTableRaw(DataTable dataTable, string schema);
         /// <summary>
+        /// Execute bulk insert on specific schema from Database
+        /// </summary>
+        /// <param name="dataTable"></param>
+        public bool BulkInsertIntoTableRaw<TEntity>(List<TEntity> recordsList, TEntity entity, string tableName);
+        /// <summary>
         /// Call synchronization procedure from Database
         /// </summary>
         /// <param name="schemaName"></param>
         /// <param name="tableName"></param>
         /// <param name="parentExecutionGUID"></param>
         public Task<bool> CallDbProcMerge(string schemaName, string tableName, Guid? parentExecutionGUID);
+        /// <summary>
+        /// Call synchronization procedure from Database
+        /// </summary>
+        /// <param name="schemaName"></param>
+        /// <param name="tableName"></param>
+        public Task<bool> CallDbProcMerge(string schemaName, string tableName);
 
         public Task<bool> LogInsert(Log log);
     }

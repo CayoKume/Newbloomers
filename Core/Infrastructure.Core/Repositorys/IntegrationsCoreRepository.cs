@@ -4,13 +4,17 @@ using Domain.Core.Entities.Exceptions;
 using Domain.Core.Extensions;
 using Domain.Core.Interfaces;
 using Infrastructure.Core.Connections.SQLServer;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using MySqlX.XDevAPI;
 using System.Data;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Reflection;
+using static Dapper.SqlMapper;
 
 namespace Infrastructure.Core.Repositorys
 {
-    public class CoreRepository : ICoreRepository
+    public class CoreRepository : ICoreRepository 
     {
         private readonly ISQLServerConnection _sqlServerConnection;
 
@@ -68,6 +72,55 @@ namespace Infrastructure.Core.Repositorys
             {
                 throw new GeneralException(
                     message: $"Error when trying to bulk insert records on database - {ex.Message}",
+                    exceptionMessage: ex.StackTrace
+                );
+            }
+        }
+
+        //Refatorar Aqui (criar BulkInsertIntoTableRaw com schemaName e adicionar FillSystemDataTable como parte do corpo principal do método, após refatoração matar os 3 métodos)
+        public bool BulkInsertIntoTableRaw<TEntity>(List<TEntity> recordsList, TEntity entity, string tableName /*,string schemaName*/)
+        {
+            try
+            {
+                var table = CreateSystemDataTable(tableName, entity);
+
+                /*var properties = data.FirstOrDefault().GetType().GetFilteredProperties();
+
+                foreach (var item in data)
+                {
+                    var rowValues = new object[properties.Length];
+
+                    for (int i = 0; i < properties.Length; i++)
+                    {
+                        var prop = properties[i];
+                        var value = prop.GetValue(item);
+
+                        rowValues[i] = value ?? DBNull.Value;
+                    }
+
+                    dataTable.Rows.Add(rowValues);
+                }*/
+                FillSystemDataTable(table, recordsList.ToList());
+
+                using (var conn = _sqlServerConnection.GetDbConnection())
+                {
+                    using var bulkCopy = new SqlBulkCopy(conn);
+                    bulkCopy.DestinationTableName = $"[linx_microvix].[{table.TableName}]";
+                    bulkCopy.BatchSize = table.Rows.Count;
+                    bulkCopy.BulkCopyTimeout = 360;
+                    foreach (DataColumn c in table.Columns)
+                    {
+                        bulkCopy.ColumnMappings.Add(c.ColumnName, c.ColumnName);
+                    }
+                    bulkCopy.WriteToServer(table);
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new GeneralException(
+                    message: $"error trying to create system datatable - {ex.Message}",
                     exceptionMessage: ex.StackTrace
                 );
             }
@@ -134,6 +187,29 @@ namespace Infrastructure.Core.Repositorys
                     parameters.Add("@ParentExecutionGUID", parentExecutionGUID);
 
                     var result = await conn.ExecuteAsync($"[{schemaName}].[P_{tableName}_Sincronizacao]", param: parameters, commandType: CommandType.StoredProcedure, commandTimeout: 2700);
+
+                    if (result > 0)
+                        return true;
+
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new GeneralException(
+                    message: $"error when trying to run sync proc on database - {ex.Message}",
+                    exceptionMessage: ex.StackTrace
+                );
+            }
+        }
+
+        public async Task<bool> CallDbProcMerge(string schemaName, string tableName)
+        {
+            try
+            {
+                using (var conn = _sqlServerConnection.GetIDbConnection())
+                {
+                    var result = await conn.ExecuteAsync($"[{schemaName}].[P_{tableName}_Sincronizacao]", commandType: CommandType.StoredProcedure, commandTimeout: 2700);
 
                     if (result > 0)
                         return true;
