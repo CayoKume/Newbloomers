@@ -59,53 +59,53 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxCommerce
         public B2CConsultaClientes() { }
 
         public B2CConsultaClientes(
-            Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxCommerce.B2CConsultaClientes cliente,
+            Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxCommerce.B2CConsultaClientes record,
             string? recordXml
         )
         {
             lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
 
-            this.cod_cliente_b2c = Convert.ToInt32(cliente.cod_cliente_b2c);
-            this.cod_cliente_erp = CustomConvertersExtensions.ConvertToInt32Validation(cliente.cod_cliente_erp);
-            this.portal = CustomConvertersExtensions.ConvertToInt32Validation(cliente.portal);
-            this.timestamp = CustomConvertersExtensions.ConvertToInt64Validation(cliente.timestamp);
-            this.estado_civil_cliente = CustomConvertersExtensions.ConvertToInt32Validation(cliente.estado_civil_cliente);
-            this.ativo = CustomConvertersExtensions.ConvertToInt32Validation(cliente.ativo);
-            this.tempo_residencia = CustomConvertersExtensions.ConvertToInt32Validation(cliente.tempo_residencia);
-            this.renda = CustomConvertersExtensions.ConvertToDecimalValidation(cliente.renda);
-            this.receber_email = CustomConvertersExtensions.ConvertToBooleanValidation(cliente.receber_email);
-            this.aceita_programa_fidelidade = CustomConvertersExtensions.ConvertToBooleanValidation(cliente.aceita_programa_fidelidade);
-            this.dt_cadastro = CustomConvertersExtensions.ConvertToDateTimeValidation<string>(cliente.dt_cadastro);
-            this.dt_expedicao_rg = CustomConvertersExtensions.ConvertToDateTimeValidation<string>(cliente.dt_expedicao_rg);
-            this.dt_update = CustomConvertersExtensions.ConvertToDateTimeValidation<string>(cliente.dt_update);
-            this.dt_nasc_cliente = CustomConvertersExtensions.ConvertToDateTimeValidation<string>(cliente.dt_nasc_cliente);
+            this.cod_cliente_b2c = Convert.ToInt32(record.cod_cliente_b2c);
+            this.cod_cliente_erp = CustomConvertersExtensions.ConvertToInt32Validation(record.cod_cliente_erp);
+            this.portal = CustomConvertersExtensions.ConvertToInt32Validation(record.portal);
+            this.timestamp = CustomConvertersExtensions.ConvertToInt64Validation(record.timestamp);
+            this.estado_civil_cliente = CustomConvertersExtensions.ConvertToInt32Validation(record.estado_civil_cliente);
+            this.ativo = CustomConvertersExtensions.ConvertToInt32Validation(record.ativo);
+            this.tempo_residencia = CustomConvertersExtensions.ConvertToInt32Validation(record.tempo_residencia);
+            this.renda = CustomConvertersExtensions.ConvertToDecimalValidation(record.renda);
+            this.receber_email = CustomConvertersExtensions.ConvertToBooleanValidation(record.receber_email);
+            this.aceita_programa_fidelidade = CustomConvertersExtensions.ConvertToBooleanValidation(record.aceita_programa_fidelidade);
+            this.dt_cadastro = CustomConvertersExtensions.ConvertToDateTimeValidation<string>(record.dt_cadastro);
+            this.dt_expedicao_rg = CustomConvertersExtensions.ConvertToDateTimeValidation<string>(record.dt_expedicao_rg);
+            this.dt_update = CustomConvertersExtensions.ConvertToDateTimeValidation<string>(record.dt_update);
+            this.dt_nasc_cliente = CustomConvertersExtensions.ConvertToDateTimeValidation<string>(record.dt_nasc_cliente);
 
             //Refatorar Aqui (adicionar operador ternario para substring)
-            this.doc_cliente = cliente.doc_cliente;
-            this.nm_cliente = cliente.nm_cliente;
-            this.nm_mae = cliente.nm_mae;
-            this.nm_pai = cliente.nm_pai;
-            this.nm_conjuge = cliente.nm_conjuge;
-            this.end_cliente = cliente.end_cliente;
-            this.complemento_end_cliente = cliente.complemento_end_cliente;
-            this.nr_rua_cliente = cliente.nr_rua_cliente;
-            this.bairro_cliente = cliente.bairro_cliente;
-            this.cep_cliente = cliente.cep_cliente;
-            this.cidade_cliente = cliente.cidade_cliente;
-            this.uf_cliente = cliente.uf_cliente;
-            this.fone_cliente = cliente.fone_cliente;
-            this.fone_comercial = cliente.fone_comercial;
-            this.cel_cliente = cliente.cel_cliente;
-            this.email_cliente = cliente.email_cliente;
-            this.rg_cliente = cliente.rg_cliente;
-            this.rg_orgao_emissor = cliente.rg_orgao_emissor;
-            this.empresa_cliente = cliente.empresa_cliente;
-            this.cargo_cliente = cliente.cargo_cliente;
-            this.sexo_cliente = cliente.sexo_cliente;
-            this.naturalidade = cliente.naturalidade;
-            this.numero_compl_rua_cliente = cliente.numero_compl_rua_cliente;
-            this.tipo_pessoa = cliente.tipo_pessoa;
-            this.recordKey = $"[{cliente.cod_cliente_b2c}]|[{cliente.cod_cliente_erp}]|[{cliente.doc_cliente}]|[{cliente.timestamp}]";
+            this.doc_cliente = record.doc_cliente;
+            this.nm_cliente = record.nm_cliente;
+            this.nm_mae = record.nm_mae;
+            this.nm_pai = record.nm_pai;
+            this.nm_conjuge = record.nm_conjuge;
+            this.end_cliente = record.end_cliente;
+            this.complemento_end_cliente = record.complemento_end_cliente;
+            this.nr_rua_cliente = record.nr_rua_cliente;
+            this.bairro_cliente = record.bairro_cliente;
+            this.cep_cliente = record.cep_cliente;
+            this.cidade_cliente = record.cidade_cliente;
+            this.uf_cliente = record.uf_cliente;
+            this.fone_cliente = record.fone_cliente;
+            this.fone_comercial = record.fone_comercial;
+            this.cel_cliente = record.cel_cliente;
+            this.email_cliente = record.email_cliente;
+            this.rg_cliente = record.rg_cliente;
+            this.rg_orgao_emissor = record.rg_orgao_emissor;
+            this.empresa_cliente = record.empresa_cliente;
+            this.cargo_cliente = record.cargo_cliente;
+            this.sexo_cliente = record.sexo_cliente;
+            this.naturalidade = record.naturalidade;
+            this.numero_compl_rua_cliente = record.numero_compl_rua_cliente;
+            this.tipo_pessoa = record.tipo_pessoa;
+            this.recordKey = $"[{record.cod_cliente_b2c}]|[{record.cod_cliente_erp}]|[{record.doc_cliente}]|[{record.timestamp}]";
             this.recordXml = recordXml;
         }
     }

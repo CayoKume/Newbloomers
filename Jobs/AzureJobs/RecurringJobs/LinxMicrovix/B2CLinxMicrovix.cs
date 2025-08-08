@@ -536,19 +536,19 @@ namespace AzureJobs.RecurringJobs.LinxMicrovix.LinxMicrovix.B2C
         //    );
         //}
 
-        public async Task IntegrityLockB2CConsultaPedidosItensRegisters([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
-        {
-            var method = _methods
-                .Where(m => m.MethodName == "B2CConsultaPedidosItens")
-                .FirstOrDefault();
+        //public async Task IntegrityLockB2CConsultaPedidosItensRegisters([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    var method = _methods
+        //        .Where(m => m.MethodName == "B2CConsultaPedidosItens")
+        //        .FirstOrDefault();
 
-            var result = await _b2cConsultaPedidosItensService.IntegrityLockRegisters(
-                _linxMicrovixJobParameter.SetParameters(
-                    jobName: method.MethodName,
-                    tableName: method.MethodName,
-                    parametersInterval: "parameters_individual"
-                )
-            );
-        }
+        //    var result = await _b2cConsultaPedidosItensService.IntegrityLockRegisters(
+        //        _linxMicrovixJobParameter.SetParameters(
+        //            jobName: method.MethodName,
+        //            tableName: method.MethodName,
+        //            parametersInterval: "parameters_individual"
+        //        )
+        //    );
+        //}
     }
 }

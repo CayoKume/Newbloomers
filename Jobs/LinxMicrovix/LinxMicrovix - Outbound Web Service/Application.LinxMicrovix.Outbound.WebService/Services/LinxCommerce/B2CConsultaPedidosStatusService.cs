@@ -147,7 +147,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
             string? parameters = await _coreRepository.GetRecord<string>(sql);
 
             var body = _linxMicrovixServiceBase.BuildBodyRequest(
-                        parametersList: parameters.Replace("[0]", "0").Replace("[data_inicial]", $"{DateTime.Today.AddDays(-7).ToString("yyyy-MM-dd")}").Replace("[data_fim]", $"{DateTime.Today.ToString("yyyy-MM-dd")}"),
+                        parametersList: parameters.Replace("[0]", "0").Replace("[data_inicial]", $"{DateTime.Today.AddDays(-8).ToString("yyyy-MM-dd")}").Replace("[data_fim]", $"{DateTime.Today.AddDays(+1).ToString("yyyy-MM-dd")}"),
                         jobParameter: jobParameter,
                         cnpj_emp: jobParameter.docMainCompany
                     );
@@ -178,7 +178,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
 
                 if (_listSomenteNovos.Count() > 0)
                 {
-                    _b2cConsultaPedidosStatusRepository.BulkInsertIntoTableRaw(records: _listSomenteNovos, jobParameter: jobParameter);
+                    _b2cConsultaPedidosStatusRepository.BulkInsertIntoTableRaw(records: listRecords, jobParameter: jobParameter);
                     await _coreRepository.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
 
                     for (int i = 0; i < _listSomenteNovos.Count; i++)

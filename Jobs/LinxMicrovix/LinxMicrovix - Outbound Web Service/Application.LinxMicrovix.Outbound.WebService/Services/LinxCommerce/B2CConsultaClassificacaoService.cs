@@ -160,33 +160,34 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
             {
                 try
                 {
-                    var validations = new List<ValidationResult>();
+                    //Refatorar Aqui (Não esquecer de voltar esse comentario)
+                    //var validations = new List<ValidationResult>();
 
-                    var entity = new B2CConsultaClassificacao(
-                        listValidations: validations,
-                        codigo_classificacao: records[i].Where(pair => pair.Key == "codigo_classificacao").Select(pair => pair.Value).FirstOrDefault(),
-                        nome_classificacao: records[i].Where(pair => pair.Key == "nome_classificacao").Select(pair => pair.Value).FirstOrDefault(),
-                        timestamp: records[i].Where(pair => pair.Key == "timestamp").Select(pair => pair.Value).FirstOrDefault(),
-                        portal: records[i].Where(pair => pair.Key == "portal").Select(pair => pair.Value).FirstOrDefault(),
-                        recordXml: records[i].Where(pair => pair.Key == "recordXml").Select(pair => pair.Value).FirstOrDefault()
-                    );
+                    //var entity = new B2CConsultaClassificacao(
+                    //    listValidations: validations,
+                    //    codigo_classificacao: records[i].Where(pair => pair.Key == "codigo_classificacao").Select(pair => pair.Value).FirstOrDefault(),
+                    //    nome_classificacao: records[i].Where(pair => pair.Key == "nome_classificacao").Select(pair => pair.Value).FirstOrDefault(),
+                    //    timestamp: records[i].Where(pair => pair.Key == "timestamp").Select(pair => pair.Value).FirstOrDefault(),
+                    //    portal: records[i].Where(pair => pair.Key == "portal").Select(pair => pair.Value).FirstOrDefault(),
+                    //    recordXml: records[i].Where(pair => pair.Key == "recordXml").Select(pair => pair.Value).FirstOrDefault()
+                    //);
 
-                    var contexto = new ValidationContext(entity, null, null);
-                    Validator.TryValidateObject(entity, contexto, validations, true);
+                    //var contexto = new ValidationContext(entity, null, null);
+                    //Validator.TryValidateObject(entity, contexto, validations, true);
 
-                    if (validations.Count() > 0)
-                    {
-                        for (int j = 0; j < validations.Count(); j++)
-                        {
-                            _logger.AddMessage(
-                                message: $"Error when convert record - codigo_classificacao: {records[i].Where(pair => pair.Key == "codigo_classificacao").Select(pair => pair.Value).FirstOrDefault()} | nome_classificacao: {records[i].Where(pair => pair.Key == "nome_classificacao").Select(pair => pair.Value).FirstOrDefault()}\n" +
-                                         $"{validations[j].ErrorMessage}"
-                            );
-                        }
-                        continue;
-                    }
+                    //if (validations.Count() > 0)
+                    //{
+                    //    for (int j = 0; j < validations.Count(); j++)
+                    //    {
+                    //        _logger.AddMessage(
+                    //            message: $"Error when convert record - codigo_classificacao: {records[i].Where(pair => pair.Key == "codigo_classificacao").Select(pair => pair.Value).FirstOrDefault()} | nome_classificacao: {records[i].Where(pair => pair.Key == "nome_classificacao").Select(pair => pair.Value).FirstOrDefault()}\n" +
+                    //                     $"{validations[j].ErrorMessage}"
+                    //        );
+                    //    }
+                    //    continue;
+                    //}
 
-                    list.Add(entity);
+                    //list.Add(entity);
                 }
                 catch (Exception ex)
                 {
