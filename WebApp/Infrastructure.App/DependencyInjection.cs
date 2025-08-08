@@ -16,7 +16,6 @@ namespace Infrastructure.App
             {
                 services.AddHttpClient("MiniWMS", client =>
                 {
-                    //client.BaseAddress = new Uri("http://localhost:5143/NewBloomers/BloomersInvoiceIntegrations/MiniWms/");
                     client.BaseAddress = new Uri("https://localhost:7113/NewBloomers/BloomersInvoiceIntegrations/MiniWms/");
                     client.Timeout = new TimeSpan(0, 2, 0);
                 });

@@ -15,12 +15,12 @@ namespace AzureJobs.RecurringJobs.Shippment
             _webJobExceptionHandlingMiddleware = new WebJobExceptionHandlingMiddleware(services);
         }
 
-        // public async Task SearchTrackingHistory([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
-        // {
-        //     await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
-        //     {
-        //         var result = await _jadlogService.SearchTrackingHistory();
-        //     });
-        // }
+        //public async Task SearchTrackingHistory([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
+        //    {
+        //        var result = await _jadlogService.SearchTrackingHistory();
+        //    });
+        //}
     }
 }

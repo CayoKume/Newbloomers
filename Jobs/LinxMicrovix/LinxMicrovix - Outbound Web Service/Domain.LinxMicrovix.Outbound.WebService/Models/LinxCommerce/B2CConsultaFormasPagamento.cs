@@ -7,18 +7,10 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxCommerce
 {
     public class B2CConsultaFormasPagamento
     {
-        [NotMapped]
-        public Int32 id { get; set; }
-
         public DateTime? lastupdateon { get; private set; }
-
         public Int32? cod_forma_pgto { get; private set; }
-
-        [LengthValidation(length: 50, propertyName: "forma_pgto")]
         public string? forma_pgto { get; private set; }
-
         public Int64? timestamp { get; private set; }
-
         public Int32? portal { get; private set; }
 
         [NotMapped]
@@ -32,32 +24,16 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxCommerce
         public B2CConsultaFormasPagamento() { }
 
         public B2CConsultaFormasPagamento(
-            List<ValidationResult> listValidations,
-            string? cod_forma_pgto,
-            string? forma_pgto,
-            string? timestamp,
-            string? portal,
+            Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxCommerce.B2CConsultaFormasPagamento record,
             string? recordXml
         )
         {
-            lastupdateon = DateTime.Now;
+            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+            this.cod_forma_pgto = CustomConvertersExtensions.ConvertToInt32Validation(record.cod_forma_pgto);
+            this.portal = CustomConvertersExtensions.ConvertToInt32Validation(record.portal);
+            this.timestamp = CustomConvertersExtensions.ConvertToInt32Validation(record.timestamp);
 
-            this.cod_forma_pgto =
-                ConvertToInt32Validation.IsValid(cod_forma_pgto, "cod_forma_pgto", listValidations) ?
-                Convert.ToInt32(cod_forma_pgto) :
-                0;
-
-            this.portal =
-                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
-                Convert.ToInt32(portal) :
-                0;
-
-            this.timestamp =
-                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
-                Convert.ToInt64(timestamp) :
-                0;
-
-            this.forma_pgto = forma_pgto;
+            this.forma_pgto = record.forma_pgto;
             this.recordXml = recordXml;
         }
     }

@@ -9,7 +9,7 @@ namespace WebApi.Extensions
             if (!System.Diagnostics.Debugger.IsAttached)
             {
                 app.UseCors(policy =>
-                policy.WithOrigins("http://172.25.1.6:7575", "http://localhost:7575", "https://webapplication.newbloomers.com.br:7475")
+                policy.WithOrigins("http://172.25.1.4:7575", "http://localhost:7575", "https://webapplication.newbloomers.com.br:7475")
                     .AllowAnyMethod()
                     .AllowAnyHeader()
                     .WithHeaders(HeaderNames.ContentType)

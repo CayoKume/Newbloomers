@@ -172,8 +172,6 @@ namespace Application.AfterSale.Services
                .Clear()
                .AddLog(EnumJob.AfterSaleReverses);
 
-            var teste = new List<string?>();
-
             var simplifiedReverses = new List<Reverse>();
             var completeReverses = new List<Data>();
             var companys = await _afterSaleRepository.GetCompanys();
@@ -183,6 +181,7 @@ namespace Application.AfterSale.Services
                 var parameters = new Dictionary<string, string>
                 {
                     { "start_date", $"{DateTime.Now.AddMonths(-2).ToString("yyyy-MM-dd")}" },
+                    //{ "start_date", $"2000-01-01" },
                     { "end_date", $"{DateTime.Now.ToString("yyyy-MM-dd")}" }
                 };
 
@@ -212,6 +211,11 @@ namespace Application.AfterSale.Services
                         );
 
                         var nextPage = Newtonsoft.Json.JsonConvert.DeserializeObject<ResponseReverses>(responseByPage);
+
+                        //foreach (var _page in nextPage.data)
+                        //{
+                        //    simplifiedReverses.Add(new Reverse(reverse: _page, token: company.Token.ToString()));
+                        //}
 
                         nextPage.data.ForEach(r =>
                             simplifiedReverses.Add(new Reverse(reverse: r, token: company.Token.ToString()))
@@ -250,20 +254,12 @@ namespace Application.AfterSale.Services
                                 rote: $"v3/api/reverses/{top30List[j].id}"
                             );
 
-                            var completeReverse = new Root();
+                            var completeReverse = Newtonsoft.Json.JsonConvert.DeserializeObject<Root>(_response);
 
-                            try
-                            {
-                                completeReverse = Newtonsoft.Json.JsonConvert.DeserializeObject<Root>(_response);
-                            }
-                            catch
-                            {
-                                teste.Add(_response);
-                                continue;
-                            }
-
+                            //Refatorar Aqui (colocar essas conversões dentro da construção da Model)
                             completeReverse.data.reverse.customer_id = completeReverse.data.customer.id;
-
+                            completeReverse.data.reverse.order_id = completeReverse.data.ecommerce_order;
+                            //completeReverse.data.reverse.posting_card = completeReverse.data.reverse.courier
                             completeReverses.Add(new Data(completeReverse.data, _response));
                         }
 

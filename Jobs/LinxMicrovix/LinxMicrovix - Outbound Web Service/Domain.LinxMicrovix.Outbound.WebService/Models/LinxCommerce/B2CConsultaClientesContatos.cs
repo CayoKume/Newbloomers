@@ -38,19 +38,19 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxCommerce
         )
         {
             lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
-            this.id_clientes_contatos = Convert.ToInt32(record.id_clientes_contatos);
-            this.id_contato_b2c = Convert.ToInt32(record.id_contato_b2c);
-            this.id_parentesco = Convert.ToInt32(record.id_parentesco);
-            this.cod_cliente_erp = Convert.ToInt32(record.cod_cliente_erp);
+            this.id_clientes_contatos = CustomConvertersExtensions.ConvertToInt32Validation(record.id_clientes_contatos);
+            this.id_contato_b2c = CustomConvertersExtensions.ConvertToInt32Validation(record.id_contato_b2c);
+            this.id_parentesco = CustomConvertersExtensions.ConvertToInt32Validation(record.id_parentesco);
+            this.cod_cliente_erp = CustomConvertersExtensions.ConvertToInt32Validation(record.cod_cliente_erp);
             this.timestamp = CustomConvertersExtensions.ConvertToInt64Validation(record.timestamp);
-            this.portal = Convert.ToInt32(record.portal);
+            this.portal = CustomConvertersExtensions.ConvertToInt32Validation(record.portal);
             this.data_nasc_contato = CustomConvertersExtensions.ConvertToDateTimeValidation<string>(record.data_nasc_contato);
 
-            this.nome_contato = nome_contato;
-            this.sexo_contato = sexo_contato;
-            this.fone_contato = fone_contato;
-            this.celular_contato = celular_contato;
-            this.email_contato = email_contato;
+            this.nome_contato = record.nome_contato;
+            this.sexo_contato = record.sexo_contato;
+            this.fone_contato = record.fone_contato;
+            this.celular_contato = record.celular_contato;
+            this.email_contato = record.email_contato;
             this.recordXml = recordXml;
         }
     }

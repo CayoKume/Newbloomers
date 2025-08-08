@@ -7,18 +7,10 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxCommerce
 {
     public class B2CConsultaTipoEncomenda
     {
-        [NotMapped]
-        public Int32 id { get; set; }
-
         public DateTime? lastupdateon { get; private set; }
-
         public Int32? id_tipo_encomenda { get; private set; }
-
-        [LengthValidation(length: 100, propertyName: "nm_tipo_encomenda")]
         public string? nm_tipo_encomenda { get; private set; }
-
         public Int64? timestamp { get; private set; }
-
         public Int32? portal { get; private set; }
 
         [NotMapped]
@@ -32,32 +24,16 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxCommerce
         public B2CConsultaTipoEncomenda() { }
 
         public B2CConsultaTipoEncomenda(
-            List<ValidationResult> listValidations,
-            string? id_tipo_encomenda,
-            string? nm_tipo_encomenda,
-            string? timestamp,
-            string? portal,
+            Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxCommerce.B2CConsultaTipoEncomenda record,
             string? recordXml
         )
         {
-            lastupdateon = DateTime.Now;
-
-            this.id_tipo_encomenda =
-                ConvertToInt32Validation.IsValid(id_tipo_encomenda, "id_tipo_encomenda", listValidations) ?
-                Convert.ToInt32(id_tipo_encomenda) :
-                0;
-
-            this.portal =
-                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
-                Convert.ToInt32(portal) :
-                0;
-
-            this.timestamp =
-                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
-                Convert.ToInt64(timestamp) :
-                0;
-
-            this.nm_tipo_encomenda = nm_tipo_encomenda;
+            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+            this.id_tipo_encomenda = CustomConvertersExtensions.ConvertToInt32Validation(record.id_tipo_encomenda);   
+            this.portal = CustomConvertersExtensions.ConvertToInt32Validation(record.portal);
+            this.timestamp = CustomConvertersExtensions.ConvertToInt64Validation(record.timestamp);
+               
+            this.nm_tipo_encomenda = record.nm_tipo_encomenda;
             this.recordXml = recordXml;
         }
     }

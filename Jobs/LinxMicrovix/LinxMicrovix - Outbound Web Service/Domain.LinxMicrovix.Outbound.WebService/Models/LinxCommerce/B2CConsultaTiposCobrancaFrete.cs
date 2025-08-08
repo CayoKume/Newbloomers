@@ -7,18 +7,10 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxCommerce
 {
     public class B2CConsultaTiposCobrancaFrete
     {
-        [NotMapped]
-        public Int32 id { get; set; }
-
         public DateTime? lastupdateon { get; private set; }
-
         public Int32? codigo_tipo_cobranca_frete { get; private set; }
-
-        [LengthValidation(length: 60, propertyName: "nome_tipo_cobranca_frete")]
         public string? nome_tipo_cobranca_frete { get; private set; }
-
         public Int64? timestamp { get; private set; }
-
         public Int32? portal { get; private set; }
 
         [NotMapped]
@@ -32,32 +24,16 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxCommerce
         public B2CConsultaTiposCobrancaFrete() { }
 
         public B2CConsultaTiposCobrancaFrete(
-            List<ValidationResult> listValidations,
-            string? codigo_tipo_cobranca_frete,
-            string? nome_tipo_cobranca_frete,
-            string? timestamp,
-            string? portal,
+            Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxCommerce.B2CConsultaTiposCobrancaFrete record,
             string? recordXml
         )
         {
-            lastupdateon = DateTime.Now;
+            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+            this.codigo_tipo_cobranca_frete = CustomConvertersExtensions.ConvertToInt32Validation(record.codigo_tipo_cobranca_frete);
+            this.portal = CustomConvertersExtensions.ConvertToInt32Validation(record.portal);
+            this.timestamp = CustomConvertersExtensions.ConvertToInt64Validation(record.timestamp);
 
-            this.codigo_tipo_cobranca_frete =
-                ConvertToInt32Validation.IsValid(codigo_tipo_cobranca_frete, "codigo_tipo_cobranca_frete", listValidations) ?
-                Convert.ToInt32(codigo_tipo_cobranca_frete) :
-                0;
-
-            this.portal =
-                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
-                Convert.ToInt32(portal) :
-                0;
-
-            this.timestamp =
-                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
-                Convert.ToInt64(timestamp) :
-                0;
-
-            this.nome_tipo_cobranca_frete = nome_tipo_cobranca_frete;
+            this.nome_tipo_cobranca_frete = record.nome_tipo_cobranca_frete;
             this.recordXml = recordXml;
         }
     }

@@ -8,21 +8,12 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxCommerce
 {
     public class B2CConsultaProdutosDimensoes
     {
-        [SkipProperty]
-        public Int32 id { get; set; }
-
         public DateTime? lastupdateon { get; private set; }
-
         public Int64? codigoproduto { get; private set; }
-
         public decimal? altura { get; private set; }
-
         public decimal? comprimento { get; private set; }
-
         public Int64? timestamp { get; private set; }
-
         public decimal? largura { get; private set; }
-
         public Int32? portal { get; private set; }
 
         [NotMapped]
@@ -36,47 +27,17 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxCommerce
         public B2CConsultaProdutosDimensoes() { }
 
         public B2CConsultaProdutosDimensoes(
-            List<ValidationResult> listValidations,
-            string? codigoproduto,
-            string? altura,
-            string? comprimento,
-            string? timestamp,
-            string? largura,
-            string? portal,
+            Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxCommerce.B2CConsultaProdutosDimensoes record,
             string? recordXml
         )
         {
-            lastupdateon = DateTime.Now;
-
-            this.altura =
-                ConvertToDecimalValidation.IsValid(altura, "altura", listValidations) ?
-                Convert.ToDecimal(altura, new CultureInfo("en-US")) :
-                0;
-
-            this.comprimento =
-                ConvertToDecimalValidation.IsValid(comprimento, "comprimento", listValidations) ?
-                Convert.ToDecimal(comprimento, new CultureInfo("en-US")) :
-                0;
-
-            this.largura =
-                ConvertToDecimalValidation.IsValid(largura, "largura", listValidations) ?
-                Convert.ToDecimal(largura, new CultureInfo("en-US")) :
-                0;
-
-            this.codigoproduto =
-                ConvertToInt64Validation.IsValid(codigoproduto, "codigoproduto", listValidations) ?
-                Convert.ToInt64(codigoproduto) :
-                0;
-
-            this.portal =
-                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
-                Convert.ToInt32(portal) :
-                0;
-
-            this.timestamp =
-                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
-                Convert.ToInt64(timestamp) :
-                0;
+            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+            this.altura = CustomConvertersExtensions.ConvertToDecimalValidation(record.altura);
+            this.comprimento = CustomConvertersExtensions.ConvertToDecimalValidation(record.comprimento);
+            this.largura = CustomConvertersExtensions.ConvertToDecimalValidation(record.largura);
+            this.codigoproduto = CustomConvertersExtensions.ConvertToInt64Validation(record.codigoproduto);
+            this.portal = CustomConvertersExtensions.ConvertToInt32Validation(record.portal);
+            this.timestamp = CustomConvertersExtensions.ConvertToInt64Validation(record.timestamp);
 
             this.recordXml = recordXml;
         }

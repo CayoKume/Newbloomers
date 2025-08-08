@@ -20,21 +20,21 @@ namespace AzureJobs.RecurringJobs.General
         //    });
         //}
 
-        // public async Task AfterSaleTransportations([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
-        // {
-        //     await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
-        //     {
-        //         var result = await _afterSaleService.GetReversesTransportations();
-        //     });
-        // }
+        //public async Task AfterSaleTransportations([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
+        //    {
+        //        var result = await _afterSaleService.GetReversesTransportations();
+        //    });
+        //}
 
-        // public async Task AfterSaleStatus([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
-        // {
-        //     await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
-        //     {
-        //         var result = await _afterSaleService.GetReversesStatus();
-        //     });
-        // }
+        //public async Task AfterSaleStatus([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
+        //    {
+        //        var result = await _afterSaleService.GetReversesStatus();
+        //    });
+        //}
 
         //public async Task AfterSaleReverses([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
         //{

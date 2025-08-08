@@ -29,7 +29,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxCommerce
         )
         {
             lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
-            this.codigo_classificacao = Convert.ToInt32(record.codigo_classificacao);
+            this.codigo_classificacao = CustomConvertersExtensions.ConvertToInt32Validation(record.codigo_classificacao);
             this.portal = CustomConvertersExtensions.ConvertToInt32Validation(record.portal);
             this.timestamp = CustomConvertersExtensions.ConvertToInt64Validation(record.timestamp);
 

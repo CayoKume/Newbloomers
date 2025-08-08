@@ -189,6 +189,7 @@ namespace Application.App.Services
             }
         }
 
+        //Refatorar Aqui (Adicionar Handler a camada application para gerar essa string
         private List<System.String> GenerateDanfeBodyRequest(Order pedido)
         {
             try
@@ -318,6 +319,7 @@ namespace Application.App.Services
             }
         }
 
+        //Refatorar Aqui (Adicionar Handler a camada application para gerar essa string
         private List<System.String> GenerateAWBTotalBodyRequest(Order pedido)
         {
             try
@@ -411,6 +413,7 @@ namespace Application.App.Services
             }
         }
 
+        //Refatorar Aqui (Adicionar Handler a camada application para gerar essa string
         private List<System.String> GenerateAWBAWRBodyRequest(Order pedido)
         {
             try
@@ -502,6 +505,7 @@ namespace Application.App.Services
             }
         }
 
+        //Refatorar Aqui (Adicionar Handler a camada application para gerar essa string
         private List<System.String> GenerateAWBJadlogBodyRequest(Order pedido)
         {
             try

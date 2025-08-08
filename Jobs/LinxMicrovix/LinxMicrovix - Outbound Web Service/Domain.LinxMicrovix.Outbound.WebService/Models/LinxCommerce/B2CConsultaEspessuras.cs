@@ -7,18 +7,10 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxCommerce
 {
     public class B2CConsultaEspessuras
     {
-        [NotMapped]
-        public Int32 id { get; set; }
-
         public DateTime? lastupdateon { get; private set; }
-
         public Int32? codigo_espessura { get; private set; }
-
-        [LengthValidation(length: 100, propertyName: "nome_espessura")]
         public string? nome_espessura { get; private set; }
-
         public Int64? timestamp { get; private set; }
-
         public Int32? portal { get; private set; }
 
         [NotMapped]
@@ -32,32 +24,16 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxCommerce
         public B2CConsultaEspessuras() { }
 
         public B2CConsultaEspessuras(
-            List<ValidationResult> listValidations,
-            string? codigo_espessura,
-            string? nome_espessura,
-            string? timestamp,
-            string? portal,
+            Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxCommerce.B2CConsultaEspessuras record,
             string? recordXml
         )
         {
-            lastupdateon = DateTime.Now;
+            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+            this.codigo_espessura = CustomConvertersExtensions.ConvertToInt32Validation(record.codigo_espessura);
+            this.portal = CustomConvertersExtensions.ConvertToInt32Validation(record.portal);
+            this.timestamp = CustomConvertersExtensions.ConvertToInt64Validation(record.timestamp);
 
-            this.codigo_espessura =
-                ConvertToInt32Validation.IsValid(codigo_espessura, "codigo_espessura", listValidations) ?
-                Convert.ToInt32(codigo_espessura) :
-                0;
-
-            this.portal =
-                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
-                Convert.ToInt32(portal) :
-                0;
-
-            this.timestamp =
-                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
-                Convert.ToInt64(timestamp) :
-                0;
-
-            this.nome_espessura = nome_espessura;
+            this.nome_espessura = record.nome_espessura;
             this.recordXml = recordXml;
         }
     }

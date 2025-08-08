@@ -8,26 +8,14 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxCommerce
 {
     public class B2CConsultaProdutosCampanhas
     {
-        [SkipProperty]
-        public Int32 id { get; set; }
-
         public DateTime? lastupdateon { get; private set; }
-
         public Int32? codigo_campanha { get; private set; }
-
-        [LengthValidation(length: 60, propertyName: "nome_campanha")]
         public string? nome_campanha { get; private set; }
-
         public DateTime? vigencia_inicio { get; private set; }
-
         public DateTime? vigencia_fim { get; private set; }
-
         public string? observacao { get; private set; }
-
         public Int32? ativo { get; private set; }
-
         public Int64? timestamp { get; private set; }
-
         public Int32? portal { get; private set; }
 
         [NotMapped]
@@ -41,52 +29,20 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxCommerce
         public B2CConsultaProdutosCampanhas() { }
 
         public B2CConsultaProdutosCampanhas(
-            List<ValidationResult> listValidations,
-            string? codigo_campanha,
-            string? nome_campanha,
-            string? vigencia_inicio,
-            string? vigencia_fim,
-            string? observacao,
-            string? ativo,
-            string? timestamp,
-            string? portal,
+            Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxCommerce.B2CConsultaProdutosCampanhas record,
             string? recordXml
         )
         {
-            lastupdateon = DateTime.Now;
-
-            this.codigo_campanha =
-                ConvertToInt32Validation.IsValid(codigo_campanha, "codigo_campanha", listValidations) ?
-                Convert.ToInt32(codigo_campanha) :
-                0;
-
-            this.vigencia_inicio =
-                ConvertToDateTimeValidation.IsValid(vigencia_inicio, "vigencia_inicio", listValidations) ?
-                Convert.ToDateTime(vigencia_inicio) :
-                new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar);
-
-            this.vigencia_fim =
-                ConvertToDateTimeValidation.IsValid(vigencia_fim, "vigencia_fim", listValidations) ?
-                Convert.ToDateTime(vigencia_fim) :
-                new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar);
-
-            this.ativo =
-                ConvertToInt32Validation.IsValid(ativo, "ativo", listValidations) ?
-                Convert.ToInt32(ativo) :
-                0;
-
-            this.portal =
-                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
-                Convert.ToInt32(portal) :
-                0;
-
-            this.timestamp =
-                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
-                Convert.ToInt64(timestamp) :
-                0;
-
-            this.nome_campanha = nome_campanha;
-            this.observacao = observacao;
+            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+            this.codigo_campanha = CustomConvertersExtensions.ConvertToInt32Validation(record.codigo_campanha);
+            this.vigencia_inicio = CustomConvertersExtensions.ConvertToDateTimeValidation<string>(record.vigencia_inicio);
+            this.vigencia_fim = CustomConvertersExtensions.ConvertToDateTimeValidation<string>(record.vigencia_fim);
+            this.ativo = CustomConvertersExtensions.ConvertToInt32Validation(record.ativo);
+            this.portal = CustomConvertersExtensions.ConvertToInt32Validation(record.portal);
+            this.timestamp = CustomConvertersExtensions.ConvertToInt64Validation(record.timestamp);
+               
+            this.nome_campanha = record.nome_campanha;
+            this.observacao = record.observacao;
             this.recordXml = recordXml;
         }
     }

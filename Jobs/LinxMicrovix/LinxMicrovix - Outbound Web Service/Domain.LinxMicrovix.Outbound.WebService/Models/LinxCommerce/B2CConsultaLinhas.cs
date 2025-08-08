@@ -7,21 +7,11 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxCommerce
 {
     public class B2CConsultaLinhas
     {
-        [NotMapped]
-        public Int32 id { get; set; }
-
         public DateTime? lastupdateon { get; private set; }
-
         public Int32? codigo_linha { get; private set; }
-
-        [LengthValidation(length: 30, propertyName: "nome_linha")]
         public string? nome_linha { get; private set; }
-
         public Int64? timestamp { get; private set; }
-
-        [LengthValidation(length: 250, propertyName: "setores")]
         public string? setores { get; private set; }
-
         public Int32? portal { get; private set; }
 
         [NotMapped]
@@ -35,34 +25,17 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxCommerce
         public B2CConsultaLinhas() { }
 
         public B2CConsultaLinhas(
-            List<ValidationResult> listValidations,
-            string? codigo_linha,
-            string? nome_linha,
-            string? timestamp,
-            string? setores,
-            string? portal,
+            Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxCommerce.B2CConsultaLinhas record,
             string? recordXml
         )
         {
-            lastupdateon = DateTime.Now;
+            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+            this.codigo_linha = CustomConvertersExtensions.ConvertToInt32Validation(record.codigo_linha);
+            this.portal = CustomConvertersExtensions.ConvertToInt32Validation(record.portal);
+            this.timestamp = CustomConvertersExtensions.ConvertToInt64Validation(record.timestamp);
 
-            this.codigo_linha =
-                ConvertToInt32Validation.IsValid(codigo_linha, "codigo_linha", listValidations) ?
-                Convert.ToInt32(codigo_linha) :
-                0;
-
-            this.portal =
-                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
-                Convert.ToInt32(portal) :
-                0;
-
-            this.timestamp =
-                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
-                Convert.ToInt64(timestamp) :
-                0;
-
-            this.nome_linha = nome_linha;
-            this.setores = setores;
+            this.nome_linha = record.nome_linha;
+            this.setores = record.setores;
             this.recordXml = recordXml;
         }
     }

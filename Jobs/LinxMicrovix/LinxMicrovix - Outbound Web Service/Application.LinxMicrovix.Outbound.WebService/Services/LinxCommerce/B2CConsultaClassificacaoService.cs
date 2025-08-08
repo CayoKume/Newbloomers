@@ -1,15 +1,15 @@
 ﻿using Application.Core.Interfaces;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Api;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Handlers.Commands;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Services;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Services.LinxCommerce;
 using Domain.Core.Entities.Exceptions;
 using Domain.Core.Enums;
 using Domain.Core.Interfaces;
-using Domain.LinxMicrovix.Outbound.WebService.Models.LinxCommerce;
 using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
-using Application.LinxMicrovix.Outbound.WebService.Interfaces.Api;
-
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxCommerce;
+using Domain.LinxMicrovix.Outbound.WebService.Models.LinxCommerce;
+using FluentValidation;
 using System.ComponentModel.DataAnnotations;
 
 namespace Application.LinxMicrovix.Outbound.WebService.Services
@@ -27,6 +27,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
         private readonly ILinxMicrovixCommandHandler _linxMicrovixCommandHandler;
         private readonly ICoreRepository _coreRepository;
         private readonly IB2CConsultaClassificacaoRepository _b2cConsultaClassificacaoRepository;
+        private readonly IValidator<Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxCommerce.B2CConsultaClassificacao> _validator;
         private static List<string?> _b2cConsultaClassificacaoCache { get; set; } = new List<string?>();
 
         public B2CConsultaClassificacaoService(
@@ -160,34 +161,32 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
             {
                 try
                 {
-                    //Refatorar Aqui (Não esquecer de voltar esse comentario)
-                    //var validations = new List<ValidationResult>();
+                    var entity = new Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxCommerce.B2CConsultaClassificacao(
+                        codigo_classificacao: records[i].Where(pair => pair.Key == "codigo_classificacao").Select(pair => pair.Value).FirstOrDefault(),
+                        nome_classificacao: records[i].Where(pair => pair.Key == "nome_classificacao").Select(pair => pair.Value).FirstOrDefault(),
+                        timestamp: records[i].Where(pair => pair.Key == "timestamp").Select(pair => pair.Value).FirstOrDefault(),
+                        portal: records[i].Where(pair => pair.Key == "portal").Select(pair => pair.Value).FirstOrDefault()
+                    );
 
-                    //var entity = new B2CConsultaClassificacao(
-                    //    listValidations: validations,
-                    //    codigo_classificacao: records[i].Where(pair => pair.Key == "codigo_classificacao").Select(pair => pair.Value).FirstOrDefault(),
-                    //    nome_classificacao: records[i].Where(pair => pair.Key == "nome_classificacao").Select(pair => pair.Value).FirstOrDefault(),
-                    //    timestamp: records[i].Where(pair => pair.Key == "timestamp").Select(pair => pair.Value).FirstOrDefault(),
-                    //    portal: records[i].Where(pair => pair.Key == "portal").Select(pair => pair.Value).FirstOrDefault(),
-                    //    recordXml: records[i].Where(pair => pair.Key == "recordXml").Select(pair => pair.Value).FirstOrDefault()
-                    //);
+                    var xml = records[i].Where(pair => pair.Key == "recordXml").Select(pair => pair.Value).FirstOrDefault();
+                    var validations = _validator.Validate(entity);
 
-                    //var contexto = new ValidationContext(entity, null, null);
-                    //Validator.TryValidateObject(entity, contexto, validations, true);
+                    if (validations.Errors.Count() > 0)
+                    {
+                        var message = $"Error when convert record - codigo_classificacao: {records[i].Where(pair => pair.Key == "codigo_classificacao").Select(pair => pair.Value).FirstOrDefault()} | nome_classificacao: {records[i].Where(pair => pair.Key == "nome_classificacao").Select(pair => pair.Value).FirstOrDefault()}\n";
 
-                    //if (validations.Count() > 0)
-                    //{
-                    //    for (int j = 0; j < validations.Count(); j++)
-                    //    {
-                    //        _logger.AddMessage(
-                    //            message: $"Error when convert record - codigo_classificacao: {records[i].Where(pair => pair.Key == "codigo_classificacao").Select(pair => pair.Value).FirstOrDefault()} | nome_classificacao: {records[i].Where(pair => pair.Key == "nome_classificacao").Select(pair => pair.Value).FirstOrDefault()}\n" +
-                    //                     $"{validations[j].ErrorMessage}"
-                    //        );
-                    //    }
-                    //    continue;
-                    //}
+                        for (int j = 0; j < validations.Errors.Count(); j++)
+                        {
+                            var msg = validations.Errors[j].ErrorMessage;
+                            var property = validations.Errors[j].PropertyName;
+                            var value = validations.Errors[j].FormattedMessagePlaceholderValues.Where(x => x.Key == "PropertyValue").FirstOrDefault().Value;
+                            message += $"{msg.Replace("[0]", $"{property}: {value}")}\n";
+                        }
 
-                    //list.Add(entity);
+                        _logger.AddMessage(message);
+                    }
+
+                    list.Add(new B2CConsultaClassificacao(entity, xml));
                 }
                 catch (Exception ex)
                 {

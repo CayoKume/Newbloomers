@@ -40,42 +40,19 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxCommerce
         public B2CConsultaCodigoRastreio() { }
 
         public B2CConsultaCodigoRastreio(
-            List<ValidationResult> listValidations,
-            string? id_pedido,
-            string? documento,
-            string? serie,
-            string? codigo_rastreio,
-            string? sequencia_volume,
-            string? timestamp,
-            string? portal,
+            Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxCommerce.B2CConsultaCodigoRastreio record,
             string? recordXml
         )
         {
-            lastupdateon = DateTime.Now;
+            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+            this.id_pedido = CustomConvertersExtensions.ConvertToInt32Validation(record.id_pedido);
+            this.documento = CustomConvertersExtensions.ConvertToInt32Validation(record.documento);
+            this.portal = CustomConvertersExtensions.ConvertToInt32Validation(record.portal);
+            this.timestamp = CustomConvertersExtensions.ConvertToInt64Validation(record.timestamp);
 
-            this.id_pedido =
-                ConvertToInt32Validation.IsValid(id_pedido, "id_pedido", listValidations) ?
-                Convert.ToInt32(id_pedido) :
-                0;
-
-            this.documento =
-                ConvertToInt32Validation.IsValid(documento, "documento", listValidations) ?
-                Convert.ToInt32(documento) :
-                0;
-
-            this.portal =
-                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
-                Convert.ToInt32(portal) :
-                0;
-
-            this.timestamp =
-                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
-                Convert.ToInt64(timestamp) :
-                0;
-
-            this.serie = serie;
-            this.codigo_rastreio = codigo_rastreio;
-            this.sequencia_volume = sequencia_volume;
+            this.serie = record.serie;
+            this.codigo_rastreio = record.codigo_rastreio;
+            this.sequencia_volume = record.sequencia_volume;
             this.recordXml = recordXml;
         }
     }
