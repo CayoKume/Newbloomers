@@ -50,7 +50,6 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                     var validations = new List<ValidationResult>();
 
                     var entity = new LinxB2CPedidos(
-                        listValidations: validations,
                         order_id: records[i].Where(pair => pair.Key == "order_id").Select(pair => pair.Value).FirstOrDefault(),
                         id_pedido: records[i].Where(pair => pair.Key == "id_pedido").Select(pair => pair.Value).FirstOrDefault(),
                         dt_pedido: records[i].Where(pair => pair.Key == "dt_pedido").Select(pair => pair.Value).FirstOrDefault(),

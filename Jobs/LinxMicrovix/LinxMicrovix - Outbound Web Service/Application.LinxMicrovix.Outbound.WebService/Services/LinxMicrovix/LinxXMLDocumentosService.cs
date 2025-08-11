@@ -51,7 +51,6 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                     var validations = new List<ValidationResult>();
 
                     var entity = new LinxXMLDocumentos(
-                        listValidations: validations,
                         cnpj_emp: records[i].Where(pair => pair.Key == "cnpj_emp").Select(pair => pair.Value).FirstOrDefault(),
                         documento: records[i].Where(pair => pair.Key == "documento").Select(pair => pair.Value).FirstOrDefault(),
                         serie: records[i].Where(pair => pair.Key == "serie").Select(pair => pair.Value).FirstOrDefault(),

@@ -50,7 +50,6 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                     var validations = new List<ValidationResult>();
 
                     var entity = new LinxSetores(
-                        listValidations: validations,
                         id_setor: records[i].Where(pair => pair.Key == "id_setor").Select(pair => pair.Value).FirstOrDefault(),
                         desc_setor: records[i].Where(pair => pair.Key == "desc_setor").Select(pair => pair.Value).FirstOrDefault(),
                         recordXml: records[i].Where(pair => pair.Key == "recordXml").Select(pair => pair.Value).FirstOrDefault(),

@@ -50,7 +50,6 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                     var validations = new List<ValidationResult>();
 
                     var entity = new LinxUsuarios(
-                        listValidations: validations,
                         usuario_id: records[i].Where(pair => pair.Key == "usuario_id").Select(pair => pair.Value).FirstOrDefault(),
                         usuario_login: records[i].Where(pair => pair.Key == "usuario_login").Select(pair => pair.Value).FirstOrDefault(),
                         usuario_nome: records[i].Where(pair => pair.Key == "usuario_nome").Select(pair => pair.Value).FirstOrDefault(),

@@ -54,7 +54,6 @@ namespace LinxMicrovix.Outbound.Web.Service.Application.Services.LinxMicrovix
                     var validations = new List<ValidationResult>();
 
                     var entity = new LinxProdutosCodBar(
-                        listValidations: validations,
                         cod_produto: records[i].Where(pair => pair.Key == "cod_produto").Select(pair => pair.Value).FirstOrDefault(),
                         cod_barra: records[i].Where(pair => pair.Key == "cod_barra").Select(pair => pair.Value).FirstOrDefault(),
                         timestamp: records[i].Where(pair => pair.Key == "timestamp").Select(pair => pair.Value).FirstOrDefault(),

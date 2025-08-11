@@ -54,7 +54,6 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                     var validations = new List<ValidationResult>();
 
                     var entity = new LinxRotinaOrigem(
-                        listValidations: validations,
                         codigo_rotina: records[i].Where(pair => pair.Key == "codigo_rotina").Select(pair => pair.Value).FirstOrDefault(),
                         descricao_rotina: records[i].Where(pair => pair.Key == "descricao_rotina").Select(pair => pair.Value).FirstOrDefault(),
                         portal: records[i].Where(pair => pair.Key == "portal").Select(pair => pair.Value).FirstOrDefault(),

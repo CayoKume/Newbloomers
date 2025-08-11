@@ -52,8 +52,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                 {
                     var validations = new List<ValidationResult>();
 
-                    var entity = new B2CConsultaProdutosTags(
-                        listValidations: validations,
+                    var entity = new Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxCommerce.B2CConsultaProdutosTags(
                         id_b2c_tags_produtos: records[i].Where(pair => pair.Key == "id_b2c_tags_produtos").Select(pair => pair.Value).FirstOrDefault(),
                         descricao_b2c_tags: records[i].Where(pair => pair.Key == "descricao_b2c_tags").Select(pair => pair.Value).FirstOrDefault(),
                         timestamp: records[i].Where(pair => pair.Key == "timestamp").Select(pair => pair.Value).FirstOrDefault(),

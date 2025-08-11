@@ -52,8 +52,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                 {
                     var validations = new List<ValidationResult>();
 
-                    var entity = new B2CConsultaImagens(
-                        listValidations: validations,
+                    var entity = new Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxCommerce.B2CConsultaImagens(
                         id_imagem: records[i].Where(pair => pair.Key == "id_imagem").Select(pair => pair.Value).FirstOrDefault(),
                         md5: records[i].Where(pair => pair.Key == "md5").Select(pair => pair.Value).FirstOrDefault(),
                         url_imagem_blob: records[i].Where(pair => pair.Key == "url_imagem_blob").Select(pair => pair.Value).FirstOrDefault(),

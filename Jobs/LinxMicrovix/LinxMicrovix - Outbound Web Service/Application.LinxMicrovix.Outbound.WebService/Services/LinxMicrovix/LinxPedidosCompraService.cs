@@ -55,7 +55,6 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                     var validations = new List<ValidationResult>();
 
                     var entity = new LinxPedidosCompra(
-                        listValidations: validations,
                         cnpj_emp: records[i].Where(pair => pair.Key == "cnpj_emp").Select(pair => pair.Value).FirstOrDefault(),
                         cod_pedido: records[i].Where(pair => pair.Key == "cod_pedido").Select(pair => pair.Value).FirstOrDefault().Replace("-", ""),
                         data_pedido: records[i].Where(pair => pair.Key == "data_pedido").Select(pair => pair.Value).FirstOrDefault(),

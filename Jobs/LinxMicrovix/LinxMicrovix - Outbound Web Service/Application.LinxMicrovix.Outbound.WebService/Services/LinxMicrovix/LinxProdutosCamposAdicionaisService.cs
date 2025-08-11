@@ -55,7 +55,6 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                     var validations = new List<ValidationResult>();
 
                     var entity = new LinxProdutosCamposAdicionais(
-                        listValidations: validations,
                         cod_produto: records[i].Where(pair => pair.Key == "cod_produto").Select(pair => pair.Value).FirstOrDefault(),
                         campo: records[i].Where(pair => pair.Key == "campo").Select(pair => pair.Value).FirstOrDefault(),
                         valor: records[i].Where(pair => pair.Key == "valor").Select(pair => pair.Value).FirstOrDefault(),

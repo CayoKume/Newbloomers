@@ -51,7 +51,6 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                     var validations = new List<ValidationResult>();
 
                     var entity = new LinxMovimentoCartoes(
-                        listValidations: validations,
                         identificador: records[i].Where(pair => pair.Key == "identificador").Select(pair => pair.Value).FirstOrDefault(),
                         cnpj_emp: records[i].Where(pair => pair.Key == "cnpj_emp").Select(pair => pair.Value).FirstOrDefault(),
                         codlojasitef: records[i].Where(pair => pair.Key == "codlojasitef").Select(pair => pair.Value).FirstOrDefault(),

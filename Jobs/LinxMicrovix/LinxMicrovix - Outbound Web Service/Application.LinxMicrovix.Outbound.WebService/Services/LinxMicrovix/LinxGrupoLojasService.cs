@@ -50,7 +50,6 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                     var validations = new List<ValidationResult>();
 
                     var entity = new LinxGrupoLojas(
-                        listValidations: validations,
                         cnpj: records[i].Where(pair => pair.Key == "CNPJ").Select(pair => pair.Value).FirstOrDefault(),
                         nome_empresa: records[i].Where(pair => pair.Key == "nome_empresa").Select(pair => pair.Value).FirstOrDefault(),
                         id_empresas_rede: records[i].Where(pair => pair.Key == "id_empresas_rede").Select(pair => pair.Value).FirstOrDefault(),

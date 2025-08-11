@@ -55,7 +55,6 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                     var validations = new List<ValidationResult>();
 
                     var entity = new LinxMovimentoTrocas(
-                        listValidations: validations,
                         cnpj_emp: records[i].Where(pair => pair.Key == "cnpj_emp").Select(pair => pair.Value).FirstOrDefault(),
                         identificador: records[i].Where(pair => pair.Key == "identificador").Select(pair => pair.Value).FirstOrDefault(),
                         num_vale: records[i].Where(pair => pair.Key == "num_vale").Select(pair => pair.Value).FirstOrDefault(),

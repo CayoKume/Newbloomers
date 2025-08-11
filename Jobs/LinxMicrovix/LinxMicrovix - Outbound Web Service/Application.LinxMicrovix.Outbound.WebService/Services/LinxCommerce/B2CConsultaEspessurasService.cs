@@ -51,8 +51,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                 {
                     var validations = new List<ValidationResult>();
 
-                    var entity = new B2CConsultaEspessuras(
-                        listValidations: validations,
+                    var entity = new Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxCommerce.B2CConsultaEspessuras(
                         codigo_espessura: records[i].Where(pair => pair.Key == "codigo_espessura").Select(pair => pair.Value).FirstOrDefault(),
                         nome_espessura: records[i].Where(pair => pair.Key == "nome_espessura").Select(pair => pair.Value).FirstOrDefault(),
                         timestamp: records[i].Where(pair => pair.Key == "timestamp").Select(pair => pair.Value).FirstOrDefault(),

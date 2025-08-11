@@ -50,7 +50,6 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                     var validations = new List<ValidationResult>();
 
                     var entity = new LinxCfopFiscal(
-                        listValidations: validations,
                         portal: records[i].Where(pair => pair.Key == "portal").Select(pair => pair.Value).FirstOrDefault(),
                         id_cfop_fiscal: records[i].Where(pair => pair.Key == "id_cfop_fiscal").Select(pair => pair.Value).FirstOrDefault(),
                         cfop_fiscal: records[i].Where(pair => pair.Key == "cfop_fiscal").Select(pair => pair.Value).FirstOrDefault(),

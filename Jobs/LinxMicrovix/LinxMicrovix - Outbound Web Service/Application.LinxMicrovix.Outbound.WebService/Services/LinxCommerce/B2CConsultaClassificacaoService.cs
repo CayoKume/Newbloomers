@@ -161,7 +161,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
             {
                 try
                 {
-                    var entity = new Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxCommerce.B2CConsultaClassificacao(
+                    var entity = new Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxCommerce.Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxCommerce.B2CConsultaClassificacao(
                         codigo_classificacao: records[i].Where(pair => pair.Key == "codigo_classificacao").Select(pair => pair.Value).FirstOrDefault(),
                         nome_classificacao: records[i].Where(pair => pair.Key == "nome_classificacao").Select(pair => pair.Value).FirstOrDefault(),
                         timestamp: records[i].Where(pair => pair.Key == "timestamp").Select(pair => pair.Value).FirstOrDefault(),

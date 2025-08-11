@@ -51,8 +51,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                 {
                     var validations = new List<ValidationResult>();
 
-                    var entity = new B2CConsultaPlanos(
-                        listValidations: validations,
+                    var entity = new Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxCommerce.B2CConsultaPlanos(
                         plano: records[i].Where(pair => pair.Key == "plano").Select(pair => pair.Value).FirstOrDefault(),
                         nome_plano: records[i].Where(pair => pair.Key == "nome_plano").Select(pair => pair.Value).FirstOrDefault(),
                         forma_pagamento: records[i].Where(pair => pair.Key == "forma_pagamento").Select(pair => pair.Value).FirstOrDefault(),

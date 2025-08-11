@@ -54,7 +54,6 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                     var validations = new List<ValidationResult>();
 
                     var entity = new LinxClientesFornec(
-                        listValidations: validations,
                         cod_cliente: records[i].Where(pair => pair.Key == "cod_cliente").Select(pair => pair.Value).FirstOrDefault(),
                         razao_cliente: records[i].Where(pair => pair.Key == "razao_cliente").Select(pair => pair.Value).FirstOrDefault(),
                         nome_cliente: records[i].Where(pair => pair.Key == "nome_cliente").Select(pair => pair.Value).FirstOrDefault(),
