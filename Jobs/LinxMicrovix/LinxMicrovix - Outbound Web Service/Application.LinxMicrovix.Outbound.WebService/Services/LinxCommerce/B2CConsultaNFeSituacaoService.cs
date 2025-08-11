@@ -1,4 +1,4 @@
-﻿using Application.Core.Interfaces;
+using Application.Core.Interfaces;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Handlers.Commands;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Services;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Services.LinxCommerce;
@@ -8,9 +8,9 @@ using Domain.Core.Interfaces;
 using Domain.LinxMicrovix.Outbound.WebService.Models.LinxCommerce;
 using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Api;
-
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxCommerce;
 using System.ComponentModel.DataAnnotations;
+using FluentValidation;
 
 namespace Application.LinxMicrovix.Outbound.WebService.Services
 {
@@ -22,6 +22,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
         private readonly ILinxMicrovixCommandHandler _linxMicrovixCommandHandler;
         private readonly IB2CConsultaNFeSituacaoRepository _b2cConsultaNFeSituacaoRepository;
+        private readonly IValidator<Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxCommerce.B2CConsultaNFeSituacao> _validator;
         private static List<string?> _b2cConsultaNFeSituacaoCache { get; set; } = new List<string?>();
 
         public B2CConsultaNFeSituacaoService(
@@ -29,10 +30,12 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
             ILoggerService logger,
             ICoreRepository coreRepository,
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
+            IValidator<Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxCommerce.B2CConsultaNFeSituacao> validator,
             ILinxMicrovixCommandHandler linxMicrovixCommandHandler,
             IB2CConsultaNFeSituacaoRepository b2cConsultaNFeSituacaoRepository
         )
         {
+            _validator = validator;
             _apiCall = apiCall;
             _logger = logger;
             _coreRepository = coreRepository;
@@ -51,7 +54,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                 {
                     var validations = new List<ValidationResult>();
 
-                    var entity = new B2CConsultaNFeSituacao(
+                    var entity = new Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxCommerce.B2CConsultaNFeSituacao(
                         listValidations: validations,
                         id_nfe_situacao: records[i].Where(pair => pair.Key == "id_nfe_situacao").Select(pair => pair.Value).FirstOrDefault(),
                         descricao: records[i].Where(pair => pair.Key == "descricao").Select(pair => pair.Value).FirstOrDefault(),
@@ -60,27 +63,30 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                         recordXml: records[i].Where(pair => pair.Key == "recordXml").Select(pair => pair.Value).FirstOrDefault()
                     );
 
-                    var contexto = new ValidationContext(entity, null, null);
-                    Validator.TryValidateObject(entity, contexto, validations, true);
+                    var xml = records[i].Where(pair => pair.Key == "recordXml").Select(pair => pair.Value).FirstOrDefault();
+                    var validations = _validator.Validate(entity);`r`n
 
-                    if (validations.Count() > 0)
+                    if (validations.Errors.Count() > 0)
                     {
-                        for (int j = 0; j < validations.Count(); j++)
+                        var message = $"Error when convert record - id_nfe_situacao: {records[i].Where(pair => pair.Key == ";
+    
+                        for (int j = 0; j < validations.Errors.Count(); j++)
                         {
-                            _logger.AddMessage(
-                                message: $"Error when convert record - id_nfe_situacao: {records[i].Where(pair => pair.Key == "id_nfe_situacao").Select(pair => pair.Value).FirstOrDefault()} | descricao: {records[i].Where(pair => pair.Key == "descricao").Select(pair => pair.Value).FirstOrDefault()}\n" +
-                                         $"{validations[j].ErrorMessage}"
-                            );
+                            var msg = validations.Errors[j].ErrorMessage;
+                            var property = validations.Errors[j].PropertyName;
+                            var value = validations.Errors[j].FormattedMessagePlaceholderValues.Where(x => x.Key == "PropertyValue").FirstOrDefault().Value;
+                            message += $"{msg.Replace("[0]", $"{property}: {value}")}";
                         }
-                        continue;
+    
+                        _logger.AddMessage(message);
                     }
-
-                    list.Add(entity);
+    
+                    list.Add(new B2CConsultaNFeSituacao(entity, xml));
                 }
                 catch (Exception ex)
                 {
                     throw new GeneralException(
-                        message: $"Error when convert record - id_nfe_situacao: {records[i].Where(pair => pair.Key == "id_nfe_situacao").Select(pair => pair.Value).FirstOrDefault()} | descricao: {records[i].Where(pair => pair.Key == "descricao").Select(pair => pair.Value).FirstOrDefault()} - {ex.Message}",
+                        message: $"Error when convert record - id_nfe_situacao: {records[i].Where(pair => pair.Key == " - {ex.Message}id_nfe_situacao").Select(pair => pair.Value).FirstOrDefault()} | descricao: {records[i].Where(pair => pair.Key == "descricao").Select(pair => pair.Value).FirstOrDefault()} - {ex.Message}",
                             exceptionMessage: ex.StackTrace
                     );
                 }
@@ -152,3 +158,4 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
         }
     }
 }
+
