@@ -1,4 +1,4 @@
-﻿using Application.Core.Interfaces;
+using Application.Core.Interfaces;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Services;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Services.LinxMicrovix;
 using Domain.Core.Entities.Exceptions;
@@ -13,6 +13,7 @@ using Application.LinxMicrovix.Outbound.WebService.Interfaces.Handlers.Commands;
 using Domain.Core.Interfaces;
 using Application.LinxMicrovix.Outbound.WebService.Handlers.Commands;
 using Domain.LinxMicrovix.Outbound.WebService.Models.Base;
+using FluentValidation;
 
 namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
 {
@@ -22,6 +23,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
         private readonly ILoggerService _logger;
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
         private readonly ILinxProdutosCamposAdicionaisRepository _linxProdutosCamposAdicionaisRepository;
+        private readonly IValidator<Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxProdutosCamposAdicionais> _validator;
         private readonly ICoreRepository _coreRepository;
         private readonly ILinxMicrovixCommandHandler _linxMicrovixCommandHandler;
 
@@ -33,10 +35,12 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
             ILinxProdutosCamposAdicionaisRepository linxProdutosCamposAdicionaisRepository,
             ICoreRepository coreRepository,
+            IValidator<Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxProdutosCamposAdicionais> validator,
             ILinxMicrovixCommandHandler linxMicrovixCommandHandler
         )
         {
             _apiCall = apiCall;
+            _validator = validator;
             _logger = logger;
             _linxMicrovixServiceBase = linxMicrovixServiceBase;
             _linxProdutosCamposAdicionaisRepository = linxProdutosCamposAdicionaisRepository;
@@ -48,37 +52,38 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
         public List<LinxProdutosCamposAdicionais?> DeserializeXMLToObject(LinxAPIParam jobParameter, List<Dictionary<string?, string?>> records)
         {
             var list = new List<LinxProdutosCamposAdicionais>();
+            
             for (int i = 0; i < records.Count(); i++)
             {
                 try
                 {
-                    var validations = new List<ValidationResult>();
-
-                    var entity = new LinxProdutosCamposAdicionais(
+                    var entity = new Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxProdutosCamposAdicionais(
                         cod_produto: records[i].Where(pair => pair.Key == "cod_produto").Select(pair => pair.Value).FirstOrDefault(),
                         campo: records[i].Where(pair => pair.Key == "campo").Select(pair => pair.Value).FirstOrDefault(),
                         valor: records[i].Where(pair => pair.Key == "valor").Select(pair => pair.Value).FirstOrDefault(),
                         timestamp: records[i].Where(pair => pair.Key == "timestamp").Select(pair => pair.Value).FirstOrDefault(),
-                        portal: records[i].Where(pair => pair.Key == "portal").Select(pair => pair.Value).FirstOrDefault(),
-                        recordXml: records[i].Where(pair => pair.Key == "recordXml").Select(pair => pair.Value).FirstOrDefault()
+                        portal: records[i].Where(pair => pair.Key == "portal").Select(pair => pair.Value).FirstOrDefault()
                     );
 
-                    var contexto = new ValidationContext(entity, null, null);
-                    Validator.TryValidateObject(entity, contexto, validations, true);
+                    var xml = records[i].Where(pair => pair.Key == "recordXml").Select(pair => pair.Value).FirstOrDefault();
+                    var validations = _validator.Validate(entity);
 
-                    if (validations.Count() > 0)
+                    if (validations.Errors.Count() > 0)
                     {
-                        for (int j = 0; j < validations.Count(); j++)
+                        var message = $"Error when convert record - cod_produto: {records[i].Where(pair => pair.Key == "cod_produto").Select(pair => pair.Value).FirstOrDefault()} | campo: {records[i].Where(pair => pair.Key == "campo").Select(pair => pair.Value).FirstOrDefault()} | valor: {records[i].Where(pair => pair.Key == "valor").Select(pair => pair.Value).FirstOrDefault()}" + "\n";
+		
+                        for (int j = 0; j < validations.Errors.Count(); j++)
                         {
-                            _logger.AddMessage(
-                                message: $"Error when convert record - cod_produto: {records[i].Where(pair => pair.Key == "cod_produto").Select(pair => pair.Value).FirstOrDefault()} | campo: {records[i].Where(pair => pair.Key == "campo").Select(pair => pair.Value).FirstOrDefault()} | valor: {records[i].Where(pair => pair.Key == "valor").Select(pair => pair.Value).FirstOrDefault()}\n" +
-                                         $"{validations[j].ErrorMessage}"
-                            );
+                            var msg = validations.Errors[j].ErrorMessage;
+                            var property = validations.Errors[j].PropertyName;
+                            var value = validations.Errors[j].FormattedMessagePlaceholderValues.Where(x => x.Key == "PropertyValue").FirstOrDefault().Value;
+                            message += $"{msg.Replace("[0]", $"{property}: {value}")}";
                         }
-                        continue;
+		
+                        _logger.AddMessage(message);
                     }
-
-                    list.Add(entity);
+		
+                    list.Add(new LinxProdutosCamposAdicionais(entity, xml));
                 }
                 catch (Exception ex)
                 {
@@ -205,3 +210,5 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
         }
     }
 }
+
+

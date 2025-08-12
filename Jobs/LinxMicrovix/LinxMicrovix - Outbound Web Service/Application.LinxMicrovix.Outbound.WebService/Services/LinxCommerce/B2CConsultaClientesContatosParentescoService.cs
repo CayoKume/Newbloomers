@@ -1,4 +1,4 @@
-﻿using Application.Core.Interfaces;
+using Application.Core.Interfaces;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Services;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Services.LinxCommerce;
 using Domain.Core.Entities.Exceptions;
@@ -11,6 +11,7 @@ using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxCommerc
 using System.ComponentModel.DataAnnotations;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Handlers.Commands;
 using Domain.LinxMicrovix.Outbound.WebService.Models.Base;
+using FluentValidation;
 
 namespace Application.LinxMicrovix.Outbound.WebService.Services
 {
@@ -22,6 +23,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
         private readonly ICoreRepository _coreRepository;
         private readonly IB2CConsultaClientesContatosParentescoRepository _b2cConsultaClientesContatosParentescoRepository;
         private readonly ILinxMicrovixCommandHandler _linxMicrovixCommandHandler;
+        private readonly IValidator<Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxCommerce.B2CConsultaClientesContatosParentesco> _validator;
         private static List<string?> _b2cConsultaClientesContatosParentescoCache { get; set; } = new List<string?>();
 
         public B2CConsultaClientesContatosParentescoService(
@@ -30,9 +32,11 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
             ICoreRepository coreRepository,
             IB2CConsultaClientesContatosParentescoRepository b2cConsultaClientesContatosParentescoRepository,
+            IValidator<Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxCommerce.B2CConsultaClientesContatosParentesco> validator,
             ILinxMicrovixCommandHandler linxMicrovixCommandHandler
         )
         {
+            _validator = validator;
             _apiCall = apiCall;
             _logger = logger;
             _linxMicrovixServiceBase = linxMicrovixServiceBase;
@@ -49,32 +53,32 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
             {
                 try
                 {
-                    var validations = new List<ValidationResult>();
-
                     var entity = new Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxCommerce.B2CConsultaClientesContatosParentesco(
                         id_parentesco: records[i].Where(pair => pair.Key == "id_parentesco").Select(pair => pair.Value).FirstOrDefault(),
                         descricao_parentesco: records[i].Where(pair => pair.Key == "descricao_parentesco").Select(pair => pair.Value).FirstOrDefault(),
                         timestamp: records[i].Where(pair => pair.Key == "timestamp").Select(pair => pair.Value).FirstOrDefault(),
-                        portal: records[i].Where(pair => pair.Key == "portal").Select(pair => pair.Value).FirstOrDefault(),
-                        recordXml: records[i].Where(pair => pair.Key == "recordXml").Select(pair => pair.Value).FirstOrDefault()
+                        portal: records[i].Where(pair => pair.Key == "portal").Select(pair => pair.Value).FirstOrDefault()
                     );
 
-                    var contexto = new ValidationContext(entity, null, null);
-                    Validator.TryValidateObject(entity, contexto, validations, true);
+                    var xml = records[i].Where(pair => pair.Key == "recordXml").Select(pair => pair.Value).FirstOrDefault();
+                    var validations = _validator.Validate(entity);
 
-                    if (validations.Count() > 0)
+                    if (validations.Errors.Count() > 0)
                     {
-                        for (int j = 0; j < validations.Count(); j++)
+                        var message = $"Error when convert record - id_parentesco: {records[i].Where(pair => pair.Key == "id_parentesco").Select(pair => pair.Value).FirstOrDefault()} | descricao_parentesco: {records[i].Where(pair => pair.Key == "descricao_parentesco").Select(pair => pair.Value).FirstOrDefault()}";
+    
+                        for (int j = 0; j < validations.Errors.Count(); j++)
                         {
-                            _logger.AddMessage(
-                                message: $"Error when convert record - id_parentesco: {records[i].Where(pair => pair.Key == "id_parentesco").Select(pair => pair.Value).FirstOrDefault()} | descricao_parentesco: {records[i].Where(pair => pair.Key == "descricao_parentesco").Select(pair => pair.Value).FirstOrDefault()}\n" +
-                                         $"{validations[j].ErrorMessage}"
-                            );
+                            var msg = validations.Errors[j].ErrorMessage;
+                            var property = validations.Errors[j].PropertyName;
+                            var value = validations.Errors[j].FormattedMessagePlaceholderValues.Where(x => x.Key == "PropertyValue").FirstOrDefault().Value;
+                            message += $"{msg.Replace("[0]", $"{property}: {value}")}";
                         }
-                        continue;
+    
+                        _logger.AddMessage(message);
                     }
-
-                    list.Add(entity);
+    
+                    list.Add(new B2CConsultaClientesContatosParentesco(entity, xml));
                 }
                 catch (Exception ex)
                 {
@@ -193,3 +197,4 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
         }
     }
 }
+

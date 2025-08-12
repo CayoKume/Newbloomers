@@ -1,17 +1,18 @@
-﻿using Application.Core.Interfaces;
-using Application.LinxMicrovix.Outbound.WebService.Interfaces.Api;
+using Application.Core.Interfaces;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Handlers.Commands;
-using Application.LinxMicrovix.Outbound.WebService.Interfaces.Handlers.Commands.LinxCommerce;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Services;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Services.LinxCommerce;
 using Domain.Core.Entities.Exceptions;
 using Domain.Core.Enums;
 using Domain.Core.Interfaces;
-using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
-using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxCommerce;
 using Domain.LinxMicrovix.Outbound.WebService.Models.LinxCommerce;
+using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Api;
+using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxCommerce;
 using Domain.LinxMicrovix.Outbound.WebService.Models.Parameters;
 using System.ComponentModel.DataAnnotations;
+using FluentValidation;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Handlers.Commands.LinxCommerce;
 
 namespace Application.LinxMicrovix.Outbound.WebService.Services
 {
@@ -24,6 +25,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
         private readonly ILinxMicrovixCommandHandler _linxMicrovixCommandHandler;
         private readonly IB2CConsultaPedidosCommandHandler _b2cConsultaPedidosCommandHandler;
         private readonly IB2CConsultaPedidosRepository _b2cConsultaPedidosRepository;
+        private readonly IValidator<Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxCommerce.B2CConsultaPedidos> _validator;
         private static List<string?> _b2cConsultaPedidosCache { get; set; } = new List<string?>();
 
         public B2CConsultaPedidosService(
@@ -31,11 +33,13 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
             ILoggerService logger,
             ICoreRepository coreRepository,
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
-            IB2CConsultaPedidosCommandHandler b2cConsultaPedidosCommandHandler,
+            IValidator<Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxCommerce.B2CConsultaPedidos> validator,
             ILinxMicrovixCommandHandler linxMicrovixCommandHandler,
-            IB2CConsultaPedidosRepository b2cConsultaPedidosRepository
+            IB2CConsultaPedidosRepository b2cConsultaPedidosRepository,
+            IB2CConsultaPedidosCommandHandler b2cConsultaPedidosCommandHandler
         )
         {
+            _validator = validator;
             _apiCall = apiCall;
             _logger = logger;
             _coreRepository = coreRepository;
@@ -53,8 +57,6 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
             {
                 try
                 {
-                    var validations = new List<ValidationResult>();
-
                     var entity = new Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxCommerce.B2CConsultaPedidos(
                         id_pedido: records[i].Where(pair => pair.Key == "id_pedido").Select(pair => pair.Value).FirstOrDefault(),
                         dt_pedido: records[i].Where(pair => pair.Key == "dt_pedido").Select(pair => pair.Value).FirstOrDefault(),
@@ -83,26 +85,28 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                         id_tipo_b2c: records[i].Where(pair => pair.Key == "id_tipo_b2c").Select(pair => pair.Value).FirstOrDefault(),
                         ecommerce_origem: records[i].Where(pair => pair.Key == "ecommerce_origem").Select(pair => pair.Value).FirstOrDefault(),
                         order_id: records[i].Where(pair => pair.Key == "order_id").Select(pair => pair.Value).FirstOrDefault(),
-                        portal: records[i].Where(pair => pair.Key == "portal").Select(pair => pair.Value).FirstOrDefault(),
-                        recordXml: records[i].Where(pair => pair.Key == "recordXml").Select(pair => pair.Value).FirstOrDefault()
+                        portal: records[i].Where(pair => pair.Key == "portal").Select(pair => pair.Value).FirstOrDefault()
                     );
 
-                    var contexto = new ValidationContext(entity, null, null);
-                    Validator.TryValidateObject(entity, contexto, validations, true);
+                    var xml = records[i].Where(pair => pair.Key == "recordXml").Select(pair => pair.Value).FirstOrDefault();
+                    var validations = _validator.Validate(entity);
 
-                    if (validations.Count() > 0)
+                    if (validations.Errors.Count() > 0)
                     {
-                        for (int j = 0; j < validations.Count(); j++)
+                        var message = $"Error when convert record - id_pedido: {records[i].Where(pair => pair.Key == "id_pedido").Select(pair => pair.Value).FirstOrDefault()} | order_id: {records[i].Where(pair => pair.Key == "order_id").Select(pair => pair.Value).FirstOrDefault()} ";
+    
+                        for (int j = 0; j < validations.Errors.Count(); j++)
                         {
-                            _logger.AddMessage(
-                                message: $"Error when convert record - id_pedido: {records[i].Where(pair => pair.Key == "id_pedido").Select(pair => pair.Value).FirstOrDefault()} | order_id: {records[i].Where(pair => pair.Key == "order_id").Select(pair => pair.Value).FirstOrDefault()}\n" +
-                                         $"{validations[j].ErrorMessage}"
-                            );
+                            var msg = validations.Errors[j].ErrorMessage;
+                            var property = validations.Errors[j].PropertyName;
+                            var value = validations.Errors[j].FormattedMessagePlaceholderValues.Where(x => x.Key == "PropertyValue").FirstOrDefault().Value;
+                            message += $"{msg.Replace("[0]", $"{property}: {value}")}";
                         }
-                        continue;
+    
+                        _logger.AddMessage(message);
                     }
-
-                    list.Add(entity);
+    
+                    list.Add(new B2CConsultaPedidos(entity, xml));
                 }
                 catch (Exception ex)
                 {
@@ -257,14 +261,10 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                             _listSomenteNovos.AddRange(listRecords);
                             pedido.is_present_in_erp = true;
                         } 
-                    }
-                }
+    }
+}
 
-                if (_listSomenteNovos.Count() > 0)
-                {
-                    _b2cConsultaPedidosRepository.BulkInsertIntoTableRaw(records: _listSomenteNovos, jobParameter: jobParameter);
-                    await _coreRepository.CallDbProcMerge(jobParameter.schema, jobParameter.tableName);
-                }
+
 
                 if (_listRegistrosConsultados.Count() > 0)
                 {
@@ -272,7 +272,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                                 recordsList: _listRegistrosConsultados.ToList(),
                                 entity: new IntegrityLockTablesRegister(),
                                 tableName: "IntegrityLockTablesRegisters"
-                            ); 
+                    ); 
                 }
 
                 return true;

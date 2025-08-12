@@ -1,4 +1,4 @@
-﻿using Application.Core.Interfaces;
+using Application.Core.Interfaces;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Handlers.Commands;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Services;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Services.LinxCommerce;
@@ -11,6 +11,7 @@ using Application.LinxMicrovix.Outbound.WebService.Interfaces.Api;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxCommerce;
 using Domain.LinxMicrovix.Outbound.WebService.Models.Base;
 using System.ComponentModel.DataAnnotations;
+using FluentValidation;
 
 namespace Application.LinxMicrovix.Outbound.WebService.Services
 {
@@ -22,6 +23,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
         private readonly ICoreRepository _coreRepository;
         private readonly IB2CConsultaClientesEstadoCivilRepository _b2cConsultaClientesEstadoCivilRepository;
         private readonly ILinxMicrovixCommandHandler _linxMicrovixCommandHandler;
+        private readonly IValidator<Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxCommerce.B2CConsultaClientesEstadoCivil> _validator;
         private static List<string?> _b2cConsultaClientesEstadoCivilCache { get; set; } = new List<string?>();
 
         public B2CConsultaClientesEstadoCivilService(
@@ -30,9 +32,11 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
             ICoreRepository coreRepository,
             IB2CConsultaClientesEstadoCivilRepository b2cConsultaClientesEstadoCivilRepository,
+            IValidator<Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxCommerce.B2CConsultaClientesEstadoCivil> validator,
             ILinxMicrovixCommandHandler linxMicrovixCommandHandler
         )
         {
+            _validator = validator;
             _apiCall = apiCall;
             _logger = logger;
             _b2cConsultaClientesEstadoCivilRepository = b2cConsultaClientesEstadoCivilRepository;
@@ -49,37 +53,37 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
             {
                 try
                 {
-                    var validations = new List<ValidationResult>();
-
                     var entity = new Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxCommerce.B2CConsultaClientesEstadoCivil(
                         id_estado_civil: records[i].Where(pair => pair.Key == "id_estado_civil").Select(pair => pair.Value).FirstOrDefault(),
                         estado_civil: records[i].Where(pair => pair.Key == "estado_civil").Select(pair => pair.Value).FirstOrDefault(),
                         timestamp: records[i].Where(pair => pair.Key == "timestamp").Select(pair => pair.Value).FirstOrDefault(),
-                        portal: records[i].Where(pair => pair.Key == "portal").Select(pair => pair.Value).FirstOrDefault(),
-                        recordXml: records[i].Where(pair => pair.Key == "recordXml").Select(pair => pair.Value).FirstOrDefault()
+                        portal: records[i].Where(pair => pair.Key == "portal").Select(pair => pair.Value).FirstOrDefault()
                     );
 
-                    var contexto = new ValidationContext(entity, null, null);
-                    Validator.TryValidateObject(entity, contexto, validations, true);
+                    var xml = records[i].Where(pair => pair.Key == "recordXml").Select(pair => pair.Value).FirstOrDefault();
+                    var validations = _validator.Validate(entity);
 
-                    if (validations.Count() > 0)
+                    if (validations.Errors.Count() > 0)
                     {
-                        for (int j = 0; j < validations.Count(); j++)
+                        var message = $"Error when convert record - id_estado_civil: {records[i].Where(pair => pair.Key == "id_estado_civil").Select(pair => pair.Value).FirstOrDefault()} | estado_civil: {records[i].Where(pair => pair.Key == "estado_civil").Select(pair => pair.Value).FirstOrDefault()}";
+    
+                        for (int j = 0; j < validations.Errors.Count(); j++)
                         {
-                            _logger.AddMessage(
-                                message: $"Error when convert record - id_estado_civil: {records[i].Where(pair => pair.Key == "id_estado_civil").Select(pair => pair.Value).FirstOrDefault()} | estado_civil:{records[i].Where(pair => pair.Key == "estado_civil").Select(pair => pair.Value).FirstOrDefault()}\n" +
-                                         $"{validations[j].ErrorMessage}"
-                            );
+                            var msg = validations.Errors[j].ErrorMessage;
+                            var property = validations.Errors[j].PropertyName;
+                            var value = validations.Errors[j].FormattedMessagePlaceholderValues.Where(x => x.Key == "PropertyValue").FirstOrDefault().Value;
+                            message += $"{msg.Replace("[0]", $"{property}: {value}")}";
                         }
-                        continue;
+    
+                        _logger.AddMessage(message);
                     }
-
-                    list.Add(entity);
+    
+                    list.Add(new B2CConsultaClientesEstadoCivil(entity, xml));
                 }
                 catch (Exception ex)
                 {
                     throw new GeneralException(
-                        message: $"Error when convert record - id_estado_civil: {records[i].Where(pair => pair.Key == "id_estado_civil").Select(pair => pair.Value).FirstOrDefault()} | estado_civil:{records[i].Where(pair => pair.Key == "estado_civil").Select(pair => pair.Value).FirstOrDefault()} - {ex.Message}",
+                        message: $"Error when convert record - id_estado_civil: {records[i].Where(pair => pair.Key == "id_estado_civil").Select(pair => pair.Value).FirstOrDefault()} | estado_civil: {records[i].Where(pair => pair.Key == "estado_civil").Select(pair => pair.Value).FirstOrDefault()} - {ex.Message}",
                         exceptionMessage: ex.StackTrace
                     );
                 }
@@ -151,3 +155,4 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
         }
     }
 }
+

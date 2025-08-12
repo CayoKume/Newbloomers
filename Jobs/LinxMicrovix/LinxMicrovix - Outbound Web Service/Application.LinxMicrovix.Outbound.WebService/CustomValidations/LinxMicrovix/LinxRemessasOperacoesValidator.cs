@@ -8,7 +8,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.CustomValidations.LinxMic
     {
         public LinxRemessasOperacoesValidator()
         {
-            RuleFor(x => x.id_remessa_operacao).MustBeValidInt32().When(x => !string.IsNullOrEmpty(x.id_remessa_operacao));
+            RuleFor(x => x.id_remessa_operacoes).MustBeValidInt32().When(x => !string.IsNullOrEmpty(x.id_remessa_operacoes));
             RuleFor(x => x.descricao).MaximumLength(30).WithMessage("O campo 'descricao' deve ter no máximo 30 caracteres.").When(x => !string.IsNullOrEmpty(x.descricao));
             RuleFor(x => x.timestamp).MustBeValidInt64().When(x => !string.IsNullOrEmpty(x.timestamp));
             RuleFor(x => x.portal).MustBeValidInt32().When(x => !string.IsNullOrEmpty(x.portal));

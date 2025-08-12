@@ -1,4 +1,4 @@
-using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
+
 using Domain.Core.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -7,20 +7,11 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
 {
     public class LinxRespostaVenda
     {
-        [NotMapped]
-        public Int32 id { get; set; }
-
         public DateTime? lastupdateon { get; private set; }
-
         public Int32? id_resposta_venda { get; private set; }
-
         public Int32? portal { get; private set; }
-
-        [LengthValidation(length: 100, propertyName: "descricao_resposta")]
         public string? descricao_resposta { get; private set; }
-
         public Int32? id_pergunta_venda { get; private set; }
-
         public Int64? timestamp { get; private set; }
 
         [NotMapped]
@@ -33,38 +24,13 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
 
         public LinxRespostaVenda() { }
 
-        public LinxRespostaVenda(
-            List<ValidationResult> listValidations,
-            string? portal,
-            string? id_resposta_venda,
-            string? descricao_resposta,
-            string? id_pergunta_venda,
-            string? timestamp
-        )
-        {
-            lastupdateon = DateTime.Now;
-
-            this.portal =
-                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
-                Convert.ToInt32(portal) :
-                0;
-
-            this.id_resposta_venda =
-                ConvertToInt32Validation.IsValid(id_resposta_venda, "id_resposta_venda", listValidations) ?
-                Convert.ToInt32(id_resposta_venda) :
-                0;
-
-            this.id_pergunta_venda =
-                ConvertToInt32Validation.IsValid(id_pergunta_venda, "id_pergunta_venda", listValidations) ?
-                Convert.ToInt32(id_pergunta_venda) :
-                0;
-
-            this.timestamp =
-                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
-                Convert.ToInt64(timestamp) :
-                0;
-
-            this.descricao_resposta = descricao_resposta;
+        public LinxRespostaVenda(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxRespostaVenda record, string recordXml) {
+            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+            this.portal = CustomConvertersExtensions.ConvertToInt32Validation(record.portal);
+            this.id_resposta_venda = CustomConvertersExtensions.ConvertToInt32Validation(record.id_resposta_venda);
+            this.id_pergunta_venda = CustomConvertersExtensions.ConvertToInt32Validation(record.id_pergunta_venda);
+            this.timestamp = CustomConvertersExtensions.ConvertToInt64Validation(record.timestamp);
+            this.descricao_resposta = record.descricao_resposta;
         }
     }
 }

@@ -1,30 +1,45 @@
-using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
+
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix
 {
     public class LinxNFeEvento
     {
-        public string? id_espessura { get; private set; }
-        public string? desc_espessura { get; private set; }
+        public string? lastupdateon { get; private set; }
+        public string? portal { get; private set; }
+        public string? cnpj_emp { get; private set; }
+        public string? id_nfe_evento { get; private set; }
+        public string? id_nfe { get; private set; }
+        public string? codigo_tipo { get; private set; }
+        public string? xml { get; private set; }
         public string? timestamp { get; private set; }
-        public string? codigo_integracao_ws { get; private set; }
-        public string? ativo { get; private set; }
+        public string? data_emissao { get; private set; }
+        public string? hora_emissao { get; private set; }
 
         public LinxNFeEvento() { }
 
         public LinxNFeEvento(
-            string? id_espessura,
-            string? desc_espessura,
+            string? lastupdateon,
+            string? portal,
+            string? cnpj_emp,
+            string? id_nfe_evento,
+            string? id_nfe,
+            string? codigo_tipo,
+            string? xml,
             string? timestamp,
-            string? codigo_integracao_ws,
-            string? ativo
+            string? data_emissao,
+            string? hora_emissao
         )
         {
-            this.id_espessura = id_espessura;
-            this.desc_espessura = desc_espessura;
+            this.lastupdateon = lastupdateon;
+            this.portal = portal;
+            this.cnpj_emp = cnpj_emp;
+            this.id_nfe_evento = id_nfe_evento;
+            this.id_nfe = id_nfe;
+            this.codigo_tipo = codigo_tipo;
+            this.xml = xml;
             this.timestamp = timestamp;
-            this.codigo_integracao_ws = codigo_integracao_ws;
-            this.ativo = ativo;
+            this.data_emissao = data_emissao;
+            this.hora_emissao = hora_emissao;
         }
     }
 }

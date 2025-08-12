@@ -1,4 +1,4 @@
-using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
+
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix
 {
@@ -48,6 +48,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix
         public string? empresa { get; private set; }
         public string? transportador { get; private set; }
         public string? deposito { get; private set; }
+        public string? portal { get; private set; }
 
         public LinxPedidosVenda() { }
 
@@ -95,6 +96,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix
             string? transacao_ws,
             string? empresa,
             string? transportador,
+            string? portal,
             string? deposito
         )
         {
@@ -141,6 +143,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix
             this.transacao_ws = transacao_ws;
             this.empresa = empresa;
             this.transportador = transportador;
+            this.portal = portal;
             this.deposito = deposito;
         }
     }

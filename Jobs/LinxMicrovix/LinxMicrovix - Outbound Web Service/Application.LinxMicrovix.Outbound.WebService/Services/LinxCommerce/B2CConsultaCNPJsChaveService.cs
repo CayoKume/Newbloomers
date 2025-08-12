@@ -1,4 +1,4 @@
-﻿using Application.Core.Interfaces;
+using Application.Core.Interfaces;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Handlers.Commands;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Services;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Services.LinxCommerce;
@@ -10,6 +10,7 @@ using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Api;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxCommerce;
 using System.ComponentModel.DataAnnotations;
+using FluentValidation;
 
 namespace Application.LinxMicrovix.Outbound.WebService.Services
 {
@@ -21,6 +22,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
         private readonly ICoreRepository _coreRepository;
         private readonly IB2CConsultaCNPJsChaveRepository _b2cConsultaCNPJsChaveRepository;
         private readonly ILinxMicrovixCommandHandler _linxMicrovixCommandHandler;
+        private readonly IValidator<Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxCommerce.B2CConsultaCNPJsChave> _validator;
         private static List<string?> _b2cConsultaCNPJsChaveCache { get; set; } = new List<string?>();
 
         public B2CConsultaCNPJsChaveService(
@@ -29,9 +31,11 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
             IB2CConsultaCNPJsChaveRepository b2cConsultaCNPJsChaveRepository,
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
             ICoreRepository coreRepository,
+            IValidator<Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxCommerce.B2CConsultaCNPJsChave> validator,
             ILinxMicrovixCommandHandler linxMicrovixCommandHandler
         )
         {
+            _validator = validator;
             _apiCall = apiCall;
             _logger = logger;
             _b2cConsultaCNPJsChaveRepository = b2cConsultaCNPJsChaveRepository;
@@ -48,8 +52,6 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
             {
                 try
                 {
-                    var validations = new List<ValidationResult>();
-
                     var entity = new Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxCommerce.B2CConsultaCNPJsChave(
                         cnpj: records[i].Where(pair => pair.Key == "cnpj").Select(pair => pair.Value).FirstOrDefault(),
                         nome_empresa: records[i].Where(pair => pair.Key == "nome_empresa").Select(pair => pair.Value).FirstOrDefault(),
@@ -60,26 +62,28 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                         empresa: records[i].Where(pair => pair.Key == "empresa").Select(pair => pair.Value).FirstOrDefault(),
                         classificacao_portal: records[i].Where(pair => pair.Key == "classificacao_portal").Select(pair => pair.Value).FirstOrDefault(),
                         b2c: records[i].Where(pair => pair.Key == "b2c").Select(pair => pair.Value).FirstOrDefault(),
-                        oms: records[i].Where(pair => pair.Key == "oms").Select(pair => pair.Value).FirstOrDefault(),
-                        recordXml: records[i].Where(pair => pair.Key == "recordXml").Select(pair => pair.Value).FirstOrDefault()
+                        oms: records[i].Where(pair => pair.Key == "oms").Select(pair => pair.Value).FirstOrDefault()
                     );
 
-                    var contexto = new ValidationContext(entity, null, null);
-                    Validator.TryValidateObject(entity, contexto, validations, true);
+                    var xml = records[i].Where(pair => pair.Key == "recordXml").Select(pair => pair.Value).FirstOrDefault();
+                    var validations = _validator.Validate(entity);
 
-                    if (validations.Count() > 0)
+                    if (validations.Errors.Count() > 0)
                     {
-                        for (int j = 0; j < validations.Count(); j++)
+                        var message = $"Error when convert record - cnpj: {records[i].Where(pair => pair.Key == "cnpj").Select(pair => pair.Value).FirstOrDefault()} | nome_empresa: {records[i].Where(pair => pair.Key == "nome_empresa").Select(pair => pair.Value).FirstOrDefault()} ";
+    
+                        for (int j = 0; j < validations.Errors.Count(); j++)
                         {
-                            _logger.AddMessage(
-                                message: $"Error when convert record - cnpj: {records[i].Where(pair => pair.Key == "cnpj").Select(pair => pair.Value).FirstOrDefault()} | nome_empresa: {records[i].Where(pair => pair.Key == "nome_empresa").Select(pair => pair.Value).FirstOrDefault()}\n" +
-                                         $"{validations[j].ErrorMessage}"
-                            );
+                            var msg = validations.Errors[j].ErrorMessage;
+                            var property = validations.Errors[j].PropertyName;
+                            var value = validations.Errors[j].FormattedMessagePlaceholderValues.Where(x => x.Key == "PropertyValue").FirstOrDefault().Value;
+                            message += $"{msg.Replace("[0]", $"{property}: {value}")}";
                         }
-                        continue;
+    
+                        _logger.AddMessage(message);
                     }
-
-                    list.Add(entity);
+    
+                    list.Add(new B2CConsultaCNPJsChave(entity, xml));
                 }
                 catch (Exception ex)
                 {
@@ -183,3 +187,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
         }
     }
 }
+
+
+
+

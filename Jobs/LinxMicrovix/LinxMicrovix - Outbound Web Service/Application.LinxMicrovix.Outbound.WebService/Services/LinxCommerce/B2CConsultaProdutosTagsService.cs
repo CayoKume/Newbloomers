@@ -1,4 +1,4 @@
-﻿using Application.Core.Interfaces;
+using Application.Core.Interfaces;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Handlers.Commands;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Services;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Services.LinxCommerce;
@@ -8,10 +8,10 @@ using Domain.Core.Interfaces;
 using Domain.LinxMicrovix.Outbound.WebService.Models.LinxCommerce;
 using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Api;
-
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxCommerce;
 using Domain.LinxMicrovix.Outbound.WebService.Models.Base;
 using System.ComponentModel.DataAnnotations;
+using FluentValidation;
 
 namespace Application.LinxMicrovix.Outbound.WebService.Services
 {
@@ -23,6 +23,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
         private readonly ILinxMicrovixCommandHandler _linxMicrovixCommandHandler;
         private readonly IB2CConsultaProdutosTagsRepository _b2cConsultaProdutosTagsRepository;
+        private readonly IValidator<Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxCommerce.B2CConsultaProdutosTags> _validator;
         private static List<string?> _b2cConsultaProdutosTagsCache { get; set; } = new List<string?>();
 
         public B2CConsultaProdutosTagsService(
@@ -30,10 +31,12 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
             ILoggerService logger,
             ICoreRepository coreRepository,
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
+            IValidator<Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxCommerce.B2CConsultaProdutosTags> validator,
             ILinxMicrovixCommandHandler linxMicrovixCommandHandler,
             IB2CConsultaProdutosTagsRepository b2cConsultaProdutosTagsRepository
         )
         {
+            _validator = validator;
             _apiCall = apiCall;
             _logger = logger;
             _coreRepository = coreRepository;
@@ -50,34 +53,34 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
             {
                 try
                 {
-                    var validations = new List<ValidationResult>();
-
                     var entity = new Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxCommerce.B2CConsultaProdutosTags(
                         id_b2c_tags_produtos: records[i].Where(pair => pair.Key == "id_b2c_tags_produtos").Select(pair => pair.Value).FirstOrDefault(),
                         descricao_b2c_tags: records[i].Where(pair => pair.Key == "descricao_b2c_tags").Select(pair => pair.Value).FirstOrDefault(),
                         timestamp: records[i].Where(pair => pair.Key == "timestamp").Select(pair => pair.Value).FirstOrDefault(),
                         id_b2c_tags: records[i].Where(pair => pair.Key == "id_b2c_tags").Select(pair => pair.Value).FirstOrDefault(),
                         codigoproduto: records[i].Where(pair => pair.Key == "codigoproduto").Select(pair => pair.Value).FirstOrDefault(),
-                        portal: records[i].Where(pair => pair.Key == "portal").Select(pair => pair.Value).FirstOrDefault(),
-                        recordXml: records[i].Where(pair => pair.Key == "recordXml").Select(pair => pair.Value).FirstOrDefault()
+                        portal: records[i].Where(pair => pair.Key == "portal").Select(pair => pair.Value).FirstOrDefault()
                     );
 
-                    var contexto = new ValidationContext(entity, null, null);
-                    Validator.TryValidateObject(entity, contexto, validations, true);
+                    var xml = records[i].Where(pair => pair.Key == "recordXml").Select(pair => pair.Value).FirstOrDefault();
+                    var validations = _validator.Validate(entity);
 
-                    if (validations.Count() > 0)
+                    if (validations.Errors.Count() > 0)
                     {
-                        for (int j = 0; j < validations.Count(); j++)
+                        var message = $"Error when convert record - id_b2c_tags_produtos: {records[i].Where(pair => pair.Key == "id_b2c_tags_produtos").Select(pair => pair.Value).FirstOrDefault()} | descricao_b2c_tags: {records[i].Where(pair => pair.Key == "descricao_b2c_tags").Select(pair => pair.Value).FirstOrDefault()} ";
+    
+                        for (int j = 0; j < validations.Errors.Count(); j++)
                         {
-                            _logger.AddMessage(
-                                message: $"Error when convert record - id_b2c_tags_produtos: {records[i].Where(pair => pair.Key == "id_b2c_tags_produtos").Select(pair => pair.Value).FirstOrDefault()} | descricao_b2c_tags: {records[i].Where(pair => pair.Key == "descricao_b2c_tags").Select(pair => pair.Value).FirstOrDefault()}\n" +
-                                         $"{validations[j].ErrorMessage}"
-                            );
+                            var msg = validations.Errors[j].ErrorMessage;
+                            var property = validations.Errors[j].PropertyName;
+                            var value = validations.Errors[j].FormattedMessagePlaceholderValues.Where(x => x.Key == "PropertyValue").FirstOrDefault().Value;
+                            message += $"{msg.Replace("[0]", $"{property}: {value}")}";
                         }
-                        continue;
+    
+                        _logger.AddMessage(message);
                     }
-
-                    list.Add(entity);
+    
+                    list.Add(new B2CConsultaProdutosTags(entity, xml));
                 }
                 catch (Exception ex)
                 {
@@ -154,3 +157,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
         }
     }
 }
+
+
+
+

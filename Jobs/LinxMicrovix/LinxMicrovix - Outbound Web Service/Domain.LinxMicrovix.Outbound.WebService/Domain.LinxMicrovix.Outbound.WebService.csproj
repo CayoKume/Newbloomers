@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="CustomValidations\**" />
+    <EmbeddedResource Remove="CustomValidations\**" />
+    <None Remove="CustomValidations\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Entities\Base\LinxCommerce\" />
     <Folder Include="Entities\Base\LinxMicrovix\" />
     <Folder Include="Entities\LinxCommerce\" />

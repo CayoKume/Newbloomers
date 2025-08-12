@@ -1,4 +1,4 @@
-using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
+
 using Domain.Core.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -8,29 +8,15 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
 {
     public class LinxMovimentoOrigemDevolucoes
     {
-        [SkipProperty]
-        public Int32 id { get; set; }
-
         public DateTime? lastupdateon { get; private set; }
-
         public Guid? identificador { get; private set; }
-
-        [LengthValidation(length: 14, propertyName: "cnpj_emp")]
         public string? cnpj_emp { get; private set; }
-
         public Int32? nota_origem { get; private set; }
-
         public Int32? ecf_origem { get; private set; }
-
         public DateTime? data_origem { get; private set; }
-
-        [LengthValidation(length: 10, propertyName: "serie_origem")]
         public string? serie_origem { get; private set; }
-
         public Int32? empresa { get; private set; }
-
         public Int32? portal { get; private set; }
-
         public Int64? timestamp { get; private set; }
 
         [NotMapped]
@@ -43,57 +29,17 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
 
         public LinxMovimentoOrigemDevolucoes() { }
 
-        public LinxMovimentoOrigemDevolucoes(
-            List<ValidationResult> listValidations,
-            string? identificador,
-            string? cnpj_emp,
-            string? nota_origem,
-            string? ecf_origem,
-            string? data_origem,
-            string? serie_origem,
-            string? empresa,
-            string? portal,
-            string? timestamp
-        )
-        {
-            lastupdateon = DateTime.Now;
-
-            this.portal =
-                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
-                Convert.ToInt32(portal) :
-                0;
-
-            this.nota_origem =
-                ConvertToInt32Validation.IsValid(nota_origem, "nota_origem", listValidations) ?
-                Convert.ToInt32(nota_origem) :
-                0;
-
-            this.ecf_origem =
-                ConvertToInt32Validation.IsValid(ecf_origem, "ecf_origem", listValidations) ?
-                Convert.ToInt32(ecf_origem) :
-                0;
-
-            this.empresa =
-                ConvertToInt32Validation.IsValid(empresa, "empresa", listValidations) ?
-                Convert.ToInt32(empresa) :
-                0;
-
-            this.timestamp =
-                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
-                Convert.ToInt64(timestamp) :
-                0;
-
-            this.identificador =
-                String.IsNullOrEmpty(identificador) ? null
-                : Guid.Parse(identificador);
-
-            this.data_origem =
-               ConvertToDateTimeValidation.IsValid(data_origem, "data_origem", listValidations) ?
-               Convert.ToDateTime(data_origem) :
-               new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar);
-
-            this.cnpj_emp = cnpj_emp;
-            this.serie_origem = serie_origem;
+        public LinxMovimentoOrigemDevolucoes(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxMovimentoOrigemDevolucoes record, string recordXml) {
+            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+            this.portal = CustomConvertersExtensions.ConvertToInt32Validation(record.portal);
+            this.nota_origem = CustomConvertersExtensions.ConvertToInt32Validation(record.nota_origem);
+            this.ecf_origem = CustomConvertersExtensions.ConvertToInt32Validation(record.ecf_origem);
+            this.empresa = CustomConvertersExtensions.ConvertToInt32Validation(record.empresa);
+            this.timestamp = CustomConvertersExtensions.ConvertToInt64Validation(record.timestamp);
+            this.identificador = Guid.Parse(record.identificador);
+            this.data_origem = CustomConvertersExtensions.ConvertToDateTimeValidation<string>(record.data_origem);
+            this.cnpj_emp = record.cnpj_emp;
+            this.serie_origem = record.serie_origem;
         }
     }
 }

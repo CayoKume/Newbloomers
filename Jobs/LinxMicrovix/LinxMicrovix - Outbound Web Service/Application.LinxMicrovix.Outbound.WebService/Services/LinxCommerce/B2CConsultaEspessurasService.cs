@@ -1,4 +1,4 @@
-﻿using Application.Core.Interfaces;
+using Application.Core.Interfaces;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Handlers.Commands;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Services;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Services.LinxCommerce;
@@ -11,6 +11,7 @@ using Application.LinxMicrovix.Outbound.WebService.Interfaces.Api;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxCommerce;
 using Domain.LinxMicrovix.Outbound.WebService.Models.Base;
 using System.ComponentModel.DataAnnotations;
+using FluentValidation;
 
 namespace Application.LinxMicrovix.Outbound.WebService.Services
 {
@@ -22,6 +23,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
         private readonly ILinxMicrovixCommandHandler _linxMicrovixCommandHandler;
         private readonly IB2CConsultaEspessurasRepository _b2cConsultaEspessurasRepository;
+        private readonly IValidator<Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxCommerce.B2CConsultaEspessuras> _validator;
         private static List<string?> _b2cConsultaEspessurasCache = new List<string?>();
 
         public B2CConsultaEspessurasService(
@@ -29,10 +31,12 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
             ILoggerService logger,
             ICoreRepository coreRepository,
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
+            IValidator<Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxCommerce.B2CConsultaEspessuras> validator,
             ILinxMicrovixCommandHandler linxMicrovixCommandHandler,
             IB2CConsultaEspessurasRepository b2cConsultaEspessurasRepository
         )
         {
+            _validator = validator;
             _apiCall = apiCall;
             _logger = logger;
             _coreRepository = coreRepository;
@@ -49,32 +53,32 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
             {
                 try
                 {
-                    var validations = new List<ValidationResult>();
-
                     var entity = new Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxCommerce.B2CConsultaEspessuras(
                         codigo_espessura: records[i].Where(pair => pair.Key == "codigo_espessura").Select(pair => pair.Value).FirstOrDefault(),
                         nome_espessura: records[i].Where(pair => pair.Key == "nome_espessura").Select(pair => pair.Value).FirstOrDefault(),
                         timestamp: records[i].Where(pair => pair.Key == "timestamp").Select(pair => pair.Value).FirstOrDefault(),
-                        portal: records[i].Where(pair => pair.Key == "portal").Select(pair => pair.Value).FirstOrDefault(),
-                        recordXml: records[i].Where(pair => pair.Key == "recordXml").Select(pair => pair.Value).FirstOrDefault()
+                        portal: records[i].Where(pair => pair.Key == "portal").Select(pair => pair.Value).FirstOrDefault()
                     );
 
-                    var contexto = new ValidationContext(entity, null, null);
-                    Validator.TryValidateObject(entity, contexto, validations, true);
+                    var xml = records[i].Where(pair => pair.Key == "recordXml").Select(pair => pair.Value).FirstOrDefault();
+                    var validations = _validator.Validate(entity);
 
-                    if (validations.Count() > 0)
+                    if (validations.Errors.Count() > 0)
                     {
-                        for (int j = 0; j < validations.Count(); j++)
-                        {
-                            _logger.AddMessage(
-                                message: $"Error when convert record - codigo_espessura: {records[i].Where(pair => pair.Key == "codigo_espessura").Select(pair => pair.Value).FirstOrDefault()} | nome_espessura: {records[i].Where(pair => pair.Key == "nome_espessura").Select(pair => pair.Value).FirstOrDefault()}\n" +
-                                         $"{validations[j].ErrorMessage}"
-                            );
-                        }
-                        continue;
-                    }
+                        var message = $"Error when convert record - codigo_espessura: {records[i].Where(pair => pair.Key == "codigo_espessura").Select(pair => pair.Value).FirstOrDefault()} | nome_espessura: {records[i].Where(pair => pair.Key == "nome_espessura").Select(pair => pair.Value).FirstOrDefault()} ";
 
-                    list.Add(entity);
+						for (int j = 0; j < validations.Errors.Count(); j++)
+                        {
+                            var msg = validations.Errors[j].ErrorMessage;
+                            var property = validations.Errors[j].PropertyName;
+                            var value = validations.Errors[j].FormattedMessagePlaceholderValues.Where(x => x.Key == "PropertyValue").FirstOrDefault().Value;
+                            message += $"{msg.Replace("[0]", $"{property}: {value}")}";
+                        }
+    
+                        _logger.AddMessage(message);
+                    }
+    
+                    list.Add(new B2CConsultaEspessuras(entity, xml));
                 }
                 catch (Exception ex)
                 {
@@ -191,3 +195,6 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
         }
     }
 }
+
+
+

@@ -1,4 +1,4 @@
-using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
+
 using Domain.Core.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -8,23 +8,12 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
 {
     public class LinxLinhas
     {
-        [SkipProperty]
-        public Int32 id { get; set; }
-
         public DateTime? lastupdateon { get; private set; }
-
         public Int32? id_linha { get; private set; }
-
-        [LengthValidation(length: 30, propertyName: "desc_linha")]
         public string? desc_linha { get; private set; }
-
         public Int64? timestamp { get; private set; }
-
-        [LengthValidation(length: 50, propertyName: "codigo_integracao_ws")]
         public string? codigo_integracao_ws { get; private set; }
-
         public Int32? portal { get; private set; }
-
         public decimal? coeficiente_comissao { get; private set; }
 
         [NotMapped]
@@ -37,40 +26,14 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
 
         public LinxLinhas() { }
 
-        public LinxLinhas(
-            List<ValidationResult> listValidations,
-            string? id_linha,
-            string? desc_linha,
-            string? timestamp,
-            string? codigo_integracao_ws,
-            string? portal,
-            string? coeficiente_comissao
-        )
-        {
-            lastupdateon = DateTime.Now;
-
-            this.portal =
-                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
-                Convert.ToInt32(portal) :
-                0;
-
-            this.id_linha =
-                ConvertToInt32Validation.IsValid(id_linha, "id_linha", listValidations) ?
-                Convert.ToInt32(id_linha) :
-                0;
-
-            this.timestamp =
-                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
-                Convert.ToInt64(timestamp) :
-                0;
-
-            this.coeficiente_comissao =
-                ConvertToDecimalValidation.IsValid(coeficiente_comissao, "coeficiente_comissao", listValidations) ?
-                Convert.ToDecimal(coeficiente_comissao, new CultureInfo("en-US")) :
-                0;
-
-            this.desc_linha = desc_linha;
-            this.codigo_integracao_ws = codigo_integracao_ws;
+        public LinxLinhas(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxLinhas record, string recordXml) {
+            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+            this.portal = CustomConvertersExtensions.ConvertToInt32Validation(record.portal);
+            this.id_linha = CustomConvertersExtensions.ConvertToInt32Validation(record.id_linha);
+            this.timestamp = CustomConvertersExtensions.ConvertToInt64Validation(record.timestamp);
+            this.coeficiente_comissao = CustomConvertersExtensions.ConvertToDecimalValidation(record.coeficiente_comissao);
+            this.desc_linha = record.desc_linha;
+            this.codigo_integracao_ws = record.codigo_integracao_ws;
         }
     }
 }

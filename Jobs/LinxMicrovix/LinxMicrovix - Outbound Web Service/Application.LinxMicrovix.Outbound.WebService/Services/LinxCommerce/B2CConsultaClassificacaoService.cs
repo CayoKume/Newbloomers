@@ -1,16 +1,16 @@
-﻿using Application.Core.Interfaces;
-using Application.LinxMicrovix.Outbound.WebService.Interfaces.Api;
+using Application.Core.Interfaces;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Handlers.Commands;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Services;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Services.LinxCommerce;
 using Domain.Core.Entities.Exceptions;
 using Domain.Core.Enums;
 using Domain.Core.Interfaces;
-using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
-using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxCommerce;
 using Domain.LinxMicrovix.Outbound.WebService.Models.LinxCommerce;
-using FluentValidation;
+using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Api;
+using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxCommerce;
 using System.ComponentModel.DataAnnotations;
+using FluentValidation;
 
 namespace Application.LinxMicrovix.Outbound.WebService.Services
 {
@@ -35,10 +35,12 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
             ILoggerService logger,
             IB2CConsultaClassificacaoRepository b2cConsultaClassificacaoRepository,
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
+            IValidator<Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxCommerce.B2CConsultaClassificacao> validator,
             ILinxMicrovixCommandHandler linxMicrovixCommandHandler,
             ICoreRepository coreRepository
         )
         {
+            _validator = validator;
             _apiCall = apiCall;
             _logger = logger;
             _b2cConsultaClassificacaoRepository = b2cConsultaClassificacaoRepository;
@@ -161,7 +163,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
             {
                 try
                 {
-                    var entity = new Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxCommerce.Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxCommerce.B2CConsultaClassificacao(
+                    var entity = new Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxCommerce.B2CConsultaClassificacao(
                         codigo_classificacao: records[i].Where(pair => pair.Key == "codigo_classificacao").Select(pair => pair.Value).FirstOrDefault(),
                         nome_classificacao: records[i].Where(pair => pair.Key == "nome_classificacao").Select(pair => pair.Value).FirstOrDefault(),
                         timestamp: records[i].Where(pair => pair.Key == "timestamp").Select(pair => pair.Value).FirstOrDefault(),
@@ -173,19 +175,19 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
 
                     if (validations.Errors.Count() > 0)
                     {
-                        var message = $"Error when convert record - codigo_classificacao: {records[i].Where(pair => pair.Key == "codigo_classificacao").Select(pair => pair.Value).FirstOrDefault()} | nome_classificacao: {records[i].Where(pair => pair.Key == "nome_classificacao").Select(pair => pair.Value).FirstOrDefault()}\n";
-
+                        var message = $"Error when convert record - codigo_classificacao: {records[i].Where(pair => pair.Key == "codigo_classificacao").Select(pair => pair.Value).FirstOrDefault()} | nome_classificacao: {records[i].Where(pair => pair.Key == "nome_classificacao").Select(pair => pair.Value).FirstOrDefault()}";
+    
                         for (int j = 0; j < validations.Errors.Count(); j++)
                         {
                             var msg = validations.Errors[j].ErrorMessage;
                             var property = validations.Errors[j].PropertyName;
                             var value = validations.Errors[j].FormattedMessagePlaceholderValues.Where(x => x.Key == "PropertyValue").FirstOrDefault().Value;
-                            message += $"{msg.Replace("[0]", $"{property}: {value}")}\n";
+                            message += $"{msg.Replace("[0]", $"{property}: {value}")}";
                         }
-
+    
                         _logger.AddMessage(message);
                     }
-
+    
                     list.Add(new B2CConsultaClassificacao(entity, xml));
                 }
                 catch (Exception ex)
@@ -201,3 +203,4 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
         }
     }
 }
+

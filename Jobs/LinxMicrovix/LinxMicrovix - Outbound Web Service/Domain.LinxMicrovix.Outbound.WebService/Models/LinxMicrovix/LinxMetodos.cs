@@ -8,11 +8,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
     {
         [NotMapped]
         [SkipProperty]
-
         public DateTime? lastupdateon { get; private set; }
-
         public int? methodID { get; set; }
-
         public string? Retorno { get; set; }
 
         [NotMapped]
@@ -25,12 +22,10 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
 
         public LinxMetodos() { }
 
-        public LinxMetodos(
-            string? Retorno
-        )
-        {
-            lastupdateon = DateTime.Now;
-            this.Retorno = Retorno;
+        public LinxMetodos(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxMetodos record, string recordXml) 
+        {    
+			lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+            this.Retorno = record.Retorno;
         }
     }
 }
