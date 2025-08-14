@@ -11,4 +11,9 @@
     <ProjectReference Include="..\Domain.AfterSale\Domain.AfterSale.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Handlers\Commands\" />
+    <Folder Include="Interfaces\Handlers\Commands\" />
+  </ItemGroup>
+
 </Project>

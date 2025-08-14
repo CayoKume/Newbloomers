@@ -33,7 +33,7 @@ namespace Domain.Core.Entities.Auditing
         /// <param name="guidExecution"></param>
         public Message(string Msg, Guid? guidExecution)
         {
-            this.Msg = Msg;
+            this.Msg = Msg.Length > 300 ? Msg.Substring(0, 300) : Msg;
             IdLogLevel = EnumMessageLevel.Information;
             IsError = false;
             Execution = guidExecution;
@@ -47,7 +47,7 @@ namespace Domain.Core.Entities.Auditing
         /// <param name="execution"></param>
         public Message(string message, string exceptionMessage, Guid? execution)
         {
-            Msg = message;
+            Msg = message.Length > 300 ? message.Substring(0, 300) : message;
             IsError = true;
             IdLogLevel = EnumMessageLevel.Error;
             ExceptionMessage = exceptionMessage;
@@ -62,7 +62,7 @@ namespace Domain.Core.Entities.Auditing
         /// <param name="execution"></param>
         public Message(string message, string exceptionMessage, string sqlCommand, Guid? execution)
         {
-            Msg = message;
+            Msg = message.Length > 300 ? message.Substring(0, 300) : message;
             IsError = true;
             IdLogLevel = EnumMessageLevel.Error;
             ExceptionMessage = exceptionMessage;

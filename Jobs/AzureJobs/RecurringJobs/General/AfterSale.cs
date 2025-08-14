@@ -1,4 +1,4 @@
-﻿using Application.AfterSale.Interfaces;
+﻿using Application.AfterSale.Interfaces.Services;
 using Application.Core.Middlewares;
 using Microsoft.Azure.WebJobs;
 

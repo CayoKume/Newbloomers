@@ -1,4 +1,4 @@
-﻿using Domain.AfterSale.Entities;
+﻿using Domain.AfterSale.Models;
 using Infrastructure.Core.Data.Schemas;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;

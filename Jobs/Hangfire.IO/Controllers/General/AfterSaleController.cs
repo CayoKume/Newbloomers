@@ -1,4 +1,4 @@
-﻿using Application.AfterSale.Interfaces;
+﻿using Application.AfterSale.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 

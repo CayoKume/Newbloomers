@@ -38,5 +38,12 @@ namespace Application.Core.Validations.Extensions
                 .Must(value => !string.IsNullOrEmpty(value) && bool.TryParse(value, out _))
                 .WithMessage($"O valor [0] deve ser um booleano válido (true/false).");
         }
+
+        public static IRuleBuilderOptions<T, string?> MustBeValidGuid<T>(this IRuleBuilder<T, string?> ruleBuilder)
+        {
+            return ruleBuilder
+                .Must(value => !string.IsNullOrEmpty(value) && Guid.TryParse(value, out _))
+                .WithMessage($"O valor [0] deve ser um Guid válido.");
+        }
     }
 }

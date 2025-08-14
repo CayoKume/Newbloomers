@@ -13,6 +13,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxComm
         {
             var schema = SchemaContext.GetSchema(typeof(B2CConsultaClassificacao));
 
+            //Refatorar Aqui (Adicionar schema, primary key e mappings para untreated)
             builder.ToTable("B2CConsultaClassificacao");
            
             builder.Property(e => e.lastupdateon)

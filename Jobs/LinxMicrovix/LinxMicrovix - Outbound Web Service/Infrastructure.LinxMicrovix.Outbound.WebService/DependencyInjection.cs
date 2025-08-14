@@ -1,4 +1,4 @@
-﻿using Application.LinxMicrovix.Outbound.WebService.CustomValidations.LinxCommerce;
+﻿using Application.LinxMicrovix.Outbound.WebService.Validations.LinxCommerce;
 using Application.LinxMicrovix.Outbound.WebService.Handlers.Commands;
 using Application.LinxMicrovix.Outbound.WebService.Handlers.Commands.LinxCommerce;
 using Application.LinxMicrovix.Outbound.WebService.Handlers.Commands.LinxMicrovix;
