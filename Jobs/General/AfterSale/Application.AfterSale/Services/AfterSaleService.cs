@@ -195,10 +195,8 @@ namespace Application.AfterSale.Services
             {
                 var parameters = new Dictionary<string, string>
                 {
-                    //{ "start_date", $"{DateTime.Now.AddMonths(-2).ToString("yyyy-MM-dd")}" },
-                    { "start_date", $"2023-01-01" },
-                    { "end_date", $"2023-12-31" }
-                    //{ "end_date", $"{DateTime.Now.ToString("yyyy-MM-dd")}" }
+                    { "start_date", $"{DateTime.Now.AddMonths(-2).ToString("yyyy-MM-dd")}" },
+                    { "end_date", $"{DateTime.Now.ToString("yyyy-MM-dd")}" }
                 };
 
                 var encodedParameters = await new FormUrlEncodedContent(parameters).ReadAsStringAsync();
@@ -226,7 +224,7 @@ namespace Application.AfterSale.Services
                         
                         if (nextPage.success)
                         {
-                            simplifiedReverses.AddRange(nextPage.data); //na open era
+                            simplifiedReverses.AddRange(nextPage.data);
                             rote = nextPage.next_page_url;
                             continue;
                         }
@@ -236,17 +234,15 @@ namespace Application.AfterSale.Services
                     }
                 }
 
-                //if (GetReversesCache.Count() == 0)
-                //    GetReversesCache = await _afterSaleRepository.GetReversesByIds(
-                //        simplifiedReverses.Select(x => x.id).ToList()
-                //    );
+                if (GetReversesCache.Count() == 0)
+                    GetReversesCache = await _afterSaleRepository.GetReversesByIds(
+                        simplifiedReverses.Select(x => x.id).ToList()
+                    );
 
-                //var _listSomenteNovos = simplifiedReverses.Where(x => GetReversesCache.Any(y =>
-                //   CustomConvertersExtensions.ConvertToInt32Validation(x.id) == y.id &&
-                //   CustomConvertersExtensions.ConvertToDateTimeValidation(x.updated_at) > y.updated_at
-                //)).ToList();
-
-                var _listSomenteNovos = simplifiedReverses;
+                var _listSomenteNovos = simplifiedReverses.Where(x => GetReversesCache.Any(y =>
+                   CustomConvertersExtensions.ConvertToInt32Validation(x.id) == y.id &&
+                   CustomConvertersExtensions.ConvertToDateTimeValidation(x.updated_at) > y.updated_at
+                )).ToList();
 
                 if (_listSomenteNovos.Count() > 0)
                 {
@@ -263,8 +259,7 @@ namespace Application.AfterSale.Services
                             {
                                 var _response = await _apiCall.GetAsync(
                                     token: company.Token.ToString(),
-                                    //rote: $"v3/api/reverses/{top30List[j].id}"
-                                    rote: $"v3/api/reverses/2862989"
+                                    rote: $"v3/api/reverses/{top30List[j].id}"
                                 );
 
                                 try
@@ -311,7 +306,7 @@ namespace Application.AfterSale.Services
                     _logger.AddRecord(
                         s.id.ToString(),
                         s.Responses
-                            .Where(pair => pair.Key == s.id)
+                            .Where(pair => pair.Key == s.id.ToString())
                             .Select(pair => pair.Value)
                             .FirstOrDefault()
                     )

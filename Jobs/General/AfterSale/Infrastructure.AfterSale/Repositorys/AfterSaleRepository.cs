@@ -119,17 +119,23 @@ public class AfterSaleRepository : IAfterSaleRepository
         var trackingTable = _coreRepository.CreateSystemDataTable(entity: new Tracking(), tableName: "AfterSaleTrackings");
         var trackingHistoryTable = _coreRepository.CreateSystemDataTable(entity: new TrackingHistory(), tableName: "AfterSaleTrackingHistories");
 
+        //quando tracking é nulo na response o ctor do código monta um tracking com id = 0 e em caso com mais de um tracking montado pelo ctor, da erro de primary key no insert por isso esse agrupamento
+        var trackingGroupBy = data.Where(x => x.tracking != null)
+                                  .GroupBy(x => new { x.tracking.id, ReverseId = x.tracking.reverse_id })
+                                  .Select(g => g.First().tracking)
+                                  .ToList();
+
         _coreRepository.FillSystemDataTable(reversesTable, data.Select(x => x).ToList());
         _coreRepository.FillSystemDataTable(customerTable, data.Select(x => x.customer).ToList());
         _coreRepository.FillSystemDataTable(addressTable, data.Select(x => x.customer.address).ToList());
         _coreRepository.FillSystemDataTable(addressTable, data.Select(x => x.customer.shipping_address).ToList());
-        _coreRepository.FillSystemDataTable(trackingTable, data.Where(x => x.tracking != null).Select(x => x.tracking).ToList());
+        _coreRepository.FillSystemDataTable(trackingTable, trackingGroupBy);
         _coreRepository.FillSystemDataTable(trackingHistoryTable, data.SelectMany(x => x.tracking_history).ToList());
 
         _coreRepository.BulkInsertIntoTableRaw(reversesTable);
         _coreRepository.BulkInsertIntoTableRaw(customerTable);
         _coreRepository.BulkInsertIntoTableRaw(addressTable);
-        _coreRepository.BulkInsertIntoTableRaw(trackingTable);//aqui
+        _coreRepository.BulkInsertIntoTableRaw(trackingTable);
         _coreRepository.BulkInsertIntoTableRaw(trackingHistoryTable);
 
         await _coreRepository.CallDbProcMerge("general", addressTable.TableName, parentExecutionGUID);

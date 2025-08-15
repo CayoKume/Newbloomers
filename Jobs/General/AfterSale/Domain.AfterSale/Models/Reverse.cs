@@ -93,7 +93,7 @@ namespace Domain.AfterSale.Models
         public List<TrackingHistory> tracking_history { get; set; } = new List<TrackingHistory>();
 
         [SkipProperty]
-        public Dictionary<int?, string> Responses { get; set; } = new Dictionary<int?, string>();
+        public Dictionary<string, string> Responses { get; set; } = new Dictionary<string, string>();
 
         public Reverse() 
         {
@@ -296,6 +296,8 @@ namespace Domain.AfterSale.Models
             collect_scheduling_link = data?.reverse?.collect_scheduling_link;
             returned_invoice = data?.reverse?.returned_invoice;
             dot_id = data?.reverse?.dot_id;
+
+            Responses.Add(data?.reverse?.id, response);
 
             ecommerce = data?.reverse?.ecommerce != null ? new Ecommerce(data?.reverse?.ecommerce) : new Ecommerce();
             customer = data?.customer != null ? new Customer(data?.customer) : new Customer();

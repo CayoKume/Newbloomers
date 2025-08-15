@@ -150,7 +150,7 @@ namespace Domain.AfterSale.Models
             customer = refund.customer != null ? new Customer(refund.customer) : new Customer();
             status = refund.status != null ? new Status(refund.status) : new Status();
             status_histories = refund.status_histories != null ? new StatusHistories(refund.status_histories) : new StatusHistories();
-            total_amount_histories = refund.total_amount_histories != null ? new TotalAmountHistories(refund.total_amount_histories) : new TotalAmountHistories(); //Erro aqui
+            total_amount_histories = refund.total_amount_histories != null ? new TotalAmountHistories(refund.total_amount_histories) : new TotalAmountHistories();
             voucher = refund.voucher != null ? new Voucher(refund.voucher) : new Voucher();
             reverse = refund.reverse != null ? new Reverse(refund.reverse) : new Reverse();
 

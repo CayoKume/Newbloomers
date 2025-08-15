@@ -23,7 +23,7 @@ namespace Domain.AfterSale.Models
             date = new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar);
             refund_id = 0;
             type = new Type();
-            Refund = new Refund();
+            //Refund = new Refund();
         }
 
         public TotalAmountHistories(Dtos.TotalAmountHistories totalAmountHistories)
@@ -33,7 +33,7 @@ namespace Domain.AfterSale.Models
             date = CustomConvertersExtensions.ConvertToDateTimeValidation(totalAmountHistories?.date);
             refund_id = CustomConvertersExtensions.ConvertToInt32Validation(totalAmountHistories.refund_id);
             type = totalAmountHistories.type != null ? new Models.Type(totalAmountHistories.type) : new Type();
-            Refund = totalAmountHistories.Refund != null ? new Models.Refund(totalAmountHistories.Refund) : new Refund();
+            //Refund = totalAmountHistories.Refund != null ? new Models.Refund(totalAmountHistories.Refund) : new Refund();
         }
     }
 }
