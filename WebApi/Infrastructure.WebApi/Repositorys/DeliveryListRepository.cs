@@ -5,7 +5,7 @@ using Domain.WebApi.Models;
 using Infrastructure.Core.Connections.SQLServer;
 using System.Data;
 using System.Threading;
-using Domain.Wms.Models;
+using Domain.WebApi.Models;
 
 namespace Infrastructure.WebApi.Repositorys
 {

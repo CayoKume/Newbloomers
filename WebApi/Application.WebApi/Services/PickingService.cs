@@ -7,7 +7,7 @@ using QuestPDF.Infrastructure;
 using System.Globalization;
 using ZXing;
 using ZXing.Common;
-using Domain.Wms.Models;
+using Domain.WebApi.Models;
 
 namespace Application.WebApi.Services
 {

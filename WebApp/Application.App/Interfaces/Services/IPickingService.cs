@@ -1,4 +1,5 @@
-﻿using Domain.App.Entities;
+﻿using Application.App.ViewModels.Picking;
+using Domain.App.Entities;
 using Order = Application.App.ViewModels.Picking.Order;
 
 namespace Application.App.Interfaces.Services

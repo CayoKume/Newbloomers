@@ -94,7 +94,7 @@ else
         //         {
         //             { "_titleContentText", "ATENÇÃO" },
         //             { "_dialogContentText", "Você está tentando conferir uma quantidade maior do que a necessária deste produto, deseja continuar?" },
-        //             { "_onClickEvent", (Func<Task>)(() => AddItemAsPicked(item)) },
+        //             { "_onClickEvent", EventCallback.Factory.Create(this, () => AddItemAsPicked(item)) },
         //         };
 
         // await _dialogService.ShowAsync<ConfirmationDialog>("", parameters, options);

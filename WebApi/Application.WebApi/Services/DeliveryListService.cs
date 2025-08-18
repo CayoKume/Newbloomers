@@ -5,7 +5,7 @@ using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 using System.Reflection.Metadata;
-using Domain.Wms.Models;
+using Domain.WebApi.Models;
 
 namespace Application.WebApi.Services
 {

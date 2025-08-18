@@ -1,5 +1,5 @@
 using Application.WebApi.Interfaces.Services;
-using Domain.Wms.Models;
+using Domain.WebApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
@@ -165,6 +165,6 @@ namespace WmsApi.Controllers
     //Refatorar Aqui
     public class PrintOrderToPresentRequest
     {
-        public Order serializePedido { get; set; }
+        public Domain.WebApi.Models.LabelsOrder serializePedido { get; set; }
     }
 }

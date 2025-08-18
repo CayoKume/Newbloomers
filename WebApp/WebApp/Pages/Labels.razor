@@ -196,6 +196,7 @@ else
                 await jsRuntime.InvokeVoidAsync("abrirAbas", links);
                 await _etiquetasService.UpdateFlagPrinted(this.orderNumber);
             }
+            //Refatorar Aqui (padronizar exibição de mensagem de erros)
             // else
             //     await _dialogService.ShowMessageBox("Erro", "A etiqueta não pode ser impressa pois a nota fiscal não está autorizada.");
         

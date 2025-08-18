@@ -2,7 +2,7 @@
 using Application.WebApi.Interfaces.Services;
 using Newtonsoft.Json;
 using System.Collections.Generic;
-using Domain.Wms.Models;
+using Domain.WebApi.Models;
 
 namespace Application.WebApi.Services
 {

@@ -1,5 +1,5 @@
 using Application.WebApi.Interfaces.Services;
-using Domain.Wms.Models;
+using Domain.WebApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;

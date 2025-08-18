@@ -1,5 +1,5 @@
 ﻿using Application.WebApi.Interfaces.Handlers.Commands;
-using Domain.Wms.Models;
+using Domain.WebApi.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;

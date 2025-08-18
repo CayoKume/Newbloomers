@@ -2,8 +2,8 @@
 using Domain.WebApi.Interfaces.Repositorys;
 using Dapper;
 using Infrastructure.Core.Connections.SQLServer;
-using AttendenceOrder = Domain.Wms.Models.AttendenceOrder;
-using Domain.Wms.Models;
+using AttendenceOrder = Domain.WebApi.Models.AttendenceOrder;
+using Domain.WebApi.Models;
 
 namespace Infrastructure.WebApi.Repositorys
 {

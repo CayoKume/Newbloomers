@@ -8,7 +8,7 @@ using ZXing;
 using Application.WebApi.Interfaces.Apis;
 using Domain.WebApi.Interfaces.Repositorys;
 using Application.WebApi.Interfaces.Services;
-using Domain.Wms.Models;
+using Domain.WebApi.Models;
 
 namespace Application.WebApi.Services
 {

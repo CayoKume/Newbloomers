@@ -2,8 +2,8 @@
 using Domain.WebApi.Interfaces.Repositorys;
 using Dapper;
 using Infrastructure.Core.Connections.SQLServer;
-using ExecuteCancellationOrder = Domain.Wms.Models.ExecuteCancellationOrder;
-using Domain.Wms.Models;
+using ExecuteCancellationOrder = Domain.WebApi.Models.ExecuteCancellationOrder;
+using Domain.WebApi.Models;
 
 namespace Infrastructure.WebApi.Repositorys
 {

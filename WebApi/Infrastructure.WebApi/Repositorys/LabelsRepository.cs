@@ -3,8 +3,7 @@ using Domain.WebApi.Interfaces.Repositorys;
 using Dapper;
 using Domain.WebApi.Models;
 using Infrastructure.Core.Connections.SQLServer;
-using LabelsOrder = Domain.Wms.Models.LabelsOrder;
-using Domain.Wms.Models;
+using LabelsOrder = Domain.WebApi.Models.LabelsOrder;
 
 namespace Infrastructure.WebApi.Repositorys
 {

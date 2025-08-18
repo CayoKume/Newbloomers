@@ -1,7 +1,7 @@
 ﻿using Domain.Core.Entities.Base;
 using Domain.WebApi.Models;
 
-namespace Domain.Wms.Models
+namespace Domain.WebApi.Models
 {
     public class Order : OrderBase
     {

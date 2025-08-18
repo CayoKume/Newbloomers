@@ -1,4 +1,4 @@
-﻿using Domain.Wms.Models;
+﻿using Domain.WebApi.Models;
 
 namespace Domain.WebApi.Interfaces.Repositorys
 {

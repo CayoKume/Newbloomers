@@ -1,4 +1,4 @@
-﻿namespace Domain.Wms.Models
+﻿namespace Domain.WebApi.Models
 {
     public class CancellationRequestOrder : Order
     {

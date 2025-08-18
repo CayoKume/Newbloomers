@@ -1,5 +1,5 @@
 using Application.WebApi.Interfaces.Services;
-using Domain.Wms.Models;
+using Domain.WebApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
@@ -174,7 +174,8 @@ namespace WmsApi.Controllers
     {
         public string? nr_pedido { get; set; }
         public int volumes { get; set; }
-        public object? itens { get; set; }
+        public List<Domain.WebApi.Models.PickingProduct>? itens { get; set; } //Aqui
+        //public object? itens { get; set; }
     }
 
     //Refatorar Aqui

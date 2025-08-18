@@ -6,13 +6,13 @@
         </MudText>
     </TitleContent>
     <DialogContent>
-        <MudText Typo="Typo.h5">
+        <MudText Typo="Typo.h6">
             @_dialogContentText
         </MudText>
     </DialogContent>
     <DialogActions>
         <MudButton OnClick="Cancel">Close</MudButton>
-        <MudButton Color="Color.Success" OnClick="InvokeOnClickEvent">Continue</MudButton>
+        <MudButton Color="Color.Success" OnClick="@_onClickEvent">Continue</MudButton>
     </DialogActions>
 </MudDialog>
 
@@ -24,16 +24,7 @@
     [Parameter] public string _titleContentText { get; set; } = "Dialog";
     [Parameter] public string? _dialogContentText { get; set; }
 
-    [Parameter] public Func<Task>? _onClickEvent { get; set; }
-
-    private async Task InvokeOnClickEvent()
-    {
-        if (_onClickEvent != null)
-        {
-            await _onClickEvent.Invoke();
-            MudDialog?.Cancel();
-        }
-    }
+    [Parameter] public EventCallback _onClickEvent { get; set; }
 
     private void Cancel() => MudDialog?.Cancel();
 }

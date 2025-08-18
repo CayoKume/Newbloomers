@@ -4,7 +4,7 @@ using Dapper;
 using Domain.WebApi.Models;
 using Infrastructure.Core.Connections.SQLServer;
 using Newtonsoft.Json;
-using Domain.Wms.Models;
+using Domain.WebApi.Models;
 
 namespace Infrastructure.WebApi.Repositorys
 {

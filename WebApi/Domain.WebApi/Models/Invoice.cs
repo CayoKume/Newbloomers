@@ -1,6 +1,6 @@
 ﻿using Domain.Core.Entities.Base;
 
-namespace Domain.Wms.Models
+namespace Domain.WebApi.Models
 {
     public class Invoice : InvoiceBase
     {

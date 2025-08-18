@@ -42,6 +42,44 @@
             <MudDataGridPager T="Order" />
         </PagerContent>
     </MudDataGrid>
+
+    @*Refatorar Aqui (verificar a possibilidade de não passar essa janela como parametro, para conferencia do pedido ser mais rápida)*@
+@*     <MudDialog>
+        <TitleContent>
+            <MudText Typo="Typo.h6">
+                <MudIcon Icon="@Icons.Material.Filled.QrCodeScanner" Class="mr-3 mb-n1" />
+                CONFERIR
+            </MudText>
+        </TitleContent>
+        <DialogContent>
+            <MudGrid Spacing="1" Justify="Justify.SpaceAround">
+                <MudItem>
+                    <MudTextField @bind-Value="@inputValueVolumes" HelperText="Volume" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentText="pct/cx" Style="height:2.5rem" />
+                </MudItem>
+                <MudItem>
+                    <MudTextField @ref="valueProdutoReference" T="string" OnKeyUp="AddItemAsPickedDialog" TextUpdateSuppression="false" Clearable="true" HelperText="Produto" Variant="Variant.Outlined" Style="height:2.5rem" />
+                </MudItem>
+                <MudItem>
+                    <MudIconButton @onclick="@RemoveQtdeDialog" Color="Color.Primary" Size="@Size.Large" Variant="@Variant.Filled" Icon="@Icons.Material.Filled.Delete"></MudIconButton>
+                </MudItem>
+            </MudGrid>
+
+            <MudDivider DividerType="DividerType.Middle" Class="my-2"></MudDivider>
+
+            <MudDataGrid Items="@itens" Bordered="true">
+                <Columns>
+                    <PropertyColumn Property="@(item => $"{item.cod_product} - {item.description_product}")" Title="Descrição" />
+                    <PropertyColumn Property="@(item => item.sku_product)" Title="Referência" />
+                    <PropertyColumn Property="@(item => item.quantity_product)" Title="Qtde" />
+                    <PropertyColumn Property="@(item => item.picked_quantity)" Title="Conferido" />
+                </Columns>
+            </MudDataGrid>
+        </DialogContent>
+        <DialogActions>
+             <MudButton OnClick="Cancel">@_closeButtonText</MudButton>
+            <MudButton Color="Color.Success">@ShowConfirmationDialog()</MudButton>
+        </DialogActions>
+    </MudDialog> *@
 }
 else
 {
@@ -134,6 +172,7 @@ else
         visible = false;
     }
 
+    //Refatorar Aqui (colocar nome do método em ingles)
     private Task ConferirPedido(Order pedido)
     {
         this.nr_pedido = pedido.number;
@@ -147,14 +186,15 @@ else
             { "_closeButtonText", "Close" },
             { "_clickButtonText", "Conferir" },
             { "_titleContentText", "CONFERIR" },
-            { "_onClickEvent", (Func<Task>)(() => ShowConfirmationDialog()) },
+            { "_onClickEvent", EventCallback.Factory.Create(this, ShowConfirmationDialog) },
             { "_bodyContent", PickingDialogBody }
         };
 
         return _dialogService.ShowAsync<ConfirmationDialogWithRenderFragment>("", parameters, options);
     }
 
-    private async Task ConferirPedidoIndividual(Enter evento)
+    //Refatorar Aqui (colocar nome do método em ingles)
+    private async Task ConferirPedidoIndividual(Enter evento) //Refatorar Aqui (verificar possibilidade de matar classe Enter)
     {
         if (evento.e.Code == "Enter" || evento.e.Code == "NumpadEnter")
         {
@@ -173,7 +213,7 @@ else
                 { "_closeButtonText", "Close" },
                 { "_clickButtonText", "Conferir" },
                 { "_titleContentText", "CONFERIR" },
-                { "_onClickEvent", (Func<Task>)(() => ShowConfirmationDialog()) },
+                { "_onClickEvent", EventCallback.Factory.Create(this, ShowConfirmationDialog) },
                 { "_bodyContent", PickingDialogBody }
             };
 
@@ -201,7 +241,7 @@ else
             {
                 { "_titleContentText", "ATENÇÃO" },
                 { "_dialogContentText", "Você está tentando remover uma quantidade menor do que a mínima necessária para este produto, deseja continuar?" },
-                { "_onClickEvent", (Func<Task>)(() => RemoveQtde(item)) },
+                { "_onClickEvent", EventCallback.Factory.Create(this, () => RemoveQtde(item)) },
             };
 
             await _dialogService.ShowAsync<ConfirmationDialog>("", parameters, options);
@@ -219,7 +259,53 @@ else
 
     private Task ShowConfirmationDialog()
     {
-        return _dialogService.ShowAsync<ConfirmationDialog>("CONFERIR");
+        var options = new DialogOptions() { CloseButton = true, CloseOnEscapeKey = true }; //Refatorar Aqui (deixar essa classe fixa com essa propriedades)
+
+        var parameters = new DialogParameters
+        {
+            { "_titleContentText", "ATENÇÃO" },
+            { "_dialogContentText", "Você tem certeza que deseja conferir o pedido?" },
+            { "_onClickEvent", EventCallback.Factory.Create(this, FinalizingPicking) }
+        };
+
+        return _dialogService.ShowAsync<ConfirmationDialog>("", parameters, options);
+    }
+
+    private async Task FinalizingPicking()
+    {
+        isLoading = false;
+        visible = true;
+
+        var order = orders?.Where(p => p.number == this.nr_pedido).First();
+        var result = await _conferenciaService.UpdateRetorno(order);
+
+        if (result)
+        {
+            var options = new DialogOptions() { CloseButton = true, CloseOnEscapeKey = true };
+
+            var parameters = new DialogParameters
+            {
+                { "_titleContentText", "SUCESSO!" },
+                { "_dialogContentText", "Pedido conferido com sucesso!" }
+            };
+
+            await _dialogService.ShowAsync<AlertDialog>("", parameters, options);
+        }
+        else
+        {
+            var options = new DialogOptions() { CloseButton = true, CloseOnEscapeKey = true };
+
+            var parameters = new DialogParameters
+            {
+                { "_titleContentText", "ERROR!" },
+                { "_dialogContentText", "Erro ao conferir o pedido!" }
+            };
+
+            await _dialogService.ShowAsync<AlertDialog>("", parameters, options);
+        }
+
+        isLoading = true;
+        visible = false;
     }
 
     private async Task AddItemAsPickedDialog(KeyboardEventArgs e)
@@ -241,7 +327,7 @@ else
                 {
                     { "_titleContentText", "ATENÇÃO" },
                     { "_dialogContentText", "Você está tentando conferir uma quantidade maior do que a necessária deste produto, deseja continuar?" },
-                    { "_onClickEvent", (Func<Task>)(() => AddItemAsPicked(item)) },
+                    { "_onClickEvent", EventCallback.Factory.Create(this, () => AddItemAsPicked(item)) },
                 };
 
                 await _dialogService.ShowAsync<ConfirmationDialog>("", parameters, options);
@@ -286,6 +372,7 @@ else
         }
     }
 
+    //Refatorar Aqui (colocar nome do método em ingles)
     private async Task ImprimeRomaneio(Order pedido)
     {
         isLoading = false;

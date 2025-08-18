@@ -114,7 +114,7 @@ namespace Application.App.Services
             };
             var encodedParameters = await new FormUrlEncodedContent(parameters).ReadAsStringAsync();
             var result = await _apiCall.GetAsync("GetUnpickedOrderToPrint", encodedParameters);
-            var pedido = JsonSerializer.Deserialize<OrderToPrint>(result);
+            var pedido = JsonSerializer.Deserialize<Order>(result); //verificar aqui
 
             return await _apiCall.PostAsync($"PrintOrderToCupoun", JsonSerializer.Serialize(new { serializePedido = pedido }));
         }

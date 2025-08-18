@@ -1,4 +1,4 @@
-﻿using Domain.Wms.Models;
+﻿using Domain.WebApi.Models;
 
 namespace Application.WebApi.Interfaces.Handlers.Commands
 {

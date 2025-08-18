@@ -1,4 +1,4 @@
-﻿using Domain.Wms.Models;
+﻿using Domain.WebApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
