@@ -116,7 +116,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix
             this.desconto_item = desconto_item;
             this.cod_plano_pagamento = cod_plano_pagamento;
             this.plano_pagamento = plano_pagamento;
-            this.obs = obs;
+            this.obs = obs?.Trim();
             this.aprovado = aprovado;
             this.cancelado = cancelado;
             this.data_aprovacao = data_aprovacao;

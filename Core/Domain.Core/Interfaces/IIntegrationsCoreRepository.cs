@@ -1,4 +1,5 @@
-﻿using Domain.Core.Entities.Auditing;
+﻿using Dapper;
+using Domain.Core.Entities.Auditing;
 using System.Data;
 using static Dapper.SqlMapper;
 
@@ -35,6 +36,12 @@ namespace Domain.Core.Interfaces
         /// </summary>
         /// <param name="sql"></param>
         public Task<bool> ExecuteCommand(string? sql);
+
+        /// <summary>
+        /// Execute simple sql query in Database
+        /// </summary>
+        /// <param name="sql"></param>
+        public Task<bool> ExecuteCommand(string? sql, DynamicParameters parameters);
 
         /// <summary>
         /// Insert Record to Database

@@ -8,7 +8,8 @@ namespace Hangfire.IO.Extensions
         {
             app.UseMiddleware<ExceptionHandlingMiddleware>();
 #if DEBUG
-            app.UseSwagger();
+            //app.UseSwagger(); //Refatorar Aqui (remover)
+            app.UseSwagger(c => { c.OpenApiVersion = Microsoft.OpenApi.OpenApiSpecVersion.OpenApi2_0; });
             app.UseSwaggerUI();
             app.UseHttpsRedirection();
             app.UseAuthorization();

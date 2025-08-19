@@ -5,9 +5,7 @@ using Domain.Core.Extensions;
 using Domain.Core.Interfaces;
 using Infrastructure.Core.Connections.SQLServer;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using MySqlX.XDevAPI;
 using System.Data;
-using System.Data.Common;
 using System.Data.SqlClient;
 using System.Reflection;
 using static Dapper.SqlMapper;
@@ -347,6 +345,37 @@ namespace Infrastructure.Core.Repositorys
                 using (var conn = _sqlServerConnection.GetIDbConnection())
                 {
                     var result = await conn.ExecuteAsync(sql: sql, commandTimeout: 3600);
+
+                    if (result > 0)
+                        return true;
+
+                    return false;
+                }
+            }
+            catch (SqlException ex)
+            {
+                throw new SQLCommandException(
+                    message: $"error when trying to execute sql command on database - {ex.Message}",
+                    exceptionMessage: ex.StackTrace,
+                    commandSQL: sql
+                );
+            }
+            catch (Exception ex)
+            {
+                throw new GeneralException(
+                    message: $"error when trying to execute sql command on database - {ex.Message}",
+                    exceptionMessage: ex.StackTrace
+                );
+            }
+        }
+
+        public async Task<bool> ExecuteCommand(string? sql, DynamicParameters parameters)
+        {
+            try
+            {
+                using (var conn = _sqlServerConnection.GetIDbConnection())
+                {
+                    var result = await conn.ExecuteAsync(sql: sql, param: parameters, commandTimeout: 3600);
 
                     if (result > 0)
                         return true;
