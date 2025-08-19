@@ -4,8 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Hangfire.IO.Controllers.LinxMicrovix
 {
+#if DEBUG
     [ApiController]
-    [Route("MicrovixJobs/B2CLinxMicrovix")]
+    [Route("LinxMicrovixJobs/B2CLinxMicrovix")]
     public class B2CLinxMicrovixController : Controller
     {
         private readonly LinxAPIParam _linxMicrovixJobParameter;
@@ -1332,113 +1333,6 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
 
             return Ok($"Records integrated successfully.");
         }
-
-        [HttpPost("IntegrityLockB2CConsultaClientesRegisters")]
-        public async Task<ActionResult> IntegrityLockB2CConsultaClientesRegisters()
-        {
-            var method = _methods
-                .Where(m => m.MethodName == "B2CConsultaClientes")
-                .FirstOrDefault();
-
-            var result = await _b2cConsultaClientesService.IntegrityLockB2CConsultaClientesRegisters(
-                _linxMicrovixJobParameter.SetParameters(
-                    jobName: method.MethodName,
-                    tableName: method.MethodName,
-                    parametersInterval: "parameters_individual"
-                )
-            );
-
-            return Ok($"Records integrated successfully.");
-        }
-
-        [HttpPost("IntegrityLockB2CConsultaPedidosRegisters")]
-        public async Task<ActionResult> IntegrityLockB2CConsultaPedidosRegisters()
-        {
-            var method = _methods
-                .Where(m => m.MethodName == "B2CConsultaPedidos")
-                .FirstOrDefault();
-
-            var result = await _b2cConsultaPedidosService.IntegrityLockRegisters(
-                _linxMicrovixJobParameter.SetParameters(
-                    jobName: method.MethodName,
-                    tableName: method.MethodName,
-                    parametersInterval: "parameters_individual"
-                )
-            );
-
-            return Ok($"Records integrated successfully.");
-        }
-
-        [HttpPost("IntegrityLockB2CConsultaPedidosIdentificadorRegisters")]
-        public async Task<ActionResult> IntegrityLockB2CConsultaPedidosIdentificadorRegisters()
-        {
-            var method = _methods
-                .Where(m => m.MethodName == "B2CConsultaPedidosIdentificador")
-                .FirstOrDefault();
-
-            var result = await _b2cConsultaPedidosIdentificadorService.IntegrityLockRegisters(
-                _linxMicrovixJobParameter.SetParameters(
-                    jobName: method.MethodName,
-                    tableName: method.MethodName,
-                    parametersInterval: "parameters_individual"
-                )
-            );
-
-            return Ok($"Records integrated successfully.");
-        }
-
-        [HttpPost("IntegrityLockB2CConsultaPedidosStatusRegisters")]
-        public async Task<ActionResult> IntegrityLockB2CConsultaPedidosStatusRegisters()
-        {
-            var method = _methods
-                .Where(m => m.MethodName == "B2CConsultaPedidosStatus")
-                .FirstOrDefault();
-
-            var result = await _b2cConsultaPedidosStatusService.IntegrityLockRegisters(
-                _linxMicrovixJobParameter.SetParameters(
-                    jobName: method.MethodName,
-                    tableName: method.MethodName,
-                    parametersInterval: "parameters_individual"
-                )
-            );
-
-            return Ok($"Records integrated successfully.");
-        }
-
-        [HttpPost("IntegrityLockB2CConsultaNFeRegisters")]
-        public async Task<ActionResult> IntegrityLockB2CConsultaNFeRegisters()
-        {
-            var method = _methods
-                .Where(m => m.MethodName == "B2CConsultaNFe")
-                .FirstOrDefault();
-
-            var result = await _b2cConsultaNFeService.IntegrityLockRegisters(
-                _linxMicrovixJobParameter.SetParameters(
-                    jobName: method.MethodName,
-                    tableName: method.MethodName,
-                    parametersInterval: "parameters_individual"
-                )
-            );
-
-            return Ok($"Records integrated successfully.");
-        }
-
-        [HttpPost("IntegrityLockB2CConsultaPedidosItensRegisters")]
-        public async Task<ActionResult> IntegrityLockB2CConsultaPedidosItensRegisters()
-        {
-            var method = _methods
-                .Where(m => m.MethodName == "B2CConsultaPedidosItens")
-                .FirstOrDefault();
-
-            var result = await _b2cConsultaPedidosItensService.IntegrityLockRegisters(
-                _linxMicrovixJobParameter.SetParameters(
-                    jobName: method.MethodName,
-                    tableName: method.MethodName,
-                    parametersInterval: "parameters_individual"
-                )
-            );
-
-            return Ok($"Records integrated successfully.");
-        }
     }
+#endif
 }

@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Hangfire.IO.Controllers.General
 {
+#if DEBUG
     [ApiController]
     [Route("AfterSaleJobs/AfterSale")]
     public class AfterSaleController : Controller
@@ -52,5 +53,6 @@ namespace Hangfire.IO.Controllers.General
 
             return Ok($"Records integrated successfully.");
         }
-    }
+    } 
+#endif
 }

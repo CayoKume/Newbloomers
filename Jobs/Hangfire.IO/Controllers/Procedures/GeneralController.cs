@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Hangfire.IO.Controllers.Procedures
 {
+#if DEBUG
     public class GeneralController : Controller
     {
         private readonly ICoreRepository _coreRepository;
@@ -21,5 +22,6 @@ namespace Hangfire.IO.Controllers.Procedures
         {
             var result = _coreRepository.ExecuteCommand("exec [dbo].[P_Server_Maintenance]");
         }
-    }
+    } 
+#endif
 }

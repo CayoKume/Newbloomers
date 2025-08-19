@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Hangfire.IO.Controllers.Shippment
 {
+#if DEBUG
     [ApiController]
     [Route("CarriersJobs/JadLog")]
     public class JadLogController : Controller
@@ -19,5 +20,6 @@ namespace Hangfire.IO.Controllers.Shippment
 
             return Ok();
         }
-    }
+    } 
+#endif
 }

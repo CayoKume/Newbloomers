@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Hangfire.IO.Controllers.Carries
 {
+#if DEBUG
     [ApiController]
     [Route("CarriersJobs/TotalExpress")]
     public class TotalExpressController : Controller
@@ -43,5 +44,6 @@ namespace Hangfire.IO.Controllers.Carries
 
             return Ok();
         }
-    }
+    } 
+#endif
 }

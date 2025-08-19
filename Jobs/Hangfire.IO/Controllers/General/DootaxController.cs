@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Hangfire.IO.Controllers.General
 {
+#if DEBUG
     [ApiController]
     [Route("DootaxJobs/Dootax")]
     public class DootaxController : Controller
@@ -19,5 +20,6 @@ namespace Hangfire.IO.Controllers.General
 
             return Ok($"Records integrated successfully.");
         }
-    }
+    } 
+#endif
 }

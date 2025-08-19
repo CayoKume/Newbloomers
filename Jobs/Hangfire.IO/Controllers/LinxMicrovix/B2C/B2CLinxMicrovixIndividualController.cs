@@ -5,8 +5,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Hangfire.IO.Controllers.LinxMicrovix
 {
+#if DEBUG
     [ApiController]
-    [Route("MicrovixJobs/B2CLinxMicrovixIndividual")]
+    [Route("LinxMicrovixJobs/B2CLinxMicrovixIndividual")]
     public class B2CLinxMicrovixIndividualController : Controller
     {
         private readonly LinxAPIParam _linxMicrovixJobParameter;
@@ -247,4 +248,5 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
             return Ok();
         }
     }
+#endif
 }

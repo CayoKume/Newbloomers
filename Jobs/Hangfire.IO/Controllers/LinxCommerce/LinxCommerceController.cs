@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HangfireDashboard.UI.Controllers.LinxCommerce
 {
+#if DEBUG
     [ApiController]
     [Route("LinxCommerceJobs/LinxCommerce")]
     public class LinxCommerceController : Controller
@@ -270,18 +271,7 @@ namespace HangfireDashboard.UI.Controllers.LinxCommerce
 
             return Ok($"Records integrated successfully.");
         }
-
-        [HttpPost("IntegrityLockOrderItem")]
-        public async Task<ActionResult> IntegrityLockOrdersRegisters()
-        {
-            var result = await _orderService.IntegrityLockOrdersRegisters(
-                _linxCommerceJobParameter.SetParameters(
-                    jobName: "IntegrityLockOrdersRegisters",
-                    tableName: "Orders"
-                )
-            );
-
-            return Ok($"Records integrated successfully.");
-        }
     }
+
+#endif
 }

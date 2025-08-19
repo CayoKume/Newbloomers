@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace HangfireDashboard.UI.Controllers.LinxCommerce
 {
+#if DEBUG
     [ApiController]
     [Route("LinxCommerceJobs/LinxCommerceIndividual")]
     public class LinxCommerceIndividualController : Controller
@@ -157,4 +158,6 @@ namespace HangfireDashboard.UI.Controllers.LinxCommerce
             return Ok($"Record: {productId} integrated successfully.");
         }
     }
+
+#endif
 }

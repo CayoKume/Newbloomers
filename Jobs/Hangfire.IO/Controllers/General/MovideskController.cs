@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Hangfire.IO.Controllers.General
 {
+#if DEBUG
     [ApiController]
     [Route("MovideskJobs/Movidesk")]
     public class MovideskController : Controller
@@ -40,4 +41,6 @@ namespace Hangfire.IO.Controllers.General
             return Ok($"Records integrated successfully.");
         }
     }
+
+#endif
 }

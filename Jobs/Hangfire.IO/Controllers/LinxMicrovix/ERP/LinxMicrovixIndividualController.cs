@@ -5,6 +5,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Hangfire.IO.Controllers.LinxMicrovix
 {
+#if DEBUG
+    [ApiController]
+    [Route("LinxMicrovixJobs/LinxMicrovixIndividual")]
     public class LinxMicrovixIndividualController : Controller
     {
         private readonly LinxAPIParam _linxMicrovixJobParameter;
@@ -512,4 +515,5 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
             return Ok($"Records integrated successfully.");
         }
     }
+#endif
 }
