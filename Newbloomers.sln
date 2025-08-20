@@ -119,6 +119,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain.Core", "Core\Domain.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.Core", "Core\Infrastructure.Core\Infrastructure.Core.csproj", "{CE5FD70D-FC60-4A66-9C90-0CFD2A1F2271}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Itens de Solução", "Itens de Solução", "{380A7511-A354-6D7A-0CC0-8FA1F1BA7B6C}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		GEMINI.md = GEMINI.md
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

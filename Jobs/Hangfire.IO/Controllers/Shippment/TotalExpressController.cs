@@ -9,10 +9,18 @@ namespace Hangfire.IO.Controllers.Carries
     [Route("CarriersJobs/TotalExpress")]
     public class TotalExpressController : Controller
     {
+        //Refatorar Aqui (adicionar retorno json usando o middleware de erros)
         private readonly ITotalExpressService _totalExpressService;
 
         public TotalExpressController(ITotalExpressService totalExpressService) =>
             (_totalExpressService) = (totalExpressService);
+
+        [HttpPost("GetSendOrders")]
+        public async Task<ActionResult<string?>> TotalExpressGetSendOrders()
+        {
+            await _totalExpressService.SendOrders();
+            return Ok();
+        }
 
         [HttpPost("SendOrders")]
         public async Task<ActionResult<string?>> TotalExpressSendOrders()
