@@ -17,18 +17,8 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxComm
             builder.ToTable("B2CConsultaClientesEnderecosEntrega");
 
             if (schema == "linx_microvix_commerce")
-            {
                 builder.HasKey(e => new { e.id_endereco_entrega, e.cod_cliente_erp, e.cod_cliente_b2c, e.id_cidade });
-                builder.Ignore(e => e.id);
-            }
-            else
-            {
-                builder.HasKey(e => e.id);
-
-                builder.Property(e => e.id)
-                    .HasColumnType("int")
-                    .ValueGeneratedOnAdd();
-            }
+            
             
             builder.Property(e => e.lastupdateon)
                 .HasProviderColumnType(EnumTableColumnType.DateTime);

@@ -1,10 +1,10 @@
 ﻿using Application.Core.Interfaces;
+using Application.Movidesk.Interfaces;
 using Domain.Core.Enums;
 using Domain.Movidesk.Models.Tickets;
 using Domain.Movidesk.Interfaces.Apis;
 using Domain.Movidesk.Interfaces.Repositorys;
 using FluentValidation;
-using Application.Movidesk.Interfaces.Services;
 
 namespace Application.Movidesk.Services
 {

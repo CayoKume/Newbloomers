@@ -1,4 +1,4 @@
-using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
+
 using Domain.Core.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -7,13 +7,8 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
 {
     public class LinxProdutosInformacoes
     {
-        [NotMapped]
-        public Int32 id { get; set; }
-
         public DateTime? lastupdateon { get; private set; }
-
         public Int64? codigoproduto { get; set; }
-
         public string? informacoes_produto { get; set; }
 
         [NotMapped]
@@ -26,20 +21,10 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
 
         public LinxProdutosInformacoes() { }
 
-        public LinxProdutosInformacoes(
-            List<ValidationResult> listValidations,
-            string? codigoproduto,
-            string? informacoes_produto
-        )
-        {
-            lastupdateon = DateTime.Now;
-
-            this.codigoproduto =
-                ConvertToInt64Validation.IsValid(codigoproduto, "codigoproduto", listValidations) ?
-                Convert.ToInt64(codigoproduto) :
-                0;
-
-            this.informacoes_produto = informacoes_produto;
+        public LinxProdutosInformacoes(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxProdutosInformacoes record, string recordXml) {
+            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+            this.codigoproduto = CustomConvertersExtensions.ConvertToInt64Validation(record.codigoproduto);
+            this.informacoes_produto = record.informacoes_produto;
         }
     }
 }

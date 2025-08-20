@@ -17,18 +17,8 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxComm
             builder.ToTable("B2CConsultaProdutosCustos");
 
             if (schema == "linx_microvix_commerce")
-            {
                 builder.HasKey(e => new { e.id_produtos_custos, e.codigoproduto });
-                builder.Ignore(e => e.id);
-            }
-            else
-            {
-                builder.HasKey(e => e.id);
-
-                builder.Property(e => e.id)
-                    .HasColumnType("int")
-                    .ValueGeneratedOnAdd();
-            }
+            
             
             builder.Property(e => e.lastupdateon)
                 .HasProviderColumnType(EnumTableColumnType.DateTime);

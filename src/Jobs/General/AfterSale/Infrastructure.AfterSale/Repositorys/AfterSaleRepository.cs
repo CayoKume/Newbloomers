@@ -3,8 +3,8 @@ using Domain.AfterSale.Interfaces.Repositorys;
 using Domain.Core.Entities.Exceptions;
 using Infrastructure.Core.Connections.SQLServer;
 using System.Data;
-using Domain.AfterSale.Entities;
-using Reverse = Domain.AfterSale.Entities.Reverse;
+using Domain.AfterSale.Models;
+using Reverse = Domain.AfterSale.Models.Reverse;
 using Domain.Core.Interfaces;
 using Microsoft.Win32;
 
@@ -18,9 +18,9 @@ public class AfterSaleRepository : IAfterSaleRepository
     public AfterSaleRepository(ISQLServerConnection sqlServerConnection, ICoreRepository coreRepository) =>
             (_sqlServerConnection, _coreRepository) = (sqlServerConnection, coreRepository);
 
-    public async Task<List<Reverse?>> GetReversesByIds(List<int?> reversesIds)
+    public async Task<List<SimplifiedReverse?>> GetReversesByIds(List<string?> reversesIds)
     {
-        var list = new List<Reverse?>();
+        var list = new List<SimplifiedReverse?>();
         string identificadores = String.Empty;
         int indice = reversesIds.Count() / 1000;
 
@@ -40,7 +40,7 @@ public class AfterSaleRepository : IAfterSaleRepository
                 }
 
                 string sql = $"SELECT ID, UPDATED_AT FROM [GENERAL].[AFTERSALEREVERSES] WHERE ID IN ({identificadores})";
-                var result = await _coreRepository.GetRecords<Reverse>(sql);
+                var result = await _coreRepository.GetRecords<SimplifiedReverse>(sql);
                 list.AddRange(result);
             }
 
@@ -57,7 +57,7 @@ public class AfterSaleRepository : IAfterSaleRepository
             }
 
             string sql = $"SELECT ID, UPDATED_AT FROM [GENERAL].[AFTERSALEREVERSES] WHERE ID IN ({identificadores})";
-            var AddRange = await _coreRepository.GetRecords<Reverse>(sql);
+            var AddRange = await _coreRepository.GetRecords<SimplifiedReverse>(sql);
             list.AddRange(AddRange);
 
             return list;
@@ -111,7 +111,7 @@ public class AfterSaleRepository : IAfterSaleRepository
         throw new NotImplementedException();
     }
 
-    public async Task<bool> InsertIntoAfterSaleReverses(List<Domain.AfterSale.Entities.Data> data, Guid? parentExecutionGUID)
+    public async Task<bool> InsertIntoAfterSaleReverses(List<Domain.AfterSale.Models.Reverse> data, Guid? parentExecutionGUID)
     {
         var reversesTable = _coreRepository.CreateSystemDataTable(entity: new Reverse(), tableName: "AfterSaleReverses");
         var customerTable = _coreRepository.CreateSystemDataTable(entity: new Customer(), tableName: "AfterSaleCustomers");
@@ -119,11 +119,17 @@ public class AfterSaleRepository : IAfterSaleRepository
         var trackingTable = _coreRepository.CreateSystemDataTable(entity: new Tracking(), tableName: "AfterSaleTrackings");
         var trackingHistoryTable = _coreRepository.CreateSystemDataTable(entity: new TrackingHistory(), tableName: "AfterSaleTrackingHistories");
 
-        _coreRepository.FillSystemDataTable(reversesTable, data.Select(x => x.reverse).ToList());
+        //quando tracking é nulo na response o ctor do código monta um tracking com id = 0 e em caso com mais de um tracking montado pelo ctor, da erro de primary key no insert por isso esse agrupamento
+        var trackingGroupBy = data.Where(x => x.tracking != null)
+                                  .GroupBy(x => new { x.tracking.id, ReverseId = x.tracking.reverse_id })
+                                  .Select(g => g.First().tracking)
+                                  .ToList();
+
+        _coreRepository.FillSystemDataTable(reversesTable, data.Select(x => x).ToList());
         _coreRepository.FillSystemDataTable(customerTable, data.Select(x => x.customer).ToList());
         _coreRepository.FillSystemDataTable(addressTable, data.Select(x => x.customer.address).ToList());
         _coreRepository.FillSystemDataTable(addressTable, data.Select(x => x.customer.shipping_address).ToList());
-        _coreRepository.FillSystemDataTable(trackingTable, data.Where(x => x.reverse.tracking != null).Select(x => x.reverse.tracking).ToList());
+        _coreRepository.FillSystemDataTable(trackingTable, trackingGroupBy);
         _coreRepository.FillSystemDataTable(trackingHistoryTable, data.SelectMany(x => x.tracking_history).ToList());
 
         _coreRepository.BulkInsertIntoTableRaw(reversesTable);

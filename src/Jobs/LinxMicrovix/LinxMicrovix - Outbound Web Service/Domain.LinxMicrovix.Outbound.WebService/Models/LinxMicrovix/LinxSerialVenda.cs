@@ -1,4 +1,4 @@
-using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
+
 using Domain.Core.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -7,22 +7,12 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
 {
     public class LinxSerialVenda
     {
-        [NotMapped]
-        public Int32 id { get; set; }
-
         public DateTime? lastupdateon { get; private set; }
-
         public Int32? id_serial_venda { get; private set; }
-
         public Int32? portal { get; private set; }
-
         public Int32? transacao { get; private set; }
-
         public Int64? codigoproduto { get; private set; }
-
-        [LengthValidation(length: 50, propertyName: "serial")]
         public string? serial { get; private set; }
-
         public Int64? timestamp { get; private set; }
 
         [NotMapped]
@@ -35,44 +25,14 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
 
         public LinxSerialVenda() { }
 
-        public LinxSerialVenda(
-            List<ValidationResult> listValidations,
-            string? id_serial_venda,
-            string? portal,
-            string? transacao,
-            string? codigoproduto,
-            string? serial,
-            string? timestamp
-        )
-        {
-            lastupdateon = DateTime.Now;
-
-            this.portal =
-                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
-                Convert.ToInt32(portal) :
-                0;
-
-            this.id_serial_venda =
-                ConvertToInt32Validation.IsValid(id_serial_venda, "id_serial_venda", listValidations) ?
-                Convert.ToInt32(id_serial_venda) :
-                0;
-
-            this.transacao =
-                ConvertToInt32Validation.IsValid(transacao, "transacao", listValidations) ?
-                Convert.ToInt32(transacao) :
-                0;
-
-            this.timestamp =
-                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
-                Convert.ToInt64(timestamp) :
-                0;
-
-            this.codigoproduto =
-                ConvertToInt64Validation.IsValid(codigoproduto, "codigoproduto", listValidations) ?
-                Convert.ToInt64(codigoproduto) :
-                0;
-
-            this.serial = serial;
+        public LinxSerialVenda(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxSerialVenda record, string recordXml) {
+            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+            this.portal = CustomConvertersExtensions.ConvertToInt32Validation(record.portal);
+            this.id_serial_venda = CustomConvertersExtensions.ConvertToInt32Validation(record.id_serial_venda);
+            this.transacao = CustomConvertersExtensions.ConvertToInt32Validation(record.transacao);
+            this.timestamp = CustomConvertersExtensions.ConvertToInt64Validation(record.timestamp);
+            this.codigoproduto = CustomConvertersExtensions.ConvertToInt64Validation(record.codigoproduto);
+            this.serial = record.serial;
         }
     }
 }

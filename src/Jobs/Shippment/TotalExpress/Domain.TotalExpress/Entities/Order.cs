@@ -18,6 +18,5 @@ namespace Domain.TotalExpress.Entities
         public ShippingCompany? shippingCompany { get; set; }
         public Invoice? invoice { get; set; }
         public List<Product> itens { get { return _itens; } set { _itens = value; } }
-
     }
 }

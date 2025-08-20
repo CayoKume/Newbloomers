@@ -1,4 +1,4 @@
-using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
+
 using Domain.Core.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -8,26 +8,14 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
 {
     public class LinxNfse
     {
-        [SkipProperty]
-        public Int32 id { get; set; }
-
         public DateTime? lastupdateon { get; private set; }
-
         public Int32? id_nfse { get; private set; }
-
         public Int32? portal { get; private set; }
-
         public Int32? documento { get; private set; }
-
-        [LengthValidation(length: 50, propertyName: "codigo_verificacao")]
         public string? codigo_verificacao { get; private set; }
-
         public Int32? id_nfse_situacao { get; private set; }
-
         public Guid? identificador { get; private set; }
-
         public DateTime? dt_insert { get; private set; }
-
         public Int64? timestamp { get; private set; }
 
         [NotMapped]
@@ -40,55 +28,16 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
 
         public LinxNfse() { }
 
-        public LinxNfse(
-            List<ValidationResult> listValidations,
-            string? id_nfse,
-            string? portal,
-            string? documento,
-            string? codigo_verificacao,
-            string? id_nfse_situacao,
-            string? identificador,
-            string? dt_insert,
-            string? timestamp
-        )
-        {
-            lastupdateon = DateTime.Now;
-
-            this.portal =
-                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
-                Convert.ToInt32(portal) :
-                0;
-
-            this.documento =
-                ConvertToInt32Validation.IsValid(documento, "documento", listValidations) ?
-                Convert.ToInt32(documento) :
-                0;
-
-            this.id_nfse =
-                ConvertToInt32Validation.IsValid(id_nfse, "id_nfse", listValidations) ?
-                Convert.ToInt32(id_nfse) :
-                0;
-
-            this.id_nfse_situacao =
-                ConvertToInt32Validation.IsValid(id_nfse_situacao, "id_nfse_situacao", listValidations) ?
-                Convert.ToInt32(id_nfse_situacao) :
-                0;
-
-            this.identificador =
-                String.IsNullOrEmpty(identificador) ? null
-                : Guid.Parse(identificador);
-
-            this.dt_insert =
-               ConvertToDateTimeValidation.IsValid(dt_insert, "dt_insert", listValidations) ?
-               Convert.ToDateTime(dt_insert) :
-               new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar);
-
-            this.timestamp =
-                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
-                Convert.ToInt64(timestamp) :
-                0;
-
-            this.codigo_verificacao = codigo_verificacao;
+        public LinxNfse(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxNfse record, string recordXml) {
+            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+            this.portal = CustomConvertersExtensions.ConvertToInt32Validation(record.portal);
+            this.documento = CustomConvertersExtensions.ConvertToInt32Validation(record.documento);
+            this.id_nfse = CustomConvertersExtensions.ConvertToInt32Validation(record.id_nfse);
+            this.id_nfse_situacao = CustomConvertersExtensions.ConvertToInt32Validation(record.id_nfse_situacao);
+            this.identificador = Guid.Parse(record.identificador);
+            this.dt_insert = CustomConvertersExtensions.ConvertToDateTimeValidation<string>(record.dt_insert);
+            this.timestamp = CustomConvertersExtensions.ConvertToInt64Validation(record.timestamp);
+            this.codigo_verificacao = record.codigo_verificacao;
         }
     }
 }

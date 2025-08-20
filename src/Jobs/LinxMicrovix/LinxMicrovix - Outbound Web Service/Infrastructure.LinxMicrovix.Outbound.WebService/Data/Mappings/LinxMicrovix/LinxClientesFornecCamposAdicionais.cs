@@ -16,18 +16,8 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
             builder.ToTable("LinxClientesFornecCamposAdicionais");
 
             if (schema == "linx_microvix_erp")
-            {
                 builder.HasKey(e => new { e.cod_cliente });
-                builder.Ignore(x => x.id);
-            }
-            else
-            {
-                builder.HasKey(x => x.id);
-
-                builder.Property(e => e.id)
-                    .HasColumnType("int")
-                    .ValueGeneratedOnAdd();
-            }
+            
 
             builder.Property(e => e.lastupdateon)
                 .HasProviderColumnType(EnumTableColumnType.DateTime);

@@ -15,19 +15,9 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
 
             builder.ToTable("LinxECFFormasPagamento");
 
-            if (schema == "linx_microvix_erp")
-            { 
+            if (schema == "linx_microvix_erp") 
                 builder.HasKey(e => e.id_empresa_ecf_formas_pgto);
-                builder.Ignore(x => x.id);
-            }
-            else
-            {
-                builder.HasKey(x => x.id);
-
-                builder.Property(e => e.id)
-                    .HasColumnType("int")
-                    .ValueGeneratedOnAdd();
-            }
+            
 
             builder.Property(e => e.lastupdateon)
                 .HasProviderColumnType(EnumTableColumnType.DateTime);

@@ -127,11 +127,11 @@ namespace Domain.LinxCommerce.Entities.Order
             public Root(Order.Root order, string? getOrderResponse)
             {
                 this.lastupdateon = DateTime.Now;
-                this.OrderInvoice = new OrderInvoice(order.OrderInvoice, order.OrderID);
-                this.Seller = new OrderSeller(order.Seller);
-                this.OrderType = new OrderType(order.OrderType);
-                this.MultiSiteTenant = new OrderMultiSiteTenant(order.MultiSiteTenant);
-                this.SalesRepresentative = new SalesRepresentative.SalesRepresentative(order.SalesRepresentative);
+                this.OrderInvoice = new OrderInvoice(order.OrderInvoice == null ? new OrderInvoice() : order.OrderInvoice, order.OrderID);
+                this.Seller = new OrderSeller(order.Seller == null ? new OrderSeller() : order.Seller);
+                this.OrderType = new OrderType(order.OrderType == null ? new OrderType() : order.OrderType);
+                this.MultiSiteTenant = new OrderMultiSiteTenant(order.MultiSiteTenant == null ? new OrderMultiSiteTenant() : order.MultiSiteTenant);
+                this.SalesRepresentative = new SalesRepresentative.SalesRepresentative(order.SalesRepresentative == null ? new SalesRepresentative.SalesRepresentative() : order.SalesRepresentative);
 
                 this.OrderID = order.OrderID;
                 this.OrderNumber = order.OrderNumber;
@@ -186,7 +186,7 @@ namespace Domain.LinxCommerce.Entities.Order
                 this.CustomerTradingName = order.CustomerTradingName;
                 this.CustomerSiteTaxPayer = order.CustomerSiteTaxPayer;
 
-                this.SalesRepresentativeID = order.SalesRepresentative.SalesRepresentativeID;
+                this.SalesRepresentativeID = order.SalesRepresentative == null ? 0 : order.SalesRepresentative.SalesRepresentativeID;
 
                 this.SellerEMail = this.Seller.EMail;
                 this.SellerIntegrationID = this.Seller.IntegrationID;

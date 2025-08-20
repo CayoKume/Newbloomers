@@ -53,10 +53,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
             {
                 try
                 {
-                    var validations = new List<ValidationResult>();
-
                     var entity = new Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxCommerce.B2CConsultaProdutosAssociados(
-                        listValidations: validations,
                         id: records[i].Where(pair => pair.Key == "id").Select(pair => pair.Value).FirstOrDefault(),
                         codigoproduto: records[i].Where(pair => pair.Key == "codigoproduto").Select(pair => pair.Value).FirstOrDefault(),
                         codigoproduto_associado: records[i].Where(pair => pair.Key == "codigoproduto_associado").Select(pair => pair.Value).FirstOrDefault(),
@@ -64,16 +61,15 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                         qtde_item: records[i].Where(pair => pair.Key == "qtde_item").Select(pair => pair.Value).FirstOrDefault(),
                         item_obrigatorio: records[i].Where(pair => pair.Key == "item_obrigatorio").Select(pair => pair.Value).FirstOrDefault(),
                         timestamp: records[i].Where(pair => pair.Key == "timestamp").Select(pair => pair.Value).FirstOrDefault(),
-                        portal: records[i].Where(pair => pair.Key == "portal").Select(pair => pair.Value).FirstOrDefault(),
-                        recordXml: records[i].Where(pair => pair.Key == "recordXml").Select(pair => pair.Value).FirstOrDefault()
+                        portal: records[i].Where(pair => pair.Key == "portal").Select(pair => pair.Value).FirstOrDefault()
                     );
 
                     var xml = records[i].Where(pair => pair.Key == "recordXml").Select(pair => pair.Value).FirstOrDefault();
-                    var validations = _validator.Validate(entity);`r`n
+                    var validations = _validator.Validate(entity);
 
                     if (validations.Errors.Count() > 0)
                     {
-                        var message = $"Error when convert record - codigoproduto: {records[i].Where(pair => pair.Key == ";
+                        var message = $"Error when convert record - codigoproduto: {records[i].Where(pair => pair.Key == "codigoproduto").Select(pair => pair.Value).FirstOrDefault()} | codigoproduto_associado: {records[i].Where(pair => pair.Key == "codigoproduto_associado").Select(pair => pair.Value).FirstOrDefault()} ";
     
                         for (int j = 0; j < validations.Errors.Count(); j++)
                         {
@@ -91,7 +87,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                 catch (Exception ex)
                 {
                     throw new GeneralException(
-                        message: $"Error when convert record - codigoproduto: {records[i].Where(pair => pair.Key == " - {ex.Message}codigoproduto").Select(pair => pair.Value).FirstOrDefault()} | codigoproduto_associado: {records[i].Where(pair => pair.Key == "codigoproduto_associado").Select(pair => pair.Value).FirstOrDefault()} - {ex.Message}",
+                        message: $"Error when convert record - codigoproduto: {records[i].Where(pair => pair.Key == "codigoproduto").Select(pair => pair.Value).FirstOrDefault()} | codigoproduto_associado: {records[i].Where(pair => pair.Key == "codigoproduto_associado").Select(pair => pair.Value).FirstOrDefault()} - {ex.Message}",
                             exceptionMessage: ex.StackTrace
                     );
                 }
@@ -204,4 +200,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
         }
     }
 }
+
+
+
 

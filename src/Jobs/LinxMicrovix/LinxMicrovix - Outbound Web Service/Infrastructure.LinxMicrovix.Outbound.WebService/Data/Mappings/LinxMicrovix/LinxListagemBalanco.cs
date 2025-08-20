@@ -16,18 +16,8 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
             builder.ToTable("LinxListagemBalanco");
 
             if (schema == "linx_microvix_erp")
-            {
                 builder.HasKey(e => e.id_balanco);
-                builder.Ignore(x => x.id);
-            }
-            else
-            {
-                builder.HasKey(x => x.id);
-
-                builder.Property(e => e.id)
-                    .HasColumnType("int")
-                    .ValueGeneratedOnAdd();
-            }
+            
 
             builder.Property(e => e.lastupdateon)
                 .HasProviderColumnType(EnumTableColumnType.DateTime);

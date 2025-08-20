@@ -1,4 +1,4 @@
-﻿using Application.Core.Interfaces;
+using Application.Core.Interfaces;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Handlers.Commands;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Services;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Services.LinxMicrovix;
@@ -10,6 +10,8 @@ using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Api;
 using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxMicrovix;
 using System.ComponentModel.DataAnnotations;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Handlers.Commands.LinxMicrovix;
+using FluentValidation;
 
 namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
 {
@@ -18,9 +20,11 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
         private readonly IAPICall _apiCall;
         private readonly ILoggerService _logger;
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
+        private readonly IValidator<Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxClientesFornec> _validator;
         private readonly ICoreRepository _coreRepository;
         private readonly ILinxClientesFornecRepository _linxClientesFornecRepository;
         private readonly ILinxMicrovixCommandHandler _linxMicrovixCommandHandler;
+        private readonly ILinxClientesFornecCommandHandler _linxClientesFornecCommandHandler;
         private static List<string?> _linxClientesFornecCache { get; set; } = new List<string?>();
 
         public LinxClientesFornecService(
@@ -29,28 +33,30 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
             ICoreRepository coreRepository,
             ILinxClientesFornecRepository linxClientesFornecRepository,
-            ILinxMicrovixCommandHandler linxMicrovixCommandHandler
+            IValidator<Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxClientesFornec> validator,
+            ILinxMicrovixCommandHandler linxMicrovixCommandHandler,
+            ILinxClientesFornecCommandHandler linxClientesFornecCommandHandler
         )
         {
             _apiCall = apiCall;
+            _validator = validator;
             _logger = logger;
             _linxMicrovixServiceBase = linxMicrovixServiceBase;
             _coreRepository = coreRepository;
             _linxClientesFornecRepository = linxClientesFornecRepository;
             _linxMicrovixCommandHandler = linxMicrovixCommandHandler;
+            _linxClientesFornecCommandHandler = linxClientesFornecCommandHandler;
         }
 
         public List<LinxClientesFornec?> DeserializeXMLToObject(LinxAPIParam jobParameter, List<Dictionary<string?, string?>> records)
         {
             var list = new List<LinxClientesFornec>();
+            
             for (int i = 0; i < records.Count(); i++)
             {
                 try
                 {
-                    var validations = new List<ValidationResult>();
-
-                    var entity = new LinxClientesFornec(
-                        listValidations: validations,
+                    var entity = new Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxClientesFornec(
                         cod_cliente: records[i].Where(pair => pair.Key == "cod_cliente").Select(pair => pair.Value).FirstOrDefault(),
                         razao_cliente: records[i].Where(pair => pair.Key == "razao_cliente").Select(pair => pair.Value).FirstOrDefault(),
                         nome_cliente: records[i].Where(pair => pair.Key == "nome_cliente").Select(pair => pair.Value).FirstOrDefault(),
@@ -92,32 +98,34 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                         obs: records[i].Where(pair => pair.Key == "obs").Select(pair => pair.Value).FirstOrDefault(),
                         mae: records[i].Where(pair => pair.Key == "mae").Select(pair => pair.Value).FirstOrDefault(),
                         timestamp: records[i].Where(pair => pair.Key == "timestamp").Select(pair => pair.Value).FirstOrDefault(),
-                        portal: records[i].Where(pair => pair.Key == "portal").Select(pair => pair.Value).FirstOrDefault(),
-                        recordXml: records[i].Where(pair => pair.Key == "recordXml").Select(pair => pair.Value).FirstOrDefault()
+                        portal: records[i].Where(pair => pair.Key == "portal").Select(pair => pair.Value).FirstOrDefault()
                     );
 
-                    var contexto = new ValidationContext(entity, null, null);
-                    Validator.TryValidateObject(entity, contexto, validations, true);
+                    var xml = records[i].Where(pair => pair.Key == "recordXml").Select(pair => pair.Value).FirstOrDefault();
+                    var validations = _validator.Validate(entity);
 
-                    if (validations.Count() > 0)
+                    if (validations.Errors.Count() > 0)
                     {
-                        for (int j = 0; j < validations.Count(); j++)
+                        var message = $"Error when convert record - doc_cliente: {records[i].Where(pair => pair.Key == "doc_cliente").Select(pair => pair.Value).FirstOrDefault()} | razao_cliente: {records[i].Where(pair => pair.Key == "razao_cliente").Select(pair => pair.Value).FirstOrDefault()}" + "\n";
+		
+                        for (int j = 0; j < validations.Errors.Count(); j++)
                         {
-                            _logger.AddMessage(
-                                message: $"Error when convert record - doc_cliente: {records[i].Where(pair => pair.Key == "doc_cliente").Select(pair => pair.Value).FirstOrDefault()} | razao_cliente: {records[i].Where(pair => pair.Key == "razao_cliente").Select(pair => pair.Value).FirstOrDefault()}\n" +
-                                         $"{validations[j].ErrorMessage}"
-                            );
+                            var msg = validations.Errors[j].ErrorMessage;
+                            var property = validations.Errors[j].PropertyName;
+                            var value = validations.Errors[j].FormattedMessagePlaceholderValues.Where(x => x.Key == "PropertyValue").FirstOrDefault().Value;
+                            message += $"{msg.Replace("[0]", $"{property}: {value}")}";
                         }
-                        continue;
+		
+                        _logger.AddMessage(message);
                     }
-
-                    list.Add(entity);
+		
+                    list.Add(new LinxClientesFornec(entity, xml));
                 }
                 catch (Exception ex)
                 {
                     throw new GeneralException(
                         message: $"Error when convert record - doc_cliente: {records[i].Where(pair => pair.Key == "doc_cliente").Select(pair => pair.Value).FirstOrDefault()} | razao_cliente: {records[i].Where(pair => pair.Key == "razao_cliente").Select(pair => pair.Value).FirstOrDefault()}",
-                            exceptionMessage: ex.StackTrace
+                        exceptionMessage: ex.StackTrace
                     );
                 }
             };
@@ -229,5 +237,44 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
 
             return true;
         }
+
+        public async Task<bool> IntegrityLockLinxClientesFornecRegisters(LinxAPIParam jobParameter)
+        {
+            var _listSomenteNovos = new List<LinxClientesFornec>();
+
+            string sql = _linxMicrovixCommandHandler.CreateGetParametersQuery(jobParameter.parametersInterval, jobParameter.parametersTableName, jobParameter.jobName);
+            string? parameters = await _coreRepository.GetRecord<string>(sql);
+
+            string integritySql = _linxClientesFornecCommandHandler.CreateIntegrityLockQuery();
+            var clientes = await _coreRepository.GetRecords<string>(integritySql);
+
+            foreach (var cliente in clientes)
+            {
+                var body = _linxMicrovixServiceBase.BuildBodyRequest(
+                                parametersList: parameters.Replace("[0]", "0").Replace("[doc_cliente]", cliente).Replace("[data_inicial]", "2000-01-01").Replace("[data_fim]", $"{DateTime.Today.ToString("yyyy-MM-dd")}"),
+                                jobParameter: jobParameter,
+                                cnpj_emp: jobParameter.docMainCompany
+                            );
+
+                string? response = await _apiCall.PostAsync(jobParameter: jobParameter, body: body);
+                var xmls = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response);
+
+                if (xmls.Count() > 0)
+                {
+                    var listRecords = DeserializeXMLToObject(jobParameter, xmls);
+                    _listSomenteNovos.AddRange(listRecords);
+                } 
+            }
+
+            if (_listSomenteNovos.Count() > 0)
+            {
+                _linxClientesFornecRepository.BulkInsertIntoTableRaw(records: _listSomenteNovos, jobParameter: jobParameter);
+                await _coreRepository.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
+            }
+
+            return true;
+        }
     }
 }
+
+

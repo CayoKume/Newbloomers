@@ -16,18 +16,8 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
             builder.ToTable("LinxAcoesPromocionais");
 
             if(schema == "linx_microvix_erp")
-            {
                 builder.HasKey(x => x.id_acoes_promocionais);
-                builder.Ignore(e => e.id);
-            }
-            else
-            {
-                builder.HasKey(x => x.id);
-
-                builder.Property(e => e.id)
-                    .HasColumnType("int")
-                    .ValueGeneratedOnAdd();
-            }
+            
             
             builder
                 .Property(x => x.id_acoes_promocionais)

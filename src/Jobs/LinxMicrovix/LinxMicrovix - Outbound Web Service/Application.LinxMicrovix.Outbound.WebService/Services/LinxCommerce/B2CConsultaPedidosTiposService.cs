@@ -53,23 +53,19 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
             {
                 try
                 {
-                    var validations = new List<ValidationResult>();
-
                     var entity = new Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxCommerce.B2CConsultaPedidosTipos(
-                        listValidations: validations,
                         id_tipo_b2c: records[i].Where(pair => pair.Key == "id_tipo_b2c").Select(pair => pair.Value).FirstOrDefault(),
                         descricao: records[i].Where(pair => pair.Key == "descricao").Select(pair => pair.Value).FirstOrDefault(),
                         pos_timestamp_old: records[i].Where(pair => pair.Key == "pos_timestamp_old").Select(pair => pair.Value).FirstOrDefault(),
-                        portal: records[i].Where(pair => pair.Key == "portal").Select(pair => pair.Value).FirstOrDefault(),
-                        recordXml: records[i].Where(pair => pair.Key == "recordXml").Select(pair => pair.Value).FirstOrDefault()
+                        portal: records[i].Where(pair => pair.Key == "portal").Select(pair => pair.Value).FirstOrDefault()
                     );
 
                     var xml = records[i].Where(pair => pair.Key == "recordXml").Select(pair => pair.Value).FirstOrDefault();
-                    var validations = _validator.Validate(entity);`r`n
+                    var validations = _validator.Validate(entity);
 
                     if (validations.Errors.Count() > 0)
                     {
-                        var message = $"Error when convert record - id_tipo_b2c: {records[i].Where(pair => pair.Key == ";
+                        var message = $"Error when convert record - id_tipo_b2c: {records[i].Where(pair => pair.Key == "id_tipo_b2c").Select(pair => pair.Value).FirstOrDefault()} | descricao: {records[i].Where(pair => pair.Key == "descricao").Select(pair => pair.Value).FirstOrDefault()} ";
     
                         for (int j = 0; j < validations.Errors.Count(); j++)
                         {
@@ -87,7 +83,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                 catch (Exception ex)
                 {
                     throw new GeneralException(
-                        message: $"Error when convert record - id_tipo_b2c: {records[i].Where(pair => pair.Key == " - {ex.Message}id_tipo_b2c").Select(pair => pair.Value).FirstOrDefault()} | descricao: {records[i].Where(pair => pair.Key == "descricao").Select(pair => pair.Value).FirstOrDefault()} - {ex.Message}",
+                        message: $"Error when convert record - id_tipo_b2c: {records[i].Where(pair => pair.Key == "id_tipo_b2c").Select(pair => pair.Value).FirstOrDefault()} | descricao: {records[i].Where(pair => pair.Key == "descricao").Select(pair => pair.Value).FirstOrDefault()} - {ex.Message}",
                             exceptionMessage: ex.StackTrace
                     );
                 }
@@ -160,4 +156,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
 
     }
 }
+
+
+
 

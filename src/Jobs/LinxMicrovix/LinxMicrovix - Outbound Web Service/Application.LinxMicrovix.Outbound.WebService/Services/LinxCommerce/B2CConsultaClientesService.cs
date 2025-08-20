@@ -11,8 +11,9 @@ using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxCommerc
 using System.ComponentModel.DataAnnotations;
 using System.Data;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Handlers.Commands;
-
 using FluentValidation;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Handlers.Commands.LinxCommerce;
+using Domain.LinxMicrovix.Outbound.WebService.Models.Parameters;
 
 namespace Application.LinxMicrovix.Outbound.WebService.Services
 {
@@ -24,6 +25,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
         private readonly ICoreRepository _coreRepository;
         private readonly IB2CConsultaClientesRepository _b2cConsultaClientesRepository;
         private readonly ILinxMicrovixCommandHandler _linxMicrovixCommandHandler;
+        private readonly IB2CConsultaClientesCommandHandler _b2CConsultaClientesCommandHandler;
         private readonly IValidator<Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxCommerce.B2CConsultaClientes> _validator;
         private static List<string?> _b2cConsultaClientesCache { get; set; } = new List<string?>();
 
@@ -54,10 +56,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
             {
                 try
                 {
-                    var validations = new List<ValidationResult>();
-
                     var entity = new Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxCommerce.B2CConsultaClientes(
-                         listValidations: validations,
                          cod_cliente_b2c: records[i].Where(pair => pair.Key == "cod_cliente_b2c").Select(pair => pair.Value).FirstOrDefault(),
                          cod_cliente_erp: records[i].Where(pair => pair.Key == "cod_cliente_erp").Select(pair => pair.Value).FirstOrDefault(),
                          doc_cliente: records[i].Where(pair => pair.Key == "doc_cliente").Select(pair => pair.Value).FirstOrDefault(),
@@ -95,16 +94,15 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                          timestamp: records[i].Where(pair => pair.Key == "timestamp").Select(pair => pair.Value).FirstOrDefault(),
                          tipo_pessoa: records[i].Where(pair => pair.Key == "tipo_pessoa").Select(pair => pair.Value).FirstOrDefault(),
                          portal: records[i].Where(pair => pair.Key == "portal").Select(pair => pair.Value).FirstOrDefault(),
-                         aceita_programa_fidelidade: records[i].Where(pair => pair.Key == "aceita_programa_fidelidade").Select(pair => pair.Value).FirstOrDefault(),
-                        recordXml: records[i].Where(pair => pair.Key == "recordXml").Select(pair => pair.Value).FirstOrDefault()
+                         aceita_programa_fidelidade: records[i].Where(pair => pair.Key == "aceita_programa_fidelidade").Select(pair => pair.Value).FirstOrDefault()
                     );
 
                     var xml = records[i].Where(pair => pair.Key == "recordXml").Select(pair => pair.Value).FirstOrDefault();
-                    var validations = _validator.Validate(entity);`r`n
+                    var validations = _validator.Validate(entity);
 
                     if (validations.Errors.Count() > 0)
                     {
-                        var message = $"Error when convert record - cod_cliente_b2c: {records[i].Where(pair => pair.Key == ";
+                        var message = $"Error when convert record - cod_cliente_b2c: {records[i].Where(pair => pair.Key == "cod_cliente_b2c").Select(pair => pair.Value).FirstOrDefault()} | nm_cliente: {records[i].Where(pair => pair.Key == "nm_cliente").Select(pair => pair.Value).FirstOrDefault()} ";
     
                         for (int j = 0; j < validations.Errors.Count(); j++)
                         {
@@ -122,7 +120,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                 catch (Exception ex)
                 {
                     throw new GeneralException(
-                        message: $"Error when convert record - cod_cliente_b2c: {records[i].Where(pair => pair.Key == " - {ex.Message}cod_cliente_b2c").Select(pair => pair.Value).FirstOrDefault()} | nm_cliente: {records[i].Where(pair => pair.Key == "nm_cliente").Select(pair => pair.Value).FirstOrDefault()} - {ex.Message}",
+                        message: $"Error when convert record - cod_cliente_b2c: {records[i].Where(pair => pair.Key == "cod_cliente_b2c").Select(pair => pair.Value).FirstOrDefault()} | nm_cliente: {records[i].Where(pair => pair.Key == "nm_cliente").Select(pair => pair.Value).FirstOrDefault()} - {ex.Message}",
                         exceptionMessage: ex.StackTrace
                     );
                 }
@@ -235,6 +233,44 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
 
             return true;
         }
+
+        public async Task<bool> IntegrityLockB2CConsultaClientesRegisters(LinxAPIParam jobParameter)
+        {
+            try
+            {
+                var _listSomenteNovos = new List<B2CConsultaClientes>();
+
+                string sql = _linxMicrovixCommandHandler.CreateGetParametersQuery(jobParameter.parametersInterval, jobParameter.parametersTableName, jobParameter.jobName);
+                string? parameters = await _coreRepository.GetRecord<string>(sql);
+
+                string integritySql = _b2CConsultaClientesCommandHandler.CreateIntegrityLockQuery();
+                var _listRegistrosConsultados = await _coreRepository.GetRecords<IntegrityLockTablesRegister>(integritySql);
+
+                foreach (var cliente in _listRegistrosConsultados)
+                {
+                    var body = _linxMicrovixServiceBase.BuildBodyRequest(
+                                    parametersList: parameters.Replace("[0]", "0").Replace("[doc_cliente]", cliente.identifier).Replace("[data_inicial]", "2000-01-01").Replace("[data_fim]", $"{DateTime.Today.ToString("yyyy-MM-dd")}"),
+                                    jobParameter: jobParameter,
+                                    cnpj_emp: jobParameter.docMainCompany
+                                );
+
+                    string? response = await _apiCall.PostAsync(jobParameter: jobParameter, body: body);
+                    var xmls = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response);
+
+                    if (xmls.Count() > 0)
+                    {
+                        var listRecords = DeserializeXMLToObject(jobParameter, xmls);
+                        _listSomenteNovos.AddRange(listRecords);
+                        cliente.is_present_in_erp = true;
+                    }
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
     }
 }
-

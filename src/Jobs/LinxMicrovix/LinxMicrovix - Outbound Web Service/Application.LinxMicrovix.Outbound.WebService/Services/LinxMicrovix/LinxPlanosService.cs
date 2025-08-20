@@ -1,4 +1,4 @@
-﻿using Application.Core.Interfaces;
+using Application.Core.Interfaces;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Services;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Services.LinxMicrovix;
 using Domain.Core.Entities.Exceptions;
@@ -12,6 +12,7 @@ using System.ComponentModel.DataAnnotations;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Handlers.Commands;
 using Domain.Core.Interfaces;
 using Application.LinxMicrovix.Outbound.WebService.Handlers.Commands;
+using FluentValidation;
 
 namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
 {
@@ -21,9 +22,9 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
         private readonly ILoggerService _logger;
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
         private readonly ILinxPlanosRepository _linxPlanosRepository;
+        private readonly IValidator<Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxPlanos> _validator;
         private readonly ICoreRepository _coreRepository;
         private readonly ILinxMicrovixCommandHandler _linxMicrovixCommandHandler;
-
         private static List<string?> _linxPlanosCache { get; set; } = new List<string?>();
 
         public LinxPlanosService(
@@ -32,10 +33,12 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
             ILinxPlanosRepository linxPlanosRepository,
             ICoreRepository coreRepository,
+            IValidator<Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxPlanos> validator,
             ILinxMicrovixCommandHandler linxMicrovixCommandHandler
         )
         {
             _apiCall = apiCall;
+            _validator = validator;
             _logger = logger;
             _linxMicrovixServiceBase = linxMicrovixServiceBase;
             _linxPlanosRepository = linxPlanosRepository;
@@ -47,14 +50,12 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
         public List<LinxPlanos?> DeserializeXMLToObject(LinxAPIParam jobParameter, List<Dictionary<string?, string?>> records)
         {
             var list = new List<LinxPlanos>();
+            
             for (int i = 0; i < records.Count(); i++)
             {
                 try
                 {
-                    var validations = new List<ValidationResult>();
-
-                    var entity = new LinxPlanos(
-                        listValidations: validations,
+                    var entity = new Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxPlanos(
                         plano: records[i].Where(pair => pair.Key == "plano").Select(pair => pair.Value).FirstOrDefault(),
                         desc_plano: records[i].Where(pair => pair.Key == "desc_plano").Select(pair => pair.Value).FirstOrDefault(),
                         qtde_parcelas: records[i].Where(pair => pair.Key == "qtde_parcelas").Select(pair => pair.Value).FirstOrDefault(),
@@ -70,26 +71,28 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                         desativado: records[i].Where(pair => pair.Key == "desativado").Select(pair => pair.Value).FirstOrDefault(),
                         usa_tef: records[i].Where(pair => pair.Key == "usa_tef").Select(pair => pair.Value).FirstOrDefault(),
                         timestamp: records[i].Where(pair => pair.Key == "timestamp").Select(pair => pair.Value).FirstOrDefault(),
-                        portal: records[i].Where(pair => pair.Key == "portal").Select(pair => pair.Value).FirstOrDefault(),
-                        recordXml: records[i].Where(pair => pair.Key == "recordXml").Select(pair => pair.Value).FirstOrDefault()
+                        portal: records[i].Where(pair => pair.Key == "portal").Select(pair => pair.Value).FirstOrDefault()
                     );
 
-                    var contexto = new ValidationContext(entity, null, null);
-                    Validator.TryValidateObject(entity, contexto, validations, true);
+                    var xml = records[i].Where(pair => pair.Key == "recordXml").Select(pair => pair.Value).FirstOrDefault();
+                    var validations = _validator.Validate(entity);
 
-                    if (validations.Count() > 0)
+                    if (validations.Errors.Count() > 0)
                     {
-                        for (int j = 0; j < validations.Count(); j++)
+                        var message = $"Error when convert record - plano: {records[i].Where(pair => pair.Key == "plano").Select(pair => pair.Value).FirstOrDefault()} | desc_plano: {records[i].Where(pair => pair.Key == "desc_plano").Select(pair => pair.Value).FirstOrDefault()}" + "\n";
+		
+                        for (int j = 0; j < validations.Errors.Count(); j++)
                         {
-                            _logger.AddMessage(
-                                message: $"Error when convert record - plano: {records[i].Where(pair => pair.Key == "plano").Select(pair => pair.Value).FirstOrDefault()} | desc_plano: {records[i].Where(pair => pair.Key == "desc_plano").Select(pair => pair.Value).FirstOrDefault()}\n" +
-                                         $"{validations[j].ErrorMessage}"
-                            );
+                            var msg = validations.Errors[j].ErrorMessage;
+                            var property = validations.Errors[j].PropertyName;
+                            var value = validations.Errors[j].FormattedMessagePlaceholderValues.Where(x => x.Key == "PropertyValue").FirstOrDefault().Value;
+                            message += $"{msg.Replace("[0]", $"{property}: {value}")}";
                         }
-                        continue;
+		
+                        _logger.AddMessage(message);
                     }
-
-                    list.Add(entity);
+		
+                    list.Add(new LinxPlanos(entity, xml));
                 }
                 catch (Exception ex)
                 {
@@ -211,3 +214,5 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
         }
     }
 }
+
+

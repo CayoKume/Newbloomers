@@ -8,5 +8,6 @@ namespace Application.LinxMicrovix.Outbound.WebService.Interfaces.Services.LinxC
         public List<B2CConsultaPedidosItens?> DeserializeXMLToObject(LinxAPIParam jobParameter, List<Dictionary<string?, string?>> records);
         public Task<bool> GetRecords(LinxAPIParam jobParameter);
         public Task<bool> GetRecord(LinxAPIParam jobParameter, string? identificador);
+        public Task<bool> IntegrityLockRegisters(LinxAPIParam jobParameter);
     }
 }

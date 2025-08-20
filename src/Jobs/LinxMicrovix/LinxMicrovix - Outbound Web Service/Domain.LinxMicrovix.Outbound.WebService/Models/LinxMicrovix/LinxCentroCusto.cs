@@ -1,4 +1,4 @@
-using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
+
 using Domain.Core.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -7,25 +7,13 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
 {
     public class LinxCentroCusto
     {
-        [NotMapped]
-        public Int32 id { get; set; }
-
         public DateTime? lastupdateon { get; private set; }
-
         public Int32? portal { get; private set; }
-
         public Int32? empresa { get; private set; }
-
-        [LengthValidation(length: 14, propertyName: "CNPJ")]
         public string? CNPJ { get; private set; }
-
         public Int32? id_centrocusto { get; private set; }
-
-        [LengthValidation(length: 50, propertyName: "nome_centrocusto")]
         public string? nome_centrocusto { get; private set; }
-
         public bool? ativo { get; private set; }
-
         public Int64? timestamp { get; private set; }
 
         [NotMapped]
@@ -38,46 +26,15 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
 
         public LinxCentroCusto() { }
 
-        public LinxCentroCusto(
-            List<ValidationResult> listValidations,
-            string? portal,
-            string? empresa,
-            string? CNPJ,
-            string? id_centrocusto,
-            string? nome_centrocusto,
-            string? ativo,
-            string? timestamp
-        )
-        {
-            lastupdateon = DateTime.Now;
-
-            this.empresa =
-                ConvertToInt32Validation.IsValid(empresa, "empresa", listValidations) ?
-                Convert.ToInt32(empresa) :
-                0;
-
-            this.id_centrocusto =
-                ConvertToInt32Validation.IsValid(id_centrocusto, "id_centrocusto", listValidations) ?
-                Convert.ToInt32(id_centrocusto) :
-                0;
-
-            this.ativo =
-                ConvertToBooleanValidation.IsValid(ativo, "ativo", listValidations) ?
-                Convert.ToBoolean(ativo) :
-                false;
-
-            this.portal =
-                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
-                Convert.ToInt32(portal) :
-                0;
-
-            this.timestamp =
-                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
-                Convert.ToInt64(timestamp) :
-                0;
-
-            this.CNPJ = CNPJ;
-            this.nome_centrocusto = nome_centrocusto;
+        public LinxCentroCusto(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxCentroCusto record, string recordXml) {
+            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+            this.empresa = CustomConvertersExtensions.ConvertToInt32Validation(record.empresa);
+            this.id_centrocusto = CustomConvertersExtensions.ConvertToInt32Validation(record.id_centrocusto);
+            this.ativo = CustomConvertersExtensions.ConvertToBooleanValidation(record.ativo);
+            this.portal = CustomConvertersExtensions.ConvertToInt32Validation(record.portal);
+            this.timestamp = CustomConvertersExtensions.ConvertToInt64Validation(record.timestamp);
+            this.CNPJ = record.CNPJ;
+            this.nome_centrocusto = record.nome_centrocusto;
         }
     }
 }

@@ -1,4 +1,4 @@
-using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
+
 
 namespace Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix
 {
@@ -26,6 +26,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix
         public string? data_aprovacao { get; private set; }
         public string? numero_ped_fornec { get; private set; }
         public string? tipo_frete { get; private set; }
+        public string? nf_origem_ws { get; private set; }
         public string? natureza_operacao { get; private set; }
         public string? previsao_entrega { get; private set; }
         public string? numero_projeto_officina { get; private set; }
@@ -62,6 +63,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix
             string? data_aprovacao,
             string? numero_ped_fornec,
             string? tipo_frete,
+            string? nf_origem_ws,
             string? natureza_operacao,
             string? previsao_entrega,
             string? numero_projeto_officina,
@@ -96,6 +98,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix
             this.encerrado = encerrado;
             this.numero_ped_fornec = numero_ped_fornec;
             this.tipo_frete = tipo_frete;
+            this.nf_origem_ws = nf_origem_ws;
             this.natureza_operacao = natureza_operacao;
             this.previsao_entrega = previsao_entrega;
             this.numero_projeto_officina = numero_projeto_officina;

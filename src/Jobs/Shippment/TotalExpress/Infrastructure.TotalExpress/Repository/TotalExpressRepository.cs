@@ -9,8 +9,9 @@ namespace Infrastructure.TotalExpress.Repository
 {
     public class TotalExpressRepository : ITotalExpressRepository
     {
+        //Refatorar Aqui (Retirar Connections e deixar somente core que já possui opções de bancos)
         private readonly ISQLServerConnection _sqlServerConnection;
-        //private readonly IMySQLConnection _mysqlConnection;
+        //private readonly IMySQLConnection _mysqlConnection; 
         //private readonly IPostgreSQLConnection _postgreSQLConnection;
         private readonly ICoreRepository _coreRepository;
 
@@ -572,6 +573,11 @@ namespace Infrastructure.TotalExpress.Repository
             await _coreRepository.CallDbProcMerge("general", eventsTable.TableName, parentExecutionGuid);
 
             return true;
+        }
+
+        public Task<List<Order>> GetSendOrders()
+        {
+            throw new NotImplementedException();
         }
     }
 }

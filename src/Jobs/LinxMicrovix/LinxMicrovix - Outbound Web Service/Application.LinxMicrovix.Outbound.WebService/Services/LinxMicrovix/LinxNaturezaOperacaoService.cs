@@ -1,4 +1,4 @@
-﻿using Application.Core.Interfaces;
+using Application.Core.Interfaces;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Services;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Services.LinxMicrovix;
 using Domain.Core.Entities.Exceptions;
@@ -12,6 +12,7 @@ using System.ComponentModel.DataAnnotations;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Handlers.Commands;
 using Domain.Core.Interfaces;
 using Application.LinxMicrovix.Outbound.WebService.Handlers.Commands;
+using FluentValidation;
 
 namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
 {
@@ -21,9 +22,9 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
         private readonly ILoggerService _logger;
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
         private readonly ILinxNaturezaOperacaoRepository _linxNaturezaOperacaoRepository;
+        private readonly IValidator<Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxNaturezaOperacao> _validator;
         private readonly ICoreRepository _coreRepository;
         private readonly ILinxMicrovixCommandHandler _linxMicrovixCommandHandler;
-
         private static List<string?> _linxNaturezaOperacaoCache { get; set; } = new List<string?>();
 
         public LinxNaturezaOperacaoService(
@@ -32,10 +33,12 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
             ILinxNaturezaOperacaoRepository linxNaturezaOperacaoRepository,
             ICoreRepository coreRepository,
+            IValidator<Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxNaturezaOperacao> validator,
             ILinxMicrovixCommandHandler linxMicrovixCommandHandler
         )
         {
             _apiCall = apiCall;
+            _validator = validator;
             _logger = logger;
             _linxMicrovixServiceBase = linxMicrovixServiceBase;
             _linxNaturezaOperacaoRepository = linxNaturezaOperacaoRepository;
@@ -47,14 +50,12 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
         public List<LinxNaturezaOperacao?> DeserializeXMLToObject(LinxAPIParam jobParameter, List<Dictionary<string?, string?>> records)
         {
             var list = new List<LinxNaturezaOperacao>();
+            
             for (int i = 0; i < records.Count(); i++)
             {
                 try
                 {
-                    var validations = new List<ValidationResult>();
-
-                    var entity = new LinxNaturezaOperacao(
-                        listValidations: validations,
+                    var entity = new Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxNaturezaOperacao(
                         cod_natureza_operacao: records[i].Where(pair => pair.Key == "cod_natureza_operacao").Select(pair => pair.Value).FirstOrDefault(),
                         descricao: records[i].Where(pair => pair.Key == "descricao").Select(pair => pair.Value).FirstOrDefault(),
                         soma_relatorios: records[i].Where(pair => pair.Key == "soma_relatorios").Select(pair => pair.Value).FirstOrDefault(),
@@ -90,26 +91,28 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
                         recusa_de: records[i].Where(pair => pair.Key == "recusa_de").Select(pair => pair.Value).FirstOrDefault(),
                         codigo_ws: records[i].Where(pair => pair.Key == "codigo_ws").Select(pair => pair.Value).FirstOrDefault(),
                         timestamp: records[i].Where(pair => pair.Key == "timestamp").Select(pair => pair.Value).FirstOrDefault(),
-                        portal: records[i].Where(pair => pair.Key == "portal").Select(pair => pair.Value).FirstOrDefault(),
-                        recordXml: records[i].Where(pair => pair.Key == "recordXml").Select(pair => pair.Value).FirstOrDefault()
+                        portal: records[i].Where(pair => pair.Key == "portal").Select(pair => pair.Value).FirstOrDefault()
                     );
 
-                    var contexto = new ValidationContext(entity, null, null);
-                    Validator.TryValidateObject(entity, contexto, validations, true);
+                    var xml = records[i].Where(pair => pair.Key == "recordXml").Select(pair => pair.Value).FirstOrDefault();
+                    var validations = _validator.Validate(entity);
 
-                    if (validations.Count() > 0)
+                    if (validations.Errors.Count() > 0)
                     {
-                        for (int j = 0; j < validations.Count(); j++)
+                        var message = $"Error when convert record - cod_natureza_operacao: {records[i].Where(pair => pair.Key == "cod_natureza_operacao").Select(pair => pair.Value).FirstOrDefault()} | descricao: {records[i].Where(pair => pair.Key == "descricao").Select(pair => pair.Value).FirstOrDefault()}" + "\n";
+		
+                        for (int j = 0; j < validations.Errors.Count(); j++)
                         {
-                            _logger.AddMessage(
-                                message: $"Error when convert record - cod_natureza_operacao: {records[i].Where(pair => pair.Key == "cod_natureza_operacao").Select(pair => pair.Value).FirstOrDefault()} | descricao: {records[i].Where(pair => pair.Key == "descricao").Select(pair => pair.Value).FirstOrDefault()}\n" +
-                                         $"{validations[j].ErrorMessage}"
-                            );
+                            var msg = validations.Errors[j].ErrorMessage;
+                            var property = validations.Errors[j].PropertyName;
+                            var value = validations.Errors[j].FormattedMessagePlaceholderValues.Where(x => x.Key == "PropertyValue").FirstOrDefault().Value;
+                            message += $"{msg.Replace("[0]", $"{property}: {value}")}";
                         }
-                        continue;
+		
+                        _logger.AddMessage(message);
                     }
-
-                    list.Add(entity);
+		
+                    list.Add(new LinxNaturezaOperacao(entity, xml));
                 }
                 catch (Exception ex)
                 {
@@ -220,3 +223,5 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
         }
     }
 }
+
+

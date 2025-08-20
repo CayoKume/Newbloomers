@@ -9,7 +9,7 @@ namespace Domain.AfterSale.Entities
         public string? reverse_type { get; set; }
         public bool? courier_collect { get; set; }
         public string? courier_service_type { get; set; }
-        public string? service_type_changed { get; set; }
+        public int? service_type_changed { get; set; }
         public int? ecommerce_order_id { get; set; }
         public int? store_id { get; set; }
         public int? courier_contract_id { get; set; }
@@ -20,6 +20,7 @@ namespace Domain.AfterSale.Entities
         public bool? is_store_seller_contract { get; set; }
         public string? locker_reference { get; set; }
         public DateTime? store_expire_date { get; set; }
+        public CourierDataEncrypted courier_data_encrypted { get; set; }
         public bool? skip_process_step { get; set; }
         public bool? freight_by_customer { get; set; }
         public string? tracking_error { get; set; }
@@ -206,5 +207,12 @@ namespace Domain.AfterSale.Entities
         public int? total { get; set; }
         public bool? success { get; set; }
         public List<Reverse> data { get; set; }
+    }
+
+    //Refatorar Aqui (colocar essa classe em um arquivo própio)
+    public class CourierDataEncrypted
+    {
+        public string posting_card { get; set; }
+        public bool is_store_seller_contract { get; set; }
     }
 }

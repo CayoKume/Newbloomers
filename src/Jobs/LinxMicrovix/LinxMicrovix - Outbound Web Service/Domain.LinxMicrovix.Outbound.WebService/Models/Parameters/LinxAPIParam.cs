@@ -94,5 +94,21 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters
 
             return this;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="jobName"></param>
+        /// <param name="parametersInterval"></param>
+        /// <param name="tableName"></param>
+        /// <returns></returns>
+        public LinxAPIParam SetParameters(string? jobName, string? parametersInterval, string? tableName)
+        {
+            this.jobName = jobName;
+            this.tableName = tableName;
+            this.parametersInterval = parametersInterval;
+
+            return this;
+        }
     }
 }

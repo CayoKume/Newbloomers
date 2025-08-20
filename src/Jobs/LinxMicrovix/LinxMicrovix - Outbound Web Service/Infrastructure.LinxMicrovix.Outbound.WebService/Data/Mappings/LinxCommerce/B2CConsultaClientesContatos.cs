@@ -15,25 +15,6 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxComm
 
             builder.ToTable("B2CConsultaClientesContatos");
 
-            if (schema == "linx_microvix_commerce")
-            {
-                builder.HasKey(e => new { e.id_clientes_contatos, e.id_contato_b2c, e.id_parentesco });
-                builder.Ignore(e => e.id);
-            }
-            else
-            {
-                builder.HasKey(e => e.id);
-
-                builder.Property(e => e.id)
-                    .HasColumnType("int")
-                    .ValueGeneratedOnAdd();
-            }
-                
-
-            builder.Property(e => e.id)
-                .HasColumnType("int")
-                .ValueGeneratedOnAdd();
-
             builder.Property(e => e.lastupdateon)
                 .HasProviderColumnType(EnumTableColumnType.DateTime);
 

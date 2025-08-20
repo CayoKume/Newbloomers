@@ -1,4 +1,4 @@
-using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
+
 using Domain.Core.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -8,21 +8,11 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
 {
     public class LinxSetores
     {
-        [SkipProperty]
-        public Int32 id { get; set; }
-
         public DateTime? lastupdateon { get; private set; }
-
         public Int32? id_setor { get; private set; }
-
-        [LengthValidation(length: 30, propertyName: "desc_setor")]
         public string? desc_setor { get; private set; }
-
         public Int64? timestamp { get; private set; }
-
-        [LengthValidation(length: 50, propertyName: "codigo_integracao_ws")]
         public string? codigo_integracao_ws { get; private set; }
-
         public Int32? ativo { get; private set; }
 
         [NotMapped]
@@ -35,37 +25,15 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
 
         public LinxSetores() { }
 
-        public LinxSetores(
-            List<ValidationResult> listValidations,
-            string? id_setor,
-            string? desc_setor,
-            string? timestamp,
-            string? codigo_integracao_ws,
-            string? ativo,
-            string? recordXml
-        )
-        {
-            lastupdateon = DateTime.Now;
-
-            this.id_setor =
-                ConvertToInt32Validation.IsValid(id_setor, "id_setor", listValidations) ?
-                Convert.ToInt32(id_setor) :
-                0;
-
-            this.timestamp =
-                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
-                Convert.ToInt64(timestamp) :
-                0;
-
-            this.ativo =
-                ConvertToInt32Validation.IsValid(ativo, "ativo", listValidations) ?
-                Convert.ToInt32(ativo) :
-                0;
-
-            this.desc_setor = desc_setor;
-            this.recordKey = $"[{id_setor}]|[{timestamp}]";
+        public LinxSetores(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxSetores record, string recordXml) {
+            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+            this.id_setor = CustomConvertersExtensions.ConvertToInt32Validation(record.id_setor);
+            this.timestamp = CustomConvertersExtensions.ConvertToInt64Validation(record.timestamp);
+            this.ativo = CustomConvertersExtensions.ConvertToInt32Validation(record.ativo);
+            this.desc_setor = record.desc_setor;
+            this.recordKey = $"[{record.id_setor}]|[{record.timestamp}]";
             this.recordXml = recordXml;
-            this.codigo_integracao_ws = codigo_integracao_ws;
+            this.codigo_integracao_ws = record.codigo_integracao_ws;
         }
     }
 }

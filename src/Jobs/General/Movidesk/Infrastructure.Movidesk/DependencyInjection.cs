@@ -1,4 +1,5 @@
-﻿using Application.Movidesk.Services;
+﻿using Application.Movidesk.Interfaces;
+using Application.Movidesk.Services;
 using Domain.Movidesk.Interfaces.Apis;
 using Domain.Movidesk.Interfaces.Repositorys;
 using Infrastructure.Movidesk.Api;
@@ -9,7 +10,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using FluentValidation;
 using Application.Movidesk.CustomValidations.Person;
-using Application.Movidesk.Interfaces.Services;
 
 namespace Infrastructure.Movidesk
 {

@@ -27,5 +27,17 @@ namespace Application.LinxMicrovix.Outbound.WebService.Handlers.Commands
                           @empresa_cliente, @cargo_cliente, @sexo_cliente, @dt_update, @ativo, @receber_email, @dt_expedicao_rg, @naturalidade, @tempo_residencia, 
                           @renda, @numero_compl_rua_cliente, @timestamp, @tipo_pessoa, @portal, @aceita_programa_fidelidade)";
         }
+
+        public string CreateIntegrityLockQuery()
+        {
+            return @$"select distinct top 500 
+                      'B2CConsultaClientes' as [table], 
+                      'doc_cliente' as recordKey, 
+                      IIF(a.cpf is null, a.cnpj, a.cpf) as identifier 
+                      from linx_commerce.customer a (nolock)
+                      left join linx_microvix_commerce.B2CConsultaClientes b (nolock) on IIF(a.cpf is null, a.cnpj, a.cpf) = b.doc_cliente
+                      left join linx_microvix.IntegrityLockTablesRegisters c (nolock) on IIF(a.cpf is null, a.cnpj, a.cpf) = c.identifier
+                      where b.doc_cliente is null and c.identifier is null and a.createddate > '2025-01-01'";
+        }
     }
 }

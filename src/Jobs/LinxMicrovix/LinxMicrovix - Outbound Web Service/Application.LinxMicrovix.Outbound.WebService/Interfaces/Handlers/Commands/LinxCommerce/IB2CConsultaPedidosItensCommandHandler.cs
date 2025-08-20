@@ -6,5 +6,6 @@ namespace Application.LinxMicrovix.Outbound.WebService.Interfaces.Handlers.Comma
     {
         string CreateGetRegistersExistsQuery(List<long?> registros);
         string CreateInsertRecordQuery(string tableName);
+        string CreateIntegrityLockQuery();
     }
 }

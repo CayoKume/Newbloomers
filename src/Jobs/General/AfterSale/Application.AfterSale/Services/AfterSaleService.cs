@@ -1,9 +1,12 @@
-﻿using Application.AfterSale.Interfaces;
+﻿using Application.AfterSale.Interfaces.Api;
+using Application.AfterSale.Interfaces.Services;
 using Application.Core.Interfaces;
-using Domain.AfterSale.Entities;
-using Domain.AfterSale.Interfaces.Api;
 using Domain.AfterSale.Interfaces.Repositorys;
+using Domain.AfterSale.Models;
 using Domain.Core.Enums;
+using Domain.Core.Extensions;
+using FluentValidation;
+using static Dapper.SqlMapper;
 
 namespace Application.AfterSale.Services
 {
@@ -13,13 +16,15 @@ namespace Application.AfterSale.Services
         private readonly ILoggerService _logger;
         private readonly IAfterSaleRepository _afterSaleRepository;
 
-        private static List<Reverse?> GetReversesCache { get; set; } = new();
+        private readonly IValidator<Domain.AfterSale.Dtos.Ecommerce> _ecommerceValidator;
+
+        private static List<SimplifiedReverse?> GetReversesCache { get; set; } = new();
         private static List<string> GetMeJsonCache { get; set; } = new();
         private static string GetReversesTransportationsJsonCache = String.Empty;
         private static string GetReversesStatusJsonCache = String.Empty;
 
-        public AfterSaleService(IAPICall apiCall, ILoggerService logger, IAfterSaleRepository afterSaleRepository) =>
-            (_apiCall, _logger, _afterSaleRepository) = (apiCall, logger, afterSaleRepository);
+        public AfterSaleService(IAPICall apiCall, ILoggerService logger, IAfterSaleRepository afterSaleRepository, IValidator<Domain.AfterSale.Dtos.Ecommerce> ecommerceValidator) =>
+            (_apiCall, _logger, _afterSaleRepository, _ecommerceValidator) = (apiCall, logger, afterSaleRepository, ecommerceValidator);
 
         #region Me - Infos about your ecommerce
         /// <summary>
@@ -45,7 +50,17 @@ namespace Application.AfterSale.Services
 
                 if (!GetMeJsonCache.Any(x => x == $"{company.doc_company} - {hash}"))
                 {
-                    var me = Newtonsoft.Json.JsonConvert.DeserializeObject<Me>(response);
+                    var me = Newtonsoft.Json.JsonConvert.DeserializeObject<Domain.AfterSale.Dtos.Me>(response);
+                    var validations = _ecommerceValidator.Validate(me.data);
+
+                    if (validations.Errors.Count() > 0)
+                    {
+                        var message = String.Empty;
+                        validations.Errors.ForEach(s =>
+                            message += $"{s.ErrorMessage}\n"
+                        );
+                        _logger.AddMessage(message);
+                    }
 
                     _listSomenteNovos.Add(new Ecommerce(ecommerce: me.data, json: response));
 
@@ -172,10 +187,8 @@ namespace Application.AfterSale.Services
                .Clear()
                .AddLog(EnumJob.AfterSaleReverses);
 
-            var teste = new List<string?>();
-
-            var simplifiedReverses = new List<Reverse>();
-            var completeReverses = new List<Data>();
+            var simplifiedReverses = new List<Domain.AfterSale.Dtos.Reverse>();
+            var completeReverses = new List<Domain.AfterSale.Models.Reverse>();
             var companys = await _afterSaleRepository.GetCompanys();
 
             foreach (var company in companys)
@@ -194,15 +207,11 @@ namespace Application.AfterSale.Services
                     encodedParameters: encodedParameters
                 );
 
-                var page = Newtonsoft.Json.JsonConvert.DeserializeObject<ResponseReverses>(response);
-
-                page.data.ForEach(x =>
-                    simplifiedReverses.Add(new Reverse(reverse: x, token: company.Token.ToString()))
-                );
-
+                var page = Newtonsoft.Json.JsonConvert.DeserializeObject<Domain.AfterSale.Dtos.ResponseReverses>(response);
+                simplifiedReverses.AddRange(page.data);
                 string? rote = page.next_page_url;
 
-                if (page.last_page > 1)
+                if (page.last_page > 1) 
                 {
                     while (!String.IsNullOrEmpty(rote))
                     {
@@ -211,104 +220,105 @@ namespace Application.AfterSale.Services
                             rote: rote.Replace("https://api.send4.com.br/", "")
                         );
 
-                        var nextPage = Newtonsoft.Json.JsonConvert.DeserializeObject<ResponseReverses>(responseByPage);
-
-                        nextPage.data.ForEach(r =>
-                            simplifiedReverses.Add(new Reverse(reverse: r, token: company.Token.ToString()))
-                        );
-
-                        rote = nextPage.next_page_url;
-                    }
-                }
-            }
-
-            if (GetReversesCache.Count() == 0)
-                GetReversesCache = await _afterSaleRepository.GetReversesByIds(
-                    simplifiedReverses.Select(x => x.id).ToList()
-                );
-
-            var _listSomenteNovos = simplifiedReverses.Where(x => GetReversesCache.Any(y =>
-               x.id == y.id && x.updated_at > y.updated_at
-            )).ToList();
-
-            if (_listSomenteNovos.Count() > 0)
-            {
-                //API da AfterSale lança Too Many Requests após 30 consultas, por isso dividimos a lista simplifiedReverses em indices de 30 consultas
-                int indice = simplifiedReverses.Count() / 30;
-
-                if (indice > 1)
-                {
-                    for (int i = 0; i <= indice; i++)
-                    {
-                        string identificadores = String.Empty;
-                        var top30List = simplifiedReverses.Skip(i * 30).Take(30).ToList();
-
-                        for (int j = 0; j < top30List.Count(); j++)
+                        var nextPage = Newtonsoft.Json.JsonConvert.DeserializeObject<Domain.AfterSale.Dtos.ResponseReverses>(responseByPage);
+                        
+                        if (nextPage.success)
                         {
-                            var _response = await _apiCall.GetAsync(
-                                token: top30List[j].token,
-                                rote: $"v3/api/reverses/{top30List[j].id}"
-                            );
-
-                            var completeReverse = new Root();
-
-                            try
-                            {
-                                completeReverse = Newtonsoft.Json.JsonConvert.DeserializeObject<Root>(_response);
-                            }
-                            catch
-                            {
-                                teste.Add(_response);
-                                continue;
-                            }
-
-                            completeReverse.data.reverse.customer_id = completeReverse.data.customer.id;
-
-                            completeReverses.Add(new Data(completeReverse.data, _response));
+                            simplifiedReverses.AddRange(nextPage.data);
+                            rote = nextPage.next_page_url;
+                            continue;
                         }
 
-                        //Espera 1 minuto após primeiro indice de 30 consultas
+                        //API da AfterSale lança Too Many Requests após 30 consultas, por isso caso tenha dado erro na consuta das páginas aguardamos por 1 minuto
                         Thread.Sleep(60 * 1000);
                     }
                 }
-                else
+
+                if (GetReversesCache.Count() == 0)
+                    GetReversesCache = await _afterSaleRepository.GetReversesByIds(
+                        simplifiedReverses.Select(x => x.id).ToList()
+                    );
+
+                var _listSomenteNovos = simplifiedReverses.Where(x => GetReversesCache.Any(y =>
+                   CustomConvertersExtensions.ConvertToInt32Validation(x.id) == y.id &&
+                   CustomConvertersExtensions.ConvertToDateTimeValidation(x.updated_at) > y.updated_at
+                )).ToList();
+
+                if (_listSomenteNovos.Count() > 0)
                 {
-                    foreach (var reverse in simplifiedReverses)
+                    //API da AfterSale lança Too Many Requests após 30 consultas, por isso dividimos a lista _listSomenteNovos em indices de 30 consultas
+                    int indice = _listSomenteNovos.Count() / 30;
+
+                    if (indice > 1 || _listSomenteNovos.Count() > 30)
                     {
-                        var _response = await _apiCall.GetAsync(
-                            token: reverse.token,
-                            rote: $"v3/api/reverses/{reverse.id}"
-                        );
+                        for (int i = 0; i <= indice; i++)
+                        {
+                            var top30List = _listSomenteNovos.Skip(i * 30).Take(30).ToList();
 
-                        var completeReverse = Newtonsoft.Json.JsonConvert.DeserializeObject<Root>(_response);
-                        completeReverse.data.reverse.customer_id = completeReverse.data.customer.id;
+                            for (int j = 0; j < top30List.Count(); j++)
+                            {
+                                var _response = await _apiCall.GetAsync(
+                                    token: company.Token.ToString(),
+                                    rote: $"v3/api/reverses/{top30List[j].id}"
+                                );
 
-                        completeReverses.Add(new Data (completeReverse.data, _response));
+                                try
+                                {
+                                    var completeReverse = Newtonsoft.Json.JsonConvert.DeserializeObject<Domain.AfterSale.Dtos.Root>(_response);
+
+                                    if (completeReverse.success)
+                                        completeReverses.Add(new Reverse(completeReverse.data, _response));
+
+                                }
+                                catch (Exception)
+                                {
+                                    throw;
+                                }                                
+                            }
+
+                            //Espera 1 minuto após primeiro indice de 30 consultas
+                            Thread.Sleep(60 * 1000);
+                        }
                     }
-                }
+                    else
+                    {
+                        foreach (var reverse in _listSomenteNovos)
+                        {
+                            var _response = await _apiCall.GetAsync(
+                                token: company.Token.ToString(),
+                                rote: $"v3/api/reverses/{reverse.id}"
+                            );
 
-                if (completeReverses.Count() > 0)
-                {
-                    await _afterSaleRepository.InsertIntoAfterSaleReverses(completeReverses, _logger.GetExecutionGuid());
+                            var completeReverse = Newtonsoft.Json.JsonConvert.DeserializeObject<Domain.AfterSale.Dtos.Root>(_response);
 
-                    completeReverses.ForEach(s =>
-                        _logger.AddRecord(
-                            s.reverse.id.ToString(),
-                            s.Responses
-                                .Where(pair => pair.Key == s.reverse.id)
-                                .Select(pair => pair.Value)
-                                .FirstOrDefault()
-                        )
-                    );
-
-                    completeReverses.ForEach(s =>
-                        GetReversesCache.Add(s.reverse)
-                    );
+                            if (completeReverse.success)
+                                completeReverses.Add(new Reverse(completeReverse.data, _response));
+                        }
+                    }
                 }
             }
 
+            if (completeReverses.Count() > 0)
+            {
+                await _afterSaleRepository.InsertIntoAfterSaleReverses(completeReverses, _logger.GetExecutionGuid());
+
+                completeReverses.ForEach(s =>
+                    _logger.AddRecord(
+                        s.id.ToString(),
+                        s.Responses
+                            .Where(pair => pair.Key == s.id.ToString())
+                            .Select(pair => pair.Value)
+                            .FirstOrDefault()
+                    )
+                );
+
+                completeReverses.ForEach(s =>
+                    GetReversesCache.Add(new SimplifiedReverse { id = s.id, updated_at = s.updated_at })
+                );
+            }
+
             _logger.AddMessage(
-                $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"
+                $"Concluída com sucesso: {completeReverses.Count} registro(s) novo(s) inserido(s)!"
             );
 
             _logger.SetLogEndDate();
@@ -330,7 +340,7 @@ namespace Application.AfterSale.Services
                 rote: $"v3/api/reverses/{id}"
             );
 
-            var page = Newtonsoft.Json.JsonConvert.DeserializeObject<Root>(response);
+            //var page = Newtonsoft.Json.JsonConvert.DeserializeObject<Root>(response);
 
             //await _afterSaleRepository.InsertIntoAfterSaleReversesStatus(); 
 
@@ -372,7 +382,7 @@ namespace Application.AfterSale.Services
 
                     foreach (var _status in status.data)
                     {
-                        _listSomenteNovos.Add(new Status(status: _status, json: response));
+                        //_listSomenteNovos.Add(new Status(status: _status, json: response));
                     }
 
                     GetReversesStatusJsonCache = hash;
@@ -381,7 +391,7 @@ namespace Application.AfterSale.Services
 
             if (_listSomenteNovos.Count() > 0)
             {
-                await _afterSaleRepository.InsertIntoAfterSaleStatus(_listSomenteNovos, _logger.GetExecutionGuid());
+                //await _afterSaleRepository.InsertIntoAfterSaleStatus(_listSomenteNovos, _logger.GetExecutionGuid());
 
                 _listSomenteNovos.ForEach(s =>
                     _logger.AddRecord(
@@ -440,7 +450,7 @@ namespace Application.AfterSale.Services
 
             if (_listSomenteNovos.Count() > 0)
             {
-                await _afterSaleRepository.InsertIntoAfterSaleTransportations(_listSomenteNovos, _logger.GetExecutionGuid());
+                //await _afterSaleRepository.InsertIntoAfterSaleTransportations(_listSomenteNovos, _logger.GetExecutionGuid());
 
                 _listSomenteNovos.ForEach(s =>
                     _logger.AddRecord(

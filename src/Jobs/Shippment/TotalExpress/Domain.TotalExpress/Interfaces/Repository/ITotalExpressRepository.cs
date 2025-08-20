@@ -9,6 +9,7 @@ namespace Domain.TotalExpress.Interfaces.Repository
 
         public Task<Order> GetInvoicedOrder(string? orderNumber);
         public Task<List<Order>> GetInvoicedOrders();
+        public Task<List<Order>> GetSendOrders();
         public Task<Parameters> GetParameters(string? docCompany, string? method);
         public Task<IEnumerable<Parameters>> GetSenderIds();
         public Task<IEnumerable<Awb>> GetSenderAwbs();

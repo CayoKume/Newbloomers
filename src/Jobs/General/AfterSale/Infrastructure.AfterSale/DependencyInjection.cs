@@ -1,6 +1,5 @@
-﻿using Application.AfterSale.Interfaces;
-using Application.AfterSale.Services;
-using Domain.AfterSale.Interfaces.Api;
+﻿using Application.AfterSale.Services;
+using Application.AfterSale.Interfaces.Api;
 using Domain.AfterSale.Interfaces.Repositorys;
 using Infrastructure.AfterSale.Api;
 using Infrastructure.AfterSale.Data;
@@ -8,6 +7,9 @@ using Infrastructure.AfterSale.Repositorys;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
+using Application.AfterSale.Interfaces.Services;
+using FluentValidation;
+using Application.AfterSale.Validations;
 
 namespace Infrastructure.AfterSale.DependencyInjection
 {
@@ -24,6 +26,8 @@ namespace Infrastructure.AfterSale.DependencyInjection
 
             services.AddScoped<IAfterSaleService, AfterSaleService>();
             services.AddScoped<IAfterSaleRepository, AfterSaleRepository>();
+
+            services.AddValidatorsFromAssemblyContaining<AfterSaleEcommerceValidator>();
 
             return services;
         }

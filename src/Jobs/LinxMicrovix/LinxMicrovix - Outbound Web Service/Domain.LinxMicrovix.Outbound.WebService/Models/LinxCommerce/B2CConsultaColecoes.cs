@@ -1,4 +1,4 @@
-using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
+
 using Domain.Core.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -7,21 +7,11 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxCommerce
 {
     public class B2CConsultaColecoes
     {
-        [NotMapped]
-        public Int32 id { get; set; }
-
         public DateTime? lastupdateon { get; private set; }
-
         public Int32? codigo_colecao { get; private set; }
-
-        [LengthValidation(length: 100, propertyName: "nome_colecao")]
         public string? nome_colecao { get; private set; }
-
         public Int64? timestamp { get; private set; }
-
-        [LengthValidation(length: 250, propertyName: "marcas")]
         public string? marcas { get; private set; }
-
         public Int32? portal { get; private set; }
 
         [NotMapped]
@@ -35,34 +25,17 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxCommerce
         public B2CConsultaColecoes() { }
 
         public B2CConsultaColecoes(
-            List<ValidationResult> listValidations,
-            string? codigo_colecao,
-            string? nome_colecao,
-            string? timestamp,
-            string? marcas,
-            string? portal,
+            Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxCommerce.B2CConsultaColecoes record,
             string? recordXml
         )
         {
-            lastupdateon = DateTime.Now;
+            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+            this.codigo_colecao = CustomConvertersExtensions.ConvertToInt32Validation(record.codigo_colecao);
+            this.portal = CustomConvertersExtensions.ConvertToInt32Validation(record.portal);
+            this.timestamp = CustomConvertersExtensions.ConvertToInt64Validation(record.timestamp);
 
-            this.codigo_colecao =
-                ConvertToInt32Validation.IsValid(codigo_colecao, "codigo_colecao", listValidations) ?
-                Convert.ToInt32(codigo_colecao) :
-                0;
-
-            this.portal =
-                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
-                Convert.ToInt32(portal) :
-                0;
-
-            this.timestamp =
-                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
-                Convert.ToInt64(timestamp) :
-                0;
-
-            this.nome_colecao = nome_colecao;
-            this.marcas = marcas;
+            this.nome_colecao = record.nome_colecao;
+            this.marcas = record.marcas;
             this.recordXml = recordXml;
         }
     }

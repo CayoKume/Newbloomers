@@ -13,21 +13,9 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxComm
         {
             var schema = SchemaContext.GetSchema(typeof(B2CConsultaClientes));
 
-            builder.ToTable("B2CConsultaClientes");
+            builder.ToTable("B2CConsultaClientes", "linx_microvix_commerce");
 
-            if (schema == "linx_microvix_commerce")
-            {
-                builder.HasKey(e => new { e.cod_cliente_b2c, e.cod_cliente_erp, e.doc_cliente });
-                builder.Ignore(e => e.id);
-            }
-            else
-            {
-                builder.HasKey(e => e.id);
-
-                builder.Property(e => e.id)
-                    .HasColumnType("int")
-                    .ValueGeneratedOnAdd();
-            }
+            builder.HasKey(e => new { e.cod_cliente_b2c, e.cod_cliente_erp, e.doc_cliente });
             
             builder.Property(e => e.lastupdateon)
                 .HasProviderColumnType(EnumTableColumnType.DateTime);

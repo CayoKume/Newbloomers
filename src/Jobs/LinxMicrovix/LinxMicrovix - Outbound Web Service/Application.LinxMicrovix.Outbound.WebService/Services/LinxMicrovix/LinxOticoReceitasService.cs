@@ -1,11 +1,11 @@
-﻿using Application.Core.Interfaces;
+using Application.Core.Interfaces;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Handlers.Commands;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Services;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Services.LinxMicrovix;
 using Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix;
 using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Api;
-
+using FluentValidation;
 
 namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
 {
@@ -13,6 +13,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
     {
         private readonly IAPICall _apiCall;
         private readonly ILoggerService _logger;
+        private readonly IValidator<Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxOticoReceitas> _validator;
         private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
         private readonly ILinxMicrovixCommandHandler _linxMicrovixCommandHandler;
 
@@ -20,10 +21,12 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
             IAPICall apiCall,
             ILoggerService logger,
             ILinxMicrovixServiceBase linxMicrovixServiceBase,
+            IValidator<Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxOticoReceitas> validator,
             ILinxMicrovixCommandHandler linxMicrovixCommandHandler
         )
         {
             _apiCall = apiCall;
+            _validator = validator;
             _logger = logger;
             _linxMicrovixServiceBase = linxMicrovixServiceBase;
             _linxMicrovixCommandHandler = linxMicrovixCommandHandler;
@@ -45,3 +48,5 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
         }
     }
 }
+
+

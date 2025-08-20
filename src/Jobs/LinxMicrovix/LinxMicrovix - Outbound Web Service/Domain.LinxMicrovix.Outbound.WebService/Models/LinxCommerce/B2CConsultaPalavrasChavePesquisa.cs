@@ -1,4 +1,4 @@
-using Domain.LinxMicrovix.Outbound.WebService.CustomValidations;
+
 using Domain.Core.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -7,18 +7,10 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxCommerce
 {
     public class B2CConsultaPalavrasChavePesquisa
     {
-        [NotMapped]
-        public Int32 id { get; set; }
-
         public DateTime? lastupdateon { get; private set; }
-
         public Int32? portal { get; private set; }
-
         public Int32? id_b2c_palavras_chave_pesquisa { get; private set; }
-
-        [LengthValidation(length: 300, propertyName: "nome_colecao")]
         public string? nome_colecao { get; private set; }
-
         public Int64? timestamp { get; private set; }
 
         [NotMapped]
@@ -32,32 +24,16 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxCommerce
         public B2CConsultaPalavrasChavePesquisa() { }
 
         public B2CConsultaPalavrasChavePesquisa(
-            List<ValidationResult> listValidations,
-            string? portal,
-            string? id_b2c_palavras_chave_pesquisa,
-            string? nome_colecao,
-            string? timestamp,
+            Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxCommerce.B2CConsultaPalavrasChavePesquisa record,
             string? recordXml
         )
         {
-            lastupdateon = DateTime.Now;
+            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+            this.id_b2c_palavras_chave_pesquisa = CustomConvertersExtensions.ConvertToInt32Validation(record.id_b2c_palavras_chave_pesquisa);
+            this.portal = CustomConvertersExtensions.ConvertToInt32Validation(record.portal);
+            this.timestamp = CustomConvertersExtensions.ConvertToInt64Validation(record.timestamp);
 
-            this.id_b2c_palavras_chave_pesquisa =
-                ConvertToInt32Validation.IsValid(id_b2c_palavras_chave_pesquisa, "id_b2c_palavras_chave_pesquisa", listValidations) ?
-                Convert.ToInt32(id_b2c_palavras_chave_pesquisa) :
-                0;
-
-            this.portal =
-                ConvertToInt32Validation.IsValid(portal, "portal", listValidations) ?
-                Convert.ToInt32(portal) :
-                0;
-
-            this.timestamp =
-                ConvertToInt64Validation.IsValid(timestamp, "timestamp", listValidations) ?
-                Convert.ToInt64(timestamp) :
-                0;
-
-            this.nome_colecao = nome_colecao;
+            this.nome_colecao = record.nome_colecao;
             this.recordXml = recordXml;
         }
     }

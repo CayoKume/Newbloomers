@@ -45,7 +45,7 @@ namespace Domain.LinxCommerce.Entities.SalesRepresentative
 
         public SalesRepresentative(SalesRepresentative salesRepresentative)
         {
-            this.SalesRepresentativeID = salesRepresentative.SalesRepresentativeID;
+            this.SalesRepresentativeID = salesRepresentative.SalesRepresentativeID == null ? 0 : salesRepresentative.SalesRepresentativeID;
             this.Name = salesRepresentative.Name;
             this.FriendlyCode = salesRepresentative.FriendlyCode;
             this.ImageUrl = salesRepresentative.ImageUrl;

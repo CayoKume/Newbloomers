@@ -16,7 +16,6 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
             builder.ToTable("LinxMovimentoCartoes");
 
             if (schema == "linx_microvix_erp")
-            {
                 builder.HasKey(e => new
                 {
                     e.identificador,
@@ -24,16 +23,7 @@ namespace Infrastructure.LinxMicrovix.Outbound.WebService.Data.Mappings.LinxMicr
                     e.cupomfiscal,
                     e.cod_autorizacao
                 });
-                builder.Ignore(x => x.id);
-            }
-            else
-            {
-                builder.HasKey(x => x.id);
-
-                builder.Property(e => e.id)
-                    .HasColumnType("int")
-                    .ValueGeneratedOnAdd();
-            }
+            
 
             builder.Property(e => e.lastupdateon)
                 .HasProviderColumnType(EnumTableColumnType.DateTime);
