@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Gotho.MudBlazor.PdfViewer" Version="2.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.10" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.10" PrivateAssets="all" />
+    <PackageReference Include="MudBlazor" Version="8.10.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Application.App\Application.WebApp.csproj" />
+    <ProjectReference Include="..\Infrastructure.App\Infrastructure.WebApp.csproj" />
+  </ItemGroup>
+
+</Project>

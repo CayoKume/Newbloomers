@@ -1,0 +1,242 @@
+﻿@page "/Labels"
+@inject IJSRuntime jsRuntime;
+@inject IDialogService _dialogService
+@inject ILabelsService _etiquetasService
+@using Domain.WebApp.Entities
+@using Order = Application.WebApp.ViewModels.Labels.Order
+@using static Domain.WebApp.Entities.AppContext
+
+<PageTitle>Labels</PageTitle>
+
+@if (isLoading)
+{
+    <GridsToolbar @bind-DataInicial="_initialDate"
+                  @bind-DataFinal="_finalDate"
+                  @bind-TextoPedido="orderNumber"
+                  OnAtualizar="HandleAtualizar"
+                  OnKeyUpEvent="ImprimeEtiquetaIndividual"
+                  BotaoDesabilitado="_carregando"
+                  BotaoCarregando="_carregando" />
+
+    <MudDataGrid Items="@orders" Bordered="true">
+        <Columns>
+            <PropertyColumn Property="x => x.number" Title="Pedido"/>
+            <TemplateColumn Title="Etiqueta">
+                <CellTemplate>
+                    <MudButton @onclick="@(() => ImprimeEtiqueta(context.Item))" Size="@Size.Small" Variant="@Variant.Filled" Color="@(context.Item.buttonClass ? Color.Success : Color.Primary)">@(context.Item.buttonText)</MudButton>
+                </CellTemplate>
+            </TemplateColumn>
+            <TemplateColumn Title="Cup.Troca">
+                <CellTemplate>
+                    <MudButton @onclick="@(() => ImprimeCompTroca(context.Item))" Size="@Size.Small" Variant="@Variant.Filled" Color="@(context.Item.buttonPresentClass ? Color.Success : Color.Primary)">@(context.Item.buttonPresentText)</MudButton>
+                </CellTemplate>
+            </TemplateColumn>
+            <PropertyColumn Property="x => x.client.cod_client" Title="Cliente"/>
+            <PropertyColumn Property="x => x.client.reason_client" Title="Nome"/>
+            <PropertyColumn Property="x => x.client.address_client" Title="Endereço"/>
+            <PropertyColumn Property="x => x.client.street_number_client" Title="Número"/>
+            <PropertyColumn Property="x => x.shippingCompany.cod_shippingCompany" Title="Transportadora"/>
+            <PropertyColumn Property="x => x.shippingCompany.reason_shippingCompany" Title="Nome"/>
+        </Columns>
+
+        <PagerContent>
+            <MudDataGridPager T="Order"/>
+        </PagerContent>
+    </MudDataGrid>
+}
+else
+{
+    <div class="my-custom-container">
+        <LoadingOverlay Visible="@visible" />
+    </div>
+}
+
+<script src="js/Utils.js"></script>
+
+@code {
+    private bool visible = true;
+    private bool isLoading = false;
+
+    private string? doc_company;
+    private string? serie_order;
+    private string? orderNumber;
+
+    private bool _carregando;
+
+    private DateTime? _initialDate = DateTime.Now.AddDays(-1); //Refatorar Aqui (essa variavel precisa se date only, para não dar b.o na query do select)
+    private DateTime? _finalDate = DateTime.Now.AddDays(-1); //Refatorar Aqui (essa variavel precisa se date only, para não dar b.o na query do select)
+
+    private IEnumerable<Order>? orders = new List<Order>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        doc_company = await GetTextInLocalStorage("doc_company");
+        serie_order = await GetTextInLocalStorage("serie_order");
+        await LoadOrders();
+        isLoading = true;
+        visible = false;
+    }
+
+    private async Task LoadOrders()
+    {
+        if (_initialDate.HasValue && _finalDate.HasValue)
+        {
+            if (_initialDate.Value > _finalDate.Value)
+            {
+                await _dialogService.ShowMessageBox("Erro", "A data inicial não pode ser maior que a data final.");
+                return;
+            }
+
+            orders = await _etiquetasService.GetOrders(doc_company, serie_order, _initialDate.Value.ToString("yyyy-MM-dd"), _finalDate.Value.ToString("yyyy-MM-dd"));
+            AssigningButtonProperties(orders?.ToList());
+        }
+    }
+
+    private async Task HandleAtualizar()
+    {
+        isLoading = false;
+        visible = true;
+
+        _carregando = true;
+        await LoadOrders();
+        _carregando = false;
+
+        isLoading = true;
+        visible = false;
+    }
+
+    private async Task ImprimeCompTroca(Order pedido)
+    {
+        isLoading = false;
+        visible = true;
+
+        var links = new List<string>();
+
+        //Refatorar Aqui
+        // var options = new DialogOptions() { CloseButton = true, FullScreen = true };
+        // var parameters = new DialogParameters
+        // {
+        //     { "base64FileString", dataUrl }
+        // };
+        //await _dialogService.ShowAsync<PdfViewerDialog>("", parameters, options);
+
+        var base64String = await _etiquetasService.PrintCoupon(doc_company, serie_order, pedido.number);
+        await jsRuntime.InvokeVoidAsync("downloadFile", "application/pdf", base64String, pedido.number);
+        var dataUrl = $"data:application/pdf;base64,{base64String}";
+        links.Add(dataUrl);
+
+        await jsRuntime.InvokeVoidAsync("abrirAbas", links);
+
+        isLoading = true;
+        visible = false;
+    }
+
+    private async Task ImprimeEtiqueta(Order pedido)
+    {
+        isLoading = false;
+        visible = true;
+
+        await _etiquetasService.PrintLabels(pedido);
+
+        var links = new List<string>();
+        for (int i = 0; i < pedido.volumes + 1; i++)
+        {
+            var fileName = pedido.number + " - " + (i + 1) + ".pdf";
+            var base64String = await _etiquetasService.GetLabelToPrint(fileName);
+            var dataUrl = $"data:application/pdf;base64,{base64String}";
+            
+            //Refatorar Aqui
+            // var options = new DialogOptions() { CloseButton = true, FullScreen = true };
+            // var parameters = new DialogParameters
+            // {
+            //     { "base64FileString", dataUrl }
+            // };
+            //await _dialogService.ShowAsync<PdfViewerDialog>("", parameters, options);
+
+            links.Add(dataUrl);
+        }
+
+        await jsRuntime.InvokeVoidAsync("abrirAbas", links);
+        await _etiquetasService.UpdateFlagPrinted(this.orderNumber);
+
+        isLoading = true;
+        visible = false;
+    }
+
+    private async Task ImprimeEtiquetaIndividual(Enter evento) //Refatorar Aqui (subtituir por KeyboardEventArgs e e matar a classe Enter)
+    {
+        if (evento.e.Code == "Enter" || evento.e.Code == "NumpadEnter")
+        {
+            isLoading = false;
+            visible = true;
+
+            this.orderNumber = evento.orderNumber;
+            var pedido = await _etiquetasService.PrintLabel(doc_company, serie_order, this.orderNumber);
+
+            if (pedido.invoice is not null)
+            {
+                await _etiquetasService.PrintLabels(pedido);
+
+                var links = new List<string>();
+                for (int i = 0; i < pedido.volumes + 1; i++)
+                {
+                    var fileName = pedido.number + " - " + (i + 1) + ".pdf";
+                    var base64String = await _etiquetasService.GetLabelToPrint(fileName);
+                    var dataUrl = $"data:application/pdf;base64,{base64String}";
+                    
+                    //Refatorar Aqui
+                    // var options = new DialogOptions() { CloseButton = true, FullScreen = true };
+                    // var parameters = new DialogParameters
+                    // {
+                    //     { "base64FileString", dataUrl }
+                    // };
+                    //await _dialogService.ShowAsync<PdfViewerDialog>("", parameters, options);
+
+                    links.Add(dataUrl);
+                }
+
+                await jsRuntime.InvokeVoidAsync("abrirAbas", links);
+                await _etiquetasService.UpdateFlagPrinted(this.orderNumber);
+            }
+            //Refatorar Aqui (padronizar exibição de mensagem de erros)
+            // else
+            //     await _dialogService.ShowMessageBox("Erro", "A etiqueta não pode ser impressa pois a nota fiscal não está autorizada.");
+        
+            isLoading = true;
+            visible = false;
+        }
+    }
+
+    private void AssigningButtonProperties(List<Order>? orders)
+    {
+        foreach (var pedido in orders)
+        {
+            if (pedido.printed == "S")
+            {
+                pedido.buttonText = "Impresso";
+                pedido.buttonClass = true;
+            }
+            else
+            {
+                pedido.buttonText = "Imprimir";
+                pedido.buttonClass = false;
+            }
+
+            if (pedido.present == "S")
+            {
+                pedido.buttonPresentText = "Impresso";
+                pedido.buttonPresentClass = true;
+            }
+            else
+            {
+                pedido.buttonPresentText = "Imprimir";
+                pedido.buttonPresentClass = false;
+            }
+        }
+    }
+
+    private async Task<string> GetTextInLocalStorage(string key)
+    {
+        return await jsRuntime.InvokeAsync<string>("localStorage.getItem", key);
+    }
+}
