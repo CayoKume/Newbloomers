@@ -14,6 +14,7 @@ using Infrastructure.Dootax;
 using Infrastructure.Movidesk;
 using FluentValidation;
 using System.Reflection;
+using Infrastructure.Movidesk.DependencyInjection;
 
 namespace Hangfire.IO.Extensions
 {

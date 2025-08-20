@@ -1,4 +1,5 @@
 ﻿using Application.Movidesk.Interfaces;
+using Application.Movidesk.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hangfire.IO.Controllers.General

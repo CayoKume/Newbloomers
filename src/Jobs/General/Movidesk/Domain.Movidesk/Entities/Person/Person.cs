@@ -1,4 +1,6 @@
-﻿namespace Domain.Movidesk.Entities.Person
+﻿using Domain.Movidesk.Entities.Persons;
+
+namespace Domain.Movidesk.Entities.Person
 {
     public class Person
     {

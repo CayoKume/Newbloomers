@@ -1,8 +1,6 @@
-﻿using Application.Movidesk.Interfaces;
+﻿using Application.Movidesk.Interfaces.Services;
 using Application.Movidesk.Services;
-using Domain.Movidesk.Interfaces.Apis;
 using Domain.Movidesk.Interfaces.Repositorys;
-using Infrastructure.Movidesk.Api;
 using Infrastructure.Movidesk.Data;
 using Infrastructure.Movidesk.Repositorys;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,8 +8,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using FluentValidation;
 using Application.Movidesk.CustomValidations.Person;
+using Infrastructure.Movidesk.Api;
+using Domain.Movidesk.Interfaces.Apis;
 
-namespace Infrastructure.Movidesk
+namespace Infrastructure.Movidesk.DependencyInjection
 {
     public static class DependencyInjection
     {
