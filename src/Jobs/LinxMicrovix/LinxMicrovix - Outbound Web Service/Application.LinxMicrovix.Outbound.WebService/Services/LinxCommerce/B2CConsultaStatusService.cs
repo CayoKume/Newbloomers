@@ -1,0 +1,171 @@
+using Application.Core.Interfaces;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Handlers.Commands;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Services;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Services.LinxCommerce;
+using Domain.Core.Entities.Exceptions;
+using Domain.Core.Enums;
+using Domain.Core.Interfaces;
+using Domain.LinxMicrovix.Outbound.WebService.Models.LinxCommerce;
+using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Api;
+using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxCommerce;
+using Domain.LinxMicrovix.Outbound.WebService.Models.Base;
+using System.ComponentModel.DataAnnotations;
+using FluentValidation;
+
+namespace Application.LinxMicrovix.Outbound.WebService.Services
+{
+    public class B2CConsultaStatusService : IB2CConsultaStatusService
+    {
+        private readonly IAPICall _apiCall;
+        private readonly ILoggerService _logger;
+        private readonly ICoreRepository _coreRepository;
+        private readonly ILinxMicrovixServiceBase _linxMicrovixServiceBase;
+        private readonly ILinxMicrovixCommandHandler _linxMicrovixCommandHandler;
+        private readonly IB2CConsultaStatusRepository _b2cConsultaStatusRepository;
+        private readonly IValidator<Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxCommerce.B2CConsultaStatus> _validator;
+        private static List<string?> _b2cConsultaStatusCache { get; set; } = new List<string?>();
+
+        public B2CConsultaStatusService(
+            IAPICall apiCall,
+            ILoggerService logger,
+            ICoreRepository coreRepository,
+            ILinxMicrovixServiceBase linxMicrovixServiceBase,
+            IValidator<Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxCommerce.B2CConsultaStatus> validator,
+            ILinxMicrovixCommandHandler linxMicrovixCommandHandler,
+            IB2CConsultaStatusRepository b2cConsultaStatusRepository
+        )
+        {
+            _validator = validator;
+            _apiCall = apiCall;
+            _logger = logger;
+            _coreRepository = coreRepository;
+            _linxMicrovixServiceBase = linxMicrovixServiceBase;
+            _linxMicrovixCommandHandler = linxMicrovixCommandHandler;
+            _b2cConsultaStatusRepository = b2cConsultaStatusRepository;
+        }
+
+        public List<B2CConsultaStatus?> DeserializeXMLToObject(LinxAPIParam jobParameter, List<Dictionary<string?, string?>> records)
+        {
+            var list = new List<B2CConsultaStatus>();
+
+            for (int i = 0; i < records.Count(); i++)
+            {
+                try
+                {
+                    var validations = new List<ValidationResult>();
+
+                    var entity = new Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxCommerce.B2CConsultaStatus(
+                        listValidations: validations,
+                        id_status: records[i].Where(pair => pair.Key == "id_status").Select(pair => pair.Value).FirstOrDefault(),
+                        descricao_status: records[i].Where(pair => pair.Key == "descricao_status").Select(pair => pair.Value).FirstOrDefault(),
+                        timestamp: records[i].Where(pair => pair.Key == "timestamp").Select(pair => pair.Value).FirstOrDefault(),
+                        portal: records[i].Where(pair => pair.Key == "portal").Select(pair => pair.Value).FirstOrDefault(),
+                        recordXml: records[i].Where(pair => pair.Key == "recordXml").Select(pair => pair.Value).FirstOrDefault()
+                    );
+
+                    var xml = records[i].Where(pair => pair.Key == "recordXml").Select(pair => pair.Value).FirstOrDefault();
+                    var validations = _validator.Validate(entity);`r`n
+
+                    if (validations.Errors.Count() > 0)
+                    {
+                        var message = $"Error when convert record - id_status: {records[i].Where(pair => pair.Key == ";
+    
+                        for (int j = 0; j < validations.Errors.Count(); j++)
+                        {
+                            var msg = validations.Errors[j].ErrorMessage;
+                            var property = validations.Errors[j].PropertyName;
+                            var value = validations.Errors[j].FormattedMessagePlaceholderValues.Where(x => x.Key == "PropertyValue").FirstOrDefault().Value;
+                            message += $"{msg.Replace("[0]", $"{property}: {value}")}";
+                        }
+    
+                        _logger.AddMessage(message);
+                    }
+    
+                    list.Add(new B2CConsultaStatus(entity, xml));
+                }
+                catch (Exception ex)
+                {
+                    throw new GeneralException(
+                        message: $"Error when convert record - id_status: {records[i].Where(pair => pair.Key == " - {ex.Message}id_status").Select(pair => pair.Value).FirstOrDefault()} | descricao_status: {records[i].Where(pair => pair.Key == "descricao_status").Select(pair => pair.Value).FirstOrDefault()} - {ex.Message}",
+                            exceptionMessage: ex.StackTrace
+                    );
+                }
+            }
+
+            return list;
+        }
+
+        public async Task<bool> GetRecords(LinxAPIParam jobParameter)
+        {
+            _logger
+               .Clear()
+               .AddLog(EnumJob.B2CConsultaStatus);
+
+            var xmls = new List<Dictionary<string?, string?>>();
+
+            string sql = _linxMicrovixCommandHandler.CreateGetParametersQuery(jobParameter.parametersInterval, jobParameter.parametersTableName, jobParameter.jobName);
+            string? parameters = await _coreRepository.GetRecord<string>(sql);
+
+            string sqlCnpjsEmp = _linxMicrovixCommandHandler.CreateGetB2CCompanysQuery();
+            var cnpjs_emp = await _coreRepository.GetRecords<Company?>(sql);
+
+            foreach (var cnpj_emp in cnpjs_emp)
+            {
+                var body = _linxMicrovixServiceBase.BuildBodyRequest(
+                            parametersList: parameters.Replace("[0]", "0"),
+                            jobParameter: jobParameter,
+                            cnpj_emp: cnpj_emp.doc_company
+                        );
+
+                string? response = await _apiCall.PostAsync(jobParameter: jobParameter, body: body);
+                var result = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response);
+                xmls.AddRange(result);
+            }
+
+            if (xmls.Count() > 0)
+            {
+                var listRecords = DeserializeXMLToObject(jobParameter, xmls);
+
+                if (_b2cConsultaStatusCache.Count == 0)
+                {
+                    var list = await _b2cConsultaStatusRepository.GetRegistersExists(
+                        jobParameter: jobParameter,
+                        registros: listRecords
+                                    .Select(x => x.id_status)
+                                    .ToList()
+                    );
+
+                    _b2cConsultaStatusCache = list.ToList();
+                }
+
+                var _listSomenteNovos = listRecords.Where(x => !_b2cConsultaStatusCache.Any(y =>
+                    y == x.recordKey
+                )).ToList();
+
+                if (_listSomenteNovos.Count() > 0)
+                {
+                    _b2cConsultaStatusRepository.BulkInsertIntoTableRaw(records: _listSomenteNovos, jobParameter: jobParameter);
+                    await _coreRepository.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
+
+                    for (int i = 0; i < _listSomenteNovos.Count; i++)
+                    {
+                        _logger.AddRecord(_listSomenteNovos[i].recordKey, _listSomenteNovos[i].recordXml);
+                    }
+
+                    _b2cConsultaStatusCache.AddRange(_listSomenteNovos.Select(x => x.recordKey));
+                }
+
+                _logger.AddMessage(
+                    $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"
+                );
+            }
+
+            _logger.SetLogEndDate();
+            await _logger.CommitAllChanges();
+
+            return true;
+        }
+    }
+}
+

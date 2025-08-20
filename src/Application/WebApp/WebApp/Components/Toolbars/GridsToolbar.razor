@@ -1,0 +1,84 @@
+﻿<MudGrid Spacing="5" Justify="Justify.SpaceAround">
+    <MudItem Class="align-self-center">
+        <MudDatePicker Label="Data Inicial" Date="@DataInicial" DateChanged="@DataInicialChanged" />
+    </MudItem>
+    <MudItem Class="align-self-center">
+        <MudDatePicker Label="Data Final" Date="@DataFinal" DateChanged="@DataFinalChanged" />
+    </MudItem>
+    <MudItem Class="align-self-center">
+        <MudTextField Adornment="Adornment.End"
+                        AdornmentIcon="@Icons.Material.Filled.Search"
+                        @bind-Value="TextoPedido"
+                        Label="Pedido" 
+                        Variant="Variant.Outlined"
+                        @onkeyup="InvokeOnKeyUpEvent">
+            @*Rafatorar Aqui (Adicionar Variavel Texto Label como Parameter)*@
+        </MudTextField>
+    </MudItem>
+    <MudItem Class="align-self-center">
+        <MudButton Size="@Size.Large"
+                    Variant="@Variant.Filled"
+                    Color="@Color.Primary"
+                    OnClick="OnAtualizarClicked"
+                    Disabled="@BotaoDesabilitado"
+                    Loading="@BotaoCarregando">
+            Atualizar @*Rafatorar Aqui (Adicionar Variavel Texto Botão como Parameter)*@
+        </MudButton>
+    </MudItem>
+</MudGrid>
+
+<MudDivider DividerType="DividerType.Middle" Class="my-6" />
+
+@code {
+    [Parameter] public DateTime? DataInicial { get; set; }
+    [Parameter] public EventCallback<DateTime?> DataInicialChanged { get; set; }
+
+    [Parameter] public DateTime? DataFinal { get; set; }
+    [Parameter] public EventCallback<DateTime?> DataFinalChanged { get; set; }
+
+    [Parameter] public string? TextoPedido { get; set; }
+    [Parameter] public EventCallback<string> TextoPedidoChanged { get; set; }
+
+    [Parameter] public EventCallback<Enter> OnKeyUpEvent { get; set; }
+    [Parameter] public EventCallback OnAtualizar { get; set; }
+
+    [Parameter] public bool BotaoDesabilitado { get; set; } = false;
+    [Parameter] public bool BotaoCarregando { get; set; } = false;
+
+    private Task OnAtualizarClicked() => OnAtualizar.InvokeAsync();
+
+    private async Task InvokeOnKeyUpEvent(KeyboardEventArgs e)
+    {
+        if (e.Code == "Enter" || e.Code == "NumpadEnter")
+        {
+            var pedido = TextoPedido?.Trim().ToUpper();
+            TextoPedido = string.Empty;
+
+            await OnKeyUpEvent.InvokeAsync(new Enter { e = e, orderNumber = pedido });
+        }
+    }
+
+    private DateTime? DataInicialLocal
+    {
+        get => DataInicial;
+        set => OnDataInicialChanged(value);
+    }
+
+    private async Task OnDataInicialChanged(DateTime? novaData)
+    {
+        DataInicial = novaData;
+        await DataInicialChanged.InvokeAsync(novaData);
+    }
+
+    private DateTime? DataFinalLocal
+    {
+        get => DataFinal;
+        set => OnDataFinalChanged(value);
+    }
+
+    private async Task OnDataFinalChanged(DateTime? novaData)
+    {
+        DataFinal = novaData;
+        await DataFinalChanged.InvokeAsync(novaData);
+    }
+}

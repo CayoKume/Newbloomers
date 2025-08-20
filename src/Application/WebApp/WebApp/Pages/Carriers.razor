@@ -1,0 +1,155 @@
+﻿@page "/Carriers"
+@using Application.WebApp.Interfaces.Services
+@inject IJSRuntime jsRuntime;
+@inject IDialogService _dialogService
+@inject IPickingService _pickingService;
+
+<PageTitle>Change Order Carriers</PageTitle>
+
+@if (isLoading)
+{
+    <MudContainer style="height: 100vh; display: flex">
+        <MudContainer Class="align-self-center">
+            <MudGrid Spacing="5" Justify="Justify.Center">
+                <MudCard Elevation = "1" Class="align-self-center">
+                    @if (order != null)
+                    {
+                        <MudCardContent>
+                            <MudText Typo="Typo.h4" HtmlTag="strong">@order.number</MudText>
+                            <MudText Typo="Typo.body2">Cliente: @order.client.cod_client - @order.client.reason_client</MudText>
+                            <MudText Typo="Typo.body2">Transportadora: @order.shippingCompany.cod_shippingCompany - @order.shippingCompany.reason_shippingCompany</MudText>
+                        </MudCardContent>
+                    }
+                    else
+                    {
+                        <MudCardContent>
+                            <MudText Typo="Typo.h4" HtmlTag="strong">Pedido: - </MudText>
+                            <MudText Typo="Typo.body2">Cliente: - </MudText>
+                            <MudText Typo="Typo.body2">Transportadora: - </MudText>
+                        </MudCardContent>
+                    }
+                </MudCard>
+            </MudGrid>
+
+            <MudDivider DividerType="DividerType.Middle" Class="my-2" />
+
+            <MudGrid Spacing="5" Justify="Justify.SpaceAround">
+                <MudItem Class="align-self-center">
+                    <MudTextField Adornment="Adornment.End"
+                                  AdornmentIcon="@Icons.Material.Filled.Search"
+                                  @ref="valueOrderNumberReference"
+                                  T="string"
+                                  Label="Pedido"
+                                  Variant="Variant.Outlined"
+                                  @onkeyup="LoadOrder">
+                    </MudTextField>
+                </MudItem>
+
+                <MudItem Class="align-self-center">
+                    <MudAutocomplete @bind-Value="inputValueTransportadoras"
+                                     SearchFunc="@Search"
+                                     Variant="Variant.Outlined"
+                                     Label="Transportadora"
+                                     Margin="Margin.Normal"
+                                     Dense="true"
+                                     Disabled="false"
+                                     ReadOnly="false"
+                                     Placeholder="@(null)"
+                                     HelperText="@(null)"
+                                     HelperTextOnFocus="true"
+                                     Clearable="true"
+                                     Modal="true"
+                                     ShowProgressIndicator="true"
+                                     FullWidth="true"
+                                     Class="align-self-center" />
+                </MudItem>
+
+                <MudItem Class="align-self-center">
+                    <MudButton Size="@Size.Large"
+                               Variant="@Variant.Filled"
+                               Color="@Color.Primary"
+                               OnClick="HandleUpdate"
+                               Disabled="@_carregando"
+                               Loading="@_carregando">
+                        Alterar
+                    </MudButton>
+                </MudItem>
+            </MudGrid>
+        </MudContainer>
+    </MudContainer>
+}
+else
+{
+    <div class="my-custom-container">
+        <LoadingOverlay Visible="@visible" />
+    </div>
+}
+
+<script src="js/Utils.js"></script>
+
+@code {
+    private bool visible = true;
+    private bool isLoading = false;
+    private bool _carregando;
+
+    private string? doc_company;
+    private string? serie_order;
+    private string? inputValueTransportadoras;
+
+    private string[]? _shippmentCompanies;
+    private List<ShippingCompany>? shippmentCompanies;
+    private MudTextField<string>? valueOrderNumberReference;
+    private Order? order;
+
+    protected override async Task OnInitializedAsync()
+    {
+        doc_company = await GetTextInLocalStorage("doc_company");
+        serie_order = await GetTextInLocalStorage("serie_order");
+
+        shippmentCompanies = await _pickingService.GetShippingCompanys();
+        _shippmentCompanies = shippmentCompanies?.Select(c => $"{c.cod_shippingCompany} - {c.reason_shippingCompany}").ToArray();
+
+        isLoading = true;
+        visible = false;
+    }
+
+    private async Task LoadOrder() //Refatorar Aqui (Renomear para LoadData)
+    {
+        if (!String.IsNullOrEmpty(valueOrderNumberReference?.Value))
+            order = await _pickingService.GetUnpickedOrder(doc_company, serie_order, valueOrderNumberReference?.Value);
+        else
+            await _dialogService.ShowMessageBox("Erro", "Digite um número de pedido.");
+
+    }
+
+    private async Task HandleUpdate()
+    {
+        isLoading = false;
+        visible = true;
+        _carregando = true;
+
+        string transportadora = inputValueTransportadoras?.Split(" - ").FirstOrDefault()?.Trim() ?? string.Empty; //Refatorar Aqui
+        var result = await _pickingService.UpdateShippingCompany(valueOrderNumberReference?.Value, Convert.ToInt32(transportadora));
+
+        _carregando = false;
+        isLoading = true;
+        visible = false;
+    }
+
+    private Task<IEnumerable<string>?> Search(string value, CancellationToken token)
+    {
+        if (string.IsNullOrEmpty(value))
+            return Task.FromResult<IEnumerable<string>?>(_shippmentCompanies);
+
+        var result = _shippmentCompanies?
+            .Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
+
+        return Task.FromResult<IEnumerable<string>?>(result);
+    }
+
+    private async Task<string> GetTextInLocalStorage(string key)
+    {
+        return await jsRuntime.InvokeAsync<string>("localStorage.getItem", key);
+    }
+
+}

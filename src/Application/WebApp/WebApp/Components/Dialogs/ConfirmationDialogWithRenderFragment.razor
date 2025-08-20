@@ -1,0 +1,45 @@
+﻿@inject IJSRuntime jsRuntime;
+
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            <MudIcon Icon="@_icon" Class="mr-3 mb-n1" />
+            @_titleContentText
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        @_bodyContent
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">@_closeButtonText</MudButton>
+        <MudButton Color="Color.Success" OnClick="@_onClickEvent">@_clickButtonText</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    private IMudDialogInstance MudDialog { get; set; }
+
+    [Parameter] public string _titleContentText { get; set; } = "Dialog";
+    [Parameter] public string _icon { get; set; } = Icons.Material.Filled.AddAlert;
+
+    [Parameter] public string? _closeButtonText { get; set; }
+    [Parameter] public string? _clickButtonText { get; set; }
+
+    [Parameter] public RenderFragment? _bodyContent { get; set; }
+    [Parameter] public EventCallback _onClickEvent { get; set; }
+
+    // protected override async Task OnAfterRenderAsync(bool firstRender)
+    // {
+    //     if (!firstRender) //Refatorar aqui
+    //         await valueProdutoReference.FocusAsync();
+    // }
+
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        await jsRuntime.InvokeVoidAsync("focusById", "inputSeparaProdutos");
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    private void Cancel() => MudDialog.Cancel();
+}

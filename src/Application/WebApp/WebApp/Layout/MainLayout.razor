@@ -1,0 +1,60 @@
+﻿@inherits LayoutComponentBase
+
+<MudThemeProvider />
+<MudPopoverProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<MudLayout>
+    <MudAppBar Elevation="1" Dense="true">
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+        <MudButton Variant="Variant.Text" Color="Color.Inherit">Newbloomers</MudButton>
+        <MudSpacer />
+        <MudButton Variant="Variant.Text" Color="Color.Inherit">
+            <MudIcon Icon="@Icons.Material.Filled.Factory"></MudIcon>
+            <MudText Style="margin-left: .4rem">Empresa</MudText>
+        </MudButton>
+        <MudButton Variant="Variant.Text" Color="Color.Inherit">
+            <MudIcon Icon="@Icons.Material.Filled.Person"></MudIcon>
+            <MudText Style="margin-left: .4rem">Usuario</MudText>
+        </MudButton>
+    </MudAppBar>
+
+    <MudDrawer @bind-Open="@_drawerOpen" ClipMode="DrawerClipMode.Docked" Breakpoint="Breakpoint.Sm" Elevation="1" Variant="@DrawerVariant.Mini">
+        <MudNavMenu>
+            <MudNavLink Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
+            <MudNavLink Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Factory">Empresa</MudNavLink>
+            
+            <MudNavGroup Title="Expedição" Icon="@Icons.Material.Filled.LocalShipping" Expanded="false">
+                <MudNavLink Href="/Labels" Icon="@Icons.Material.Filled.LocalOffer">Imprimir Etiquetas</MudNavLink>
+                <MudNavLink Href="/Picking" Icon="@Icons.Material.Filled.QrCodeScanner">Conferir Pedidos</MudNavLink>
+                <MudNavLink Href="/DeliveryLists" Icon="@Icons.Material.Filled.PictureAsPdf">Imprimir Romaneio</MudNavLink>
+                <MudNavLink Href="/DeliveryListsExpedition" Icon="@Icons.Material.Filled.DeliveryDining">Expedir Romaneio</MudNavLink>
+                <MudNavGroup Title="Alterar Pedido" Icon="@Icons.Material.Filled.Edit" Expanded="false">
+                    <MudNavLink Href="/Carriers" Icon="@Icons.Material.Filled.LocalShipping">Alterar Transp.</MudNavLink>
+                </MudNavGroup>
+            </MudNavGroup>
+
+            <MudNavGroup Title="Solicitações" Icon="@Icons.Material.Filled.HeadsetMic" Expanded="false">
+                <MudNavLink Href="/" Icon="@Icons.Material.Filled.CancelScheduleSend">Solic. Cancel</MudNavLink>
+                <MudNavLink Href="/" Icon="@Icons.Material.Filled.PermPhoneMsg">Atendimento</MudNavLink>
+                <MudNavLink Href="/" Icon="@Icons.Material.Filled.PlayCircle">Exec. Cancel.</MudNavLink>
+            </MudNavGroup>
+
+            <MudNavLink Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Payment">Nota Fiscal</MudNavLink>
+        </MudNavMenu>
+    </MudDrawer>
+
+    <MudMainContent Class="pt-16 px-16">
+        @Body
+    </MudMainContent>
+</MudLayout>
+
+@code {
+    private bool _drawerOpen = false;
+
+    void DrawerToggle()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
+}
