@@ -1,11 +1,15 @@
 ﻿using Application.LinxMicrovix.Outbound.WebService.Interfaces.Services.LinxCommerce;
 using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hangfire.IO.Controllers.LinxMicrovix
 {
-#if DEBUG
     [ApiController]
+    [Authorize]
+#if RELEASE
+    [ApiExplorerSettings(IgnoreApi = true)]
+#endif
     [Route("LinxMicrovixJobs/B2CLinxMicrovixIntegrityLocks")]
     public class B2CLinxMicrovixIntegrityLocksController : Controller
     {
@@ -370,5 +374,4 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
             return Ok($"Records integrated successfully.");
         }
     }
-#endif
 }

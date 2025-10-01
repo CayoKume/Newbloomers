@@ -7,17 +7,18 @@ namespace Hangfire.IO.Extensions
         public static IApplicationBuilder UseApplication(this IApplicationBuilder app, string? serverName)
         {
             app.UseMiddleware<ExceptionHandlingMiddleware>();
-#if DEBUG
-            //app.UseSwagger(); //Refatorar Aqui (remover)
             app.UseSwagger(c => { c.OpenApiVersion = Microsoft.OpenApi.OpenApiSpecVersion.OpenApi2_0; });
-            app.UseSwaggerUI();
+            app.UseSwaggerUI(c =>
+            {
+                c.OAuthClientId("e2528c48-69b9-42ff-859d-406b4acfeeea");
+                c.OAuthClientSecret("jdS8Q~v7imbh1eFvibYIHpJgrh6PsUF1RA6Fobwi");
+            });
             app.UseHttpsRedirection();
             app.UseAuthorization();
-#else
-            app.UseHangfireDashboard();
-            LinxMicrovixERPRecurringJobsExtensions.AddRecurringJobs();
-            LinxMicrovixB2CRecurringJobsExtensions.AddRecurringJobs();
-#endif
+
+            //app.UseHangfireDashboard();
+            //LinxMicrovixERPRecurringJobsExtensions.AddRecurringJobs();
+            //LinxMicrovixB2CRecurringJobsExtensions.AddRecurringJobs();
             return app;
         }
     }

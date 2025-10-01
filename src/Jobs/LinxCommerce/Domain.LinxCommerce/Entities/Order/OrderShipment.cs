@@ -21,7 +21,7 @@ namespace Domain.LinxCommerce.Entities.Order
 
         public OrderShipment(OrderShipment orderShipment)
         {
-            this.lastupdateon = DateTime.Now;
+            lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.OrderShipmentID = orderShipment.OrderShipmentID;
             this.OrderID = orderShipment.OrderID;
             this.DeliveryMethodID = orderShipment.DeliveryMethodID;

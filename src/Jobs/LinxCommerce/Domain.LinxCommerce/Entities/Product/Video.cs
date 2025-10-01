@@ -11,7 +11,7 @@
 
         public Video(Video video, Int32? mediaID)
         {
-            this.lastupdateon = DateTime.Now;
+            lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.MediaID = mediaID;
             this.Title = video.Title;
             this.Url = video.Url;

@@ -29,7 +29,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxOrdensServicoPosicaoOsRamoOpticoHistorico() { }
 
         public LinxOrdensServicoPosicaoOsRamoOpticoHistorico(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxOrdensServicoPosicaoOsRamoOpticoHistorico record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.id_ordens_servico_posicao_os_ramo_optico_historico = CustomConvertersExtensions.ConvertToInt32Validation(record.id_ordens_servico_posicao_os_ramo_optico_historico);
             this.numero_os = CustomConvertersExtensions.ConvertToInt32Validation(record.numero_os);
             this.usuario = CustomConvertersExtensions.ConvertToInt32Validation(record.usuario);

@@ -30,7 +30,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxRemessasIdentificadores() { }
 
         public LinxRemessasIdentificadores(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxRemessasIdentificadores record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.id_remessas = CustomConvertersExtensions.ConvertToInt32Validation(record.id_remessas);
             this.id_remessas_acertos = CustomConvertersExtensions.ConvertToInt32Validation(record.id_remessas_acertos);
             this.transacao_acerto = CustomConvertersExtensions.ConvertToInt32Validation(record.transacao_acerto);

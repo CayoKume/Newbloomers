@@ -26,7 +26,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxTamanhos() { }
 
         public LinxTamanhos(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxTamanhos record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.ativo = CustomConvertersExtensions.ConvertToBooleanValidation(record.ativo);
             this.timestamp = CustomConvertersExtensions.ConvertToInt64Validation(record.timestamp);
             this.id_tamanho = record.id_tamanho;

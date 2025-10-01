@@ -36,7 +36,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxConfiguracoesTributariasDetalhesSimplificado() { }
 
         public LinxConfiguracoesTributariasDetalhesSimplificado(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxConfiguracoesTributariasDetalhesSimplificado record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.id_config_tributaria_detalhe = CustomConvertersExtensions.ConvertToInt32Validation(record.id_config_tributaria_detalhe);
             this.id_config_tributaria = CustomConvertersExtensions.ConvertToInt32Validation(record.id_config_tributaria);
             this.id_classe_fiscal = CustomConvertersExtensions.ConvertToInt32Validation(record.id_classe_fiscal);

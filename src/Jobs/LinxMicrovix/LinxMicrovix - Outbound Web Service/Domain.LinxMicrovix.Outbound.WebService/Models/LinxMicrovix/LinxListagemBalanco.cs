@@ -29,7 +29,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxListagemBalanco() { }
 
         public LinxListagemBalanco(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxListagemBalanco record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.id_balanco = CustomConvertersExtensions.ConvertToInt32Validation(record.id_balanco);
             this.qtde_produtos = CustomConvertersExtensions.ConvertToInt32Validation(record.qtde_produtos);
             this.qtde_itens = CustomConvertersExtensions.ConvertToInt32Validation(record.qtde_itens);

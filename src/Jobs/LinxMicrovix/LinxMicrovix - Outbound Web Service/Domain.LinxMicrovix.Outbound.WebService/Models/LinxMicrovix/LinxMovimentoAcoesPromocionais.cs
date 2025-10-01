@@ -28,7 +28,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxMovimentoAcoesPromocionais() { }
 
         public LinxMovimentoAcoesPromocionais(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxMovimentoAcoesPromocionais record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.portal = CustomConvertersExtensions.ConvertToInt32Validation(record.portal);
             this.transacao = CustomConvertersExtensions.ConvertToInt32Validation(record.transacao);
             this.id_acoes_promocionais = CustomConvertersExtensions.ConvertToInt32Validation(record.id_acoes_promocionais);

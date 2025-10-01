@@ -94,7 +94,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxDadosOpticosDav() { }
 
         public LinxDadosOpticosDav(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxDadosOpticosDav record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.dav = CustomConvertersExtensions.ConvertToInt32Validation(record.dav);
             this.id_produtos_opticos_tipo_aro = CustomConvertersExtensions.ConvertToInt32Validation(record.id_produtos_opticos_tipo_aro);
             this.id_produtos_opticos_formato_aro = CustomConvertersExtensions.ConvertToInt32Validation(record.id_produtos_opticos_formato_aro);

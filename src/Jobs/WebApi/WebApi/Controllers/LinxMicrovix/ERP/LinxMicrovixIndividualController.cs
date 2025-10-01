@@ -1,12 +1,16 @@
 ﻿using Application.LinxMicrovix.Outbound.WebService.Interfaces.Services.LinxMicrovix;
 using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
 namespace Hangfire.IO.Controllers.LinxMicrovix
 {
-#if DEBUG
     [ApiController]
+    [Authorize]
+#if RELEASE
+    [ApiExplorerSettings(IgnoreApi = true)]
+#endif
     [Route("LinxMicrovixJobs/LinxMicrovixIndividual")]
     public class LinxMicrovixIndividualController : Controller
     {
@@ -444,7 +448,7 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
         public async Task<ActionResult> LinxPedidosVendaIndividual([Required][FromQuery] string? cod_pedido, [Required][FromQuery] string? cnpj_emp)
         {
             var method = _methods
-                .Where(m => m.MethodName == "LinxPedidosVendaIndividual")
+                .Where(m => m.MethodName == "LinxPedidosVenda")
                 .FirstOrDefault();
 
             var result = await _linxPedidosVendaService.GetRecord(
@@ -515,5 +519,4 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
             return Ok($"Records integrated successfully.");
         }
     }
-#endif
 }

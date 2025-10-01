@@ -44,6 +44,12 @@ namespace Domain.Core.Interfaces
         public Task<bool> ExecuteCommand(string? sql, DynamicParameters parameters);
 
         /// <summary>
+        /// Execute simple sql query in Database
+        /// </summary>
+        /// <param name="sql"></param>
+        public Task<bool> ExecuteCommand(string? sql, DynamicParameters parameters, CommandType commandType);
+
+        /// <summary>
         /// Insert Record to Database
         /// </summary>
         /// <param name="sql"></param>

@@ -26,7 +26,7 @@
         public string? billing_item_id { get; set; }
         //public string? created_by { get; set; }
         public string? created_at { get; set; }
-        public string? updated_at { get; set; }
+        public DateTime? updated_at { get; set; }
         public string? deleted_at { get; set; }
         public string? status_id { get; set; }
         public string? type { get; set; }

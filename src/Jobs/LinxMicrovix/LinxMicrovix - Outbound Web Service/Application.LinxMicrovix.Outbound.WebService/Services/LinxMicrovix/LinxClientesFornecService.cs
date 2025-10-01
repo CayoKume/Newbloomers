@@ -237,43 +237,6 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
 
             return true;
         }
-
-        public async Task<bool> IntegrityLockLinxClientesFornecRegisters(LinxAPIParam jobParameter)
-        {
-            var _listSomenteNovos = new List<LinxClientesFornec>();
-
-            string sql = _linxMicrovixCommandHandler.CreateGetParametersQuery(jobParameter.parametersInterval, jobParameter.parametersTableName, jobParameter.jobName);
-            string? parameters = await _coreRepository.GetRecord<string>(sql);
-
-            string integritySql = _linxClientesFornecCommandHandler.CreateIntegrityLockQuery();
-            var clientes = await _coreRepository.GetRecords<string>(integritySql);
-
-            foreach (var cliente in clientes)
-            {
-                var body = _linxMicrovixServiceBase.BuildBodyRequest(
-                                parametersList: parameters.Replace("[0]", "0").Replace("[doc_cliente]", cliente).Replace("[data_inicial]", "2000-01-01").Replace("[data_fim]", $"{DateTime.Today.ToString("yyyy-MM-dd")}"),
-                                jobParameter: jobParameter,
-                                cnpj_emp: jobParameter.docMainCompany
-                            );
-
-                string? response = await _apiCall.PostAsync(jobParameter: jobParameter, body: body);
-                var xmls = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response);
-
-                if (xmls.Count() > 0)
-                {
-                    var listRecords = DeserializeXMLToObject(jobParameter, xmls);
-                    _listSomenteNovos.AddRange(listRecords);
-                } 
-            }
-
-            if (_listSomenteNovos.Count() > 0)
-            {
-                _linxClientesFornecRepository.BulkInsertIntoTableRaw(records: _listSomenteNovos, jobParameter: jobParameter);
-                await _coreRepository.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
-            }
-
-            return true;
-        }
     }
 }
 

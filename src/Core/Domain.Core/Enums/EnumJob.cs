@@ -110,6 +110,9 @@
         JadlogSearchTrackingHistory = 1100,
 
         TotalExpressTrackingHistory = 1300,
+        TotalExpressSendOrders = 1301,
+
+        StoneLogisticaTrackingHistory = 1700,
 
         AfterSaleEcommerces = 1200,
         AfterSaleReverses = 1201,

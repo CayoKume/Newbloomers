@@ -31,7 +31,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxFidelidade() { }
 
         public LinxFidelidade(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxFidelidade record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.portal = CustomConvertersExtensions.ConvertToInt32Validation(record.portal);
             this.id_fidelidade_parceiro_log = CustomConvertersExtensions.ConvertToInt32Validation(record.id_fidelidade_parceiro_log);
             this.operacao = CustomConvertersExtensions.ConvertToInt32Validation(record.operacao);

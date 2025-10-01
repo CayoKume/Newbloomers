@@ -47,7 +47,7 @@ namespace Application.AfterSale.Validations
             
             RuleFor(x => x.store_expire_date).MustBeValidDateTime().When(x => !string.IsNullOrEmpty(x.store_expire_date));
             RuleFor(x => x.created_at).MustBeValidDateTime().When(x => !string.IsNullOrEmpty(x.created_at));
-            RuleFor(x => x.updated_at).MustBeValidDateTime().When(x => !string.IsNullOrEmpty(x.updated_at));
+            //RuleFor(x => x.updated_at).MustBeValidDateTime().When(x => !string.IsNullOrEmpty(x.updated_at));
             RuleFor(x => x.deleted_at).MustBeValidDateTime().When(x => !string.IsNullOrEmpty(x.deleted_at));
             RuleFor(x => x.billing_date).MustBeValidDateTime().When(x => !string.IsNullOrEmpty(x.billing_date));
             

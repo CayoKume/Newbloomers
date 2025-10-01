@@ -6,12 +6,13 @@ namespace Infrastructure.Core.Connections.SQLServer
 {
     public class SQLServerConnection : ISQLServerConnection, IDisposable
     {
+        private readonly IConfiguration _configuration;
         private readonly string? _connectionstring;
         private IDbConnection _connection;
         private SqlConnection _conn;
 
         public SQLServerConnection(IConfiguration configuration) =>
-            _connectionstring = configuration.GetConnectionString("Connection");
+            (_configuration, _connectionstring) = (configuration, configuration.GetConnectionString("Connection"));
 
         public void Dispose() => _connection?.Dispose();
 

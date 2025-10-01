@@ -31,7 +31,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxCommerce
             string? recordXml
         )
         {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+            lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.id_prod_tab_preco = CustomConvertersExtensions.ConvertToInt32Validation(record.id_prod_tab_preco);
             this.id_tabela = CustomConvertersExtensions.ConvertToInt32Validation(record.id_tabela);
             this.codigoproduto = CustomConvertersExtensions.ConvertToInt64Validation(record.codigoproduto);

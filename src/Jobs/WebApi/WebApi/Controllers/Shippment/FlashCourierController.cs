@@ -1,11 +1,15 @@
 ﻿using Application.FlashCourier.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
 namespace Hangfire.IO.Controllers.Carries
 {
-#if DEBUG
     [ApiController]
+    [Authorize]
+#if RELEASE
+    [ApiExplorerSettings(IgnoreApi = true)]
+#endif
     [Route("CarriersJobs/FlashCourier")]
     public class FlashCourierController : Controller
     {
@@ -38,6 +42,4 @@ namespace Hangfire.IO.Controllers.Carries
             return Ok();
         }
     }
-
-#endif
 }

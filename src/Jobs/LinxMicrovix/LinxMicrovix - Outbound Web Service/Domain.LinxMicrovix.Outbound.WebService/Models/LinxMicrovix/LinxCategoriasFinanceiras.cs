@@ -25,7 +25,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxCategoriasFinanceiras() { }
 
         public LinxCategoriasFinanceiras(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxCategoriasFinanceiras record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+            lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.id_categorias_financeiras = CustomConvertersExtensions.ConvertToInt32Validation(record.id_categorias_financeiras);
             this.ativo = CustomConvertersExtensions.ConvertToBooleanValidation(record.ativo);
             this.historico = CustomConvertersExtensions.ConvertToInt64Validation(record.historico);

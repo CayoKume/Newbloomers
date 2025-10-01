@@ -24,7 +24,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxClientesFornecCamposAdicionais() { }
 
         public LinxClientesFornecCamposAdicionais(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxClientesFornecCamposAdicionais record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.cod_cliente = CustomConvertersExtensions.ConvertToInt32Validation(record.cod_cliente);
             this.portal = CustomConvertersExtensions.ConvertToInt32Validation(record.portal);
             this.campo = record.campo;

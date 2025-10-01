@@ -23,7 +23,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxProdutosOpticosTipoAro() { }
 
         public LinxProdutosOpticosTipoAro(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxProdutosOpticosTipoAro record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.id_tipo_aro = CustomConvertersExtensions.ConvertToInt32Validation(record.id_tipo_aro);
             this.timestamp = CustomConvertersExtensions.ConvertToInt64Validation(record.timestamp);
             this.tipo_aro = record.tipo_aro;

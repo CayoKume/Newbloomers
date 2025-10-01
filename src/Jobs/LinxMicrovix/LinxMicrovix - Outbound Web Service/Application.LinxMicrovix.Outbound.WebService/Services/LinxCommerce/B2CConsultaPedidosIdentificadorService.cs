@@ -152,7 +152,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
             string? parameters = await _coreRepository.GetRecord<string>(sql);
 
             var body = _linxMicrovixServiceBase.BuildBodyRequest(
-                        parametersList: parameters.Replace("[0]", "0").Replace("[data_origem_inicial]", $"{DateTime.Today.AddDays(-7).ToString("yyyy-MM-dd")}").Replace("[data_origem_fim]", $"{DateTime.Today.ToString("yyyy-MM-dd")}"),
+                        parametersList: parameters.Replace("[0]", "0").Replace("[data_origem_inicial]", $"{DateTime.Today.AddDays(-20).ToString("yyyy-MM-dd")}").Replace("[data_origem_fim]", $"{DateTime.Today.AddDays(+1).ToString("yyyy-MM-dd")}"),
                         jobParameter: jobParameter,
                         cnpj_emp: jobParameter.docMainCompany
                     );

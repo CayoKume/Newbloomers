@@ -38,7 +38,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxMovimentoGiftCard() { }
 
         public LinxMovimentoGiftCard(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxMovimentoGiftCard record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.empresa = CustomConvertersExtensions.ConvertToInt32Validation(record.empresa);
             this.operacao = CustomConvertersExtensions.ConvertToInt32Validation(record.operacao);
             this.qtde_tentativa = CustomConvertersExtensions.ConvertToInt32Validation(record.qtde_tentativa);

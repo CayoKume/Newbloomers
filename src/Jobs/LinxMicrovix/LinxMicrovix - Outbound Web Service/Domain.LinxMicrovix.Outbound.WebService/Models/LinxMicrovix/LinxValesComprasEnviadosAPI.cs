@@ -33,7 +33,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxValesComprasEnviadosAPI() { }
 
         public LinxValesComprasEnviadosAPI(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxValesComprasEnviadosAPI record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.numero_controle = CustomConvertersExtensions.ConvertToInt32Validation(record.numero_controle);
             this.status_vale = CustomConvertersExtensions.ConvertToInt32Validation(record.status_vale);
             this.codigo_portal_resgate = CustomConvertersExtensions.ConvertToInt32Validation(record.codigo_portal_resgate);

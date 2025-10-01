@@ -14,7 +14,7 @@
 
         public OrderTag(OrderTag orderTag, Guid? orderID)
         {
-            this.lastupdateon = DateTime.Now;
+            lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.OrderID = orderID;
             this.IsDeleted = orderTag.IsDeleted;
             this.IsSystem = orderTag.IsSystem;

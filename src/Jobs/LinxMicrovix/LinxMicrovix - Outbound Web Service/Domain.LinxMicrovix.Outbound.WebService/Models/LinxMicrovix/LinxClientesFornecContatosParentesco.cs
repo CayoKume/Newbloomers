@@ -23,7 +23,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxClientesFornecContatosParentesco() { }
 
         public LinxClientesFornecContatosParentesco(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxClientesFornecContatosParentesco record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.id_parentesco = CustomConvertersExtensions.ConvertToInt32Validation(record.id_parentesco);
             this.timestamp = CustomConvertersExtensions.ConvertToInt64Validation(record.timestamp);
             this.descricao_parentesco = record.descricao_parentesco;

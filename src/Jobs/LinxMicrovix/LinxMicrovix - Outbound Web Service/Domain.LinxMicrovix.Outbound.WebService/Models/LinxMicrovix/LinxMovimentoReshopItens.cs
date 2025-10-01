@@ -30,7 +30,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxMovimentoReshopItens() { }
 
         public LinxMovimentoReshopItens(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxMovimentoReshopItens record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.id_movimento_campanha_reshop_item = CustomConvertersExtensions.ConvertToInt32Validation(record.id_movimento_campanha_reshop_item);
             this.id_campanha = CustomConvertersExtensions.ConvertToInt32Validation(record.id_campanha);
             this.ordem = CustomConvertersExtensions.ConvertToInt32Validation(record.ordem);

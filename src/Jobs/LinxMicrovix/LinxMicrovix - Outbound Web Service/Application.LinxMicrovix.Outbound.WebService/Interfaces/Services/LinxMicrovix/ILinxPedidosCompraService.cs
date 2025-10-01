@@ -6,6 +6,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Interfaces.Services.LinxM
     public interface ILinxPedidosCompraService
     {
         public List<LinxPedidosCompra?> DeserializeXMLToObject(LinxAPIParam jobParameter, List<Dictionary<string?, string?>> records);
+        public Task<bool> IntegrityLockRegisters(LinxAPIParam jobParameter);
         public Task<bool> GetRecords(LinxAPIParam jobParameter);
     }
 }

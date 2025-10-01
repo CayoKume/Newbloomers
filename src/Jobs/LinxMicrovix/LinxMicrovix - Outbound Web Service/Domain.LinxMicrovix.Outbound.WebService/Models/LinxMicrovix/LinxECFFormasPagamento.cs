@@ -25,7 +25,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxECFFormasPagamento() { }
 
         public LinxECFFormasPagamento(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxECFFormasPagamento record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.id_empresa_ecf_formas_pgto = CustomConvertersExtensions.ConvertToInt32Validation(record.id_empresa_ecf_formas_pgto);
             this.id_ecf = CustomConvertersExtensions.ConvertToInt32Validation(record.id_ecf);
             this.cod_forma_pgto = CustomConvertersExtensions.ConvertToInt32Validation(record.cod_forma_pgto);

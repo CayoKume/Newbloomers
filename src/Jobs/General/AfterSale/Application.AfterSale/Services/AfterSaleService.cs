@@ -195,7 +195,8 @@ namespace Application.AfterSale.Services
             {
                 var parameters = new Dictionary<string, string>
                 {
-                    { "start_date", $"{DateTime.Now.AddMonths(-2).ToString("yyyy-MM-dd")}" },
+                    //{ "start_date", $"{DateTime.Now.AddMonths(-2).ToString("yyyy-MM-dd")}" },
+                    { "start_date", $"2025-05-01" },
                     { "end_date", $"{DateTime.Now.ToString("yyyy-MM-dd")}" }
                 };
 
@@ -210,11 +211,19 @@ namespace Application.AfterSale.Services
                 var page = Newtonsoft.Json.JsonConvert.DeserializeObject<Domain.AfterSale.Dtos.ResponseReverses>(response);
                 simplifiedReverses.AddRange(page.data);
                 string? rote = page.next_page_url;
+                int contador = 0;
 
                 if (page.last_page > 1) 
                 {
                     while (!String.IsNullOrEmpty(rote))
                     {
+                        //API da AfterSale lança Too Many Requests após 30 consultas, por isso caso tenha dado erro na consuta das páginas aguardamos por 1 minuto
+                        if (contador > 14)
+                        { 
+                            Thread.Sleep(60 * 1000);
+                            contador = 0;
+                        }
+
                         var responseByPage = await _apiCall.GetAsync(
                             token: company.Token.ToString(),
                             rote: rote.Replace("https://api.send4.com.br/", "")
@@ -226,11 +235,11 @@ namespace Application.AfterSale.Services
                         {
                             simplifiedReverses.AddRange(nextPage.data);
                             rote = nextPage.next_page_url;
+                            contador++;
+                            Thread.Sleep(10 * 1000);
                             continue;
                         }
-
-                        //API da AfterSale lança Too Many Requests após 30 consultas, por isso caso tenha dado erro na consuta das páginas aguardamos por 1 minuto
-                        Thread.Sleep(60 * 1000);
+                        Console.WriteLine("deu erro");
                     }
                 }
 
@@ -241,7 +250,7 @@ namespace Application.AfterSale.Services
 
                 var _listSomenteNovos = simplifiedReverses.Where(x => GetReversesCache.Any(y =>
                    CustomConvertersExtensions.ConvertToInt32Validation(x.id) == y.id &&
-                   CustomConvertersExtensions.ConvertToDateTimeValidation(x.updated_at) > y.updated_at
+                   x.updated_at >= y.updated_at
                 )).ToList();
 
                 if (_listSomenteNovos.Count() > 0)

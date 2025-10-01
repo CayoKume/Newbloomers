@@ -57,7 +57,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxMovimentoExtensao() { }
 
         public LinxMovimentoExtensao(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxMovimentoExtensao record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.identificador = Guid.Parse(record.identificador);
             this.base_fcp_st = CustomConvertersExtensions.ConvertToDecimalValidation(record.base_fcp_st);
             this.valor_fcp_st = CustomConvertersExtensions.ConvertToDecimalValidation(record.valor_fcp_st);

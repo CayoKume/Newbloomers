@@ -1,12 +1,16 @@
 ﻿using Application.LinxMicrovix.Outbound.WebService.Interfaces.Services.LinxCommerce;
 using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
 namespace Hangfire.IO.Controllers.LinxMicrovix
 {
-#if DEBUG
     [ApiController]
+    [Authorize]
+#if RELEASE
+    [ApiExplorerSettings(IgnoreApi = true)]
+#endif
     [Route("LinxMicrovixJobs/B2CLinxMicrovixIndividual")]
     public class B2CLinxMicrovixIndividualController : Controller
     {
@@ -163,7 +167,7 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
                 .Where(m => m.MethodName == "B2CConsultaPedidos")
                 .FirstOrDefault();
 
-            var result = await _b2cConsultaClientesService.GetRecord(
+            var result = await _b2cConsultaPedidosService.GetRecord(
                 _linxMicrovixJobParameter.SetParameters(
                     jobName: method.MethodName,
                     tableName: method.MethodName
@@ -248,5 +252,4 @@ namespace Hangfire.IO.Controllers.LinxMicrovix
             return Ok();
         }
     }
-#endif
 }

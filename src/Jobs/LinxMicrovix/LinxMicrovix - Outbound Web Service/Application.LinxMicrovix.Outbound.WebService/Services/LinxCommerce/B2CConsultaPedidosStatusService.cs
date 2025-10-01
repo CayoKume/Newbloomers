@@ -233,16 +233,17 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                     }
                 }
 
-
-
                 if (_listRegistrosConsultados.Count() > 0)
                 {
-                    _coreRepository.BulkInsertIntoTableRaw<IntegrityLockTablesRegister>(
-                                recordsList: _listRegistrosConsultados.ToList(),
-                                entity: new IntegrityLockTablesRegister(),
-                                tableName: "IntegrityLockTablesRegisters"
-                    );
+                    _b2cConsultaPedidosStatusRepository.BulkInsertIntoTableRaw(records: _listSomenteNovos, jobParameter: jobParameter);
+                    await _coreRepository.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
                 }
+
+                _coreRepository.BulkInsertIntoTableRaw<IntegrityLockTablesRegister>(
+                    recordsList: _listRegistrosConsultados.ToList(),
+                    entity: new IntegrityLockTablesRegister(),
+                    tableName: "IntegrityLockTablesRegisters"
+                );
 
                 return true;
             }

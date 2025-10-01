@@ -24,7 +24,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxOticoPrismaDescricao() { }
 
         public LinxOticoPrismaDescricao(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxOticoPrismaDescricao record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.id_otico_prisma_descricao = CustomConvertersExtensions.ConvertToInt32Validation(record.id_otico_prisma_descricao);
             this.portal = CustomConvertersExtensions.ConvertToInt32Validation(record.portal);
             this.timestamp = CustomConvertersExtensions.ConvertToInt64Validation(record.timestamp);

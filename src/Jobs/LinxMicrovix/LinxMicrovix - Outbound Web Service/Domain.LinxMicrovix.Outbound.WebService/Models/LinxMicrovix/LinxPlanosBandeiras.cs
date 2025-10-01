@@ -27,7 +27,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxPlanosBandeiras() { }
 
         public LinxPlanosBandeiras(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxPlanosBandeiras record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.portal = CustomConvertersExtensions.ConvertToInt32Validation(record.portal);
             this.plano = CustomConvertersExtensions.ConvertToInt32Validation(record.plano);
             this.adquirente = CustomConvertersExtensions.ConvertToInt32Validation(record.adquirente);

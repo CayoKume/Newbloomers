@@ -18,7 +18,7 @@
 
         public Contact(Contact contact, Int32? customerID)
         {
-            this.lastupdateon = DateTime.Now;
+            lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.Phone = contact.Phone;
             this.Phone2 = contact.Phone2;
             this.CellPhone = contact.CellPhone;

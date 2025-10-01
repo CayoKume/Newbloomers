@@ -23,7 +23,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxFaturasOrigem() { }
 
         public LinxFaturasOrigem(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxFaturasOrigem record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.codigo_fatura = CustomConvertersExtensions.ConvertToInt64Validation(record.codigo_fatura);
             this.codigo_fatura_origem = CustomConvertersExtensions.ConvertToInt64Validation(record.codigo_fatura_origem);
             this.timestamp = CustomConvertersExtensions.ConvertToInt64Validation(record.timestamp);

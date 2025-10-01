@@ -30,7 +30,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxTrocaUnificadaResumoBaixa() { }
 
         public LinxTrocaUnificadaResumoBaixa(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxTrocaUnificadaResumoBaixa record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.portal_baixa = CustomConvertersExtensions.ConvertToInt32Validation(record.portal_baixa);
             this.empresa_baixa = CustomConvertersExtensions.ConvertToInt32Validation(record.empresa_baixa);
             this.id_troca_baixa = CustomConvertersExtensions.ConvertToInt32Validation(record.id_troca_baixa);

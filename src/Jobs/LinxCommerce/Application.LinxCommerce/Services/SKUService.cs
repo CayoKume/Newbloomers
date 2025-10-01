@@ -768,7 +768,7 @@ namespace Application.LinxCommerce.Services
             var objectRequest = new
             {
                 Page = new { PageIndex = 0, PageSize = 10000 },
-                Where = $"(CreatedDate>=\"{DateTime.Now.Date:yyyy-MM-dd}T00:00:00\" && CreatedDate<=\"{DateTime.Now.Date:yyyy-MM-dd}T23:59:59\")",
+                Where = $"(CreatedDate>=\"{DateTime.Now.AddDays(-7).Date:yyyy-MM-dd}T00:00:00\" && CreatedDate<=\"{DateTime.Now.Date:yyyy-MM-dd}T23:59:59\")",
                 WhereMetadata = "",
                 OrderBy = "ProductID",
             };
@@ -849,7 +849,7 @@ namespace Application.LinxCommerce.Services
             {
                 QueueID = 21,
                 Page = new { PageIndex = 0, PageSize = 1000 },
-                Where = $"EntityKeyName==\"CatalogItemID\" && EntityTypeName==\"EZ.Store.Model.Catalog.Product\"",
+                Where = $"EntityTypeName==\"EZ.Store.Model.Catalog.Product\"",
                 WhereMetadata = "",
                 OrderBy = "QueueItemID",
             };
@@ -864,7 +864,7 @@ namespace Application.LinxCommerce.Services
             var enqueuedItens = Newtonsoft.Json.JsonConvert.DeserializeObject<SearchQueuedItem.Root>(response);
             var enqueuedProducts = enqueuedItens
                                 .Result
-                                .Where(x => x.EntityKeyName == "CatalogItemID")
+                                .Where(x => x.EntityTypeName == "EZ.Store.Model.Catalog.Product")
                                 .GroupBy(y => y.EntityKeyValue)
                                 .Select(g => g.First())
                                 .ToList();

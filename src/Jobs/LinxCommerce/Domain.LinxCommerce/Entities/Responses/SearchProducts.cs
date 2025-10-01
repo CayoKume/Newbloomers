@@ -17,8 +17,8 @@
             public string? ShortDescription { get; set; }
             public string? LongDescription { get; set; }
             public string? MaterializedFullText { get; set; }
-            public DateTime? CreatedDate { get; set; }
-            public DateTime? ModifiedDate { get; set; }
+            public DateTimeOffset? CreatedDate { get; set; }
+            public DateTimeOffset? ModifiedDate { get; set; }
         }
     }
 }

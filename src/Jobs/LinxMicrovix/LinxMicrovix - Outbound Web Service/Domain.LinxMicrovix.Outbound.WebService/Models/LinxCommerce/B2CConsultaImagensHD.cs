@@ -29,7 +29,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxCommerce
             string? recordXml
         )
         {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+            lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.identificador_imagem = String.IsNullOrEmpty(record.identificador_imagem) ? null : Guid.Parse(record.identificador_imagem);
             this.codigoproduto = CustomConvertersExtensions.ConvertToInt32Validation(record.codigoproduto);
             this.portal = CustomConvertersExtensions.ConvertToInt32Validation(record.portal);

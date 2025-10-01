@@ -2,6 +2,7 @@
 using Domain.Core.Interfaces;
 using Domain.TotalExpress.Entities;
 using Domain.TotalExpress.Interfaces.Repository;
+using Domain.TotalExpress.Models;
 using Infrastructure.Core.Connections.SQLServer;
 using System.Data;
 
@@ -32,7 +33,7 @@ namespace Infrastructure.TotalExpress.Repository
 
         public async Task<bool> GenerateRequestLog(string? orderNumber, string? request)
         {
-            string? sql = $@"INSERT INTO [GENERAL].[dbo].[TOTALEXPRESSREQUESTLOG] (PEDIDO, DATAENVIO, REQUEST) 
+            string? sql = $@"INSERT INTO [GENERAL].[TOTALEXPRESSREQUESTLOG] (PEDIDO, DATAENVIO, REQUEST) 
                             VALUES (@OrderNumber, GETDATE(), @Request)";
             var parameter = new
             {
@@ -74,49 +75,35 @@ namespace Infrastructure.TotalExpress.Repository
             }
         }
 
-        public async Task<bool> GenerateResponseLog(string? orderNumber, string? sender_id, string? response)
+        public async Task<bool> GenerateResponseLog(List<Encomenda>? encomendas, Guid? parentExecutionGuid)
         {
-            string? sql = @$"INSERT INTO [GENERAL].[dbo].[TOTALEXPRESSREGISTROLOG] (PEDIDO, REMETENTEID, DATAENVIO, RETORNO) 
-                         VALUES (@OrderNumber, @SenderID, GETDATE(), @Return)";
-            var parameter = new
-            {
-                OrderNumber = orderNumber,
-                Return = response,
-                SenderID = sender_id
-            };
+            var pedidosTable = _coreRepository.CreateSystemDataTable("TotalExpressPedidos", new Encomenda());
+            var volumesTable = _coreRepository.CreateSystemDataTable("TotalExpressVolumes", new Volume());
+            var documentosFiscaisTable = _coreRepository.CreateSystemDataTable("TotalExpressDocumentoFiscais", new Documentofiscal());
 
-            try
-            {
-                using (var conn = _sqlServerConnection.GetIDbConnection(""))
-                {
-                    var result = await conn.ExecuteAsync(
-                        sql: sql,
-                        commandType: CommandType.Text,
-                        param: parameter,
-                        commandTimeout: 360
-                    );
+            _coreRepository.FillSystemDataTable(data: encomendas, dataTable: pedidosTable);
+            _coreRepository.FillSystemDataTable(data: encomendas.SelectMany(x => x.volumes).ToList(), dataTable: volumesTable);
+            _coreRepository.FillSystemDataTable(data: encomendas.SelectMany(x => x.documentoFiscal).ToList(), dataTable: documentosFiscaisTable);
 
-                    if (result > 0)
-                        return true;
+            _coreRepository.BulkInsertIntoTableRaw(
+                dataTable: pedidosTable
+            );
 
-                    return false;
-                }
-            }
-            catch (Exception ex)
-            {
-                throw;
-                //throw new ExecuteCommandWithParametersException()
-                //{
-                //    project = "TotalExpress",
-                //    method = "GenerateResponseLog",
-                //    schema = "[GENERAL].[dbo].[TOTALEXPRESSREGISTROLOG]",
-                //    job = "",
-                //    message = "",
-                //    parameter = JsonConvert.SerializeObject(parameter),
-                //    command = sql,
-                //    exception = ex.Message
-                //};
-            }
+            await _coreRepository.CallDbProcMerge("general", pedidosTable.TableName, parentExecutionGuid);
+
+            _coreRepository.BulkInsertIntoTableRaw(
+                dataTable: volumesTable
+            );
+
+            await _coreRepository.CallDbProcMerge("general", volumesTable.TableName, parentExecutionGuid);
+
+            _coreRepository.BulkInsertIntoTableRaw(
+                dataTable: documentosFiscaisTable
+            );
+
+            await _coreRepository.CallDbProcMerge("general", documentosFiscaisTable.TableName, parentExecutionGuid);
+
+            return true;
         }
 
         public async Task<Order> GetInvoicedOrder(string? orderNumber)
@@ -193,14 +180,14 @@ namespace Infrastructure.TotalExpress.Repository
 
                             A.NF_SAIDA AS NUMBER_NF,
                             A.NB_VALOR_PEDIDO AS AMOUNT_NF,
-                            (SELECT CAST(SUBstring? (A.[XML_FATURAMENTO], CHARINDEX('<vFrete>', CAST(A.[XML_FATURAMENTO] AS VARCHAR(MAX))) + 8, 4) AS DECIMAL(14,2))) AS SHIPPING_VALUE_NF,
-                            (SELECT CAST(SUBstring? (A.[XML_FATURAMENTO], CHARINDEX('<pesoB>', CAST(A.[XML_FATURAMENTO] AS VARCHAR(MAX))) + 7, 4) AS DECIMAL(14,2))) AS WEIGHT_NF,
+                            (SELECT CAST(SUBSTRING (A.[XML_FATURAMENTO], CHARINDEX('<vFrete>', CAST(A.[XML_FATURAMENTO] AS VARCHAR(MAX))) + 8, 4) AS DECIMAL(14,2))) AS SHIPPING_VALUE_NF,
+                            (SELECT CAST(SUBSTRING (A.[XML_FATURAMENTO], CHARINDEX('<pesoB>', CAST(A.[XML_FATURAMENTO] AS VARCHAR(MAX))) + 7, 4) AS DECIMAL(14,2))) AS WEIGHT_NF,
                             A.CHAVE_NFE AS KEY_NFE_NF,
                             CAST(A.[XML_FATURAMENTO] AS VARCHAR(MAX)) AS XML_NF,
                             CAST(A.[XML_FATURAMENTO] AS VARCHAR(MAX)) AS XML_DISTRIBUITION_NF,
                             'NF' as TYPE_NF,
-                            (SELECT SUBstring? (A.[XML_FATURAMENTO], CHARINDEX('<serie>', A.[XML_FATURAMENTO]) + 7, 1)) AS SERIE_NF,
-                            (SELECT SUBstring? (A.[XML_FATURAMENTO], CHARINDEX('<dhEmi>', A.[XML_FATURAMENTO]) + 7, 25)) AS DATE_EMISSION_NF
+                            (SELECT SUBSTRING (A.[XML_FATURAMENTO], CHARINDEX('<serie>', A.[XML_FATURAMENTO]) + 7, 1)) AS SERIE_NF,
+                            (SELECT SUBSTRING (A.[XML_FATURAMENTO], CHARINDEX('<dhEmi>', A.[XML_FATURAMENTO]) + 7, 25)) AS DATE_EMISSION_NF
 
                             FROM [GENERAL].[dbo].[IT4_WMS_DOCUMENTO] A (NOLOCK)
                             JOIN [GENERAL].[dbo].[IT4_WMS_DOCUMENTO_ITEM] B (NOLOCK) ON A.IDCONTROLE = B.IDCONTROLE
@@ -215,7 +202,7 @@ namespace Infrastructure.TotalExpress.Repository
 
             try
             {
-                using (var conn = _sqlServerConnection.GetIDbConnection(""))
+                using (var conn = _sqlServerConnection.GetIDbConnection("general"))
                 {
                     var result = await conn.QueryAsync<Order, Product, Client, ShippingCompany, Company, Invoice, Order>(sql, (order, product, client, shippingCompany, company, invoice) =>
                     {
@@ -255,10 +242,9 @@ namespace Infrastructure.TotalExpress.Repository
 
         public async Task<List<Order>> GetInvoicedOrders()
         {
-            string? sql = @"SELECT DISTINCT 
+            string? sql = @"SELECT DISTINCT
                             TRIM(A.DOCUMENTO) AS NUMBER,
                             A.VOLUMES AS VOLUMES,
-                            A.NB_CFOP_PEDIDO AS CFOP,
 
                             B.CODIGO_BARRA AS COD_PRODUCT,
                             B.NB_SKU_PRODUTO AS SKU_PRODUCT,
@@ -281,14 +267,14 @@ namespace Infrastructure.TotalExpress.Repository
                             END AS STREET_NUMBER_CLIENT,
                             A.NB_COMPLEMENTO_END_CLIENTE AS COMPLEMENT_ADDRESS_CLIENT,
                             A.NB_BAIRRO_CLIENTE AS NEIGHBORHOOD_CLIENT,
-                            A.NB_CIDADE AS CITY_CLIENT,
-                            A.NB_ESTADO AS UF_CLIENT,
-                            A.NB_CEP AS ZIP_CODE_CLIENT,
+                            A.NB_CIDADE_CLIENTE AS CITY_CLIENT,
+                            A.NB_UF_CLIENTE AS UF_CLIENT,
+                            A.NB_CEP_CLIENTE AS ZIP_CODE_CLIENT,
                             A.NB_FONE_CLIENTE AS FONE_CLIENT,
                             A.NB_INSCRICAO_ESTADUAL_CLIENTE AS STATE_REGISTRATION_CLIENT,
                             A.NB_INSCRICAO_MUNICIPAL_CLIENTE AS MUNICIPAL_REGISTRATION_CLIENT,
 
-                            A.NB_TRANSPORTADORA AS COD_SHIPPINGCOMPANY,
+                            A.NB_COD_TRANSPORTADORA AS COD_SHIPPINGCOMPANY,
                             A.NB_METODO_TRANSPORTADORA AS METODO_SHIPPINGCOMPANY,
                             A.NB_RAZAO_TRANSPORTADORA AS REASON_SHIPPINGCOMPANY,
                             A.NB_NOME_TRANSPORTADORA AS NAME_SHIPPINGCOMPANY,
@@ -326,28 +312,29 @@ namespace Infrastructure.TotalExpress.Repository
 
                             A.NF_SAIDA AS NUMBER_NF,
                             A.NB_VALOR_PEDIDO AS AMOUNT_NF,
-                            (SELECT CAST(SUBstring? (A.[XML_FATURAMENTO], CHARINDEX('<vFrete>', CAST(A.[XML_FATURAMENTO] AS VARCHAR(MAX))) + 8, 4) AS DECIMAL(14,2))) AS SHIPPING_VALUE_NF,
-                            (SELECT CAST(SUBstring? (A.[XML_FATURAMENTO], CHARINDEX('<pesoB>', CAST(A.[XML_FATURAMENTO] AS VARCHAR(MAX))) + 7, 4) AS DECIMAL(14,2))) AS WEIGHT_NF,
+                            (SELECT CAST(SUBSTRING(A.[XML_FATURAMENTO], CHARINDEX('<vFrete>', CAST(A.[XML_FATURAMENTO] AS VARCHAR(MAX))) + 8, 4) AS DECIMAL(14,2))) AS SHIPPING_VALUE_NF,
+                            (SELECT CAST(SUBSTRING(A.[XML_FATURAMENTO], CHARINDEX('<pesoB>', CAST(A.[XML_FATURAMENTO] AS VARCHAR(MAX))) + 7, 4) AS DECIMAL(14,2))) AS WEIGHT_NF,
                             A.CHAVE_NFE AS KEY_NFE_NF,
                             CAST(A.[XML_FATURAMENTO] AS VARCHAR(MAX)) AS XML_NF,
                             CAST(A.[XML_FATURAMENTO] AS VARCHAR(MAX)) AS XML_DISTRIBUITION_NF,
                             'NF' as TYPE_NF,
-                            (SELECT SUBstring? (A.[XML_FATURAMENTO], CHARINDEX('<serie>', A.[XML_FATURAMENTO]) + 7, 1)) AS SERIE_NF,
-                            (SELECT SUBstring? (A.[XML_FATURAMENTO], CHARINDEX('<dhEmi>', A.[XML_FATURAMENTO]) + 7, 25)) AS DATE_EMISSION_NF
+                            (SELECT SUBSTRING(A.[XML_FATURAMENTO], CHARINDEX('<serie>', A.[XML_FATURAMENTO]) + 7, 1)) AS SERIE_NF,
+                            (SELECT SUBSTRING(A.[XML_FATURAMENTO], CHARINDEX('<dhEmi>', A.[XML_FATURAMENTO]) + 7, 25)) AS DATE_EMISSION_NF
 
-                            FROM [GENERAL].[dbo].[IT4_WMS_DOCUMENTO] A (NOLOCK)
-                            JOIN [GENERAL].[dbo].[IT4_WMS_DOCUMENTO_ITEM] B (NOLOCK) ON A.IDCONTROLE = B.IDCONTROLE
-                            LEFT JOIN GENERAL..TOTALEXPRESSREGISTROLOG C (NOLOCK) ON A.DOCUMENTO = C.PEDIDO
+                            FROM [GENERAL].[IT4_WMS_DOCUMENTO] A (NOLOCK)
+                            JOIN [GENERAL].[IT4_WMS_DOCUMENTO_ITEM] B (NOLOCK) ON A.IDCONTROLE = B.IDCONTROLE
+                            LEFT JOIN GENERAL.TotalExpressPedidos C (NOLOCK) ON A.DOCUMENTO = C.PEDIDO
+                            LEFT JOIN GENERAL.TotalExpressErros D (NOLOCK) ON A.DOCUMENTO = D.PEDIDO
                             WHERE
                             A.SERIE != 'MX-'
 							AND A.ORIGEM = 'P'
                             AND A.CHAVE_NFE IS NOT NULL 
                             AND A.XML_FATURAMENTO IS NOT NULL 
-                            AND A.NB_TRANSPORTADORA = '7601'
+                            AND A.NB_COD_TRANSPORTADORA = '7601'
                             AND A.DATA > GETDATE() - 15
                             AND A.VOLUMES IS NOT NULL
-							AND (C.PEDIDO IS NULL OR SUBstring?(C.retorno, 3, 7) <> 'retorno') 
-							AND NOT EXISTS (SELECT 0 FROM GENERAL..TotalExpressRegistroLog TER (NOLOCK) WHERE TER.pedido = C.pedido AND SUBstring?(TER.retorno, 3, 7) = 'retorno')";
+							AND C.PEDIDO IS NULL
+							AND D.PEDIDO IS NULL";
 
             try
             {
@@ -393,7 +380,7 @@ namespace Infrastructure.TotalExpress.Repository
                             REMETENTE_ID AS SENDER_ID,
                             SERVICO_TIPO AS SERVICE_TYPE
                             FROM
-                            [GENERAL].[dbo].[PARAMETROS_TOTALEXPRESS]
+                            [GENERAL].[PARAMETROS_TOTALEXPRESS]
                             WHERE
                             CNPJ_EMP = '{docCompany}' AND
                             METODO = '{method}'";
@@ -575,9 +562,27 @@ namespace Infrastructure.TotalExpress.Repository
             return true;
         }
 
-        public Task<List<Order>> GetSendOrders()
+        public async Task<Order?> GetSendOrder(string orderNumber)
         {
-            throw new NotImplementedException();
+            string? sql = $@"SELECT DISTINCT 
+                                  [pedido] as number
+                                 ,[awb] as _return
+                                 ,[prev_entrega] as delivery_made_date
+                                 ,[prev_entrega_atualizada] as real_delivery_forecast_date
+                             FROM [general].[TotalExpressTrackings]
+                             WHERE pedido = '{orderNumber}'";
+
+            try
+            {
+                using (var conn = _sqlServerConnection.GetIDbConnection())
+                {
+                    return await conn.QueryFirstOrDefaultAsync<Order>(sql, commandTimeout: 360);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
     }
 }

@@ -236,73 +236,73 @@ namespace AzureJobs.RecurringJobs.LinxMicrovix.ERP
         //     });
         // }
 
-        // public async Task LinxLojas([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
-        // {
-        //     await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
-        //     {
-        //         var method = _methods
-        //             .Where(m => m.MethodName == "LinxLojas")
-        //             .FirstOrDefault();
+        //public async Task LinxLojas([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
+        //    {
+        //        var method = _methods
+        //            .Where(m => m.MethodName == "LinxLojas")
+        //            .FirstOrDefault();
 
-        //         var result = await _linxLojasService.GetRecords(
-        //             _linxMicrovixJobParameter.SetParameters(
-        //                 jobName: method.MethodName,
-        //                 tableName: method.MethodName
-        //             )
-        //         );
-        //     });
-        // }
+        //        var result = await _linxLojasService.GetRecords(
+        //            _linxMicrovixJobParameter.SetParameters(
+        //                jobName: method.MethodName,
+        //                tableName: method.MethodName
+        //            )
+        //        );
+        //    });
+        //}
 
-        // public async Task LinxGrupoLojas([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
-        // {
-        //     await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
-        //     {
-        //         var method = _methods
-        //             .Where(m => m.MethodName == "LinxGrupoLojas")
-        //             .FirstOrDefault();
+        //public async Task LinxGrupoLojas([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
+        //    {
+        //        var method = _methods
+        //            .Where(m => m.MethodName == "LinxGrupoLojas")
+        //            .FirstOrDefault();
 
-        //         var result = await _linxGrupoLojasService.GetRecords(
-        //             _linxMicrovixJobParameter.SetParameters(
-        //                 jobName: method.MethodName,
-        //                 tableName: method.MethodName
-        //             )
-        //         );
-        //     });
-        // }
+        //        var result = await _linxGrupoLojasService.GetRecords(
+        //            _linxMicrovixJobParameter.SetParameters(
+        //                jobName: method.MethodName,
+        //                tableName: method.MethodName
+        //            )
+        //        );
+        //    });
+        //}
 
-        // public async Task LinxSetores([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
-        // {
-        //     await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
-        //     {
-        //         var method = _methods
-        //             .Where(m => m.MethodName == "LinxSetores")
-        //             .FirstOrDefault();
+        //public async Task LinxSetores([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
+        //    {
+        //        var method = _methods
+        //            .Where(m => m.MethodName == "LinxSetores")
+        //            .FirstOrDefault();
 
-        //         var result = await _linxSetoresService.GetRecords(
-        //             _linxMicrovixJobParameter.SetParameters(
-        //                 jobName: method.MethodName,
-        //                 tableName: method.MethodName
-        //             )
-        //         );
-        //     });
-        // }
+        //        var result = await _linxSetoresService.GetRecords(
+        //            _linxMicrovixJobParameter.SetParameters(
+        //                jobName: method.MethodName,
+        //                tableName: method.MethodName
+        //            )
+        //        );
+        //    });
+        //}
 
-        // public async Task LinxNaturezaOperacao([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
-        // {
-        //     await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
-        //     {
-        //         var method = _methods
-        //             .Where(m => m.MethodName == "LinxNaturezaOperacao")
-        //             .FirstOrDefault();
+        //public async Task LinxNaturezaOperacao([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
+        //    {
+        //        var method = _methods
+        //            .Where(m => m.MethodName == "LinxNaturezaOperacao")
+        //            .FirstOrDefault();
 
-        //         var result = await _linxNaturezaOperacaoService.GetRecords(
-        //             _linxMicrovixJobParameter.SetParameters(
-        //                 jobName: method.MethodName,
-        //                 tableName: method.MethodName
-        //             )
-        //         );
-        //     });
-        // }
+        //        var result = await _linxNaturezaOperacaoService.GetRecords(
+        //            _linxMicrovixJobParameter.SetParameters(
+        //                jobName: method.MethodName,
+        //                tableName: method.MethodName
+        //            )
+        //        );
+        //    });
+        //}
 
         //public async Task LinxMovimento([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
         //{
@@ -321,73 +321,73 @@ namespace AzureJobs.RecurringJobs.LinxMicrovix.ERP
         //    });
         //}
 
-        // public async Task LinxMovimentoPlanos([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
-        // {
-        //     await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
-        //     {
-        //         var method = _methods
-        //             .Where(m => m.MethodName == "LinxMovimentoPlanos")
-        //             .FirstOrDefault();
+        //public async Task LinxMovimentoPlanos([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
+        //    {
+        //        var method = _methods
+        //            .Where(m => m.MethodName == "LinxMovimentoPlanos")
+        //            .FirstOrDefault();
 
-        //         var result = await _linxMovimentoPlanosService.GetRecords(
-        //             _linxMicrovixJobParameter.SetParameters(
-        //                 jobName: method.MethodName,
-        //                 tableName: method.MethodName
-        //             )
-        //         );
-        //     });
-        // }
+        //        var result = await _linxMovimentoPlanosService.GetRecords(
+        //            _linxMicrovixJobParameter.SetParameters(
+        //                jobName: method.MethodName,
+        //                tableName: method.MethodName
+        //            )
+        //        );
+        //    });
+        //}
 
-        // public async Task LinxMovimentoCartoes([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
-        // {
-        //     await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
-        //     {
-        //         var method = _methods
-        //             .Where(m => m.MethodName == "LinxMovimentoCartoes")
-        //             .FirstOrDefault();
+        //public async Task LinxMovimentoCartoes([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
+        //    {
+        //        var method = _methods
+        //            .Where(m => m.MethodName == "LinxMovimentoCartoes")
+        //            .FirstOrDefault();
 
-        //         var result = await _linxMovimentoCartoesService.GetRecords(
-        //             _linxMicrovixJobParameter.SetParameters(
-        //                 jobName: method.MethodName,
-        //                 tableName: method.MethodName
-        //             )
-        //         );
-        //     });
-        // }
+        //        var result = await _linxMovimentoCartoesService.GetRecords(
+        //            _linxMicrovixJobParameter.SetParameters(
+        //                jobName: method.MethodName,
+        //                tableName: method.MethodName
+        //            )
+        //        );
+        //    });
+        //}
 
-        // public async Task LinxMovimentoTrocas([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
-        // {
-        //     await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
-        //     {
-        //         var method = _methods
-        //             .Where(m => m.MethodName == "LinxMovimentoTrocas")
-        //             .FirstOrDefault();
+        //public async Task LinxMovimentoTrocas([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
+        //    {
+        //        var method = _methods
+        //            .Where(m => m.MethodName == "LinxMovimentoTrocas")
+        //            .FirstOrDefault();
 
-        //         var result = await _linxMovimentoTrocasService.GetRecords(
-        //             _linxMicrovixJobParameter.SetParameters(
-        //                 jobName: method.MethodName,
-        //                 tableName: method.MethodName
-        //             )
-        //         );
-        //     });
-        // }
+        //        var result = await _linxMovimentoTrocasService.GetRecords(
+        //            _linxMicrovixJobParameter.SetParameters(
+        //                jobName: method.MethodName,
+        //                tableName: method.MethodName
+        //            )
+        //        );
+        //    });
+        //}
 
-        // public async Task LinxPlanos([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
-        // {
-        //     await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
-        //     {
-        //         var method = _methods
-        //             .Where(m => m.MethodName == "LinxPlanos")
-        //             .FirstOrDefault();
+        //public async Task LinxPlanos([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
+        //    {
+        //        var method = _methods
+        //            .Where(m => m.MethodName == "LinxPlanos")
+        //            .FirstOrDefault();
 
-        //         var result = await _linxPlanosService.GetRecords(
-        //             _linxMicrovixJobParameter.SetParameters(
-        //                 jobName: method.MethodName,
-        //                 tableName: method.MethodName
-        //             )
-        //         );
-        //     });
-        // }
+        //        var result = await _linxPlanosService.GetRecords(
+        //            _linxMicrovixJobParameter.SetParameters(
+        //                jobName: method.MethodName,
+        //                tableName: method.MethodName
+        //            )
+        //        );
+        //    });
+        //}
 
         //public async Task LinxPedidosVenda([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
         //{
@@ -406,22 +406,22 @@ namespace AzureJobs.RecurringJobs.LinxMicrovix.ERP
         //    });
         //}
 
-        // public async Task LinxPedidosCompra([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
-        // {
-        //     await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
-        //     {
-        //         var method = _methods
-        //             .Where(m => m.MethodName == "LinxPedidosCompra")
-        //             .FirstOrDefault();
+        //public async Task LinxPedidosCompra([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
+        //    {
+        //        var method = _methods
+        //            .Where(m => m.MethodName == "LinxPedidosCompra")
+        //            .FirstOrDefault();
 
-        //         var result = await _linxPedidosCompraService.GetRecords(
-        //             _linxMicrovixJobParameter.SetParameters(
-        //                 jobName: method.MethodName,
-        //                 tableName: method.MethodName
-        //             )
-        //         );
-        //     });
-        // }
+        //        var result = await _linxPedidosCompraService.GetRecords(
+        //            _linxMicrovixJobParameter.SetParameters(
+        //                jobName: method.MethodName,
+        //                tableName: method.MethodName
+        //            )
+        //        );
+        //    });
+        //}
 
         //public async Task LinxClientesFornec([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
         //{
@@ -440,39 +440,39 @@ namespace AzureJobs.RecurringJobs.LinxMicrovix.ERP
         //    });
         //}
 
-        // public async Task LinxClientesEnderecosEntrega([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
-        // {
-        //     await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
-        //     {
-        //         var method = _methods
-        //             .Where(m => m.MethodName == "LinxClientesEnderecosEntrega")
-        //             .FirstOrDefault();
+        //public async Task LinxClientesEnderecosEntrega([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
+        //    {
+        //        var method = _methods
+        //            .Where(m => m.MethodName == "LinxClientesEnderecosEntrega")
+        //            .FirstOrDefault();
 
-        //         var result = await _linxClientesEnderecosEntregaService.GetRecords(
-        //             _linxMicrovixJobParameter.SetParameters(
-        //                 jobName: method.MethodName,
-        //                 tableName: method.MethodName
-        //             )
-        //         );
-        //     });
-        // }
+        //        var result = await _linxClientesEnderecosEntregaService.GetRecords(
+        //            _linxMicrovixJobParameter.SetParameters(
+        //                jobName: method.MethodName,
+        //                tableName: method.MethodName
+        //            )
+        //        );
+        //    });
+        //}
 
-        // public async Task LinxVendedores([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
-        // {
-        //     await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
-        //     {
-        //         var method = _methods
-        //             .Where(m => m.MethodName == "LinxVendedores")
-        //             .FirstOrDefault();
+        //public async Task LinxVendedores([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
+        //    {
+        //        var method = _methods
+        //            .Where(m => m.MethodName == "LinxVendedores")
+        //            .FirstOrDefault();
 
-        //         var result = await _linxVendedoresService.GetRecords(
-        //             _linxMicrovixJobParameter.SetParameters(
-        //                 jobName: method.MethodName,
-        //                 tableName: method.MethodName
-        //             )
-        //         );
-        //     });
-        // }
+        //        var result = await _linxVendedoresService.GetRecords(
+        //            _linxMicrovixJobParameter.SetParameters(
+        //                jobName: method.MethodName,
+        //                tableName: method.MethodName
+        //            )
+        //        );
+        //    });
+        //}
 
         //public async Task LinxProdutos([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
         //{
@@ -491,225 +491,225 @@ namespace AzureJobs.RecurringJobs.LinxMicrovix.ERP
         //    });
         //}
 
-        // public async Task LinxProdutosInventario([TimerTrigger("0 */30 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
-        // {
-        //     await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
-        //     {
-        //         var method = _methods
-        //             .Where(m => m.MethodName == "LinxProdutosInventario")
-        //             .FirstOrDefault();
+        //public async Task LinxProdutosInventario([TimerTrigger("0 */30 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
+        //    {
+        //        var method = _methods
+        //            .Where(m => m.MethodName == "LinxProdutosInventario")
+        //            .FirstOrDefault();
 
-        //         var result = await _linxProdutosInventarioService.GetRecords(
-        //             _linxMicrovixJobParameter.SetParameters(
-        //                 jobName: method.MethodName,
-        //                 tableName: method.MethodName
-        //             )
-        //         );
-        //     });
-        // }
+        //        var result = await _linxProdutosInventarioService.GetRecords(
+        //            _linxMicrovixJobParameter.SetParameters(
+        //                jobName: method.MethodName,
+        //                tableName: method.MethodName
+        //            )
+        //        );
+        //    });
+        //}
 
-        // public async Task LinxProdutosDetalhes([TimerTrigger("0 */30 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
-        // {
-        //     await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
-        //     {
-        //         var method = _methods
-        //             .Where(m => m.MethodName == "LinxProdutosDetalhes")
-        //             .FirstOrDefault();
+        //public async Task LinxProdutosDetalhes([TimerTrigger("0 */30 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
+        //    {
+        //        var method = _methods
+        //            .Where(m => m.MethodName == "LinxProdutosDetalhes")
+        //            .FirstOrDefault();
 
-        //         var result = await _linxProdutosDetalhesService.GetRecords(
-        //             _linxMicrovixJobParameter.SetParameters(
-        //                 jobName: method.MethodName,
-        //                 tableName: method.MethodName
-        //             )
-        //         );
-        //     });
-        // }
+        //        var result = await _linxProdutosDetalhesService.GetRecords(
+        //            _linxMicrovixJobParameter.SetParameters(
+        //                jobName: method.MethodName,
+        //                tableName: method.MethodName
+        //            )
+        //        );
+        //    });
+        //}
 
-        // public async Task LinxProdutosDetalhesWithZeroStock([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
-        // {
-        //     await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
-        //     {
-        //         var method = _methods
-        //             .Where(m => m.MethodName == "LinxProdutosDetalhes")
-        //             .FirstOrDefault();
+        //public async Task LinxProdutosDetalhesWithZeroStock([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
+        //    {
+        //        var method = _methods
+        //            .Where(m => m.MethodName == "LinxProdutosDetalhes")
+        //            .FirstOrDefault();
 
-        //         var result = await _linxProdutosDetalhesService.GetZeroStockRecords(
-        //             _linxMicrovixJobParameter.SetParameters(
-        //                 jobName: method.MethodName,
-        //                 tableName: method.MethodName
-        //             )
-        //         );
-        //     });
-        // }
+        //        var result = await _linxProdutosDetalhesService.GetZeroStockRecords(
+        //            _linxMicrovixJobParameter.SetParameters(
+        //                jobName: method.MethodName,
+        //                tableName: method.MethodName
+        //            )
+        //        );
+        //    });
+        //}
 
-        // public async Task LinxProdutosCodBar([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
-        // {
-        //     await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
-        //     {
-        //         var method = _methods
-        //             .Where(m => m.MethodName == "LinxProdutosCodBar")
-        //             .FirstOrDefault();
+        //public async Task LinxProdutosCodBar([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
+        //    {
+        //        var method = _methods
+        //            .Where(m => m.MethodName == "LinxProdutosCodBar")
+        //            .FirstOrDefault();
 
-        //         var result = await _linxProdutosCodBarService.GetRecords(
-        //             _linxMicrovixJobParameter.SetParameters(
-        //                 jobName: method.MethodName,
-        //                 tableName: method.MethodName
-        //             )
-        //         );
-        //     });
-        // }
+        //        var result = await _linxProdutosCodBarService.GetRecords(
+        //            _linxMicrovixJobParameter.SetParameters(
+        //                jobName: method.MethodName,
+        //                tableName: method.MethodName
+        //            )
+        //        );
+        //    });
+        //}
 
-        // public async Task LinxProdutosPromocoes([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
-        // {
-        //     await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
-        //     {
-        //         var method = _methods
-        //             .Where(m => m.MethodName == "LinxProdutosPromocoes")
-        //             .FirstOrDefault();
+        //public async Task LinxProdutosPromocoes([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
+        //    {
+        //        var method = _methods
+        //            .Where(m => m.MethodName == "LinxProdutosPromocoes")
+        //            .FirstOrDefault();
 
-        //         var result = await _linxProdutosPromocoesService.GetRecords(
-        //             _linxMicrovixJobParameter.SetParameters(
-        //                 jobName: method.MethodName,
-        //                 tableName: method.MethodName
-        //             )
-        //         );
-        //     });
-        // }
+        //        var result = await _linxProdutosPromocoesService.GetRecords(
+        //            _linxMicrovixJobParameter.SetParameters(
+        //                jobName: method.MethodName,
+        //                tableName: method.MethodName
+        //            )
+        //        );
+        //    });
+        //}
 
-        // public async Task LinxProdutosDepositos([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
-        // {
-        //     await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
-        //     {
-        //         var method = _methods
-        //             .Where(m => m.MethodName == "LinxProdutosDepositos")
-        //             .FirstOrDefault();
+        //public async Task LinxProdutosDepositos([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
+        //    {
+        //        var method = _methods
+        //            .Where(m => m.MethodName == "LinxProdutosDepositos")
+        //            .FirstOrDefault();
 
-        //         var result = await _linxProdutosDepositosService.GetRecords(
-        //             _linxMicrovixJobParameter.SetParameters(
-        //                 jobName: method.MethodName,
-        //                 tableName: method.MethodName
-        //             )
-        //         );
-        //     });
-        // }
+        //        var result = await _linxProdutosDepositosService.GetRecords(
+        //            _linxMicrovixJobParameter.SetParameters(
+        //                jobName: method.MethodName,
+        //                tableName: method.MethodName
+        //            )
+        //        );
+        //    });
+        //}
 
-        // public async Task LinxProdutosTabelas([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
-        // {
-        //     await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
-        //     {
-        //         var method = _methods
-        //             .Where(m => m.MethodName == "LinxProdutosTabelas")
-        //             .FirstOrDefault();
+        //public async Task LinxProdutosTabelas([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
+        //    {
+        //        var method = _methods
+        //            .Where(m => m.MethodName == "LinxProdutosTabelas")
+        //            .FirstOrDefault();
 
-        //         var result = await _linxProdutosTabelasService.GetRecords(
-        //             _linxMicrovixJobParameter.SetParameters(
-        //                 jobName: method.MethodName,
-        //                 tableName: method.MethodName
-        //             )
-        //         );
-        //     });
-        // }
+        //        var result = await _linxProdutosTabelasService.GetRecords(
+        //            _linxMicrovixJobParameter.SetParameters(
+        //                jobName: method.MethodName,
+        //                tableName: method.MethodName
+        //            )
+        //        );
+        //    });
+        //}
 
-        // public async Task LinxProdutosTabelasPrecos([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
-        // {
-        //     await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
-        //     {
-        //         var method = _methods
-        //             .Where(m => m.MethodName == "LinxProdutosTabelasPrecos")
-        //             .FirstOrDefault();
+        //public async Task LinxProdutosTabelasPrecos([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
+        //    {
+        //        var method = _methods
+        //            .Where(m => m.MethodName == "LinxProdutosTabelasPrecos")
+        //            .FirstOrDefault();
 
-        //         var result = await _linxProdutosTabelasPrecosService.GetRecords(
-        //             _linxMicrovixJobParameter.SetParameters(
-        //                 jobName: method.MethodName,
-        //                 tableName: method.MethodName
-        //             )
-        //         );
-        //     });
-        // }
+        //        var result = await _linxProdutosTabelasPrecosService.GetRecords(
+        //            _linxMicrovixJobParameter.SetParameters(
+        //                jobName: method.MethodName,
+        //                tableName: method.MethodName
+        //            )
+        //        );
+        //    });
+        //}
 
-        // public async Task LinxProdutosCamposAdicionais([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
-        // {
-        //     await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
-        //     {
-        //         var method = _methods
-        //             .Where(m => m.MethodName == "LinxProdutosCamposAdicionais")
-        //             .FirstOrDefault();
+        //public async Task LinxProdutosCamposAdicionais([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
+        //    {
+        //        var method = _methods
+        //            .Where(m => m.MethodName == "LinxProdutosCamposAdicionais")
+        //            .FirstOrDefault();
 
-        //         var result = await _linxProdutosCamposAdicionaisService.GetRecords(
-        //             _linxMicrovixJobParameter.SetParameters(
-        //                 jobName: method.MethodName,
-        //                 tableName: method.MethodName
-        //             )
-        //         );
-        //     });
-        // }
+        //        var result = await _linxProdutosCamposAdicionaisService.GetRecords(
+        //            _linxMicrovixJobParameter.SetParameters(
+        //                jobName: method.MethodName,
+        //                tableName: method.MethodName
+        //            )
+        //        );
+        //    });
+        //}
 
-        // public async Task LinxUsuarios([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
-        // {
-        //     await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
-        //     {
-        //         var method = _methods
-        //             .Where(m => m.MethodName == "LinxUsuarios")
-        //         .FirstOrDefault();
+        //public async Task LinxUsuarios([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
+        //    {
+        //        var method = _methods
+        //            .Where(m => m.MethodName == "LinxUsuarios")
+        //        .FirstOrDefault();
 
-        //         var result = await _linxUsuariosService.GetRecords(
-        //             _linxMicrovixJobParameter.SetParameters(
-        //                 jobName: method.MethodName,
-        //                 tableName: method.MethodName
-        //             )
-        //         );
-        //     });
-        // }
+        //        var result = await _linxUsuariosService.GetRecords(
+        //            _linxMicrovixJobParameter.SetParameters(
+        //                jobName: method.MethodName,
+        //                tableName: method.MethodName
+        //            )
+        //        );
+        //    });
+        //}
 
-        // public async Task LinxCfopFiscal([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
-        // {
-        //     await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
-        //     {
-        //         var method = _methods
-        //             .Where(m => m.MethodName == "LinxCfopFiscal")
-        //         .FirstOrDefault();
+        //public async Task LinxCfopFiscal([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
+        //    {
+        //        var method = _methods
+        //            .Where(m => m.MethodName == "LinxCfopFiscal")
+        //        .FirstOrDefault();
 
-        //         var result = await _linxCfopFiscalService.GetRecords(
-        //             _linxMicrovixJobParameter.SetParameters(
-        //                 jobName: method.MethodName,
-        //                 tableName: method.MethodName
-        //             )
-        //         );
-        //     });
-        // }
+        //        var result = await _linxCfopFiscalService.GetRecords(
+        //            _linxMicrovixJobParameter.SetParameters(
+        //                jobName: method.MethodName,
+        //                tableName: method.MethodName
+        //            )
+        //        );
+        //    });
+        //}
 
-        // public async Task LinxRotinaOrigem([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
-        // {
-        //     await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
-        //     {
-        //         var method = _methods
-        //             .Where(m => m.MethodName == "LinxRotinaOrigem")
-        //         .FirstOrDefault();
+        //public async Task LinxRotinaOrigem([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
+        //    {
+        //        var method = _methods
+        //            .Where(m => m.MethodName == "LinxRotinaOrigem")
+        //        .FirstOrDefault();
 
-        //         var result = await _linxRotinaOrigemService.GetRecords(
-        //             _linxMicrovixJobParameter.SetParameters(
-        //                 jobName: method.MethodName,
-        //                 tableName: method.MethodName
-        //             )
-        //         );
-        //     });
-        // }
+        //        var result = await _linxRotinaOrigemService.GetRecords(
+        //            _linxMicrovixJobParameter.SetParameters(
+        //                jobName: method.MethodName,
+        //                tableName: method.MethodName
+        //            )
+        //        );
+        //    });
+        //}
 
-        // public async Task LinxXmlDocumentos([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
-        // {
-        //     await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
-        //     {
-        //         var method = _methods
-        //             .Where(m => m.MethodName == "LinxXMLDocumentos")
-        //         .FirstOrDefault();
+        //public async Task LinxXmlDocumentos([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
+        //    {
+        //        var method = _methods
+        //            .Where(m => m.MethodName == "LinxXMLDocumentos")
+        //        .FirstOrDefault();
 
-        //         var result = await _linxXMLDocumentosService.GetRecords(
-        //             _linxMicrovixJobParameter.SetParameters(
-        //                 jobName: method.MethodName,
-        //                 tableName: method.MethodName
-        //             )
-        //         );
-        //     });
-        // }
+        //        var result = await _linxXMLDocumentosService.GetRecords(
+        //            _linxMicrovixJobParameter.SetParameters(
+        //                jobName: method.MethodName,
+        //                tableName: method.MethodName
+        //            )
+        //        );
+        //    });
+        //}
     }
 }

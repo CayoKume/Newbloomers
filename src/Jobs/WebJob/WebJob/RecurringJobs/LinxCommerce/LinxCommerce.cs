@@ -104,73 +104,73 @@ namespace AzureJobs.RecurringJobs.LinxCommerce
         //     });
         // }
 
-        // public async Task SearchProductsByQueue([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
-        // {
-        //     await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
-        //     {
-        //         var method = _methods
-        //             .Where(m => m.MethodName == "SearchProducts")
-        //             .FirstOrDefault();
+        //public async Task SearchProductsByQueue([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
+        //    {
+        //        var method = _methods
+        //            .Where(m => m.MethodName == "SearchProducts")
+        //            .FirstOrDefault();
 
-        //         var result = await _skuService.SearchProductByQueue(
-        //             _linxCommerceJobParameter.SetParameters(
-        //                 jobName: method.MethodName,
-        //                 tableName: method.MethodName
-        //             )
-        //         );
-        //     });
-        // }
+        //        var result = await _skuService.SearchProductByQueue(
+        //            _linxCommerceJobParameter.SetParameters(
+        //                jobName: method.MethodName,
+        //                tableName: method.MethodName
+        //            )
+        //        );
+        //    });
+        //}
 
-        // public async Task SearchSKUsByQueue([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
-        // {
-        //     await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
-        //     {
-        //         var method = _methods
-        //             .Where(m => m.MethodName == "SearchSKU")
-        //             .FirstOrDefault();
+        //public async Task SearchSKUsByQueue([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
+        //    {
+        //        var method = _methods
+        //            .Where(m => m.MethodName == "SearchSKU")
+        //            .FirstOrDefault();
 
-        //         var result = await _skuService.SearchSKUByQueue(
-        //             _linxCommerceJobParameter.SetParameters(
-        //                 jobName: method.MethodName,
-        //                 tableName: method.MethodName
-        //             )
-        //         );
-        //     });
-        // }
+        //        var result = await _skuService.SearchSKUByQueue(
+        //            _linxCommerceJobParameter.SetParameters(
+        //                jobName: method.MethodName,
+        //                tableName: method.MethodName
+        //            )
+        //        );
+        //    });
+        //}
 
-        // public async Task SearchOrdersByQueue([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
-        // {
-        //     await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
-        //     {
-        //         var method = _methods
-        //             .Where(m => m.MethodName == "SearchOrders")
-        //             .FirstOrDefault();
+        //public async Task SearchOrdersByQueue([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
+        //    {
+        //        var method = _methods
+        //            .Where(m => m.MethodName == "SearchOrders")
+        //            .FirstOrDefault();
 
-        //         var result = await _orderService.SearchOrdersByQueue(
-        //             _linxCommerceJobParameter.SetParameters(
-        //                 jobName: method.MethodName,
-        //                 tableName: method.MethodName
-        //             )
-        //         );
-        //     });
-        // }
+        //        var result = await _orderService.SearchOrdersByQueue(
+        //            _linxCommerceJobParameter.SetParameters(
+        //                jobName: method.MethodName,
+        //                tableName: method.MethodName
+        //            )
+        //        );
+        //    });
+        //}
 
-        // public async Task SearchCustomerByQueue([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
-        // {
-        //     await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
-        //     {
-        //         var method = _methods
-        //             .Where(m => m.MethodName == "SearchCustomer")
-        //             .FirstOrDefault();
+        //public async Task SearchCustomerByQueue([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
+        //    {
+        //        var method = _methods
+        //            .Where(m => m.MethodName == "SearchCustomer")
+        //            .FirstOrDefault();
 
-        //         var result = await _customerService.SearchCustomerByQueue(
-        //             _linxCommerceJobParameter.SetParameters(
-        //                 jobName: method.MethodName,
-        //                 tableName: method.MethodName
-        //             )
-        //         );
-        //     });
-        // }
+        //        var result = await _customerService.SearchCustomerByQueue(
+        //            _linxCommerceJobParameter.SetParameters(
+        //                jobName: method.MethodName,
+        //                tableName: method.MethodName
+        //            )
+        //        );
+        //    });
+        //}
 
         // public async Task SearchSalesRepresentative([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
         // {

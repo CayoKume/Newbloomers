@@ -50,7 +50,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxB2CPedidos() { }
 
         public LinxB2CPedidos(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxB2CPedidos record, string recordXml) {
-            this.lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+            lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.vl_frete = CustomConvertersExtensions.ConvertToDecimalValidation(record.vl_frete);
             this.taxa_impressao = CustomConvertersExtensions.ConvertToDecimalValidation(record.taxa_impressao);
             this.valor_frete_gratis = CustomConvertersExtensions.ConvertToDecimalValidation(record.valor_frete_gratis);

@@ -7,6 +7,7 @@ using Domain.LinxCommerce.Entities.Responses;
 using Domain.LinxCommerce.Interfaces.Api;
 using Domain.LinxCommerce.Interfaces.Repositorys;
 using FluentValidation;
+using Newtonsoft.Json;
 
 namespace Application.LinxCommerce.Services
 {
@@ -238,6 +239,7 @@ namespace Application.LinxCommerce.Services
             {
                 Page = new { PageIndex = 0, PageSize = 1000 },
                 Where = $"(CreatedDate>=\"{DateTime.Now.AddDays(-1).Date:yyyy-MM-dd}T00:00:00\" && CreatedDate<=\"{DateTime.Now.Date:yyyy-MM-dd}T23:59:59\")",
+                //Where = $"(CreatedDate>=\"2025-07-01T00:00:00\" && CreatedDate<=\"2025-07-31T23:59:59\")",
                 WhereMetadata = "",
                 OrderBy = "CustomerID",
             };

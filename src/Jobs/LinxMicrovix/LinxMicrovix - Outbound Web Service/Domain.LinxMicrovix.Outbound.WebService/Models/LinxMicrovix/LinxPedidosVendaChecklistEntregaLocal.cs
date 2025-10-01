@@ -23,7 +23,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxPedidosVendaChecklistEntregaLocal() { }
 
         public LinxPedidosVendaChecklistEntregaLocal(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxPedidosVendaChecklistEntregaLocal record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.id_checklist_entrega_local = CustomConvertersExtensions.ConvertToInt32Validation(record.id_checklist_entrega_local);
             this.timestamp = CustomConvertersExtensions.ConvertToInt64Validation(record.timestamp);
             this.descricao = record.descricao;

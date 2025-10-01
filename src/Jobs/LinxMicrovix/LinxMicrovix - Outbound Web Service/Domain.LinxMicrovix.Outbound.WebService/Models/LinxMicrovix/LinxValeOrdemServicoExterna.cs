@@ -25,7 +25,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxValeOrdemServicoExterna() { }
 
         public LinxValeOrdemServicoExterna(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxValeOrdemServicoExterna record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.id_vale_ordem_servico_externa = CustomConvertersExtensions.ConvertToInt32Validation(record.id_vale_ordem_servico_externa);
             this.portal = CustomConvertersExtensions.ConvertToInt32Validation(record.portal);
             this.timestamp = CustomConvertersExtensions.ConvertToInt64Validation(record.timestamp);

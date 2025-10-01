@@ -69,7 +69,8 @@ public class AfterSaleRepository : IAfterSaleRepository
         string? sql = @$"SELECT DISTINCT
                     CNPJ_EMP AS DOC_COMPANY,
                     TOKEN AS TOKEN
-                    FROM GENERAL.PARAMETROS_AFTERSALE";
+                    FROM GENERAL.PARAMETROS_AFTERSALE
+                    WHERE CNPJ_EMP = '38367316000199'";
 
         return await _coreRepository.GetRecords<Company>(sql);
     }

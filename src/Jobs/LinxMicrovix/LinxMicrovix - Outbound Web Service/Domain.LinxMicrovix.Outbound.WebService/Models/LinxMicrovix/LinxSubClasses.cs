@@ -24,7 +24,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxSubClasses() { }
 
         public LinxSubClasses(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxSubClasses record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.id_subclasses = CustomConvertersExtensions.ConvertToInt32Validation(record.id_subclasses);
             this.classe = CustomConvertersExtensions.ConvertToInt32Validation(record.classe);
             this.timestamp = CustomConvertersExtensions.ConvertToInt64Validation(record.timestamp);

@@ -1,11 +1,15 @@
 ﻿using Application.AfterSale.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
 namespace Hangfire.IO.Controllers.General
 {
-#if DEBUG
     [ApiController]
+    [Authorize]
+#if RELEASE
+    [ApiExplorerSettings(IgnoreApi = true)]
+#endif
     [Route("AfterSaleJobs/AfterSale")]
     public class AfterSaleController : Controller
     {
@@ -54,5 +58,4 @@ namespace Hangfire.IO.Controllers.General
             return Ok($"Records integrated successfully.");
         }
     } 
-#endif
 }

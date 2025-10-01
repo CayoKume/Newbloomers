@@ -34,7 +34,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxCupomDesconto() { }
 
         public LinxCupomDesconto(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxCupomDesconto record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.id_cupom_desconto = CustomConvertersExtensions.ConvertToInt32Validation(record.id_cupom_desconto);
             this.qtde_original = CustomConvertersExtensions.ConvertToInt32Validation(record.qtde_original);
             this.qtde_disponivel = CustomConvertersExtensions.ConvertToInt32Validation(record.qtde_disponivel);

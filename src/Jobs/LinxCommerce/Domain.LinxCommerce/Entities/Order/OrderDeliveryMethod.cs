@@ -20,7 +20,7 @@
         public decimal? ScheduleTax { get; set; }
         //public DateTime? ScheduleStartTime { get; set; }
         //public DateTime? ScheduleEndTime { get; set; }
-        public DateTime? ScheduleDate { get; set; }
+        public DateTimeOffset? ScheduleDate { get; set; }
         public string? DeliveryMethodAlias { get; set; }
         public Int32? PointOfSaleID { get; set; }
         public string? PointOfSaleIntegrationID { get; set; }
@@ -32,13 +32,13 @@
         public string? WarehouseIntegrationID { get; set; }
         public Int32? DockID { get; set; }
         public string? CarrierName { get; set; }
-        public DateTime? DeliveryEstimatedDate { get; set; }
+        public DateTimeOffset? DeliveryEstimatedDate { get; set; }
 
         public OrderDeliveryMethod() { }
 
         public OrderDeliveryMethod(OrderDeliveryMethod orderDeliveryMethod)
         {
-            this.lastupdateon = DateTime.Now;
+            lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.LogisticOptionId = orderDeliveryMethod.LogisticOptionId;
             this.LogisticOptionName = orderDeliveryMethod.LogisticOptionName;
             this.LogisticContractId = orderDeliveryMethod.LogisticContractId;

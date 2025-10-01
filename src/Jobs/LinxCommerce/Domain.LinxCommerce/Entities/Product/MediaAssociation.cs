@@ -13,7 +13,7 @@
 
         public MediaAssociation(MediaAssociation mediaAssociation) 
         {
-            this.lastupdateon = DateTime.Now;
+            lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.ID = mediaAssociation.ID;
             this.ProductID = mediaAssociation.ProductID;
             this.MediaID = mediaAssociation.MediaID;

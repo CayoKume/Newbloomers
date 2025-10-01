@@ -122,6 +122,7 @@ namespace Application.LinxCommerce.Services
                 {
                     Page = new { PageIndex = pageIndex, PageSize = 500 },
                     Where = $"(ModifiedDate>=\"{DateTime.Now.AddDays(-2).Date:yyyy-MM-dd}T00:00:00\" && ModifiedDate<=\"{DateTime.Now.Date:yyyy-MM-dd}T23:59:59\")",
+                    //Where = $"(CreatedDate>=\"2025-08-12T00:00:00\" && CreatedDate<=\"2025-08-12T23:59:59\")",
                     WhereMetadata = "",
                     OrderBy = "OrderNumber",
                 };

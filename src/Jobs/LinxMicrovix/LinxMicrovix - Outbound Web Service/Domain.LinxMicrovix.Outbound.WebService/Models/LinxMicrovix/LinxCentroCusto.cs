@@ -27,7 +27,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxCentroCusto() { }
 
         public LinxCentroCusto(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxCentroCusto record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.empresa = CustomConvertersExtensions.ConvertToInt32Validation(record.empresa);
             this.id_centrocusto = CustomConvertersExtensions.ConvertToInt32Validation(record.id_centrocusto);
             this.ativo = CustomConvertersExtensions.ConvertToBooleanValidation(record.ativo);

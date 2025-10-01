@@ -21,6 +21,8 @@ namespace Application.Jadlog.Services
 
         public async Task<bool?> CancelOrder()
         {
+            //Refatorar Aqui (retirar try catches)
+
             try
             {
                 return true;

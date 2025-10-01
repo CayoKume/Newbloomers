@@ -32,7 +32,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxSangriaSuprimentos() { }
 
         public LinxSangriaSuprimentos(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxSangriaSuprimentos record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.portal = CustomConvertersExtensions.ConvertToInt32Validation(record.portal);
             this.usuario = CustomConvertersExtensions.ConvertToInt32Validation(record.usuario);
             this.id_sangria_suprimentos = CustomConvertersExtensions.ConvertToInt32Validation(record.id_sangria_suprimentos);

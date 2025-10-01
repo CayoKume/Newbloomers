@@ -28,7 +28,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxB2CPedidosStatus() { }
 
         public LinxB2CPedidosStatus(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxB2CPedidosStatus record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+            lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.id = CustomConvertersExtensions.ConvertToInt32Validation(record.id);
             this.id_status = CustomConvertersExtensions.ConvertToInt32Validation(record.id_status);
             this.id_pedido = CustomConvertersExtensions.ConvertToInt32Validation(record.id_pedido);

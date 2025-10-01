@@ -23,6 +23,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxMovimentoIndicacoes() { }
 
         public LinxMovimentoIndicacoes(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxMovimentoIndicacoes record, string recordXml) {
+            lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.cod_cliente = CustomConvertersExtensions.ConvertToInt32Validation(record.cod_cliente);
             this.timestamp = CustomConvertersExtensions.ConvertToInt64Validation(record.timestamp);
             this.identificador = Guid.Parse(record.identificador);

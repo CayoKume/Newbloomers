@@ -8,7 +8,7 @@ namespace Domain.LinxCommerce.Entities.Product
         public Int32? MediaID { get; set; }
         public bool? IsDeleted { get; set; }
         public string? Index { get; set; }
-        public DateTime? CreatedDate { get; set; }
+        public DateTimeOffset? CreatedDate { get; set; }
         public string? Type { get; set; }
         public Int32? ParentMediaID { get; set; }
         public string? OriginalFileName { get; set; }
@@ -26,7 +26,7 @@ namespace Domain.LinxCommerce.Entities.Product
 
         public Midia(Midia midia)
         {
-            this.lastupdateon = DateTime.Now;
+            lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.MediaID = midia.MediaID;
             this.IsDeleted = midia.IsDeleted;
             this.Index = midia.Index;

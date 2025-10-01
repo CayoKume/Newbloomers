@@ -1,12 +1,16 @@
 ﻿using Application.LinxMicrovix.Outbound.WebService.Interfaces.Services.LinxMicrovix;
 using Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix;
 using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hangfire.IO.Controllers.LinxMicrovix.ERP
 {
-#if DEBUG
     [ApiController]
+    [Authorize]
+#if RELEASE
+    [ApiExplorerSettings(IgnoreApi = true)]
+#endif
     [Route("LinxMicrovixJobs/LinxMicrovix")]
     public class LinxMicrovixController : Controller
     {
@@ -693,5 +697,4 @@ namespace Hangfire.IO.Controllers.LinxMicrovix.ERP
             return Ok($"Records integrated successfully.");
         }
     }
-#endif
 }

@@ -40,7 +40,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxAntecipacoesFinanceirasPlanos() { }
 
         public LinxAntecipacoesFinanceirasPlanos(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxAntecipacoesFinanceirasPlanos record, string recordXml) {
-            this.lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+            lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.empresa = CustomConvertersExtensions.ConvertToInt32Validation(record.empresa);
             this.id_link_pagamento_linx_pay_hub = CustomConvertersExtensions.ConvertToInt32Validation(record.id_link_pagamento_linx_pay_hub);
             this.id_vendas_pos_produtos_campos_adicionais_tmp = CustomConvertersExtensions.ConvertToInt32Validation(record.id_vendas_pos_produtos_campos_adicionais_tmp);

@@ -24,7 +24,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxRotinaOrigem() { }
 
         public LinxRotinaOrigem(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxRotinaOrigem record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.portal = CustomConvertersExtensions.ConvertToInt32Validation(record.portal);
             this.codigo_rotina = CustomConvertersExtensions.ConvertToInt32Validation(record.codigo_rotina);
             this.timestamp = CustomConvertersExtensions.ConvertToInt64Validation(record.timestamp);

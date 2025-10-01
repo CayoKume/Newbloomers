@@ -22,9 +22,9 @@ namespace Domain.LinxCommerce.Entities.Responses
 
         public class Result
         {
-            public DateTime? AcquiredDate { get; set; }
-            public DateTime? CancelledDate { get; set; }
-            public DateTime? CreatedDate { get; set; }
+            public DateTimeOffset? AcquiredDate { get; set; }
+            public DateTimeOffset? CancelledDate { get; set; }
+            public DateTimeOffset? CreatedDate { get; set; }
             public int? CustomerID { get; set; }
             public decimal? DeliveryAmount { get; set; }
             public decimal? DiscountAmount { get; set; }
@@ -33,13 +33,13 @@ namespace Domain.LinxCommerce.Entities.Responses
             public int? ItemsCount { get; set; }
             public decimal? ItemsQty { get; set; }
             public string? MarketPlaceBrand { get; set; }
-            public DateTime? ModifiedDate { get; set; }
+            public DateTimeOffset? ModifiedDate { get; set; }
             public Guid? OrderID { get; set; }
             public string? OrderNumber { get; set; }
             public int? OrderStatusID { get; set; }
-            public DateTime? PaymentDate { get; set; }
+            public DateTimeOffset? PaymentDate { get; set; }
             public string? PaymentStatus { get; set; }
-            public DateTime? ShipmentDate { get; set; }
+            public DateTimeOffset? ShipmentDate { get; set; }
             public string? ShipmentStatus { get; set; }
             public decimal? SubTotal { get; set; }
             public decimal? TaxAmount { get; set; }

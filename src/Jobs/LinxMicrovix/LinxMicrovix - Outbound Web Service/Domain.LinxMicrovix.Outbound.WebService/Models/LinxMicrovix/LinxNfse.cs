@@ -29,7 +29,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxNfse() { }
 
         public LinxNfse(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxNfse record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.portal = CustomConvertersExtensions.ConvertToInt32Validation(record.portal);
             this.documento = CustomConvertersExtensions.ConvertToInt32Validation(record.documento);
             this.id_nfse = CustomConvertersExtensions.ConvertToInt32Validation(record.id_nfse);

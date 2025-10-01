@@ -1,11 +1,12 @@
 ﻿using Application.TotalExpress.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
 namespace Hangfire.IO.Controllers.Carries
 {
-#if DEBUG
     [ApiController]
+    [Authorize]
     [Route("CarriersJobs/TotalExpress")]
     public class TotalExpressController : Controller
     {
@@ -15,11 +16,11 @@ namespace Hangfire.IO.Controllers.Carries
         public TotalExpressController(ITotalExpressService totalExpressService) =>
             (_totalExpressService) = (totalExpressService);
 
-        [HttpPost("GetSendOrders")]
-        public async Task<ActionResult<string?>> TotalExpressGetSendOrders()
+        [HttpPost("GetSendOrder")]
+        public async Task<ActionResult<string?>> TotalExpressGetSendOrder([Required][FromQuery] string? orderNumber)
         {
-            await _totalExpressService.SendOrders();
-            return Ok();
+            var result = await _totalExpressService.GetSendOrder(orderNumber);
+            return Ok(result);
         }
 
         [HttpPost("SendOrders")]
@@ -38,6 +39,7 @@ namespace Hangfire.IO.Controllers.Carries
         }
 
         [HttpPost("SendOrderAsETUR")]
+        [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<ActionResult<string?>> TotalExpressSendOrderAsETUR([Required][FromQuery] string? orderNumber)
         {
             var result = await _totalExpressService.SendOrderAsEtur(orderNumber.Trim().ToUpper());
@@ -46,6 +48,7 @@ namespace Hangfire.IO.Controllers.Carries
         }
 
         [HttpPost("UpdateLogOrders")]
+        [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<ActionResult<string?>> TotalExpressUpdateLogOrders()
         {
             await _totalExpressService.InsertLogOrdersByAWBs();
@@ -53,5 +56,4 @@ namespace Hangfire.IO.Controllers.Carries
             return Ok();
         }
     } 
-#endif
 }

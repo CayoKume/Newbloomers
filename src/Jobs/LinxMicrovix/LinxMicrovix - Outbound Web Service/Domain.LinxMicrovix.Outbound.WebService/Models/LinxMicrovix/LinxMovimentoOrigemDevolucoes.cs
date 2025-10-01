@@ -30,7 +30,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxMovimentoOrigemDevolucoes() { }
 
         public LinxMovimentoOrigemDevolucoes(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxMovimentoOrigemDevolucoes record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.portal = CustomConvertersExtensions.ConvertToInt32Validation(record.portal);
             this.nota_origem = CustomConvertersExtensions.ConvertToInt32Validation(record.nota_origem);
             this.ecf_origem = CustomConvertersExtensions.ConvertToInt32Validation(record.ecf_origem);

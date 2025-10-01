@@ -32,7 +32,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxPagamentoParcialDav() { }
 
         public LinxPagamentoParcialDav(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxPagamentoParcialDav record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.id_vendas_pos = CustomConvertersExtensions.ConvertToInt32Validation(record.id_vendas_pos);
             this.id_pagamento_parcial_tmp = CustomConvertersExtensions.ConvertToInt32Validation(record.id_pagamento_parcial_tmp);
             this.plano = CustomConvertersExtensions.ConvertToInt32Validation(record.plano);

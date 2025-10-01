@@ -25,7 +25,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxClasseFiscal() { }
 
         public LinxClasseFiscal(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxClasseFiscal record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.id_classe_fiscal = CustomConvertersExtensions.ConvertToInt32Validation(record.id_classe_fiscal);
             this.excluido = CustomConvertersExtensions.ConvertToBooleanValidation(record.excluido);
             this.portal = CustomConvertersExtensions.ConvertToInt32Validation(record.portal);

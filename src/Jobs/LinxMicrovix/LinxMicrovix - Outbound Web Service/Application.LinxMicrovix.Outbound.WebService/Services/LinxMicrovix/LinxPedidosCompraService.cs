@@ -1,18 +1,15 @@
 using Application.Core.Interfaces;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Api;
+using Application.LinxMicrovix.Outbound.WebService.Interfaces.Handlers.Commands;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Services;
 using Application.LinxMicrovix.Outbound.WebService.Interfaces.Services.LinxMicrovix;
 using Domain.Core.Entities.Exceptions;
 using Domain.Core.Enums;
-using Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix;
-using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
-using Application.LinxMicrovix.Outbound.WebService.Interfaces.Api;
-
-using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxMicrovix;
-using System.ComponentModel.DataAnnotations;
-using Application.LinxMicrovix.Outbound.WebService.Interfaces.Handlers.Commands;
 using Domain.Core.Interfaces;
-using Application.LinxMicrovix.Outbound.WebService.Handlers.Commands;
+using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
+using Domain.LinxMicrovix.Outbound.WebService.Interfaces.Repositorys.LinxMicrovix;
 using Domain.LinxMicrovix.Outbound.WebService.Models.Base;
+using Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix;
 using FluentValidation;
 
 namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
@@ -195,6 +192,50 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
             await _logger.CommitAllChanges();
 
             return true;
+        }
+
+        public async Task<bool> IntegrityLockRegisters(LinxAPIParam jobParameter)
+        {
+            try
+            {
+                var xmls = new List<Dictionary<string?, string?>>();
+
+                string sql = _linxMicrovixCommandHandler.CreateGetParametersQuery(jobParameter.parametersInterval, jobParameter.parametersTableName, jobParameter.jobName);
+                string? parameters = await _coreRepository.GetRecord<string>(sql);
+
+                var sqlCnpjs = _linxMicrovixCommandHandler.CreateGetMicrovixCompanysQuery();
+                var cnpjs_emp = await _coreRepository.GetRecords<Company>(sqlCnpjs);
+
+                foreach (var cnpj_emp in cnpjs_emp)
+                {
+                    var body = _linxMicrovixServiceBase.BuildBodyRequest(
+                                parametersList: parameters.Replace("[0]", "0").Replace("[data_inicial]", $"{DateTime.Today.AddDays(-7).ToString("yyyy-MM-dd")}").Replace("[data_fim]", $"{DateTime.Today.ToString("yyyy-MM-dd")}").Replace("[data_alt_inicial]", $"{DateTime.Today.AddDays(-7).ToString("yyyy-MM-dd")}").Replace("[data_alt_fim]", $"{DateTime.Today.ToString("yyyy-MM-dd")}"),
+                                jobParameter: jobParameter,
+                                cnpj_emp: cnpj_emp.doc_company
+                            );
+
+                    string? response = await _apiCall.PostAsync(jobParameter: jobParameter, body: body);
+                    var result = _linxMicrovixServiceBase.DeserializeResponseToXML(jobParameter, response);
+                    xmls.AddRange(result);
+                }
+
+                if (xmls.Count() > 0)
+                {
+                    var listRecords = DeserializeXMLToObject(jobParameter, xmls);
+
+                    if (listRecords.Count() > 0)
+                    {
+                        _linxPedidosCompraRepository.BulkInsertIntoTableRaw(records: listRecords, jobParameter: jobParameter);
+                        await _coreRepository.CallDbProcMerge(jobParameter.schema, jobParameter.tableName, _logger.GetExecutionGuid());
+                    }
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
     }
 }

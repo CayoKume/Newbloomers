@@ -26,7 +26,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxSetores() { }
 
         public LinxSetores(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxSetores record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.id_setor = CustomConvertersExtensions.ConvertToInt32Validation(record.id_setor);
             this.timestamp = CustomConvertersExtensions.ConvertToInt64Validation(record.timestamp);
             this.ativo = CustomConvertersExtensions.ConvertToInt32Validation(record.ativo);

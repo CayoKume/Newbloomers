@@ -25,7 +25,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxEnquadramentoIpi() { }
 
         public LinxEnquadramentoIpi(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxEnquadramentoIpi record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.id_enquadramento_ipi = CustomConvertersExtensions.ConvertToInt32Validation(record.id_enquadramento_ipi);
             this.portal = CustomConvertersExtensions.ConvertToInt32Validation(record.portal);
             this.timestamp = CustomConvertersExtensions.ConvertToInt64Validation(record.timestamp);

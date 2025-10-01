@@ -17,7 +17,7 @@
 
         public Image(Image image, Int32? mediaID) 
         {
-            this.lastupdateon = DateTime.Now;
+            lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.RelativePath = image.RelativePath;
             this.Extension = image.Extension;
             this.MaxWidth = image.MaxWidth;

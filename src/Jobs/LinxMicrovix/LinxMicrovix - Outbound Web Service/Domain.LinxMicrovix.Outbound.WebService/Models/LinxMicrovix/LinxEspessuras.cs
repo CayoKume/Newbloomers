@@ -25,7 +25,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxEspessuras() { }
 
         public LinxEspessuras(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxEspessuras record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.id_espessura = CustomConvertersExtensions.ConvertToInt32Validation(record.id_espessura);
             this.timestamp = CustomConvertersExtensions.ConvertToInt64Validation(record.timestamp);
             this.ativo = CustomConvertersExtensions.ConvertToBooleanValidation(record.ativo);

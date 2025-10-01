@@ -1,10 +1,14 @@
 ﻿using Application.Jadlog.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hangfire.IO.Controllers.Shippment
 {
-#if DEBUG
     [ApiController]
+    [Authorize]
+#if RELEASE
+    [ApiExplorerSettings(IgnoreApi = true)]
+#endif
     [Route("CarriersJobs/JadLog")]
     public class JadLogController : Controller
     {
@@ -21,5 +25,4 @@ namespace Hangfire.IO.Controllers.Shippment
             return Ok();
         }
     } 
-#endif
 }

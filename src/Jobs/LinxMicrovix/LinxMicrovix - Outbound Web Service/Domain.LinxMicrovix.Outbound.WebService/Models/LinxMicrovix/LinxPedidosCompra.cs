@@ -54,7 +54,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxPedidosCompra() { }
 
         public LinxPedidosCompra(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxPedidosCompra record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.portal = CustomConvertersExtensions.ConvertToInt32Validation(record.portal);
             this.cod_pedido = CustomConvertersExtensions.ConvertToInt32Validation(record.cod_pedido);
             this.transacao = CustomConvertersExtensions.ConvertToInt32Validation(record.transacao);

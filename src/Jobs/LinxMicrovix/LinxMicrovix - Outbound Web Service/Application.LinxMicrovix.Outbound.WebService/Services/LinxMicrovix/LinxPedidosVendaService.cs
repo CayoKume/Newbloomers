@@ -146,7 +146,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services.LinxMicrovix
             string? parameters = await _coreRepository.GetRecord<string>(sql);
 
             var body = _linxMicrovixServiceBase.BuildBodyRequest(
-                parametersList: parameters.Replace("[0]", "0").Replace("[cod_pedido]", identificador),
+                parametersList: parameters.Replace("[0]", "0").Replace("[data_inicial]", "2000-01-01").Replace("[data_fim]", $"{DateTime.Today.ToString("yyyy-MM-dd")}").Replace("[doc_origem]", identificador),
                 jobParameter: jobParameter,
                 cnpj_emp: cnpj_emp);
 

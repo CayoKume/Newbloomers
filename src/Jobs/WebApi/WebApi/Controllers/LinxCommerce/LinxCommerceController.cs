@@ -1,12 +1,16 @@
 ﻿using Application.LinxCommerce.Interfaces;
 using Domain.LinxCommerce.Entities.Parameters;
 using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HangfireDashboard.UI.Controllers.LinxCommerce
 {
-#if DEBUG
     [ApiController]
+    [Authorize]
+#if RELEASE
+    [ApiExplorerSettings(IgnoreApi = true)]
+#endif
     [Route("LinxCommerceJobs/LinxCommerce")]
     public class LinxCommerceController : Controller
     {
@@ -272,6 +276,4 @@ namespace HangfireDashboard.UI.Controllers.LinxCommerce
             return Ok($"Records integrated successfully.");
         }
     }
-
-#endif
 }

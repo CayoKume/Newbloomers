@@ -1,11 +1,15 @@
 ﻿using Application.LinxMicrovix.Outbound.WebService.Interfaces.Services.LinxMicrovix;
 using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hangfire.IO.Controllers.LinxMicrovix.ERP
 {
-#if DEBUG
     [ApiController]
+    [Authorize]
+#if RELEASE
+    [ApiExplorerSettings(IgnoreApi = true)]
+#endif
     [Route("LinxMicrovixJobs/LinxMicrovixIntegrityLocks")]
     public class LinxMicrovixIntegrityLocksController : Controller
     {
@@ -165,23 +169,21 @@ namespace Hangfire.IO.Controllers.LinxMicrovix.ERP
                             .Get<List<LinxMethods>>();
         }
 
-        [HttpPost("IntegrityLockLinxClientesFornecRegisters")]
-        public async Task<ActionResult> IntegrityLockLinxClientesFornecRegisters()
+        [HttpPost("IntegrityLockLinxPedidosCompraRegisters")]
+        public async Task<ActionResult> IntegrityLockLinxPedidosCompraRegisters()
         {
             var method = _methods
-                .Where(m => m.MethodName == "LinxClientesFornec")
+                .Where(m => m.MethodName == "LinxPedidosCompra")
                 .FirstOrDefault();
 
-            var result = await _linxClientesFornecService.IntegrityLockLinxClientesFornecRegisters(
+            var result = await _linxPedidosCompraService.IntegrityLockRegisters(
                 _linxMicrovixJobParameter.SetParameters(
                     jobName: method.MethodName,
-                    tableName: method.MethodName,
-                    parametersInterval: "parameters_individual"
+                    tableName: method.MethodName
                 )
             );
 
             return Ok($"Records integrated successfully.");
         }
     } 
-#endif
 }

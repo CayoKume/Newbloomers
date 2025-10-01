@@ -29,7 +29,7 @@ namespace Domain.LinxCommerce.Entities.Sku
 
         public bool? Preorderable { get; set; }
 
-        public DateTime? PreorderDate { get; set; }
+        public DateTimeOffset? PreorderDate { get; set; }
 
         public decimal? PreorderLimit { get; set; }
 
@@ -55,9 +55,9 @@ namespace Domain.LinxCommerce.Entities.Sku
 
         public bool? IsVisible { get; set; }
 
-        public DateTime? VisibleFrom { get; set; }
+        public DateTimeOffset? VisibleFrom { get; set; }
 
-        public DateTime? VisibleTo { get; set; }
+        public DateTimeOffset? VisibleTo { get; set; }
 
         public bool? IsDeleted { get; set; }
 
@@ -67,11 +67,11 @@ namespace Domain.LinxCommerce.Entities.Sku
 
         public string? SKU { get; set; }
 
-        public DateTime? CreatedDate { get; set; }
+        public DateTimeOffset? CreatedDate { get; set; }
 
         public string? CreatedBy { get; set; }
 
-        public DateTime? ModifiedDate { get; set; }
+        public DateTimeOffset? ModifiedDate { get; set; }
 
         public string? ModifiedBy { get; set; }
 
@@ -96,7 +96,7 @@ namespace Domain.LinxCommerce.Entities.Sku
 
         public Sku(Sku sku, string? getSkuResponse)
         {
-            this.lastupdateon = DateTime.Now;
+            lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.UPC = sku.UPC;
             this.DisplayCondition = sku.DisplayCondition;
             this.DefinitionID = sku.DefinitionID;

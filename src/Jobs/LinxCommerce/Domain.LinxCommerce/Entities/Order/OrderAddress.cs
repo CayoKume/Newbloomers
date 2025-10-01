@@ -24,7 +24,7 @@
 
         public OrderAddress(OrderAddress orderAddress)
         {
-            this.lastupdateon = DateTime.Now;
+            lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.OrderAddressID = orderAddress.OrderAddressID;
             this.OrderID = orderAddress.OrderID;
             this.Name = orderAddress.Name;

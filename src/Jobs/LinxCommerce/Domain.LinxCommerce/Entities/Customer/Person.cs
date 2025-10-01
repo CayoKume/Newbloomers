@@ -6,11 +6,11 @@ namespace Domain.LinxCommerce.Entities.Customer
     {
         public DateTime lastupdateon { get; set; }
         public string? Surname { get; set; }
-        public DateTime? BirthDate { get; set; }
+        public DateTimeOffset? BirthDate { get; set; }
         public string? Gender { get; set; }
         public string? RG { get; set; }
         public string? Cpf { get; set; }
-        public DateTime? CreatedDate { get; set; }
+        public DateTimeOffset? CreatedDate { get; set; }
         public Int32 CustomerID { get; set; }
         public Int32? CustomerStatusID { get; set; }
         public string? WebSiteID { get; set; }
@@ -42,7 +42,7 @@ namespace Domain.LinxCommerce.Entities.Customer
 
         public Person(Person customer, string getCustomerResponse)
         {
-            this.lastupdateon = DateTime.Now;
+            lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.Surname = customer.Surname;
             this.BirthDate = customer.BirthDate;
             this.Gender = customer.Gender;

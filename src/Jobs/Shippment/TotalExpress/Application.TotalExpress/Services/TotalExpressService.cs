@@ -1,11 +1,14 @@
 ﻿using Application.Core.Interfaces;
 using Application.TotalExpress.Interfaces;
 using Domain.Core.Enums;
+using Domain.TotalExpress.Dtos;
 using Domain.TotalExpress.Entities;
 using Domain.TotalExpress.Interfaces.Api;
 using Domain.TotalExpress.Interfaces.Repository;
+using Domain.TotalExpress.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Data.Common;
 using System.Net;
 using System.Text;
 
@@ -28,7 +31,7 @@ namespace Application.TotalExpress.Services
 
                 if (order != null)
                 {
-                    var parameters = await _totalExpressRepository.GetParameters(order.company.doc_company, order.shippment_method);
+                    var parameters = await _totalExpressRepository.GetParameters(order.company.doc_company, order.shippingCompany.metodo_shippingCompany);
                     var jArray = BuildJObject(order, parameters);
                     var token = await GenerateToken(order.company.doc_company);
                     var headers = new Dictionary<string?, string?>
@@ -51,11 +54,11 @@ namespace Application.TotalExpress.Services
                             "TotalExpressAPI"
                         );
 
-                        await _totalExpressRepository.GenerateResponseLog(
-                            order.number,
-                            parameters.sender_id,
-                            response
-                        );
+                        //await _totalExpressRepository.GenerateResponseLog(
+                        //    order.number,
+                        //    parameters.sender_id,
+                        //    response
+                        //);
                     }
 
                     return true;
@@ -99,11 +102,11 @@ namespace Application.TotalExpress.Services
                             "TotalExpressAPI"
                         );
 
-                        await _totalExpressRepository.GenerateResponseLog(
-                            order.number,
-                            parameters.sender_id,
-                            response
-                        );
+                        //await _totalExpressRepository.GenerateResponseLog(
+                        //    order.number,
+                        //    parameters.sender_id,
+                        //    response
+                        //);
                     }
 
                     return true;
@@ -118,15 +121,20 @@ namespace Application.TotalExpress.Services
 
         public async Task<bool> SendOrders()
         {
-            try
-            {
-                var orders = await _totalExpressRepository.GetInvoicedOrders();
+            _logger
+               .Clear()
+               .AddLog(EnumJob.B2CConsultaClientes);
 
-                if (orders.Count() > 0)
+            var _listSomenteNovos = new List<Encomenda>();
+            var orders = await _totalExpressRepository.GetInvoicedOrders();
+
+            if (orders.Count() > 0)
+            {
+                foreach (var order in orders)
                 {
-                    foreach (var order in orders)
+                    try
                     {
-                        var parameters = await _totalExpressRepository.GetParameters(order.company.doc_company, order.shippment_method);
+                        var parameters = await _totalExpressRepository.GetParameters(order.company.doc_company, order.shippingCompany.metodo_shippingCompany);
                         var jArray = BuildJObject(order, parameters);
                         var token = await GenerateToken(order.company.doc_company);
                         var headers = new Dictionary<string?, string?>
@@ -149,22 +157,39 @@ namespace Application.TotalExpress.Services
                                 "TotalExpressAPI"
                             );
 
-                            await _totalExpressRepository.GenerateResponseLog(
-                                order.number,
-                                parameters.sender_id,
-                                response
-                            );
+                            var retorno = Newtonsoft.Json.JsonConvert.DeserializeObject<Return.Rootobject>(response);
+
+                            foreach (var encomenda in retorno.retorno.encomendas)
+                            {
+                                _listSomenteNovos.Add(new Encomenda(encomenda, response, parameters.sender_id));
+                            }
                         }
                     }
-
-                    return true;
+                    catch (Exception ex)
+                    {
+                        continue;
+                    }
                 }
-                return false;
+
+                if (_listSomenteNovos.Count() > 0)
+                {
+                    await _totalExpressRepository.GenerateResponseLog(encomendas: _listSomenteNovos, _logger.GetExecutionGuid());
+
+                    for (int i = 0; i < _listSomenteNovos.Count; i++)
+                    {
+                        _logger.AddRecord(_listSomenteNovos[i].recordKey, _listSomenteNovos[i].recordXml);
+                    }
+                }
+
+                _logger.AddMessage(
+                    $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"
+                );
             }
-            catch
-            {
-                throw;
-            }
+
+            _logger.SetLogEndDate();
+            await _logger.CommitAllChanges();
+
+            return false;
         }
 
         public async Task<bool> InsertLogOrdersByDateInterval()
@@ -399,7 +424,7 @@ namespace Application.TotalExpress.Services
                                     { "nfe", new JArray(
                                             new JObject
                                             {
-                                                { "nfeCfop", order.cfop.Replace(".","") },
+                                                { "nfeCfop", order.cfop?.Replace(".","") },
                                                 { "nfeChave", order.invoice.key_nfe_nf },
                                                 { "nfeData", order.invoice.date_emission_nf.ToString("dd-MM-yyyy") },
                                                 { "nfeNumero", int.Parse(order.invoice.number_nf) },
@@ -444,6 +469,12 @@ namespace Application.TotalExpress.Services
             );
 
             return JsonConvert.DeserializeObject<Token>(result);
+        }
+
+        public async Task<string> GetSendOrder(string orderNumber)
+        {
+            var pedido = await _totalExpressRepository.GetSendOrder(orderNumber);
+            return Newtonsoft.Json.JsonConvert.SerializeObject(pedido);
         }
     }
 }

@@ -261,8 +261,8 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
                             _listSomenteNovos.AddRange(listRecords);
                             pedido.is_present_in_erp = true;
                         } 
-    }
-}
+                    }
+                }
 
 
 

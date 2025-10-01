@@ -25,6 +25,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxSpedTipoBaseCredito() { }
 
         public LinxSpedTipoBaseCredito(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxSpedTipoBaseCredito record, string recordXml) {
+            lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.portal = CustomConvertersExtensions.ConvertToInt32Validation(record.portal);
             this.id_sped_tipo_base_credito = CustomConvertersExtensions.ConvertToInt32Validation(record.id_sped_tipo_base_credito);
             this.timestamp = CustomConvertersExtensions.ConvertToInt64Validation(record.timestamp);

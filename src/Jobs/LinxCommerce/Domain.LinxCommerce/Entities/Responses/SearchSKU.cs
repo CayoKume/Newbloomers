@@ -13,8 +13,8 @@
             public string? Name { get; set; }
             public string? SKU { get; set; }
             public string? IntegrationID { get; set; }
-            public DateTime? CreatedDate { get; set; }
-            public DateTime? ModifiedDate { get; set; }
+            public DateTimeOffset? CreatedDate { get; set; }
+            public DateTimeOffset? ModifiedDate { get; set; }
         }
     }
 }

@@ -24,7 +24,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxProdutosOpticosFormatoAro() { }
 
         public LinxProdutosOpticosFormatoAro(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxProdutosOpticosFormatoAro record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.id_formato_aro = CustomConvertersExtensions.ConvertToInt32Validation(record.id_formato_aro);
             this.timestamp = CustomConvertersExtensions.ConvertToInt64Validation(record.timestamp);
             this.codigo = record.codigo;

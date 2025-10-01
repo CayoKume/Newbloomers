@@ -5,8 +5,8 @@
         public DateTime lastupdateon { get; set; }
         public string? Identifier { get; set; }
         public string? Alias { get; set; }
-        public DateTime? PaymentDate { get; set; }
-        public DateTime? ExpirationDate { get; set; }
+        public DateTimeOffset? PaymentDate { get; set; }
+        public DateTimeOffset? ExpirationDate { get; set; }
         public Int32? Month { get; set; }
         public Int32? Year { get; set; }
         public string? Holder { get; set; }
@@ -28,7 +28,7 @@
 
         public OrderPaymentInfo(OrderPaymentInfo orderPaymentInfo, Int32? orderPaymentMethodID)
         {
-            this.lastupdateon = DateTime.Now;
+            lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.Identifier = orderPaymentInfo.Identifier;
             this.Alias = orderPaymentInfo.Alias;
             this.PaymentDate = orderPaymentInfo.PaymentDate;

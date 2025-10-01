@@ -7,13 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Core\Application.Core\Application.Core.csproj" />
-    <ProjectReference Include="..\Domain.AfterSale\Domain.AfterSale.csproj" />
+    <Compile Remove="Handlers\**" />
+    <Compile Remove="Interfaces\Handlers\**" />
+    <EmbeddedResource Remove="Handlers\**" />
+    <EmbeddedResource Remove="Interfaces\Handlers\**" />
+    <None Remove="Handlers\**" />
+    <None Remove="Interfaces\Handlers\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Handlers\Commands\" />
-    <Folder Include="Interfaces\Handlers\Commands\" />
+    <ProjectReference Include="..\..\..\..\Core\Application.Core\Application.Core.csproj" />
+    <ProjectReference Include="..\Domain.AfterSale\Domain.AfterSale.csproj" />
   </ItemGroup>
 
 </Project>

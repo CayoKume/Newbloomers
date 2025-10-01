@@ -24,7 +24,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
 
         public LinxMetodos(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxMetodos record, string recordXml) 
         {    
-			lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+			            lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.Retorno = record.Retorno;
         }
     }

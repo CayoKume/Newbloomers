@@ -1,9 +1,15 @@
 ﻿using Domain.Core.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hangfire.IO.Controllers.Procedures
 {
-#if DEBUG
+    [ApiController]
+    [Authorize]
+#if RELEASE
+    [ApiExplorerSettings(IgnoreApi = true)]
+#endif
+    [Route("ProceduresJobs/Operacoes")]
     public class OperacoesController : Controller
     {
         private readonly ICoreRepository _coreRepository;
@@ -23,5 +29,4 @@ namespace Hangfire.IO.Controllers.Procedures
             var result = _coreRepository.ExecuteCommand("exec [operations].[P_Snapshot_Estoque]");
         }
     } 
-#endif
 }

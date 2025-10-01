@@ -63,7 +63,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxClientesFornec() { }
 
         public LinxClientesFornec(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxClientesFornec record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.portal = CustomConvertersExtensions.ConvertToInt32Validation(record.portal);
             this.cod_cliente = CustomConvertersExtensions.ConvertToInt32Validation(record.cod_cliente);
             this.cod_ibge_municipio = CustomConvertersExtensions.ConvertToInt32Validation(record.cod_ibge_municipio);

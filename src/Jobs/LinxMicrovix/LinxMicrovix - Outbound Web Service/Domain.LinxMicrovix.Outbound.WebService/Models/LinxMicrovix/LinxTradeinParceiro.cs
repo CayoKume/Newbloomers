@@ -24,7 +24,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxTradeinParceiro() { }
 
         public LinxTradeinParceiro(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxTradeinParceiro record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.portal = CustomConvertersExtensions.ConvertToInt32Validation(record.portal);
             this.id_tradein_parceiro = CustomConvertersExtensions.ConvertToInt32Validation(record.id_tradein_parceiro);
             this.timestamp = CustomConvertersExtensions.ConvertToInt64Validation(record.timestamp);

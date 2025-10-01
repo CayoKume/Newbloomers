@@ -50,6 +50,7 @@ namespace Infrastructure.Jadlog.Api
             }
             catch
             {
+                //Refatorar Aqui
                 throw new GeneralException(
                     //stage: EnumStages.PostAsync,
                     //error: EnumError.Exception,

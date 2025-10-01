@@ -21,10 +21,10 @@ namespace Domain.LinxCommerce.Entities.Order
         public Int32? Installments { get; set; }
         public decimal? InstallmentAmount { get; set; }
         public decimal? TaxAmount { get; set; }
-        public DateTime? PaymentDate { get; set; }
-        public DateTime? CaptureDate { get; set; }
-        public DateTime? AcquiredDate { get; set; }
-        public DateTime? PaymentCancelledDate { get; set; }
+        public DateTimeOffset? PaymentDate { get; set; }
+        public DateTimeOffset? CaptureDate { get; set; }
+        public DateTimeOffset? AcquiredDate { get; set; }
+        public DateTimeOffset? PaymentCancelledDate { get; set; }
 
         [SkipProperty]
         public OrderPaymentInfo PaymentInfo { get; set; } = new OrderPaymentInfo();
@@ -33,7 +33,7 @@ namespace Domain.LinxCommerce.Entities.Order
 
         public OrderPaymentMethod(OrderPaymentMethod orderPaymentMethod)
         {
-            this.lastupdateon = DateTime.Now;
+            lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.OrderPaymentMethodID = orderPaymentMethod.OrderPaymentMethodID;
             this.OrderID = orderPaymentMethod.OrderID;
             this.PaymentNumber = orderPaymentMethod.PaymentNumber;

@@ -29,6 +29,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxComissoesVendedores() { }
 
         public LinxComissoesVendedores(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxComissoesVendedores record, string recordXml) {
+            lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.vendedor = CustomConvertersExtensions.ConvertToInt32Validation(record.vendedor);
             this.empresa = CustomConvertersExtensions.ConvertToInt32Validation(record.empresa);
             this.valor_base = CustomConvertersExtensions.ConvertToDecimalValidation(record.valor_base);

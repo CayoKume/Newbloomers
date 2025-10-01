@@ -43,7 +43,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxMovimentoCartoes() { }
 
         public LinxMovimentoCartoes(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxMovimentoCartoes record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.portal = CustomConvertersExtensions.ConvertToInt32Validation(record.portal);
             this.id_cartao_bandeira = CustomConvertersExtensions.ConvertToInt32Validation(record.id_cartao_bandeira);
             this.ordem_cartao = CustomConvertersExtensions.ConvertToInt32Validation(record.ordem_cartao);

@@ -27,7 +27,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxNcm() { }
 
         public LinxNcm(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxNcm record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.ativo = CustomConvertersExtensions.ConvertToBooleanValidation(record.ativo);
             this.codigo_genero = CustomConvertersExtensions.ConvertToInt32Validation(record.codigo_genero);
             this.id_ncm = CustomConvertersExtensions.ConvertToInt32Validation(record.id_ncm);

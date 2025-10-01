@@ -14,7 +14,7 @@
 
         public OrderDiscount(OrderDiscount orderDiscount, Guid? orderID)
         {
-            this.lastupdateon = DateTime.Now;
+            lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.Amount = orderDiscount.Amount;
             this.DiscountID = orderDiscount.DiscountID;
             this.Message = orderDiscount.Message;

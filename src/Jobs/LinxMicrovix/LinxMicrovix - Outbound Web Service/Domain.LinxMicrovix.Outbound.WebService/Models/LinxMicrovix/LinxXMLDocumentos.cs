@@ -40,7 +40,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxXMLDocumentos() { }
 
         public LinxXMLDocumentos(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxXMLDocumentos record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.portal = CustomConvertersExtensions.ConvertToInt32Validation(record.portal);
             this.documento = CustomConvertersExtensions.ConvertToInt32Validation(record.documento);
             this.situacao = CustomConvertersExtensions.ConvertToInt32Validation(record.situacao);

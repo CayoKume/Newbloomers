@@ -55,16 +55,16 @@ namespace Domain.LinxCommerce.Entities.Product
         public string? WarrantyDescription { get; set; }
         public string? TagsIDs { get; set; }
         public bool? IsVisible { get; set; }
-        public DateTime? VisibleFrom { get; set; }
-        public DateTime? VisibleTo { get; set; }
+        public DateTimeOffset? VisibleFrom { get; set; }
+        public DateTimeOffset? VisibleTo { get; set; }
         public bool? IsSearchable { get; set; }
         public bool? IsUponRequest { get; set; }
         public string? DisplayAvailability { get; set; }
         public bool? DisplayStockQty { get; set; }
         public string? DisplayPrice { get; set; }
         public bool? IsNew { get; set; }
-        public DateTime? NewFrom { get; set; }
-        public DateTime? NewTo { get; set; }
+        public DateTimeOffset? NewFrom { get; set; }
+        public DateTimeOffset? NewTo { get; set; }
         public bool? IsGift { get; set; }
         public bool? UseAcceptanceTerm { get; set; }
         public Int32? AcceptanceTermID { get; set; }
@@ -74,9 +74,9 @@ namespace Domain.LinxCommerce.Entities.Product
         public Int32? ProductID { get; set; }
         public string? Name { get; set; }
         public string? SKU { get; set; }
-        public DateTime? CreatedDate { get; set; }
+        public DateTimeOffset? CreatedDate { get; set; }
         public string? CreatedBy { get; set; }
-        public DateTime? ModifiedDate { get; set; }
+        public DateTimeOffset? ModifiedDate { get; set; }
         public string? ModifiedBy { get; set; }
         public string? IntegrationID { get; set; }
         
@@ -86,7 +86,7 @@ namespace Domain.LinxCommerce.Entities.Product
         {
             try
             {
-                this.lastupdateon = DateTime.Now;
+                lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
                 this.BrandID = product.BrandID;
                 this.SkusIDs = product.SkusIDs;
                 this.FlagsIDs = product.FlagsIDs;

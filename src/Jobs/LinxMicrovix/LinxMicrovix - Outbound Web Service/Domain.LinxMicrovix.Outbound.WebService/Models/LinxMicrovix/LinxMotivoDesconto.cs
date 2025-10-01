@@ -25,7 +25,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxMotivoDesconto() { }
 
         public LinxMotivoDesconto(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxMotivoDesconto record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.id_motivo_desconto = CustomConvertersExtensions.ConvertToInt32Validation(record.id_motivo_desconto);
             this.ativo = CustomConvertersExtensions.ConvertToBooleanValidation(record.ativo);
             this.excluido = CustomConvertersExtensions.ConvertToBooleanValidation(record.excluido);

@@ -15,11 +15,13 @@ namespace Domain.Core.Extensions
                     if (String.IsNullOrEmpty(entity?.ToString()) || !DateTime.TryParse(entity.ToString(), out var boolean))
                         return new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar);
 
-                    return TimeZoneInfo.ConvertTimeFromUtc(Convert.ToDateTime(entity.ToString()).ToUniversalTime(), TimeZoneInfo.FindSystemTimeZoneById("America/Sao_Paulo"));
+                    return Convert.ToDateTime(entity?.ToString());
+                    //return TimeZoneInfo.ConvertTimeFromUtc(Convert.ToDateTime(entity.ToString()).ToUniversalTime(), TimeZoneInfo.FindSystemTimeZoneById("America/Sao_Paulo"));
                 }
 
                 else if (typeof(TEntity) == typeof(DateTime))
-                    return TimeZoneInfo.ConvertTimeFromUtc(Convert.ToDateTime(entity?.ToString()).ToUniversalTime(), TimeZoneInfo.FindSystemTimeZoneById("America/Sao_Paulo"));
+                    return Convert.ToDateTime(entity?.ToString());
+                    //return TimeZoneInfo.ConvertTimeFromUtc(Convert.ToDateTime(entity?.ToString()).ToUniversalTime(), TimeZoneInfo.FindSystemTimeZoneById("America/Sao_Paulo"));
 
                 return new DateTime(1990, 01, 01, 00, 00, 00, new CultureInfo("en-US").Calendar);
             }

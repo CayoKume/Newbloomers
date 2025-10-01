@@ -122,7 +122,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxConfiguracoesTributariasDetalhes() { }
 
         public LinxConfiguracoesTributariasDetalhes(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxConfiguracoesTributariasDetalhes record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.id_config_tributaria = CustomConvertersExtensions.ConvertToInt32Validation(record.id_config_tributaria);
             this.id_ramo_atividade = CustomConvertersExtensions.ConvertToInt32Validation(record.id_ramo_atividade);
             this.empresa = CustomConvertersExtensions.ConvertToInt32Validation(record.empresa);

@@ -51,7 +51,7 @@
 
         public OrderItem(OrderItem orderItem)
         {
-            this.lastupdateon = DateTime.Now;
+            lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.OrderItemID = orderItem.OrderItemID;
             this.OrderID = orderItem.OrderID;
             this.ParentItemID = orderItem.ParentItemID;

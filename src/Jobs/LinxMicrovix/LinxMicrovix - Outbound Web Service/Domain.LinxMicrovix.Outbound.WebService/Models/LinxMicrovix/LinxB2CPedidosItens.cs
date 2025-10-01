@@ -28,7 +28,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxB2CPedidosItens() { }
 
         public LinxB2CPedidosItens(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxB2CPedidosItens record, string recordXml) {
-            this.lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+            lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.id_pedido_item = CustomConvertersExtensions.ConvertToInt32Validation(record.id_pedido_item);
             this.id_pedido = CustomConvertersExtensions.ConvertToInt32Validation(record.id_pedido);
             this.codigoproduto = CustomConvertersExtensions.ConvertToInt64Validation(record.codigoproduto);

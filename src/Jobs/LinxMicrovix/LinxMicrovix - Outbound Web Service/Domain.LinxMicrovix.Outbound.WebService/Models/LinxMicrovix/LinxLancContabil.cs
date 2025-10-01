@@ -42,7 +42,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxLancContabil() { }
 
         public LinxLancContabil(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxLancContabil record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.portal = CustomConvertersExtensions.ConvertToInt32Validation(record.portal);
             this.fatura_origem = CustomConvertersExtensions.ConvertToInt32Validation(record.fatura_origem);
             this.empresa = CustomConvertersExtensions.ConvertToInt32Validation(record.empresa);

@@ -8,13 +8,13 @@
 
         public string? Status { get; set; }
 
-        public DateTime? ConfirmationDate { get; set; }
+        public DateTimeOffset? ConfirmationDate { get; set; }
 
         public EmailConfirmation() { }
 
         public EmailConfirmation(EmailConfirmation emailConfirmation, Int32? customerID)
         {
-            this.lastupdateon = DateTime.Now;
+            lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.Status = emailConfirmation.Status;
             this.ConfirmationDate = emailConfirmation.ConfirmationDate;
             this.CustomerID = customerID;

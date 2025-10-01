@@ -36,6 +36,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
             ICoreRepository coreRepository,
             IB2CConsultaClientesRepository b2cConsultaClientesRepository,
             IValidator<Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxCommerce.B2CConsultaClientes> validator,
+            IB2CConsultaClientesCommandHandler b2CConsultaClientesCommandHandler,
             ILinxMicrovixCommandHandler linxMicrovixCommandHandler
         )
         {
@@ -45,6 +46,7 @@ namespace Application.LinxMicrovix.Outbound.WebService.Services
             _b2cConsultaClientesRepository = b2cConsultaClientesRepository;
             _linxMicrovixServiceBase = linxMicrovixServiceBase;
             _coreRepository = coreRepository;
+            _b2CConsultaClientesCommandHandler = b2CConsultaClientesCommandHandler;
             _linxMicrovixCommandHandler = linxMicrovixCommandHandler;
         }
 

@@ -242,7 +242,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         /// <param name="icms_base_desonerado_item"></param>
         /// <param name="codigo_status_nfe"></param>
         public LinxMovimento(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxMovimento record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.portal = CustomConvertersExtensions.ConvertToInt32Validation(record.portal);
             this.transacao = CustomConvertersExtensions.ConvertToInt32Validation(record.transacao);
             this.usuario = CustomConvertersExtensions.ConvertToInt32Validation(record.usuario);

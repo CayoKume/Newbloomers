@@ -494,6 +494,7 @@ namespace Services
 
                     requests.Add(zpl.Replace("'", ""));
                 }
+
                 return requests;
             }
             catch (Exception ex)

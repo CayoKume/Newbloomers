@@ -27,18 +27,18 @@ namespace Domain.LinxCommerce.Entities.Order
             public decimal? TotalDue { get; set; }
             public decimal? TotalPaid { get; set; }
             public decimal? TotalRefunded { get; set; }
-            public DateTime? PaymentDate { get; set; }
+            public DateTimeOffset? PaymentDate { get; set; }
             public string? PaymentStatus { get; set; }
-            public DateTime? ShipmentDate { get; set; }
+            public DateTimeOffset? ShipmentDate { get; set; }
             public string? ShipmentStatus { get; set; }
             public string? GlobalStatus { get; set; }
             public string? DeliveryPostalCode { get; set; }
             public string? CreatedChannel { get; set; }
             public int? TrafficSourceID { get; set; }
             public int? OrderStatusID { get; set; }
-            public DateTime? CreatedDate { get; set; }
+            public DateTimeOffset? CreatedDate { get; set; }
             public string? CreatedBy { get; set; }
-            public DateTime? ModifiedDate { get; set; }
+            public DateTimeOffset? ModifiedDate { get; set; }
             public string? ModifiedBy { get; set; }
             public string? Remarks { get; set; }
             public decimal? SellerCommissionAmount { get; set; }
@@ -46,15 +46,15 @@ namespace Domain.LinxCommerce.Entities.Order
             public Guid? OrderGroupID { get; set; }
             public string? OrderGroupNumber { get; set; }
             public bool? HasConflicts { get; set; }
-            public DateTime? AcquiredDate { get; set; }
+            public DateTimeOffset? AcquiredDate { get; set; }
             public bool? HasHubOrderWithoutShipmentConflict { get; set; }
             public string? CustomerType { get; set; }
-            public DateTime? CancelledDate { get; set; }
+            public DateTimeOffset? CancelledDate { get; set; }
             public string? WebSiteName { get; set; }
             public string? CustomerName { get; set; }
             public string? CustomerEmail { get; set; }
             public string? CustomerGender { get; set; }
-            public DateTime? CustomerBirthDate { get; set; }
+            public DateTimeOffset? CustomerBirthDate { get; set; }
             public string? CustomerPhone { get; set; }
             public string? CustomerCPF { get; set; }
             public string? CustomerCNPJ { get; set; }
@@ -126,7 +126,7 @@ namespace Domain.LinxCommerce.Entities.Order
 
             public Root(Order.Root order, string? getOrderResponse)
             {
-                this.lastupdateon = DateTime.Now;
+                lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
                 this.OrderInvoice = new OrderInvoice(order.OrderInvoice == null ? new OrderInvoice() : order.OrderInvoice, order.OrderID);
                 this.Seller = new OrderSeller(order.Seller == null ? new OrderSeller() : order.Seller);
                 this.OrderType = new OrderType(order.OrderType == null ? new OrderType() : order.OrderType);

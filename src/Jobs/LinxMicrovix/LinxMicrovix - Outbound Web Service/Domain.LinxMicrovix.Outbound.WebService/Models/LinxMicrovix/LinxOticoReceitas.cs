@@ -109,7 +109,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxOticoReceitas() { }
 
         public LinxOticoReceitas(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxOticoReceitas record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.migracao_dados = CustomConvertersExtensions.ConvertToBooleanValidation(record.migracao_dados);
             this.data_receita =  CustomConvertersExtensions.ConvertToDateTimeValidation<string>(record.data_receita);
             this.id_otico_receitas = CustomConvertersExtensions.ConvertToInt32Validation(record.id_otico_receitas);

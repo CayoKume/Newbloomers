@@ -59,7 +59,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxFechamentoCaixa() { }
 
         public LinxFechamentoCaixa(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxFechamentoCaixa record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.ativo = CustomConvertersExtensions.ConvertToBooleanValidation(record.ativo);
             this.conferencia_efetuada = CustomConvertersExtensions.ConvertToBooleanValidation(record.conferencia_efetuada);
             this.data =  CustomConvertersExtensions.ConvertToDateTimeValidation<string>(record.data);

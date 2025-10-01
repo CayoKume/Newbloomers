@@ -26,7 +26,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxNfceEstacao() { }
 
         public LinxNfceEstacao(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxNfceEstacao record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.id_nfce_estacao = CustomConvertersExtensions.ConvertToInt32Validation(record.id_nfce_estacao);
             this.empresa = CustomConvertersExtensions.ConvertToInt32Validation(record.empresa);
             this.ativo = CustomConvertersExtensions.ConvertToBooleanValidation(record.ativo);

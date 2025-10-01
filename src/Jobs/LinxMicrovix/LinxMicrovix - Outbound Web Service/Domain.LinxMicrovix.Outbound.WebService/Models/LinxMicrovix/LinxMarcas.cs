@@ -24,7 +24,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxMarcas() { }
 
         public LinxMarcas(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxMarcas record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.id_marca = CustomConvertersExtensions.ConvertToInt32Validation(record.id_marca);
             this.timestamp = CustomConvertersExtensions.ConvertToInt64Validation(record.timestamp);
             this.desc_marca = record.desc_marca;

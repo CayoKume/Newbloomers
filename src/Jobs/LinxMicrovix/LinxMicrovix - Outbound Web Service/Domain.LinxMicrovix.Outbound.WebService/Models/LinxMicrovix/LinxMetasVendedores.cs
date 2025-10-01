@@ -31,7 +31,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxMetasVendedores() { }
 
         public LinxMetasVendedores(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxMetasVendedores record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.id_meta = CustomConvertersExtensions.ConvertToInt32Validation(record.id_meta);
             this.cod_vendedor = CustomConvertersExtensions.ConvertToInt32Validation(record.cod_vendedor);
             this.portal = CustomConvertersExtensions.ConvertToInt32Validation(record.portal);

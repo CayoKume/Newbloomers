@@ -23,7 +23,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxDevolucaoRemanejoFabricaTipo() { }
 
         public LinxDevolucaoRemanejoFabricaTipo(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxDevolucaoRemanejoFabricaTipo record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.id_devolucao_remanejo_fabrica_tipo = CustomConvertersExtensions.ConvertToInt32Validation(record.id_devolucao_remanejo_fabrica_tipo);
             this.timestamp = CustomConvertersExtensions.ConvertToInt64Validation(record.timestamp);
             this.descricao = record.descricao;

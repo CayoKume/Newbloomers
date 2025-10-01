@@ -24,7 +24,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxColecoes() { }
 
         public LinxColecoes(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxColecoes record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.id_colecao = CustomConvertersExtensions.ConvertToInt32Validation(record.id_colecao);
             this.timestamp = CustomConvertersExtensions.ConvertToInt64Validation(record.timestamp);
             this.desc_colecao = record.desc_colecao;

@@ -26,7 +26,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxCstCofinsFiscal() { }
 
         public LinxCstCofinsFiscal(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxCstCofinsFiscal record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.id_csosn_fiscal = CustomConvertersExtensions.ConvertToInt32Validation(record.id_csosn_fiscal);
             this.id_csosn_fiscal_substitutiva = CustomConvertersExtensions.ConvertToInt32Validation(record.id_csosn_fiscal_substitutiva);
             this.portal = CustomConvertersExtensions.ConvertToInt32Validation(record.portal);

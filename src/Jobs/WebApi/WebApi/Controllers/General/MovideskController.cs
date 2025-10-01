@@ -1,11 +1,15 @@
 ﻿using Application.Movidesk.Interfaces;
 using Application.Movidesk.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hangfire.IO.Controllers.General
 {
-#if DEBUG
     [ApiController]
+    [Authorize]
+#if RELEASE
+    [ApiExplorerSettings(IgnoreApi = true)]
+#endif
     [Route("MovideskJobs/Movidesk")]
     public class MovideskController : Controller
     {
@@ -42,6 +46,4 @@ namespace Hangfire.IO.Controllers.General
             return Ok($"Records integrated successfully.");
         }
     }
-
-#endif
 }

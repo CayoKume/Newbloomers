@@ -19,7 +19,7 @@
 
         public MetadataValue(MetadataValue metadataValue, Int32? productID)
         {
-            this.lastupdateon = DateTime.Now;
+            lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.ProductID = productID;
             this.PropertyMetadataID = metadataValue.PropertyMetadataID;
             this.PropertyName = metadataValue.PropertyName;

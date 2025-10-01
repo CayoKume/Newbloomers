@@ -25,7 +25,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxPosicaoOsRamoOptico() { }
 
         public LinxPosicaoOsRamoOptico(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxPosicaoOsRamoOptico record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.id_posicao_os_ramo_optico = CustomConvertersExtensions.ConvertToInt32Validation(record.id_posicao_os_ramo_optico);
             this.codigo_status_padrao = CustomConvertersExtensions.ConvertToInt32Validation(record.codigo_status_padrao);
             this.ativo = CustomConvertersExtensions.ConvertToBooleanValidation(record.ativo);

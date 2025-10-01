@@ -30,7 +30,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxMetasVendedoresDia() { }
 
         public LinxMetasVendedoresDia(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxMetasVendedoresDia record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.id_meta = CustomConvertersExtensions.ConvertToInt32Validation(record.id_meta);
             this.portal = CustomConvertersExtensions.ConvertToInt32Validation(record.portal);
             this.cod_vendedor = CustomConvertersExtensions.ConvertToInt32Validation(record.cod_vendedor);

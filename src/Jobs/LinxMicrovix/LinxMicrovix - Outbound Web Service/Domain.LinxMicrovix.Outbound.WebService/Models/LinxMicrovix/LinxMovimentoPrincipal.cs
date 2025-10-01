@@ -32,7 +32,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxMovimentoPrincipal() { }
 
         public LinxMovimentoPrincipal(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxMovimentoPrincipal record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.identificador = Guid.Parse(record.identificador);
             this.total_fidelidade_cashback = CustomConvertersExtensions.ConvertToDecimalValidation(record.total_fidelidade_cashback);
             this.valor_nota = CustomConvertersExtensions.ConvertToDecimalValidation(record.valor_nota);

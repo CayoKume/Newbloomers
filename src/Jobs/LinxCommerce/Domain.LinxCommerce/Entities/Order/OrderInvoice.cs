@@ -15,17 +15,17 @@
         public string? InvoicePdf { get; set; }
         public string? Observation { get; set; }
         public string? Operation { get; set; }
-        public DateTime? ProcessedAt { get; set; }
-        public DateTime? UpdatedAt { get; set; }
-        public DateTime? IssuedAt { get; set; }
-        public DateTime? CreatedAt { get; set; }
+        public DateTimeOffset? ProcessedAt { get; set; }
+        public DateTimeOffset? UpdatedAt { get; set; }
+        public DateTimeOffset? IssuedAt { get; set; }
+        public DateTimeOffset? CreatedAt { get; set; }
         public Guid? OrderID { get; set; }
 
         public OrderInvoice() { }
 
         public OrderInvoice(OrderInvoice orderInvoice, Guid? orderID)
         {
-            this.lastupdateon = DateTime.Now;
+            lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.OrderInvoiceID = orderInvoice.OrderInvoiceID;
             this.Code = orderInvoice.Code;
             this.Url = orderInvoice.Url;

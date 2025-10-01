@@ -34,7 +34,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxOrcamentoComponenteFormula() { }
 
         public LinxOrcamentoComponenteFormula(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxOrcamentoComponenteFormula record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.id_orcamento_componente_formula = CustomConvertersExtensions.ConvertToInt32Validation(record.id_orcamento_componente_formula);
             this.documento = CustomConvertersExtensions.ConvertToInt32Validation(record.documento);
             this.portal = CustomConvertersExtensions.ConvertToInt32Validation(record.portal);

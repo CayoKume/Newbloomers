@@ -23,7 +23,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxMovimentoVendaConjugada() { }
 
         public LinxMovimentoVendaConjugada(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxMovimentoVendaConjugada record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.identificador_produto = Guid.Parse(record.identificador_produto);
             this.identificador_servico = Guid.Parse(record.identificador_servico);
             this.timestamp = CustomConvertersExtensions.ConvertToInt64Validation(record.timestamp);

@@ -1,10 +1,14 @@
 ﻿using Application.Dootax.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hangfire.IO.Controllers.General
 {
-#if DEBUG
     [ApiController]
+    [Authorize]
+#if RELEASE
+    [ApiExplorerSettings(IgnoreApi = true)]
+#endif
     [Route("DootaxJobs/Dootax")]
     public class DootaxController : Controller
     {
@@ -21,5 +25,4 @@ namespace Hangfire.IO.Controllers.General
             return Ok($"Records integrated successfully.");
         }
     } 
-#endif
 }

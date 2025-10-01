@@ -13,8 +13,6 @@ var app = builder.Build();
 
 app.UseApplication(serverName);
 
-#if DEBUG
 app.MapControllers();
-#endif
 
 app.Run();

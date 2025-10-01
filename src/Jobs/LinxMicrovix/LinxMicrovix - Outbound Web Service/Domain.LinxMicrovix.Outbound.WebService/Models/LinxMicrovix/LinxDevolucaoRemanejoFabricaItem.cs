@@ -28,7 +28,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxDevolucaoRemanejoFabricaItem() { }
 
         public LinxDevolucaoRemanejoFabricaItem(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxDevolucaoRemanejoFabricaItem record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.id_devolucao_remanejo_fabrica_item = CustomConvertersExtensions.ConvertToInt32Validation(record.id_devolucao_remanejo_fabrica_item);
             this.id_devolucao_remanejo_fabrica = CustomConvertersExtensions.ConvertToInt32Validation(record.id_devolucao_remanejo_fabrica);
             this.quantidade = CustomConvertersExtensions.ConvertToInt32Validation(record.quantidade);

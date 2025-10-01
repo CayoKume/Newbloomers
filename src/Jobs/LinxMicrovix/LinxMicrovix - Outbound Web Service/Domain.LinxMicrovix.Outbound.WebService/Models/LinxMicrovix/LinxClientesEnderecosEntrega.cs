@@ -35,7 +35,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxClientesEnderecosEntrega(){ }
 
         public LinxClientesEnderecosEntrega(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxClientesEnderecosEntrega record, string recordXml) {
-            this.lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+            this.            lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.id_endereco_entrega = CustomConvertersExtensions.ConvertToInt32Validation(record.id_endereco_entrega);
             this.cod_cliente = CustomConvertersExtensions.ConvertToInt32Validation(record.cod_cliente);
             this.portal = CustomConvertersExtensions.ConvertToInt32Validation(record.portal);

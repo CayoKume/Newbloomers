@@ -15,6 +15,11 @@ using Infrastructure.Movidesk;
 using FluentValidation;
 using System.Reflection;
 using Infrastructure.Movidesk.DependencyInjection;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Identity.Web;
+using Microsoft.OpenApi.Models;
+using Microsoft.Net.Http.Headers;
+using Infrastructure.Stone;
 
 namespace Hangfire.IO.Extensions
 {
@@ -31,9 +36,11 @@ namespace Hangfire.IO.Extensions
             builder.Services.AddScopedTotalExpressServices();
             builder.Services.AddScopedAfterSaleServices();
             builder.Services.AddScopedJadlogServices();
+            builder.Services.AddScopedStoneServices();
             builder.Services.AddScopedDootaxServices();
             builder.Services.AddScopedMovideskServices();
 
+            //Refatorar Aqui (tentar deixar só em uma linha todas as validações da fluent validation)
             builder.Services.AddValidatorsFromAssembly(Assembly.Load("Application.LinxMicrovix.Outbound.WebService"));
 
             builder.Services.AddDbContextService(builder);

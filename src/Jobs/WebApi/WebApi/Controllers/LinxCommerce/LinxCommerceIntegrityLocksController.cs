@@ -1,12 +1,16 @@
 ﻿using Application.LinxCommerce.Interfaces;
 using Domain.LinxCommerce.Entities.Parameters;
 using Domain.LinxMicrovix.Outbound.WebService.Entities.Parameters;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hangfire.IO.Controllers.LinxCommerce
 {
-#if DEBUG
     [ApiController]
+    [Authorize]
+#if RELEASE
+    [ApiExplorerSettings(IgnoreApi = true)]
+#endif
     [Route("LinxCommerceJobs/LinxCommerceIntegrityLocks")]
     public class LinxCommerceIntegrityLocksController : Controller
     {
@@ -98,5 +102,4 @@ namespace Hangfire.IO.Controllers.LinxCommerce
             return Ok($"Records integrated successfully.");
         }
     } 
-#endif
 }

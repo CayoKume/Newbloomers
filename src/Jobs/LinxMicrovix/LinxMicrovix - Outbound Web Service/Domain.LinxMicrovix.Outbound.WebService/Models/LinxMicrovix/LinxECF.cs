@@ -34,7 +34,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxECF() { }
 
         public LinxECF(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxECF record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.id_ecf = CustomConvertersExtensions.ConvertToInt32Validation(record.id_ecf);
             this.empresa = CustomConvertersExtensions.ConvertToInt32Validation(record.empresa);
             this.ecf = CustomConvertersExtensions.ConvertToInt32Validation(record.ecf);

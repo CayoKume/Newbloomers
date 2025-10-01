@@ -21,7 +21,7 @@
 
         public PersonAddress(PersonAddress address, Int32? customerID)
         {
-            this.lastupdateon = DateTime.Now;
+            lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.ID = address.ID;
             this.Name = address.Name;
             this.ContactName = address.ContactName;

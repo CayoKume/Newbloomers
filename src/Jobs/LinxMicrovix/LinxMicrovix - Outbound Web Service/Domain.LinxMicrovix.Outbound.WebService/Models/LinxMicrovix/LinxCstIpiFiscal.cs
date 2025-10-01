@@ -30,7 +30,7 @@ namespace Domain.LinxMicrovix.Outbound.WebService.Models.LinxMicrovix
         public LinxCstIpiFiscal() { }
 
         public LinxCstIpiFiscal(Domain.LinxMicrovix.Outbound.WebService.Dtos.LinxMicrovix.LinxCstIpiFiscal record, string recordXml) {
-            lastupdateon = CustomConvertersExtensions.ConvertToDateTimeValidation<DateTime>(DateTime.Now);
+                        lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.id_cst_ipi_fiscal = CustomConvertersExtensions.ConvertToInt32Validation(record.id_cst_ipi_fiscal);
             this.excluido = CustomConvertersExtensions.ConvertToBooleanValidation(record.excluido);
             this.inicio_vigencia =  CustomConvertersExtensions.ConvertToDateTimeValidation<string>(record.inicio_vigencia);

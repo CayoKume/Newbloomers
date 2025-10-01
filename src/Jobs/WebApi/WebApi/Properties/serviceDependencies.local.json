@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "identityapp1": {
+      "connectionInfo": "Registro do aplicativo: NewbloomersWebJobsApi, Locatário: NEWBLOOMERS (newbloomers.com.br - Microsoft Entra ID)",
+      "type": "identityapp.default"
+    }
+  }
+}

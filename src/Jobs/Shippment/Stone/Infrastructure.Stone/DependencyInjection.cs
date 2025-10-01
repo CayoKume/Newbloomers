@@ -1,13 +1,17 @@
-﻿using Application.Stone.Interfaces;
+﻿using Application.Stone.Handlers.Commands;
+using Application.Stone.Interfaces.Handlers.Commands;
+using Application.Stone.Interfaces.Services;
 using Application.Stone.Services;
+using Application.Stone.Validations;
 using Domain.Stone.Interfaces.Api;
 using Domain.Stone.Interfaces.Repository;
+using FluentValidation;
 using Infrastructure.Stone.Api;
+using Infrastructure.Stone.Data;
 using Infrastructure.Stone.Repository;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore;
-using Infrastructure.Stone.Data;
 
 namespace Infrastructure.Stone
 {
@@ -27,6 +31,9 @@ namespace Infrastructure.Stone
 
             services.AddScoped<IStoneService, StoneService>();
             services.AddScoped<IStoneRepository, StoneRepository>();
+            services.AddScoped<IStoneLogisticaCommandHandler, StoneLogisticaCommandHandler>();
+
+            services.AddValidatorsFromAssemblyContaining<StoneOrderValidator>();
 
             return services;
         }

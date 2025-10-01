@@ -12,7 +12,7 @@
 
         public ParentRelation(ParentRelation parentRelation, Int32? productID)
         {
-            this.lastupdateon = DateTime.Now;
+            lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.ParentID = parentRelation.ParentID;
             this.ParentSKU = parentRelation.ParentSKU;
             this.ParentIntegrationID = parentRelation.ParentIntegrationID;
