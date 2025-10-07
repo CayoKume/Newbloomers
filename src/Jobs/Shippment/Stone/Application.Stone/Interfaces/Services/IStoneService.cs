@@ -2,9 +2,10 @@
 {
     public interface IStoneService
     {
+        public Task<bool> GetZplLabels();
         public Task<string> GetAccessToken();
         public Task<string> GetDeliveryOptions();
-        public Task<string> CreateDeliveryOrder();
+        public Task<bool> CreateDeliveryOrder();
         public Task<bool> CheckDeliveryOrder();
         public Task<string> CancelOrder();
     }

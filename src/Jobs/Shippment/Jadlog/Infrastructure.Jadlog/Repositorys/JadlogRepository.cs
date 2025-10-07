@@ -1,28 +1,44 @@
 ﻿using Dapper;
-using Domain.Core.Enums;
-using Domain.Core.Entities.Exceptions;
 using Domain.Core.Extensions;
+using Domain.Core.Interfaces;
 using Domain.Jadlog.Entities;
 using Domain.Jadlog.Interfaces.Repositorys;
 using Infrastructure.Core.Connections.SQLServer;
 using System.Data;
-using System.Data.Common;
 using System.Data.SqlClient;
 using System.Reflection;
-using Domain.Core.Entities.Base;
 
 namespace Infrastructure.Jadlog.Repositorys
 {
     public class JadlogRepository : IJadlogRepository
     {
         private readonly ISQLServerConnection _conn;
+        private readonly ICoreRepository _coreRepository;
 
-        public JadlogRepository(ISQLServerConnection conn) =>
-            _conn = conn;
+        public JadlogRepository(ISQLServerConnection conn, ICoreRepository coreRepository) =>
+            (_conn, _coreRepository) = (conn, coreRepository);
 
-        public Task InsertResponse(string pedido, string request, InsertResponse response)
+        public async Task<bool> InsertResponse(List<OrderSent>? pedidos, Guid? parentExecutionGuid)
         {
-            throw new NotImplementedException();
+            var pedidosTable = _coreRepository.CreateSystemDataTable("JadLogPedidos", new OrderSent());
+            var errosTable = _coreRepository.CreateSystemDataTable("JadLogErros", new Erro());
+
+            _coreRepository.FillSystemDataTable(data: pedidos, dataTable: pedidosTable);
+            _coreRepository.FillSystemDataTable(data: pedidos.Where(p => p.erro != null).Select(x => x.erro).ToList(), dataTable: errosTable);
+
+            _coreRepository.BulkInsertIntoTableRaw(
+                dataTable: pedidosTable
+            );
+
+            await _coreRepository.CallDbProcMerge("general", pedidosTable.TableName, parentExecutionGuid);
+
+            _coreRepository.BulkInsertIntoTableRaw(
+                dataTable: errosTable
+            );
+
+            await _coreRepository.CallDbProcMerge("general", errosTable.TableName, parentExecutionGuid);
+
+            return true;
         }
 
         public Task<Order> GetInvoicedOrder(string orderNumber)
@@ -35,7 +51,7 @@ namespace Infrastructure.Jadlog.Repositorys
             var sql = $@"SELECT DISTINCT 
                          TRIM(A.DOCUMENTO) AS NUMBER,
                          A.VOLUMES AS VOLUMES,
-                         A.NB_CFOP_PEDIDO AS CFOP,
+                         --A.NB_CFOP_PEDIDO AS CFOP,
                          CASE
                              WHEN A.CLIENTE_OU_FORNECEDOR IN (SELECT COD_CLIENTE FROM LINX_MICROVIX_ERP.LINXCLIENTESFORNEC (NOLOCK) WHERE (RAZAO_CLIENTE LIKE '%MNR%')  AND TIPO_CLIENTE = 'J') THEN 'B2B' --B2B MISHA
                              WHEN A.CLIENTE_OU_FORNECEDOR IN (SELECT COD_CLIENTE FROM LINX_MICROVIX_ERP.LINXCLIENTESFORNEC (NOLOCK) WHERE (RAZAO_CLIENTE LIKE '%NEWFIT%')  AND TIPO_CLIENTE = 'J') THEN 'B2B' --B2B OPEN ERA
@@ -132,7 +148,7 @@ namespace Infrastructure.Jadlog.Repositorys
                          FROM [GENERAL].[IT4_WMS_DOCUMENTO] A (NOLOCK)
                          JOIN [GENERAL].[IT4_WMS_DOCUMENTO_ITEM] B (NOLOCK) ON A.IDCONTROLE = B.IDCONTROLE
                          LEFT JOIN [GENERAL].[JADLOGPEDIDOS] C (NOLOCK) ON A.DOCUMENTO = C.PEDIDO
-	                     JOIN [GENERAL].[JADLOGERROS] E (NOLOCK) ON C.PEDIDO = E.PEDIDO
+	                     LEFT JOIN [GENERAL].[JADLOGERROS] E (NOLOCK) ON C.PEDIDO = E.PEDIDO
                          JOIN [LINX_MICROVIX_ERP].[LINXLOJAS] D (NOLOCK) ON D.CNPJ_EMP = IIF(A.SERIE = 'MI-', '38367316000199', '42538267000187')
                          WHERE
                          --A.DOCUMENTO IN ('')
@@ -144,10 +160,10 @@ namespace Infrastructure.Jadlog.Repositorys
                          AND A.DATA > GETDATE() - 15
                          AND A.VOLUMES IS NOT NULL
                          AND (
-			                     (
-				                     C.PEDIDO IS NULL OR
-				                     (E.DESCRICAO NOT LIKE '%já foi enviado. Solicitacao de coleta:%' AND C.STATUS = 'Erro ao inserir solicitacao.')
-			                     )
+			                (
+				                C.PEDIDO IS NULL OR
+				                (E.DESCRICAO NOT LIKE '%já foi enviado. Solicitacao de coleta:%' AND C.STATUS = 'Erro ao inserir solicitacao.')
+			                )
                          )
                          AND B.IDITEM = 1";
 

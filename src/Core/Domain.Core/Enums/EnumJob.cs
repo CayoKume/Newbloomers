@@ -108,11 +108,14 @@
         LinxCommerceProduct = 909,
 
         JadlogSearchTrackingHistory = 1100,
+        JadlogSendOrders = 1101,
 
         TotalExpressTrackingHistory = 1300,
         TotalExpressSendOrders = 1301,
 
         StoneLogisticaTrackingHistory = 1700,
+        StoneLogisticaSendOrders = 1701,
+        StoneLogisticaGetZplLabels = 1702,
 
         AfterSaleEcommerces = 1200,
         AfterSaleReverses = 1201,

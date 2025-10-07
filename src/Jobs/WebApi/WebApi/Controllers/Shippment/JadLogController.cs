@@ -24,5 +24,13 @@ namespace Hangfire.IO.Controllers.Shippment
 
             return Ok();
         }
+
+        [HttpPost("SendOrders")]
+        public async Task<ActionResult<string?>> SendOrders()
+        {
+            await _jadlogService.InsertOrder();
+
+            return Ok();
+        }
     } 
 }

@@ -1,11 +1,24 @@
-﻿using Microsoft.IdentityModel.Tokens;
-using System.Globalization;
-using static System.Net.Mime.MediaTypeNames;
+﻿using System.Globalization;
 
 namespace Domain.Core.Extensions
 {
     public static class CustomConvertersExtensions
     {
+        public static string StringLengthValidation<TEntity>(TEntity entity, int length)
+        {
+            try
+            {
+                if (String.IsNullOrEmpty(entity?.ToString()))
+                    return String.Empty;
+
+                return entity.ToString().Length > length ? entity.ToString().Substring(0, length) : entity.ToString();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public static DateTime ConvertToDateTimeValidation<TEntity>(TEntity entity)
         {
             try

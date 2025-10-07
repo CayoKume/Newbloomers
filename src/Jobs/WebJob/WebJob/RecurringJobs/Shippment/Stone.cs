@@ -1,17 +1,17 @@
 ﻿using Application.Core.Middlewares;
-using Application.Jadlog.Interfaces;
+using Application.Stone.Interfaces.Services;
 using Microsoft.Azure.WebJobs;
 
-namespace AzureJobs.RecurringJobs.Shippment
+namespace WebJob.RecurringJobs.Shippment
 {
-    public class Jadlog
+    public class Stone
     {
         private readonly WebJobExceptionHandlingMiddleware _webJobExceptionHandlingMiddleware;
-        private readonly IJadlogService _jadlogService;
+        private readonly IStoneService _stoneService;
 
-        public Jadlog(IJadlogService jadlogService, IServiceProvider services)
+        public Stone(IStoneService stoneService, IServiceProvider services)
         {
-            _jadlogService = jadlogService;
+            _stoneService = stoneService;
             _webJobExceptionHandlingMiddleware = new WebJobExceptionHandlingMiddleware(services);
         }
 
@@ -19,15 +19,15 @@ namespace AzureJobs.RecurringJobs.Shippment
         //{
         //    await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
         //    {
-        //        var result = await _jadlogService.SearchTrackingHistory();
+        //        var result = await _stoneService.CheckDeliveryOrder();
         //    });
         //}
 
-        //public async Task SendOrders([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //public async Task SearchZplLabel([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
         //{
         //    await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
         //    {
-        //        var result = await _jadlogService.InsertOrder();
+        //        var result = await _stoneService.GetZplLabels();
         //    });
         //}
     }

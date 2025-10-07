@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain.Core.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,8 +18,8 @@ namespace Domain.Stone.Entities
         public Error(string orderNumber, string message, string error)
         {
             this.orderNumber = orderNumber;
-            this.message = message;
-            this.error = error;
+            this.message = CustomConvertersExtensions.StringLengthValidation(message, 300);
+            this.error = CustomConvertersExtensions.StringLengthValidation(error, 300);
         }
     }
 }

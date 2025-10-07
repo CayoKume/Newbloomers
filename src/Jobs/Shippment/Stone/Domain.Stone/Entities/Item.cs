@@ -27,16 +27,16 @@ namespace Domain.Stone.Entities
         public Item(Dtos.Item item, string orderId)
         {
             this.orderId = CustomConvertersExtensions.ConvertToGuidValidation(orderId);
-            this.code = item.code;
+            this.code = CustomConvertersExtensions.StringLengthValidation(item.code, 50);
             this.depth = CustomConvertersExtensions.ConvertToDecimalValidation(item.depth);
             this.width = CustomConvertersExtensions.ConvertToDecimalValidation(item.width);
             this.height = CustomConvertersExtensions.ConvertToDecimalValidation(item.height);
             this.weight = CustomConvertersExtensions.ConvertToDecimalValidation(item.weight);
             this.quantity = CustomConvertersExtensions.ConvertToDecimalValidation(item.quantity);
             this.unitPrice = CustomConvertersExtensions.ConvertToDecimalValidation(item.unitPrice);
-            this.invoiceKey = item.invoiceKey;
-            this.description = item.description;
-            this.invoiceNumber = item.invoiceNumber;
+            this.invoiceKey = CustomConvertersExtensions.StringLengthValidation(item.invoiceKey, 44);
+            this.description = CustomConvertersExtensions.StringLengthValidation(item.description, 255);
+            this.invoiceNumber = CustomConvertersExtensions.StringLengthValidation(item.invoiceNumber, 50);
             this.invoiceTotalValue = CustomConvertersExtensions.ConvertToDecimalValidation(item.invoiceTotalValue);
         }
     }

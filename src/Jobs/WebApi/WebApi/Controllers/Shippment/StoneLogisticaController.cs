@@ -22,5 +22,19 @@ namespace Hangfire.IO.Controllers.Carries
             var result = await _stoneService.CheckDeliveryOrder();
             return Ok(result);
         }
+
+        [HttpPost("StoneLogisticaSendOrders")]
+        public async Task<ActionResult<string?>> StoneLogisticaSendOrders()
+        {
+            var result = await _stoneService.CreateDeliveryOrder();
+            return Ok(result);
+        }
+
+        [HttpPost("StoneLogisticaGetZplLabels")]
+        public async Task<ActionResult<string?>> StoneLogisticaGetZplLabels()
+        {
+            var result = await _stoneService.GetZplLabels();
+            return Ok(result);
+        }
     } 
 }

@@ -18,6 +18,23 @@ namespace Infrastructure.Stone.Api
             throw new NotImplementedException();
         }
 
+        public async Task<string?> GetAsync(string? rote)
+        {
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    HttpResponseMessage resp = await client.GetAsync(rote);
+                    resp.EnsureSuccessStatusCode();
+                    return await resp.Content.ReadAsStringAsync();
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
         public async Task<string?> GetAsync(string? rote, string? token)
         {
             try
@@ -40,10 +57,7 @@ namespace Infrastructure.Stone.Api
                 var client = CreateClient(rote, token);
                 var response = await client.PostAsync($"{client.BaseAddress}{rote}", new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(jObj), Encoding.UTF8, "application/json"));
 
-                if (response.IsSuccessStatusCode && response.StatusCode == HttpStatusCode.OK)
-                    return await response.Content.ReadAsStringAsync();
-                else
-                    throw new Exception($"{response.StatusCode}");
+                return await response.Content.ReadAsStringAsync();
             }
             catch
             {

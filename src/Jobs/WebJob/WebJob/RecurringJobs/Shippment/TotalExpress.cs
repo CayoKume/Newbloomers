@@ -21,12 +21,12 @@ namespace AzureJobs.RecurringJobs.Shippment
         //    });
         //}
 
-        public async Task SendOrders([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
-        {
-            await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
-            {
-                var result = await _totalExpressService.SendOrders();
-            });
-        }
+        //public async Task SendOrders([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
+        //    {
+        //        var result = await _totalExpressService.SendOrders();
+        //    });
+        //}
     }
 }

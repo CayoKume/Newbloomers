@@ -109,5 +109,12 @@ namespace AzureJobs.RecurringJobs.Procedures
 
         //    return;
         //}
+
+        //public async Task P_Volo_Integracao_Infos_Pedidos_Zpl([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    await _coreRepository.ExecuteCommand("exec [general].[p_Volo_Integracao_Infos_Pedidos_Zpl]");
+
+        //    return;
+        //}
     }
 }

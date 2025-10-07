@@ -21,9 +21,9 @@ namespace Domain.Stone.Entities
         public Owner(Dtos.Owner owner)
         {
             this.ownerId = CustomConvertersExtensions.ConvertToGuidValidation(owner.id);
-            this.name = owner.name;
+            this.name = CustomConvertersExtensions.StringLengthValidation(owner.name, 60);
             this.document = Regex.Replace(owner.document, @"[./-]", "");
-            this.phoneNumber = owner.phoneNumber;
+            this.phoneNumber = CustomConvertersExtensions.StringLengthValidation(owner.phoneNumber, 20);
             this.logisticAccountId = CustomConvertersExtensions.ConvertToGuidValidation(owner.logisticAccountId);
         }
     }

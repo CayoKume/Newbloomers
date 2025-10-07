@@ -149,21 +149,24 @@ namespace Infrastructure.Core.Repositorys
         {
             try
             {
-                var properties = data.FirstOrDefault().GetType().GetFilteredProperties();
-
-                foreach (var item in data)
+                if (data.Count() > 0)
                 {
-                    var rowValues = new object[properties.Length];
+                    var properties = data.FirstOrDefault().GetType().GetFilteredProperties();
 
-                    for (int i = 0; i < properties.Length; i++)
+                    foreach (var item in data)
                     {
-                        var prop = properties[i];
-                        var value = prop.GetValue(item);
+                        var rowValues = new object[properties.Length];
 
-                        rowValues[i] = value ?? DBNull.Value;
-                    }
+                        for (int i = 0; i < properties.Length; i++)
+                        {
+                            var prop = properties[i];
+                            var value = prop.GetValue(item);
 
-                    dataTable.Rows.Add(rowValues);
+                            rowValues[i] = value ?? DBNull.Value;
+                        }
+
+                        dataTable.Rows.Add(rowValues);
+                    } 
                 }
             }
             catch (Exception ex)
@@ -233,7 +236,7 @@ namespace Infrastructure.Core.Repositorys
             foreach (var record in log.Records)
             {
                 //adicionar fluent validations
-                var text = record.RecordText.Length > 8000 ? record.RecordText.Substring(0, 8000) : record.RecordText;
+                var text = record.RecordText?.Length > 8000 ? record.RecordText?.Substring(0, 8000) : record.RecordText;
 
                 recordsTable.Rows.Add(record.FieldKeyValue, text, log.Execution);
             }

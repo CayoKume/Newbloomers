@@ -1,17 +1,22 @@
 ﻿using Application.Stone.Interfaces.Handlers.Commands;
+using Dapper;
 using Domain.Core.Interfaces;
 using Domain.Stone.Entities;
 using Domain.Stone.Interfaces.Repository;
+using Infrastructure.Core.Connections.SQLServer;
+using System.Collections.Generic;
 
 namespace Infrastructure.Stone.Repository
 {
     public class StoneRepository : IStoneRepository
     {
         private readonly ICoreRepository _coreRepository;
+        private readonly ISQLServerConnection _sqlServerConnection;
         private readonly IStoneLogisticaCommandHandler _commandHandler;
 
-        public StoneRepository(ICoreRepository coreRepository, IStoneLogisticaCommandHandler commandHandler)
+        public StoneRepository(ICoreRepository coreRepository, ISQLServerConnection sqlServerConnection, IStoneLogisticaCommandHandler commandHandler)
         {
+            _sqlServerConnection = sqlServerConnection;
             _coreRepository = coreRepository;
             _commandHandler = commandHandler;
         }
@@ -27,7 +32,7 @@ namespace Infrastructure.Stone.Repository
             var ownerTable = _coreRepository.CreateSystemDataTable("StoneLogisticaOwner", new Owner());
             var errorsTable = _coreRepository.CreateSystemDataTable("StoneLogisticaErrors", new Error());
 
-            var orders = records.Select(x => x).Where(x => x.orderId != new Guid()).ToList();
+            var orders = records.Select(x => x).ToList();
             var errors = records.Select(x => x.error).Where(x => x.orderNumber != null);
             var owner = records.Select(x => x.owner).Where(x => x.document != null).GroupBy(x => x.ownerId).Select(x => x.FirstOrDefault()).FirstOrDefault();
             var customers = records.Select(x => x.customer).Where(x => x.document != null).GroupBy(x => x.document).Select(x => x.FirstOrDefault()).ToList();
@@ -75,15 +80,72 @@ namespace Infrastructure.Stone.Repository
             return await _coreRepository.GetRecords<Parameters>(sql);
         }
 
-        public async Task<IEnumerable<string?>> GetRegistersExists()
+        public async Task<IEnumerable<Zpl?>> GetExistingReferenceKeys()
         {
-            string sql = _commandHandler.CreateGetRegistersExistsQuery();
-            return await _coreRepository.GetRecords<string>(sql);
+            string sql = _commandHandler.CreateGetExistingReferenceKeysQuery();
+            return await _coreRepository.GetRecords<Zpl>(sql);
         }
 
-        public Task<bool> InsertRecord(Order? record)
+        public async Task<IEnumerable<OrdersToBeSent?>> GetRegistersExists()
+        {
+            string sql = _commandHandler.CreateGetRegistersExistsQuery();
+
+            try
+            {
+                using (var conn = _sqlServerConnection.GetIDbConnection())
+                {
+                    var result = await conn.QueryAsync<OrdersToBeSent, Product, Client, ShippingCompany, Company, Invoice, OrdersToBeSent>(sql, (order, product, client, shippingCompany, company, invoice) =>
+                    {
+                        order.itens.Add(product);
+                        order.client = client;
+                        order.shippingCompany = shippingCompany;
+                        order.company = company;
+                        order.invoice = invoice;
+                        return order;
+                    }, splitOn: "COD_PRODUCT, COD_CLIENT, COD_SHIPPINGCOMPANY, COD_COMPANY, NUMBER_NF", commandTimeout: 360);
+
+                    return result.GroupBy(p => p.number).Select(g =>
+                    {
+                        var groupedOrder = g.FirstOrDefault();
+                        groupedOrder.itens = g.Select(p => p.itens.Single()).ToList();
+                        return groupedOrder;
+                    }).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        public async Task<IEnumerable<Domain.Stone.Entities.Order?>> GetRegistersExists(List<Guid> registros)
+        {
+            string sql = _commandHandler.CreateGetRegistersExistsQuery(registros);
+            return await _coreRepository.GetRecords<Domain.Stone.Entities.Order>(sql);
+        }
+
+        public Task<bool> InsertOrder(Order? record)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<bool> InsertZpls(List<Zpl> records)
+        {
+            var orderTable = _coreRepository.CreateSystemDataTable("It4_Wms_Documento_Zpl", new Zpl());
+            var errorsTable = _coreRepository.CreateSystemDataTable("StoneLogisticaErrors", new Error());
+
+            var orders = records.Select(x => x).Where(x => x.zpl != null).ToList();
+            var errors = records.Select(x => x.error).Where(x => x.orderNumber != null);
+
+            _coreRepository.FillSystemDataTable(orderTable, orders);
+            _coreRepository.FillSystemDataTable(errorsTable, errors.ToList());
+
+            _coreRepository.BulkInsertIntoTableRaw(orderTable, "general");
+            _coreRepository.BulkInsertIntoTableRaw(errorsTable);
+            
+            await _coreRepository.CallDbProcMerge("general", errorsTable.TableName);
+
+            return true;
         }
     }
 }

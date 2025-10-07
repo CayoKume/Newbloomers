@@ -20,13 +20,13 @@ namespace Domain.Stone.Entities
         {
             this.orderId = CustomConvertersExtensions.ConvertToGuidValidation(orderId);
             this.eventId = CustomConvertersExtensions.ConvertToGuidValidation(@event.id);
-            this.status = @event.status;
+            this.status = CustomConvertersExtensions.StringLengthValidation(@event.status, 60);
             this.createdAt = CustomConvertersExtensions.ConvertToDateTimeValidation(@event.createdAt);
-            this.modifiedBy = @event.modifiedBy;
-            this.trackingCode = @event.trackingCode;
-            this.carrierName = @event.carrier?.name;
-            this.carrierService = @event.carrier?.service;
-            this.description = @event.description;
+            this.modifiedBy = CustomConvertersExtensions.StringLengthValidation(@event.modifiedBy, 60);
+            this.trackingCode = CustomConvertersExtensions.StringLengthValidation(@event.trackingCode, 60);
+            this.carrierName = CustomConvertersExtensions.StringLengthValidation(@event.carrier?.name, 60);
+            this.carrierService = CustomConvertersExtensions.StringLengthValidation(@event.carrier?.service, 60);
+            this.description = CustomConvertersExtensions.StringLengthValidation(@event.description, 300);
         }
     }
 }

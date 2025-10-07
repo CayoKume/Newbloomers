@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain.Core.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,10 +18,10 @@ namespace Domain.Stone.Entities
 
         public Customer(Dtos.Customer customer)
         {
-            this.name = customer.name;
-            this.email = customer.email;
-            this.document = customer.document;
-            this.phoneNumber = customer.phoneNumber;
+            this.name = CustomConvertersExtensions.StringLengthValidation(customer.name, 60);
+            this.email = CustomConvertersExtensions.StringLengthValidation(customer.email, 50);
+            this.document = CustomConvertersExtensions.StringLengthValidation(customer.document, 14);
+            this.phoneNumber = CustomConvertersExtensions.StringLengthValidation(customer.phoneNumber, 20);
         }
     }
 }

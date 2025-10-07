@@ -6,6 +6,7 @@ using Infrastructure.Jadlog.DependencyInjection;
 using Infrastructure.LinxCommerce.DependencyInjection;
 using Infrastructure.LinxMicrovix.Outbound.WebService.DependencyInjection;
 using Infrastructure.TotalExpress.DependencyInjection;
+using Infrastructure.Stone;
 
 namespace AzureJobs.Extensions
 {
@@ -24,6 +25,7 @@ namespace AzureJobs.Extensions
                 services.AddScopedTotalExpressServices();
                 services.AddScopedJadlogServices();
                 services.AddScopedAfterSaleServices();
+                services.AddScopedStoneServices();
             });
 
             return builder;

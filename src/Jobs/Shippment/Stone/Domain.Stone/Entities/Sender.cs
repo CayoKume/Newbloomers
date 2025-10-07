@@ -19,10 +19,10 @@ namespace Domain.Stone.Entities
 
         public Sender(Dtos.Sender sender)
         {
-            this.name = sender.name;
-            this.email = sender.email;
-            this.document = sender.document;
-            this.phoneNumber = sender.phoneNumber;
+            this.name = CustomConvertersExtensions.StringLengthValidation(sender.name, 60);
+            this.email = CustomConvertersExtensions.StringLengthValidation(sender.email, 50);
+            this.document = CustomConvertersExtensions.StringLengthValidation(sender.document, 14);
+            this.phoneNumber = CustomConvertersExtensions.StringLengthValidation(sender.phoneNumber, 20);
             this.logisticAccountId = CustomConvertersExtensions.ConvertToGuidValidation(sender.logisticAccountId);
         }
     }
