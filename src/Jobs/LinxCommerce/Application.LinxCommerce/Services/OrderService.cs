@@ -154,15 +154,15 @@ namespace Application.LinxCommerce.Services
                 SearchOrdersByDateIntervalCache = list.ToList();
             }
 
-            var _listSomenteNovos = ordersResults.Where(x => SearchOrdersByDateIntervalCache.Any(y =>
-               x.OrderID == y.OrderID && x.ModifiedDate > y.ModifiedDate
-            )).ToList();
+            ordersResults.RemoveAll(x => SearchOrdersByDateIntervalCache.Any(y =>
+               x.OrderID == y.OrderID && x.ModifiedDate < y.ModifiedDate
+            ));
 
-            if (_listSomenteNovos.Count() > 0)
+            if (ordersResults.Count() > 0)
             {
                 var ordersAPIList = new List<Order.Root>();
 
-                foreach (var orderID in _listSomenteNovos)
+                foreach (var orderID in ordersResults)
                 {
                     var getOrderResponse = await _apiCall.PostRequest(
                         jobParameter: jobParameter,
@@ -208,7 +208,7 @@ namespace Application.LinxCommerce.Services
             }
 
             _logger.AddMessage(
-                $"Concluída com sucesso: {_listSomenteNovos.Count()} registro(s) novo(s) inserido(s)!"
+                $"Concluída com sucesso: {ordersResults.Count()} registro(s) novo(s) inserido(s)!"
             );
 
             _logger.SetLogEndDate();

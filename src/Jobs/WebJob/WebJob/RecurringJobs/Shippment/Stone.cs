@@ -30,5 +30,13 @@ namespace WebJob.RecurringJobs.Shippment
         //        var result = await _stoneService.GetZplLabels();
         //    });
         //}
+
+        //public async Task SendOrders([TimerTrigger("0 */3 * * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo timerInfo)
+        //{
+        //    await _webJobExceptionHandlingMiddleware.ExecuteAsync(async () =>
+        //    {
+        //        var result = await _stoneService.CreateDeliveryOrder();
+        //    });
+        //}
     }
 }

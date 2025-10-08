@@ -104,17 +104,20 @@ namespace Application.Stone.Services
                     _checkDeliveryOrdersCache = list.ToList();
                 }
 
-                //var _listSomenteNovos = listRecords;
-                var _listSomenteNovos = listRecords.Where(x => _checkDeliveryOrdersCache.Any(y =>
+                listRecords.RemoveAll(x => _checkDeliveryOrdersCache.Any(y =>
                    x.orderId == y.orderId &&
-                   x.updatedAt >= y.updatedAt
-                )).ToList();
+                   x.updatedAt <= y.updatedAt
+                ));
 
-                if (_listSomenteNovos.Count() > 0)
+                if (listRecords.Count() > 0)
                 {
-                    await _stoneRepository.BulkInsertIntoTableRaw(_listSomenteNovos, _logger.GetExecutionGuid());
+                    await _stoneRepository.BulkInsertIntoTableRaw(listRecords, _logger.GetExecutionGuid());
 
-                    _listSomenteNovos.ForEach(s =>
+                    listRecords.ForEach(s =>
+                        _checkDeliveryOrdersCache.Add(s)
+                    );
+
+                    listRecords.ForEach(s =>
                         _logger.AddRecord(
                             s.orderId.ToString(),
                             s.Responses
@@ -126,7 +129,7 @@ namespace Application.Stone.Services
                 }
 
                 _logger.AddMessage(
-                    $"Concluída com sucesso: {_listSomenteNovos.Count()} registro(s) novo(s) inserido(s)!"
+                    $"Concluída com sucesso: {listRecords.Count()} registro(s) novo(s) inserido(s)!"
                 );
             }
 
@@ -150,19 +153,20 @@ namespace Application.Stone.Services
             {
                 foreach (var parameter in parameters)
                 {
+                    var jObject = new JObject
+                    {
+                        { "email", parameter.email },
+                        { "password", parameter.password }
+                    };
+
+                    var responseToken = await _apiCall.PostAsync("auth/login", jObject);
+                    var token = Newtonsoft.Json.JsonConvert.DeserializeObject<Token>(responseToken);
+
                     foreach (var order in orders)
                     {
                         try
                         {
-                            var jObject = new JObject
-                            {
-                                { "email", parameter.email },
-                                { "password", parameter.password }
-                            };
-
                             var jObj = BuildJObject(order, parameters.FirstOrDefault());
-                            var responseToken = await _apiCall.PostAsync("auth/login", jObject);
-                            var token = Newtonsoft.Json.JsonConvert.DeserializeObject<Token>(responseToken);
 
                             string? response = await _apiCall.PostAsync(
                                 "deliveries",
@@ -170,7 +174,7 @@ namespace Application.Stone.Services
                                 token.accessToken
                             );
 
-                            if (response.Contains("erro"))
+                            if (response.Contains("message"))
                             {
                                 var error = Newtonsoft.Json.JsonConvert.DeserializeObject<Domain.Stone.Dtos.Error>(response);
                                 _listSomenteNovos.Add(new SendedOrder(order.number, Newtonsoft.Json.JsonConvert.SerializeObject(jObj), error.message, error.error));
@@ -189,7 +193,7 @@ namespace Application.Stone.Services
 
                 if (_listSomenteNovos.Count() > 0)
                 {
-                    //await _stoneRepository.GenerateResponseLog(encomendas: _listSomenteNovos, _logger.GetExecutionGuid());
+                    await _stoneRepository.BulkInsertIntoTableRaw(_listSomenteNovos, _logger.GetExecutionGuid());
 
                     _listSomenteNovos.ForEach(s =>
                         _logger.AddRecord(
@@ -201,11 +205,11 @@ namespace Application.Stone.Services
                         )
                     );
                 }
-
-                _logger.AddMessage(
-                    $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"
-                );
             }
+
+            _logger.AddMessage(
+                $"Concluída com sucesso: {_listSomenteNovos.Count} registro(s) novo(s) inserido(s)!"
+            );
 
             _logger.SetLogEndDate();
             await _logger.CommitAllChanges();
@@ -236,19 +240,19 @@ namespace Application.Stone.Services
             {
                 foreach (var parameter in parameters)
                 {
-                    foreach (var order in orders)
-                    {
-                        try
-                        {
-                            var jObject = new JObject
+                    var jObject = new JObject
                             {
                                 { "email", parameter.email },
                                 { "password", parameter.password }
                             };
 
-                            var responseToken = await _apiCall.PostAsync("auth/login", jObject);
-                            var token = Newtonsoft.Json.JsonConvert.DeserializeObject<Token>(responseToken);
+                    var responseToken = await _apiCall.PostAsync("auth/login", jObject);
+                    var token = Newtonsoft.Json.JsonConvert.DeserializeObject<Token>(responseToken);
 
+                    foreach (var order in orders)
+                    {
+                        try
+                        {
                             var response = await _apiCall.GetAsync($"deliveries/{order.referencekey}/label?format=zpl", token.accessToken);
                             
                             if (response.Contains("erro"))
@@ -311,7 +315,7 @@ namespace Application.Stone.Services
                 { "customer", new JObject {
                         { "name", $"{order.client.reason_client}" },
                         { "document", $"{order.client.doc_client}" },
-                        { "phoneNumber", $"{order.client.fone_client}" },
+                        { "phoneNumber", $"999999999" },
                         { "email", $"{order.client.email_client}" }
                     } 
                 },
@@ -333,7 +337,7 @@ namespace Application.Stone.Services
                         { "neighborhood", $"{order.client.neighborhood_client}" },
                         { "city", $"{order.client.city_client}" },
                         { "countryState", $"{order.client.uf_client}" },
-                        { "zipCode", $"{order.client.zip_code_client}" },
+                        { "zipCode", $"{order.client.zip_code_client.Trim()}" },
                         { "complement", $"{order.client.complement_address_client}" },
                         { "reference", $"{order.client.complement_address_client}" },
                         { "latitude", 0 },
@@ -346,7 +350,7 @@ namespace Application.Stone.Services
                         { "neighborhood", $"{order.company.neighborhood_company}" },
                         { "city", $"{order.company.city_company}" },
                         { "countryState", $"{order.company.uf_company}" },
-                        { "zipCode", $"{order.company.zip_code_company}" },
+                        { "zipCode", $"{order.company.zip_code_company.Trim()}" },
                         { "complement", $"{order.company.complement_address_company}" },
                         { "reference", $"{order.company.complement_address_company}" },
                         { "latitude", 0 },

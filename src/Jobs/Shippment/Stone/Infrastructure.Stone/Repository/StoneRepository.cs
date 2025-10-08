@@ -74,6 +74,26 @@ namespace Infrastructure.Stone.Repository
             return true;
         }
 
+        public async Task<bool> BulkInsertIntoTableRaw(List<SendedOrder> records, Guid? parentExecutionGUID)
+        {
+            var orderTable = _coreRepository.CreateSystemDataTable("StoneLogisticaOrdersShipped", new SendedOrder());
+            var errorsTable = _coreRepository.CreateSystemDataTable("StoneLogisticaErrors", new Error());
+
+            var orders = records.Select(x => x).Where(x => x.id != null).ToList();
+            var errors = records.Select(x => x.err).Where(x => x.orderNumber != null);
+
+            _coreRepository.FillSystemDataTable(errorsTable, errors.ToList());
+            _coreRepository.FillSystemDataTable(orderTable, orders);
+
+            _coreRepository.BulkInsertIntoTableRaw(errorsTable);
+            _coreRepository.BulkInsertIntoTableRaw(orderTable);
+
+            await _coreRepository.CallDbProcMerge("general", errorsTable.TableName, parentExecutionGUID);
+            await _coreRepository.CallDbProcMerge("general", orderTable.TableName, parentExecutionGUID);
+
+            return true;
+        }
+
         public async Task<IEnumerable<Parameters?>> GetParameters()
         {
             string sql = _commandHandler.CreateGetParametersQuery();
@@ -131,7 +151,7 @@ namespace Infrastructure.Stone.Repository
 
         public async Task<bool> InsertZpls(List<Zpl> records)
         {
-            var orderTable = _coreRepository.CreateSystemDataTable("It4_Wms_Documento_Zpl", new Zpl());
+            var orderTable = _coreRepository.CreateSystemDataTable("StoneLogisticaZplLabels", new Zpl());
             var errorsTable = _coreRepository.CreateSystemDataTable("StoneLogisticaErrors", new Error());
 
             var orders = records.Select(x => x).Where(x => x.zpl != null).ToList();

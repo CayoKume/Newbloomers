@@ -7,6 +7,7 @@ namespace Domain.Stone.Interfaces.Repository
         public Task<bool> InsertZpls(List<Zpl> records);
         public Task<bool> InsertOrder(Order? record);
         public Task<bool> BulkInsertIntoTableRaw(IList<Order> records, Guid? parentExecutionGUID);
+        public Task<bool> BulkInsertIntoTableRaw(List<SendedOrder> records, Guid? parentExecutionGUID);
         public Task<IEnumerable<Zpl?>> GetExistingReferenceKeys();
         public Task<IEnumerable<OrdersToBeSent?>> GetRegistersExists();
         public Task<IEnumerable<Domain.Stone.Entities.Order?>> GetRegistersExists(List<Guid> registros);

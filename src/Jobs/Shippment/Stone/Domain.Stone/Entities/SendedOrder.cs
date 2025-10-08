@@ -1,6 +1,5 @@
 ﻿using Domain.Core.Extensions;
 using System.ComponentModel.DataAnnotations.Schema;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Domain.Stone.Entities
 {
@@ -17,6 +16,10 @@ namespace Domain.Stone.Entities
         public Guid? deliveryRequestId { get; set; }
         public decimal? cost { get; set; }
         public string? classification { get; set; }
+        public Int64? quoteExpirationDate { get; set; }
+        public Int64? totalETA { get; set; }
+        public decimal? totalCost { get; set; }
+
 
         [SkipProperty]
         [NotMapped]
@@ -25,6 +28,8 @@ namespace Domain.Stone.Entities
         [SkipProperty]
         [NotMapped]
         public Dictionary<string?, string> Responses { get; set; } = new Dictionary<string?, string>();
+
+        public SendedOrder() { }
 
         public SendedOrder(Domain.Stone.Dtos.SendedOrderResponse sendedOrder, string orderNumber, string request)
         {
@@ -39,6 +44,9 @@ namespace Domain.Stone.Entities
             this.deliveryRequestId = sendedOrder.deliveryRequestId;
             this.cost = sendedOrder.cost;
             this.classification = sendedOrder.classification;
+            this.quoteExpirationDate = sendedOrder.quoteExpirationDate;
+            this.totalETA = sendedOrder.totalETA;
+            this.totalCost = sendedOrder.totalCost;
             this.Responses.Add(orderNumber, request);
         }
 
@@ -46,15 +54,6 @@ namespace Domain.Stone.Entities
         {
             this.lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.orderNumber = orderNumber;
-            this.id = null;
-            this.createdAt = null;
-            this.eta = null;
-            this.slaWorkingDays = null;
-            this.service = null;
-            this.expiresAt = null;
-            this.deliveryRequestId = null;
-            this.cost = null;
-            this.classification = null;
             this.Responses.Add(orderNumber, request);
             this.err = System.String.IsNullOrEmpty(message) && System.String.IsNullOrEmpty(error) ? new Error() : new Error(orderNumber, message, error);
         }

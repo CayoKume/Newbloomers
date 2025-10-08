@@ -5,15 +5,13 @@ namespace Domain.Stone.Entities
 {
     public class Zpl
     {
-        public Int64 idcontrole { get; set; }
+        public DateTime lastupdateon { get; set; }
         public string documento { get; set; }
-        public Int64 transportadora { get; set; }
 
         [SkipProperty]
         public string referencekey { get; set; }
 
         public string zpl { get; set; }
-        public bool etiqueta_impressa { get; set; } = false;
 
         [NotMapped]
         [SkipProperty]
@@ -21,6 +19,7 @@ namespace Domain.Stone.Entities
 
         public void SetZpl(string zpl)
         {
+            this.lastupdateon = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time"));
             this.zpl = zpl;
         }
 

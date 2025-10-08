@@ -8,17 +8,15 @@ namespace Application.Stone.Handlers.Commands
     {
         public string CreateGetExistingReferenceKeysQuery()
         {
-            return $@"SELECT DISTINCT TOP 200
-                          A.IDCONTROLE,
+            return $@"SELECT DISTINCT
                           A.DOCUMENTO,
-                          A.NB_COD_TRANSPORTADORA AS TRANSPORTADORA,
                           REFERENCEKEY
                       FROM
                           [GENERAL].[IT4_WMS_DOCUMENTO] A (NOLOCK)
                       JOIN
                           [GENERAL].[STONELOGISTICAORDERS] B (NOLOCK) ON REPLACE(B.REFERENCEKEY, '3294_29_', '') = A.DOCUMENTO
                       LEFT JOIN 
-                          [GENERAL].[IT4_WMS_DOCUMENTO_ZPL] C (NOLOCK) ON C.DOCUMENTO = A.DOCUMENTO
+                          [GENERAL].[STONELOGISTICAZPLLABELS] C (NOLOCK) ON C.DOCUMENTO = A.DOCUMENTO
                       LEFT JOIN 
                           [GENERAL].[STONELOGISTICAERRORS] D (NOLOCK) ON A.DOCUMENTO = D.ORDERNUMBER
                       WHERE
@@ -116,7 +114,9 @@ namespace Application.Stone.Handlers.Commands
                       JOIN 
                           GENERAL.IT4_WMS_DOCUMENTO_ITEM B (NOLOCK) ON A.IDCONTROLE = B.IDCONTROLE
                       LEFT JOIN 
-	                      GENERAL.STONELOGISTICAORDERS C (NOLOCK) on A.DOCUMENTO = REPLACE(C.REFERENCEKEY, '3294_29_', '')
+	                      GENERAL.STONELOGISTICAORDERSSHIPPED C (NOLOCK) ON A.DOCUMENTO = C.ORDERNUMBER
+                      LEFT JOIN 
+	                      GENERAL.STONELOGISTICAERRORS D (NOLOCK) ON A.DOCUMENTO = D.ORDERNUMBER
                       WHERE 
 	                      A.NB_COD_TRANSPORTADORA = 97586
                       AND
@@ -126,7 +126,9 @@ namespace Application.Stone.Handlers.Commands
                       AND 
 	                      A.DATA > CAST(GETDATE() -7 AS DATE)
                       AND 
-	                      C.REFERENCEKEY IS NULL";
+	                      C.ORDERNUMBER IS NULL
+                      AND 
+                          D.ORDERNUMBER IS NULL";
         }
 
         public string CreateGetRegistersExistsQuery(List<Guid> registros)
@@ -184,24 +186,24 @@ namespace Application.Stone.Handlers.Commands
                     {
 
                         if (j == top1000List.Count() - 1)
-                            identificadores += $"({top1000List[j].idcontrole}, '{top1000List[j].documento}', {top1000List[j].transportadora}, '{top1000List[j].zpl}', 0);";
+                            identificadores += $"({top1000List[j].lastupdateon}, '{top1000List[j].documento}', '{top1000List[j].zpl}');";
                         else
-                            identificadores += $"({top1000List[j].idcontrole}, '{top1000List[j].documento}', {top1000List[j].transportadora}, '{top1000List[j].zpl}', 0), ";
+                            identificadores += $"({top1000List[j].lastupdateon}, '{top1000List[j].documento}', '{top1000List[j].zpl}'), ";
                     }
 
-                    return $"INSERT INTO [GENERAL].[IT4_WMS_DOCUMENTO_ZPL] ([IDCONTROLE], [DOCUMENTO], [TRANSPORTADORA], [ZPL], [ETIQUETA_IMPRESSA]) VALUES {identificadores}";
+                    return $"INSERT INTO [GENERAL].[STONELOGISTICAZPLLABELS] ([LASTUPDATEON], [DOCUMENTO], [ZPL]) VALUES {identificadores}";
                 }
             }
 
             for (int i = 0; i < zpls.Count(); i++)
             {
                 if (i == zpls.Count() - 1)
-                    identificadores += $"({zpls[i].idcontrole}, '{zpls[i].documento}', {zpls[i].transportadora}, '{zpls[i].zpl}', 0);";
+                    identificadores += $"({zpls[i].lastupdateon}, '{zpls[i].documento}', '{zpls[i].zpl}');";
                 else
-                    identificadores += $"({zpls[i].idcontrole}, '{zpls[i].documento}', {zpls[i].transportadora}, '{zpls[i].zpl}', 0), ";
+                    identificadores += $"({zpls[i].lastupdateon}, '{zpls[i].documento}', '{zpls[i].zpl}'), ";
             }
 
-            return $"INSERT INTO [GENERAL].[IT4_WMS_DOCUMENTO_ZPL] ([IDCONTROLE], [DOCUMENTO], [TRANSPORTADORA], [ZPL], [ETIQUETA_IMPRESSA]) VALUES {identificadores}";
+            return $"INSERT INTO [GENERAL].[STONELOGISTICAZPLLABELS] ([LASTUPDATEON], [DOCUMENTO], [ZPL]) VALUES {identificadores}";
         }
     }
 }
