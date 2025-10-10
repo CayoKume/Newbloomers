@@ -190,13 +190,19 @@ namespace Application.AfterSale.Services
             var simplifiedReverses = new List<Domain.AfterSale.Dtos.Reverse>();
             var completeReverses = new List<Domain.AfterSale.Models.Reverse>();
             var companys = await _afterSaleRepository.GetCompanys();
+            
+            //pesquisa por id (só para depurar)
+            //int[] ids = { };
+            //for (int i = 0; i < ids.Length; i++)
+            //{
+            //    simplifiedReverses.Add(new Domain.AfterSale.Dtos.Reverse { id = ids[i], updated_at = DateTime.Now });
+            //}
 
             foreach (var company in companys)
             {
                 var parameters = new Dictionary<string, string>
                 {
-                    //{ "start_date", $"{DateTime.Now.AddMonths(-2).ToString("yyyy-MM-dd")}" },
-                    { "start_date", $"2025-05-01" },
+                    { "start_date", $"{DateTime.Now.AddMonths(-1).ToString("yyyy-MM-dd")}" },
                     { "end_date", $"{DateTime.Now.ToString("yyyy-MM-dd")}" }
                 };
 
@@ -213,13 +219,13 @@ namespace Application.AfterSale.Services
                 string? rote = page.next_page_url;
                 int contador = 0;
 
-                if (page.last_page > 1) 
+                if (page.last_page > 1)
                 {
                     while (!String.IsNullOrEmpty(rote))
                     {
                         //API da AfterSale lança Too Many Requests após 30 consultas, por isso caso tenha dado erro na consuta das páginas aguardamos por 1 minuto
                         if (contador > 14)
-                        { 
+                        {
                             Thread.Sleep(60 * 1000);
                             contador = 0;
                         }
@@ -230,7 +236,7 @@ namespace Application.AfterSale.Services
                         );
 
                         var nextPage = Newtonsoft.Json.JsonConvert.DeserializeObject<Domain.AfterSale.Dtos.ResponseReverses>(responseByPage);
-                        
+
                         if (nextPage.success)
                         {
                             simplifiedReverses.AddRange(nextPage.data);
@@ -248,21 +254,21 @@ namespace Application.AfterSale.Services
                         simplifiedReverses.Select(x => x.id).ToList()
                     );
 
-                var _listSomenteNovos = simplifiedReverses.Where(x => GetReversesCache.Any(y =>
-                   CustomConvertersExtensions.ConvertToInt32Validation(x.id) == y.id &&
-                   x.updated_at >= y.updated_at
-                )).ToList();
+                simplifiedReverses.RemoveAll(x => GetReversesCache.Any(y =>
+                   x.id == y.id &&
+                   x.updated_at <= y.updated_at
+                ));
 
-                if (_listSomenteNovos.Count() > 0)
+                if (simplifiedReverses.Count() > 0)
                 {
                     //API da AfterSale lança Too Many Requests após 30 consultas, por isso dividimos a lista _listSomenteNovos em indices de 30 consultas
-                    int indice = _listSomenteNovos.Count() / 30;
+                    int indice = simplifiedReverses.Count() / 30;
 
-                    if (indice > 1 || _listSomenteNovos.Count() > 30)
+                    if (indice > 1 || simplifiedReverses.Count() > 30)
                     {
                         for (int i = 0; i <= indice; i++)
                         {
-                            var top30List = _listSomenteNovos.Skip(i * 30).Take(30).ToList();
+                            var top30List = simplifiedReverses.Skip(i * 30).Take(30).ToList();
 
                             for (int j = 0; j < top30List.Count(); j++)
                             {
@@ -291,7 +297,7 @@ namespace Application.AfterSale.Services
                     }
                     else
                     {
-                        foreach (var reverse in _listSomenteNovos)
+                        foreach (var reverse in simplifiedReverses)
                         {
                             var _response = await _apiCall.GetAsync(
                                 token: company.Token.ToString(),
@@ -315,14 +321,14 @@ namespace Application.AfterSale.Services
                     _logger.AddRecord(
                         s.id.ToString(),
                         s.Responses
-                            .Where(pair => pair.Key == s.id.ToString())
+                            .Where(pair => pair.Key == s.id)
                             .Select(pair => pair.Value)
                             .FirstOrDefault()
                     )
                 );
 
                 completeReverses.ForEach(s =>
-                    GetReversesCache.Add(new SimplifiedReverse { id = s.id, updated_at = s.updated_at })
+                    GetReversesCache.Add(new SimplifiedReverse { id = s.id, updated_at = s.updated_at.Value })
                 );
             }
 

@@ -10,7 +10,7 @@ namespace Application.AfterSale.Validations
     {
         public AfterSaleReverseValidator()
         {
-            RuleFor(x => x.id).MustBeValidInt32().When(x => !string.IsNullOrEmpty(x.id));
+            //RuleFor(x => x.id).MustBeValidInt64().When(x => !string.IsNullOrEmpty(x.id));
             RuleFor(x => x.service_type_changed).MustBeValidInt32().When(x => !string.IsNullOrEmpty(x.service_type_changed));
             RuleFor(x => x.ecommerce_order_id).MustBeValidInt32().When(x => !string.IsNullOrEmpty(x.ecommerce_order_id));
             RuleFor(x => x.store_id).MustBeValidInt32().When(x => !string.IsNullOrEmpty(x.store_id));

@@ -32,7 +32,7 @@ namespace Domain.Core.Extensions
                     //return TimeZoneInfo.ConvertTimeFromUtc(Convert.ToDateTime(entity.ToString()).ToUniversalTime(), TimeZoneInfo.FindSystemTimeZoneById("America/Sao_Paulo"));
                 }
 
-                else if (typeof(TEntity) == typeof(DateTime))
+                else if (typeof(TEntity) == typeof(DateTime) || typeof(TEntity) == typeof(DateTime?))
                     return Convert.ToDateTime(entity?.ToString());
                     //return TimeZoneInfo.ConvertTimeFromUtc(Convert.ToDateTime(entity?.ToString()).ToUniversalTime(), TimeZoneInfo.FindSystemTimeZoneById("America/Sao_Paulo"));
 

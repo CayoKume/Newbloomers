@@ -93,7 +93,7 @@ namespace Domain.AfterSale.Models
         public List<TrackingHistory> tracking_history { get; set; } = new List<TrackingHistory>();
 
         [SkipProperty]
-        public Dictionary<string, string> Responses { get; set; } = new Dictionary<string, string>();
+        public Dictionary<Int64?, string> Responses { get; set; } = new Dictionary<Int64?, string>();
 
         public Reverse() 
         {
@@ -162,7 +162,7 @@ namespace Domain.AfterSale.Models
 
         public Reverse(Domain.AfterSale.Dtos.Reverse reverse)
         {
-            id = CustomConvertersExtensions.ConvertToInt32Validation(reverse.id);
+            id = CustomConvertersExtensions.ConvertToInt32Validation(reverse.id.ToString());
             service_type_changed = CustomConvertersExtensions.ConvertToInt32Validation(reverse.service_type_changed);
             ecommerce_order_id = CustomConvertersExtensions.ConvertToInt32Validation(reverse.ecommerce_order_id);
             store_id = CustomConvertersExtensions.ConvertToInt32Validation(reverse.store_id);
@@ -242,7 +242,7 @@ namespace Domain.AfterSale.Models
 
         public Reverse(Domain.AfterSale.Dtos.Data data, string response)
         {
-            id = CustomConvertersExtensions.ConvertToInt32Validation(data?.reverse?.id);
+            id = CustomConvertersExtensions.ConvertToInt32Validation(data?.reverse?.id.ToString());
             service_type_changed = CustomConvertersExtensions.ConvertToInt32Validation(data?.reverse?.service_type_changed);
             ecommerce_order_id = CustomConvertersExtensions.ConvertToInt32Validation(data?.reverse?.ecommerce_order_id);
             store_id = CustomConvertersExtensions.ConvertToInt32Validation(data?.reverse?.store_id);

@@ -1,4 +1,4 @@
-﻿using Application.Dootax.Interfaces;
+﻿using Application.Dootax.Interfaces.Services;
 using Domain.Dootax.Interfaces.Apis;
 using Domain.Dootax.Interfaces.Repositorys;
 
@@ -14,29 +14,22 @@ namespace Application.Dootax.Services
 
         public async Task<bool> ImportFilesUpload()
         {
-            //try
-            //{
-                var xmls = await _dootaxRepository.GetXMLs();
+            var xmls = await _dootaxRepository.GetXMLs();
 
-                if (xmls.Count() > 0)
+            if (xmls.Count() > 0)
+            {
+                foreach (var xml in xmls)
                 {
-                    foreach (var xml in xmls)
-                    {
-                        var result = await _apiCall.PostAsync(xml);
+                    var result = await _apiCall.PostAsync(xml);
 
-                        if (result != null)
-                            await _dootaxRepository.InsertSendFilesSuccessfulLog(xml.CNPJCPF, xml.Documento, xml.Serie, xml.ChaveNfe);
-                        else
-                            continue;
-                    }
+                    if (result != null)
+                        await _dootaxRepository.InsertSendFilesSuccessfulLog(xml.CNPJCPF, xml.Documento, xml.Serie, xml.ChaveNfe);
+                    else
+                        continue;
                 }
+            }
 
-                return true;
-            //}
-            //catch
-            //{
-                //throw;
-            //}
+            return true;
         }
     }
 }

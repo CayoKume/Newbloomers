@@ -1,5 +1,4 @@
-﻿using Domain.Core.Interfaces;
-using Infrastructure.AfterSale.DependencyInjection;
+﻿using Infrastructure.AfterSale.DependencyInjection;
 using Infrastructure.FlashCourier.DependencyInjection;
 using Infrastructure.Core.DependencyInjection;
 using Infrastructure.Jadlog.DependencyInjection;
@@ -7,6 +6,7 @@ using Infrastructure.LinxCommerce.DependencyInjection;
 using Infrastructure.LinxMicrovix.Outbound.WebService.DependencyInjection;
 using Infrastructure.TotalExpress.DependencyInjection;
 using Infrastructure.Stone;
+using Infrastructure.Dootax;
 
 namespace AzureJobs.Extensions
 {
@@ -25,6 +25,7 @@ namespace AzureJobs.Extensions
                 services.AddScopedTotalExpressServices();
                 services.AddScopedJadlogServices();
                 services.AddScopedAfterSaleServices();
+                services.AddScopedDootaxServices();
                 services.AddScopedStoneServices();
             });
 

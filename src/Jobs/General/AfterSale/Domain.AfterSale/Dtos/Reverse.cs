@@ -2,7 +2,7 @@
 {
     public class Reverse
     {
-        public string? id { get; set; }
+        public Int64? id { get; set; }
         public string? reverse_type { get; set; }
         public string? courier_collect { get; set; }
         public string? courier_service_type { get; set; }

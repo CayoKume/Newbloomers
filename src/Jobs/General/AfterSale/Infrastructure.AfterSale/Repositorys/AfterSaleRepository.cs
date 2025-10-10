@@ -18,7 +18,7 @@ public class AfterSaleRepository : IAfterSaleRepository
     public AfterSaleRepository(ISQLServerConnection sqlServerConnection, ICoreRepository coreRepository) =>
             (_sqlServerConnection, _coreRepository) = (sqlServerConnection, coreRepository);
 
-    public async Task<List<SimplifiedReverse?>> GetReversesByIds(List<string?> reversesIds)
+    public async Task<List<SimplifiedReverse?>> GetReversesByIds(List<Int64?> reversesIds)
     {
         var list = new List<SimplifiedReverse?>();
         string identificadores = String.Empty;

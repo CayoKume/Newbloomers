@@ -19,6 +19,7 @@
     <ProjectReference Include="..\..\..\Core\Infrastructure.Core\Infrastructure.Core.csproj" />
     <ProjectReference Include="..\..\General\AfterSale\Application.AfterSale\Application.AfterSale.csproj" />
     <ProjectReference Include="..\..\General\AfterSale\Infrastructure.AfterSale\Infrastructure.AfterSale.csproj" />
+    <ProjectReference Include="..\..\General\Dootax\Infrastructure.Dootax\Infrastructure.Dootax.csproj" />
     <ProjectReference Include="..\..\LinxCommerce\Application.LinxCommerce\Application.LinxCommerce.csproj" />
     <ProjectReference Include="..\..\LinxCommerce\Infrastructure.LinxCommerce\Infrastructure.LinxCommerce.csproj" />
     <ProjectReference Include="..\..\LinxMicrovix\LinxMicrovix - Outbound Web Service\Application.LinxMicrovix.Outbound.WebService\Application.LinxMicrovix.Outbound.WebService.csproj" />

@@ -19,7 +19,7 @@ namespace Infrastructure.Dootax.Api
             {
                 //select in database to take token and user
                 //var client = CreateClient("78391c28-0d30-4d8d-bbcd-735006165ecf", "newbloomers"); //homolog
-                var client = CreateClient("87e2c224-fb6a-48c2-82da-8c57584b3169", "newbloomers");
+                var client = CreateClient("87e2c224-fb6a-48c2-82da-8c57584b3169", "newbloomers"); //prod
                 var xmlText = Convert.ToBase64String(Encoding.UTF8.GetBytes(xml.DsXml)); //convert xml to base64
                 var jObject = new JObject
                 {

@@ -7,7 +7,7 @@ public interface IAfterSaleRepository
     /*Select in Database*/
     public Task<IEnumerable<Company?>> GetCompanys();
     public Task<Company?> GetCompany(string cnpj_emp);
-    public Task<List<SimplifiedReverse?>> GetReversesByIds(List<string?> reversesIds);
+    public Task<List<SimplifiedReverse?>> GetReversesByIds(List<Int64?> reversesIds);
 
     /*Insert in Database*/
     public Task<bool> InsertIntoAfterSaleEcommerce(List<Ecommerce> data, Guid? parentExecutionGUID);

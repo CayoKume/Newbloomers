@@ -1,4 +1,4 @@
-﻿namespace Application.Dootax.Interfaces
+﻿namespace Application.Dootax.Interfaces.Services
 {
     public interface IDootaxService
     {

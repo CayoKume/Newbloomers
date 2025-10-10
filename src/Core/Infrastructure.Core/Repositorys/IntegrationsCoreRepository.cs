@@ -372,6 +372,37 @@ namespace Infrastructure.Core.Repositorys
             }
         }
 
+        public async Task<bool> ExecuteCommand(string? sql, object entity)
+        {
+            try
+            {
+                using (var conn = _sqlServerConnection.GetIDbConnection())
+                {
+                    var result = await conn.ExecuteAsync(sql: sql, entity, commandTimeout: 3600);
+
+                    if (result > 0)
+                        return true;
+
+                    return false;
+                }
+            }
+            catch (SqlException ex)
+            {
+                throw new SQLCommandException(
+                    message: $"error when trying to execute sql command on database - {ex.Message}",
+                    exceptionMessage: ex.StackTrace,
+                    commandSQL: sql
+                );
+            }
+            catch (Exception ex)
+            {
+                throw new GeneralException(
+                    message: $"error when trying to execute sql command on database - {ex.Message}",
+                    exceptionMessage: ex.StackTrace
+                );
+            }
+        }
+
         public async Task<bool> ExecuteCommand(string? sql, DynamicParameters parameters)
         {
             try

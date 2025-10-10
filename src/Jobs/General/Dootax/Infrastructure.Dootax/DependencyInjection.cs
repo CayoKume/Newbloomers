@@ -1,5 +1,4 @@
-﻿using Application.Dootax.Interfaces;
-using Application.Dootax.Services;
+﻿using Application.Dootax.Services;
 using Domain.Dootax.Interfaces.Apis;
 using Domain.Dootax.Interfaces.Repositorys;
 using Infrastructure.Dootax.Api;
@@ -8,6 +7,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Infrastructure.Dootax.Data;
+using Application.Dootax.Interfaces.Services;
+using Application.Dootax.Interfaces.Handlers.Commands;
+using Application.Dootax.Handlers.Commands;
 
 namespace Infrastructure.Dootax
 {
@@ -27,6 +29,7 @@ namespace Infrastructure.Dootax
 
             services.AddScoped<IDootaxService, DootaxService>();
             services.AddScoped<IDootaxRepository, DootaxRepository>();
+            services.AddScoped<IDootaxCommandHandler, DootaxCommandHandler>();
 
             return services;
         }

@@ -9,6 +9,6 @@ namespace Domain.AfterSale.Models
     public class SimplifiedReverse
     {
         public int? id { get; set; }
-        public DateTime? updated_at { get; set; }
+        public DateTime updated_at { get; set; }
     }
 }

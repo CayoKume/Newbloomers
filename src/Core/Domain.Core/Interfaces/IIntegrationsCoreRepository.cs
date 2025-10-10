@@ -41,6 +41,12 @@ namespace Domain.Core.Interfaces
         /// Execute simple sql query in Database
         /// </summary>
         /// <param name="sql"></param>
+        public Task<bool> ExecuteCommand(string? sql, object entity);
+
+        /// <summary>
+        /// Execute simple sql query in Database
+        /// </summary>
+        /// <param name="sql"></param>
         public Task<bool> ExecuteCommand(string? sql, DynamicParameters parameters);
 
         /// <summary>
